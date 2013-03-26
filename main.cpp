@@ -1,16 +1,18 @@
-#include "Cesar.h"
+#include "Playfair.h"
+//#include "Polybe.h"
+//#include "Wolseley.h"
+//#include "Cesar.h"
 //#include "StringCipher.h"
 //#include "Tools.h"
 //#include "converterTools.h"
-//#include "clsHellman.h"
 //#include "clsMorse.h"
 #include <iostream>
 
 int main()
 {   
-    Cesar C;
-    C.setKey(3);
-    StringCipher *sc_c = &C;
+    Playfair *P = new Playfair();
+    P->setKey("MAISON");
+    StringCipher *sc_c = P;
     
     cout << sc_c->encode();
     
