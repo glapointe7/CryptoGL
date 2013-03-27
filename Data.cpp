@@ -9,39 +9,43 @@
 #include <fstream>
 #include <iostream>
 
-Data::Data() {
+Data::Data()
+{
 }
 
-Data::Data(const Data& orig) {
+Data::Data(const Data& orig)
+{
 }
 
-Data::~Data() {
+Data::~Data()
+{
 }
 
 // Charge le contenu du fichier texte filename en conservant les espaces si
 // keep_space est true.
+
 string Data::load(const string filename, bool keep_space)
 {
    string data = "";
-    
+
    // Ouverture du fichier en lecture.
    try
    {
       ifstream in(filename.c_str());
 
-      while(!in.eof())
+      while (!in.eof())
       {
          string tmp;
          in >> tmp;
          data += tmp;
-         if(keep_space == true)
+         if (keep_space == true)
          {
             data += " ";
          }
       }
       in.close();
    }
-   catch(exception &e)
+   catch (exception &e)
    {
       cout << "Erreur : " << e.what();
       return nullptr;
@@ -51,6 +55,7 @@ string Data::load(const string filename, bool keep_space)
 }
 
 // Sauvegarde le texte data dans filename.
+
 void Data::save(const string filename, const string data)
 {
    try
@@ -59,7 +64,7 @@ void Data::save(const string filename, const string data)
       out << data;
       out.close();
    }
-   catch(exception &e)
+   catch (exception &e)
    {
       cout << "Erreur : " << e.what();
    }

@@ -7,11 +7,12 @@
 
 #include "StringCipher.h"
 
-StringCipher::StringCipher() 
+StringCipher::StringCipher()
 {
-    
+
 }
 
-StringCipher::StringCipher(const StringCipher& orig) {
+StringCipher::StringCipher(const StringCipher& orig)
+{
 }
 

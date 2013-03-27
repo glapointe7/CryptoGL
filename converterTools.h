@@ -5,6 +5,8 @@
 
 using namespace std;
 
+string baseConvertString(const string number, const unsigned char from_base,
+        const unsigned char to_base);
 string convertTextToBinaryString(const string &text);
 void convertTextToMajus(string &text);
 
