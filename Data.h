@@ -20,7 +20,7 @@ class Data
         virtual ~Data();
         
         static string load(const string filename, bool keep_space = false);
-        void save(const string filename, const string data);
+        static void save(const string filename, const string data);
     
     private:
         string encoded_file;
