@@ -14,20 +14,19 @@ using namespace std;
 
 class StringCipher 
 {
-    public:
-        StringCipher();
-        StringCipher(const StringCipher& orig);
-        virtual ~StringCipher() = default;
+   public:
+      StringCipher();
+      StringCipher(const StringCipher& orig);
+      virtual ~StringCipher() = default;
 
-        virtual string encode()const = 0;
-        virtual string decode()const = 0;
-        //virtual void setKey(const string key);
+      virtual string encode()const = 0;
+      virtual string decode()const = 0;
+      //virtual void setKey(const string key);
 
-    protected:
-       string cipher_text;
-       string clear_text;
-       string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        //Data DataFile;
+   protected:
+      string cipher_text;
+      string clear_text;
+      string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 };
 
 #endif	/* STRINGCIPHER_H */

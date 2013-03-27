@@ -22,45 +22,45 @@ Data::~Data() {
 // keep_space est true.
 string Data::load(const string filename, bool keep_space)
 {
-    string data = "";
+   string data = "";
     
-    // Ouverture du fichier en lecture.
-    try
-    {
-        ifstream in(filename.c_str());
+   // Ouverture du fichier en lecture.
+   try
+   {
+      ifstream in(filename.c_str());
 
-        while(!in.eof())
-        {
-            string tmp;
-            in >> tmp;
-            data += tmp;
-            if(keep_space == true)
-            {
-                data += " ";
-            }
-        }
-        in.close();
-    }
-    catch(exception &e)
-    {
-        cout << "Erreur : " << e.what();
-        return nullptr;
-    }
+      while(!in.eof())
+      {
+         string tmp;
+         in >> tmp;
+         data += tmp;
+         if(keep_space == true)
+         {
+            data += " ";
+         }
+      }
+      in.close();
+   }
+   catch(exception &e)
+   {
+      cout << "Erreur : " << e.what();
+      return nullptr;
+   }
 
-    return data;
+   return data;
 }
 
 // Sauvegarde le texte data dans filename.
 void Data::save(const string filename, const string data)
 {
-    try
-    {
-        ofstream out(filename.c_str());
-        out << data;
-        out.close();
-    }
-    catch(exception &e)
-    {
-        cout << "Erreur : " << e.what();
-    }
+   try
+   {
+      ofstream out(filename.c_str());
+      out << data;
+      out.close();
+   }
+   catch(exception &e)
+   {
+      cout << "Erreur : " << e.what();
+   }
 }
