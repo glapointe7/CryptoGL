@@ -12,17 +12,17 @@
 
 class Wolseley : public StringCipher
 {
-    public:
-        Wolseley();
-        ~Wolseley() {};
+public:
+   Wolseley();
+   ~Wolseley();
 
-        string encode() const;
-        string decode() const;
+   string encode() const;
+   string decode() const;
 
-        void setKey(const string key);
-        void setAlpha(const string letters);
-        
-    private:
-        string key;
+   void setKey(const string key);
+   void setAlpha(const string letters);
+
+private:
+   string key;
 };
 #endif

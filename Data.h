@@ -12,19 +12,19 @@
 
 using namespace std;
 
-class Data 
+class Data
 {
-    public:
-        Data();
-        Data(const Data& orig);
-        virtual ~Data();
-        
-        static string load(const string filename, bool keep_space = false);
-        static void save(const string filename, const string data);
-    
-    private:
-        string encoded_file;
-        string decoded_file;
+public:
+   Data();
+   Data(const Data& orig);
+   virtual ~Data();
+
+   static string load(const string filename, bool keep_space = false);
+   static void save(const string filename, const string data);
+
+private:
+   string encoded_file;
+   string decoded_file;
 };
 
 #endif	/* DATA_H */
