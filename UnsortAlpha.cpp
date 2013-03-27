@@ -6,8 +6,6 @@ UnsortAlpha::UnsortAlpha()
 {
    clear_text = Data::load("clear_text.txt");
    cipher_text = Data::load("cipher_text.txt");
-   clear_len = clear_text.length();
-   cipher_len = cipher_text.length();
    unsort_alpha.reserve(alpha.length());
 }
 

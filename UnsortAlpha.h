@@ -21,7 +21,5 @@ protected:
 private:
    string key;
    string unsort_alpha;
-   unsigned int cipher_len;
-   unsigned int clear_len;
 };
 #endif
