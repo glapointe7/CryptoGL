@@ -1,0 +1,27 @@
+Toutes les idées qui nous passent par la tête pour lesquelles on veut discuter.
+
+
+1. Familles de cryptos
+
+	a. (StringCipher) Les cryptos qui renvoient un string(définie par alpha) et qui prennent le message en string(définie par alpha).
+
+	b. (IntegerCipher) Les cryptos qui prennent un message en string et qui renvoient un vecteur d'entiers. (Pas sûr ici...)
+
+	c. (HashCipher) Les cryptos irréversibles prennant un string(code ascii) comme message et renvoyant un string(hexadécimal ou binaire seulement)
+
+	d. (StreamCipher) Les cryptos modernes (DES, AES, IDEA, etc.) qui encodent le message par blocs de X bits.
+
+	
+
+2. Autres classes importantes
+
+	a. (Data) Classe gérant les fichiers générés par l'encodage, décodage, cryptanalyse ou attaque de cryptos.
+
+	b. (Cryptanalysis) Calcul de l'IC et statistiques générales d'un message encodé (analyse de fréquences par exemple).
+
+	c. (Attack) Bruteforce normal ou avec un dictionnaire, utilisation d'attaques connues (Kasiski, Bazeries, Friedman, etc.)
+
+	d. (MathematicalAttack ???) Je sais qu'on peut attaquer le DES par l'algorithme LLL par exemple.
+
+
+
