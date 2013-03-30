@@ -34,7 +34,7 @@ void Playfair::setKey(const string key)
 
 // Encode un texte clair avec la méthode de Playfair.
 
-string Playfair::encode() const
+string Playfair::encode()
 {
    string crypted = "";
    crypted.reserve(clear_len);
@@ -47,17 +47,15 @@ string Playfair::encode() const
       // Obtenir les coordonnées (x,y) et (a,b) des lettres du bigramme dans la grille.
       auto X = make_pair(0, 0);
       auto A = make_pair(0, 0);
-      unsigned int y = 0, b = 0;
 
       for (auto row : grid)
       {
          X.first = row.find(clear_text[i]);
          if (X.first != string::npos)
          {
-            X.second = y;
             break;
          }
-         y++;
+         X.second++;
       }
 
       for (auto row : grid)
@@ -65,15 +63,10 @@ string Playfair::encode() const
          A.first = row.find(clear_text[i + 1]);
          if (A.first != string::npos)
          {
-            A.second = b;
             break;
          }
-         b++;
+         A.second++;
       }
-      cout << clear_text[i] << "(" << X.first << ", "
-              << X.second << ") - " << clear_text[i + 1] << "("
-              << A.first << ", "
-              << A.second << ")";
 
       // Soient X = (x,y) et A = (a,b).
       // R�gle 1 : Si x != a ET y != b, alors X = (x,b) et A = (a,y).
@@ -100,7 +93,6 @@ string Playfair::encode() const
          crypted += grid[X.first][X.second];
          crypted += "X";
       }
-      cout << " => " << crypted[i] << crypted[i + 1] << "\n";
    }
 
    Data::save("cipher_text.txt", crypted);
@@ -110,7 +102,7 @@ string Playfair::encode() const
 
 // Encode un texte clair avec la m�thode de Playfair.
 
-string Playfair::decode() const
+string Playfair::decode()
 {
    string decrypted = "";
    decrypted.reserve(cipher_len);

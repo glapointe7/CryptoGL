@@ -12,6 +12,10 @@ Cesar::Cesar()
    cipher_text = Data::load("cipher_text.txt");
 }
 
+Cesar::~Cesar()
+{
+}
+
 // Obtient le caractère additionné à key dans l'alphabet.
 unsigned char Cesar::getAlphaPosition(const char key, const char c) const
 {
@@ -24,7 +28,7 @@ void Cesar::setKey(const unsigned char key)
 }
 
 // Encode un texte clair avec le chiffre de Cesar.
-string Cesar::encode() const
+string Cesar::encode()
 {
    string crypted = "";
    crypted.reserve(clear_text.length());
@@ -40,7 +44,7 @@ string Cesar::encode() const
 }
 
 // D�code un texte encod� par le chiffre de Cesar.
-string Cesar::decode() const
+string Cesar::decode()
 {
    string decrypted = "";
    decrypted.reserve(cipher_text.length());

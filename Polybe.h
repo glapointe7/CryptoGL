@@ -13,8 +13,8 @@ public:
    Polybe();
    ~Polybe();
 
-   string encode() const;
-   string decode() const;
+   string encode();
+   string decode();
 
    void setKey(const string key);
    void setAlpha(const string letters);

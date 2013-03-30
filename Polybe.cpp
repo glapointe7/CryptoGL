@@ -32,7 +32,7 @@ void Polybe::setKey(const string key)
 
 // Encode un texte clair par le chiffre de Polybe.
 
-string Polybe::encode() const
+string Polybe::encode()
 {
    string crypted = "";
    crypted.reserve(2 * clear_len);
@@ -65,7 +65,7 @@ string Polybe::encode() const
 
 // Décode un texte encodé par le chiffre de Polybe.
 
-string Polybe::decode() const
+string Polybe::decode()
 {
    string decrypted = "";
    decrypted.reserve(clear_len);

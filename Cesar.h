@@ -9,8 +9,8 @@ public:
    Cesar();
    ~Cesar();
 
-   string encode() const;
-   string decode() const;
+   string encode();
+   string decode();
 
    void setKey(const unsigned char key);
    unsigned char getAlphaPosition(const char key, const char c) const;

@@ -15,8 +15,8 @@ public:
    void setKey(const string key);
 
 protected:
-   string encode() const;
-   string decode() const;
+   string encode();
+   string decode();
 
 private:
    string key;

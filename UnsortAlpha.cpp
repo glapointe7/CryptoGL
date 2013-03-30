@@ -28,7 +28,7 @@ void UnsortAlpha::setHorizontalAlpha()
 // Construit l'alphabet désordonné de façon verticale selon 
 // la longueur de la clé épurée de doublons.
 
-void UnsortAlpha::setHorizontalAlpha()
+void UnsortAlpha::setVerticalAlpha()
 {
    string new_key(removeRepeatedLetters(key));
    string str(removeRepeatedLetters(new_key + alpha));
@@ -48,7 +48,7 @@ void UnsortAlpha::setHorizontalAlpha()
 
 // Encode un texte avec un alphabet désordonné choisi.
 
-string UnsortAlpha::encode() const
+string UnsortAlpha::encode()
 {
    string crypted = "";
    crypted.reserve(clear_text.length());
@@ -63,7 +63,7 @@ string UnsortAlpha::encode() const
 
 // Encode un texte avec un alphabet désordonné choisi.
 
-string UnsortAlpha::decode() const
+string UnsortAlpha::decode()
 {
    string decrypted = "";
    decrypted.reserve(cipher_text.length());

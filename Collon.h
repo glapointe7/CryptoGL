@@ -17,8 +17,8 @@ public:
    Collon(const Collon& orig);
    ~Collon();
 
-   string encode() const;
-   string decode() const;
+   string encode();
+   string decode();
 
    void setKey(const string key);
    void setGridDimension(const uint8_t grid_dim);

@@ -12,8 +12,8 @@ public:
    Fleissner();
    ~Fleissner();
 
-   string encode() const;
-   string decode() const;
+   string encode();
+   string decode();
 
    void setAlpha(const string letters);
    void setKey(const vector<coordinates> key);

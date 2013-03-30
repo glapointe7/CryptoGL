@@ -18,6 +18,10 @@ Wolseley::Wolseley()
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
 }
 
+Wolseley::~Wolseley()
+{
+}
+
 void Wolseley::setKey(const string key)
 {
    this->key = key;
@@ -30,7 +34,7 @@ void Wolseley::setAlpha(const string letters)
 
 // Encode un message avec le chiffre de Wolseley.
 
-string Wolseley::encode() const
+string Wolseley::encode()
 {
    string crypted = "";
    crypted.reserve(clear_text.length());
@@ -50,7 +54,7 @@ string Wolseley::encode() const
 
 // Décode un cryptogramme chiffré avec Wolseley.
 
-string Wolseley::decode() const
+string Wolseley::decode()
 {
    string decrypted = "";
    decrypted.reserve(cipher_text.length());

@@ -27,7 +27,7 @@ void Vigenere::setKey(const string key)
    this->key = key;
 }
 
-string Vigenere::encode() const
+string Vigenere::encode()
 {
    string crypted = "";
    crypted.reserve(clear_text.length());
@@ -53,7 +53,7 @@ string Vigenere::encode() const
 
 // D�code un texte encod� par le chiffre de Vigen�re.
 
-string Vigenere::decode() const
+string Vigenere::decode()
 {
    string decrypted = "";
    decrypted.reserve(cipher_text.length());

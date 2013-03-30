@@ -117,7 +117,7 @@ void Fleissner::fillWithRandomChars()
 
 // Encode un texte avec la grille tournante de Fleissner.
 
-string Fleissner::encode() const
+string Fleissner::encode()
 {
    string crypted = "";
    vector<coordinates> coords(key);
@@ -165,7 +165,7 @@ string Fleissner::encode() const
 
 // Décode un cryptogramme de la grille de Fleissner.
 
-string Fleissner::decode() const
+string Fleissner::decode()
 {
    string decrypted = "";
    vector<coordinates> coords(key);

@@ -47,7 +47,7 @@ void Collon::setAlpha(const string letters)
    alpha = letters;
 }
 
-string Collon::encode() const
+string Collon::encode()
 {
    string line1 = "";
    line1.reserve(clear_len);
@@ -89,7 +89,7 @@ string Collon::encode() const
    return crypted;
 }
 
-string Collon::decode() const
+string Collon::decode()
 {
    unsigned int line_len = cipher_len >> 1;
    string decrypted = "";

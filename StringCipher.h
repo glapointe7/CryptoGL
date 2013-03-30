@@ -19,8 +19,8 @@ public:
    StringCipher(const StringCipher& orig);
    virtual ~StringCipher() = default;
 
-   virtual string encode()const = 0;
-   virtual string decode()const = 0;
+   virtual string encode() = 0;
+   virtual string decode() = 0;
    //virtual void setKey(const string key);
 
 protected:

@@ -17,8 +17,8 @@ public:
    Vigenere(const Vigenere& orig);
    ~Vigenere();
    
-   string encode() const;
-   string decode() const;
+   string encode();
+   string decode();
    
    void setKey(const string key);
    
