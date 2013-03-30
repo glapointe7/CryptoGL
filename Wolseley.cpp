@@ -1,14 +1,10 @@
-/* 
- * File:   Wolseley.cpp
- * Author: gabriel
- * 
- * Modified by Gabriel on 27 mars 2013
- */
 
 #include "Wolseley.h"
+
+#include <algorithm>
+
 #include "Data.h"
 #include "Tools.h"
-#include <algorithm>
 
 Wolseley::Wolseley()
 {
@@ -18,18 +14,14 @@ Wolseley::Wolseley()
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
 }
 
-Wolseley::~Wolseley()
-{
-}
-
-void Wolseley::setKey(const string key)
+void Wolseley::setKey(const string &key)
 {
    this->key = key;
 }
 
 // Encode un message avec le chiffre de Wolseley.
 
-string Wolseley::encode()
+string Wolseley::encode(const std::string &)
 {
    string crypted = "";
    crypted.reserve(clear_text.length());
@@ -49,7 +41,7 @@ string Wolseley::encode()
 
 // Décode un cryptogramme chiffré avec Wolseley.
 
-string Wolseley::decode()
+string Wolseley::decode(const std::string &)
 {
    string decrypted = "";
    decrypted.reserve(cipher_text.length());

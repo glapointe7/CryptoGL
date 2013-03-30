@@ -1,25 +1,26 @@
+
 #ifndef UNSORTALPHA_H
 #define UNSORTALPHA_H
 
 #include "StringCipher.h"
-#include <vector>
+
+#include <string>
 
 class UnsortAlpha : public StringCipher
 {
 public:
    UnsortAlpha();
-   ~UnsortAlpha();
+   
+   std::string encode(const std::string &);
+   std::string decode(const std::string &);
 
    void setVerticalAlpha();
    void setHorizontalAlpha();
-   void setKey(const string key);
-
-protected:
-   string encode();
-   string decode();
+   void setKey(const std::string key);
 
 private:
-   string key;
-   string unsort_alpha;
+   std::string key;
+   std::string unsort_alpha;
 };
-#endif
+
+#endif // UNSORTALPHA_H

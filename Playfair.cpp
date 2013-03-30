@@ -1,8 +1,11 @@
+
 #include "Playfair.h"
+
+#include <iostream>
+#include <utility>
+
 #include "Data.h"
 #include "Tools.h"
-#include <utility>
-#include <iostream>
 
 Playfair::Playfair()
 {
@@ -11,15 +14,11 @@ Playfair::Playfair()
    clear_len = clear_text.length();
    cipher_len = cipher_text.length();
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
-   if ((clear_text.length() % 2) != 0)
+   if (clear_text.length() % 2 != 0)
    {
       clear_text += "X";
       clear_len++;
    }
-}
-
-Playfair::~Playfair()
-{
 }
 
 void Playfair::setKey(const string key)
@@ -29,7 +28,7 @@ void Playfair::setKey(const string key)
 
 // Encode un texte clair avec la méthode de Playfair.
 
-string Playfair::encode()
+string Playfair::encode(const std::string &)
 {
    string crypted = "";
    crypted.reserve(clear_len);
@@ -97,7 +96,7 @@ string Playfair::encode()
 
 // Encode un texte clair avec la m�thode de Playfair.
 
-string Playfair::decode()
+string Playfair::decode(const std::string &)
 {
    string decrypted = "";
    decrypted.reserve(cipher_len);

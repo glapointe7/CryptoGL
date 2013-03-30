@@ -1,12 +1,6 @@
-/* 
- * File:   clsVigenere.h
- * Author: gabriel
- *
- * Created on March 29, 2013, 8:32 AM
- */
 
 #ifndef VIGENERE_H
-#define	VIGENERE_H
+#define VIGENERE_H
 
 #include "StringCipher.h"
 
@@ -14,18 +8,14 @@ class Vigenere : public StringCipher
 {
 public:
    Vigenere();
-   Vigenere(const Vigenere& orig);
-   ~Vigenere();
    
-   string encode();
-   string decode();
+   std::string encode(const std::string &);
+   std::string decode(const std::string &);
    
-   void setKey(const string key);
+   void setKey(const std::string &key);
    
 private:
-   string key;
-
+   std::string key;
 };
 
-#endif	/* CLSVIGENERE_H */
-
+#endif // VIGENERE_H

@@ -1,3 +1,4 @@
+
 #ifndef MORSE_H
 #define MORSE_H
 
@@ -10,12 +11,12 @@ class Morse : public StringCipher
 {
 public:
    Morse();
-   ~Morse();
 
-   string encode();
-   string decode();
+   std::string encode(const std::string &);
+   std::string decode(const std::string &);
 
 private:
-   vector<string> morse;
+   std::vector<std::string> morse;
 };
-#endif
+
+#endif // MORSE_H

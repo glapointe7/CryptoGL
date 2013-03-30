@@ -1,7 +1,10 @@
+
 #include "Fleissner.h"
-#include "Data.h"
+
 #include <set>
 #include <time.h>
+
+#include "Data.h"
 
 Fleissner::Fleissner()
 {
@@ -12,13 +15,9 @@ Fleissner::Fleissner()
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!,:;?_-'\"/*+=()[]{}%$#");
 }
 
-Fleissner::~Fleissner()
-{
-}
-
 // La clé correspond au masque, c'est-à-dire les coordonnées de chaque trous du masque.
 
-void Fleissner::setKey(const vector<coordinates> key)
+void Fleissner::setKey(const vector<Coordinates> key)
 {
    this->key = key;
 }
@@ -30,7 +29,7 @@ void Fleissner::setGridDimension(const unsigned short dim)
 
 // V�rifie que le masque initial contient exactement le quart des cellules de la grille.
 
-bool Fleissner::checkMask(vector<coordinates> &coords) const
+bool Fleissner::checkMask(vector<Coordinates> &coords) const
 {
    unsigned short key_size = key.size();
    unsigned short mask_size_approuved = key_size * 4;
@@ -42,9 +41,9 @@ bool Fleissner::checkMask(vector<coordinates> &coords) const
    }
 
    // Afin d'ordonner les coordonnées pour chaque rotation.
-   set<coordinates> rotation90, rotation180, rotation270;
-   set<coordinates> cmp;
-   pair < set<coordinates>::iterator, bool> is_unique;
+   set<Coordinates> rotation90, rotation180, rotation270;
+   set<Coordinates> cmp;
+   pair <set<Coordinates>::iterator, bool> is_unique;
 
    // On remplit le SET du masque initial key et on insert les rotations ordonnées 
    // en s'assurant que les coordonnées sont uniques.
@@ -112,10 +111,10 @@ void Fleissner::fillWithRandomChars()
 
 // Encode un texte avec la grille tournante de Fleissner.
 
-string Fleissner::encode()
+string Fleissner::encode(const std::string &)
 {
    string crypted = "";
-   vector<coordinates> coords(key);
+   vector<Coordinates> coords(key);
    unsigned short dim = grid_dim * grid_dim;
 
    // Si le masque est valide.
@@ -160,10 +159,10 @@ string Fleissner::encode()
 
 // Décode un cryptogramme de la grille de Fleissner.
 
-string Fleissner::decode()
+string Fleissner::decode(const std::string &)
 {
    string decrypted = "";
-   vector<coordinates> coords(key);
+   vector<Coordinates> coords(key);
    unsigned short dim = grid_dim * grid_dim;
 
    // On v�rifie si le masque initial est valide et on obtient les coordonn�es de ses rotations.

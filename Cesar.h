@@ -1,3 +1,4 @@
+
 #ifndef CESAR_H
 #define CESAR_H
 
@@ -7,10 +8,9 @@ class Cesar : public StringCipher
 {
 public:
    Cesar();
-   ~Cesar();
 
-   string encode();
-   string decode();
+   std::string encode(const std::string &);
+   std::string decode(const std::string &);
 
    void setKey(const unsigned char key);
    unsigned char getAlphaPosition(const char key, const char c) const;
@@ -18,4 +18,5 @@ public:
 private:
    unsigned char key;
 };
-#endif
+
+#endif // CESAR_H

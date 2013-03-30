@@ -1,11 +1,6 @@
-/* 
- * File:   Vigenere.cpp
- * Author: gabriel
- * 
- * Created on March 29, 2013, 8:32 AM
- */
 
 #include "Vigenere.h"
+
 #include "Data.h"
 
 Vigenere::Vigenere()
@@ -14,20 +9,12 @@ Vigenere::Vigenere()
    cipher_text = Data::load("cipher_text.txt");
 }
 
-Vigenere::Vigenere(const Vigenere& orig)
-{
-}
-
-Vigenere::~Vigenere()
-{
-}
-
-void Vigenere::setKey(const string key)
+void Vigenere::setKey(const string &key)
 {
    this->key = key;
 }
 
-string Vigenere::encode()
+string Vigenere::encode(const std::string &)
 {
    string crypted = "";
    crypted.reserve(clear_text.length());
@@ -53,7 +40,7 @@ string Vigenere::encode()
 
 // D�code un texte encod� par le chiffre de Vigen�re.
 
-string Vigenere::decode()
+string Vigenere::decode(const std::string &)
 {
    string decrypted = "";
    decrypted.reserve(cipher_text.length());

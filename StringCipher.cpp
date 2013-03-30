@@ -1,9 +1,3 @@
-/* 
- * File:   StringCipher.cpp
- * Author: gabriel
- * 
- * Created on March 23, 2013, 9:12 AM
- */
 
 #include "StringCipher.h"
 
@@ -12,16 +6,61 @@ StringCipher::StringCipher()
 
 }
 
-StringCipher::StringCipher(const StringCipher& orig)
+void StringCipher::save(const std::string &)
 {
+   /*
+    try
+   {
+      ofstream out(filename.c_str());
+      out << data;
+      out.close();
+   }
+   catch (exception &e)
+   {
+      cout << "Erreur : " << e.what();
+   }
+    */
+}
+ 
+std::string StringCipher::load(const std::string &)
+{
+   /*
+    string data = "";
+
+   // Ouverture du fichier en lecture.
+   try
+   {
+      ifstream in(filename.c_str());
+
+      while (!in.eof())
+      {
+         string tmp;
+         in >> tmp;
+         data += tmp;
+         if (keep_space == true)
+         {
+            data += " ";
+         }
+      }
+      in.close();
+   }
+   catch (exception &e)
+   {
+      cout << "Erreur : " << e.what();
+      return nullptr;
+   }
+
+   return data;
+    */
+   return "";
 }
 
-void StringCipher::setAlpha(const string &alpha)
+void StringCipher::setAlpha(const std::string &alpha)
 {
    this->alpha = alpha;
 }
 
-string StringCipher::getAlpha() const
+std::string StringCipher::getAlpha() const
 {
    return alpha;
 }

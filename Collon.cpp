@@ -1,14 +1,10 @@
-/* 
- * File:   Collon.cpp
- * Author: gabriel
- * 
- * Created on March 29, 2013, 8:54 AM
- */
 
 #include "Collon.h"
+
+#include <utility>
+
 #include "Data.h"
 #include "Tools.h"
-#include <utility>
 
 Collon::Collon()
 {
@@ -19,15 +15,7 @@ Collon::Collon()
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
 }
 
-Collon::Collon(const Collon& orig)
-{
-}
-
-Collon::~Collon()
-{
-}
-
-void Collon::setKey(const string key)
+void Collon::setKey(const std::string &key)
 {
    this->key = key;
 }
@@ -42,7 +30,7 @@ void Collon::setBlockLength(const uint32_t series)
    block_len = series;
 }
 
-string Collon::encode()
+string Collon::encode(const std::string &)
 {
    string line1 = "";
    line1.reserve(clear_len);
@@ -84,7 +72,7 @@ string Collon::encode()
    return crypted;
 }
 
-string Collon::decode()
+string Collon::decode(const std::string &)
 {
    unsigned int line_len = cipher_len >> 1;
    string decrypted = "";
@@ -117,20 +105,20 @@ string Collon::decode()
       
       // Soient A = (x1, y1) et B = (x2, y2) les 2 lettres du bigramme à l'itération i.
       // Soit C = (x, y) la lettre décodée. On doit avoir C = (x2, y1).
-      for(auto str : grid)
+      for (auto str : grid)
       {
          A.first = str.find(line1[i]);
-         if(A.first != string::npos)
+         if (A.first != string::npos)
          {
             break;
          }
          A.second++;
       }
       
-      for(auto str : grid)
+      for (auto str : grid)
       {
          B.first = str.find(line2[i]);
-         if(B.first != string::npos)
+         if (B.first != string::npos)
          {
             break;
          }

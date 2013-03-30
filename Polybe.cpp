@@ -1,11 +1,10 @@
-/* Modifié par Gabriel Lapointe
- * le 27 mars 2013
- */
 
 #include "Polybe.h"
+
+#include <utility> 
+
 #include "Data.h"
 #include "Tools.h"
-#include <utility> 
 
 Polybe::Polybe()
 {
@@ -16,18 +15,14 @@ Polybe::Polybe()
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
 }
 
-Polybe::~Polybe()
-{
-}
-
-void Polybe::setKey(const string key)
+void Polybe::setKey(const string &key)
 {
    this->key = key;
 }
 
 // Encode un texte clair par le chiffre de Polybe.
 
-string Polybe::encode()
+string Polybe::encode(const std::string &)
 {
    string crypted = "";
    crypted.reserve(2 * clear_len);
@@ -60,7 +55,7 @@ string Polybe::encode()
 
 // Décode un texte encodé par le chiffre de Polybe.
 
-string Polybe::decode()
+string Polybe::decode(const std::string &)
 {
    string decrypted = "";
    decrypted.reserve(clear_len);

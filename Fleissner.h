@@ -1,25 +1,27 @@
+
 #ifndef FLEISSNER_H
 #define FLEISSNER_H
 
 #include "StringCipher.h"
+
 #include <vector>
 
-typedef pair<unsigned short, unsigned short> coordinates;
-
 class Fleissner : public StringCipher
-{
+{  
 public:
+   
+   typedef std::pair<unsigned short, unsigned short> Coordinates;
+   
    Fleissner();
-   ~Fleissner();
 
-   string encode();
-   string decode();
+   std::string encode(const std::string &);
+   std::string decode(const std::string &);
 
-   void setKey(const vector<coordinates> key);
+   void setKey(const std::vector<Coordinates> key);
    void setGridDimension(const unsigned short dim);
 
 private:
-   bool checkMask(vector<coordinates> &coords) const;
+   bool checkMask(std::vector<Coordinates> &coords) const;
    void fillWithRandomChars();
 
    // Dimension de la grille de chiffrement.
@@ -33,9 +35,10 @@ private:
 
    //vector<coordinates> coords;
    // Coordonnées des masques initial.
-   vector<coordinates> key;
+   std::vector<Coordinates> key;
 
    unsigned int cipher_len;
    unsigned int clear_len;
 };
-#endif
+
+#endif // FLEISSNER_H

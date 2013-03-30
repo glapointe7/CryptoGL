@@ -1,7 +1,10 @@
+
 #include "Morse.h"
+
+#include <algorithm>
+
 #include "Tools.h"
 #include "Data.h"
-#include <algorithm>
 
 Morse::Morse()
 {
@@ -16,13 +19,9 @@ Morse::Morse()
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?");
 }
 
-Morse::~Morse()
-{
-}
-
 // Encode un message clair en langage Morse.
 
-string Morse::encode()
+string Morse::encode(const std::string &)
 {
    string crypted = "";
 
@@ -38,7 +37,7 @@ string Morse::encode()
 
 // D�code un message crypt� en langage Morse.
 
-string Morse::decode()
+string Morse::decode(const std::string &)
 {
    string decrypted = "";
    vector<string> cipher_word = split(cipher_text);

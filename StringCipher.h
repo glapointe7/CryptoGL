@@ -1,36 +1,30 @@
-/* 
- * File:   StringCipher.h
- * Author: gabriel
- *
- * Created on March 23, 2013, 9:12 AM
- */
 
 #ifndef STRINGCIPHER_H
-#define	STRINGCIPHER_H
+#define STRINGCIPHER_H
 
 #include <string>
 
-using namespace std;
+#include "Cipher.hpp"
 
-class StringCipher
+class StringCipher : public Cipher<std::string>
 {
 public:
    StringCipher();
-   StringCipher(const StringCipher& orig);
-   virtual ~StringCipher() = default;
+   ~StringCipher() {}
 
-   virtual string encode() = 0;
-   virtual string decode() = 0;
-   //virtual void setKey(const string key);
+   virtual std::string encode(const std::string &) = 0;
+   virtual std::string decode(const std::string &) = 0;
    
-   void setAlpha(const string &letters);
-   string getAlpha() const;
+   void save(const std::string &);
+   std::string load(const std::string &);
+   
+   void setAlpha(const std::string &letters);
+   std::string getAlpha() const;
 
 protected:
-   string cipher_text;
-   string clear_text;
-   string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+   std::string cipher_text;
+   std::string clear_text;
+   std::string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 };
 
-#endif	/* STRINGCIPHER_H */
-
+#endif // STRINGCIPHER_H

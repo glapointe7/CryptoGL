@@ -1,9 +1,3 @@
-/* 
- * File:   Wolseley.h
- * Author: gabriel
- *
- * Modified by Gabriel on 25 mars 2013
- */
 
 #ifndef WOLSELEY_H
 #define WOLSELEY_H
@@ -14,14 +8,14 @@ class Wolseley : public StringCipher
 {
 public:
    Wolseley();
-   ~Wolseley();
 
-   string encode();
-   string decode();
+   std::string encode(const std::string &);
+   std::string decode(const std::string &);
 
-   void setKey(const string key);
+   void setKey(const std::string &key);
 
 private:
-   string key;
+   std::string key;
 };
-#endif
+
+#endif // WOLSELEY_H

@@ -64,7 +64,7 @@ MD5::MD5()
 
 // nifty shortcut ctor, compute MD5 for string and finalize it right away
 
-MD5::MD5(const string &text)
+MD5::MD5(const std::string &text)
 {
    finalized = false;
    update((const unsigned char*) text.c_str(), text.length());
@@ -74,7 +74,7 @@ MD5::MD5(const string &text)
 // encodes input (uint32_t) into output (unsigned char). Assumes len is
 // a multiple of 4.
 
-void MD5::encode(uint8_t output[], const vector<uint32_t> &input, uint32_t len)
+void MD5::encode(uint8_t output[], const std::vector<uint32_t> &input, uint32_t len)
 {
    for (uint32_t i = 0, j = 0; j < len; i++, j += 4)
    {
@@ -89,8 +89,8 @@ void MD5::encode(uint8_t output[], const vector<uint32_t> &input, uint32_t len)
 
 void MD5::transform(const uint8_t block[64])
 {
-   vector<uint32_t> hash(state);
-   vector<uint32_t> x(16, 0);
+   std::vector<uint32_t> hash(state);
+   std::vector<uint32_t> x(16, 0);
    
    // decodes input (unsigned char) into output (uint32_t). Assumes len is a multiple of 4.
    for (unsigned int i = 0, j = 0; j < 64; i++, j += 4)
@@ -100,10 +100,10 @@ void MD5::transform(const uint8_t block[64])
    }
 
    // Constantes pour la transformation MD5.
-   const vector<uint32_t> routine = {7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21};
+   const std::vector<uint32_t> routine = {7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21};
 
    // valeurs obtenues par la formule k(i) = sin(i + 1) * 2^32 pour i = 0,...,63.
-   const vector<unsigned int> k = {
+   const std::vector<unsigned int> k = {
       0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
       0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
       0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
@@ -280,7 +280,7 @@ MD5& MD5::finalize()
 
 // Retourne la string représentant le codage en hexadécimal.
 
-string MD5::hexdigest() const
+std::string MD5::hexdigest() const
 {
    if (!finalized)
    {
@@ -294,5 +294,5 @@ string MD5::hexdigest() const
    }
    buf[32] = 0;
 
-   return string(buf);
+   return std::string(buf);
 }

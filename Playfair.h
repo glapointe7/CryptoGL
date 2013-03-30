@@ -1,6 +1,3 @@
-/* Modifié par Gabriel Lapointe
- * le 25 mars 2013
- */
 
 #ifndef PLAYFAIR_H
 #define PLAYFAIR_H
@@ -11,18 +8,18 @@ class Playfair : public StringCipher
 {
 public:
    Playfair();
-   ~Playfair();
 
-   string encode();
-   string decode();
+   std::string encode(const std::string &);
+   std::string decode(const std::string &);
 
-   void setKey(const string key);
+   void setKey(const std::string key);
 
 private:
-   string key;
+   std::string key;
    unsigned int cipher_len;
    unsigned int clear_len;
 
    const unsigned char rows = 5;
 };
-#endif
+
+#endif // PLAYFAIR_H
