@@ -24,4 +24,14 @@ Toutes les idées qui nous passent par la tête pour lesquelles on veut discuter
 	d. (MathematicalAttack ???) Je sais qu'on peut attaquer le DES par l'algorithme LLL par exemple.
 
 
+3. Ajouter une librairie pour les outils mathématiques (MathematicalTools) ou même une pour les maths générales et d'autres plus spécialisées.
 
+	a. Calcul du PGCD.
+
+	b. Calcul du déterminant d'une matrice.
+
+	c. Calcule du modulo inverse de X.
+
+	d. Calculer la matrice inverse (algorithme de Gauss)
+
+	e. ETC.
