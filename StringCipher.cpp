@@ -16,3 +16,12 @@ StringCipher::StringCipher(const StringCipher& orig)
 {
 }
 
+void StringCipher::setAlpha(const string &alpha)
+{
+   this->alpha = alpha;
+}
+
+string StringCipher::getAlpha() const
+{
+   return alpha;
+}

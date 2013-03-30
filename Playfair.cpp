@@ -22,11 +22,6 @@ Playfair::~Playfair()
 {
 }
 
-void Playfair::setAlpha(const string letters)
-{
-   alpha = letters;
-}
-
 void Playfair::setKey(const string key)
 {
    this->key = key;

@@ -27,11 +27,6 @@ void Wolseley::setKey(const string key)
    this->key = key;
 }
 
-void Wolseley::setAlpha(const string letters)
-{
-   alpha = letters;
-}
-
 // Encode un message avec le chiffre de Wolseley.
 
 string Wolseley::encode()

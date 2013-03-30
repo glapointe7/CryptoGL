@@ -20,11 +20,6 @@ Polybe::~Polybe()
 {
 }
 
-void Polybe::setAlpha(const string letters)
-{
-   alpha = letters;
-}
-
 void Polybe::setKey(const string key)
 {
    this->key = key;

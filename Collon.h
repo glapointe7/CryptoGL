@@ -23,7 +23,6 @@ public:
    void setKey(const string key);
    void setGridDimension(const uint8_t grid_dim);
    void setBlockLength(const uint32_t series);
-   void setAlpha(const string letters);
 
 private:
    string key;

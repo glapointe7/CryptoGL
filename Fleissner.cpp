@@ -16,11 +16,6 @@ Fleissner::~Fleissner()
 {
 }
 
-void Fleissner::setAlpha(const string letters)
-{
-   alpha = letters;
-}
-
 // La clé correspond au masque, c'est-à-dire les coordonnées de chaque trous du masque.
 
 void Fleissner::setKey(const vector<coordinates> key)

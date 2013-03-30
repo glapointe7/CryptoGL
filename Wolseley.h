@@ -20,7 +20,6 @@ public:
    string decode();
 
    void setKey(const string key);
-   void setAlpha(const string letters);
 
 private:
    string key;

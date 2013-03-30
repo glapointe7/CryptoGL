@@ -15,7 +15,6 @@ public:
    string encode();
    string decode();
 
-   void setAlpha(const string letters);
    void setKey(const vector<coordinates> key);
    void setGridDimension(const unsigned short dim);
 

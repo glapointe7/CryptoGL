@@ -20,11 +20,6 @@ Morse::~Morse()
 {
 }
 
-void Morse::setAlpha(const string letters)
-{
-   alpha = letters;
-}
-
 // Encode un message clair en langage Morse.
 
 string Morse::encode()

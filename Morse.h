@@ -2,6 +2,8 @@
 #define MORSE_H
 
 #include "StringCipher.h"
+
+#include <string>
 #include <vector>
 
 class Morse : public StringCipher
@@ -12,8 +14,6 @@ public:
 
    string encode();
    string decode();
-
-   void setAlpha(const string letters);
 
 private:
    vector<string> morse;

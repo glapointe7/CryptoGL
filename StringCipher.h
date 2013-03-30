@@ -22,6 +22,9 @@ public:
    virtual string encode() = 0;
    virtual string decode() = 0;
    //virtual void setKey(const string key);
+   
+   void setAlpha(const string &letters);
+   string getAlpha() const;
 
 protected:
    string cipher_text;

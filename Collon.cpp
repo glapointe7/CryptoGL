@@ -42,11 +42,6 @@ void Collon::setBlockLength(const uint32_t series)
    block_len = series;
 }
 
-void Collon::setAlpha(const string letters)
-{
-   alpha = letters;
-}
-
 string Collon::encode()
 {
    string line1 = "";
