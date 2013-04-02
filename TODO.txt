@@ -8,6 +8,10 @@
 
 4. Ajouter une classe Matrix pour la manipulation des matrices : Inverse, déterminant, addition et multiplication, Cofacteurs, Adjointe, Transposée, etc.
 
+5. Pour les transpositions, ADFGVX contient une transposition rectangulaire (Aggrégation). 
+
+6. Créer la classe abstraite Transposition ? Par exemple : http://www.apprendre-en-ligne.net/crypto/transpo/rectangulaire.html
+
 **********************************************************
 
 IDÉES / SUGGESTIONS / AUTRES
