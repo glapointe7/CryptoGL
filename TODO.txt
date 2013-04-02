@@ -1,5 +1,17 @@
-Toutes les idées qui nous passent par la tête pour lesquelles on veut discuter.
+*************** À DISCUTER *******************************
 
+1. Optimiser la fonction load(const string &filename) selon http://insanecoding.blogspot.ca/2011/11/how-to-read-in-file-in-c.html
+
+2. Ajouter les cryptos : ADFGVX, Transposition, Affine, variantes de Vigenère, chiffrement à 2-3-4 carrés.
+
+3. S'entendre sur : mettre ou pas 'using namespace std;'.
+
+4. Ajouter une classe Matrix pour la manipulation des matrices : Inverse, déterminant, addition et multiplication, Cofacteurs, Adjointe, Transposée, etc.
+
+**********************************************************
+
+IDÉES / SUGGESTIONS / AUTRES
+**********************************************************
 
 1. Familles de cryptos
 
