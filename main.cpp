@@ -1,4 +1,5 @@
-#include "Playfair.h"
+#include "Railfence.h"
+//#include "Playfair.h"
 //#include "Polybe.h"
 //#include "Wolseley.h"
 //#include "Cesar.h"
@@ -8,14 +9,20 @@
 //#include "clsMorse.h"
 #include <iostream>
 
+using namespace std;
+
 int main()
 {
+   Railfence *R = new Railfence();
+   R->setKey(4);
+   
+   StringCipher *SC = R;
+   cout << SC->decode("CTIONCNLMEAAMV");
    //Playfair *P = new Playfair();
    //P->setKey("MAISON");
    //StringCipher *sc_c = P;
 
    //cout << sc_c->encode();
-
 
    //string key = "ABCDEEFDABE";
    //string text = "iI PArait Que TU vEUX que Je tEstE kpTa1 aVEc mA pRoPre cLE";

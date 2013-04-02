@@ -3,71 +3,51 @@
 
 #include <utility> 
 
-#include "Data.h"
-#include "Tools.h"
+using namespace std;
 
 Polybe::Polybe()
 {
-   clear_text = Data::load("clear_text.txt");
-   cipher_text = Data::load("cipher_text.txt");
-   clear_len = clear_text.length();
-   cipher_len = cipher_text.length();
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
-}
-
-void Polybe::setKey(const string &key)
-{
-   this->key = key;
 }
 
 // Encode un texte clair par le chiffre de Polybe.
 
-string Polybe::encode(const std::string &)
+string Polybe::encode(const std::string &clear_text)
 {
+   unsigned int clear_len = clear_text.length();
    string crypted = "";
-   crypted.reserve(2 * clear_len);
+   crypted.reserve(clear_len << 1);
 
    // Construction de la grille de chiffrement.
-   vector<string> grid(createGrid(key + alpha, Polybe::rows));
+   vector<string> grid(getGrid(key + alpha));
 
+   // Obtention des coordonnées de chaque lettre dans la grille.
+   // Note : on ajoute '1', car on veut rendre le cryptogramme en string.
    for (auto c : clear_text)
    {
-      auto pos = make_pair('1', '1');
-      for (auto row : grid)
-      {
-         pos.first = row.find(c);
-         if (pos.first != string::npos)
-         {
-            pos.first += '1';
-            break;
-         }
-         pos.second++;
-      }
+      auto pos = getCharCoordinates(c, grid);
 
-      crypted += pos.second;
-      crypted += pos.first;
+      crypted += (pos.second + '1');
+      crypted += (pos.first + '1');
    }
-
-   Data::save("cipher_text.txt", crypted);
 
    return crypted;
 }
 
 // Décode un texte encodé par le chiffre de Polybe.
 
-string Polybe::decode(const std::string &)
+string Polybe::decode(const std::string &cipher_text)
 {
+   unsigned int cipher_len = cipher_text.length();
    string decrypted = "";
-   decrypted.reserve(clear_len);
-   vector<string> grid(createGrid(key + alpha, Polybe::rows));
+   decrypted.reserve(cipher_len);
+   vector<string> grid(getGrid(key + alpha));
 
    for (unsigned i = 0; i < cipher_len; i += 2)
    {
       auto pos = make_pair(cipher_text[i] - '1', cipher_text[i + 1] - '1');
       decrypted += grid[pos.first][pos.second];
    }
-
-   Data::save("clear_text.txt", decrypted);
 
    return decrypted;
 }

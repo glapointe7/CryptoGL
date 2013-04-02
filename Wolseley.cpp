@@ -3,14 +3,10 @@
 
 #include <algorithm>
 
-#include "Data.h"
 #include "Tools.h"
 
 Wolseley::Wolseley()
 {
-   clear_text = Data::load("clear_text.txt");
-   cipher_text = Data::load("cipher_text.txt");
-   //transform(clear_text.begin(), clear_text.end(), clear_text.begin(), ::toupper);
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
 }
 
@@ -21,7 +17,7 @@ void Wolseley::setKey(const string &key)
 
 // Encode un message avec le chiffre de Wolseley.
 
-string Wolseley::encode(const std::string &)
+string Wolseley::encode(const std::string &clear_text)
 {
    string crypted = "";
    crypted.reserve(clear_text.length());
@@ -34,14 +30,13 @@ string Wolseley::encode(const std::string &)
       string::size_type pos = new_alpha.find(c);
       crypted += new_alpha[24 - pos];
    }
-   Data::save("cipher_text.txt", crypted);
 
    return crypted;
 }
 
 // Décode un cryptogramme chiffré avec Wolseley.
 
-string Wolseley::decode(const std::string &)
+string Wolseley::decode(const std::string &cipher_text)
 {
    string decrypted = "";
    decrypted.reserve(cipher_text.length());
@@ -54,7 +49,6 @@ string Wolseley::decode(const std::string &)
       string::size_type pos = new_alpha.find(c);
       decrypted += new_alpha[24 - pos];
    }
-   Data::save("clear_text.txt", decrypted);
-
+  
    return decrypted;
 }

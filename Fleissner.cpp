@@ -3,15 +3,12 @@
 
 #include <set>
 #include <time.h>
+#include <vector>
 
-#include "Data.h"
+using namespace std;
 
 Fleissner::Fleissner()
 {
-   clear_text = Data::load("clear_text.txt");
-   cipher_text = Data::load("cipher_text.txt");
-   clear_len = clear_text.length();
-   cipher_len = cipher_text.length();
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!,:;?_-'\"/*+=()[]{}%$#");
 }
 
@@ -43,7 +40,7 @@ bool Fleissner::checkMask(vector<Coordinates> &coords) const
    // Afin d'ordonner les coordonnées pour chaque rotation.
    set<Coordinates> rotation90, rotation180, rotation270;
    set<Coordinates> cmp;
-   pair <set<Coordinates>::iterator, bool> is_unique;
+   pair < set<Coordinates>::iterator, bool> is_unique;
 
    // On remplit le SET du masque initial key et on insert les rotations ordonnées 
    // en s'assurant que les coordonnées sont uniques.
@@ -93,25 +90,25 @@ bool Fleissner::checkMask(vector<Coordinates> &coords) const
    return true;
 }
 
-// Remplit le texte clair par des caract�res au hasard afin d'obtenir un multiple du carr� de grid_dim.
+// Remplit le texte clair par des caractères au hasard afin d'obtenir 
+// un multiple du carré de grid_dim.
 
-void Fleissner::fillWithRandomChars()
+void Fleissner::fillWithRandomChars(string &text)
 {
-   unsigned int fillers = clear_len % (grid_dim * grid_dim);
-   unsigned short alpha_len = alpha.length();
+   unsigned int fillers = text.length() % (grid_dim * grid_dim);
+   unsigned short alpha_len = alpha.length() + 1;
    srand(time(0));
 
    for (unsigned int i = 0; i < fillers; i++)
    {
-      unsigned short rnd_alpha_pos = rand() % alpha_len + 1;
-      clear_text += alpha[rnd_alpha_pos];
+      unsigned short rnd_alpha_pos = rand() % alpha_len;
+      text += alpha[rnd_alpha_pos];
    }
-   clear_len += fillers;
 }
 
 // Encode un texte avec la grille tournante de Fleissner.
 
-string Fleissner::encode(const std::string &)
+string Fleissner::encode(const std::string &clear_text)
 {
    string crypted = "";
    vector<Coordinates> coords(key);
@@ -120,7 +117,8 @@ string Fleissner::encode(const std::string &)
    // Si le masque est valide.
    if (checkMask(coords) == true)
    {
-      fillWithRandomChars();
+      string full_text(clear_text);
+      fillWithRandomChars(full_text);
 
       // On réserve l'espace selon grid_dim pour la grille.
       vector<string> grid;
@@ -132,6 +130,7 @@ string Fleissner::encode(const std::string &)
 
       // Construire la chaîne de cryptage complète.
       // Si la grille est pleine, alors on la vide et on recommence le processus.
+      unsigned int clear_len = full_text.length();
       unsigned short max_grid = static_cast<unsigned short> (clear_len / dim);
       unsigned int k = 0;
 
@@ -140,7 +139,7 @@ string Fleissner::encode(const std::string &)
          // Remplir la grille de chiffrement selon les coordonnées recueillies.
          for (unsigned short j = 0; j < dim; j++, k++)
          {
-            grid[coords[j].first][coords[j].second] = clear_text[k];
+            grid[coords[j].first][coords[j].second] = full_text[k];
          }
 
          // Construire la cha�ne de chiffrement et vider la grille.
@@ -150,8 +149,6 @@ string Fleissner::encode(const std::string &)
          }
          grid.clear();
       }
-
-      //General::save(crypted);
    }
 
    return crypted;
@@ -159,7 +156,7 @@ string Fleissner::encode(const std::string &)
 
 // Décode un cryptogramme de la grille de Fleissner.
 
-string Fleissner::decode(const std::string &)
+string Fleissner::decode(const std::string &cipher_text)
 {
    string decrypted = "";
    vector<Coordinates> coords(key);
@@ -168,6 +165,7 @@ string Fleissner::decode(const std::string &)
    // On v�rifie si le masque initial est valide et on obtient les coordonn�es de ses rotations.
    if (checkMask(coords) == true)
    {
+      unsigned int cipher_len = cipher_text.length();
       unsigned short max_grid = static_cast<unsigned short> (cipher_len / dim);
       unsigned int k = 0;
       vector<string> grid;
@@ -186,8 +184,6 @@ string Fleissner::decode(const std::string &)
             decrypted += grid[coords[c].first][coords[c].second];
          }
       }
-
-      //General::save(decrypted);
    }
 
    return decrypted;

@@ -4,6 +4,22 @@
 #include <algorithm>
 #include <vector>
 
+// Convertit chaque Majuscule et minuscule en un symbole quelconque du code ASCII.
+// symbol doit contenir 2 caract�res : 0 = MAJUSCULE  1 = minuscule.
+
+void convertMajMinToSymbol(string &text, const string symbol)
+{
+   // On remplace chaque caractère en majuscule par symbol[0].
+   replace_if(text.begin(), text.end(), [](char c) {
+      return (isupper(c));
+   }, symbol[0]);
+
+   // On remplace chaque caractère en minuscule par symbol[1].
+   replace_if(text.begin(), text.end(), [](char c) {
+      return (islower(c));
+   }, symbol[1]);
+}
+
 // Convertit un string en une suite binaire.
 
 string convertTextToBinaryString(const string &text)
@@ -21,7 +37,7 @@ string convertTextToBinaryString(const string &text)
 
 // Convertit un texte en majuscules.
 
-void convertTextToMajus(string &text)
+void uppercase(string &text)
 {
    transform(text.begin(), text.end(), text.begin(), ::toupper);
 }
@@ -47,7 +63,7 @@ Type lexical_cast(const string &textNumber)
  * @param int to_base : La base pour laquelle number doit être converti.
  * @return string result
  */
-string baseConvertString(const string number, const unsigned char from_base,
+string baseConvertString(const string &number, const unsigned char from_base,
         const unsigned char to_base)
 {
    string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";

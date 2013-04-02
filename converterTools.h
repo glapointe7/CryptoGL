@@ -5,10 +5,11 @@
 
 using namespace std;
 
-string baseConvertString(const string number, const unsigned char from_base,
+string baseConvertString(const string &number, const unsigned char from_base,
         const unsigned char to_base);
 string convertTextToBinaryString(const string &text);
-void convertTextToMajus(string &text);
+void uppercase(string &text);
+void convertMajMinToSymbol(string &text, const string symbol);
 
 template <class Type>
 Type lexical_cast(const string &textNumber);

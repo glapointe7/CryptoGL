@@ -4,6 +4,8 @@
 
 #include "StringCipher.h"
 
+#include <string>
+
 class Wolseley : public StringCipher
 {
 public:

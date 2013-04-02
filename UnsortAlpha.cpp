@@ -1,13 +1,10 @@
 
 #include "UnsortAlpha.h"
 
-#include "Data.h"
 #include "Tools.h"
 
 UnsortAlpha::UnsortAlpha()
 {
-   clear_text = Data::load("clear_text.txt");
-   cipher_text = Data::load("cipher_text.txt");
    unsort_alpha.reserve(alpha.length());
 }
 
@@ -46,7 +43,7 @@ void UnsortAlpha::setVerticalAlpha()
 
 // Encode un texte avec un alphabet désordonné choisi.
 
-string UnsortAlpha::encode(const std::string &)
+string UnsortAlpha::encode(const std::string &clear_text)
 {
    string crypted = "";
    crypted.reserve(clear_text.length());
@@ -61,7 +58,7 @@ string UnsortAlpha::encode(const std::string &)
 
 // Encode un texte avec un alphabet désordonné choisi.
 
-string UnsortAlpha::decode(const std::string &)
+string UnsortAlpha::decode(const std::string &cipher_text)
 {
    string decrypted = "";
    decrypted.reserve(cipher_text.length());

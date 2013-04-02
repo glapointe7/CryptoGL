@@ -14,7 +14,7 @@ private:
    virtual T encode(const T &) = 0;
    virtual T decode(const T &) = 0;
 
-   virtual void save(const std::string &) = 0;
+   virtual void save(const std::string &, const T &) = 0;
    virtual T load(const std::string &) = 0;
 };
 

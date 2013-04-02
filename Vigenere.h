@@ -4,6 +4,8 @@
 
 #include "StringCipher.h"
 
+#include <string>
+
 class Vigenere : public StringCipher
 {
 public:

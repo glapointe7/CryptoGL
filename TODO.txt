@@ -5,11 +5,13 @@ Toutes les idées qui nous passent par la tête pour lesquelles on veut discuter
 
 	a. (StringCipher) Les cryptos qui renvoient un string(définie par alpha) et qui prennent le message en string(définie par alpha).
 
-	b. (IntegerCipher) Les cryptos qui prennent un message en string et qui renvoient un vecteur d'entiers. (Pas sûr ici...)
+	b. (BufferCipher) Les cryptos qui prennent un message en ASCII et qui renvoient un vecteur de char.
 
 	c. (HashCipher) Les cryptos irréversibles prennant un string(code ascii) comme message et renvoyant un string(hexadécimal ou binaire seulement)
 
 	d. (StreamCipher) Les cryptos modernes (DES, AES, IDEA, etc.) qui encodent le message par blocs de X bits.
+
+	e. (SquareCipher) Les cryptos qui utilisent une grille de chiffrement (Polybe, Collon, ADFGVX, etc.).
 
 	
 

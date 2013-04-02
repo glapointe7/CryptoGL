@@ -4,13 +4,9 @@
 #include <algorithm>
 
 #include "Tools.h"
-#include "Data.h"
 
 Morse::Morse()
 {
-   clear_text = Data::load("clear_text.txt");
-   cipher_text = Data::load("cipher_text.txt", true);
-
    morse = {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..",
       ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.",
       "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", "-----",
@@ -21,7 +17,7 @@ Morse::Morse()
 
 // Encode un message clair en langage Morse.
 
-string Morse::encode(const std::string &)
+string Morse::encode(const std::string &clear_text)
 {
    string crypted = "";
 
@@ -30,25 +26,21 @@ string Morse::encode(const std::string &)
       crypted += morse[alpha.find(c)] + " ";
    }
 
-   Data::save("cipher_text.txt", crypted);
-
    return crypted;
 }
 
 // D�code un message crypt� en langage Morse.
 
-string Morse::decode(const std::string &)
+string Morse::decode(const std::string &cipher_text)
 {
    string decrypted = "";
    vector<string> cipher_word = split(cipher_text);
 
-   for (auto it : cipher_word)
+   for (auto str : cipher_word)
    {
-      unsigned int pos = find(morse.begin(), morse.end(), it) - morse.begin();
+      unsigned int pos = find(morse.begin(), morse.end(), str) - morse.begin();
       decrypted += alpha[pos];
    }
-
-   Data::save("clear_text.txt", decrypted);
 
    return decrypted;
 }

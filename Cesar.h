@@ -4,6 +4,8 @@
 
 #include "StringCipher.h"
 
+#include <string>
+
 class Cesar : public StringCipher
 {
 public:

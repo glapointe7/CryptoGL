@@ -4,63 +4,35 @@
 #include <iostream>
 #include <utility>
 
-#include "Data.h"
-#include "Tools.h"
+using namespace std;
 
 Playfair::Playfair()
 {
-   clear_text = Data::load("clear_text.txt");
-   cipher_text = Data::load("cipher_text.txt");
-   clear_len = clear_text.length();
-   cipher_len = cipher_text.length();
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
-   if (clear_text.length() % 2 != 0)
-   {
-      clear_text += "X";
-      clear_len++;
-   }
-}
-
-void Playfair::setKey(const string key)
-{
-   this->key = key;
 }
 
 // Encode un texte clair avec la méthode de Playfair.
 
-string Playfair::encode(const std::string &)
+string Playfair::encode(const std::string &clear_text)
 {
+   string full_text(clear_text);
+   unsigned int clear_len = full_text.length();
+   if (clear_len % 2 != 0)
+   {
+      full_text += "X";
+      clear_len++;
+   }
+   
    string crypted = "";
    crypted.reserve(clear_len);
 
-   const string str = key + alpha;
-   vector<string> grid(createGrid(str, rows));
+   const vector<string> grid(getGrid(key + alpha));
 
    for (unsigned int i = 0; i < clear_len; i += 2)
    {
       // Obtenir les coordonnées (x,y) et (a,b) des lettres du bigramme dans la grille.
-      auto X = make_pair(0, 0);
-      auto A = make_pair(0, 0);
-
-      for (auto row : grid)
-      {
-         X.first = row.find(clear_text[i]);
-         if (X.first != string::npos)
-         {
-            break;
-         }
-         X.second++;
-      }
-
-      for (auto row : grid)
-      {
-         A.first = row.find(clear_text[i + 1]);
-         if (A.first != string::npos)
-         {
-            break;
-         }
-         A.second++;
-      }
+      auto X = getCharCoordinates(full_text[i], grid);
+      auto A = getCharCoordinates(full_text[i+1], grid);
 
       // Soient X = (x,y) et A = (a,b).
       // R�gle 1 : Si x != a ET y != b, alors X = (x,b) et A = (a,y).
@@ -89,38 +61,24 @@ string Playfair::encode(const std::string &)
       }
    }
 
-   Data::save("cipher_text.txt", crypted);
-
    return crypted;
 }
 
 // Encode un texte clair avec la m�thode de Playfair.
 
-string Playfair::decode(const std::string &)
+string Playfair::decode(const std::string &cipher_text)
 {
+   unsigned int cipher_len = cipher_text.length();
    string decrypted = "";
    decrypted.reserve(cipher_len);
-   vector<string> grid(createGrid(key + alpha, Playfair::rows));
+   
+   const vector<string> grid(getGrid(key + alpha));
 
    for (unsigned int i = 0; i < cipher_len; i += 2)
    {
-      // Obtenir les coordonn�es (x,y) des lettres du bigramme dans la grille.
-      auto x = make_pair(0, 0);
-      auto y = make_pair(0, 0);
-      unsigned int j = 0;
-      for (auto row : grid)
-      {
-         x = make_pair(row.find(clear_text[i]), row.find(clear_text[i + 1]));
-         if (x.first != string::npos)
-         {
-            y.first = j;
-         }
-         if (x.second != string::npos)
-         {
-            y.second = j;
-         }
-         j++;
-      }
+      // Obtenir les coordonnées (x,y) et (a,b) des lettres du bigramme dans la grille.
+      auto x = getCharCoordinates(cipher_text[i], grid);
+      auto y = getCharCoordinates(cipher_text[i+1], grid);
 
       // Soient A = (x,y) et B = (a,b)
       // R�gle 1 : Si x != a ET y != b, alors A = (x,b) et B = (a,y).
@@ -142,8 +100,6 @@ string Playfair::decode(const std::string &)
          decrypted += grid[(y.first + 4) % 5][y.second];
       }
    }
-
-   Data::save("clear_text.txt", decrypted);
 
    return decrypted;
 }

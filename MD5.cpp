@@ -3,7 +3,7 @@
 #include <string.h>
 #include <vector>
 
-// F, G, H and I are basic MD5 functions.
+// F, G, H et I sont des fonctions de base pour le calcul du MD5.
 
 inline uint32_t MD5::F(uint32_t x, uint32_t y, uint32_t z)
 {

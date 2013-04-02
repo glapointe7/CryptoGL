@@ -5,6 +5,7 @@
 #include "StringCipher.h"
 
 #include <vector>
+#include <string>
 
 class Fleissner : public StringCipher
 {  
@@ -22,7 +23,7 @@ public:
 
 private:
    bool checkMask(std::vector<Coordinates> &coords) const;
-   void fillWithRandomChars();
+   void fillWithRandomChars(std::string &text);
 
    // Dimension de la grille de chiffrement.
    unsigned short grid_dim;
@@ -36,9 +37,6 @@ private:
    //vector<coordinates> coords;
    // Coordonnées des masques initial.
    std::vector<Coordinates> key;
-
-   unsigned int cipher_len;
-   unsigned int clear_len;
 };
 
 #endif // FLEISSNER_H
