@@ -1,4 +1,5 @@
-#include "Railfence.h"
+#include "Delastelle.hpp"
+//#include "Railfence.h"
 //#include "Playfair.h"
 //#include "Polybe.h"
 //#include "Wolseley.h"
@@ -13,11 +14,16 @@ using namespace std;
 
 int main()
 {
-   Railfence *R = new Railfence();
-   R->setKey(4);
+   Delastelle *D = new Delastelle();
+   D->setBlockLength(5);
    
-   StringCipher *SC = R;
-   cout << SC->decode("CTIONCNLMEAAMV");
+   SquareCipher *SC = D;
+   SC->setKey("DIMANCHE");
+   SC->setGridDimension(5);
+   
+   //string text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
+   string text = "POSSNDGOBBPPDRQSVTCOVGDNZDRABSSKPOMDDSKTMMQZXIAHOXEEEYESYOPLHORTNIPGLNMSVNR";
+   cout << SC->decode(text);
    //Playfair *P = new Playfair();
    //P->setKey("MAISON");
    //StringCipher *sc_c = P;

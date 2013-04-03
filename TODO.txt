@@ -12,6 +12,8 @@
 
 6. Créer la classe abstraite Transposition ? Par exemple : http://www.apprendre-en-ligne.net/crypto/transpo/rectangulaire.html
 
+7. Ajouter une fonction dans SquareCipher qui ajoute des caractères quelconques pour que le texte soit un multiple d'une autre longueur.
+
 **********************************************************
 
 IDÉES / SUGGESTIONS / AUTRES
