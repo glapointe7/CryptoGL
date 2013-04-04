@@ -18,7 +18,6 @@ public:
 
 private:
    void transform(const uint8_t block[64]);
-   //static void decode(vector<uint32_t> &output, const uint8_t input[], uint32_t len);
    static void encode(uint8_t output[], const std::vector<uint32_t> &input, uint32_t len);
 
    bool finalized;

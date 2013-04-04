@@ -2,6 +2,8 @@
 #ifndef BUFFERCIPHER_H
 #define	BUFFERCIPHER_H
 
+
+
 class BufferCipher
 {
 public:

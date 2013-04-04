@@ -7,7 +7,7 @@
 //#include "StringCipher.h"
 //#include "Tools.h"
 //#include "converterTools.h"
-//#include "clsMorse.h"
+//#include "Morse.h"
 #include <iostream>
 
 using namespace std;
@@ -16,19 +16,17 @@ int main()
 {
    Delastelle *D = new Delastelle();
    D->setBlockLength(5);
-   
-   SquareCipher *SC = D;
-   SC->setKey("DIMANCHE");
-   SC->setGridDimension(5);
+   D->setKey("DIMANCHE");
+   D->setGridDimension(5);
    
    //string text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
-   string text = "POSSNDGOBBPPDRQSVTCOVGDNZDRABSSKPOMDDSKTMMQZXIAHOXEEEYESYOPLHORTNIPGLNMSVNR";
-   cout << SC->decode(text);
+   //string text = "POSSNDGOBBPPDRQSVTCOVGDNZDRABSSKPOMDDSKTMMQZXIAHOXEEEYESYOPLHORTNIPGLNMSVNR";
+   string text = D->load(R"(../GIT_CryptoCode/cipher_text.txt)");
+   cout << D->decode(text);
+   
    //Playfair *P = new Playfair();
    //P->setKey("MAISON");
-   //StringCipher *sc_c = P;
-
-   //cout << sc_c->encode();
+   //cout << P->encode();
 
    //string key = "ABCDEEFDABE";
    //string text = "iI PArait Que TU vEUX que Je tEstE kpTa1 aVEc mA pRoPre cLE";
