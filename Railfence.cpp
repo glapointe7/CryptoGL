@@ -3,8 +3,6 @@
 #include <string>
 #include <utility>
 
-using namespace std;
-
 Railfence::Railfence()
 {
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVWXYZ.-");
@@ -17,10 +15,10 @@ void Railfence::setKey(const unsigned int key)
 
 // Encode un texte par le chiffre de RailFence.
 
-string Railfence::encode(const std::string &clear_text)
+std::string Railfence::encode(const std::string &clear_text)
 {
    unsigned int clear_len = clear_text.length();
-   string crypted = "";
+   std::string crypted = "";
    crypted.reserve(clear_len);
    unsigned int n = (key - 1) << 1;
 
@@ -41,12 +39,12 @@ string Railfence::encode(const std::string &clear_text)
 
 // Décode un texte encodé par le chiffre de RailFence.
 
-string Railfence::decode(const string &cipher_text)
+std::string Railfence::decode(const std::string &cipher_text)
 {
    unsigned int cipher_len = cipher_text.length();
-   string decrypted('A', cipher_len);
+   std::string decrypted('A', cipher_len);
 
-   auto step = make_pair((key - 1) << 1, 0);
+   auto step = std::make_pair((key - 1) << 1, 0);
    unsigned int k = 0;
 
    for (unsigned int i = 0; i < key; i++)

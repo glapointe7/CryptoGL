@@ -4,8 +4,6 @@
 #include <vector>
 #include <utility>
 
-using namespace std;
-
 Delastelle::Delastelle()
 {
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
@@ -16,40 +14,40 @@ void Delastelle::setBlockLength(const unsigned int block_len)
    this->block_len = block_len;
 }
 
-string Delastelle::encode(const string &clear_text)
+std::string Delastelle::encode(const std::string &clear_text)
 {
-   string nuls(block_len - (clear_text.length() % block_len), 'X');
-   string full_text(clear_text + nuls);
+   std::string nuls(block_len - (clear_text.length() % block_len), 'X');
+   std::string full_text(clear_text + nuls);
    unsigned int clear_len = full_text.length();
 
    // Prendre chaque bloc de block_len caractères.
-   vector<string> block;
+   std::vector<std::string> block;
    for (unsigned int i = 0; i < clear_len; i += block_len)
    {
       block.push_back(full_text.substr(i, block_len));
    }
 
    // Grille de chiffrement.
-   vector<string> grid(getGrid(key + alpha));
+   std::vector<std::string> grid(getGrid(key + alpha));
 
    // Vecteur contenant les coordonnées en X des block_len caractères et celles en Y.
-   vector<pair<vector<unsigned char>, vector<unsigned char> > > coords_block;
+   std::vector<std::pair<std::vector<unsigned char>, std::vector<unsigned char> > > coords_block;
 
    // Sous chaque lettre, on note les coordonnées des lettres verticalement.
    for (auto str : block)
    {
-      vector<unsigned char> X, Y;
+      std::vector<unsigned char> X, Y;
       for (auto c : str)
       {
          auto coords = getCharCoordinates(c, grid);
          X.push_back(coords.first);
          Y.push_back(coords.second);
       }
-      coords_block.push_back(make_pair(X, Y));
+      coords_block.push_back(std::make_pair(X, Y));
    }
 
    // Vecteur de toutes les coordonnées chiffrées.
-   vector<pair<unsigned char, unsigned char> > encoded_coords;
+   std::vector<std::pair<unsigned char, unsigned char> > encoded_coords;
 
    for (auto XY : coords_block)
    {
@@ -58,31 +56,31 @@ string Delastelle::encode(const string &clear_text)
          // Les coordonnées en X obtenues.
          for (unsigned int i = 0; i < block_len; i += 2)
          {
-            encoded_coords.push_back(make_pair(XY.first[i], XY.first[i + 1]));
+            encoded_coords.push_back(std::make_pair(XY.first[i], XY.first[i + 1]));
          }
 
          // Les coordonnées en Y obtenues.
          for (unsigned int i = 0; i < block_len; i += 2)
          {
-            encoded_coords.push_back(make_pair(XY.second[i], XY.second[i + 1]));
+            encoded_coords.push_back(std::make_pair(XY.second[i], XY.second[i + 1]));
          }
       }
       else
       {
          for (unsigned int i = 0; i < block_len - 1; i += 2)
          {
-            encoded_coords.push_back(make_pair(XY.second[i], XY.second[i + 1]));
+            encoded_coords.push_back(std::make_pair(XY.second[i], XY.second[i + 1]));
          }
-         encoded_coords.push_back(make_pair(XY.second[block_len - 1], XY.first[0]));
+         encoded_coords.push_back(std::make_pair(XY.second[block_len - 1], XY.first[0]));
          for (unsigned int i = 1; i < block_len; i += 2)
          {
-            encoded_coords.push_back(make_pair(XY.first[i], XY.first[i + 1]));
+            encoded_coords.push_back(std::make_pair(XY.first[i], XY.first[i + 1]));
          }
       }
    }
 
    // On prend chaque coordonnées reçues et on retrouve le caractère associé dans la grille.
-   string crypted = "";
+   std::string crypted = "";
    crypted.reserve(clear_len);
    for (auto xy : encoded_coords)
    {
@@ -92,14 +90,14 @@ string Delastelle::encode(const string &clear_text)
    return crypted;
 }
 
-string Delastelle::decode(const string &cipher_text)
+std::string Delastelle::decode(const std::string &cipher_text)
 {
    unsigned int cipher_len = cipher_text.length();
-   string decrypted = "";
+   std::string decrypted = "";
    decrypted.reserve(cipher_len);
    
-   vector<string> grid(getGrid(key + alpha));
-   vector<unsigned char > chars_coords;
+   std::vector<std::string> grid(getGrid(key + alpha));
+   std::vector<unsigned char > chars_coords;
    for(auto c : cipher_text)
    {
       auto coords = getCharCoordinates(c, grid);

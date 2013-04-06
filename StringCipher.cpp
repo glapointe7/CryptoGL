@@ -6,24 +6,22 @@
 #include <iostream>
 #include <sstream>
 
-using namespace std;
-
 StringCipher::StringCipher()
 {
 
 }
 
-void StringCipher::save(const std::string &filename, const string &data)
+void StringCipher::save(const std::string &filename, const std::string &data)
 {
    try
    {
-      ofstream out(filename.c_str());
+      std::ofstream out(filename.c_str());
       out << data;
       out.close();
    }
-   catch (exception &e)
+   catch (std::exception &e)
    {
-      cout << "Erreur : " << e.what();
+      std::cout << "Erreur : " << e.what();
    }
 }
 
@@ -40,23 +38,23 @@ std::string StringCipher::load(const std::string &filename)
    }
    throw(errno);*/
 
-   string data = "";
+   std::string data = "";
    try
    {
-      ifstream in(filename.c_str());
+      std::ifstream in(filename.c_str());
 
       while (!in.eof())
       {
-         string tmp;
+         std::string tmp;
          in >> tmp;
          data += tmp;
       }
 
       in.close();
    }
-   catch (exception &e)
+   catch (std::exception &e)
    {
-      cout << "Erreur : " << e.what();
+      std::cout << "Erreur : " << e.what();
       return "";
    }
 

@@ -5,8 +5,6 @@
 #include <vector>
 #include <string>
 
-using namespace std;
-
 Transposition::Transposition()
 {
    
@@ -19,13 +17,13 @@ void Transposition::setKey(const std::string &key)
 
 std::vector<std::string> Transposition::setTable(const std::string &data) const
 {
-   vector<string> table;
+   std::vector<std::string> table;
    unsigned int key_len = key.length();
    
    // On remplit la grille qu'on doit lire en colonne. 
    // Pour faciliter le code, on la transpose.
    unsigned int data_len = data.length();
-   string tmp;
+   std::string tmp;
    tmp.reserve(data_len);
    for (unsigned int i = 0; i < key_len; i++)
    {
@@ -44,14 +42,14 @@ std::vector<std::string> Transposition::setTable(const std::string &data) const
 std::vector<std::string> Transposition::sortColon(const std::vector<std::string> &table) const
 {
    unsigned int key_len = key.length();
-   map<char, unsigned int> sorted_key;
+   std::map<char, unsigned int> sorted_key;
    
    for(unsigned int i = 0; i < key_len; i++)
    {
-      sorted_key.insert(make_pair(key[i], i));
+      sorted_key.insert(std::make_pair(key[i], i));
    }
    
-   vector<string> sorted_table;
+   std::vector<std::string> sorted_table;
    for(auto pair : sorted_key)
    {
       sorted_table.push_back(table[pair.second]);

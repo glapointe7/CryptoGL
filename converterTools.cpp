@@ -7,7 +7,7 @@
 // Convertit chaque Majuscule et minuscule en un symbole quelconque du code ASCII.
 // symbol doit contenir 2 caract�res : 0 = MAJUSCULE  1 = minuscule.
 
-void convertMajMinToSymbol(string &text, const string symbol)
+void convertMajMinToSymbol(std::string &text, const std::string symbol)
 {
    // On remplace chaque caractère en majuscule par symbol[0].
    replace_if(text.begin(), text.end(), [](char c) {
@@ -22,13 +22,13 @@ void convertMajMinToSymbol(string &text, const string symbol)
 
 // Convertit un string en une suite binaire.
 
-string convertTextToBinaryString(const string &text)
+std::string convertTextToBinaryString(const std::string &text)
 {
-   string bits = "";
+   std::string bits = "";
 
    for (auto c : text)
    {
-      bitset<8> byte(c);
+      std::bitset<8> byte(c);
       bits += byte.to_string();
    }
 
@@ -37,7 +37,7 @@ string convertTextToBinaryString(const string &text)
 
 // Convertit un texte en majuscules.
 
-void uppercase(string &text)
+void uppercase(std::string &text)
 {
    transform(text.begin(), text.end(), text.begin(), ::toupper);
 }
@@ -45,9 +45,9 @@ void uppercase(string &text)
 // Transforme un String en un nombre.
 
 template <class Type>
-Type lexical_cast(const string &textNumber)
+Type lexical_cast(const std::string &textNumber)
 {
-   istringstream ss(textNumber);
+   std::istringstream ss(textNumber);
 
    Type number;
    ss >> number;
@@ -63,12 +63,12 @@ Type lexical_cast(const string &textNumber)
  * @param int to_base : La base pour laquelle number doit être converti.
  * @return string result
  */
-string baseConvertString(const string &number, const unsigned char from_base,
+std::string baseConvertString(const std::string &number, const unsigned char from_base,
         const unsigned char to_base)
 {
-   string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
-   string result = "";
-   vector<unsigned char> pos;
+   std::string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
+   std::string result = "";
+   std::vector<unsigned char> pos;
 
    for (auto c : number)
    {

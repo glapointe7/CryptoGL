@@ -58,10 +58,10 @@ long getModInverse(long a, const long n)
 
 // On enl�ve les lettres doublons de la clef.
 
-string removeRepeatedLetters(const string key)
+std::string removeRepeatedLetters(const std::string key)
 {
    unsigned short keylen = key.length();
-   string result(key);
+   std::string result(key);
 
    for (unsigned short i = 0; i < keylen; i++)
    {
@@ -80,7 +80,7 @@ string removeRepeatedLetters(const string key)
 
 // Remplace dans "text" chaque occurence du caract�re "letter" par "rletter".
 
-void replaceChar(string &text, const char letter, const char rletter)
+void replaceChar(std::string &text, const char letter, const char rletter)
 {
    replace_if(text.begin(), text.end(), [letter](char c) {
       return (c == letter);
@@ -89,12 +89,12 @@ void replaceChar(string &text, const char letter, const char rletter)
 
 // Effectue, selon 'op', un XOR, NOT, AND, OR et retourne le r�sultat. 
 
-string getBinary(const string &bin_text, const string &bin_to_compare, const unsigned char op)
+std::string getBinary(const std::string &bin_text, const std::string &bin_to_compare, const unsigned char op)
 {
    const size_t size = 500;
-   bitset<size> Text(bin_text);
-   bitset<size> Comp(bin_to_compare);
-   bitset<size> res;
+   std::bitset<size> Text(bin_text);
+   std::bitset<size> Comp(bin_to_compare);
+   std::bitset<size> res;
 
    switch (op)
    {
@@ -117,11 +117,11 @@ string getBinary(const string &bin_text, const string &bin_to_compare, const uns
 
 // D�cale les bits � gauche ou � droite selon 'is_right' de 'shift' positions.
 
-string getBinaryShifter(const string &bin_text, const unsigned int shift, bool is_right = true)
+std::string getBinaryShifter(const std::string &bin_text, const unsigned int shift, bool is_right = true)
 {
    const size_t size = 500;
-   bitset<size> Text(bin_text);
-   bitset<size> res;
+   std::bitset<size> Text(bin_text);
+   std::bitset<size> res;
 
    if (is_right)
       res = Text >> shift;
@@ -133,14 +133,14 @@ string getBinaryShifter(const string &bin_text, const unsigned int shift, bool i
 
 // S�pare une cha�ne de caract�res par l'espace et met chaque mot dans un vecteur.
 
-vector<string> split(const string &text)
+std::vector<std::string> split(const std::string &text)
 {
-   istringstream iss(text);
-   vector<string> split_text;
+   std::istringstream iss(text);
+   std::vector<std::string> split_text;
 
    do
    {
-      string word;
+      std::string word;
       iss >> word;
       split_text.push_back(word);
    } while (iss);
@@ -151,9 +151,9 @@ vector<string> split(const string &text)
 
 // Retourne les caract�res pris � chaque 'step' position.
 
-string getStepCharacters(string &text, unsigned short step)
+std::string getStepCharacters(std::string &text, unsigned short step)
 {
-   string message = "";
+   std::string message = "";
    unsigned long text_len = text.length();
 
    for (unsigned long i = step; i <= text_len - step; i += step)

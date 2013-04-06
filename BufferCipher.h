@@ -14,9 +14,12 @@ class BufferCipher : public Cipher<Bytes_Container>
 public:
    BufferCipher();
    virtual ~BufferCipher() {}
+   
+   virtual Bytes_Container encode(const Bytes_Container &) = 0;
+   virtual Bytes_Container decode(const Bytes_Container &) = 0;
 
-   void save(const std::string &, const Bytes_Container &);
-   Bytes_Container load(const std::string &);
+   static void save(const std::string &, const Bytes_Container &);
+   static Bytes_Container load(const std::string &);
 
    // Pour obtenir les octets sous forme d'une chaîne hexadécimale.
    std::string hexDigest(const Bytes_Container &data) const;
@@ -24,8 +27,7 @@ public:
 protected:
    
 private:
-   virtual Bytes_Container encode(const Bytes_Container &) = 0;
-   virtual Bytes_Container decode(const Bytes_Container &) = 0;
+  
 };
 
 #endif

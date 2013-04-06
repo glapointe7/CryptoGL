@@ -3,8 +3,6 @@
 
 #include <utility>
 
-using namespace std;
-
 Collon::Collon()
 {
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
@@ -15,17 +13,17 @@ void Collon::setBlockLength(const unsigned int series)
    block_len = series;
 }
 
-std::string Collon::encode(const string &clear_text)
+std::string Collon::encode(const std::string &clear_text)
 {
    unsigned int clear_len = clear_text.length();
-   string line1 = "";
+   std::string line1 = "";
    line1.reserve(clear_len);
-   string line2(line1);
-   string crypted = "";
+   std::string line2(line1);
+   std::string crypted = "";
    crypted.reserve(clear_len << 1);
 
    // Création de la grille de chiffrement avec lettres doublons effacées.
-   vector<string> grid(getGrid(key + alpha));
+   std::vector<std::string> grid(getGrid(key + alpha));
 
    // Chaque caractères situé en (x,y) est encodé par un bigramme AB tel que
    // A = (a,y) et B = (x,b).
@@ -48,17 +46,17 @@ std::string Collon::encode(const string &clear_text)
    return crypted;
 }
 
-string Collon::decode(const string &cipher_text)
+std::string Collon::decode(const std::string &cipher_text)
 {
    unsigned int cipher_len = cipher_text.length();
    unsigned int line_len = cipher_len >> 1;
-   string decrypted = "";
+   std::string decrypted = "";
    decrypted.reserve(line_len);
-   string line1 = "";
+   std::string line1 = "";
    line1.reserve(line_len);
-   string line2(line1);
+   std::string line2(line1);
 
-   vector<string> grid(getGrid(key + alpha));
+   std::vector<std::string> grid(getGrid(key + alpha));
 
    // Remise des bigrammes en 2 lignes de texte. Généralement, la longueur de la ligne n'est
    // pas multiple de la longueur du bloc. Pour cela, on doit garder le reste.

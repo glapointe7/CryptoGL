@@ -15,8 +15,8 @@ public:
    virtual std::string encode(const std::string &) = 0;
    virtual std::string decode(const std::string &) = 0;
    
-   void save(const std::string &, const std::string &);
-   std::string load(const std::string &);
+   static void save(const std::string &, const std::string &);
+   static std::string load(const std::string &);
    
    void setAlpha(const std::string &letters);
    std::string getAlpha() const;

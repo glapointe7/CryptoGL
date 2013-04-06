@@ -5,16 +5,14 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 // Prototypes pour Tools.cpp.
-string removeRepeatedLetters(const string key);
-void replaceChar(string &text, const char letter, const char rletter);
-string getBinary(const string &bin_text, const string &bin_to_compare, const unsigned char op);
-string getBinaryShifter(const string &bin_text, const unsigned int shift, bool is_right);
-string convertBinaryToString(string &bin_text);
-vector<string> split(const string &text);
-string getStepCharacters(string &text, unsigned short step);
+std::string removeRepeatedLetters(const std::string key);
+void replaceChar(std::string &text, const char letter, const char rletter);
+std::string getBinary(const std::string &bin_text, const std::string &bin_to_compare, const unsigned char op);
+std::string getBinaryShifter(const std::string &bin_text, const unsigned int shift, bool is_right);
+std::string convertBinaryToString(std::string &bin_text);
+std::vector<std::string> split(const std::string &text);
+std::string getStepCharacters(std::string &text, unsigned short step);
 
 // Fonctions mathématiques.
 uint_fast32_t getPGCD(uint_fast32_t a, uint_fast32_t b);

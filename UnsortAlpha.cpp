@@ -8,7 +8,7 @@ UnsortAlpha::UnsortAlpha()
    unsort_alpha.reserve(alpha.length());
 }
 
-void UnsortAlpha::setKey(const string key)
+void UnsortAlpha::setKey(const std::string key)
 {
    this->key = key;
 }
@@ -25,8 +25,8 @@ void UnsortAlpha::setHorizontalAlpha()
 
 void UnsortAlpha::setVerticalAlpha()
 {
-   string new_key(removeRepeatedLetters(key));
-   string str(removeRepeatedLetters(new_key + alpha));
+   std::string new_key(removeRepeatedLetters(key));
+   std::string str(removeRepeatedLetters(new_key + alpha));
    unsigned int key_len = new_key.length();
    unsigned int alpha_len = str.length();
 
@@ -43,9 +43,9 @@ void UnsortAlpha::setVerticalAlpha()
 
 // Encode un texte avec un alphabet désordonné choisi.
 
-string UnsortAlpha::encode(const std::string &clear_text)
+std::string UnsortAlpha::encode(const std::string &clear_text)
 {
-   string crypted = "";
+   std::string crypted = "";
    crypted.reserve(clear_text.length());
 
    for (auto c : clear_text)
@@ -58,9 +58,9 @@ string UnsortAlpha::encode(const std::string &clear_text)
 
 // Encode un texte avec un alphabet désordonné choisi.
 
-string UnsortAlpha::decode(const std::string &cipher_text)
+std::string UnsortAlpha::decode(const std::string &cipher_text)
 {
-   string decrypted = "";
+   std::string decrypted = "";
    decrypted.reserve(cipher_text.length());
 
    for (auto c : cipher_text)

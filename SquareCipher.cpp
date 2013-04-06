@@ -13,13 +13,11 @@
 #include <string>
 #include <utility>
 
-using namespace std;
-
 SquareCipher::SquareCipher()
 {
 }
 
-void SquareCipher::setKey(const string &key)
+void SquareCipher::setKey(const std::string &key)
 {
    this->key = key;
 }
@@ -31,10 +29,10 @@ void SquareCipher::setGridDimension(const unsigned char dim)
 
 // Construction de la grille de chiffrement.
 
-vector<string> SquareCipher::getGrid(const string &chars) const
+std::vector<std::string> SquareCipher::getGrid(const std::string &chars) const
 {
-   string new_alpha(removeRepeatedLetters(chars));
-   vector<string> grid;
+   std::string new_alpha(removeRepeatedLetters(chars));
+   std::vector<std::string> grid;
 
    // Séparation de la chaîne pour former une grille carrée (dim X dim) de caractères.
    for (unsigned char i = 0; i < dim; i++)
@@ -46,9 +44,9 @@ vector<string> SquareCipher::getGrid(const string &chars) const
 }
 
 // Retourne les coordonées d'un caractère dans la grille de chiffrement.
-Coordinates SquareCipher::getCharCoordinates(const char c, const vector<string> &grid) const
+Coordinates SquareCipher::getCharCoordinates(const char c, const std::vector<std::string> &grid) const
 {
-   auto coords = make_pair(0, 0);
+   auto coords = std::make_pair(0, 0);
    for (auto str : grid)
    {
       coords.first = str.find(c);

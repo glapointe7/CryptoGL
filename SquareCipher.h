@@ -23,7 +23,7 @@ public:
 
 protected:
    std::vector<std::string> getGrid(const std::string &chars) const;
-   Coordinates getCharCoordinates(const char c, const std::vector<std::string> &grid) const;
+   static Coordinates getCharCoordinates(const char c, const std::vector<std::string> &grid) const;
 
    std::string key;
 

@@ -5,8 +5,6 @@
 #include <time.h>
 #include <vector>
 
-using namespace std;
-
 Fleissner::Fleissner()
 {
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!,:;?_-'\"/*+=()[]{}%$#");
@@ -14,7 +12,7 @@ Fleissner::Fleissner()
 
 // La clé correspond au masque, c'est-à-dire les coordonnées de chaque trous du masque.
 
-void Fleissner::setKey(const vector<Coordinates> key)
+void Fleissner::setKey(const std::vector<Coordinates> key)
 {
    this->key = key;
 }
@@ -26,7 +24,7 @@ void Fleissner::setGridDimension(const unsigned short dim)
 
 // V�rifie que le masque initial contient exactement le quart des cellules de la grille.
 
-bool Fleissner::checkMask(vector<Coordinates> &coords) const
+bool Fleissner::checkMask(std::vector<Coordinates> &coords) const
 {
    unsigned short key_size = key.size();
    unsigned short mask_size_approuved = key_size * 4;
@@ -38,15 +36,15 @@ bool Fleissner::checkMask(vector<Coordinates> &coords) const
    }
 
    // Afin d'ordonner les coordonnées pour chaque rotation.
-   set<Coordinates> rotation90, rotation180, rotation270;
-   set<Coordinates> cmp;
-   pair < set<Coordinates>::iterator, bool> is_unique;
+   std::set<Coordinates> rotation90, rotation180, rotation270;
+   std::set<Coordinates> cmp;
+   std::pair < std::set<Coordinates>::iterator, bool> is_unique;
 
    // On remplit le SET du masque initial key et on insert les rotations ordonnées 
    // en s'assurant que les coordonnées sont uniques.
    for (auto xy : key)
    {
-      cmp.insert(make_pair(xy.first, xy.second));
+      cmp.insert(std::make_pair(xy.first, xy.second));
    }
 
    // On vérifie si les coordonnées des rotations existent. 
@@ -54,36 +52,36 @@ bool Fleissner::checkMask(vector<Coordinates> &coords) const
    for (auto xy : key)
    {
       // 270 degr�s
-      is_unique = cmp.insert(make_pair(grid_dim - 1 - xy.second, xy.first));
+      is_unique = cmp.insert(std::make_pair(grid_dim - 1 - xy.second, xy.first));
       if (is_unique.second == false)
       {
          return false;
       }
-      rotation270.insert(make_pair(grid_dim - 1 - xy.second, xy.first));
+      rotation270.insert(std::make_pair(grid_dim - 1 - xy.second, xy.first));
    }
    coords.insert(coords.end(), rotation270.begin(), rotation270.end());
 
    for (auto xy : key)
    {
       // 180 degr�s
-      is_unique = cmp.insert(make_pair(grid_dim - 1 - xy.first, grid_dim - 1 - xy.second));
+      is_unique = cmp.insert(std::make_pair(grid_dim - 1 - xy.first, grid_dim - 1 - xy.second));
       if (is_unique.second == false)
       {
          return false;
       }
-      rotation180.insert(make_pair(grid_dim - 1 - xy.first, grid_dim - 1 - xy.second));
+      rotation180.insert(std::make_pair(grid_dim - 1 - xy.first, grid_dim - 1 - xy.second));
    }
    coords.insert(coords.end(), rotation180.begin(), rotation180.end());
 
    for (auto xy : key)
    {
       // 90 degr�s
-      is_unique = cmp.insert(make_pair(xy.second, grid_dim - 1 - xy.first));
+      is_unique = cmp.insert(std::make_pair(xy.second, grid_dim - 1 - xy.first));
       if (is_unique.second == false)
       {
          return false;
       }
-      rotation90.insert(make_pair(xy.second, grid_dim - 1 - xy.first));
+      rotation90.insert(std::make_pair(xy.second, grid_dim - 1 - xy.first));
    }
    coords.insert(coords.end(), rotation90.begin(), rotation90.end());
 
@@ -93,7 +91,7 @@ bool Fleissner::checkMask(vector<Coordinates> &coords) const
 // Remplit le texte clair par des caractères au hasard afin d'obtenir 
 // un multiple du carré de grid_dim.
 
-void Fleissner::fillWithRandomChars(string &text)
+void Fleissner::fillWithRandomChars(std::string &text)
 {
    unsigned int fillers = text.length() % (grid_dim * grid_dim);
    unsigned short alpha_len = alpha.length() + 1;
@@ -108,20 +106,20 @@ void Fleissner::fillWithRandomChars(string &text)
 
 // Encode un texte avec la grille tournante de Fleissner.
 
-string Fleissner::encode(const std::string &clear_text)
+std::string Fleissner::encode(const std::string &clear_text)
 {
-   string crypted = "";
-   vector<Coordinates> coords(key);
+   std::string crypted = "";
+   std::vector<Coordinates> coords(key);
    unsigned short dim = grid_dim * grid_dim;
 
    // Si le masque est valide.
    if (checkMask(coords) == true)
    {
-      string full_text(clear_text);
+      std::string full_text(clear_text);
       fillWithRandomChars(full_text);
 
       // On réserve l'espace selon grid_dim pour la grille.
-      vector<string> grid;
+      std::vector<std::string> grid;
       grid.reserve(grid_dim);
       for (unsigned short p = 0; p < grid_dim; p++)
       {
@@ -156,10 +154,10 @@ string Fleissner::encode(const std::string &clear_text)
 
 // Décode un cryptogramme de la grille de Fleissner.
 
-string Fleissner::decode(const std::string &cipher_text)
+std::string Fleissner::decode(const std::string &cipher_text)
 {
-   string decrypted = "";
-   vector<Coordinates> coords(key);
+   std::string decrypted = "";
+   std::vector<Coordinates> coords(key);
    unsigned short dim = grid_dim * grid_dim;
 
    // On v�rifie si le masque initial est valide et on obtient les coordonn�es de ses rotations.
@@ -168,7 +166,7 @@ string Fleissner::decode(const std::string &cipher_text)
       unsigned int cipher_len = cipher_text.length();
       unsigned short max_grid = static_cast<unsigned short> (cipher_len / dim);
       unsigned int k = 0;
-      vector<string> grid;
+      std::vector<std::string> grid;
 
       for (unsigned int i = 0; i < max_grid; i++)
       {

@@ -3,15 +3,13 @@
 
 #include <string>
 
-using namespace std;
-
-string baseConvertString(const string &number, const unsigned char from_base,
+std::string baseConvertString(const std::string &number, const unsigned char from_base,
         const unsigned char to_base);
-string convertTextToBinaryString(const string &text);
-void uppercase(string &text);
-void convertMajMinToSymbol(string &text, const string symbol);
+std::string convertTextToBinaryString(const std::string &text);
+void uppercase(std::string &text);
+void convertMajMinToSymbol(std::string &text, const std::string symbol);
 
 template <class Type>
-Type lexical_cast(const string &textNumber);
+Type lexical_cast(const std::string &textNumber);
 
 #endif

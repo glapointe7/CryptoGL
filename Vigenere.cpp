@@ -1,21 +1,19 @@
 
 #include "Vigenere.h"
 
-using namespace std;
-
 Vigenere::Vigenere()
 {
    
 }
 
-void Vigenere::setKey(const string &key)
+void Vigenere::setKey(const std::string &key)
 {
    this->key = key;
 }
 
-string Vigenere::encode(const std::string &clear_text)
+std::string Vigenere::encode(const std::string &clear_text)
 {
-   string crypted = "";
+   std::string crypted = "";
    crypted.reserve(clear_text.length());
 
    unsigned int i = 0;
@@ -39,9 +37,9 @@ string Vigenere::encode(const std::string &clear_text)
 
 // D�code un texte encod� par le chiffre de Vigen�re.
 
-string Vigenere::decode(const std::string &cipher_text)
+std::string Vigenere::decode(const std::string &cipher_text)
 {
-   string decrypted = "";
+   std::string decrypted = "";
    decrypted.reserve(cipher_text.length());
 
    unsigned int i = 0;

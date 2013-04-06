@@ -5,26 +5,24 @@
 
 #include "Tools.h"
 
-using namespace std;
-
 Hill::Hill()
 {
 
 }
 
-void Hill::setKey(const vector<vector<long> > &key)
+void Hill::setKey(const std::vector<std::vector<long> > &key)
 {
    this->key = key;
 }
 
-string Hill::encode(const std::string &clear_text)
+std::string Hill::encode(const std::string &clear_text)
 {
    unsigned int clear_len = clear_text.length();
    unsigned int alpha_len = alpha.length();
-   string crypted = "";
+   std::string crypted = "";
    crypted.reserve(clear_len << 1);
 
-   string full_text(clear_text);
+   std::string full_text(clear_text);
    if (clear_len % 2 == 1)
    {
       full_text.push_back('X');
@@ -34,7 +32,7 @@ string Hill::encode(const std::string &clear_text)
    for (unsigned int i = 0; i < clear_len - 1; i += 2)
    {
       auto pos = make_pair(alpha.find(full_text[i]), alpha.find(full_text[i + 1]));
-      pair<long, long> bipos = make_pair(((key[0][0] * pos.first) + (key[0][1] * pos.second)) % alpha_len,
+      std::pair<long, long> bipos = std::make_pair(((key[0][0] * pos.first) + (key[0][1] * pos.second)) % alpha_len,
               ((key[1][0] * pos.first) + (key[1][1] * pos.second)) % alpha_len);
 
       if (bipos.first < 0)
@@ -52,17 +50,17 @@ string Hill::encode(const std::string &clear_text)
    return crypted;
 }
 
-string Hill::decode(const std::string &cipher_text)
+std::string Hill::decode(const std::string &cipher_text)
 {
    unsigned int cipher_len = cipher_text.length();
    unsigned int alpha_len = alpha.length();
-   string decrypted = "";
+   std::string decrypted = "";
    //buildInverse();
 
    for (unsigned int i = 0; i < cipher_len - 1; i += 2)
    {
-      auto pos = make_pair(alpha.find(cipher_text[i]), alpha.find(cipher_text[i + 1]));
-      pair<long, long> bipos = make_pair(((key[0][0] * pos.first) + (key[0][1] * pos.second)) % alpha_len,
+      auto pos = std::make_pair(alpha.find(cipher_text[i]), alpha.find(cipher_text[i + 1]));
+      std::pair<long, long> bipos = std::make_pair(((key[0][0] * pos.first) + (key[0][1] * pos.second)) % alpha_len,
               ((key[1][0] * pos.first) + (key[1][1] * pos.second)) % alpha_len);
 
       if (bipos.first < 0)
