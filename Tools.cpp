@@ -82,7 +82,7 @@ std::string removeRepeatedLetters(const std::string key)
 
 void replaceChar(std::string &text, const char letter, const char rletter)
 {
-   replace_if(text.begin(), text.end(), [letter](char c) {
+   std::replace_if(text.begin(), text.end(), [letter](char c) {
       return (c == letter);
    }, rletter);
 }
@@ -112,7 +112,7 @@ std::string getBinary(const std::string &bin_text, const std::string &bin_to_com
          break;
    }
 
-   return res.to_string<char, char_traits<char>, allocator<char> >();
+   return res.to_string();
 }
 
 // D�cale les bits � gauche ou � droite selon 'is_right' de 'shift' positions.
@@ -128,7 +128,7 @@ std::string getBinaryShifter(const std::string &bin_text, const unsigned int shi
    else
       res = Text << shift;
 
-   return res.to_string<char, char_traits<char>, allocator<char> >();
+   return res.to_string();
 }
 
 // S�pare une cha�ne de caract�res par l'espace et met chaque mot dans un vecteur.

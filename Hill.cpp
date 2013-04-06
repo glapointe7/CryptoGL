@@ -10,7 +10,7 @@ Hill::Hill()
 
 }
 
-void Hill::setKey(const std::vector<std::vector<long> > &key)
+void Hill::setKey(const Matrix &key)
 {
    this->key = key;
 }
@@ -31,9 +31,9 @@ std::string Hill::encode(const std::string &clear_text)
 
    for (unsigned int i = 0; i < clear_len - 1; i += 2)
    {
-      auto pos = make_pair(alpha.find(full_text[i]), alpha.find(full_text[i + 1]));
-      std::pair<long, long> bipos = std::make_pair(((key[0][0] * pos.first) + (key[0][1] * pos.second)) % alpha_len,
-              ((key[1][0] * pos.first) + (key[1][1] * pos.second)) % alpha_len);
+      auto pos = std::make_pair(alpha.find(full_text[i]), alpha.find(full_text[i + 1]));
+      std::pair<long, long> bipos = std::make_pair((((long)key(1,1) * pos.first) + ((long)key(1,2) * pos.second)) % alpha_len,
+              (((long)key(2,1) * pos.first) + ((long)key(2,2) * pos.second)) % alpha_len);
 
       if (bipos.first < 0)
       {
@@ -55,13 +55,13 @@ std::string Hill::decode(const std::string &cipher_text)
    unsigned int cipher_len = cipher_text.length();
    unsigned int alpha_len = alpha.length();
    std::string decrypted = "";
-   //buildInverse();
+   Matrix inv_key = Matrix::inverse(key);
 
    for (unsigned int i = 0; i < cipher_len - 1; i += 2)
    {
       auto pos = std::make_pair(alpha.find(cipher_text[i]), alpha.find(cipher_text[i + 1]));
-      std::pair<long, long> bipos = std::make_pair(((key[0][0] * pos.first) + (key[0][1] * pos.second)) % alpha_len,
-              ((key[1][0] * pos.first) + (key[1][1] * pos.second)) % alpha_len);
+      std::pair<long, long> bipos = std::make_pair((((long)inv_key(1, 1) * pos.first) + ((long)inv_key(1, 2) * pos.second)) % alpha_len,
+              (((long)inv_key(2, 1) * pos.first) + ((long)inv_key(2, 2) * pos.second)) % alpha_len);
 
       if (bipos.first < 0)
       {

@@ -44,7 +44,7 @@ std::vector<std::string> SquareCipher::getGrid(const std::string &chars) const
 }
 
 // Retourne les coordonées d'un caractère dans la grille de chiffrement.
-Coordinates SquareCipher::getCharCoordinates(const char c, const std::vector<std::string> &grid) const
+Coordinates SquareCipher::getCharCoordinates(const char c, const std::vector<std::string> &grid)
 {
    auto coords = std::make_pair(0, 0);
    for (auto str : grid)

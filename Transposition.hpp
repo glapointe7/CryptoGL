@@ -4,6 +4,7 @@
 
 #include "StringCipher.h"
 #include <string>
+#include <vector>
 
 class Transposition : public StringCipher
 {

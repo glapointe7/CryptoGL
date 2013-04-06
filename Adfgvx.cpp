@@ -70,7 +70,7 @@ std::string Adfgvx::encode(const std::string &clear_text)
    std::map<char, unsigned int> sorted_key;
    for(unsigned int i = 0; i < key_len; i++)
    {
-      sorted_key.insert(make_pair(key_ok[i], i));
+      sorted_key.insert(std::make_pair(key_ok[i], i));
    }
    
    for(auto pair : sorted_key)
@@ -93,7 +93,7 @@ std::string Adfgvx::decode(const std::string &cipher_text)
    std::map<char, unsigned int> sorted_key;
    for(unsigned int i = 0; i < key_len; i++)
    {
-      sorted_key.insert(make_pair(key_ok[i], i));
+      sorted_key.insert(std::make_pair(key_ok[i], i));
    }
    
    std::vector<std::string> grid;
@@ -116,7 +116,7 @@ std::string Adfgvx::decode(const std::string &cipher_text)
    
    for(unsigned int i = 0; i < cipher_len; i += 2)
    {
-      auto coords = make_pair(code.find(first_decoding[i]), code.find(first_decoding[i+1]));
+      auto coords = std::make_pair(code.find(first_decoding[i]), code.find(first_decoding[i+1]));
       decrypted += grid_key[coords.first][coords.second];
    }
    
