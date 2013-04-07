@@ -23,6 +23,7 @@ public:
 
    // Pour obtenir les octets sous forme d'une chaîne hexadécimale.
    std::string hexDigest(const Bytes_Container &data) const;
+   Bytes_Container bytesContainer(const std::string &text) const;
 
 protected:
    

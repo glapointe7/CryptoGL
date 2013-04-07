@@ -1,17 +1,52 @@
 
 #include "Vigenere.h"
 
-Vigenere::Vigenere()
-{
-   
-}
-
-void Vigenere::setKey(const std::string &key)
+void VigenereBase::setKey(const std::string &key)
 {
    this->key = key;
 }
 
-std::string Vigenere::encode(const std::string &clear_text)
+std::string VigenereBase::get(const std::string &data, const Vigenere_types type)
+{
+   std::string text = "";
+   text.reserve(data.length());
+
+   unsigned int i = 0;
+   unsigned int klen = key.length();
+
+   VigenereBase *V = VigenereFactory::createVigenere(type);
+   
+   for (auto c : data)
+   {
+      // Si on atteint la longueur de la clé, alors on recommence au début de la clé.
+      if (i == klen)
+      {
+         i = 0;
+      }
+      
+       text += V->getChars(c, i);
+      i++;
+   }
+   
+   return text;
+}
+
+// Retourne la clé inversée dans l'alphabet donné.
+std::string VigenereBase::getMinusKey() const
+{
+   std::string minus_key = "";
+   unsigned int key_len = key.length();
+   minus_key.reserve(key_len);
+   
+   for(auto c : key)
+   {
+      minus_key += alpha[26 - alpha.find(c) - 1];
+   }
+   
+   return minus_key;
+}
+
+/*std::string Vigenere::encode(const std::string &clear_text)
 {
    std::string crypted = "";
    crypted.reserve(clear_text.length());
@@ -26,9 +61,8 @@ std::string Vigenere::encode(const std::string &clear_text)
       {
          i = 0;
       }
-
-      unsigned short pos = (alpha.find(c) + alpha.find(key[i])) % 26;
-      crypted += alpha[pos];
+      
+      crypted += alpha[(alpha.find(c) + alpha.find(key[i])) % 26];
       i++;
    }
 
@@ -52,10 +86,9 @@ std::string Vigenere::decode(const std::string &cipher_text)
          i = 0;
       }
 
-      unsigned char pos = (alpha.find(c) - alpha.find(key[i]) + 26) % 26;
-      decrypted += alpha[pos];
+      decrypted += alpha[(alpha.find(c) - alpha.find(key[i]) + 26) % 26];
       i++;
    }
 
    return decrypted;
-}
+}*/

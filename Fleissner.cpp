@@ -22,7 +22,7 @@ void Fleissner::setGridDimension(const unsigned short dim)
    grid_dim = dim;
 }
 
-// V�rifie que le masque initial contient exactement le quart des cellules de la grille.
+// Vérifie que le masque initial contient exactement le quart des cellules de la grille.
 
 bool Fleissner::checkMask(std::vector<Coordinates> &coords) const
 {
@@ -51,7 +51,7 @@ bool Fleissner::checkMask(std::vector<Coordinates> &coords) const
    // Si l'une d'elles existe, alors le masque initial n'est pas valide.
    for (auto xy : key)
    {
-      // 270 degr�s
+      // 270 degrés
       is_unique = cmp.insert(std::make_pair(grid_dim - 1 - xy.second, xy.first));
       if (is_unique.second == false)
       {
@@ -63,7 +63,7 @@ bool Fleissner::checkMask(std::vector<Coordinates> &coords) const
 
    for (auto xy : key)
    {
-      // 180 degr�s
+      // 180 degrés
       is_unique = cmp.insert(std::make_pair(grid_dim - 1 - xy.first, grid_dim - 1 - xy.second));
       if (is_unique.second == false)
       {
@@ -75,7 +75,7 @@ bool Fleissner::checkMask(std::vector<Coordinates> &coords) const
 
    for (auto xy : key)
    {
-      // 90 degr�s
+      // 90 degrés
       is_unique = cmp.insert(std::make_pair(xy.second, grid_dim - 1 - xy.first));
       if (is_unique.second == false)
       {

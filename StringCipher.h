@@ -18,6 +18,8 @@ public:
    static void save(const std::string &, const std::string &);
    static std::string load(const std::string &);
    
+   void eraseBadCharacters(std::string &text) const;
+   
    void setAlpha(const std::string &letters);
    std::string getAlpha() const;
 

@@ -16,8 +16,8 @@ void Delastelle::setBlockLength(const unsigned int block_len)
 
 std::string Delastelle::encode(const std::string &clear_text)
 {
-   std::string nuls(block_len - (clear_text.length() % block_len), 'X');
-   std::string full_text(clear_text + nuls);
+   std::string full_text(clear_text);
+   full_text.append(block_len - (clear_text.length() % block_len), 'X');
    unsigned int clear_len = full_text.length();
 
    // Prendre chaque bloc de block_len caractères.

@@ -1,5 +1,5 @@
 //#include "Delastelle.hpp"
-#include "Matrix.hpp"
+//#include "Matrix.hpp"
 //#include "Railfence.h"
 //#include "Playfair.h"
 //#include "Polybe.h"
@@ -13,56 +13,15 @@
 
 int main()
 {
-   // below some demonstration of the usage of the Matrix class
-   // create an empty matrix of 3x3 (will initially contain zeros)
-   int cols = 3;
-   int rows = 3;
-   Matrix A = Matrix(cols, rows);
-
-   // fill in some values in matrix a
-   int count = 0;
-   for (int r = 1; r <= rows; r++)
-   {
-      for (int c = 1; c <= cols; c++)
-      {
-         count++;
-         A(r, c) = count;
-      }
-   }
-
-   // adjust a value in the matrix (indexes are one-based)
-   A(2, 1) = 1.23;
-
-   // read a value from the matrix (indexes are one-based)
-   double centervalue = A(2, 2);
-   printf("centervalue = %f \n", centervalue);
-   printf("\n");
-
-   // print the whole matrix
-   printf("A = \n");
-   A.print();
-   printf("\n");
-
-   Matrix B = Matrix::ones(rows, cols) + Matrix::diag(rows);
-   printf("B = \n");
-   B.print();
-   printf("\n");
-
-   Matrix A_inv = Matrix::inverse(A);
-   printf("Inverse(A) = \n");
-   A_inv.print();
-   printf("\n");
-
-
-   /*Delastelle *D = new Delastelle();
+  /*Delastelle *D = new Delastelle();
    D->setBlockLength(5);
    D->setKey("DIMANCHE");
    D->setGridDimension(5);
    
-   //string text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
-   //string text = "POSSNDGOBBPPDRQSVTCOVGDNZDRABSSKPOMDDSKTMMQZXIAHOXEEEYESYOPLHORTNIPGLNMSVNR";
-   string text = D->load(R"(../GIT_CryptoCode/cipher_text.txt)");
-   cout << D->decode(text);*/
+   const std::string text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
+   //const std::string text = "POSSNDGOBBPPDRQSVTCOVGDNZDRABSSKPOMDDSKTMMQZXIAHOXEEEYESYOPLHORTNIPGLNMSVNR";
+   //std::string text = D->load(R"(../GIT_CryptoCode/cipher_text.txt)");
+   std::cout << D->encode(text);*/
 
    //Playfair *P = new Playfair();
    //P->setKey("MAISON");

@@ -3,8 +3,8 @@
 
 #include <string>
 #include <fstream>
-#include <iostream>
 #include <sstream>
+#include <algorithm>
 
 StringCipher::StringCipher()
 {
@@ -21,44 +21,37 @@ void StringCipher::save(const std::string &filename, const std::string &data)
    }
    catch (std::exception &e)
    {
-      std::cout << "Erreur : " << e.what();
+       throw e.what();
    }
 }
 
 std::string StringCipher::load(const std::string &filename)
 {
-   // Ouverture du fichier en lecture.
-   /*std::ifstream in(filename.c_str(), std::ios::in | std::ios::binary);
+   std::ifstream in(filename.c_str());
    if (in)
    {
-      std::ostringstream contents;
-      contents << in.rdbuf();
+      std::string contents;
+      in.seekg(0, std::ios::end);
+      contents.resize(in.tellg());
+      in.seekg(0, std::ios::beg);
+      in.read(&contents[0], contents.size());
       in.close();
-      return (contents.str());
-   }
-   throw(errno);*/
-
-   std::string data = "";
-   try
-   {
-      std::ifstream in(filename.c_str());
-
-      while (!in.eof())
+      if (!contents.empty() && *contents.rbegin() == '\n')
       {
-         std::string tmp;
-         in >> tmp;
-         data += tmp;
+         contents.erase(contents.length() - 1, 1);
       }
-
-      in.close();
+      
+      return contents;
    }
-   catch (std::exception &e)
+   throw errno;
+}
+
+void StringCipher::eraseBadCharacters(std::string &text) const
+{
+   text.erase(std::remove_if(text.begin(), text.end(), [this](char c)
    {
-      std::cout << "Erreur : " << e.what();
-      return "";
-   }
-
-   return data;
+      return alpha.find(c) == std::string::npos;
+   }), text.end());
 }
 
 void StringCipher::setAlpha(const std::string &alpha)
