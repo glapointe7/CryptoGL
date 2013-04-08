@@ -6,17 +6,25 @@
 
 #include <string>
 
+// Vigenere : CIPHER = CLEAR + KEY
+// Beaufort : CIPHER = -CLEAR + KEY
+// Beaufort German : CIPHER = CLEAR - KEY
+// Vixenere : CIPHER = CLEAR * KEY
+// Rozier : CIPHER = CLEAR + KEY (en modifiant la clé selon l'algo).
+
+// Ajouter Cesar qui est un Vigenere avec une clé de longueur 1.
+
 class VigenereBase : public StringCipher
 {
 public:
+   // Ajouter Cesar aussi ???
    enum class Vigenere_types : uint8_t
    {
       Beaufort = 0,
       BeaufortGerman = 1,
       Rozier = 2,
-      Gronsfeld = 3,
-      Vixenere = 4,
-      Vigenere = 5
+      Vixenere = 3,
+      Vigenere = 4
    };
    
    virtual ~VigenereBase() {}
@@ -30,6 +38,7 @@ public:
 protected:
    std::string get(const std::string &data, const Vigenere_types type);
    std::string getMinusKey() const;
+   std::string getVigenereKey() const;
    
    std::string key;
 };
@@ -101,33 +110,44 @@ public:
 
 // Chiffre de Rozier : Clair + Clef.
 
-/*class Rozier : public VigenereBase
+class Rozier : public VigenereBase
 {
 public:
 
-   std::string getChars(const char c, const unsigned int key_pos) const
+   std::string encode(const std::string &clear_text)
    {
-      return std::to_string((alpha.find(c) + key[key_pos]) % 26);
+      setKey(getVigenereKey());
+      return get(clear_text, Vigenere_types::Rozier);
    }
-};
-
-// Chiffre de Gronsfeld : Clair + Clef(en chiffres).
-
-class Gronsfeld : public VigenereBase
-{
-public:
-
-   std::string getChars(const char c, const unsigned int key_pos) const
+   
+   std::string decode(const std::string &cipher_text)
    {
-      return std::to_string((alpha.find(c) + key[key_pos]) % 26);
+      setKey(getVigenereKey());
+      setKey(getMinusKey());
+      return encode(cipher_text);
+   }
+   
+   char getChars(const char c, const unsigned int key_pos) const
+   {
+      return alpha[(alpha.find(key[key_pos]) + alpha.find(c) + 26) % 26];
    }
 };
 
 // Chiffre de Vigenere avec multiplication : Clair * Clef.
 
-class Vixenere : public VigenereBase
+/*class Vixenere : public VigenereBase
 {
 public:
+   std::string encode(const std::string &clear_text)
+   {
+      return get(clear_text, Vigenere_types::Vixenere);
+   }
+   
+   std::string decode(const std::string &cipher_text)
+   {
+      setKey(getMinusKey());
+      return encode(cipher_text);
+   }
 
    std::string getChars(const char c, const unsigned int key_pos) const
    {
@@ -151,10 +171,8 @@ public:
             return new Beaufort();
          case VigenereBase::Vigenere_types::BeaufortGerman:
             return new BeaufortGerman();
-         case VigenereBase::Vigenere_types::Gronsfeld:
-           // return new Gronsfeld();
          case VigenereBase::Vigenere_types::Rozier:
-           // return new Rozier();
+            return new Rozier();
          case VigenereBase::Vigenere_types::Vixenere:
            // return new Vixenere();
          case VigenereBase::Vigenere_types::Vigenere:

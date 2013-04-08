@@ -46,6 +46,21 @@ std::string VigenereBase::getMinusKey() const
    return minus_key;
 }
 
+std::string VigenereBase::getVigenereKey() const
+{
+   std::string V_key = "";
+   unsigned int key_len = key.length();
+   V_key.reserve(key_len);
+   
+   for(unsigned int i = 0; i < key_len - 1; i++)
+   {
+      V_key += alpha[(alpha.find(key[i+1]) - alpha.find(key[i+1]) + 26) % 26];
+   }
+   V_key += alpha[(alpha.find(key[0]) - alpha.find(key[key_len - 1]) + 26) % 26];
+   
+   return V_key;
+}
+
 /*std::string Vigenere::encode(const std::string &clear_text)
 {
    std::string crypted = "";
