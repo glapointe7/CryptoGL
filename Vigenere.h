@@ -2,6 +2,8 @@
 #ifndef VIGENERE_H
 #define VIGENERE_H
 
+#include <functional>
+
 #include "StringCipher.h"
 
 #include <string>
@@ -14,172 +16,59 @@
 
 // Ajouter Cesar qui est un Vigenere avec une clé de longueur 1.
 
-class VigenereBase : public StringCipher
+class Vigenere : public StringCipher
 {
+   typedef std::function<unsigned int(const char c, const unsigned int)> GetCharFunction;
+
 public:
    // Ajouter Cesar aussi ???
-   enum class Vigenere_types : uint8_t
+   enum class Type : uint8_t
    {
-      Beaufort = 0,
-      BeaufortGerman = 1,
-      Rozier = 2,
-      Vixenere = 3,
-      Vigenere = 4
+      Beaufort = 0, BeaufortGerman, Rozier, Vixenere, Vigenere
    };
-   
-   virtual ~VigenereBase() {}
 
-   virtual std::string encode(const std::string &) = 0;
-   virtual std::string decode(const std::string &) = 0;
+   // TODO Placer ici les différentes actions (que tu as expliqués en commentaire en haut)
+   unsigned int encode1(const char c, const unsigned int key_pos) { return 1; }
+   unsigned int encode2(const char c, const unsigned int key_pos) { return 1; }
+   unsigned int decode1(const char c, const unsigned int key_pos) { return 1; }
+   unsigned int decode2(const char c, const unsigned int key_pos) { return 1; }
 
-   virtual char getChars(const char c, const unsigned int key_pos) const = 0;
+   Vigenere(GetCharFunction charDecode, GetCharFunction charEncode);
+
    void setKey(const std::string &key);
+
+   virtual std::string encode(const std::string &);
+   virtual std::string decode(const std::string &);
+
+   virtual char getChars(const char c, const unsigned int key_pos) const;
    
-protected:
-   std::string get(const std::string &data, const Vigenere_types type);
-   std::string getMinusKey() const;
-   std::string getVigenereKey() const;
-   
+private:
    std::string key;
+   GetCharFunction charDecode, charEncode;
 };
-
-// Chiffre de Vigenère : Cipher_text = Key + Clear_text.
-
-class Vigenere : public VigenereBase
-{
-public:
-   std::string encode(const std::string &clear_text)
-   {
-      return get(clear_text, Vigenere_types::Vigenere);
-   }
-   
-   std::string decode(const std::string &cipher_text)
-   {
-      setKey(getMinusKey());
-      return encode(cipher_text);
-   }
-
-   char getChars(const char c, const unsigned int key_pos) const
-   {
-      return alpha[(alpha.find(key[key_pos]) + alpha.find(c) + 26) % 26];
-   }
-};
-
-// Chiffre de Beaufort : Cipher_text = Key - Clear_text.
-
-class Beaufort : public VigenereBase
-{
-public:
-   std::string encode(const std::string &clear_text)
-   {
-      return get(clear_text, Vigenere_types::Beaufort);
-   }
-   
-   std::string decode(const std::string &cipher_text)
-   {
-      return encode(cipher_text);
-   }
-
-   char getChars(const char c, const unsigned int key_pos) const
-   {
-      return alpha[(alpha.find(key[key_pos]) - alpha.find(c) + 26) % 26];
-   }
-};
-
-// Chiffre de Beaufort variante allemande : Cipher_text = Clear_text - Key.
-
-class BeaufortGerman : public VigenereBase
-{
-public:
-   std::string encode(const std::string &clear_text)
-   {
-      return get(clear_text, Vigenere_types::BeaufortGerman);
-   }
-   
-   std::string decode(const std::string &cipher_text)
-   {
-      setKey(getMinusKey());
-      return encode(cipher_text);
-   }
-   
-   char getChars(const char c, const unsigned int key_pos) const
-   {
-      return alpha[(alpha.find(c) - alpha.find(key[key_pos]) + 26) % 26];
-   }
-};
-
-// Chiffre de Rozier : Clair + Clef.
-
-class Rozier : public VigenereBase
-{
-public:
-
-   std::string encode(const std::string &clear_text)
-   {
-      setKey(getVigenereKey());
-      return get(clear_text, Vigenere_types::Rozier);
-   }
-   
-   std::string decode(const std::string &cipher_text)
-   {
-      setKey(getVigenereKey());
-      setKey(getMinusKey());
-      return encode(cipher_text);
-   }
-   
-   char getChars(const char c, const unsigned int key_pos) const
-   {
-      return alpha[(alpha.find(key[key_pos]) + alpha.find(c) + 26) % 26];
-   }
-};
-
-// Chiffre de Vigenere avec multiplication : Clair * Clef.
-
-/*class Vixenere : public VigenereBase
-{
-public:
-   std::string encode(const std::string &clear_text)
-   {
-      return get(clear_text, Vigenere_types::Vixenere);
-   }
-   
-   std::string decode(const std::string &cipher_text)
-   {
-      setKey(getMinusKey());
-      return encode(cipher_text);
-   }
-
-   std::string getChars(const char c, const unsigned int key_pos) const
-   {
-      return std::to_string(alpha.find(c) * key[key_pos]);
-   }
-};*/
 
 class VigenereFactory
 {
 public:
-
-   virtual ~VigenereFactory()
+   static Vigenere* createVigenere(const Vigenere::Type type)
    {
-   }
-
-   static VigenereBase* createVigenere(VigenereBase::Vigenere_types V_type)
-   {
-      switch (V_type)
+      switch (type)
       {
-         case VigenereBase::Vigenere_types::Beaufort:
-            return new Beaufort();
-         case VigenereBase::Vigenere_types::BeaufortGerman:
-            return new BeaufortGerman();
-         case VigenereBase::Vigenere_types::Rozier:
-            return new Rozier();
-         case VigenereBase::Vigenere_types::Vixenere:
-           // return new Vixenere();
-         case VigenereBase::Vigenere_types::Vigenere:
-            return new Vigenere();
+         // TODO Envoyer les bonnes fonctions en paramètre	 
+         case Vigenere::Type::Beaufort:
+            return new Vigenere(encode1, decode1);
+         case Vigenere::Type::BeaufortGerman:
+            return new Vigenere(encode1, decode2);
+         case Vigenere::Type::Rozier:
+            return new Vigenere(encode2, decode1);
+         case Vigenere::Type::Vixenere:
+          //return new Vigenere(encode1, decode1);
+         case Vigenere::Type::Vigenere:
+            return new Vigenere(encode2, decode2);
       }
       throw "Vigenere choice is inexistent.";
    }
 };
 
 #endif // VIGENERE_H
+

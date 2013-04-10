@@ -1,12 +1,21 @@
 
 #include "Vigenere.h"
 
-void VigenereBase::setKey(const std::string &key)
+Vigenere::Vigenere(GetCharFunction charDecode, GetCharFunction charEncode)
+   : charDecode(charDecode), charEncode(charEncode)
+{
+}
+
+void Vigenere::setKey(const std::string &key)
 {
    this->key = key;
 }
 
-std::string VigenereBase::get(const std::string &data, const Vigenere_types type)
+// TODO Coder le encode/decode standard de vigenere, mais appeler la bonne fonction charDecode
+// et charEncode qui existe dans this. Oublie pas, c'est comme une variable normale et comme
+// une fonction normale, donc tu l'utilise comme tel, soit text += charEncode(c, i);
+
+std::string Vigenere::get(const std::string &data, const Vigenere_types type)
 {
    std::string text = "";
    text.reserve(data.length());
@@ -32,7 +41,7 @@ std::string VigenereBase::get(const std::string &data, const Vigenere_types type
 }
 
 // Retourne la clé inversée dans l'alphabet donné.
-std::string VigenereBase::getMinusKey() const
+std::string Vigenere::getMinusKey() const
 {
    std::string minus_key = "";
    unsigned int key_len = key.length();
@@ -44,21 +53,6 @@ std::string VigenereBase::getMinusKey() const
    }
    
    return minus_key;
-}
-
-std::string VigenereBase::getVigenereKey() const
-{
-   std::string V_key = "";
-   unsigned int key_len = key.length();
-   V_key.reserve(key_len);
-   
-   for(unsigned int i = 0; i < key_len - 1; i++)
-   {
-      V_key += alpha[(alpha.find(key[i+1]) - alpha.find(key[i+1]) + 26) % 26];
-   }
-   V_key += alpha[(alpha.find(key[0]) - alpha.find(key[key_len - 1]) + 26) % 26];
-   
-   return V_key;
 }
 
 /*std::string Vigenere::encode(const std::string &clear_text)
