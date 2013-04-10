@@ -1,3 +1,7 @@
+/*
+ * Crypto : Transposition d'un tableau de caractères.
+ * 
+ */
 
 #ifndef TRANSPOSITIONBASE_HPP
 #define	TRANSPOSITIONBASE_HPP
@@ -6,19 +10,12 @@
 #include <vector>
 #include <string>
 #include <map>
-#include <algorithm>
+#include <algorithm>  // std::find
 
 class TranspositionBase : public StringCipher
 {
 public:
-   TranspositionBase() {}
    virtual ~TranspositionBase() {}
-   
-   void setStartingTable(const std::string &data);
-   std::map<char, unsigned int> sortKey() const;
-   std::vector<std::string> swapColumnsEncode(const std::map<char, unsigned int>& sorted_key) const;
-   std::vector<std::string> swapColumnsDecode(const std::map<char, unsigned int>& sorted_key) const;
-   std::string readFinalTable(const std::vector<std::string>&) const;
    
    std::string encode(const std::string &clear_text)
    {
@@ -49,6 +46,12 @@ public:
 protected:
    virtual void setTable(const std::string &data) = 0;
    virtual std::string read(const std::vector<std::string>&) const = 0;
+   
+   void setStartingTable(const std::string &data);
+   std::map<char, unsigned int> sortKey() const;
+   std::vector<std::string> swapColumnsEncode(const std::map<char, unsigned int>& sorted_key) const;
+   std::vector<std::string> swapColumnsDecode(const std::map<char, unsigned int>& sorted_key) const;
+   std::string readFinalTable(const std::vector<std::string>&) const;
    
    std::string key;
    std::vector<unsigned int> key_row;

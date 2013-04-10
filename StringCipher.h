@@ -10,7 +10,7 @@ class StringCipher : public Cipher<std::string>
 {
 public:
    StringCipher();
-   ~StringCipher() {}
+   virtual ~StringCipher() {}
 
    virtual std::string encode(const std::string &) = 0;
    virtual std::string decode(const std::string &) = 0;

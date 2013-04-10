@@ -10,8 +10,8 @@ class Delastelle : public SquareCipher
 public:
    Delastelle();
    
-   std::string encode(const std::string &);
-   std::string decode(const std::string &);
+   virtual std::string encode(const std::string &);
+   virtual std::string decode(const std::string &);
    
    void setBlockLength(const unsigned int block_len);
   

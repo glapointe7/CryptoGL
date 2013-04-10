@@ -1,11 +1,6 @@
 
 #include "Cesar.h"
 
-Cesar::Cesar()
-{
-   
-}
-
 // Obtient le caractère additionné à key dans l'alphabet.
 unsigned char Cesar::getAlphaPosition(const char key, const char c) const
 {

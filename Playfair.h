@@ -11,11 +11,8 @@ class Playfair : public SquareCipher
 public:
    Playfair();
 
-   std::string encode(const std::string &);
-   std::string decode(const std::string &);
-
-private:
-
+   virtual std::string encode(const std::string &);
+   virtual std::string decode(const std::string &);
 };
 
 #endif // PLAYFAIR_H

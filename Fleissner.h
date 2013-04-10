@@ -15,8 +15,8 @@ public:
    
    Fleissner();
 
-   std::string encode(const std::string &);
-   std::string decode(const std::string &);
+   virtual std::string encode(const std::string &);
+   virtual std::string decode(const std::string &);
 
    void setKey(const std::vector<Coordinates> key);
    void setGridDimension(const unsigned short dim);

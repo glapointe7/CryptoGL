@@ -10,8 +10,8 @@ public:
    Railfence();
 
    // Pour encoder avec un seul niveau pour tout le texte.
-   std::string encode(const std::string &);
-   std::string decode(const std::string &);
+   virtual std::string encode(const std::string &);
+   virtual std::string decode(const std::string &);
 
    void setKey(const unsigned int key);
 

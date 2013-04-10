@@ -11,8 +11,8 @@ class UnsortAlpha : public StringCipher
 public:
    UnsortAlpha();
    
-   std::string encode(const std::string &);
-   std::string decode(const std::string &);
+   virtual std::string encode(const std::string &);
+   virtual std::string decode(const std::string &);
 
    void setVerticalAlpha();
    void setHorizontalAlpha();

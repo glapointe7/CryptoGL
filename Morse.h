@@ -12,8 +12,8 @@ class Morse : public StringCipher
 public:
    Morse();
 
-   std::string encode(const std::string &);
-   std::string decode(const std::string &);
+   virtual std::string encode(const std::string &);
+   virtual std::string decode(const std::string &);
 
 private:
    std::vector<std::string> morse;

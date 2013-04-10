@@ -11,8 +11,8 @@ class Adfgvx : public SquareCipher
 public:
    Adfgvx();
 
-   std::string encode(const std::string &);
-   std::string decode(const std::string &);
+   virtual std::string encode(const std::string &);
+   virtual std::string decode(const std::string &);
 
    void setGridKey(const std::vector<std::string> &grid);
 

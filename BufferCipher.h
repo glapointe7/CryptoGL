@@ -27,8 +27,6 @@ public:
 
 protected:
    
-private:
-  
 };
 
 #endif

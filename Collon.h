@@ -11,8 +11,8 @@ class Collon : public SquareCipher
 public:
    Collon();
 
-   std::string encode(const std::string &);
-   std::string decode(const std::string &);
+   virtual std::string encode(const std::string &);
+   virtual std::string decode(const std::string &);
 
    void setBlockLength(const unsigned int series);
 

@@ -16,21 +16,31 @@
 
 // Ajouter Cesar qui est un Vigenere avec une clé de longueur 1.
 
-namespace VigenereGetCharFunction 
+namespace VigenereFunctions
 {
    // TODO Placer ici les différentes actions (que tu as expliqués en commentaire en haut)
-   unsigned char encode1(const char c, const unsigned int key_pos) { return 1; }
-   unsigned char encode2(const char c, const unsigned int key_pos) { return 1; }
-   unsigned char decode1(const char c, const unsigned int key_pos) { return 1; }
-   unsigned char decode2(const char c, const unsigned int key_pos) { return 1; }
+   unsigned char clearPlusKey(const char c, const char key_pos) 
+   { 
+      return (c + key_pos) % 26; 
+   }
+   
+   unsigned char clearMinusKey(const char c, const char key_pos) 
+   { 
+      return (c - key_pos + 26) % 26; 
+   }
+   
+   unsigned char keyMinusClear(const char c, const char key_pos) 
+   { 
+      return (key_pos - c + 26) % 26; 
+   }
 }
 
 class Vigenere : public StringCipher
 {
-   typedef std::function<unsigned char(const char c, const unsigned int)> GetCharFunction;
+   typedef std::function<unsigned char(const char c, const char k)> GetCharFunction;
 
 public:
-   // Ajouter Cesar aussi ???
+   
    enum class Type : uint8_t
    {
       Beaufort = 0, BeaufortGerman, Rozier, Vixenere, Vigenere
@@ -42,8 +52,6 @@ public:
 
    virtual std::string encode(const std::string &);
    virtual std::string decode(const std::string &);
-
-   virtual char getChars(const char c, const unsigned int key_pos) const;
    
 private:
    std::string key;
@@ -56,18 +64,17 @@ public:
    static Vigenere* createVigenere(const Vigenere::Type type)
    {
       switch (type)
-      {
-         // TODO Envoyer les bonnes fonctions en paramètre	 
+      {	 
          case Vigenere::Type::Beaufort:
-            return new Vigenere(encode1, decode1);
+            return new Vigenere(VigenereFunctions::keyMinusClear, VigenereFunctions::keyMinusClear);
          case Vigenere::Type::BeaufortGerman:
-            return new Vigenere(encode1, decode2);
+            return new Vigenere(VigenereFunctions::clearMinusKey, VigenereFunctions::clearPlusKey);
          case Vigenere::Type::Rozier:
-            return new Vigenere(encode2, decode1);
+            return new Vigenere(VigenereFunctions::clearPlusKey, VigenereFunctions::clearMinusKey);
          case Vigenere::Type::Vixenere:
           //return new Vigenere(encode1, decode1);
          case Vigenere::Type::Vigenere:
-            return new Vigenere(encode2, decode2);
+            return new Vigenere(VigenereFunctions::clearPlusKey, VigenereFunctions::clearMinusKey);
       }
       throw "Vigenere choice is inexistent.";
    }
