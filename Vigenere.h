@@ -16,9 +16,18 @@
 
 // Ajouter Cesar qui est un Vigenere avec une clé de longueur 1.
 
+namespace VigenereGetCharFunction 
+{
+   // TODO Placer ici les différentes actions (que tu as expliqués en commentaire en haut)
+   unsigned char encode1(const char c, const unsigned int key_pos) { return 1; }
+   unsigned char encode2(const char c, const unsigned int key_pos) { return 1; }
+   unsigned char decode1(const char c, const unsigned int key_pos) { return 1; }
+   unsigned char decode2(const char c, const unsigned int key_pos) { return 1; }
+}
+
 class Vigenere : public StringCipher
 {
-   typedef std::function<unsigned int(const char c, const unsigned int)> GetCharFunction;
+   typedef std::function<unsigned char(const char c, const unsigned int)> GetCharFunction;
 
 public:
    // Ajouter Cesar aussi ???
@@ -26,12 +35,6 @@ public:
    {
       Beaufort = 0, BeaufortGerman, Rozier, Vixenere, Vigenere
    };
-
-   // TODO Placer ici les différentes actions (que tu as expliqués en commentaire en haut)
-   unsigned int encode1(const char c, const unsigned int key_pos) { return 1; }
-   unsigned int encode2(const char c, const unsigned int key_pos) { return 1; }
-   unsigned int decode1(const char c, const unsigned int key_pos) { return 1; }
-   unsigned int decode2(const char c, const unsigned int key_pos) { return 1; }
 
    Vigenere(GetCharFunction charDecode, GetCharFunction charEncode);
 
