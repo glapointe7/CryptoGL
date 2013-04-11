@@ -18,7 +18,8 @@ public:
    virtual Numbers encode(const Bytes_Container &) = 0;
    virtual Bytes_Container decode(const Numbers &) = 0;
    
-   Numbers getPrivateKey() const;
+   Numbers getPublicKey() const;
+   virtual void setPublicKey() = 0;
    virtual void setPrivateKey(const Numbers &) = 0;
    
    static void save(const std::string &, const std::string &);
@@ -27,8 +28,10 @@ public:
    // Pour obtenir les octets sous forme d'une chaîne hexadécimale.
    std::string hexDigest(const Bytes_Container &) const;
    std::string toString(const Numbers &) const;
+   Bytes_Container toBytes(const std::string &);
    
 protected:
+   Numbers public_key;
    Numbers private_key;
 };
 

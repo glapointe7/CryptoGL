@@ -49,12 +49,24 @@ long getModInverse(long a, const long n)
    return v;
 }
 
-// Retourne la valeur du d�terminant de la matrice initialis�e.
-
-/*long getDeterminant()
+bool isSuperIncresing(const std::vector<unsigned long> &sequence)
 {
-   return (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]);
-}*/
+   unsigned long sum = 0;
+
+   for (auto number : sequence)
+   {
+      if (number > sum)
+      {
+         sum += number;
+      }
+      else
+      {
+         return false;
+      }
+   }
+
+   return true;
+}
 
 // On enl�ve les lettres doublons de la clef.
 
@@ -149,6 +161,21 @@ std::vector<std::string> split(const std::string &text)
    return split_text;
 }
 
+std::vector<std::vector<bool> > getBlockBinary(const std::vector<bool> &bytes, const unsigned long block_size)
+{
+   std::vector<std::vector<bool> > blocks_bits;
+   unsigned long bytes_size = bytes.size();
+   
+   
+   for(unsigned long i = 0; i < bytes_size; i += block_size)
+   {
+      std::vector<bool> block(bytes.begin() + i, bytes.begin() + i + block_size);
+      blocks_bits.push_back(block);
+   }
+   
+   return blocks_bits;
+}
+
 // Retourne les caract�res pris � chaque 'step' position.
 
 std::string getStepCharacters(std::string &text, unsigned short step)
@@ -162,4 +189,24 @@ std::string getStepCharacters(std::string &text, unsigned short step)
    }
 
    return message;
+}
+
+std::vector<unsigned char> getBytes(const std::vector<bool> &bits)
+{
+   unsigned long bits_size = bits.size();
+   std::vector<unsigned char> bytes;
+   
+   for(unsigned long i = 0; i < bits_size; i += 8)
+   {
+      unsigned char k = 0;
+      unsigned char ascii = 0;
+      for(char j = 7; j >= 0; --j)
+      {
+         ascii += bits[i+k] << j;
+         k++;
+      }
+      bytes.push_back(ascii);
+   }
+   
+   return bytes;
 }

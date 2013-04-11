@@ -10,23 +10,23 @@
 void convertMajMinToSymbol(std::string &text, const std::string symbol)
 {
    // On remplace chaque caractère en majuscule par symbol[0].
-   replace_if(text.begin(), text.end(), [](char c) {
+   std::replace_if(text.begin(), text.end(), [](char c) {
       return (isupper(c));
    }, symbol[0]);
 
    // On remplace chaque caractère en minuscule par symbol[1].
-   replace_if(text.begin(), text.end(), [](char c) {
+   std::replace_if(text.begin(), text.end(), [](char c) {
       return (islower(c));
    }, symbol[1]);
 }
 
 // Convertit un string en une suite binaire.
-
-std::string convertTextToBinaryString(const std::string &text)
+std::string convertBytesToBinaryString(const std::vector<unsigned char> &bytes)
 {
    std::string bits = "";
+   bits.reserve(bytes.size() << 3);
 
-   for (auto c : text)
+   for (auto c : bytes)
    {
       std::bitset<8> byte(c);
       bits += byte.to_string();
@@ -35,11 +35,27 @@ std::string convertTextToBinaryString(const std::string &text)
    return bits;
 }
 
+std::vector<bool> convertBytesToBinary(const std::vector<unsigned char> &bytes)
+{
+   std::vector<bool> all_bits;
+   
+   for (auto c : bytes)
+   {
+      std::bitset<8> byte(c);
+      for(int i = 8; i >= 0; --i)
+      {
+         all_bits.push_back(byte.test(i));
+      }
+   }
+
+   return all_bits;
+}
+
 // Convertit un texte en majuscules.
 
 void uppercase(std::string &text)
 {
-   transform(text.begin(), text.end(), text.begin(), ::toupper);
+   std::transform(text.begin(), text.end(), text.begin(), ::toupper);
 }
 
 // Transforme un String en un nombre.

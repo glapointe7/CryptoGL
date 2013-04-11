@@ -10,10 +10,20 @@
 //#include "converterTools.h"
 //#include "Morse.h"
 #include <iostream>
+#include <string>
+#include <bitset>
+
+using namespace std;
 
 int main()
 {
-  /*Delastelle *D = new Delastelle();
+  bitset<5> mybits (string("01011"));
+
+  cout << "mybits contains:\n";
+  for (int i = 4; i >= 0; --i)
+    cout << mybits.test(i);
+   
+   /*Delastelle *D = new Delastelle();
    D->setBlockLength(5);
    D->setKey("DIMANCHE");
    D->setGridDimension(5);
