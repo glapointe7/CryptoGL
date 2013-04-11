@@ -6,7 +6,7 @@
 
 #include "Cipher.hpp"
 
-class StringCipher : public Cipher<std::string>
+class StringCipher : public Cipher<std::string, std::string>
 {
 public:
    StringCipher();

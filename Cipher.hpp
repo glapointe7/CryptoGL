@@ -1,15 +1,17 @@
-
+/*
+ * Interface représentant tous les types de ciphers.
+ */
 #ifndef CIPHER_H
 #define CIPHER_H
 
-template <class T>
+template <class FuncType, class ParamType>
 class Cipher
 {
 public:
    virtual ~Cipher() {}
 
-   virtual T encode(const T &) = 0;
-   virtual T decode(const T &) = 0;
+   virtual FuncType encode(const ParamType &) = 0;
+   virtual FuncType decode(const ParamType &) = 0;
 };
 
 #endif // CIPHER_H
