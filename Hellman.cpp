@@ -5,6 +5,16 @@
 
 #include <algorithm>
 
+void Hellman::setModulo(const unsigned long &modulo)
+{
+   this->modulo = modulo;
+}
+
+void Hellman::setCoprime(const unsigned long &coprime)
+{
+   this->coprime = coprime;
+}
+
 // Vérifier la super croissance de la suite d'entiers donnée dans la clé privée.
 void Hellman::setPrivateKey(const Numbers &private_key)
 {
