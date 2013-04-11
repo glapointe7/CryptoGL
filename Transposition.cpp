@@ -1,7 +1,7 @@
 
-#include "TranspositionBase.hpp"
+#include "Transposition.hpp"
 
-void TranspositionBase::setStartingTable(const std::string &data)
+void Transposition::setStartingTable(const std::string &data)
 {
    unsigned int key_len = key.length();
 
@@ -16,7 +16,7 @@ void TranspositionBase::setStartingTable(const std::string &data)
    }
 }
 
-std::string TranspositionBase::readFinalTable(const std::vector<std::string>& s_table) const
+std::string Transposition::readFinalTable(const std::vector<std::string>& s_table) const
 {
    std::string data = "";
    data.reserve(s_table.size() * key.length());
@@ -30,7 +30,7 @@ std::string TranspositionBase::readFinalTable(const std::vector<std::string>& s_
 
 // Trie la clé en ordre alphabétique en conservant les positions originales de chaque lettre.
 
-std::map<char, unsigned int> TranspositionBase::sortKey() const
+std::map<char, unsigned int> Transposition::sortKey() const
 {
    std::map<char, unsigned int> sorted_key;
    unsigned int key_len = key.length();
@@ -46,7 +46,7 @@ std::map<char, unsigned int> TranspositionBase::sortKey() const
 // Ordonner les lignes selon l'ordre alphabétique des lettres de la clé.
 
 std::vector<std::string>
-TranspositionBase::swapColumnsDecode(const std::map<char, unsigned int>& sorted_key) const
+Transposition::swapColumnsDecode(const std::map<char, unsigned int>& sorted_key) const
 {
    std::vector<std::string> sorted_table;
    unsigned int key_len = key.length();
@@ -68,7 +68,7 @@ TranspositionBase::swapColumnsDecode(const std::map<char, unsigned int>& sorted_
 }
 
 std::vector<std::string>
-TranspositionBase::swapColumnsEncode(const std::map<char, unsigned int>& sorted_key) const
+Transposition::swapColumnsEncode(const std::map<char, unsigned int>& sorted_key) const
 {
    std::vector<std::string> sorted_table;
    unsigned int key_len = key.length();

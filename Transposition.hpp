@@ -3,8 +3,8 @@
  * 
  */
 
-#ifndef TRANSPOSITIONBASE_HPP
-#define	TRANSPOSITIONBASE_HPP
+#ifndef TRANSPOSITION_HPP
+#define	TRANSPOSITION_HPP
 
 #include "StringCipher.h"
 #include <vector>
@@ -12,10 +12,10 @@
 #include <map>
 #include <algorithm>  // std::find
 
-class TranspositionBase : public StringCipher
+class Transposition : public StringCipher
 {
 public:
-   virtual ~TranspositionBase() {}
+   virtual ~Transposition() {}
    
    std::string encode(const std::string &clear_text)
    {
@@ -60,7 +60,7 @@ protected:
 
 // Transposition en ligne : permutation des colonnes du tableau et lecture en ligne.
 
-class TranspositionRows : public TranspositionBase
+class TranspositionRows : public Transposition
 {
 public:
    void setTable(const std::string &data)
@@ -75,7 +75,7 @@ public:
 };
 
 // Transposition en ligne : permutation des colonnes du tableau et lecture en colonne.
-class TranspositionColumns : public TranspositionBase
+class TranspositionColumns : public Transposition
 {
 public:
    void setTable(const std::string &data)
@@ -115,7 +115,7 @@ public:
 
 // Chiffre à transposition double : permutation des colonnes puis des lignes du tableau.
 
-class TranspositionDouble : public TranspositionBase
+class TranspositionDouble : public Transposition
 {
 public:
    std::string read(const std::vector<std::string> &s_table) const
