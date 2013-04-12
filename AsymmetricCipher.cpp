@@ -15,7 +15,7 @@ std::string AsymmetricCipher::hexDigest(const Bytes_Container &bytes) const
    for(auto c : bytes)
    {
       char buffer[3];
-      sprintf(&buffer, "%02X ", c);
+      sprintf(buffer, "%02X ", c);
       str += *buffer;
    }
    

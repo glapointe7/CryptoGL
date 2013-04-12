@@ -1,7 +1,7 @@
 
 #include "Vigenere.h"
 
-Vigenere::Vigenere(GetCharFunction charDecode, GetCharFunction charEncode)
+Vigenere::Vigenere(GetCharFunction charEncode, GetCharFunction charDecode)
    : charDecode(charDecode), charEncode(charEncode)
 {
 }

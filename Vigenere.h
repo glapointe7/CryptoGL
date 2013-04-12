@@ -36,7 +36,7 @@ namespace VigenereFunctions
    
    std::string clearMultKey(const char c, const char key_pos) 
    { 
-      return (c * key_pos);
+      return std::to_string(c * key_pos);
    }
    
    unsigned char keyDivideCipher(const unsigned int c, const char key_pos) 
@@ -46,7 +46,12 @@ namespace VigenereFunctions
 }
 
 class Vigenere : public StringCipher
-{
+{   
+protected:
+   typedef std::function<unsigned char(const char c, const char k)> GetCharFunction;
+   std::string key;
+   GetCharFunction charDecode, charEncode;
+   
 public:
    
    enum class Type : uint8_t
@@ -54,27 +59,24 @@ public:
       Beaufort = 0, BeaufortGerman, Rozier, VigenereMult, Vigenere
    };
 
-   Vigenere(GetCharFunction charDecode, GetCharFunction charEncode);
+   Vigenere() {}
+   explicit Vigenere(GetCharFunction charDecode, GetCharFunction charEncode);
    virtual ~Vigenere() {}
    
    virtual void setKey(const std::string &key);
 
    virtual std::string encode(const std::string &);
    virtual std::string decode(const std::string &);
-   
-protected:
-   typedef std::function<unsigned char(const char c, const char k)> GetCharFunction;
-   
-   std::string key;
-   GetCharFunction charDecode, charEncode;
 };
 
 class Rozier : public Vigenere
 {
 public:
    
-   Rozier::Rozier(GetCharFunction charDecode, GetCharFunction charEncode)
-   : charDecode(charDecode), charEncode(charEncode) {}
+   Rozier(GetCharFunction charEncode1, GetCharFunction charDecode1)
+   {
+      charDecode = charDecode1; charEncode = charEncode1; 
+   }
    
    void setKey(const std::string &v_key)
    {
@@ -101,7 +103,7 @@ public:
          case Vigenere::Type::BeaufortGerman:
             return new Vigenere(VigenereFunctions::clearMinusKey, VigenereFunctions::clearPlusKey);
          case Vigenere::Type::Rozier:
-            return Rozier(VigenereFunctions::clearPlusKey, VigenereFunctions::clearMinusKey);
+            return new Rozier(VigenereFunctions::clearPlusKey, VigenereFunctions::clearMinusKey);
             //return new Vigenere(VigenereFunctions::clearPlusKey, VigenereFunctions::clearMinusKey);
          case Vigenere::Type::VigenereMult:
           //return new VigenereMult(VigenereFunctions::clearMultKey, VigenereFunctions::keyDivideCipher);
