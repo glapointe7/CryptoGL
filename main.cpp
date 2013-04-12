@@ -1,3 +1,4 @@
+#include "RC4.hpp"
 //#include "Delastelle.hpp"
 //#include "Matrix.hpp"
 //#include "Railfence.h"
@@ -10,19 +11,14 @@
 //#include "converterTools.h"
 //#include "Morse.h"
 #include <iostream>
-#include <string>
-#include <bitset>
 
 using namespace std;
 
 int main()
 {
-  bitset<5> mybits (string("01011"));
-
-  cout << "mybits contains:\n";
-  for (int i = 4; i >= 0; --i)
-    cout << mybits.test(i);
-   
+   RC4 *R = new RC4();
+   R->setKey(R->getBytesFromString("Key"));
+   cout << RC4::hexDigest(R->encode(R->getBytesFromString("Plaintext")));
    /*Delastelle *D = new Delastelle();
    D->setBlockLength(5);
    D->setKey("DIMANCHE");
