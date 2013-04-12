@@ -33,29 +33,60 @@ namespace VigenereFunctions
    { 
       return (key_pos - c + 26) % 26; 
    }
+   
+   std::string clearMultKey(const char c, const char key_pos) 
+   { 
+      return (c * key_pos);
+   }
+   
+   unsigned char keyDivideCipher(const unsigned int c, const char key_pos) 
+   { 
+      return (c / key_pos); 
+   }
 }
 
 class Vigenere : public StringCipher
 {
-   typedef std::function<unsigned char(const char c, const char k)> GetCharFunction;
-
 public:
    
    enum class Type : uint8_t
    {
-      Beaufort = 0, BeaufortGerman, Rozier, Vixenere, Vigenere
+      Beaufort = 0, BeaufortGerman, Rozier, VigenereMult, Vigenere
    };
 
    Vigenere(GetCharFunction charDecode, GetCharFunction charEncode);
-
-   void setKey(const std::string &key);
+   virtual ~Vigenere() {}
+   
+   virtual void setKey(const std::string &key);
 
    virtual std::string encode(const std::string &);
    virtual std::string decode(const std::string &);
    
-private:
+protected:
+   typedef std::function<unsigned char(const char c, const char k)> GetCharFunction;
+   
    std::string key;
    GetCharFunction charDecode, charEncode;
+};
+
+class Rozier : public Vigenere
+{
+public:
+   
+   Rozier::Rozier(GetCharFunction charDecode, GetCharFunction charEncode)
+   : charDecode(charDecode), charEncode(charEncode) {}
+   
+   void setKey(const std::string &v_key)
+   {
+      unsigned int key_len = v_key.length();
+      key = "";
+      key.reserve(key_len);
+      
+      for(unsigned int i = 0; i < key_len - 1; ++i)
+      {
+         key += alpha[(alpha.find(v_key[i+1]) - alpha.find(v_key[i]) + 26) % 26];
+      }
+   }
 };
 
 class VigenereFactory
@@ -70,9 +101,10 @@ public:
          case Vigenere::Type::BeaufortGerman:
             return new Vigenere(VigenereFunctions::clearMinusKey, VigenereFunctions::clearPlusKey);
          case Vigenere::Type::Rozier:
-            return new Vigenere(VigenereFunctions::clearPlusKey, VigenereFunctions::clearMinusKey);
-         case Vigenere::Type::Vixenere:
-          //return new Vigenere(encode1, decode1);
+            return Rozier(VigenereFunctions::clearPlusKey, VigenereFunctions::clearMinusKey);
+            //return new Vigenere(VigenereFunctions::clearPlusKey, VigenereFunctions::clearMinusKey);
+         case Vigenere::Type::VigenereMult:
+          //return new VigenereMult(VigenereFunctions::clearMultKey, VigenereFunctions::keyDivideCipher);
          case Vigenere::Type::Vigenere:
             return new Vigenere(VigenereFunctions::clearPlusKey, VigenereFunctions::clearMinusKey);
       }
@@ -81,4 +113,3 @@ public:
 };
 
 #endif // VIGENERE_H
-
