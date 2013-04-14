@@ -22,6 +22,7 @@ public:
 
    static std::string hexDigest(const BytesContainer &);
    static BytesContainer getBytesFromString(const std::string &);
+   static std::string getStringFromBytes(const BytesContainer &);
 
 protected:
    BytesContainer key;

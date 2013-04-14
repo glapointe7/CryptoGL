@@ -33,3 +33,8 @@ SymmetricCipher::getBytesFromString(const std::string &str)
 {  
    return BytesContainer(str.begin(), str.end());
 }
+
+std::string SymmetricCipher::getStringFromBytes(const BytesContainer &bytes)
+{
+   return std::string(bytes.begin(), bytes.end());
+}

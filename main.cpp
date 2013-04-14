@@ -1,4 +1,6 @@
-#include "RC4.hpp"
+#include "Rabbit.hpp"
+//#include "FrequenciesAnalysis.hpp"
+//#include "RC4.hpp"
 //#include "Delastelle.hpp"
 //#include "Matrix.hpp"
 //#include "Railfence.h"
@@ -11,14 +13,34 @@
 //#include "converterTools.h"
 //#include "Morse.h"
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 int main()
 {
-   RC4 *R = new RC4();
+   const std::vector<unsigned char> key = {0xC2, 0x1F, 0xCF, 0x38, 0x81, 0xCD, 0x5E,
+      0xE8, 0x62, 0x8A, 0xCC, 0xB0, 0xA9, 0x89, 0x0D, 0xF8};
+
+   const std::vector<unsigned char> data = {0x02, 0xF7, 0x4A, 0x1C, 0x26, 0x45, 0x6B, 0xF5, 
+   0xEC, 0xD6, 0xA5, 0x36, 0xF0, 0x54, 0x57, 0xB1, 0xA7, 0x8A, 0xC6, 0x89, 0x47, 0x6C, 0x69,
+   0x7B, 0x39, 0x0C, 0x9C, 0xC5, 0x15, 0xD8, 0xE8, 0x88, 0xEF, 0x9A, 0x69, 0x71, 0x8B, 0x82,
+   0x49, 0xA1, 0xA7, 0x3C, 0x5A, 0x6E, 0x5B, 0x90, 0x45, 0x95};
+   
+   Rabbit *R = new Rabbit();
+   R->setKey(key);
+   cout << Rabbit::hexDigest(R->decode(data));
+   //const std::string text = "POSSNDGOBBPPDRQSVTCOVGDNZDRABSSKPOMDDSKTMMQZXIAHOXEEEYESYOPLHORTNIPGLNMSVNR";
+   /*FrequenciesAnalysis *FA = new FrequenciesAnalysis();
+   std::string text = FrequenciesAnalysis::load(R"(../GIT_CryptoCode/cipher_text.txt)");
+   FA->calculateIC(text);
+   cout << FA->getIC();*/
+
+   /*RC4 *R = new RC4();
    R->setKey(R->getBytesFromString("Key"));
-   cout << RC4::hexDigest(R->encode(R->getBytesFromString("Plaintext")));
+   cout << RC4::getStringFromBytes(R->decode(R->encode(R->getBytesFromString("Plaintext"))));*/
+   //cout << RC4::hexDigest(R->encode(R->getBytesFromString("Plaintext")));
+
    /*Delastelle *D = new Delastelle();
    D->setBlockLength(5);
    D->setKey("DIMANCHE");

@@ -210,3 +210,11 @@ std::vector<unsigned char> getBytes(const std::vector<bool> &bits)
    
    return bytes;
 }
+
+void eraseChars(std::string &text, const std::string chars)
+{
+   for(auto c : chars)
+   {
+      text.erase (std::remove(text.begin(), text.end(), c), text.end());
+   }
+}

@@ -2,6 +2,7 @@
 
 #include <algorithm>
 
+// La clé ne doit pas dépasser 256 octets.
 void RC4::setKey(const BytesContainer &key)
 {
    this->key = key;
@@ -16,7 +17,7 @@ void RC4::initState()
    }
 }
 
-// La clé ne doit pas dépasser 256 octets.
+
 void RC4::initKeySchedule()
 {
    unsigned char key_len = key.size();
@@ -52,9 +53,5 @@ RC4::BytesContainer RC4::encode(const BytesContainer &clear_text)
 
 RC4::BytesContainer RC4::decode(const BytesContainer &cipher_text)
 {
-   unsigned int cipher_len = cipher_text.size();
-   BytesContainer decrypted;
-   decrypted.reserve(cipher_len);
-   
-   return decrypted;
+   return encode(cipher_text);
 }

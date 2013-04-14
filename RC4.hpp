@@ -11,10 +11,11 @@ public:
    virtual BytesContainer decode(const BytesContainer &);
    
    virtual void setKey(const BytesContainer &);
+   
+private:
    void initKeySchedule();
    void initState();
    
-private:
    BytesContainer state;
 };
 
