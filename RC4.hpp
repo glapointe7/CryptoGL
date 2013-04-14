@@ -1,9 +1,9 @@
 #ifndef RC4_HPP
 #define	RC4_HPP
 
-#include "SymmetricCipher.hpp"
+#include "StreamCipher.hpp"
 
-class RC4 : public SymmetricCipher
+class RC4 : public StreamCipher
 {
 public:
    
@@ -14,7 +14,7 @@ public:
    
 private:
    void initKeySchedule();
-   void initState();
+   void initialize();
    
    BytesContainer state;
 };

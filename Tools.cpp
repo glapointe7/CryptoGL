@@ -68,6 +68,31 @@ bool isSuperIncresing(const std::vector<unsigned long> &sequence)
    return true;
 }
 
+uint64_t getLegendreSymbol(uint64_t x, uint64_t e, uint64_t n)
+{
+   uint64_t a = 1;
+   unsigned char e_size = sizeof(e);
+   for(char i = e_size; i >=0; --i)
+   {
+      a = (a * a) % n;
+      if(getBitAtPosition(i, e) != 0)
+      {
+         a = (a * x) % n;
+      }
+   }
+   
+   return a;
+}
+
+// Retourne le bit à la position pos de number.
+char getBitAtPosition(const unsigned long pos, const uint64_t number)
+{
+   uint64_t temp = 0;
+   temp << pos;
+   
+   return number & temp;
+}
+
 // On enl�ve les lettres doublons de la clef.
 
 std::string removeRepeatedLetters(const std::string key)

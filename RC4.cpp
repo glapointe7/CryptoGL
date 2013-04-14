@@ -8,7 +8,7 @@ void RC4::setKey(const BytesContainer &key)
    this->key = key;
 }
 
-void RC4::initState()
+void RC4::initialize()
 {
    state.reserve(256);
    for(unsigned short i = 0; i < 256; ++i)
@@ -35,7 +35,7 @@ RC4::BytesContainer RC4::encode(const BytesContainer &clear_text)
    BytesContainer crypted;
    crypted.reserve(clear_len);
    
-   initState();
+   initialize();
    initKeySchedule();
    
    unsigned char j = 0;
