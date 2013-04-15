@@ -1,10 +1,11 @@
+
 #ifndef ASYMMETRICCIPHER_HPP
 #define	ASYMMETRICCIPHER_HPP
 
 #include "Cipher.hpp"
 
-#include <vector>
 #include <string>
+#include <vector>
 
 class AsymmetricCipher : public Cipher<std::vector<unsigned long>, std::vector<unsigned char> >
 {
@@ -13,10 +14,8 @@ public:
    typedef std::vector<unsigned long> Numbers;
    typedef std::vector<unsigned char> Bytes_Container;
    
-   virtual ~AsymmetricCipher() {}
-   
-   virtual Numbers encode(const Bytes_Container &) = 0;
-   virtual Bytes_Container decode(const Numbers &) = 0;
+   virtual const Numbers encode(const Bytes_Container &) = 0;
+   virtual const Bytes_Container decode(const Numbers &) = 0;
    
    Numbers getPublicKey() const;
    virtual void setPublicKey() = 0;
@@ -36,3 +35,4 @@ protected:
 };
 
 #endif	/* ASYMMETRICCIPHER_HPP */
+

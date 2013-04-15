@@ -17,7 +17,7 @@ std::string getStepCharacters(std::string &text, unsigned short step);
 std::vector<unsigned char> getBytes(const std::vector<bool> &bits);
 void eraseChars(std::string &text, const std::string chars);
 
-char getBitAtPosition(const unsigned long pos, const uint64_t number);
+bool getBitAtPosition(const unsigned long pos, const uint64_t number);
 
 // Fonctions mathématiques.
 uint_fast32_t getPGCD(uint_fast32_t a, uint_fast32_t b);

@@ -1,4 +1,5 @@
-#include "Rabbit.hpp"
+
+//#include "Rabbit.hpp"
 //#include "FrequenciesAnalysis.hpp"
 //#include "RC4.hpp"
 //#include "Delastelle.hpp"
@@ -6,6 +7,7 @@
 //#include "Railfence.h"
 //#include "Playfair.h"
 //#include "Polybe.h"
+#include "Vigenere.hpp"
 //#include "Wolseley.h"
 //#include "Cesar.h"
 //#include "StringCipher.h"
@@ -19,7 +21,10 @@ using namespace std;
 
 int main()
 {
-   const std::vector<unsigned char> key = {0xC2, 0x1F, 0xCF, 0x38, 0x81, 0xCD, 0x5E,
+   Vigenere *v = new Vigenere();
+   v->setKey("TABARNAK");
+
+   /*const std::vector<unsigned char> key = {0xC2, 0x1F, 0xCF, 0x38, 0x81, 0xCD, 0x5E,
       0xE8, 0x62, 0x8A, 0xCC, 0xB0, 0xA9, 0x89, 0x0D, 0xF8};
 
    const std::vector<unsigned char> data = {0x02, 0xF7, 0x4A, 0x1C, 0x26, 0x45, 0x6B, 0xF5, 
@@ -29,7 +34,7 @@ int main()
    
    Rabbit *R = new Rabbit();
    R->setKey(key);
-   cout << Rabbit::hexDigest(R->decode(data));
+   cout << Rabbit::hexDigest(R->decode(data));*/
    //const std::string text = "POSSNDGOBBPPDRQSVTCOVGDNZDRABSSKPOMDDSKTMMQZXIAHOXEEEYESYOPLHORTNIPGLNMSVNR";
    /*FrequenciesAnalysis *FA = new FrequenciesAnalysis();
    std::string text = FrequenciesAnalysis::load(R"(../GIT_CryptoCode/cipher_text.txt)");

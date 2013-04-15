@@ -7,31 +7,30 @@
 #include <utility>
 #include <vector>
 
-typedef std::pair<unsigned char, unsigned char> Coordinates;
-
 class SquareCipher : public StringCipher
 {
 public:
-   SquareCipher();
-   virtual ~SquareCipher() {}
+   typedef String Key;
+   typedef std::pair<unsigned char, unsigned char> Coordinates;
+   typedef std::vector<String> Grid;
 
-   virtual std::string encode(const std::string &) = 0;
-   virtual std::string decode(const std::string &) = 0;
+   virtual const String encode(const String &) = 0;
+   virtual const String decode(const String &) = 0;
 
-   void setGridDimension(const unsigned char dim);
-   void setKey(const std::string &key);
+   void setGridDimension(const unsigned int dim);
+   void setKey(const Key &key);
 
 protected:
-   std::vector<std::string> getGrid(const std::string &chars) const;
-   static Coordinates getCharCoordinates(const char c, const std::vector<std::string> &grid);
+   const Grid getGrid(const String &chars) const;
+   static const Coordinates getCharCoordinates(const char c, const Grid &grid);
 
-   std::string key;
+   Key key;
 
    // Grille de chiffrement.
    //std::vector<std::string> grid;
 
    // Dimension de la grille carrée.
-   unsigned char dim;
+   unsigned int dim;
 };
 
 #endif	/* SQUARECIPHER_H */

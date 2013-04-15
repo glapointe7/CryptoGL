@@ -1,19 +1,21 @@
+
 #ifndef SYMMETRICCIPHER_HPP
 #define	SYMMETRICCIPHER_HPP
 
 #include "Cipher.hpp"
-#include <vector>
-#include <string>
 
-class SymmetricCipher : public Cipher<std::vector<unsigned char>, std::vector<unsigned char> >
+#include <string>
+#include <vector>
+
+class SymmetricCipher : public Cipher<std::vector<unsigned char>>
 {
 public:
    typedef std::vector<unsigned char> BytesContainer;
 
    virtual ~SymmetricCipher() {}
 
-   virtual BytesContainer encode(const BytesContainer &) = 0;
-   virtual BytesContainer decode(const BytesContainer &) = 0;
+   virtual const BytesContainer encode(const BytesContainer &) = 0;
+   virtual const BytesContainer decode(const BytesContainer &) = 0;
 
    virtual void setKey(const BytesContainer &) = 0;
 

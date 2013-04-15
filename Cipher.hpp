@@ -4,14 +4,18 @@
 #ifndef CIPHER_H
 #define CIPHER_H
 
-template <class FuncType, class ParamType>
+template <class ReturnType, class ParamType = ReturnType>
 class Cipher
 {
 public:
+   typedef ReturnType ReturnTypeT;
+   typedef ParamType ParamTypeT;
+
    virtual ~Cipher() {}
 
-   virtual FuncType encode(const ParamType &) = 0;
-   virtual FuncType decode(const ParamType &) = 0;
+   virtual const ReturnType encode(const ParamType &) = 0;
+   virtual const ReturnType decode(const ParamType &) = 0;
 };
 
 #endif // CIPHER_H
+

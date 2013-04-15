@@ -1,39 +1,36 @@
-/*
- * Crypto : Transposition d'un tableau de caractères.
- * 
- */
 
 #ifndef TRANSPOSITION_HPP
 #define	TRANSPOSITION_HPP
 
 #include "StringCipher.h"
-#include <vector>
-#include <string>
+
+#include <algorithm>
 #include <map>
-#include <algorithm>  // std::find
+#include <string>
+#include <vector>
 
 class Transposition : public StringCipher
 {
 public:
-   virtual ~Transposition() {}
-   
-   std::string encode(const std::string &clear_text)
+   typedef String Key;
+
+   const String encode(const String &clear_text)
    {
       setStartingTable(clear_text);
       const std::map<char, unsigned int> sorted_key = sortKey();
-      const std::vector<std::string> s_table = swapColumnsEncode(sorted_key);
+      const std::vector<String> s_table = swapColumnsEncode(sorted_key);
       return read(s_table);
    }
    
-   std::string decode(const std::string &cipher_text)
+   const String decode(const String &cipher_text)
    {
       setTable(cipher_text);
       const std::map<char, unsigned int> sorted_key = sortKey();
-      const std::vector<std::string> s_table = swapColumnsEncode(sorted_key);
+      const std::vector<String> s_table = swapColumnsEncode(sorted_key);
       return readFinalTable(s_table);
    }
    
-   void setKey(const std::string &key)
+   void setKey(const Key &key)
    {
       this->key = key;
    }

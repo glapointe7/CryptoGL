@@ -168,6 +168,7 @@ Rabbit::BytesContainer Rabbit::encode(const BytesContainer &clear_text)
          }
       }
    }
+   // TODO Make sure that it can NEVER reach this point
 }
 
 Rabbit::BytesContainer Rabbit::decode(const BytesContainer &cipher_text)

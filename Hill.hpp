@@ -3,24 +3,23 @@
 #define	HILL_HPP
 
 #include "StringCipher.h"
-//#include "Matrix.hpp"
-//#include <vector>
 
-#include <Eigen/Core>
-
+#include <vector>
 
 class Hill : public StringCipher
 {
 public:
+   typedef std::vector<std::vector<long>> Matrix;
+
    Hill();
    
    std::string encode(const std::string &);
    std::string decode(const std::string &);
    
-   void setKey(const Eigen::MatrixXi &);
+   void setKey(const Matrix &);
    
 private:
-   Eigen::MatrixXi key;
+   Matrix key;
 };
 
 #endif	/* HILL_HPP */

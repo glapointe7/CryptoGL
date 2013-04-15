@@ -11,14 +11,14 @@ class Adfgvx : public SquareCipher
 public:
    Adfgvx();
 
-   virtual std::string encode(const std::string &);
-   virtual std::string decode(const std::string &);
+   virtual const String encode(const String &);
+   virtual const String decode(const String &);
 
-   void setGridKey(const std::vector<std::string> &grid);
+   void setGridKey(const Grid &grid);
 
 private:
    // Grille 6X6 de caractères A-Z, 0-9 servant de 2e clé.
-   std::vector<std::string> grid_key;
+   Grid grid_key;
 
    // Dimension de la grille carrée.
    const std::string code = "ADFGVX";

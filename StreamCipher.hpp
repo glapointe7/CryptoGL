@@ -1,3 +1,4 @@
+
 #ifndef STREAMCIPHER_HPP
 #define	STREAMCIPHER_HPP
 
@@ -8,8 +9,8 @@ class StreamCipher : public SymmetricCipher
 public:
    virtual ~StreamCipher() {}
    
-   virtual BytesContainer encode(const BytesContainer &) = 0;
-   virtual BytesContainer decode(const BytesContainer &) = 0;
+   virtual const BytesContainer encode(const BytesContainer &) = 0;
+   virtual const BytesContainer decode(const BytesContainer &) = 0;
    
    virtual void setKey(const BytesContainer &) = 0;
    virtual void initialize() = 0;

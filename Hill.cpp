@@ -10,14 +10,14 @@ Hill::Hill()
 
 }
 
-void Hill::setKey(const Eigen::MatrixXi &key)
+void Hill::setKey(const Matrix &key)
 {
    this->key = key;
 }
 
 std::string Hill::encode(const std::string &clear_text)
 {
-   unsigned int alpha_len = alpha.length();
+   /*unsigned int alpha_len = alpha.length();
    std::string crypted = "";
    crypted.reserve(clear_text.length() << 1);
 
@@ -43,12 +43,13 @@ std::string Hill::encode(const std::string &clear_text)
       crypted += alpha[bipos.second];
    }
 
-   return crypted;
+   return crypted;*/
+   return "";
 }
 
 std::string Hill::decode(const std::string &cipher_text)
 {
-   unsigned int cipher_len = cipher_text.length();
+   /*unsigned int cipher_len = cipher_text.length();
    unsigned int alpha_len = alpha.length();
    std::string decrypted = "";
    //Eigen::MatrixXi inv_key = Eigen::MatrixXi::inverse(key);
@@ -71,5 +72,6 @@ std::string Hill::decode(const std::string &cipher_text)
       decrypted += alpha[bipos.second];
    }
    
-   return decrypted;
+   return decrypted;*/
+   return "";
 }

@@ -6,11 +6,6 @@
 #include <sstream>
 #include <algorithm>
 
-StringCipher::StringCipher()
-{
-
-}
-
 void StringCipher::save(const std::string &filename, const std::string &data)
 {
    try
@@ -25,12 +20,12 @@ void StringCipher::save(const std::string &filename, const std::string &data)
    }
 }
 
-std::string StringCipher::load(const std::string &filename)
+const StringCipher::String StringCipher::load(const std::string &filename)
 {
    std::ifstream in(filename.c_str());
    if (in)
    {
-      std::string contents;
+      String contents;
       in.seekg(0, std::ios::end);
       contents.resize(in.tellg());
       in.seekg(0, std::ios::beg);
@@ -46,7 +41,7 @@ std::string StringCipher::load(const std::string &filename)
    throw errno;
 }
 
-void StringCipher::eraseBadCharacters(std::string &text) const
+void StringCipher::eraseBadCharacters(String &text) const
 {
    text.erase(std::remove_if(text.begin(), text.end(), [this](char c)
    {
@@ -54,12 +49,12 @@ void StringCipher::eraseBadCharacters(std::string &text) const
    }), text.end());
 }
 
-void StringCipher::setAlpha(const std::string &alpha)
+void StringCipher::setAlpha(const String &alpha)
 {
    this->alpha = alpha;
 }
 
-std::string StringCipher::getAlpha() const
+const StringCipher::String StringCipher::getAlpha() const
 {
    return alpha;
 }

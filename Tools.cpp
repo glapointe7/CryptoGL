@@ -1,12 +1,11 @@
 
 #include "Tools.h"
+
 #include <algorithm>
 #include <bitset>
 #include <sstream>
-#include <iostream>
 
 // Retourne PGCD(a,b).
-
 uint_fast32_t getPGCD(uint_fast32_t a, uint_fast32_t b)
 {
    if (b == 0)
@@ -16,7 +15,6 @@ uint_fast32_t getPGCD(uint_fast32_t a, uint_fast32_t b)
 }
 
 // Retourne le reste d'une division enti�re.
-
 long getIntegerMod(long n, long mod)
 {
    long ans = n;
@@ -30,7 +28,6 @@ long getIntegerMod(long n, long mod)
 
 // Calcule l'inverse de a modulo n et en retourne la valeur.
 // TODO : Vérifier qu'il existe a^{-1} dans Z/nZ.
-
 long getModInverse(long a, const long n)
 {
    long i = n, v = 0, d = 1;
@@ -85,12 +82,9 @@ uint64_t getLegendreSymbol(uint64_t x, uint64_t e, uint64_t n)
 }
 
 // Retourne le bit à la position pos de number.
-char getBitAtPosition(const unsigned long pos, const uint64_t number)
+bool getBitAtPosition(const unsigned long pos, const uint64_t number)
 {
-   uint64_t temp = 0;
-   temp << pos;
-   
-   return number & temp;
+   return (number & (1 << pos)) > 0;
 }
 
 // On enl�ve les lettres doublons de la clef.
