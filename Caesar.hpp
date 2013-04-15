@@ -1,16 +1,15 @@
-
-#ifndef CESAR_H
-#define CESAR_H
+#ifndef CAESAR_HPP
+#define CAESAR_HPP
 
 #include "StringCipher.h"
 
 #include <string>
 
-class Cesar : public StringCipher
+class Caesar : public StringCipher
 {
 public:
-   virtual std::string encode(const std::string &);
-   virtual std::string decode(const std::string &);
+   virtual const ClassicalType encode(const ClassicalType &);
+   virtual const ClassicalType decode(const ClassicalType &);
 
    void setKey(const unsigned char key);
    unsigned char getAlphaPosition(const char key, const char c) const;
@@ -19,4 +18,4 @@ private:
    unsigned char key;
 };
 
-#endif // CESAR_H
+#endif

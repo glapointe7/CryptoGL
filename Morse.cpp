@@ -17,9 +17,9 @@ Morse::Morse()
 
 // Encode un message clair en langage Morse.
 
-std::string Morse::encode(const std::string &clear_text)
+const Morse::ClassicalType Morse::encode(const ClassicalType &clear_text)
 {
-   std::string crypted = "";
+   ClassicalType crypted = "";
 
    for (auto c : clear_text)
    {
@@ -31,14 +31,14 @@ std::string Morse::encode(const std::string &clear_text)
 
 // D�code un message crypt� en langage Morse.
 
-std::string Morse::decode(const std::string &cipher_text)
+const Morse::ClassicalType Morse::decode(const ClassicalType &cipher_text)
 {
-   std::string decrypted = "";
+   ClassicalType decrypted = "";
    std::vector<std::string> cipher_word = split(cipher_text);
 
    for (auto str : cipher_word)
    {
-      unsigned int pos = find(morse.begin(), morse.end(), str) - morse.begin();
+      unsigned int pos = std::find(morse.begin(), morse.end(), str) - morse.begin();
       decrypted += alpha[pos];
    }
 

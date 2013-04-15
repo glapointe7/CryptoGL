@@ -6,6 +6,7 @@
 #include <sstream>
 
 // Retourne PGCD(a,b).
+
 uint_fast32_t getPGCD(uint_fast32_t a, uint_fast32_t b)
 {
    if (b == 0)
@@ -15,6 +16,7 @@ uint_fast32_t getPGCD(uint_fast32_t a, uint_fast32_t b)
 }
 
 // Retourne le reste d'une division enti�re.
+
 long getIntegerMod(long n, long mod)
 {
    long ans = n;
@@ -28,6 +30,7 @@ long getIntegerMod(long n, long mod)
 
 // Calcule l'inverse de a modulo n et en retourne la valeur.
 // TODO : Vérifier qu'il existe a^{-1} dans Z/nZ.
+
 long getModInverse(long a, const long n)
 {
    long i = n, v = 0, d = 1;
@@ -68,23 +71,17 @@ bool isSuperIncresing(const std::vector<unsigned long> &sequence)
 uint64_t getLegendreSymbol(uint64_t x, uint64_t e, uint64_t n)
 {
    uint64_t a = 1;
-   unsigned char e_size = sizeof(e);
-   for(char i = e_size; i >=0; --i)
+   unsigned char e_size = sizeof (e);
+   for (char i = e_size; i >= 0; --i)
    {
       a = (a * a) % n;
-      if(getBitAtPosition(i, e) != 0)
+      if (getBitAtPosition(i, e) != 0)
       {
          a = (a * x) % n;
       }
    }
-   
-   return a;
-}
 
-// Retourne le bit à la position pos de number.
-bool getBitAtPosition(const unsigned long pos, const uint64_t number)
-{
-   return (number & (1 << pos)) > 0;
+   return a;
 }
 
 // On enl�ve les lettres doublons de la clef.
@@ -182,16 +179,16 @@ std::vector<std::string> split(const std::string &text)
 
 std::vector<std::vector<bool> > getBlockBinary(const std::vector<bool> &bytes, const unsigned long block_size)
 {
-   std::vector<std::vector<bool> > blocks_bits;
+   std::vector < std::vector<bool> > blocks_bits;
    unsigned long bytes_size = bytes.size();
-   
-   
-   for(unsigned long i = 0; i < bytes_size; i += block_size)
+
+
+   for (unsigned long i = 0; i < bytes_size; i += block_size)
    {
       std::vector<bool> block(bytes.begin() + i, bytes.begin() + i + block_size);
       blocks_bits.push_back(block);
    }
-   
+
    return blocks_bits;
 }
 
@@ -214,26 +211,68 @@ std::vector<unsigned char> getBytes(const std::vector<bool> &bits)
 {
    unsigned long bits_size = bits.size();
    std::vector<unsigned char> bytes;
-   
-   for(unsigned long i = 0; i < bits_size; i += 8)
+
+   for (unsigned long i = 0; i < bits_size; i += 8)
    {
       unsigned char k = 0;
       unsigned char ascii = 0;
-      for(char j = 7; j >= 0; --j)
+      for (char j = 7; j >= 0; --j)
       {
-         ascii += bits[i+k] << j;
+         ascii += bits[i + k] << j;
          k++;
       }
       bytes.push_back(ascii);
    }
-   
+
    return bytes;
 }
 
 void eraseChars(std::string &text, const std::string chars)
 {
-   for(auto c : chars)
+   for (auto c : chars)
    {
-      text.erase (std::remove(text.begin(), text.end(), c), text.end());
+      text.erase(std::remove(text.begin(), text.end(), c), text.end());
    }
+}
+
+// Retourne le bit à la position pos de number.
+
+bool getBitAtPosition(const unsigned long pos, const uint64_t number)
+{
+   return (number & (1 << pos)) > 0;
+}
+
+uint32_t getBitsRange(const uint32_t number, const unsigned int from, const unsigned int to)
+{
+   uint32_t mask = 1;
+   uint32_t result;
+   unsigned int j = 0;
+   for (uint32_t i = from; i < to; ++i)
+   {
+      if (getBitAtPosition(i, number) == 1)
+      {
+         result |= mask;
+      }
+      mask <<= 1;
+   }
+   
+   return result;
+}
+
+// Rotation circulaire à gauche des bits de pos fois.
+uint32_t rotl32(const uint32_t number, const unsigned char pos)
+{
+   return (number << pos) | (number >> (32-pos));
+}
+
+// Rotation circulaire à droite des bits de pos fois.
+uint32_t rotr32(const uint32_t number, const unsigned char pos)
+{
+   return (number >> pos) | (number << (32-pos));
+}
+
+// Met un bit à la position pos à 1 dans number.
+uint32_t setBit(const uint32_t number, const unsigned char pos)
+{
+   return number | (1 << pos);
 }

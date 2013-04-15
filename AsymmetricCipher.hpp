@@ -12,10 +12,10 @@ class AsymmetricCipher : public Cipher<std::vector<unsigned long>, std::vector<u
 public:
    
    typedef std::vector<unsigned long> Numbers;
-   typedef std::vector<unsigned char> Bytes_Container;
+   typedef std::vector<unsigned char> BytesContainer;
    
-   virtual const Numbers encode(const Bytes_Container &) = 0;
-   virtual const Bytes_Container decode(const Numbers &) = 0;
+   virtual const Numbers encode(const BytesContainer &) = 0;
+   virtual const BytesContainer decode(const Numbers &) = 0;
    
    Numbers getPublicKey() const;
    virtual void setPublicKey() = 0;
@@ -25,14 +25,13 @@ public:
    static std::string load(const std::string &);
    
    // Pour obtenir les octets sous forme d'une chaîne hexadécimale.
-   std::string hexDigest(const Bytes_Container &) const;
+   std::string hexDigest(const BytesContainer &) const;
    std::string toString(const Numbers &) const;
-   Bytes_Container toBytes(const std::string &);
+   BytesContainer toBytes(const std::string &);
    
 protected:
    Numbers public_key;
    Numbers private_key;
 };
 
-#endif	/* ASYMMETRICCIPHER_HPP */
-
+#endif

@@ -16,9 +16,9 @@ void SquareCipher::setGridDimension(const unsigned int dim)
 // Construction de la grille de chiffrement.
 
 const SquareCipher::Grid
-SquareCipher::getGrid(const String &chars) const
+SquareCipher::getGrid(const ClassicalType &chars) const
 {
-   String new_alpha(removeRepeatedLetters(chars));
+   ClassicalType new_alpha(removeRepeatedLetters(chars));
    Grid grid;
 
    // Séparation de la chaîne pour former une grille carrée (dim X dim) de caractères.
@@ -34,7 +34,7 @@ SquareCipher::getGrid(const String &chars) const
 const SquareCipher::Coordinates
 SquareCipher::getCharCoordinates(const char c, const Grid &grid)
 {
-   auto coords = std::make_pair(0u, 0u);
+   auto coords = std::make_pair(0, 0);
    for (auto str : grid)
    {
       coords.first = str.find(c);

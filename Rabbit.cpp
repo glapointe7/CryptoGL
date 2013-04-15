@@ -1,5 +1,7 @@
 #include "Rabbit.hpp"
 
+#include "Tools.h"
+
 // La clé doit avoir 128 bits ou 16 octets.
 
 void Rabbit::setKey(const BytesContainer &key)
@@ -18,7 +20,7 @@ uint32_t Rabbit::g(const uint32_t x) const
    a = x & 0xFFFF;
    b = x >> 16;
 
-   return ((((a * a) >> 17 + a * b) >> 15) + b * b) ^ (x * x);
+   return (((((a * a) >> 17) + (a * b)) >> 15) + (b * b)) ^ (x * x);
 }
 
 void Rabbit::update()
@@ -43,14 +45,14 @@ void Rabbit::update()
       G[i] = g(states[i] + counters[i]);
    }
 
-   states[0] = G[0] + (G[7] << 16) + (G[6] << 16) & 0xFFFFFFFF;
-   states[1] = G[1] + (G[0] << 8) + G[7] & 0xFFFFFFFF;
-   states[2] = G[2] + (G[1] << 16) + (G[0] << 16) & 0xFFFFFFFF;
-   states[3] = G[3] + (G[2] << 8) + G[1] & 0xFFFFFFFF;
-   states[4] = G[4] + (G[3] << 16) + (G[2] << 16) & 0xFFFFFFFF;
-   states[5] = G[5] + (G[4] << 8) + G[3] & 0xFFFFFFFF;
-   states[6] = G[6] + (G[5] << 16) + (G[4] << 16) & 0xFFFFFFFF;
-   states[7] = G[7] + (G[6] << 8) + G[5] & 0xFFFFFFFF;
+   states[0] = G[0] + rotl32(G[7], 16) + rotl32(G[6], 16) & 0xFFFFFFFF;
+   states[1] = G[1] + rotl32(G[0], 8) + G[7] & 0xFFFFFFFF;
+   states[2] = G[2] + rotl32(G[1], 16) + rotl32(G[0], 16) & 0xFFFFFFFF;
+   states[3] = G[3] + rotl32(G[2], 8) + G[1] & 0xFFFFFFFF;
+   states[4] = G[4] + rotl32(G[3], 16) + rotl32(G[2], 16) & 0xFFFFFFFF;
+   states[5] = G[5] + rotl32(G[4], 8) + G[3] & 0xFFFFFFFF;
+   states[6] = G[6] + rotl32(G[5], 16) + rotl32(G[4], 16) & 0xFFFFFFFF;
+   states[7] = G[7] + rotl32(G[6], 8) + G[5] & 0xFFFFFFFF;
 }
 
 void Rabbit::initialize()
@@ -144,7 +146,7 @@ Rabbit::BytesContainer Rabbit::getOutputBytes()
    return out;
 }
 
-Rabbit::BytesContainer Rabbit::encode(const BytesContainer &clear_text)
+const Rabbit::BytesContainer Rabbit::encode(const BytesContainer &clear_text)
 {
    initialize();
    if (!IV.empty())
@@ -154,10 +156,11 @@ Rabbit::BytesContainer Rabbit::encode(const BytesContainer &clear_text)
    
    unsigned int clear_len = clear_text.size();
    unsigned int i = 0;
+   BytesContainer crypted;
    while (i < clear_len)
-   {
-      BytesContainer crypted(getOutputBytes());
-      
+   {  
+      BytesContainer output(getOutputBytes());
+      crypted.insert(crypted.end(), output.begin(), output.end());
       for (unsigned char j = 0; j < 16; ++j)
       {
          crypted[j] ^= clear_text[i];
@@ -168,10 +171,11 @@ Rabbit::BytesContainer Rabbit::encode(const BytesContainer &clear_text)
          }
       }
    }
-   // TODO Make sure that it can NEVER reach this point
+   
+   return crypted;
 }
 
-Rabbit::BytesContainer Rabbit::decode(const BytesContainer &cipher_text)
+const Rabbit::BytesContainer Rabbit::decode(const BytesContainer &cipher_text)
 {
    return encode(cipher_text);
 }

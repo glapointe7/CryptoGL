@@ -13,17 +13,17 @@ void Collon::setBlockLength(const unsigned int series)
    block_len = series;
 }
 
-std::string Collon::encode(const std::string &clear_text)
+const Collon::ClassicalType Collon::encode(const ClassicalType &clear_text)
 {
    unsigned int clear_len = clear_text.length();
    std::string line1 = "";
    line1.reserve(clear_len);
    std::string line2(line1);
-   std::string crypted = "";
+   ClassicalType crypted = "";
    crypted.reserve(clear_len << 1);
 
    // Création de la grille de chiffrement avec lettres doublons effacées.
-   std::vector<std::string> grid(getGrid(key + alpha));
+   Grid grid(getGrid(key + alpha));
 
    // Chaque caractères situé en (x,y) est encodé par un bigramme AB tel que
    // A = (a,y) et B = (x,b).
@@ -46,11 +46,11 @@ std::string Collon::encode(const std::string &clear_text)
    return crypted;
 }
 
-std::string Collon::decode(const std::string &cipher_text)
+const Collon::ClassicalType Collon::decode(const ClassicalType &cipher_text)
 {
    unsigned int cipher_len = cipher_text.length();
    unsigned int line_len = cipher_len >> 1;
-   std::string decrypted = "";
+   ClassicalType decrypted = "";
    decrypted.reserve(line_len);
    std::string line1 = "";
    line1.reserve(line_len);

@@ -12,15 +12,15 @@ Adfgvx::Adfgvx()
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
 }
 
-void Adfgvx::setGridKey(const std::vector<std::string> &grid)
+void Adfgvx::setGridKey(const Grid &grid)
 {
    grid_key = grid;
 }
 
-std::string Adfgvx::encode(const std::string &clear_text)
+const Adfgvx::ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
 {
    std::string key_ok = removeRepeatedLetters(key);
-   std::string crypted = "";
+   ClassicalType crypted = "";
    unsigned int clear_len = clear_text.length();
    unsigned int key_len = key_ok.length();
    crypted.reserve((clear_len << 1) + key_len);
@@ -51,7 +51,7 @@ std::string Adfgvx::encode(const std::string &clear_text)
 
    // On remplit la grille qu'on doit lire en colonne. 
    // Pour faciliter le code, on la transpose.
-   std::vector<std::string> grid;
+   Grid grid;
    unsigned int first_encoding_len = first_encoding.length();
    for (unsigned int i = 0; i < key_len; i++)
    {
@@ -81,9 +81,9 @@ std::string Adfgvx::encode(const std::string &clear_text)
    return crypted;
 }
 
-std::string Adfgvx::decode(const std::string &cipher_text)
+const Adfgvx::ClassicalType Adfgvx::decode(const ClassicalType &cipher_text)
 {
-   std::string decrypted = "";
+   ClassicalType decrypted = "";
    //decrypted.reserve(cipher_text >> 1);
    
    std::string key_ok = removeRepeatedLetters(key);
@@ -96,7 +96,7 @@ std::string Adfgvx::decode(const std::string &cipher_text)
       sorted_key.insert(std::make_pair(key_ok[i], i));
    }
    
-   std::vector<std::string> grid;
+   Grid grid;
    for(auto c : key_ok)
    {
       grid.push_back(cipher_text.substr(sorted_key[c] * key_len, key_len));

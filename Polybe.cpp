@@ -10,14 +10,14 @@ Polybe::Polybe()
 
 // Encode un texte clair par le chiffre de Polybe.
 
-std::string Polybe::encode(const std::string &clear_text)
+const Polybe::ClassicalType Polybe::encode(const ClassicalType &clear_text)
 {
    unsigned int clear_len = clear_text.length();
-   std::string crypted = "";
+   ClassicalType crypted = "";
    crypted.reserve(clear_len << 1);
 
    // Construction de la grille de chiffrement.
-   std::vector<std::string> grid(getGrid(key + alpha));
+   const Grid grid(getGrid(key + alpha));
 
    // Obtention des coordonnées de chaque lettre dans la grille.
    // Note : on ajoute '1', car on veut rendre le cryptogramme en string.
@@ -34,12 +34,12 @@ std::string Polybe::encode(const std::string &clear_text)
 
 // Décode un texte encodé par le chiffre de Polybe.
 
-std::string Polybe::decode(const std::string &cipher_text)
+const Polybe::ClassicalType Polybe::decode(const ClassicalType &cipher_text)
 {
    unsigned int cipher_len = cipher_text.length();
-   std::string decrypted = "";
+   ClassicalType decrypted = "";
    decrypted.reserve(cipher_len);
-   std::vector<std::string> grid(getGrid(key + alpha));
+   const Grid grid(getGrid(key + alpha));
 
    for (unsigned i = 0; i < cipher_len; i += 2)
    {

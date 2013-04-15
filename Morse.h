@@ -12,11 +12,11 @@ class Morse : public StringCipher
 public:
    Morse();
 
-   virtual std::string encode(const std::string &);
-   virtual std::string decode(const std::string &);
+   virtual const ClassicalType encode(const ClassicalType &);
+   virtual const ClassicalType decode(const ClassicalType &);
 
 private:
    std::vector<std::string> morse;
 };
 
-#endif // MORSE_H
+#endif

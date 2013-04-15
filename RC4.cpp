@@ -29,7 +29,7 @@ void RC4::initKeySchedule()
    }
 }
 
-RC4::BytesContainer RC4::encode(const BytesContainer &clear_text)
+const RC4::BytesContainer RC4::encode(const BytesContainer &clear_text)
 {
    unsigned int clear_len = clear_text.size();
    BytesContainer crypted;
@@ -51,7 +51,7 @@ RC4::BytesContainer RC4::encode(const BytesContainer &clear_text)
    return crypted;
 }
 
-RC4::BytesContainer RC4::decode(const BytesContainer &cipher_text)
+const RC4::BytesContainer RC4::decode(const BytesContainer &cipher_text)
 {
    return encode(cipher_text);
 }

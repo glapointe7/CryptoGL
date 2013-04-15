@@ -91,7 +91,7 @@ bool Fleissner::checkMask(std::vector<Coordinates> &coords) const
 // Remplit le texte clair par des caractères au hasard afin d'obtenir 
 // un multiple du carré de grid_dim.
 
-void Fleissner::fillWithRandomChars(std::string &text)
+void Fleissner::fillWithRandomChars(ClassicalType &text)
 {
    unsigned int fillers = text.length() % (grid_dim * grid_dim);
    unsigned short alpha_len = alpha.length() + 1;
@@ -106,16 +106,16 @@ void Fleissner::fillWithRandomChars(std::string &text)
 
 // Encode un texte avec la grille tournante de Fleissner.
 
-std::string Fleissner::encode(const std::string &clear_text)
+const Fleissner::ClassicalType Fleissner::encode(const ClassicalType &clear_text)
 {
-   std::string crypted = "";
+   ClassicalType crypted = "";
    std::vector<Coordinates> coords(key);
    unsigned short dim = grid_dim * grid_dim;
 
    // Si le masque est valide.
    if (checkMask(coords) == true)
    {
-      std::string full_text(clear_text);
+      ClassicalType full_text(clear_text);
       fillWithRandomChars(full_text);
 
       // On réserve l'espace selon grid_dim pour la grille.
@@ -154,9 +154,9 @@ std::string Fleissner::encode(const std::string &clear_text)
 
 // Décode un cryptogramme de la grille de Fleissner.
 
-std::string Fleissner::decode(const std::string &cipher_text)
+const Fleissner::ClassicalType Fleissner::decode(const ClassicalType &cipher_text)
 {
-   std::string decrypted = "";
+   ClassicalType decrypted = "";
    std::vector<Coordinates> coords(key);
    unsigned short dim = grid_dim * grid_dim;
 

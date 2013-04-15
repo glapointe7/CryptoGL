@@ -1,147 +1,169 @@
 
-#ifndef VIGENERE_H
-#define VIGENERE_H
+#ifndef VIGENERE_HPP
+#define VIGENERE_HPP
 
 #include "StringCipher.h"
 
 #include <functional>
 #include <string>
+#include <sstream>
+
+#include "Tools.h"  // fonction split
 
 // Vigenere : CIPHER = CLEAR + KEY
-// Beaufort : CIPHER = -CLEAR + KEY
-// Beaufort German : CIPHER = CLEAR - KEY
-// Vixenere : CIPHER = CLEAR * KEY
-// Rozier : CIPHER = CLEAR + KEY (en modifiant la clé selon l'algo).
 
 class Vigenere : public StringCipher
 {
 protected:
-   typedef std::function<String(const String &, const char, const unsigned int)> GetCharFunction;
-   
+   typedef std::function<ClassicalType(const ClassicalType &, const char, const char)> GetCharFunction;
+
    Vigenere(const GetCharFunction &charEncode, const GetCharFunction &charDecode)
-      : charDecode(charDecode), charEncode(charEncode) {}
+   : charEncode(charEncode), charDecode(charDecode) {}
+
+   static const ClassicalType clearPlusKey(const ClassicalType &alpha, const char c, const char key_pos)
+   {
+      return ClassicalType(1, alpha[(alpha.find(c) + alpha.find(key_pos)) % 26]);
+   }
+
+   static const ClassicalType clearMinusKey(const ClassicalType &alpha, const char c, const char key_pos)
+   {
+      return ClassicalType(1, alpha[(alpha.find(c) - alpha.find(key_pos) + 26) % 26]);
+   }
+
+   static const ClassicalType keyMinusClear(const ClassicalType &alpha, const char c, const char key_pos)
+   {
+      return ClassicalType(1, alpha[(alpha.find(key_pos) - alpha.find(c) + 26) % 26]);
+   }
+
+   ClassicalType key;
+   const GetCharFunction charDecode, charEncode;
 
 public:
-   typedef String Key;
+   typedef ClassicalType Key;
 
    Vigenere()
-      : charDecode(clearPlusKey), charEncode(clearMinusKey) {}
+   : charEncode(clearPlusKey), charDecode(clearMinusKey) {}
 
-   virtual void setKey(const Key &key) { this->key = key; }
+   virtual void setKey(const Key &key)
+   {
+      this->key = key;
+   }
 
-   const String encode(const String &clear_text)
+   const ClassicalType encode(const ClassicalType &clear_text)
    {
       return process(clear_text, charEncode);
    }
 
-   const String decode(const String &cipher_text)
+   const ClassicalType decode(const ClassicalType &cipher_text)
    {
       return process(cipher_text, charDecode);
    }
 
-protected:
-
-   static const String clearPlusKey(const String &alpha, const char c, const unsigned int key_pos) 
-   { 
-      // TODO All these functions
-      return ""; // std::to_string((c + key_pos) % 26);
-   }
-
-   static const String clearMinusKey(const String &alpha, const char c, const unsigned int key_pos) 
-   { 
-      return ""; // std::to_string((c - key_pos + 26) % 26);
-   }
-
-   static const String keyMinusClear(const String &alpha, const char c, const unsigned int key_pos) 
-   { 
-      return ""; // std::to_string((key_pos - c + 26) % 26);
-   }
-
-   String key;
-   const GetCharFunction &charDecode, &charEncode;
-
 private:
-   const String process(const String &text, const GetCharFunction &getNextChar)
-   {
-      const unsigned int key_length = key.length();
-   
-      String toReturn = "";
-      toReturn.reserve(text.length());
-
-      unsigned int idx = 0;
-      for (auto c : text)
-      {
-         toReturn += getNextChar(alpha, c, idx);
-         idx = (idx + 1) % key_length;
-      }
-   
-      return toReturn;
-   }
+   const ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
 };
+
+// Beaufort : CIPHER = -CLEAR + KEY
 
 class Beaufort : public Vigenere
 {
 public:
+
    Beaufort()
-      : Vigenere(keyMinusClear, keyMinusClear) {}
+   : Vigenere(keyMinusClear, keyMinusClear) {}
 };
+
+// Beaufort German : CIPHER = CLEAR - KEY
 
 class BeaufortGerman : public Vigenere
 {
 public:
+
    BeaufortGerman()
-      : Vigenere(clearMinusKey, clearPlusKey) {}
+   : Vigenere(clearMinusKey, clearPlusKey) {}
 };
+
+// Rozier : CIPHER = CLEAR + KEY
 
 class Rozier : public Vigenere
 {
 public:
-   Rozier()
-      : Vigenere(keyMinusClear, keyMinusClear) {}
 
-   void setKey(const String &v_key)
+   Rozier()
+   : Vigenere(clearPlusKey, clearMinusKey) {}
+
+   void setKey(const ClassicalType &v_key)
    {
       const unsigned int key_length = v_key.length();
       key = "";
       key.reserve(key_length);
-      
+
       for (unsigned int i = 0; i < key_length - 1; ++i)
       {
-         key += alpha[(alpha.find(v_key[i+1]) - alpha.find(v_key[i]) + 26) % 26];
+         key += alpha[(alpha.find(v_key[i + 1]) - alpha.find(v_key[i]) + 26) % 26];
       }
    }
 };
 
-class VigenereMult : public Vigenere
+// Chiffre de Caesar : Cipher = Clear + key où key est un entier char.
+
+class Caesar : public Vigenere
 {
-   static const String clearMultKey(const String &alpha, const char c, const unsigned int key_pos) 
-   {
-      // TODO Return number as you wanted to do, ie "42" and other :)
-      // Ca retourne un string JUSTE pour ce cas-ci en plus
-      return ""; //std::to_string(c * key_pos);
-   }
-
-   static const String keyDivideCipher(const String &alpha, const unsigned int c, const unsigned int key_pos) 
-   {
-      // TODO Idem
-      return ""; //std::to_string(c / key_pos);
-   }
-
 public:
-   VigenereMult()
-      : Vigenere(clearMultKey, keyDivideCipher) {}
 
-   // TODO encode() should be ok Gab
+   Caesar()
+   : Vigenere(clearPlusKey, clearMinusKey) {}
 
-   const String decode(const String &cipher_text)
+   void setKey(const unsigned char c_key)
    {
-      return ""; // Must override at least decode because it must split string
+      key = std::string(1, alpha[c_key]);
    }
 };
 
+// VigenereMult : CIPHER = CLEAR * KEY
 
+class VigenereMult : public Vigenere
+{
 
+   static const ClassicalType clearMultKey(const ClassicalType &alpha, const char c, const char key_pos)
+   {
+      std::stringstream ss;
+      ss << ((alpha.find(c) + 1) * (alpha.find(key_pos) + 1)) << " ";
+      return ss.str();
+   }
 
+   static const ClassicalType keyDivideCipher(const ClassicalType &alpha, const unsigned short c, const char key_pos)
+   {
+      return ClassicalType(1, alpha[(c / (alpha.find(key_pos) + 1)) - 1]);
+   }
+
+public:
+
+   VigenereMult()
+   : Vigenere(clearMultKey, keyDivideCipher)
+   {
+   }
+
+   const ClassicalType decode(const ClassicalType &cipher_text)
+   {
+      const unsigned int key_length = key.length();
+
+      ClassicalType toReturn = "";
+      std::vector<std::string> cipher_numbers(split(cipher_text));
+      toReturn.reserve(cipher_text.length());
+
+      unsigned int idx = 0;
+      for (auto number : cipher_numbers)
+      {
+         unsigned short num;
+         std::istringstream(number) >> num;
+         toReturn += keyDivideCipher(alpha, num, key[idx]);
+         idx = (idx + 1) % key_length;
+      }
+
+      return toReturn;
+   }
+};
 
 
 /*class VigenereFactory
@@ -169,5 +191,4 @@ public:
    }
 };*/
 
-#endif // VIGENERE_H
-
+#endif

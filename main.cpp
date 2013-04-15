@@ -9,21 +9,24 @@
 //#include "Polybe.h"
 #include "Vigenere.hpp"
 //#include "Wolseley.h"
-//#include "Cesar.h"
 //#include "StringCipher.h"
 //#include "Tools.h"
 //#include "converterTools.h"
 //#include "Morse.h"
+
 #include <iostream>
-#include <vector>
+//#include <vector>
 
 using namespace std;
 
 int main()
 {
-   Vigenere *v = new Vigenere();
+   const std::string text = "400 9 14 1 324 266 5 209 400 5 28 2 18 322 1 220 20 18 28 1 54 112 5 165 280 4 18 18 18 126 20";
+   //const std::string text = "TIGARSESTENBAWATARNACHEONDIRAIT";
+   VigenereMult *v = new VigenereMult();
    v->setKey("TABARNAK");
-
+   cout << v->decode(text);
+   
    /*const std::vector<unsigned char> key = {0xC2, 0x1F, 0xCF, 0x38, 0x81, 0xCD, 0x5E,
       0xE8, 0x62, 0x8A, 0xCC, 0xB0, 0xA9, 0x89, 0x0D, 0xF8};
 

@@ -7,7 +7,7 @@ AsymmetricCipher::getPublicKey() const
 }
 
 // Transforme les caractères en hexadécimal et renvoie la chaîne d'hexa.
-std::string AsymmetricCipher::hexDigest(const Bytes_Container &bytes) const
+std::string AsymmetricCipher::hexDigest(const BytesContainer &bytes) const
 {
    std::string str("");
    str.reserve(3 * bytes.size());
@@ -36,8 +36,8 @@ std::string AsymmetricCipher::toString(const Numbers &numbers) const
    return str;
 }
 
-AsymmetricCipher::Bytes_Container 
+AsymmetricCipher::BytesContainer 
 AsymmetricCipher::toBytes(const std::string &text)
 {
-   return Bytes_Container(text.begin(), text.end());
+   return BytesContainer(text.begin(), text.end());
 }

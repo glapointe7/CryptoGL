@@ -14,21 +14,21 @@ void Delastelle::setBlockLength(const unsigned int block_len)
    this->block_len = block_len;
 }
 
-std::string Delastelle::encode(const std::string &clear_text)
+const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_text)
 {
-   std::string full_text(clear_text);
+   ClassicalType full_text(clear_text);
    full_text.append(block_len - (clear_text.length() % block_len), 'X');
    unsigned int clear_len = full_text.length();
 
    // Prendre chaque bloc de block_len caractères.
-   std::vector<std::string> block;
+   Grid block;
    for (unsigned int i = 0; i < clear_len; i += block_len)
    {
       block.push_back(full_text.substr(i, block_len));
    }
 
    // Grille de chiffrement.
-   std::vector<std::string> grid(getGrid(key + alpha));
+   Grid grid(getGrid(key + alpha));
 
    // Vecteur contenant les coordonnées en X des block_len caractères et celles en Y.
    std::vector<std::pair<std::vector<unsigned char>, std::vector<unsigned char> > > coords_block;
@@ -80,7 +80,7 @@ std::string Delastelle::encode(const std::string &clear_text)
    }
 
    // On prend chaque coordonnées reçues et on retrouve le caractère associé dans la grille.
-   std::string crypted = "";
+   ClassicalType crypted = "";
    crypted.reserve(clear_len);
    for (auto xy : encoded_coords)
    {
@@ -90,13 +90,13 @@ std::string Delastelle::encode(const std::string &clear_text)
    return crypted;
 }
 
-std::string Delastelle::decode(const std::string &cipher_text)
+const Delastelle::ClassicalType Delastelle::decode(const ClassicalType &cipher_text)
 {
    unsigned int cipher_len = cipher_text.length();
-   std::string decrypted = "";
+   ClassicalType decrypted = "";
    decrypted.reserve(cipher_len);
    
-   std::vector<std::string> grid(getGrid(key + alpha));
+   Grid grid(getGrid(key + alpha));
    std::vector<unsigned char > chars_coords;
    for(auto c : cipher_text)
    {

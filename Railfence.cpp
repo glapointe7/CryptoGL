@@ -15,10 +15,10 @@ void Railfence::setKey(const unsigned int key)
 
 // Encode un texte par le chiffre de RailFence.
 
-std::string Railfence::encode(const std::string &clear_text)
+const Railfence::ClassicalType Railfence::encode(const ClassicalType &clear_text)
 {
    unsigned int clear_len = clear_text.length();
-   std::string crypted = "";
+   ClassicalType crypted = "";
    crypted.reserve(clear_len);
    unsigned int n = (key - 1) << 1;
 
@@ -39,10 +39,10 @@ std::string Railfence::encode(const std::string &clear_text)
 
 // Décode un texte encodé par le chiffre de RailFence.
 
-std::string Railfence::decode(const std::string &cipher_text)
+const Railfence::ClassicalType Railfence::decode(const ClassicalType &cipher_text)
 {
    unsigned int cipher_len = cipher_text.length();
-   std::string decrypted('A', cipher_len);
+   ClassicalType decrypted('A', cipher_len);
 
    auto step = std::make_pair((key - 1) << 1, 0);
    unsigned int k = 0;

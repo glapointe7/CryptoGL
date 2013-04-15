@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <bitset>
 
 // Prototypes pour Tools.cpp.
 std::string removeRepeatedLetters(const std::string key);
@@ -17,7 +18,12 @@ std::string getStepCharacters(std::string &text, unsigned short step);
 std::vector<unsigned char> getBytes(const std::vector<bool> &bits);
 void eraseChars(std::string &text, const std::string chars);
 
+// Manipulation des bits
 bool getBitAtPosition(const unsigned long pos, const uint64_t number);
+uint32_t setBit(const uint32_t number, const unsigned char pos);
+uint32_t rotl32(const uint32_t number, const unsigned char pos);
+uint32_t rotr32(const uint32_t number, const unsigned char pos);
+uint32_t getBitsRange(const uint32_t number, const unsigned int from, const unsigned int to);
 
 // Fonctions mathématiques.
 uint_fast32_t getPGCD(uint_fast32_t a, uint_fast32_t b);

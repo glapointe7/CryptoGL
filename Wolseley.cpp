@@ -17,13 +17,13 @@ void Wolseley::setKey(const std::string &key)
 
 // Encode un message avec le chiffre de Wolseley.
 
-std::string Wolseley::encode(const std::string &clear_text)
+const Wolseley::ClassicalType Wolseley::encode(const ClassicalType &clear_text)
 {
-   std::string crypted = "";
+   ClassicalType crypted = "";
    crypted.reserve(clear_text.length());
 
    std::string key_alpha(key + alpha);
-   std::string new_alpha(removeRepeatedLetters(key_alpha));
+   ClassicalType new_alpha(removeRepeatedLetters(key_alpha));
 
    for (auto c : clear_text)
    {
@@ -36,13 +36,13 @@ std::string Wolseley::encode(const std::string &clear_text)
 
 // Décode un cryptogramme chiffré avec Wolseley.
 
-std::string Wolseley::decode(const std::string &cipher_text)
+const Wolseley::ClassicalType Wolseley::decode(const ClassicalType &cipher_text)
 {
-   std::string decrypted = "";
+   ClassicalType decrypted = "";
    decrypted.reserve(cipher_text.length());
 
    std::string key_alpha(key + alpha);
-   std::string new_alpha(removeRepeatedLetters(key_alpha));
+   ClassicalType new_alpha(removeRepeatedLetters(key_alpha));
 
    for (auto c : cipher_text)
    {

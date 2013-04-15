@@ -1,4 +1,6 @@
-
+/*
+ * 
+ */
 #ifndef STRINGCIPHER_H
 #define STRINGCIPHER_H
 
@@ -9,24 +11,23 @@
 class StringCipher : public Cipher<std::string>
 {
 public:
-   typedef std::string String; // Change to CipherType or something
+   typedef std::string ClassicalType; 
 
    virtual ~StringCipher() {}
 
-   virtual const String encode(const String &) = 0;
-   virtual const String decode(const String &) = 0;
+   virtual const ClassicalType encode(const ClassicalType &) = 0;
+   virtual const ClassicalType decode(const ClassicalType &) = 0;
    
-   static void save(const std::string &, const std::string &);
-   static const String load(const std::string &);
+   static void save(const std::string &, const ClassicalType &);
+   static const ClassicalType load(const std::string &);
    
-   void eraseBadCharacters(String &) const;
+   void eraseBadCharacters(ClassicalType &) const;
    
-   void setAlpha(const String &letters);
-   const String getAlpha() const;
+   void setAlpha(const ClassicalType &letters);
+   const ClassicalType getAlpha() const;
 
 protected: 
-   String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+   ClassicalType alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 };
 
-#endif // STRINGCIPHER_H
-
+#endif

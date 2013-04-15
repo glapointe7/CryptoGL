@@ -11,9 +11,9 @@ Playfair::Playfair()
 
 // Encode un texte clair avec la méthode de Playfair.
 
-std::string Playfair::encode(const std::string &clear_text)
+const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
 {
-   std::string full_text(clear_text);
+   ClassicalType full_text(clear_text);
    unsigned int clear_len = full_text.length();
    if (clear_len % 2 != 0)
    {
@@ -21,10 +21,10 @@ std::string Playfair::encode(const std::string &clear_text)
       clear_len++;
    }
    
-   std::string crypted = "";
+   ClassicalType crypted = "";
    crypted.reserve(clear_len);
 
-   const std::vector<std::string> grid(getGrid(key + alpha));
+   const Grid grid(getGrid(key + alpha));
 
    for (unsigned int i = 0; i < clear_len; i += 2)
    {
@@ -64,13 +64,13 @@ std::string Playfair::encode(const std::string &clear_text)
 
 // Encode un texte clair avec la m�thode de Playfair.
 
-std::string Playfair::decode(const std::string &cipher_text)
+const Playfair::ClassicalType Playfair::decode(const ClassicalType &cipher_text)
 {
    unsigned int cipher_len = cipher_text.length();
-   std::string decrypted = "";
+   ClassicalType decrypted = "";
    decrypted.reserve(cipher_len);
    
-   const std::vector<std::string> grid(getGrid(key + alpha));
+   const Grid grid(getGrid(key + alpha));
 
    for (unsigned int i = 0; i < cipher_len; i += 2)
    {

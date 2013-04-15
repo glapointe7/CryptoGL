@@ -58,7 +58,7 @@ void Hellman::executeGlouton(std::vector<bool> &bits, const unsigned long T, con
     }
 }
 
-AsymmetricCipher::Numbers Hellman::encode(const Bytes_Container &clear_text)
+const AsymmetricCipher::Numbers Hellman::encode(const BytesContainer &clear_text)
 {
    Numbers crypted;
    
@@ -91,7 +91,7 @@ AsymmetricCipher::Numbers Hellman::encode(const Bytes_Container &clear_text)
    return crypted;
 }
 
-AsymmetricCipher::Bytes_Container Hellman::decode(const Numbers &cipher_text)
+const AsymmetricCipher::BytesContainer Hellman::decode(const Numbers &cipher_text)
 {  
    // On calcule x = coprime^{-1} (mod modulo).
    unsigned long inv_coprime = getModInverse(coprime, modulo);

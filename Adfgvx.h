@@ -11,8 +11,8 @@ class Adfgvx : public SquareCipher
 public:
    Adfgvx();
 
-   virtual const String encode(const String &);
-   virtual const String decode(const String &);
+   virtual const ClassicalType encode(const ClassicalType &);
+   virtual const ClassicalType decode(const ClassicalType &);
 
    void setGridKey(const Grid &grid);
 

@@ -14,14 +14,14 @@ class Rabbit : public StreamCipher
    typedef std::vector<uint16_t> UInt16Bytes;
 
 public:
-   BytesContainer encode(const BytesContainer &);
-   BytesContainer decode(const BytesContainer &);
+   virtual const BytesContainer encode(const BytesContainer &);
+   virtual const BytesContainer decode(const BytesContainer &);
 
-   void setKey(const BytesContainer &);
+   virtual void setKey(const BytesContainer &);
    void setIV(const BytesContainer &);
 
 private:
-   void initialize();
+   virtual void initialize();
    void initializeCounters();
    void update();
    BytesContainer getOutputBytes();

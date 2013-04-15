@@ -12,21 +12,21 @@
 class Transposition : public StringCipher
 {
 public:
-   typedef String Key;
+   typedef ClassicalType Key;
 
-   const String encode(const String &clear_text)
+   const ClassicalType encode(const ClassicalType &clear_text)
    {
       setStartingTable(clear_text);
       const std::map<char, unsigned int> sorted_key = sortKey();
-      const std::vector<String> s_table = swapColumnsEncode(sorted_key);
+      const std::vector<ClassicalType> s_table = swapColumnsEncode(sorted_key);
       return read(s_table);
    }
    
-   const String decode(const String &cipher_text)
+   const ClassicalType decode(const ClassicalType &cipher_text)
    {
       setTable(cipher_text);
       const std::map<char, unsigned int> sorted_key = sortKey();
-      const std::vector<String> s_table = swapColumnsEncode(sorted_key);
+      const std::vector<ClassicalType> s_table = swapColumnsEncode(sorted_key);
       return readFinalTable(s_table);
    }
    
@@ -41,18 +41,18 @@ public:
    }
    
 protected:
-   virtual void setTable(const std::string &data) = 0;
-   virtual std::string read(const std::vector<std::string>&) const = 0;
+   virtual void setTable(const ClassicalType &data) = 0;
+   virtual std::string read(const std::vector<ClassicalType>&) const = 0;
    
-   void setStartingTable(const std::string &data);
+   void setStartingTable(const ClassicalType &data);
    std::map<char, unsigned int> sortKey() const;
-   std::vector<std::string> swapColumnsEncode(const std::map<char, unsigned int>& sorted_key) const;
-   std::vector<std::string> swapColumnsDecode(const std::map<char, unsigned int>& sorted_key) const;
-   std::string readFinalTable(const std::vector<std::string>&) const;
+   std::vector<ClassicalType> swapColumnsEncode(const std::map<char, unsigned int>& sorted_key) const;
+   std::vector<ClassicalType> swapColumnsDecode(const std::map<char, unsigned int>& sorted_key) const;
+   ClassicalType readFinalTable(const std::vector<ClassicalType>&) const;
    
-   std::string key;
+   Key key;
    std::vector<unsigned int> key_row;
-   std::vector<std::string> table;
+   std::vector<ClassicalType> table;
 };
 
 // Transposition en ligne : permutation des colonnes du tableau et lecture en ligne.
@@ -60,12 +60,12 @@ protected:
 class TranspositionRows : public Transposition
 {
 public:
-   void setTable(const std::string &data)
+   void setTable(const ClassicalType &data)
    {
       setStartingTable(data);
    }
    
-   std::string read(const std::vector<std::string> &s_table) const
+   ClassicalType read(const std::vector<ClassicalType> &s_table) const
    {
       return readFinalTable(s_table);
    }
@@ -75,7 +75,7 @@ public:
 class TranspositionColumns : public Transposition
 {
 public:
-   void setTable(const std::string &data)
+   void setTable(const ClassicalType &data)
    {
       unsigned int key_len = key.length();
       unsigned int data_len = data.length();
@@ -93,10 +93,10 @@ public:
       }
    }
    
-   std::string read(const std::vector<std::string> &s_table) const
+   ClassicalType read(const std::vector<ClassicalType> &s_table) const
    {
       unsigned int key_len = key.length();
-      std::string data = "";
+      ClassicalType data = "";
       data.reserve(s_table.size() * key_len);
       for (unsigned int i = 0; i < key_len; i++)
       {
@@ -115,9 +115,9 @@ public:
 class TranspositionDouble : public Transposition
 {
 public:
-   std::string read(const std::vector<std::string> &s_table) const
+   ClassicalType read(const std::vector<ClassicalType> &s_table) const
    {
-      std::vector<std::string> col_table;
+      std::vector<ClassicalType> col_table;
       for (auto row : key_row)
       {
          col_table.push_back(s_table[row]);
@@ -126,11 +126,11 @@ public:
       return readFinalTable(col_table);
    }
 
-   void setTable(const std::string &data)
+   void setTable(const ClassicalType &data)
    {
       setStartingTable(data);
       unsigned int key_len = key_row.size();
-      std::vector<std::string> tmp;
+      std::vector<ClassicalType> tmp;
 
       for (unsigned int i = 0; i < key_len; i++)
       {
@@ -141,5 +141,4 @@ public:
    }
 };
 
-#endif	/* TRANSPOSITIONBASE_HPP */
-
+#endif
