@@ -276,3 +276,9 @@ uint32_t setBit(const uint32_t number, const unsigned char pos)
 {
    return number | (1 << pos);
 }
+
+// bits doit être <= 32. 
+uint32_t rotateLeft(const int32_t number, const unsigned char n, const unsigned char bits)
+{
+   return (number >> n) | (number << (bits-n));
+}

@@ -1,4 +1,4 @@
-
+#include "DES.hpp"
 //#include "Rabbit.hpp"
 //#include "FrequenciesAnalysis.hpp"
 //#include "RC4.hpp"
@@ -7,7 +7,7 @@
 //#include "Railfence.h"
 //#include "Playfair.h"
 //#include "Polybe.h"
-#include "Vigenere.hpp"
+//#include "Vigenere.hpp"
 //#include "Wolseley.h"
 //#include "StringCipher.h"
 //#include "Tools.h"
@@ -21,12 +21,23 @@ using namespace std;
 
 int main()
 {
-   const std::string text = "400 9 14 1 324 266 5 209 400 5 28 2 18 322 1 220 20 18 28 1 54 112 5 165 280 4 18 18 18 126 20";
+   const std::vector<unsigned char> data = {
+      0x59, 0x6F, 0x75, 0x72, 0x20, 0x6C, 0x69, 0x70, 0x73, 0x20, 0x61, 0x72, 0x65, 0x20, 0x73, 0x6D, 0x6F,
+      0x6F, 0x74, 0x68, 0x65, 0x72, 0x20, 0x74, 0x68, 0x61, 0x6E, 0x20, 0x76, 0x61, 0x73, 0x65,
+      0x6C, 0x69, 0x6E, 0x65, 0x0D, 0x0A
+   };
+   
+   const std::vector<unsigned char> key = {0x0E, 0x32, 0x92, 0x32, 0xEA, 0x6D, 0x0D, 0x73};
+   DES *D = new DES();
+   D->setKey(key);
+   cout << DES::hexDigest(D->encode(data));
+
+   /*const std::string text = "400 9 14 1 324 266 5 209 400 5 28 2 18 322 1 220 20 18 28 1 54 112 5 165 280 4 18 18 18 126 20";
    //const std::string text = "TIGARSESTENBAWATARNACHEONDIRAIT";
    VigenereMult *v = new VigenereMult();
    v->setKey("TABARNAK");
-   cout << v->decode(text);
-   
+   cout << v->decode(text);*/
+
    /*const std::vector<unsigned char> key = {0xC2, 0x1F, 0xCF, 0x38, 0x81, 0xCD, 0x5E,
       0xE8, 0x62, 0x8A, 0xCC, 0xB0, 0xA9, 0x89, 0x0D, 0xF8};
 
