@@ -6,6 +6,8 @@
 #include <vector>
 #include <bitset>
 
+typedef std::vector<std::vector<unsigned char> > Table;
+
 // Prototypes pour Tools.cpp.
 std::string removeRepeatedLetters(const std::string key);
 void replaceChar(std::string &text, const char letter, const char rletter);
@@ -19,30 +21,13 @@ std::vector<unsigned char> getBytes(const std::vector<bool> &bits);
 void eraseChars(std::string &text, const std::string chars);
 
 // Manipulation des bits
-bool getBitAtPosition(const unsigned long pos, const uint64_t number);
-uint32_t setBit(const uint32_t number, const unsigned char pos);
+const bool getBitAtPosition(const unsigned long pos, const uint64_t &number);
 uint32_t rotl32(const uint32_t number, const unsigned char pos);
 uint32_t rotr32(const uint32_t number, const unsigned char pos);
 uint32_t getBitsRange(const uint32_t number, const unsigned int from, const unsigned int to);
-uint32_t rotateLeft(const int32_t number, const unsigned char n, const unsigned char bits);
-
-template<class uint_type1, class uint_type2> 
-const uint_type1 getBitsFromTable(const uint_type2 &data, const std::vector<std::vector<unsigned char> > &table)
-{
-   uint_type1 output = 0;
-   for (auto row : table)
-   {
-      for (auto byte : row)
-      {
-         if (getBitAtPosition(byte, data) == true)
-         {
-            output = setBit(output, byte - 1);
-         }
-      }
-   }
-
-   return output;
-}
+const uint64_t rotateLeft(const int64_t &value, const unsigned char shift, const unsigned char max);
+const uint64_t rotateRight(const int64_t &value, const unsigned char shift, const unsigned char max);
+const uint64_t getBitsFromTable(const uint64_t &data, const Table &table, const uint64_t from, const uint64_t to);
 
 // Fonctions mathématiques.
 uint_fast32_t getPGCD(uint_fast32_t a, uint_fast32_t b);

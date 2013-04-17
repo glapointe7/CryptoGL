@@ -237,9 +237,10 @@ void eraseChars(std::string &text, const std::string chars)
 
 // Retourne le bit à la position pos de number.
 
-bool getBitAtPosition(const unsigned long pos, const uint64_t number)
+const bool getBitAtPosition(const unsigned long pos, const uint64_t &number)
 {
-   return (number & (1 << pos)) > 0;
+   const uint64_t x = 1;
+   return (number & (x << pos)) > 0;
 }
 
 uint32_t getBitsRange(const uint32_t number, const unsigned int from, const unsigned int to)
@@ -271,14 +272,37 @@ uint32_t rotr32(const uint32_t number, const unsigned char pos)
    return (number >> pos) | (number << (32-pos));
 }
 
-// Met un bit à la position pos à 1 dans number.
-uint32_t setBit(const uint32_t number, const unsigned char pos)
+const uint64_t rotateRight(const int64_t &value, const unsigned char shift, const unsigned char max)
 {
-   return number | (1 << pos);
+   uint64_t x = 1; 
+   return ((value >> shift) | (value << (max - shift))) & ((x << max)-1);
 }
 
-// bits doit être <= 32. 
-uint32_t rotateLeft(const int32_t number, const unsigned char n, const unsigned char bits)
+// bits doit être <= 64. 
+const uint64_t rotateLeft(const int64_t &value, const unsigned char shift, const unsigned char max)
 {
-   return (number >> n) | (number << (bits-n));
+   uint64_t x = 1; 
+   return ((value << shift) | (value >> (max - shift))) & ((x << max)-1);
+}
+
+// NOTE : Le premier bit correspond au MSB de data, donc 2^63 pour un 64 bits.
+const uint64_t getBitsFromTable(const uint64_t &data, const Table &table, const uint64_t from, const uint64_t to)
+{
+   const uint64_t y = 1;
+   unsigned char i = to;
+   uint64_t output = 0;
+   for (auto row : table)
+   {
+      for (auto byte : row)
+      {
+         --i;
+         // Si le bit à la position byte MSB est 1, alors on le positionne selon i MSB.
+         if((data >> (from - byte)) & 0x1)
+         {
+            output |= y << i;
+         }
+      }
+   }
+
+   return output;
 }

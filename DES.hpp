@@ -27,11 +27,11 @@ private:
    //uint64_t getInitialPermutation(const uint64_t &data)const;
    //uint64_t getFinalPermutation(const uint64_t &data) const;
    //uint64_t expendBlock(const uint32_t data) const;
-   uint32_t getSubstitution(const uint64_t &key_mixed) const;
+   uint64_t getSubstitution(const uint64_t &key_mixed) const;
    //uint32_t getOutput(const uint32_t s_block) const;
 
    // La fonction F de Feistel.
-   uint32_t F(const uint32_t data, const uint64_t &subkey) const;
+   uint64_t F(const uint64_t &data, const uint64_t &subkey) const;
 
    // Première table : Permutation initiale.
    const SBox IP = {
@@ -146,19 +146,15 @@ private:
    };
 
    // Table de choix de permutation 2.
-   const std::vector<SBox> PC2 = {
-      {
+   const SBox PC2 = {
          {14, 17, 11, 24, 1, 5},
          {3, 28, 15, 6, 21, 10},
          {23, 19, 12, 4, 26, 8},
-         {16, 7, 27, 20, 13, 2}
-      },
-      {
+         {16, 7, 27, 20, 13, 2},
          {41, 52, 31, 37, 47, 55},
          {30, 40, 51, 45, 33, 48},
          {44, 49, 39, 56, 34, 53},
          {46, 42, 50, 36, 29, 32}
-      }
    };
 
    // Table de rotations à gauche pour les 16 rounds.
