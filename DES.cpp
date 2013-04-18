@@ -2,8 +2,6 @@
 
 #include "Tools.h"
 
-#include <algorithm>
-
 // La clé doit être de 64 bits (8 octets).
 
 void DES::setKey(const BytesContainer &key)
@@ -24,7 +22,7 @@ DES::UInt64Container DES::getKeySchedule()
    }
 
    // On effectue la permutation PC1 pour avoir une clé de 56 bits.
-   uint64_t K56 = getBitsFromTable(key_bits, PC1, 64, 56);
+   const uint64_t K56 = getBitsFromTable(key_bits, PC1, 64, 56);
 
    // On sépare la clé de 56 bits en 2 clés de 28 bits.
    uint64_t K1, K2;
@@ -38,13 +36,13 @@ DES::UInt64Container DES::getKeySchedule()
    for (unsigned char i = 0; i < 16; ++i)
    {
       // Rotation à gauche de la partie droite et de la partie gauche.
-      uint64_t KR = rotateLeft(K1, rot_table[i], 28);
-      uint64_t KL = rotateLeft(K2, rot_table[i], 28);
+      const uint64_t KR = rotateLeft(K1, rot_table[i], 28);
+      const uint64_t KL = rotateLeft(K2, rot_table[i], 28);
       K1 = KR;
       K2 = KL;
 
       // On concatène KL et KR.
-      uint64_t K = KR | (KL << 28);
+      const uint64_t K = KR | (KL << 28);
       
       // On permute K (56 bits) selon la table PC2 pour obtenir la sous-clé (48 bits).
       subkeys[i] = getBitsFromTable(K, PC2, 56, 48);

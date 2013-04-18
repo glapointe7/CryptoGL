@@ -6,11 +6,11 @@
 #ifndef DES_HPP
 #define	DES_HPP
 
-#include "BlockCipher.hpp"
+#include "Feistel.hpp"
 
 #include <vector>
 
-class DES : public BlockCipher
+class DES : public Feistel
 {
    typedef std::vector<std::vector<unsigned char> > SBox;
 
@@ -31,7 +31,7 @@ private:
    //uint32_t getOutput(const uint32_t s_block) const;
 
    // La fonction F de Feistel.
-   uint64_t F(const uint64_t &data, const uint64_t &subkey) const;
+   virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const;
 
    // Première table : Permutation initiale.
    const SBox IP = {
