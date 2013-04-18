@@ -1,8 +1,8 @@
 
-#ifndef FLEISSNER_H
-#define FLEISSNER_H
+#ifndef FLEISSNER_HPP
+#define FLEISSNER_HPP
 
-#include "StringCipher.h"
+#include "StringCipher.hpp"
 
 #include <vector>
 #include <string>

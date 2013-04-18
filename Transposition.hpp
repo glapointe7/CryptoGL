@@ -2,7 +2,7 @@
 #ifndef TRANSPOSITION_HPP
 #define	TRANSPOSITION_HPP
 
-#include "StringCipher.h"
+#include "StringCipher.hpp"
 
 #include <algorithm>
 #include <map>

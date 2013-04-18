@@ -1,9 +1,9 @@
 
-#include "Wolseley.h"
+#include "Wolseley.hpp"
 
 #include <algorithm>
 
-#include "Tools.h"
+#include "Tools.hpp"
 
 Wolseley::Wolseley()
 {

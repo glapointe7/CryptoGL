@@ -1,15 +1,15 @@
 
-#ifndef PLAYFAIR_H
-#define PLAYFAIR_H
+#ifndef POLYBE_HPP
+#define POLYBE_HPP
 
-#include "SquareCipher.h"
+#include "SquareCipher.hpp"
 
 #include <string>
 
-class Playfair : public SquareCipher
+class Polybe : public SquareCipher
 {
 public:
-   Playfair();
+   Polybe();
 
    virtual const ClassicalType encode(const ClassicalType &);
    virtual const ClassicalType decode(const ClassicalType &);

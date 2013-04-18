@@ -1,8 +1,8 @@
 
-#ifndef UNSORTALPHA_H
-#define UNSORTALPHA_H
+#ifndef UNSORTALPHA_HPP
+#define UNSORTALPHA_HPP
 
-#include "StringCipher.h"
+#include "StringCipher.hpp"
 
 #include <string>
 

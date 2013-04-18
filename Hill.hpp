@@ -2,7 +2,7 @@
 #ifndef HILL_HPP
 #define	HILL_HPP
 
-#include "StringCipher.h"
+#include "StringCipher.hpp"
 
 #include <vector>
 
@@ -22,5 +22,4 @@ private:
    Matrix key;
 };
 
-#endif	/* HILL_HPP */
-
+#endif

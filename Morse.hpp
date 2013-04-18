@@ -1,8 +1,8 @@
 
-#ifndef MORSE_H
-#define MORSE_H
+#ifndef MORSE_HPP
+#define MORSE_HPP
 
-#include "StringCipher.h"
+#include "StringCipher.hpp"
 
 #include <string>
 #include <vector>

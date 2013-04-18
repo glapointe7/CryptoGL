@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <fstream>
 
-#include "Tools.h"
+#include "Tools.hpp"
 
 FrequenciesAnalysis::FrequenciesAnalysis()
 {

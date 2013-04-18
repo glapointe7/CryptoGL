@@ -1,7 +1,7 @@
 
-#include "SquareCipher.h"
+#include "SquareCipher.hpp"
 
-#include "Tools.h"
+#include "Tools.hpp"
 
 void SquareCipher::setKey(const Key &key)
 {

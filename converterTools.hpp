@@ -1,5 +1,5 @@
-#ifndef CONVERTER_TOOLS_H
-#define CONVERTER_TOOLS_H
+#ifndef CONVERTER_TOOLS_HPP
+#define CONVERTER_TOOLS_HPP
 
 #include <string>
 #include <vector>

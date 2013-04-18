@@ -2,13 +2,13 @@
 #ifndef VIGENERE_HPP
 #define VIGENERE_HPP
 
-#include "StringCipher.h"
+#include "StringCipher.hpp"
 
 #include <functional>
 #include <string>
 #include <sstream>
 
-#include "Tools.h"  // fonction split
+#include "Tools.hpp"  // fonction split
 
 // Vigenere : CIPHER = CLEAR + KEY
 

@@ -2,7 +2,7 @@
 #ifndef DELASTELLE_HPP
 #define	DELASTELLE_HPP
 
-#include "SquareCipher.h"
+#include "SquareCipher.hpp"
 #include <string>
 
 class Delastelle : public SquareCipher

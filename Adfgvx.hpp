@@ -1,8 +1,8 @@
 
-#ifndef ADFGVX_H
-#define	ADFGVX_H
+#ifndef ADFGVX_HPP
+#define	ADFGVX_HPP
 
-#include "SquareCipher.h"
+#include "SquareCipher.hpp"
 #include <vector>
 #include <string>
 

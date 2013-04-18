@@ -1,8 +1,8 @@
 
-#ifndef WOLSELEY_H
-#define WOLSELEY_H
+#ifndef WOLSELEY_HPP
+#define WOLSELEY_HPP
 
-#include "StringCipher.h"
+#include "StringCipher.hpp"
 
 #include <string>
 

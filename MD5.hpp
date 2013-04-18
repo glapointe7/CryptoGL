@@ -1,6 +1,6 @@
 
-#ifndef MD5_H
-#define MD5_H
+#ifndef MD5_HPP
+#define MD5_HPP
 
 #include <vector>
 #include <string>

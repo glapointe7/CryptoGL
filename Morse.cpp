@@ -1,9 +1,9 @@
 
-#include "Morse.h"
+#include "Morse.hpp"
 
 #include <algorithm>
 
-#include "Tools.h"
+#include "Tools.hpp"
 
 Morse::Morse()
 {

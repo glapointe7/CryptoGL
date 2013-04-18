@@ -1,11 +1,11 @@
 
-#include "Adfgvx.h"
+#include "Adfgvx.hpp"
 
 #include <utility>
 #include <ctime>
 #include <map>
 
-#include "Tools.h"
+#include "Tools.hpp"
 
 Adfgvx::Adfgvx()
 {

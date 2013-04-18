@@ -1,4 +1,8 @@
-#include "DES.hpp"
+/*
+ * Tests automatisés sur les cryptos en place dans le système.
+ */
+
+//#include "DES.hpp"
 //#include "Rabbit.hpp"
 //#include "FrequenciesAnalysis.hpp"
 //#include "RC4.hpp"
@@ -7,7 +11,7 @@
 //#include "Railfence.h"
 //#include "Playfair.h"
 //#include "Polybe.h"
-//#include "Vigenere.hpp"
+#include "Vigenere.hpp"
 //#include "Wolseley.h"
 //#include "StringCipher.h"
 //#include "Tools.h"
@@ -15,12 +19,28 @@
 //#include "Morse.h"
 
 #include <iostream>
-//#include <vector>
-
-using namespace std;
+#include <tuple>
 
 int main()
 {
+   typedef std::tuple<std::string, std::string, std::string> str_T;
+   typedef std::tuple<uint8_t, std::string, std::string> UI8_T;
+   
+   typedef std::pair<std::string, std::string> Key_Clear;
+   typedef std::pair<uint8_t, std::string> UI8Key_Clear;
+   
+   // Tests sur le chiffre de Caesar.
+   // (Key, cleartext)
+   std::vector<UI8Key_Clear> tests_caesar = {
+      std::make_pair(0, ""),
+      std::make_pair(0, "TESTING"),
+      std::make_pair(2, "SALUT NIL"),
+      std::make_pair(42, "BOOMERANG"),
+      std::make_pair(6, "cjsjc62fdéŷ<»°n#2/$%J  oo -0=++>}{"),
+      std::make_pair(-5, "NEGATIVE"),
+      std::make_pair(21, "Go Mister Go"),
+   };
+   
    /*const std::vector<unsigned char> data = {
       0x59, 0x6F, 0x75, 0x72, 0x20, 0x6C, 0x69, 0x70, 0x73, 0x20, 0x61, 0x72, 0x65, 0x20, 0x73, 0x6D, 0x6F,
       0x6F, 0x74, 0x68, 0x65, 0x72, 0x20, 0x74, 0x68, 0x61, 0x6E, 0x20, 0x76, 0x61, 0x73, 0x65,
@@ -29,11 +49,11 @@ int main()
    
    const std::vector<unsigned char> key = {0x0E, 0x32, 0x92, 0x32, 0xEA, 0x6D, 0x0D, 0x73};*/
 
-   const std::vector<unsigned char> data = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
+   /*const std::vector<unsigned char> data = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
    const std::vector<unsigned char> key = {0x13, 0x34, 0x57, 0x79, 0x9B, 0xBC, 0xDF, 0xF1};
    DES *D = new DES();
    D->setKey(key);
-   cout << DES::hexDigest(D->encode(data));
+   std::cout << DES::hexDigest(D->encode(data));*/
 
    /*const std::string text = "400 9 14 1 324 266 5 209 400 5 28 2 18 322 1 220 20 18 28 1 54 112 5 165 280 4 18 18 18 126 20";
    //const std::string text = "TIGARSESTENBAWATARNACHEONDIRAIT";

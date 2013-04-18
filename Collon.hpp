@@ -1,8 +1,8 @@
 
-#ifndef COLLON_H
-#define COLLON_H
+#ifndef COLLON_HPP
+#define COLLON_HPP
 
-#include "SquareCipher.h"
+#include "SquareCipher.hpp"
 
 #include <string>
 

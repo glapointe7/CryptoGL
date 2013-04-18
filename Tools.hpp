@@ -1,10 +1,9 @@
 
-#ifndef TOOLS_H
-#define TOOLS_H
+#ifndef TOOLS_HPP
+#define TOOLS_HPP
 
 #include <string>
 #include <vector>
-#include <bitset>
 
 typedef std::vector<std::vector<unsigned char> > Table;
 

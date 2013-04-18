@@ -1,5 +1,5 @@
 
-#include "StringCipher.h"
+#include "StringCipher.hpp"
 
 #include <string>
 #include <fstream>

@@ -1,7 +1,7 @@
-#ifndef SQUARECIPHER_H
-#define	SQUARECIPHER_H
+#ifndef SQUARECIPHER_HPP
+#define	SQUARECIPHER_HPP
 
-#include "StringCipher.h"
+#include "StringCipher.hpp"
 
 #include <string>
 #include <utility>

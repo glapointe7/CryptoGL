@@ -1,7 +1,7 @@
 
-#include "UnsortAlpha.h"
+#include "UnsortAlpha.hpp"
 
-#include "Tools.h"
+#include "Tools.hpp"
 
 UnsortAlpha::UnsortAlpha()
 {

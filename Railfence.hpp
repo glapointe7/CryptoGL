@@ -1,7 +1,7 @@
-#ifndef RAILFENCE_H
-#define RAILFENCE_H
+#ifndef RAILFENCE_HPP
+#define RAILFENCE_HPP
 
-#include "StringCipher.h"
+#include "StringCipher.hpp"
 #include <string>
 
 class Railfence : public StringCipher

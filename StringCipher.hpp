@@ -1,8 +1,8 @@
 /*
  * 
  */
-#ifndef STRINGCIPHER_H
-#define STRINGCIPHER_H
+#ifndef STRINGCIPHER_HPP
+#define STRINGCIPHER_HPP
 
 #include "Cipher.hpp"
 

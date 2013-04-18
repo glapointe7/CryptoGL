@@ -1,7 +1,7 @@
 #include "Hellman.hpp"
 
-#include "Tools.h"
-#include "converterTools.h"
+#include "Tools.hpp"
+#include "converterTools.hpp"
 
 #include <algorithm>
 

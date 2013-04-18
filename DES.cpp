@@ -1,6 +1,6 @@
 #include "DES.hpp"
 
-#include "Tools.h"
+#include "Tools.hpp"
 
 // La clé doit être de 64 bits (8 octets).
 

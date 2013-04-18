@@ -1,6 +1,6 @@
 #include "Rabbit.hpp"
 
-#include "Tools.h"
+#include "Tools.hpp"
 
 // La clé doit avoir 128 bits ou 16 octets.
 
