@@ -14,7 +14,7 @@ void StringCipher::save(const std::string &filename, const ClassicalType &data)
       out << data;
       out.close();
    }
-   catch (std::exception &e)
+   catch (const std::exception &e)
    {
        throw e.what();
    }
