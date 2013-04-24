@@ -11,35 +11,21 @@
 //#include "Railfence.h"
 //#include "Playfair.h"
 //#include "Polybe.h"
-#include "Vigenere.hpp"
+//#include "Vigenere.hpp"
 //#include "Wolseley.h"
 //#include "StringCipher.h"
 //#include "Tools.h"
 //#include "converterTools.h"
 //#include "Morse.h"
+#include "MD5.hpp"
 
 #include <iostream>
-#include <tuple>
 
 int main()
 {
-   typedef std::tuple<std::string, std::string, std::string> str_T;
-   typedef std::tuple<uint8_t, std::string, std::string> UI8_T;
-   
-   typedef std::pair<std::string, std::string> Key_Clear;
-   typedef std::pair<uint8_t, std::string> UI8Key_Clear;
-   
-   // Tests sur le chiffre de Caesar.
-   // (Key, cleartext)
-   std::vector<UI8Key_Clear> tests_caesar = {
-      std::make_pair(0, ""),
-      std::make_pair(0, "TESTING"),
-      std::make_pair(2, "SALUT NIL"),
-      std::make_pair(42, "BOOMERANG"),
-      std::make_pair(6, "cjsjc62fdéŷ<»°n#2/$%J  oo -0=++>}{"),
-      std::make_pair(-5, "NEGATIVE"),
-      std::make_pair(21, "Go Mister Go"),
-   };
+   const std::string data = "a";
+   MD5 *md5 = new MD5();
+   std::cout << MD5::hexDigest(md5->encode(MD5::getBytesFromString(data)));
    
    /*const std::vector<unsigned char> data = {
       0x59, 0x6F, 0x75, 0x72, 0x20, 0x6C, 0x69, 0x70, 0x73, 0x20, 0x61, 0x72, 0x65, 0x20, 0x73, 0x6D, 0x6F,
