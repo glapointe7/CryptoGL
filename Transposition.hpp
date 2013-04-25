@@ -25,8 +25,7 @@ public:
    const ClassicalType decode(const ClassicalType &cipher_text)
    {
       setTable(cipher_text);
-      const std::map<char, unsigned int> sorted_key = sortKey();
-      const std::vector<ClassicalType> s_table = swapColumnsEncode(sorted_key);
+      const std::vector<ClassicalType> s_table = swapColumnsDecode(sortKey());
       return readFinalTable(s_table);
    }
    
@@ -45,7 +44,7 @@ protected:
    virtual std::string read(const std::vector<ClassicalType>&) const = 0;
    
    void setStartingTable(const ClassicalType &data);
-   std::map<char, unsigned int> sortKey() const;
+   const std::map<char, unsigned int> sortKey() const;
    std::vector<ClassicalType> swapColumnsEncode(const std::map<char, unsigned int>& sorted_key) const;
    std::vector<ClassicalType> swapColumnsDecode(const std::map<char, unsigned int>& sorted_key) const;
    ClassicalType readFinalTable(const std::vector<ClassicalType>&) const;
@@ -71,7 +70,7 @@ public:
    }
 };
 
-// Transposition en ligne : permutation des colonnes du tableau et lecture en colonne.
+// Transposition en colonnes : permutation des colonnes du tableau et lecture en colonne.
 class TranspositionColumns : public Transposition
 {
 public:
@@ -81,11 +80,11 @@ public:
       unsigned int data_len = data.length();
       unsigned int table_size = data_len / key_len;
 
-      for (unsigned int i = 0; i < key_len; i++)
+      for (unsigned int i = 0; i < table_size; i++)
       {
          std::string row;
          row.reserve(key_len);
-         for (unsigned int j = 0; j < data_len; j += table_size)
+         for (unsigned int j = i; j < data_len; j += table_size)
          {
             row += data[j];
          }

@@ -31,7 +31,7 @@ Transposition::readFinalTable(const std::vector<ClassicalType>& s_table) const
 
 // Trie la clé en ordre alphabétique en conservant les positions originales de chaque lettre.
 
-std::map<char, unsigned int> Transposition::sortKey() const
+const std::map<char, unsigned int> Transposition::sortKey() const
 {
    std::map<char, unsigned int> sorted_key;
    unsigned int key_len = key.length();

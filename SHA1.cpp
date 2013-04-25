@@ -105,7 +105,8 @@ SHA1::BytesContainer SHA1::encode(const BytesContainer &data)
       }
    }
 
-   // On concatène hash[i] pour i=0,1,2,3,4 pour avoir un bloc de 128 bits (20 blocs de 8 bits chaque).
+   // On concatène hash[i] pour i=0,1,2,3,4 pour avoir un bloc de 128 bits 
+   // (20 blocs de 8 bits chaque) en BIG ENDIAN.
    BytesContainer crypted(20, 0);
    for (uint8_t j = 0; j < 5; ++j)
    {

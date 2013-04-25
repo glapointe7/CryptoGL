@@ -1,57 +1,9 @@
-*************** À DISCUTER *******************************
+Construire la classe abstraite Matrix et ses enfants MatrixReel et MatrixInteger en intégrant les opérateurs de manipulation de Matrices.
 
-1. Optimiser la fonction load(const string &filename) selon http://insanecoding.blogspot.ca/2011/11/how-to-read-in-file-in-c.html
+Encodage / Décodage Rabbit ne renvoie pas la bonne réponse.
 
-2. Ajouter les cryptos : ADFGVX, Transposition, Affine, variantes de Vigenère, chiffrement à 2-3-4 carrés.
+Coder le decode de DES.
 
-3. S'entendre sur : mettre ou pas 'using namespace std;'.
+Ajouter une fonction dans SquareCipher qui ajoute des caractères quelconques pour que le texte soit un multiple d'une autre longueur.
 
-4. Ajouter une classe Matrix pour la manipulation des matrices : Inverse, déterminant, addition et multiplication, Cofacteurs, Adjointe, Transposée, etc.
-
-5. Pour les transpositions, ADFGVX contient une transposition rectangulaire (Aggrégation). 
-
-6. Créer la classe abstraite Transposition ? Par exemple : http://www.apprendre-en-ligne.net/crypto/transpo/rectangulaire.html
-
-7. Ajouter une fonction dans SquareCipher qui ajoute des caractères quelconques pour que le texte soit un multiple d'une autre longueur.
-
-**********************************************************
-
-IDÉES / SUGGESTIONS / AUTRES
-**********************************************************
-
-1. Familles de cryptos
-
-	a. (StringCipher) Les cryptos qui renvoient un string(définie par alpha) et qui prennent le message en string(définie par alpha).
-
-	b. (BufferCipher) Les cryptos qui prennent un message en ASCII et qui renvoient un vecteur de char.
-
-	c. (HashCipher) Les cryptos irréversibles prennant un string(code ascii) comme message et renvoyant un string(hexadécimal ou binaire seulement)
-
-	d. (StreamCipher) Les cryptos modernes (DES, AES, IDEA, etc.) qui encodent le message par blocs de X bits.
-
-	e. (SquareCipher) Les cryptos qui utilisent une grille de chiffrement (Polybe, Collon, ADFGVX, etc.).
-
-	
-
-2. Autres classes importantes
-
-	a. (Data) Classe gérant les fichiers générés par l'encodage, décodage, cryptanalyse ou attaque de cryptos.
-
-	b. (Cryptanalysis) Calcul de l'IC et statistiques générales d'un message encodé (analyse de fréquences par exemple).
-
-	c. (Attack) Bruteforce normal ou avec un dictionnaire, utilisation d'attaques connues (Kasiski, Bazeries, Friedman, etc.)
-
-	d. (MathematicalAttack ???) Je sais qu'on peut attaquer le DES par l'algorithme LLL par exemple.
-
-
-3. Ajouter une librairie pour les outils mathématiques (MathematicalTools) ou même une pour les maths générales et d'autres plus spécialisées.
-
-	a. Calcul du PGCD.
-
-	b. Calcul du déterminant d'une matrice.
-
-	c. Calcule du modulo inverse de X.
-
-	d. Calculer la matrice inverse (algorithme de Gauss)
-
-	e. ETC.
+Régler le problème du LITTLE ENDIAN dans l'encodage MD5.

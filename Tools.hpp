@@ -27,6 +27,8 @@ uint32_t getBitsRange(const uint32_t number, const unsigned int from, const unsi
 const uint64_t rotateLeft(const int64_t &value, const unsigned char shift, const unsigned char max);
 const uint64_t rotateRight(const int64_t &value, const unsigned char shift, const unsigned char max);
 const uint64_t getBitsFromTable(const uint64_t &data, const Table &table, const uint64_t from, const uint64_t to);
+void endianSwap32(uint32_t &value);
+void endianSwap64(uint64_t &value);
 
 // Fonctions mathématiques.
 uint_fast32_t getPGCD(uint_fast32_t a, uint_fast32_t b);

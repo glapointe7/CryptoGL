@@ -1,11 +1,9 @@
 
 #include "Adfgvx.hpp"
 
-#include <utility>
-#include <ctime>
-#include <map>
+#include "Transposition.hpp"
 
-#include "Tools.hpp"
+#include <utility>
 
 Adfgvx::Adfgvx()
 {
@@ -19,104 +17,40 @@ void Adfgvx::setGridKey(const Grid &grid)
 
 const Adfgvx::ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
 {
-   std::string key_ok = removeRepeatedLetters(key);
-   ClassicalType crypted = "";
-   unsigned int clear_len = clear_text.length();
-   unsigned int key_len = key_ok.length();
-   crypted.reserve((clear_len << 1) + key_len);
-
    // Étape 1 : On prend les coordonnées de chaque lettre et on les remplace
    // par A,D,F,G,V ou X tels que A=0, D=1, F=2, G=3, V=4, X=5.
    // Exemple : Si la lettre 'K' se situe à (2,3), alors K s'encode FG.
-   std::string first_encoding(crypted);
+   std::string first_encoding = "";
+   first_encoding.reserve((clear_text.length() + key.length()) << 1);
+   
    for (auto c : clear_text)
    {
-      auto coords = getCharCoordinates(c, grid_key);
+      const auto coords = getCharCoordinates(c, grid_key);
 
       first_encoding += code[coords.second];
       first_encoding += code[coords.first];
    }
 
    // Étape 2 : On surchiffre à l'aide d'une transposition avec la clé key.
-   // On veut donc obtenir une première grille selon la clé.
-
-   // On doit avoir un multiple de la longueur de la clé. Le reste sera rempli par
-   // A,D,F,G,V,X au hasard.
-   unsigned int rest = clear_len % key_len;
-   srand(time(0));
-   for (unsigned int i = 0; i < rest; i++)
-   {
-      first_encoding += code[rand() % dim];
-   }
-
-   // On remplit la grille qu'on doit lire en colonne. 
-   // Pour faciliter le code, on la transpose.
-   Grid grid;
-   unsigned int first_encoding_len = first_encoding.length();
-   for (unsigned int i = 0; i < key_len; i++)
-   {
-      std::string tmp = "";
-      tmp.reserve(first_encoding_len);
-      for (unsigned int k = i; k < first_encoding_len; k += key_len)
-      {
-         tmp += first_encoding[k];
-      }
-      grid.push_back(tmp);
-   }
+   TranspositionColumns *TCol = new TranspositionColumns();
+   TCol->setKey(key);
    
-   // Étape 3 : On permute les lignes selon l'ordre alphabétique des lettres de la clé.
-   // On crée un map [char=>integer] qui est ordonné où char est une lettre
-   // de la clé.
-   std::map<char, unsigned int> sorted_key;
-   for(unsigned int i = 0; i < key_len; i++)
-   {
-      sorted_key.insert(std::make_pair(key_ok[i], i));
-   }
-   
-   for(auto pair : sorted_key)
-   {
-      crypted += grid[pair.second];
-   }
-
-   return crypted;
+   return TCol->encode(first_encoding);
 }
 
 const Adfgvx::ClassicalType Adfgvx::decode(const ClassicalType &cipher_text)
 {
+   const unsigned int cipher_len = cipher_text.length();
    ClassicalType decrypted = "";
-   //decrypted.reserve(cipher_text >> 1);
+   decrypted.reserve(cipher_len >> 1);
    
-   std::string key_ok = removeRepeatedLetters(key);
-   unsigned int key_len = key_ok.length();
-   
-   // Étape 1 : On construit la grille chiffrée selon la clé.
-   std::map<char, unsigned int> sorted_key;
-   for(unsigned int i = 0; i < key_len; i++)
-   {
-      sorted_key.insert(std::make_pair(key_ok[i], i));
-   }
-   
-   Grid grid;
-   for(auto c : key_ok)
-   {
-      grid.push_back(cipher_text.substr(sorted_key[c] * key_len, key_len));
-   }
-   
-   // On prend les caractères de la grille transposée.
-   unsigned int cipher_len = cipher_text.length();
-   std::string first_decoding = "";
-   first_decoding.reserve(cipher_len);
-   for (unsigned int i = 0; i < key_len; i++)
-   {
-      for (auto str : grid)
-      {
-         first_decoding += str[i];
-      }
-   }
+   TranspositionColumns *TCol = new TranspositionColumns();
+   TCol->setKey(key);
+   const std::string first_decoding = TCol->decode(cipher_text);
    
    for(unsigned int i = 0; i < cipher_len; i += 2)
    {
-      auto coords = std::make_pair(code.find(first_decoding[i]), code.find(first_decoding[i+1]));
+      const auto coords = std::make_pair(code.find(first_decoding[i]), code.find(first_decoding[i+1]));
       decrypted += grid_key[coords.first][coords.second];
    }
    

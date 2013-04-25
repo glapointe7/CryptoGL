@@ -17,21 +17,32 @@
 //#include "Tools.h"
 //#include "converterTools.h"
 //#include "Morse.h"
-#include "MD5.hpp"
+//#include "MD5.hpp"
 //#include "SHA1.hpp"
+#include "Adfgvx.hpp"
 
 #include <iostream>
 
 int main()
 {
+   //const std::string text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
+   const std::string text = "XFADDFDAVXAFDFVAFFDFDFDFFFFDAFGFFFDDDDAFDDVFDVFXAXAXFFFVVXFFAFFAXXVAFAAVVXXDVAFAFFVAFFFFFDVDXXDFXXFXFVFAXDVAXFGXDDXFDAVVVVVADFDAGFGDAFAXXDFAVVDDXDDFFF";
+   const std::string key = "MARCEL";
+   const std::vector<std::string> grid_key = {"CLOFWJ", "YMT5B4", "I7A28S", "P30QHX", "KEUL6D", "VRGZN9"};
+   
+   Adfgvx *A = new Adfgvx();
+   A->setKey(key);
+   A->setGridKey(grid_key);
+   std::cout << A->decode(text);
+   
    /*const std::string data = "abc";
    SHA1 *sha1 = new SHA1();
    std::cout << SHA1::hexDigest(sha1->encode(SHA1::getBytesFromString(data)));
    */
-   const std::string data = "abc";
+   /*const std::string data = "abc";
    MD5 *md5 = new MD5();
    std::cout << MD5::hexDigest(md5->encode(MD5::getBytesFromString(data)));
-   
+   */
    /*const std::vector<unsigned char> data = {
       0x59, 0x6F, 0x75, 0x72, 0x20, 0x6C, 0x69, 0x70, 0x73, 0x20, 0x61, 0x72, 0x65, 0x20, 0x73, 0x6D, 0x6F,
       0x6F, 0x74, 0x68, 0x65, 0x72, 0x20, 0x74, 0x68, 0x61, 0x6E, 0x20, 0x76, 0x61, 0x73, 0x65,

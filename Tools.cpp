@@ -256,36 +256,58 @@ uint32_t getBitsRange(const uint32_t number, const unsigned int from, const unsi
       }
       mask <<= 1;
    }
-   
+
    return result;
 }
 
 // Rotation circulaire à gauche des bits de pos fois.
+
 uint32_t rotl32(const uint32_t number, const unsigned char pos)
 {
-   return (number << pos) | (number >> (32-pos));
+   return (number << pos) | (number >> (32 - pos));
 }
 
 // Rotation circulaire à droite des bits de pos fois.
+
 uint32_t rotr32(const uint32_t number, const unsigned char pos)
 {
-   return (number >> pos) | (number << (32-pos));
+   return (number >> pos) | (number << (32 - pos));
 }
 
 const uint64_t rotateRight(const int64_t &value, const unsigned char shift, const unsigned char max)
 {
-   uint64_t x = 1; 
-   return ((value >> shift) | (value << (max - shift))) & ((x << max)-1);
+   uint64_t x = 1;
+   return ((value >> shift) | (value << (max - shift))) & ((x << max) - 1);
 }
 
 // bits doit être <= 64. 
+
 const uint64_t rotateLeft(const int64_t &value, const unsigned char shift, const unsigned char max)
 {
-   uint64_t x = 1; 
-   return ((value << shift) | (value >> (max - shift))) & ((x << max)-1);
+   uint64_t x = 1;
+   return ((value << shift) | (value >> (max - shift))) & ((x << max) - 1);
+}
+
+void endianSwap32(uint32_t &value)
+{
+   value = (value >> 24) | ((value << 8) & 0x00FF0000) |
+           ((value >> 8) & 0x0000FF00) | (value << 24);
+}
+
+void endianSwap64(uint64_t &value)
+{
+   value = (value >> 56) |
+           ((value << 40) & 0x00FF000000000000uLL) |
+           ((value << 24) & 0x0000FF0000000000uLL) |
+           ((value << 8) & 0x000000FF00000000uLL) |
+           ((value >> 8) & 0x00000000FF000000uLL) |
+           ((value >> 24) & 0x0000000000FF0000uLL) |
+           ((value >> 40) & 0x000000000000FF00uLL) |
+           (value << 56);
 }
 
 // NOTE : Le premier bit correspond au MSB de data, donc 2^63 pour un 64 bits.
+
 const uint64_t getBitsFromTable(const uint64_t &data, const Table &table, const uint64_t from, const uint64_t to)
 {
    const uint64_t y = 1;
@@ -297,7 +319,7 @@ const uint64_t getBitsFromTable(const uint64_t &data, const Table &table, const 
       {
          --i;
          // Si le bit à la position byte MSB est 1, alors on le positionne selon i MSB.
-         if((data >> (from - byte)) & 0x1)
+         if ((data >> (from - byte)) & 0x1)
          {
             output |= y << i;
          }
