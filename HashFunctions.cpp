@@ -27,6 +27,7 @@ std::string HashFunctions::getStringFromBytes(const BytesContainer &bytes)
    return std::string(bytes.begin(), bytes.end());
 }
 
+// Retourne un vecteur de bits à partir d'un vecteur d'octets en LITTLE ENDIAN.
 HashFunctions::BitsContainer HashFunctions::getBitsFromData(const BytesContainer &data)
 {
    BitsContainer bits;

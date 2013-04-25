@@ -35,10 +35,9 @@ private:
    static uint32_t H(uint32_t x, uint32_t y, uint32_t z);
    static uint32_t I(uint32_t x, uint32_t y, uint32_t z);
 
-   //std::vector<uint32_t> count = {0, 0};
-   std::vector<uint32_t> state = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
+   WordsContainer state = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
 
-   const std::vector<uint8_t> routine = {
+   const BytesContainer routine = {
       7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21,
       5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
       4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
@@ -46,7 +45,7 @@ private:
    };
 
    // valeurs obtenues par la formule k(i) = sin(i + 1) * 2^32 pour i = 0,...,63.
-   const std::vector<uint32_t> k = {
+   const WordsContainer k = {
       0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
       0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
       0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,

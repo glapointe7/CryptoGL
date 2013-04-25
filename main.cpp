@@ -18,12 +18,17 @@
 //#include "converterTools.h"
 //#include "Morse.h"
 #include "MD5.hpp"
+//#include "SHA1.hpp"
 
 #include <iostream>
 
 int main()
 {
-   const std::string data = "a";
+   /*const std::string data = "abc";
+   SHA1 *sha1 = new SHA1();
+   std::cout << SHA1::hexDigest(sha1->encode(SHA1::getBytesFromString(data)));
+   */
+   const std::string data = "abc";
    MD5 *md5 = new MD5();
    std::cout << MD5::hexDigest(md5->encode(MD5::getBytesFromString(data)));
    

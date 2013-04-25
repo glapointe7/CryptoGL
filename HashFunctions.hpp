@@ -8,14 +8,13 @@
 class HashFunctions
 {
 public:
-   typedef std::vector<unsigned char> BytesContainer;
+   typedef std::vector<uint8_t> BytesContainer;
    typedef std::vector<bool> BitsContainer;
    typedef std::vector<uint32_t> WordsContainer;
    
    virtual ~HashFunctions() {}
    
    virtual BytesContainer encode(const BytesContainer &) = 0;
-   virtual BitsContainer addPadding(const BitsContainer &) = 0;
    
    // Pour obtenir les octets sous forme d'une chaîne hexadécimale.
    static std::string hexDigest(const BytesContainer &data);
@@ -23,6 +22,8 @@ public:
    static std::string getStringFromBytes(const BytesContainer &bytes);
    
 protected:
+   virtual BitsContainer addPadding(const BitsContainer &) = 0;
+   
    static BitsContainer getBitsFromData(const BytesContainer &);
 };
 
