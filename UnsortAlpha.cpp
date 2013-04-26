@@ -25,10 +25,10 @@ void UnsortAlpha::setHorizontalAlpha()
 
 void UnsortAlpha::setVerticalAlpha()
 {
-   ClassicalType new_key(removeRepeatedLetters(key));
-   ClassicalType str(removeRepeatedLetters(new_key + alpha));
-   unsigned int key_len = new_key.length();
-   unsigned int alpha_len = str.length();
+   const ClassicalType new_key(removeRepeatedLetters(key));
+   const ClassicalType str(removeRepeatedLetters(new_key + alpha));
+   const unsigned int key_len = new_key.length();
+   const unsigned int alpha_len = str.length();
 
    for (unsigned int i = 0; i < key_len; i++)
    {

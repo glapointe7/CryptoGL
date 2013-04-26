@@ -17,10 +17,10 @@ void Railfence::setKey(const unsigned int key)
 
 const Railfence::ClassicalType Railfence::encode(const ClassicalType &clear_text)
 {
-   unsigned int clear_len = clear_text.length();
+   const unsigned int clear_len = clear_text.length();
    ClassicalType crypted = "";
    crypted.reserve(clear_len);
-   unsigned int n = (key - 1) << 1;
+   const unsigned int n = (key - 1) << 1;
 
    for (unsigned short i = 0; i < key; i++)
    {
@@ -28,8 +28,7 @@ const Railfence::ClassicalType Railfence::encode(const ClassicalType &clear_text
       {
          if (j % n == i || j % n == n - i)
          {
-            unsigned short pos = alpha.find(clear_text[j]);
-            crypted += alpha[pos];
+            crypted += alpha[alpha.find(clear_text[j])];
          }
       }
    }
@@ -41,7 +40,7 @@ const Railfence::ClassicalType Railfence::encode(const ClassicalType &clear_text
 
 const Railfence::ClassicalType Railfence::decode(const ClassicalType &cipher_text)
 {
-   unsigned int cipher_len = cipher_text.length();
+   const unsigned int cipher_len = cipher_text.length();
    ClassicalType decrypted('A', cipher_len);
 
    auto step = std::make_pair((key - 1) << 1, 0);

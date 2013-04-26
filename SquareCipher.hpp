@@ -26,9 +26,6 @@ protected:
 
    Key key;
 
-   // Grille de chiffrement.
-   //std::vector<std::string> grid;
-
    // Dimension de la grille carrée.
    unsigned int dim;
 };

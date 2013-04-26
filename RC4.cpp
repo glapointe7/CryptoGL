@@ -51,6 +51,7 @@ const RC4::BytesContainer RC4::encode(const BytesContainer &clear_text)
    return crypted;
 }
 
+// TODO
 const RC4::BytesContainer RC4::decode(const BytesContainer &cipher_text)
 {
    return encode(cipher_text);

@@ -12,9 +12,8 @@ Polybe::Polybe()
 
 const Polybe::ClassicalType Polybe::encode(const ClassicalType &clear_text)
 {
-   unsigned int clear_len = clear_text.length();
    ClassicalType crypted = "";
-   crypted.reserve(clear_len << 1);
+   crypted.reserve(clear_text.length() << 1);
 
    // Construction de la grille de chiffrement.
    const Grid grid(getGrid(key + alpha));
@@ -23,7 +22,7 @@ const Polybe::ClassicalType Polybe::encode(const ClassicalType &clear_text)
    // Note : on ajoute '1', car on veut rendre le cryptogramme en string.
    for (auto c : clear_text)
    {
-      auto pos = getCharCoordinates(c, grid);
+      const auto pos = getCharCoordinates(c, grid);
 
       crypted += (pos.second + '1');
       crypted += (pos.first + '1');
@@ -36,14 +35,14 @@ const Polybe::ClassicalType Polybe::encode(const ClassicalType &clear_text)
 
 const Polybe::ClassicalType Polybe::decode(const ClassicalType &cipher_text)
 {
-   unsigned int cipher_len = cipher_text.length();
+   const unsigned int cipher_len = cipher_text.length();
    ClassicalType decrypted = "";
-   decrypted.reserve(cipher_len);
+   decrypted.reserve(cipher_len >> 1);
    const Grid grid(getGrid(key + alpha));
 
    for (unsigned i = 0; i < cipher_len; i += 2)
    {
-      auto pos = std::make_pair(cipher_text[i] - '1', cipher_text[i + 1] - '1');
+      const auto pos = std::make_pair(cipher_text[i] - '1', cipher_text[i + 1] - '1');
       decrypted += grid[pos.first][pos.second];
    }
 

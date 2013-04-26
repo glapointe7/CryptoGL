@@ -2,7 +2,7 @@
 
 #include "Tools.hpp"
 
-// La clé doit avoir 128 bits ou 16 octets.
+// La clé doit avoir 128 bits = 16 octets.
 
 void Rabbit::setKey(const BytesContainer &key)
 {
@@ -45,14 +45,14 @@ void Rabbit::update()
       G[i] = g(states[i] + counters[i]);
    }
 
-   states[0] = G[0] + rotl32(G[7], 16) + rotl32(G[6], 16) & 0xFFFFFFFF;
-   states[1] = G[1] + rotl32(G[0], 8) + G[7] & 0xFFFFFFFF;
-   states[2] = G[2] + rotl32(G[1], 16) + rotl32(G[0], 16) & 0xFFFFFFFF;
-   states[3] = G[3] + rotl32(G[2], 8) + G[1] & 0xFFFFFFFF;
-   states[4] = G[4] + rotl32(G[3], 16) + rotl32(G[2], 16) & 0xFFFFFFFF;
-   states[5] = G[5] + rotl32(G[4], 8) + G[3] & 0xFFFFFFFF;
-   states[6] = G[6] + rotl32(G[5], 16) + rotl32(G[4], 16) & 0xFFFFFFFF;
-   states[7] = G[7] + rotl32(G[6], 8) + G[5] & 0xFFFFFFFF;
+   states[0] = G[0] + rotateLeft(G[7], 16, 32) + rotateLeft(G[6], 16, 32) & 0xFFFFFFFF;
+   states[1] = G[1] + rotateLeft(G[0], 8, 32) + G[7] & 0xFFFFFFFF;
+   states[2] = G[2] + rotateLeft(G[1], 16, 32) + rotateLeft(G[0], 16, 32) & 0xFFFFFFFF;
+   states[3] = G[3] + rotateLeft(G[2], 8, 32) + G[1] & 0xFFFFFFFF;
+   states[4] = G[4] + rotateLeft(G[3], 16, 32) + rotateLeft(G[2], 16, 32) & 0xFFFFFFFF;
+   states[5] = G[5] + rotateLeft(G[4], 8, 32) + G[3] & 0xFFFFFFFF;
+   states[6] = G[6] + rotateLeft(G[5], 16, 32) + rotateLeft(G[4], 16, 32) & 0xFFFFFFFF;
+   states[7] = G[7] + rotateLeft(G[6], 8, 32) + G[5] & 0xFFFFFFFF;
 }
 
 void Rabbit::initialize()

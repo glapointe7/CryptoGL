@@ -17,7 +17,7 @@ uint_fast32_t getPGCD(uint_fast32_t a, uint_fast32_t b)
 
 // Retourne le reste d'une division enti�re.
 
-long getIntegerMod(long n, long mod)
+long getIntegerMod(const long n, const long mod)
 {
    long ans = n;
    long x = floor((float) n / mod);
@@ -68,7 +68,7 @@ bool isSuperIncresing(const std::vector<unsigned long> &sequence)
    return true;
 }
 
-uint64_t getLegendreSymbol(uint64_t x, uint64_t e, uint64_t n)
+uint64_t getLegendreSymbol(const uint64_t x, const uint64_t e, const uint64_t n)
 {
    uint64_t a = 1;
    unsigned char e_size = sizeof (e);
@@ -88,12 +88,12 @@ uint64_t getLegendreSymbol(uint64_t x, uint64_t e, uint64_t n)
 
 std::string removeRepeatedLetters(const std::string key)
 {
-   unsigned short keylen = key.length();
+   unsigned int keylen = key.length();
    std::string result(key);
 
-   for (unsigned short i = 0; i < keylen; i++)
+   for (unsigned int i = 0; i < keylen; i++)
    {
-      for (unsigned short j = i + 1; j < keylen; j++)
+      for (unsigned int j = i + 1; j < keylen; j++)
       {
          if (result[i] == result[j])
          {

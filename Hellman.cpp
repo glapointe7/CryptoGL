@@ -44,7 +44,7 @@ void Hellman::executeGlouton(std::vector<bool> &bits, const unsigned long T, con
     unsigned long goal = T;
     const unsigned int priv_key_len = private_key.size();
     unsigned int j = priv_key_len - 1;
-    unsigned long k = i * priv_key_len;
+    const unsigned long k = i * priv_key_len;
     
     auto end = private_key.rend();
     for(auto it = private_key.rbegin(); it != end; ++it)

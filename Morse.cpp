@@ -38,7 +38,7 @@ const Morse::ClassicalType Morse::decode(const ClassicalType &cipher_text)
 
    for (auto str : cipher_word)
    {
-      unsigned int pos = std::find(morse.begin(), morse.end(), str) - morse.begin();
+      const unsigned int pos = std::find(morse.begin(), morse.end(), str) - morse.begin();
       decrypted += alpha[pos];
    }
 

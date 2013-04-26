@@ -18,7 +18,7 @@ void SquareCipher::setGridDimension(const unsigned int dim)
 const SquareCipher::Grid
 SquareCipher::getGrid(const ClassicalType &chars) const
 {
-   ClassicalType new_alpha(removeRepeatedLetters(chars));
+   const ClassicalType new_alpha(removeRepeatedLetters(chars));
    Grid grid;
 
    // Séparation de la chaîne pour former une grille carrée (dim X dim) de caractères.

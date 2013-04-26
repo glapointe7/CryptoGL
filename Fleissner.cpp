@@ -157,14 +157,14 @@ const Fleissner::ClassicalType Fleissner::encode(const ClassicalType &clear_text
 const Fleissner::ClassicalType Fleissner::decode(const ClassicalType &cipher_text)
 {
    ClassicalType decrypted = "";
+   decrypted.reserve(cipher_text.length());
    std::vector<Coordinates> coords(key);
-   unsigned short dim = grid_dim * grid_dim;
+   const unsigned short dim = grid_dim * grid_dim;
 
    // On v�rifie si le masque initial est valide et on obtient les coordonn�es de ses rotations.
    if (checkMask(coords) == true)
    {
-      unsigned int cipher_len = cipher_text.length();
-      unsigned short max_grid = static_cast<unsigned short> (cipher_len / dim);
+      const unsigned short max_grid = static_cast<unsigned short> (cipher_text.length() / dim);
       unsigned int k = 0;
       std::vector<std::string> grid;
 

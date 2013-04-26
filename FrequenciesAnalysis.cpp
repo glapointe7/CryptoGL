@@ -38,8 +38,8 @@ std::map<char, unsigned int> FrequenciesAnalysis::getCharsCount(const std::strin
 
 void FrequenciesAnalysis::calculateIC(const std::string &text)
 {
-   unsigned int text_len = text.length();
-   auto chars_freq = getCharsCount(text);
+   const unsigned int text_len = text.length();
+   const auto chars_freq = getCharsCount(text);
 
    for (auto pair : chars_freq)
    {

@@ -19,14 +19,14 @@
 //#include "Morse.h"
 //#include "MD5.hpp"
 //#include "SHA1.hpp"
-#include "Adfgvx.hpp"
+//#include "Adfgvx.hpp"
 
 #include <iostream>
 
 int main()
 {
    //const std::string text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
-   const std::string text = "XFADDFDAVXAFDFVAFFDFDFDFFFFDAFGFFFDDDDAFDDVFDVFXAXAXFFFVVXFFAFFAXXVAFAAVVXXDVAFAFFVAFFFFFDVDXXDFXXFXFVFAXDVAXFGXDDXFDAVVVVVADFDAGFGDAFAXXDFAVVDDXDDFFF";
+   /*const std::string text = "XFADDFDAVXAFDFVAFFDFDFDFFFFDAFGFFFDDDDAFDDVFDVFXAXAXFFFVVXFFAFFAXXVAFAAVVXXDVAFAFFVAFFFFFDVDXXDFXXFXFVFAXDVAXFGXDDXFDAVVVVVADFDAGFGDAFAXXDFAVVDDXDDFFF";
    const std::string key = "MARCEL";
    const std::vector<std::string> grid_key = {"CLOFWJ", "YMT5B4", "I7A28S", "P30QHX", "KEUL6D", "VRGZN9"};
    
@@ -34,7 +34,7 @@ int main()
    A->setKey(key);
    A->setGridKey(grid_key);
    std::cout << A->decode(text);
-   
+   */
    /*const std::string data = "abc";
    SHA1 *sha1 = new SHA1();
    std::cout << SHA1::hexDigest(sha1->encode(SHA1::getBytesFromString(data)));

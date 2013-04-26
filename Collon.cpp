@@ -15,7 +15,7 @@ void Collon::setBlockLength(const unsigned int series)
 
 const Collon::ClassicalType Collon::encode(const ClassicalType &clear_text)
 {
-   unsigned int clear_len = clear_text.length();
+   const unsigned int clear_len = clear_text.length();
    std::string line1 = "";
    line1.reserve(clear_len);
    std::string line2(line1);
@@ -23,13 +23,13 @@ const Collon::ClassicalType Collon::encode(const ClassicalType &clear_text)
    crypted.reserve(clear_len << 1);
 
    // Création de la grille de chiffrement avec lettres doublons effacées.
-   Grid grid(getGrid(key + alpha));
+   const Grid grid(getGrid(key + alpha));
 
    // Chaque caractères situé en (x,y) est encodé par un bigramme AB tel que
    // A = (a,y) et B = (x,b).
    for (auto c : clear_text)
    {
-      auto coords = getCharCoordinates(c, grid);
+      const auto coords = getCharCoordinates(c, grid);
 
       line1 += grid[coords.second][0];
       line2 += grid[dim - 1][coords.first];
@@ -48,21 +48,21 @@ const Collon::ClassicalType Collon::encode(const ClassicalType &clear_text)
 
 const Collon::ClassicalType Collon::decode(const ClassicalType &cipher_text)
 {
-   unsigned int cipher_len = cipher_text.length();
-   unsigned int line_len = cipher_len >> 1;
+   const unsigned int cipher_len = cipher_text.length();
+   const unsigned int line_len = cipher_len >> 1;
    ClassicalType decrypted = "";
    decrypted.reserve(line_len);
    std::string line1 = "";
    line1.reserve(line_len);
    std::string line2(line1);
 
-   std::vector<std::string> grid(getGrid(key + alpha));
+   const Grid grid(getGrid(key + alpha));
 
    // Remise des bigrammes en 2 lignes de texte. Généralement, la longueur de la ligne n'est
    // pas multiple de la longueur du bloc. Pour cela, on doit garder le reste.
-   unsigned short double_block_len = block_len << 1;
-   unsigned int line_rest_len = line_len % double_block_len;
-   unsigned int line_blocks_len = cipher_len - (line_rest_len << 1);
+   const unsigned short double_block_len = block_len << 1;
+   const unsigned int line_rest_len = line_len % double_block_len;
+   const unsigned int line_blocks_len = cipher_len - (line_rest_len << 1);
 
    // Obtention des 2 lignes sans reste puis on ajoute le reste.
    for (unsigned int i = 0; i < line_blocks_len; i += double_block_len)
@@ -77,8 +77,8 @@ const Collon::ClassicalType Collon::decode(const ClassicalType &cipher_text)
    // Soit C = (x, y) la lettre décodée. On doit avoir C = (x2, y1).
    for (unsigned int i = 0; i < line_len; i++)
    {
-      auto A = getCharCoordinates(line1[i], grid);
-      auto B = getCharCoordinates(line2[i], grid);
+      const auto A = getCharCoordinates(line1[i], grid);
+      const auto B = getCharCoordinates(line2[i], grid);
 
       decrypted += grid[A.second][B.first];
    }

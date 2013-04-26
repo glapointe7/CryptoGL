@@ -17,8 +17,12 @@ void Delastelle::setBlockLength(const unsigned int block_len)
 const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_text)
 {
    ClassicalType full_text(clear_text);
-   full_text.append(block_len - (clear_text.length() % block_len), 'X');
-   unsigned int clear_len = full_text.length();
+   const unsigned int rest = clear_text.length() % block_len;
+   if(rest != 0)
+   {
+      full_text.append(block_len - rest, 'X');
+   }
+   const unsigned int clear_len = full_text.length();
 
    // Prendre chaque bloc de block_len caractères.
    Grid block;
@@ -28,7 +32,7 @@ const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_te
    }
 
    // Grille de chiffrement.
-   Grid grid(getGrid(key + alpha));
+   const Grid grid(getGrid(key + alpha));
 
    // Vecteur contenant les coordonnées en X des block_len caractères et celles en Y.
    std::vector<std::pair<std::vector<unsigned char>, std::vector<unsigned char> > > coords_block;
@@ -39,7 +43,7 @@ const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_te
       std::vector<unsigned char> X, Y;
       for (auto c : str)
       {
-         auto coords = getCharCoordinates(c, grid);
+         const auto coords = getCharCoordinates(c, grid);
          X.push_back(coords.first);
          Y.push_back(coords.second);
       }
@@ -92,15 +96,15 @@ const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_te
 
 const Delastelle::ClassicalType Delastelle::decode(const ClassicalType &cipher_text)
 {
-   unsigned int cipher_len = cipher_text.length();
+   const unsigned int cipher_len = cipher_text.length();
    ClassicalType decrypted = "";
    decrypted.reserve(cipher_len);
    
-   Grid grid(getGrid(key + alpha));
+   const Grid grid(getGrid(key + alpha));
    std::vector<unsigned char > chars_coords;
    for(auto c : cipher_text)
    {
-      auto coords = getCharCoordinates(c, grid);
+      const auto coords = getCharCoordinates(c, grid);
       chars_coords.push_back(coords.second);
       chars_coords.push_back(coords.first);
    }

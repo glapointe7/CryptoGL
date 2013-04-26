@@ -3,11 +3,14 @@
 
 void Transposition::setStartingTable(const ClassicalType &data)
 {
-   unsigned int key_len = key.length();
-
+   const unsigned int key_len = key.length();
    ClassicalType full_data(data);
-   full_data.append(key_len - (data.length() % key_len), 'X');
-   unsigned int data_len = full_data.length();
+   const unsigned int rest = data.length() % key_len;
+   if(rest != 0)
+   {
+      full_data.append(key_len - rest, 'X');
+   }
+   const unsigned int data_len = full_data.length();
 
    // On remplit la grille qu'on doit lire en colonne. 
    for (unsigned int i = 0; i < data_len; i += key_len)
@@ -34,7 +37,7 @@ Transposition::readFinalTable(const std::vector<ClassicalType>& s_table) const
 const std::map<char, unsigned int> Transposition::sortKey() const
 {
    std::map<char, unsigned int> sorted_key;
-   unsigned int key_len = key.length();
+   const unsigned int key_len = key.length();
 
    for (unsigned int i = 0; i < key_len; i++)
    {
@@ -50,8 +53,8 @@ std::vector<Transposition::ClassicalType>
 Transposition::swapColumnsDecode(const std::map<char, unsigned int>& sorted_key) const
 {
    std::vector<ClassicalType> sorted_table;
-   unsigned int key_len = key.length();
-   unsigned int rows = table.size();
+   const unsigned int key_len = key.length();
+   const unsigned int rows = table.size();
 
    for (unsigned int i = 0; i < rows; i++)
    {
@@ -72,8 +75,8 @@ std::vector<Transposition::ClassicalType>
 Transposition::swapColumnsEncode(const std::map<char, unsigned int>& sorted_key) const
 {
    std::vector<ClassicalType> sorted_table;
-   unsigned int key_len = key.length();
-   unsigned int rows = table.size();
+   const unsigned int key_len = key.length();
+   const unsigned int rows = table.size();
 
    for (unsigned int i = 0; i < rows; i++)
    {

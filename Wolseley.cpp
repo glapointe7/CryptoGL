@@ -22,12 +22,12 @@ const Wolseley::ClassicalType Wolseley::encode(const ClassicalType &clear_text)
    ClassicalType crypted = "";
    crypted.reserve(clear_text.length());
 
-   std::string key_alpha(key + alpha);
-   ClassicalType new_alpha(removeRepeatedLetters(key_alpha));
+   const std::string key_alpha(key + alpha);
+   const ClassicalType new_alpha(removeRepeatedLetters(key_alpha));
 
    for (auto c : clear_text)
    {
-      std::string::size_type pos = new_alpha.find(c);
+      const std::string::size_type pos = new_alpha.find(c);
       crypted += new_alpha[24 - pos];
    }
 
@@ -41,12 +41,12 @@ const Wolseley::ClassicalType Wolseley::decode(const ClassicalType &cipher_text)
    ClassicalType decrypted = "";
    decrypted.reserve(cipher_text.length());
 
-   std::string key_alpha(key + alpha);
-   ClassicalType new_alpha(removeRepeatedLetters(key_alpha));
+   const std::string key_alpha(key + alpha);
+   const ClassicalType new_alpha(removeRepeatedLetters(key_alpha));
 
    for (auto c : cipher_text)
    {
-      std::string::size_type pos = new_alpha.find(c);
+      const std::string::size_type pos = new_alpha.find(c);
       decrypted += new_alpha[24 - pos];
    }
   

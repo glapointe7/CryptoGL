@@ -83,7 +83,7 @@ Type lexical_cast(const std::string &textNumber)
 std::string baseConvertString(const std::string &number, const unsigned char from_base,
         const unsigned char to_base)
 {
-   std::string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
+   const std::string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
    std::string result = "";
    std::vector<unsigned char> pos;
 

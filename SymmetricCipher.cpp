@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-void SymmetricCipher::save(const std::string &, const BytesContainer &)
+void SymmetricCipher::save(const std::string &filename, const BytesContainer &data)
 {
 
 }
@@ -28,13 +28,13 @@ std::string SymmetricCipher::hexDigest(const BytesContainer &bytes)
    return ss.str();
 }
 
-SymmetricCipher::BytesContainer 
+const SymmetricCipher::BytesContainer 
 SymmetricCipher::getBytesFromString(const std::string &str)
 {  
    return BytesContainer(str.begin(), str.end());
 }
 
-std::string SymmetricCipher::getStringFromBytes(const BytesContainer &bytes)
+const std::string SymmetricCipher::getStringFromBytes(const BytesContainer &bytes)
 {
    return std::string(bytes.begin(), bytes.end());
 }
