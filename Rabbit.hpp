@@ -10,35 +10,31 @@
 
 class Rabbit : public StreamCipher
 {
-   typedef std::vector<uint32_t> UInt32Bytes;
-   typedef std::vector<uint16_t> UInt16Bytes;
-
 public:
-   virtual const BytesContainer encode(const BytesContainer &);
-   virtual const BytesContainer decode(const BytesContainer &);
+   const BytesContainer encode(const BytesContainer &) final;
+   const BytesContainer decode(const BytesContainer &) final;
 
-   virtual void setKey(const BytesContainer &);
+   void setKey(const BytesContainer &) final;
    void setIV(const BytesContainer &);
+   void reset();
 
 private:
-   virtual void initialize();
-   void initializeCounters();
-   void update();
-   BytesContainer getOutputBytes();
-   uint32_t g(const uint32_t state) const;
+   virtual void keySetup() final;
+   void IVSetup();
+   void nextState();
+   BytesContainer getOutput();
    
    // Initialise le counters et le states en mettant le carry bit à 0.
    // States : divisé en 8 states de 32 bits chacun (uint32).
    // Counters : divisé en 8 counters de 32 bits chacun (uint32).
    // counter_carry_bit : 
-   UInt32Bytes states = {0, 0, 0, 0, 0, 0, 0, 0};
-   UInt32Bytes counters = {0, 0, 0, 0, 0, 0, 0, 0};
+   UInt32Container states = {0, 0, 0, 0, 0, 0, 0, 0};
+   UInt32Container counters = {0, 0, 0, 0, 0, 0, 0, 0};
    
+   // Vecteur initial.
    BytesContainer IV;
 
    bool counter_carry_bit = 0;
-
-   //const uint64_t word_size = 0x100000000;
 };
 
 #endif
