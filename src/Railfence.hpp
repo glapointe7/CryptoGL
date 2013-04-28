@@ -7,9 +7,6 @@
 class Railfence : public StringCipher
 {
 public:
-   Railfence();
-
-   // Pour encoder avec un seul niveau pour tout le texte.
    virtual const ClassicalType encode(const ClassicalType &);
    virtual const ClassicalType decode(const ClassicalType &);
 

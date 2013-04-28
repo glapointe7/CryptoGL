@@ -10,6 +10,8 @@ Adfgvx::Adfgvx()
    setAlpha("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
 }
 
+// La grille ne doit pas être vide.
+// La grille doit être de 6 X 6.
 void Adfgvx::setGridKey(const Grid &grid)
 {
    grid_key = grid;

@@ -9,6 +9,7 @@
 #include <sstream>
 
 #include "Tools.hpp"  // fonction split
+#include "EmptyKey.hpp"
 
 // Vigenere : CIPHER = CLEAR + KEY
 
@@ -46,6 +47,10 @@ public:
 
    virtual void setKey(const Key &key)
    {
+      if(key.empty())
+      {
+         throw EmptyKey("Your key should not be empty or not set.");
+      }
       this->key = key;
    }
 
@@ -92,7 +97,7 @@ public:
    Rozier()
    : Vigenere(clearPlusKey, clearMinusKey) {}
 
-   void setKey(const ClassicalType &v_key)
+   void setKey(const ClassicalType &v_key) final
    {
       const unsigned int key_length = v_key.length();
       key = "";
@@ -114,7 +119,7 @@ public:
    Caesar()
    : Vigenere(clearPlusKey, clearMinusKey) {}
 
-   void setKey(const unsigned char c_key)
+   void setKey(const unsigned char c_key) final
    {
       key = std::string(1, alpha[c_key]);
    }
@@ -164,31 +169,5 @@ public:
       return toReturn;
    }
 };
-
-
-/*class VigenereFactory
-{
-public:
-   enum Type { Beaufort = 0, BeaufortGerman, Rozier, VigenereMult, Vigenere};
-
-   static Vigenere* createVigenere(const Type type)
-   {
-      switch (type)
-      {	 
-         case Vigenere::Type::Beaufort:
-            return new Vigenere(VigenereFunctions::keyMinusClear, VigenereFunctions::keyMinusClear);
-         case Vigenere::Type::BeaufortGerman:
-            return new Vigenere(VigenereFunctions::clearMinusKey, VigenereFunctions::clearPlusKey);
-         case Vigenere::Type::Rozier:
-            return new Rozier(VigenereFunctions::clearPlusKey, VigenereFunctions::clearMinusKey);
-            //return new Vigenere(VigenereFunctions::clearPlusKey, VigenereFunctions::clearMinusKey);
-         case Vigenere::Type::VigenereMult:
-          //return new VigenereMult(VigenereFunctions::clearMultKey, VigenereFunctions::keyDivideCipher);
-         case Vigenere::Type::Vigenere:
-            return new Vigenere(VigenereFunctions::clearPlusKey, VigenereFunctions::clearMinusKey);
-      }
-      throw "Vigenere choice is inexistent.";
-   }
-};*/
 
 #endif

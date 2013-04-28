@@ -18,6 +18,7 @@ std::vector<std::vector<bool> > getBlockBinary(const std::vector<bool>&, const u
 std::string getStepCharacters(std::string &text, unsigned short step);
 std::vector<unsigned char> getBytes(const std::vector<bool> &bits);
 void eraseChars(std::string &text, const std::string chars);
+bool isUniqueChar(const std::string &);
 
 // Manipulation des bits
 const bool getBitAtPosition(const unsigned long pos, const uint64_t &number);
@@ -29,12 +30,5 @@ const uint64_t rotateRight(const int64_t &value, const unsigned char shift, cons
 const uint64_t getBitsFromTable(const uint64_t &data, const Table &table, const uint64_t from, const uint64_t to);
 void endianSwap32(uint32_t &value);
 void endianSwap64(uint64_t &value);
-
-// Fonctions mathématiques.
-uint_fast32_t getPGCD(uint_fast32_t a, uint_fast32_t b);
-long getIntegerMod(const long n, const long mod);
-long getModInverse(long a, const long n);
-bool isSuperIncresing(const std::vector<unsigned long> &sequence);
-uint64_t getLegendreSymbol(const uint64_t x, const uint64_t e, const uint64_t n);
 
 #endif

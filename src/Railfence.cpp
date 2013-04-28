@@ -3,11 +3,6 @@
 #include <string>
 #include <utility>
 
-Railfence::Railfence()
-{
-   setAlpha("ABCDEFGHIJKLMNOPQRSTUVWXYZ.-");
-}
-
 void Railfence::setKey(const unsigned int key)
 {
    this->key = key;

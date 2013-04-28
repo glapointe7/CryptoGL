@@ -34,11 +34,6 @@ public:
       this->key = key;
    }
    
-   void setKeyRow(std::vector<unsigned int>& key_row)
-   {
-      this->key_row = key_row;
-   }
-   
 protected:
    virtual void setTable(const ClassicalType &data) = 0;
    virtual std::string read(const std::vector<ClassicalType>&) const = 0;
@@ -50,7 +45,6 @@ protected:
    ClassicalType readFinalTable(const std::vector<ClassicalType>&) const;
    
    Key key;
-   std::vector<unsigned int> key_row;
    std::vector<ClassicalType> table;
 };
 
@@ -114,6 +108,11 @@ public:
 class TranspositionDouble : public Transposition
 {
 public:
+   void setKeyRow(std::vector<unsigned int>& key_row)
+   {
+      this->key_row = key_row;
+   }
+   
    ClassicalType read(const std::vector<ClassicalType> &s_table) const
    {
       std::vector<ClassicalType> col_table;
@@ -138,6 +137,9 @@ public:
       }
       table = tmp;
    }
+   
+private:
+   std::vector<unsigned int> key_row;
 };
 
 #endif

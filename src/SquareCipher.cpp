@@ -3,11 +3,21 @@
 
 #include "Tools.hpp"
 
+#include "EmptyKey.hpp"
+
 void SquareCipher::setKey(const Key &key)
 {
-   this->key = key;
+   if(key.empty())
+   {
+      throw EmptyKey("The Key should not be empty or not set.");
+   }
+   else
+   {
+      this->key = key;
+   }
 }
 
+// La dimension doit être > 0 et non vide.
 void SquareCipher::setGridDimension(const unsigned int dim)
 {
    this->dim = dim;

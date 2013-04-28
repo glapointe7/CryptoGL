@@ -6,6 +6,10 @@
 #include <sstream>
 #include <algorithm>
 
+#include "Tools.hpp"
+#include "EmptyAlpha.hpp"
+#include "MultipleChar.hpp"
+
 const StringCipher::ClassicalType StringCipher::ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 void StringCipher::save(const std::string &filename, const ClassicalType &data)
@@ -53,7 +57,18 @@ void StringCipher::eraseBadCharacters(ClassicalType &text) const
 
 void StringCipher::setAlpha(const ClassicalType &alpha)
 {
-   this->alpha = alpha;
+   if(alpha.empty())
+   {
+      throw EmptyAlpha("Your alphabet should not be empty.");
+   }
+   else if(isUniqueChar(alpha) == false)
+   {
+      throw MultipleChar("Your alphabet should contain unique characters.");
+   }
+   else
+   {
+      this->alpha = alpha;
+   }
 }
 
 const StringCipher::ClassicalType StringCipher::getAlpha() const

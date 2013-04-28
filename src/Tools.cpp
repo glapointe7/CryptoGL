@@ -5,83 +5,24 @@
 #include <bitset>
 #include <sstream>
 
-// Retourne PGCD(a,b).
-
-uint_fast32_t getPGCD(uint_fast32_t a, uint_fast32_t b)
+// Vérifie s'il existe un doublons dans text.
+bool isUniqueChar(const std::string &text)
 {
-   if (b == 0)
-      return a;
+   std::vector<bool> array(256, 0);
 
-   return getPGCD(b, a % b);
-}
-
-// Retourne le reste d'une division enti�re.
-
-long getIntegerMod(const long n, const long mod)
-{
-   long ans = n;
-   long x = floor((float) n / mod);
-   ans -= (x * mod);
-   if (ans < 0)
-      ans += mod;
-
-   return ans;
-}
-
-// Calcule l'inverse de a modulo n et en retourne la valeur.
-// TODO : Vérifier qu'il existe a^{-1} dans Z/nZ.
-
-long getModInverse(long a, const long n)
-{
-   long i = n, v = 0, d = 1;
-   while (a > 0)
+   for (auto c : text)
    {
-      long t = i / a, x = a;
-      a = i % x;
-      i = x;
-      x = d;
-      d = v - t * x;
-      v = x;
-   }
-   v %= n;
-   if (v < 0) v = (v + n) % n;
-
-   return v;
-}
-
-bool isSuperIncresing(const std::vector<unsigned long> &sequence)
-{
-   unsigned long sum = 0;
-
-   for (auto number : sequence)
-   {
-      if (number > sum)
+      if (array[c] == true)
       {
-         sum += number;
+         return false;
       }
       else
       {
-         return false;
+         array[c] = true;
       }
    }
 
    return true;
-}
-
-uint64_t getLegendreSymbol(const uint64_t x, const uint64_t e, const uint64_t n)
-{
-   uint64_t a = 1;
-   unsigned char e_size = sizeof (e);
-   for (char i = e_size; i >= 0; --i)
-   {
-      a = (a * a) % n;
-      if (getBitAtPosition(i, e) != 0)
-      {
-         a = (a * x) % n;
-      }
-   }
-
-   return a;
 }
 
 // On enl�ve les lettres doublons de la clef.
@@ -239,15 +180,14 @@ void eraseChars(std::string &text, const std::string chars)
 
 const bool getBitAtPosition(const unsigned long pos, const uint64_t &number)
 {
-   const uint64_t x = 1;
-   return (number & (x << pos)) > 0;
+   return (number & (1ull << pos)) > 0;
 }
 
 uint32_t getBitsRange(const uint32_t number, const unsigned int from, const unsigned int to)
 {
    uint32_t mask = 1;
    uint32_t result;
-  
+
    for (uint32_t i = from; i < to; ++i)
    {
       if (getBitAtPosition(i, number) == 1)

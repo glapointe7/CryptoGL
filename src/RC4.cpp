@@ -2,10 +2,24 @@
 
 #include <algorithm>
 
+#include "BadKeyLength.hpp"
+#include "EmptyKey.hpp"
+
 // La clé ne doit pas dépasser 256 octets.
 void RC4::setKey(const BytesContainer &key)
 {
-   this->key = key;
+   if(key.empty())
+   {
+      throw EmptyKey("Your RC4 key is empty or not set.");
+   }
+   else if(key.size() > 32)
+   {
+      throw BadKeyLength("Your RC4 key length should not be greater than 32 bytes.", key.size());
+   }
+   else
+   {
+      this->key = key;
+   }
 }
 
 void RC4::initialize()

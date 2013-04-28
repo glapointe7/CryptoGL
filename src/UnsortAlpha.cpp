@@ -2,6 +2,7 @@
 #include "UnsortAlpha.hpp"
 
 #include "Tools.hpp"
+#include "EmptyKey.hpp"
 
 UnsortAlpha::UnsortAlpha()
 {
@@ -10,6 +11,10 @@ UnsortAlpha::UnsortAlpha()
 
 void UnsortAlpha::setKey(const std::string key)
 {
+   if(key.empty())
+   {
+      throw EmptyKey("Tour key should not be empty or not set.");
+   }
    this->key = key;
 }
 

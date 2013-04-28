@@ -1,4 +1,6 @@
-
+/*
+ * Matrices carrées dans M(Z_n)
+ */
 #ifndef MATRIX_HPP
 #define	MATRIX_HPP
 
@@ -9,7 +11,6 @@ class Matrix
 {
 public:
    Matrix();
-   Matrix(const Matrix& orig);
    virtual ~Matrix() {}
    
    T& operator()(const unsigned int r, const unsigned int c)
