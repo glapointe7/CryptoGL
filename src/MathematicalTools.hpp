@@ -3,9 +3,10 @@
 #define	MATHEMATICALTOOLS_HPP
 
 #include <vector>
+#include <stdint.h>
 
 // Fonctions mathématiques.
-uint_fast32_t getPGCD(uint_fast32_t a, uint_fast32_t b);
+uint32_t getPGCD(uint32_t a, uint32_t b);
 long getIntegerMod(const long n, const long mod);
 long getModInverse(long a, const long n);
 bool isSuperIncresing(const std::vector<unsigned long> &sequence);

@@ -8,7 +8,7 @@ class MultipleChar : public BadAlpha
 {
 public:
    MultipleChar();
-   MultipleChar(const std::string &text) : message(text) {}
+   MultipleChar(const std::string &text) { message = text; }
 };
 
 #endif

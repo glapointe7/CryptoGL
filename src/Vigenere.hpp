@@ -97,7 +97,7 @@ public:
    Rozier()
    : Vigenere(clearPlusKey, clearMinusKey) {}
 
-   void setKey(const ClassicalType &v_key) final
+   virtual void setKey(const ClassicalType &v_key) final
    {
       const unsigned int key_length = v_key.length();
       key = "";
@@ -119,7 +119,7 @@ public:
    Caesar()
    : Vigenere(clearPlusKey, clearMinusKey) {}
 
-   void setKey(const unsigned char c_key) final
+   void setKey(const unsigned char c_key)
    {
       key = std::string(1, alpha[c_key]);
    }

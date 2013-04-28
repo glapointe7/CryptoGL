@@ -1,16 +1,17 @@
 #include "Hellman.hpp"
 
+#include "MathematicalTools.hpp"
 #include "Tools.hpp"
 #include "converterTools.hpp"
 
 #include <algorithm>
 
-void Hellman::setModulo(const unsigned long &modulo)
+void Hellman::setModulo(const uint32_t &modulo)
 {
    this->modulo = modulo;
 }
 
-void Hellman::setCoprime(const unsigned long &coprime)
+void Hellman::setCoprime(const uint32_t &coprime)
 {
    this->coprime = coprime;
 }
@@ -39,12 +40,12 @@ void Hellman::setPublicKey()
 }
 
 // Utilise l'algorithme Glouton pour retrouver le binaire initial.
-void Hellman::executeGlouton(std::vector<bool> &bits, const unsigned long T, const unsigned int i) const
+void Hellman::executeGlouton(std::vector<bool> &bits, const uint32_t T, const unsigned int i) const
 {
-    unsigned long goal = T;
+    uint32_t goal = T;
     const unsigned int priv_key_len = private_key.size();
     unsigned int j = priv_key_len - 1;
-    const unsigned long k = i * priv_key_len;
+    const uint32_t k = i * priv_key_len;
     
     auto end = private_key.rend();
     for(auto it = private_key.rbegin(); it != end; ++it)
@@ -65,7 +66,7 @@ const AsymmetricCipher::Numbers Hellman::encode(const BytesContainer &clear_text
    // Ayant la clé privée, le modulo et le coprime respectant les conditions,
    // on peut donc construire la clé publique.
    setPublicKey();
-   const unsigned long block_size = private_key.size();
+   const uint32_t block_size = private_key.size();
    
    // On convertit les octets recueillis en binaire.
    // Ensuite, on ajoute des 1 jusqu'à l'obtention d'un multiple de block_size.
@@ -78,8 +79,8 @@ const AsymmetricCipher::Numbers Hellman::encode(const BytesContainer &clear_text
    // Calculer Somme_{i=0}^{block_size} (block[i] * publi_key[i]).
    for(auto block : bin_blocks)
    {
-      unsigned long i = 0;
-      unsigned long sum = 0;
+      uint32_t i = 0;
+      uint32_t sum = 0;
       for(auto bit : block)
       {
          sum += bit * public_key[i];
@@ -94,14 +95,14 @@ const AsymmetricCipher::Numbers Hellman::encode(const BytesContainer &clear_text
 const AsymmetricCipher::BytesContainer Hellman::decode(const Numbers &cipher_text)
 {  
    // On calcule x = coprime^{-1} (mod modulo).
-   unsigned long inv_coprime = getModInverse(coprime, modulo);
+   uint32_t inv_coprime = getModInverse(coprime, modulo);
    
    std::vector<bool> bits(cipher_text.size() * private_key.size(), 0);
    unsigned int i = 0;
    
    for(auto number : cipher_text)
    {
-      unsigned long goal = (number * inv_coprime) % modulo;
+      uint32_t goal = (number * inv_coprime) % modulo;
       executeGlouton(bits, goal, i);
       i++;
    }

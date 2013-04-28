@@ -1,8 +1,10 @@
 #include "MathematicalTools.hpp"
 
+#include <cmath>
+
 // Retourne PGCD(a,b).
 
-uint_fast32_t getPGCD(uint_fast32_t a, uint_fast32_t b)
+uint32_t getPGCD(uint32_t a, uint32_t b)
 {
    if (b == 0)
       return a;
@@ -70,7 +72,7 @@ uint64_t getLegendreSymbol(const uint64_t x, const uint64_t e, const uint64_t n)
    for (char i = e_size; i >= 0; --i)
    {
       a = (a * a) % n;
-      if (e & (1ull << i) > 0)
+      if ((e & (1ull << i)) > 0)
       {
          a = (a * x) % n;
       }

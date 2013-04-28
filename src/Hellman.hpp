@@ -16,14 +16,14 @@ public:
    void setPublicKey() final;
    void setPrivateKey(const Numbers &) final;
    
-   void setModulo(const unsigned long &);
-   void setCoprime(const unsigned long &);
+   void setModulo(const uint32_t &);
+   void setCoprime(const uint32_t &);
    
 private:
-   unsigned long modulo;
-   unsigned long coprime;
+   uint32_t modulo;
+   uint32_t coprime;
    
-   void executeGlouton(std::vector<bool> &bits, const unsigned long T, const unsigned int i) const;
+   void executeGlouton(std::vector<bool> &bits, const uint32_t T, const unsigned int i) const;
 };
 
 #endif

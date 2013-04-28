@@ -15,6 +15,7 @@ set(SRC
 	SymmetricCipher.hpp SymmetricCipher.cpp
 	
 	converterTools.hpp converterTools.cpp
+   MathematicalTools.hpp MathematicalTools.cpp
 	LittleIndian.hpp
 	Tools.hpp Tools.cpp
 	Transposition.hpp Transposition.cpp
