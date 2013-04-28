@@ -9,7 +9,7 @@
 
 class SquareCipher : public StringCipher
 {
-public:
+public:  
    typedef ClassicalType Key;
    typedef std::pair<unsigned char, unsigned char> Coordinates;
    typedef std::vector<ClassicalType> Grid;
@@ -29,5 +29,6 @@ protected:
    // Dimension de la grille carrée.
    unsigned int dim;
 };
+
 
 #endif

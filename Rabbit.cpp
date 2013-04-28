@@ -34,19 +34,19 @@ void Rabbit::nextState()
    UInt32Container G(8, 0);
    for (unsigned char i = 0; i < 8; ++i)
    {
-      const uint64_t x = states[i] + counters[i] & 0xFFFFFFFFL;
+      const uint64_t x = (states[i] + counters[i]) & 0xFFFFFFFFL;
       G[i] = static_cast<uint32_t>((x * x) ^ x >> 32);
    }
 
    //const uint32_t max = std::numeric_limits<uint32_t>::max();
-   states[0] = G[0] + rotateLeft(G[7], 16, 32) + rotateLeft(G[6], 16, 32) & 0xFFFFFFFF;
-   states[1] = G[1] + rotateLeft(G[0], 8, 32) + G[7] & 0xFFFFFFFF;
-   states[2] = G[2] + rotateLeft(G[1], 16, 32) + rotateLeft(G[0], 16, 32) & 0xFFFFFFFF;
-   states[3] = G[3] + rotateLeft(G[2], 8, 32) + G[1] & 0xFFFFFFFF;
-   states[4] = G[4] + rotateLeft(G[3], 16, 32) + rotateLeft(G[2], 16, 32) & 0xFFFFFFFF;
-   states[5] = G[5] + rotateLeft(G[4], 8, 32) + G[3] & 0xFFFFFFFF;
-   states[6] = G[6] + rotateLeft(G[5], 16, 32) + rotateLeft(G[4], 16, 32) & 0xFFFFFFFF;
-   states[7] = G[7] + rotateLeft(G[6], 8, 32) + G[5] & 0xFFFFFFFF;
+   states[0] = (G[0] + rotateLeft(G[7], 16, 32) + rotateLeft(G[6], 16, 32)) & 0xFFFFFFFF;
+   states[1] = (G[1] + rotateLeft(G[0], 8, 32) + G[7]) & 0xFFFFFFFF;
+   states[2] = (G[2] + rotateLeft(G[1], 16, 32) + rotateLeft(G[0], 16, 32)) & 0xFFFFFFFF;
+   states[3] = (G[3] + rotateLeft(G[2], 8, 32) + G[1]) & 0xFFFFFFFF;
+   states[4] = (G[4] + rotateLeft(G[3], 16, 32) + rotateLeft(G[2], 16, 32)) & 0xFFFFFFFF;
+   states[5] = (G[5] + rotateLeft(G[4], 8, 32) + G[3]) & 0xFFFFFFFF;
+   states[6] = (G[6] + rotateLeft(G[5], 16, 32) + rotateLeft(G[4], 16, 32)) & 0xFFFFFFFF;
+   states[7] = (G[7] + rotateLeft(G[6], 8, 32) + G[5]) & 0xFFFFFFFF;
 }
 
 void Rabbit::keySetup()

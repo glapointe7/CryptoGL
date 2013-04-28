@@ -3,7 +3,7 @@
 
 #include <utility>
 
-#include "Tools.h"
+#include "Tools.hpp"
 
 Hill::Hill()
 {

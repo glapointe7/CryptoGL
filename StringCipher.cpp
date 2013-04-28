@@ -6,6 +6,8 @@
 #include <sstream>
 #include <algorithm>
 
+const StringCipher::ClassicalType StringCipher::ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
 void StringCipher::save(const std::string &filename, const ClassicalType &data)
 {
    try

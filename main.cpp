@@ -1,7 +1,7 @@
 /*
  * Tests automatisés sur les cryptos en place dans le système.
  */
-#include <gtest/gtest.h>
+//#include <gtest/gtest.h>
 //#include "DES.hpp"
 #include "Rabbit.hpp"
 //#include "FrequenciesAnalysis.hpp"
@@ -11,7 +11,7 @@
 //#include "Railfence.h"
 //#include "Playfair.h"
 //#include "Polybe.h"
-//#include "Vigenere.hpp"
+#include "Vigenere.hpp"
 //#include "Wolseley.h"
 //#include "StringCipher.h"
 //#include "Tools.h"

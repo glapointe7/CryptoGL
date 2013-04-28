@@ -1,3 +1,4 @@
+
 #include "SHA1.hpp"
 
 #include "Tools.hpp"
@@ -17,7 +18,7 @@ uint32_t SHA1::H(uint32_t x, uint32_t y, uint32_t z)
    return x ^ y ^ z;
 }
 
-SHA1::BitsContainer SHA1::addPadding(const BitsContainer &bits)
+const SHA1::BitsContainer SHA1::addPadding(const BitsContainer &bits)
 {
    const uint64_t bits_len = bits.size();
    BitsContainer bits_pad(bits);
@@ -40,7 +41,7 @@ SHA1::BitsContainer SHA1::addPadding(const BitsContainer &bits)
    return bits_pad;
 }
 
-SHA1::BytesContainer SHA1::encode(const BytesContainer &data)
+const SHA1::BytesContainer SHA1::encode(const BytesContainer &data)
 {
    BitsContainer bits(addPadding(getBitsFromData(data)));
    const uint32_t bits_len = bits.size();

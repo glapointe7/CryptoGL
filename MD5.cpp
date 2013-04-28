@@ -23,7 +23,7 @@ uint32_t MD5::I(uint32_t x, uint32_t y, uint32_t z)
 }
 
 // Remplit le message avec des bits pour obtenir un multiple de 512 bits.
-MD5::BitsContainer MD5::addPadding(const BitsContainer &bits)
+const MD5::BitsContainer MD5::addPadding(const BitsContainer &bits)
 {
    uint64_t bits_len = bits.size();
    BitsContainer bits_pad(bits);
@@ -47,7 +47,7 @@ MD5::BitsContainer MD5::addPadding(const BitsContainer &bits)
    return bits_pad;
 }
 
-MD5::BytesContainer MD5::encode(const BytesContainer &data)
+const MD5::BytesContainer MD5::encode(const BytesContainer &data)
 {
    BitsContainer bits(addPadding(getBitsFromData(data)));
    uint32_t bits_len = bits.size();

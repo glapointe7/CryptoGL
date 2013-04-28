@@ -34,7 +34,7 @@ SquareCipher::getGrid(const ClassicalType &chars) const
 const SquareCipher::Coordinates
 SquareCipher::getCharCoordinates(const char c, const Grid &grid)
 {
-   auto coords = std::make_pair(0, 0);
+   auto coords = std::make_pair(0u, 0u);
    for (auto str : grid)
    {
       coords.first = str.find(c);

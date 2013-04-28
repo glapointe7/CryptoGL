@@ -17,18 +17,18 @@ MD5 ("12345678901234567890123456789012345678901234567890123456789012345678901234
 #ifndef MD5_HPP
 #define	MD5_HPP
 
-#include "HashFunctions.hpp"
+#include "HashFunction.hpp"
 
 #include <vector>
 #include <string>
 
-class MD5 : public HashFunctions
+class MD5 : public HashFunction
 {
 public:
-   virtual BytesContainer encode(const BytesContainer &);
+   virtual const BytesContainer encode(const BytesContainer &);
 
 private:
-   virtual BitsContainer addPadding(const BitsContainer &);
+   virtual const BitsContainer addPadding(const BitsContainer &);
 
    static uint32_t F(uint32_t x, uint32_t y, uint32_t z);
    static uint32_t G(uint32_t x, uint32_t y, uint32_t z);

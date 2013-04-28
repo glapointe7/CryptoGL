@@ -4,15 +4,15 @@
 #ifndef SHA1_HPP
 #define	SHA1_HPP
 
-#include "HashFunctions.hpp"
+#include "HashFunction.hpp"
 
-class SHA1 : public HashFunctions
+class SHA1 : public HashFunction
 {
 public:
-   virtual BytesContainer encode(const BytesContainer &);
+   virtual const BytesContainer encode(const BytesContainer &);
    
 private:
-   virtual BitsContainer addPadding(const BitsContainer &);
+   virtual const BitsContainer addPadding(const BitsContainer &);
    
    // variables d'état initialisées en LITTLE ENDIAN.
    WordsContainer state = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xC3D2E1F0};

@@ -12,14 +12,17 @@ class StringCipher : public Cipher<std::string>
 {
 public:
    typedef std::string ClassicalType; 
+   
+   static const ClassicalType ALPHA;
 
+   StringCipher() : alpha(ALPHA) {}
    virtual ~StringCipher() {}
 
    virtual const ClassicalType encode(const ClassicalType &) = 0;
    virtual const ClassicalType decode(const ClassicalType &) = 0;
    
-   static void save(const std::string &, const ClassicalType &);
-   static const ClassicalType load(const std::string &);
+   void save(const std::string &, const ClassicalType &);
+   const ClassicalType load(const std::string &);
    
    void eraseBadCharacters(ClassicalType &) const;
    
@@ -27,7 +30,7 @@ public:
    const ClassicalType getAlpha() const;
 
 protected: 
-   ClassicalType alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+   ClassicalType alpha;
 };
 
 #endif

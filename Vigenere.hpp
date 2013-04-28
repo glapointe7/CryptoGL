@@ -36,7 +36,7 @@ protected:
    }
 
    ClassicalType key;
-   const GetCharFunction charDecode, charEncode;
+   const GetCharFunction charEncode, charDecode;
 
 public:
    typedef ClassicalType Key;
