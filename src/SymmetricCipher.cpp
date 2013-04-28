@@ -21,7 +21,7 @@ std::string SymmetricCipher::hexDigest(const BytesContainer &bytes)
 
    for (auto byte : bytes)
    {
-      ss << std::hex << (unsigned int)byte;
+      ss << std::hex << static_cast<uint32_t>(byte);
       ss << " ";
    }
    

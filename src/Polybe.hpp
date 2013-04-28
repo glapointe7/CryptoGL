@@ -11,8 +11,8 @@ class Polybe : public SquareCipher
 public:
    Polybe();
 
-   virtual const ClassicalType encode(const ClassicalType &);
-   virtual const ClassicalType decode(const ClassicalType &);
+   const ClassicalType encode(const ClassicalType &) final;
+   const ClassicalType decode(const ClassicalType &) final;
 };
 
 #endif

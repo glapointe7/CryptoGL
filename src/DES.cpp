@@ -2,11 +2,20 @@
 
 #include "Tools.hpp"
 
+#include "BadKeyLength.hpp"
+
 // La clé doit être de 64 bits (8 octets).
 
 void DES::setKey(const BytesContainer &key)
 {
-   this->key = key;
+   if(key.size() == 8)
+   {
+      this->key = key;
+   }
+   else
+   {
+      throw BadKeyLength("The key must be 8 bytes length.", key.size());
+   }
 }
 
 DES::UInt64Container DES::getKeySchedule()

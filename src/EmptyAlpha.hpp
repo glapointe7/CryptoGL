@@ -8,7 +8,7 @@ class EmptyAlpha : public BadAlpha
 {
 public:
    EmptyAlpha() {}
-   EmptyAlpha(const std::string &text) : message(text) {}
+   EmptyAlpha(const std::string &text) { message = text; }
 };
 
 #endif

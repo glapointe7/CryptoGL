@@ -10,8 +10,8 @@ class Delastelle : public SquareCipher
 public:
    Delastelle();
    
-   virtual const ClassicalType encode(const ClassicalType &);
-   virtual const ClassicalType decode(const ClassicalType &);
+   const ClassicalType encode(const ClassicalType &) final;
+   const ClassicalType decode(const ClassicalType &) final;
    
    void setBlockLength(const unsigned int block_len);
   

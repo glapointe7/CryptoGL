@@ -1,5 +1,7 @@
 #include "AsymmetricCipher.hpp"
 
+#include <sstream>
+
 AsymmetricCipher::Numbers 
 AsymmetricCipher::getPublicKey() const
 {
@@ -7,23 +9,21 @@ AsymmetricCipher::getPublicKey() const
 }
 
 // Transforme les caractères en hexadécimal et renvoie la chaîne d'hexa.
-std::string AsymmetricCipher::hexDigest(const BytesContainer &bytes) const
+std::string AsymmetricCipher::hexDigest(const BytesContainer &bytes)
 {
-   std::string str("");
-   str.reserve(3 * bytes.size());
-   
-   for(auto c : bytes)
+   std::stringstream ss;
+
+   for (auto byte : bytes)
    {
-      char buffer[3];
-      sprintf(buffer, "%02X ", c);
-      str += *buffer;
+      ss << std::hex << static_cast<uint32_t>(byte);
+      ss << " ";
    }
    
-   return str;
+   return ss.str();
 }
 
 // Transforme le vecteur d'entiers en une string d'entiers.
-std::string AsymmetricCipher::toString(const Numbers &numbers) const
+std::string AsymmetricCipher::toString(const Numbers &numbers)
 {
    std::string str("");
    str.reserve(3 * numbers.size());

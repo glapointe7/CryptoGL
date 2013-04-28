@@ -15,8 +15,8 @@ public:
    
    Fleissner();
 
-   virtual const ClassicalType encode(const ClassicalType &);
-   virtual const ClassicalType decode(const ClassicalType &);
+   const ClassicalType encode(const ClassicalType &) final;
+   const ClassicalType decode(const ClassicalType &) final;
 
    void setKey(const std::vector<Coordinates> key);
    void setGridDimension(const unsigned short dim);

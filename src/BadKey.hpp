@@ -8,8 +8,8 @@ class BadKey : public Exception
 {
 public:
    BadKey() {}
-   BadKey(const std::string &text) : message(text) {}
-   virtual ~BadKey() = 0;
+   BadKey(const std::string &); 
+   virtual ~BadKey() {};
 };
 
 #endif

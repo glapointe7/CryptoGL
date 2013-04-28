@@ -8,7 +8,7 @@ class BadLength : public BadAlpha
 {
 public:
    BadLength() {}
-   BadLength(const std::string &text) : message(text) {}
+   BadLength(const std::string &text) { message = text; }
 };
 
 #endif

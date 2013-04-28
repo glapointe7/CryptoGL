@@ -19,7 +19,7 @@ public:
    void reset();
 
 private:
-   virtual void keySetup() final;
+   void keySetup() final;
    void IVSetup();
    void nextState();
    BytesContainer getOutput();

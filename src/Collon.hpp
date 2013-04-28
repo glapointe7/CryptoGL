@@ -11,8 +11,8 @@ class Collon : public SquareCipher
 public:
    Collon();
 
-   virtual const ClassicalType encode(const ClassicalType &);
-   virtual const ClassicalType decode(const ClassicalType &);
+   const ClassicalType encode(const ClassicalType &) final;
+   const ClassicalType decode(const ClassicalType &) final;
 
    void setBlockLength(const unsigned int series);
 

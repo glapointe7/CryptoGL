@@ -25,9 +25,9 @@ public:
    static std::string load(const std::string &);
    
    // Pour obtenir les octets sous forme d'une chaîne hexadécimale.
-   std::string hexDigest(const BytesContainer &) const;
-   std::string toString(const Numbers &) const;
-   BytesContainer toBytes(const std::string &);
+   static std::string hexDigest(const BytesContainer &);
+   static std::string toString(const Numbers &);
+   static BytesContainer toBytes(const std::string &);
    
 protected:
    Numbers public_key;

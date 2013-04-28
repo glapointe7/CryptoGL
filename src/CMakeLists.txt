@@ -18,6 +18,16 @@ set(SRC
 	LittleIndian.hpp
 	Tools.hpp Tools.cpp
 	Transposition.hpp Transposition.cpp
+
+   Exception.hpp
+   BadAlpha.hpp BadAlpha.cpp
+   BadLength.hpp BadLength.cpp
+   BadKey.hpp BadKey.cpp
+   BadKeyLength.hpp BadKeyLength.cpp
+   BadChar.hpp BadChar.cpp
+   EmptyAlpha.hpp EmptyAlpha.cpp
+   EmptyKey.hpp EmptyKey.cpp
+   MatrixKeyNotReversible.hpp MatrixKeyNotReversible.cpp
 	
 	Adfgvx.hpp Adfgvx.cpp
 	Collon.hpp Collon.cpp

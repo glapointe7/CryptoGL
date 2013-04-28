@@ -10,11 +10,11 @@ class Hellman : public AsymmetricCipher
 {
 public:
    
-   virtual const Numbers encode(const BytesContainer &);
-   virtual const BytesContainer decode(const Numbers &);
+   const Numbers encode(const BytesContainer &) final;
+   const BytesContainer decode(const Numbers &) final;
    
-   virtual void setPublicKey();
-   virtual void setPrivateKey(const Numbers &);
+   void setPublicKey() final;
+   void setPrivateKey(const Numbers &) final;
    
    void setModulo(const unsigned long &);
    void setCoprime(const unsigned long &);
