@@ -247,7 +247,7 @@ uint32_t getBitsRange(const uint32_t number, const unsigned int from, const unsi
 {
    uint32_t mask = 1;
    uint32_t result;
-   unsigned int j = 0;
+  
    for (uint32_t i = from; i < to; ++i)
    {
       if (getBitAtPosition(i, number) == 1)
