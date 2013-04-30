@@ -8,6 +8,7 @@
 //#include "RC4.hpp"
 //#include "Delastelle.hpp"
 #include "Matrix.hpp"
+#include "BadMatrix.hpp"
 //#include "Railfence.h"
 //#include "Playfair.h"
 //#include "Polybe.h"
@@ -26,14 +27,25 @@
 int main()
 {
    Matrix M;
-   M.setDimension(3);
    M.setModulo(29);
    
-   std::vector<std::vector<int32_t> > Mat = {{1,2,3},
-                                           {4,5,6},
-                                           {7,8,9}};
+   const std::vector<std::vector<int32_t> > Mat = {{1,3,5},
+                                                   {0,3,7},
+                                                   {4,2,6}};
    M.setMatrix(Mat);
-   std::cout << "det(M) = " << Matrix::det(M);
+   std::cout << "det(M) = " << Matrix::det(M) << "\n\n";
+   
+   try
+   {
+      Matrix M_inv = Matrix::inverse(M);
+      Matrix::display(M_inv);
+   }
+   catch(BadMatrix &BM)
+   {
+      std::cout << BM.what();
+   }
+   
+   //std::cout << getModInverse(18, 29);
    //const std::string text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
    /*const std::string text = "XFADDFDAVXAFDFVAFFDFDFDFFFFDAFGFFFDDDDAFDDVFDVFXAXAXFFFVVXFFAFFAXXVAFAAVVXXDVAFAFFVAFFFFFDVDXXDFXXFXFVFAXDVAXFGXDDXFDAVVVVVADFDAGFGDAFAXXDFAVVDDXDDFFF";
    const std::string key = "MARCEL";

@@ -48,9 +48,11 @@ public:
    static int32_t diagonalProduct(const Matrix &A);
    static int32_t det(Matrix &A);
    static Matrix inverse(Matrix &A);
+   static void display(const Matrix &A);
    
-   void identity();
+   void setIdentity();
    void zeros();
+   static bool isSquare(const Matrice &A);
 };
 
 #endif

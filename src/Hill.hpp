@@ -3,14 +3,13 @@
 #define	HILL_HPP
 
 #include "StringCipher.hpp"
+#include "Matrix.hpp"
 
 #include <vector>
 
 class Hill : public StringCipher
 {
 public:
-   typedef std::vector<std::vector<long> > Matrix;
-   
    const ClassicalType encode(const ClassicalType &) final;
    const ClassicalType decode(const ClassicalType &) final;
    
