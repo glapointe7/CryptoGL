@@ -45,7 +45,7 @@ public:
    Vigenere()
    : charEncode(clearPlusKey), charDecode(clearMinusKey) {}
 
-   virtual void setKey(const Key &key)
+   void setKey(const Key &key)
    {
       if(key.empty())
       {

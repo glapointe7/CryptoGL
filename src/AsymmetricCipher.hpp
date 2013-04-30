@@ -9,6 +9,9 @@
 
 class AsymmetricCipher : public Cipher<std::vector<unsigned long>, std::vector<unsigned char> >
 {
+   // Hide Warning : "hides overloaded virtual function [-Woverloaded-virtual]"
+   using Cipher::decode;
+   
 public:
    
    typedef std::vector<unsigned long> Numbers;

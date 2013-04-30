@@ -29,7 +29,7 @@ void Hellman::setPrivateKey(const Numbers &private_key)
 // Vérifier si modulo et coprime sont copremiers.
 void Hellman::setPublicKey()
 {
-   if(getPGCD(modulo, coprime) == 1 && modulo > coprime)
+   if(GCD(modulo, coprime) == 1 && modulo > coprime)
    {
       for(auto number : private_key)
       {

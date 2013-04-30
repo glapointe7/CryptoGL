@@ -1,76 +1,56 @@
 /*
  * Matrices carrées dans M(Z_n)
+ * TODO : Exceptions sur les matrices. (dim doit être >= 1)
  */
 #ifndef MATRIX_HPP
 #define	MATRIX_HPP
 
 #include <vector>
+#include <stdint.h>
 
-template <class T>
 class Matrix
 {
+private:
+   typedef std::vector<std::vector<int32_t> > Matrice;
+   
+   // Dimension de la matrice carrée.
+   uint32_t dim = 0;
+   
+   // Matrice d'entiers modulo n (M est dans GL_dim(Z_n)).
+   int32_t n = 1;
+   
+   // Matrice
+   Matrice M;
+   
 public:
-   Matrix();
+   Matrix() {}
    virtual ~Matrix() {}
    
-   T& operator()(const unsigned int r, const unsigned int c)
-   {
-      if (!p.empty() && r > 0 && r <= rows && c > 0 && c <= cols)
-      {
-         return p[r - 1][c - 1];
-      }
-      else
-      {
-         throw "Subscript out of range";
-      }
-   }
+   void setMatrix(const Matrice &);
    
-   // index operator. You can use this class like myMatrix.get(col, row)
-   // the indexes are one-based, not zero based.
-   // use this function get if you want to read from a const MatrixBase
-
-   double get(const unsigned int r, const unsigned int c) const
-   {
-      if (!p.empty() && r > 0 && r <= rows && c > 0 && c <= cols)
-      {
-         return p[r - 1][c - 1];
-      }
-      else
-      {
-         throw "Subscript out of range";
-      }
-   }
+   const int32_t get(const uint32_t row, const uint32_t col) const;
+   void set(const uint32_t row, const uint32_t col, const int32_t value);
    
-   // addition of MatrixBase with MatrixBase
-
-   friend Matrix& operator+(const Matrix& a, const Matrix& b)
-   {
-      // check if the dimensions match
-      if (a.rows == b.rows && a.cols == b.cols)
-      {
-         Matrix res(a.rows, a.cols);
-
-         for (unsigned int r = 0; r < a.rows; r++)
-         {
-            for (unsigned int c = 0; c < a.cols; c++)
-            {
-               res.p[r][c] = a.p[r][c] + b.p[r][c];
-            }
-         }
-
-         return res;
-      }
-      else
-      {
-         throw "Dimensions does not match";
-      }
-   }
+   void swapRows(const uint32_t r1, const uint32_t r2);
+   const uint32_t findNonZero(const uint32_t from) const;
    
-protected:
-   unsigned int rows;
-   unsigned int cols;
-   std::vector<std::vector<T> > p;
+   const uint32_t getDimension() const;
+   void setDimension(const uint32_t);
+   const int32_t getModulo() const;
+   void setModulo(const int32_t);
+   
+   // Obtention d'une valeur de la matrice.
+   const int32_t operator()(const uint32_t r, const uint32_t c) const;
+   friend Matrix operator+(const Matrix& a, const Matrix& b);
+   
+   Matrix getMinor(const uint32_t row, const uint32_t col) const;
+   static int32_t trace(const Matrix &A);
+   static int32_t diagonalProduct(const Matrix &A);
+   static int32_t det(Matrix &A);
+   static Matrix inverse(Matrix &A);
+   
+   void identity();
+   void zeros();
 };
 
-#endif	/* MATRIX_HPP */
-
+#endif

@@ -47,9 +47,10 @@ SquareCipher::getCharCoordinates(const char c, const Grid &grid)
    auto coords = std::make_pair(0u, 0u);
    for (auto str : grid)
    {
-      coords.first = str.find(c);
-      if (coords.first != std::string::npos)
+      int32_t first = str.find(c);
+      if (first != -1)
       {
+         coords.first = static_cast<uint32_t>(first);
          break;
       }
       coords.second++;

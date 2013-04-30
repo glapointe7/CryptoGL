@@ -3,15 +3,15 @@
  */
 //#include <gtest/gtest.h>
 //#include "DES.hpp"
-#include "Rabbit.hpp"
+//#include "Rabbit.hpp"
 //#include "FrequenciesAnalysis.hpp"
 //#include "RC4.hpp"
 //#include "Delastelle.hpp"
-//#include "Matrix.hpp"
+#include "Matrix.hpp"
 //#include "Railfence.h"
 //#include "Playfair.h"
 //#include "Polybe.h"
-#include "Vigenere.hpp"
+//#include "Vigenere.hpp"
 //#include "Wolseley.h"
 //#include "StringCipher.h"
 //#include "Tools.h"
@@ -20,11 +20,20 @@
 //#include "MD5.hpp"
 //#include "SHA1.hpp"
 //#include "Adfgvx.hpp"
-
+//#include "MathematicalTools.hpp"
 #include <iostream>
 
 int main()
 {
+   Matrix M;
+   M.setDimension(3);
+   M.setModulo(29);
+   
+   std::vector<std::vector<int32_t> > Mat = {{1,2,3},
+                                           {4,5,6},
+                                           {7,8,9}};
+   M.setMatrix(Mat);
+   std::cout << "det(M) = " << Matrix::det(M);
    //const std::string text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
    /*const std::string text = "XFADDFDAVXAFDFVAFFDFDFDFFFFDAFGFFFDDDDAFDDVFDVFXAXAXFFFVVXFFAFFAXXVAFAAVVXXDVAFAFFVAFFFFFDVDXXDFXXFXFVFAXDVAXFGXDDXFDAVVVVVADFDAGFGDAFAXXDFAVVDDXDDFFF";
    const std::string key = "MARCEL";
@@ -63,7 +72,7 @@ int main()
    v->setKey("TABARNAK");
    cout << v->decode(text);*/
 
-   const std::vector<unsigned char> key = {0x91, 0x28, 0x13, 0x29, 0x2E, 0x3D, 0x36, 0xFE,
+   /*const std::vector<unsigned char> key = {0x91, 0x28, 0x13, 0x29, 0x2E, 0x3D, 0x36, 0xFE,
       0x3B, 0xFC, 0x62, 0xF1, 0xDC, 0x51, 0xC3, 0xAC
    };
 
@@ -80,7 +89,7 @@ int main()
    std::cout << Rabbit::hexDigest(enc) << "\n";
    R->reset();
    std::cout << Rabbit::hexDigest(R->decode(enc));
-
+    */
    //const std::string text = "POSSNDGOBBPPDRQSVTCOVGDNZDRABSSKPOMDDSKTMMQZXIAHOXEEEYESYOPLHORTNIPGLNMSVNR";
    /*FrequenciesAnalysis *FA = new FrequenciesAnalysis();
    std::string text = FrequenciesAnalysis::load(R"(../GIT_CryptoCode/cipher_text.txt)");

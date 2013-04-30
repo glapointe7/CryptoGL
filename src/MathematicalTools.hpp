@@ -6,10 +6,10 @@
 #include <stdint.h>
 
 // Fonctions mathématiques.
-uint32_t getPGCD(uint32_t a, uint32_t b);
-long getIntegerMod(const long n, const long mod);
-long getModInverse(long a, const long n);
-bool isSuperIncresing(const std::vector<unsigned long> &sequence);
+uint32_t GCD(uint32_t a, uint32_t b);
+int32_t getIntegerMod(const int32_t n, const int32_t mod);
+int32_t getModInverse(int32_t a, const int32_t n);
+bool isSuperIncresing(const std::vector<uint64_t> &sequence);
 uint64_t getLegendreSymbol(const uint64_t x, const uint64_t e, const uint64_t n);
 
 #endif

@@ -9,12 +9,10 @@
 class Hill : public StringCipher
 {
 public:
-   typedef std::vector<std::vector<long>> Matrix;
-
-   Hill();
+   typedef std::vector<std::vector<long> > Matrix;
    
-   std::string encode(const std::string &);
-   std::string decode(const std::string &);
+   const ClassicalType encode(const ClassicalType &) final;
+   const ClassicalType decode(const ClassicalType &) final;
    
    void setKey(const Matrix &);
    

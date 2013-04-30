@@ -3,19 +3,14 @@
 
 #include <utility>
 
-#include "Tools.hpp"
-
-Hill::Hill()
-{
-
-}
+//#include "Tools.hpp"
 
 void Hill::setKey(const Matrix &key)
 {
    this->key = key;
 }
 
-std::string Hill::encode(const std::string &clear_text)
+const Hill::ClassicalType Hill::encode(const ClassicalType &clear_text)
 {
    /*unsigned int alpha_len = alpha.length();
    std::string crypted = "";
@@ -47,7 +42,7 @@ std::string Hill::encode(const std::string &clear_text)
    return "";
 }
 
-std::string Hill::decode(const std::string &cipher_text)
+const Hill::ClassicalType Hill::decode(const ClassicalType &cipher_text)
 {
    /*unsigned int cipher_len = cipher_text.length();
    unsigned int alpha_len = alpha.length();

@@ -1,23 +1,24 @@
 #include "MathematicalTools.hpp"
 
 #include <cmath>
+#include "Exception.hpp"
 
 // Retourne PGCD(a,b).
 
-uint32_t getPGCD(uint32_t a, uint32_t b)
+uint32_t GCD(uint32_t a, uint32_t b)
 {
    if (b == 0)
       return a;
 
-   return getPGCD(b, a % b);
+   return GCD(b, a % b);
 }
 
 // Retourne le reste d'une division enti�re.
 
-long getIntegerMod(const long n, const long mod)
+int32_t getIntegerMod(const int32_t n, const int32_t mod)
 {
-   long ans = n;
-   long x = floor((float) n / mod);
+   int32_t ans = n;
+   int32_t x = floor((float) n / mod);
    ans -= (x * mod);
    if (ans < 0)
       ans += mod;
@@ -25,30 +26,39 @@ long getIntegerMod(const long n, const long mod)
    return ans;
 }
 
-// Calcule l'inverse de a modulo n et en retourne la valeur.
-// TODO : Vérifier qu'il existe a^{-1} dans Z/nZ.
+// Calcule l'inverse de a modulo n dans Z_b.
+// Théorème de Bézout : a*u + b*v = 1. v est l'inverse recherché.
 
-long getModInverse(long a, const long n)
+int32_t getModInverse(int32_t a, const int32_t b)
 {
-   long i = n, v = 0, d = 1;
-   while (a > 0)
+   // Si a et n sont copremiers, alors a^-1 existe dans Z_b.
+   int32_t v = 0;
+   if (GCD(a, b) == 1)
    {
-      long t = i / a, x = a;
-      a = i % x;
-      i = x;
-      x = d;
-      d = v - t * x;
-      v = x;
+      int32_t i = b, u = 1;
+      while (a > 0)
+      {
+         int32_t q = i / a, x = a;
+         a = i % x;
+         i = x;
+         x = u;
+         u = v - q * x;
+         v = x;
+      }
+      v %= b;
+      v = (v + b) % b;
    }
-   v %= n;
-   if (v < 0) v = (v + n) % n;
+   else
+   {
+      throw Exception("The inverse of 'a' doesn't exist in Z_b. To exist, 'a' and 'b' must be coprimes.");
+   }
 
    return v;
 }
 
-bool isSuperIncresing(const std::vector<unsigned long> &sequence)
+bool isSuperIncresing(const std::vector<uint64_t> &sequence)
 {
-   unsigned long sum = 0;
+   uint64_t sum = 0;
 
    for (auto number : sequence)
    {

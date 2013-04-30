@@ -14,6 +14,7 @@ set(SRC
 	AsymmetricCipher.hpp AsymmetricCipher.cpp
 	SymmetricCipher.hpp SymmetricCipher.cpp
 	
+   Matrix.hpp Matrix.cpp
 	converterTools.hpp converterTools.cpp
    MathematicalTools.hpp MathematicalTools.cpp
 	LittleIndian.hpp
@@ -29,6 +30,8 @@ set(SRC
    EmptyAlpha.hpp EmptyAlpha.cpp
    EmptyKey.hpp EmptyKey.cpp
    MatrixKeyNotReversible.hpp MatrixKeyNotReversible.cpp
+   BadMatrix.hpp BadMatrix.cpp
+   EmptyMatrix.hpp EmptyMatrix.cpp
 	
 	Adfgvx.hpp Adfgvx.cpp
 	Collon.hpp Collon.cpp

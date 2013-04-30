@@ -186,7 +186,7 @@ const bool getBitAtPosition(const unsigned long pos, const uint64_t &number)
 uint32_t getBitsRange(const uint32_t number, const unsigned int from, const unsigned int to)
 {
    uint32_t mask = 1;
-   uint32_t result;
+   uint32_t result = 0;
 
    for (uint32_t i = from; i < to; ++i)
    {
