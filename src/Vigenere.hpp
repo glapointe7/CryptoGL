@@ -23,17 +23,17 @@ protected:
 
    static const ClassicalType clearPlusKey(const ClassicalType &alpha, const char c, const char key_pos)
    {
-      return ClassicalType(1, alpha[(alpha.find(c) + alpha.find(key_pos)) % 26]);
+      return ClassicalType(1, alpha[(alpha.find(c) + alpha.find(key_pos)) % alpha.length()]);
    }
 
    static const ClassicalType clearMinusKey(const ClassicalType &alpha, const char c, const char key_pos)
    {
-      return ClassicalType(1, alpha[(alpha.find(c) - alpha.find(key_pos) + 26) % 26]);
+      return ClassicalType(1, alpha[(alpha.find(c) - alpha.find(key_pos) + alpha.length()) % alpha.length()]);
    }
 
    static const ClassicalType keyMinusClear(const ClassicalType &alpha, const char c, const char key_pos)
    {
-      return ClassicalType(1, alpha[(alpha.find(key_pos) - alpha.find(c) + 26) % 26]);
+      return ClassicalType(1, alpha[(alpha.find(key_pos) - alpha.find(c) + alpha.length()) % alpha.length()]);
    }
 
    ClassicalType key;
@@ -100,12 +100,13 @@ public:
    virtual void setKey(const ClassicalType &v_key) final
    {
       const unsigned int key_length = v_key.length();
+      const uint32_t alpha_len = alpha.length();
       key = "";
       key.reserve(key_length);
 
       for (unsigned int i = 0; i < key_length - 1; ++i)
       {
-         key += alpha[(alpha.find(v_key[i + 1]) - alpha.find(v_key[i]) + 26) % 26];
+         key += alpha[(alpha.find(v_key[i + 1]) - alpha.find(v_key[i]) + alpha_len) % alpha_len];
       }
    }
 };
@@ -119,9 +120,13 @@ public:
    Caesar()
    : Vigenere(clearPlusKey, clearMinusKey) {}
 
-   void setKey(const unsigned char c_key)
+   // Si la clé est négative et > alpha_len, on doit la remettre dans {0,...,alpha_len-1}.
+   void setKey(const char c_key)
    {
-      key = std::string(1, alpha[c_key]);
+      const int16_t alpha_len = alpha.length();
+      char the_key = c_key % alpha_len;
+      the_key = (the_key + alpha_len) % alpha_len;
+      key = std::string(1, alpha[the_key]);
    }
 };
 
@@ -146,8 +151,7 @@ public:
 
    VigenereMult()
    : Vigenere(clearMultKey, keyDivideCipher)
-   {
-   }
+   {}
 
    const ClassicalType decode(const ClassicalType &cipher_text)
    {

@@ -1,14 +1,15 @@
 /*
  * Tests automatisés sur les cryptos en place dans le système.
  */
-//#include <gtest/gtest.h>
+#include <gtest/gtest.h>
+#include "CaesarTest.hpp"
 //#include "DES.hpp"
 //#include "Rabbit.hpp"
 //#include "FrequenciesAnalysis.hpp"
 //#include "RC4.hpp"
 //#include "Delastelle.hpp"
-#include "Matrix.hpp"
-#include "BadMatrix.hpp"
+//#include "Matrix.hpp"
+//#include "BadMatrix.hpp"
 //#include "Railfence.h"
 //#include "Playfair.h"
 //#include "Polybe.h"
@@ -22,11 +23,18 @@
 //#include "SHA1.hpp"
 //#include "Adfgvx.hpp"
 //#include "MathematicalTools.hpp"
-#include <iostream>
+//#include <iostream>
 
-int main()
+int main(int argc, char **argv)
 {
-   Matrix M;
+   ::testing::InitGoogleTest(&argc, argv);
+   return RUN_ALL_TESTS();
+   /*const std::string text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
+   Caesar *C = new Caesar();
+   C->setAlpha("ABCDEFGHIJKLMNOPQRST");
+   C->setKey(24);
+   std::cout << C->encode(text);*/
+   /*Matrix M;
    M.setModulo(29);
    
    const std::vector<std::vector<int32_t> > Mat = {{1,3,5},
@@ -43,7 +51,7 @@ int main()
    catch(BadMatrix &BM)
    {
       std::cout << BM.what() << "\n\n";
-   }
+   }*/
    
    //std::cout << getModInverse(28, 29);
    //const std::string text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
@@ -135,9 +143,4 @@ int main()
    //removeRepeatedLetters(key);
    //cout << key;
    //cout << convertTextToBinaryString(key);
-   /*vector<uint_fast32_t> seq = {3, 5, 15, 25, 54, 110, 225};
-   const uint_fast32_t nb = 10;
-   const uint_fast32_t modulo = 439;
-   Hellman H("plain.txt", "crypted.txt");
-   H.encode(modulo, nb, seq);*/
 }
