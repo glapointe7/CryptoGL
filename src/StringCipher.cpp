@@ -22,7 +22,7 @@ void StringCipher::save(const std::string &filename, const ClassicalType &data)
    }
    catch (const std::exception &e)
    {
-       throw e.what();
+      throw e.what();
    }
 }
 
@@ -41,7 +41,7 @@ const StringCipher::ClassicalType StringCipher::load(const std::string &filename
       {
          contents.erase(contents.length() - 1, 1);
       }
-      
+
       return contents;
    }
    throw errno;
@@ -49,19 +49,18 @@ const StringCipher::ClassicalType StringCipher::load(const std::string &filename
 
 void StringCipher::eraseBadCharacters(ClassicalType &text) const
 {
-   text.erase(std::remove_if(text.begin(), text.end(), [this](char c)
-   {
+   text.erase(std::remove_if(text.begin(), text.end(), [this](char c) {
       return alpha.find(c) == std::string::npos;
    }), text.end());
 }
 
 void StringCipher::setAlpha(const ClassicalType &alpha)
 {
-   if(alpha.empty())
+   if (alpha.empty())
    {
       throw EmptyAlpha("Your alphabet should not be empty.");
    }
-   else if(isUniqueChar(alpha) == false)
+   else if (!isUniqueChar(alpha))
    {
       throw MultipleChar("Your alphabet should contain unique characters.");
    }
@@ -74,4 +73,19 @@ void StringCipher::setAlpha(const ClassicalType &alpha)
 const StringCipher::ClassicalType StringCipher::getAlpha() const
 {
    return alpha;
+}
+
+// Ajoute le caractère c text.length() % mod fois à la fin de text.
+
+const StringCipher::ClassicalType
+StringCipher::appendChars(const ClassicalType &text, const uint32_t mod, const char c)
+{
+   ClassicalType full_text(text);
+   const uint32_t rest = text.length() % mod;
+   if (rest != 0)
+   {
+      full_text.append(mod - rest, c);
+   }
+
+   return full_text;
 }

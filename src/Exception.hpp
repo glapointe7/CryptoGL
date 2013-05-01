@@ -13,7 +13,7 @@ public:
    Exception(const std::string &text) : message(text) {}
    virtual ~Exception() {};
    
-   const std::string what() const { return message; };
+   const std::string what() const noexcept { return message; };
    
 protected:
    std::string message;

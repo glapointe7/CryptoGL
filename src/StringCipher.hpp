@@ -30,6 +30,8 @@ public:
    const ClassicalType getAlpha() const;
 
 protected: 
+   const ClassicalType appendChars(const ClassicalType &, const uint32_t, const char);
+   
    ClassicalType alpha;
 };
 

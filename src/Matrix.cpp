@@ -1,28 +1,39 @@
+/*
+ * TODO : Code redondant dans inverse et det.
+ */
 #include "Matrix.hpp"
 
+// Exceptions
 #include "EmptyMatrix.hpp"
-#include "BadMatrix.hpp"
+#include "MatrixNotSquare.hpp"
 #include "MathematicalTools.hpp"
+#include "MatrixOutOfRange.hpp"
 
-#include <algorithm>
-#include <iostream>
+#include <algorithm>  // swap
+#include <iostream>   // Matrix::display
 
 // Exceptions : Matrice carrée, Matrice non vide
+
 void Matrix::setMatrix(const Matrice &M)
 {
-   if(M.empty())
+   if (M.empty())
    {
       throw EmptyMatrix("The matrix is empty.");
    }
-   else if(!isSquare(M))
+   else if (!isSquare(M))
    {
-      throw BadMatrix("The matrix should be square.");
+      throw MatrixNotSquare("The matrix is not square.");
    }
    else
    {
       this->M = M;
       setDimension(M.size());
    }
+}
+
+const Matrix::Matrice Matrix::getMatrix() const
+{
+   return M;
 }
 
 const uint32_t Matrix::getDimension() const
@@ -53,7 +64,7 @@ const int32_t Matrix::get(const uint32_t row, const uint32_t col) const
    {
       return M[row - 1][col - 1];
    }
-   throw BadMatrix("Out of range.");
+   throw MatrixOutOfRange("The row and/or column selected are out of range.");
 }
 
 // Affecte une valeur en M(row,col).
@@ -66,9 +77,11 @@ void Matrix::set(const uint32_t row, const uint32_t col, const int32_t value)
    }
    else
    {
-      throw BadMatrix("Out of range.");
+      throw MatrixOutOfRange("The row and/or column selected are out of range.");
    }
 }
+
+// Échange 2 lignes de la matrice.
 
 void Matrix::swapRows(const uint32_t r1, const uint32_t r2)
 {
@@ -89,7 +102,7 @@ const uint32_t Matrix::findNonZero(const uint32_t from) const
    return pos;
 }
 
-// Obtention d'une valeur de la matrice.
+// Obtention d'une valeur spécifique de la matrice.
 
 const int32_t Matrix::operator()(const uint32_t row, const uint32_t col) const
 {
@@ -100,11 +113,11 @@ Matrix operator+(const Matrix &A, const Matrix &B)
 {
    if (A.getDimension() == 0 || B.getDimension() == 0)
    {
-      throw EmptyMatrix("Dimension of the matrix should not be zero.");
+      throw EmptyMatrix("Dimension of the matrices should not be zero.");
    }
    else if (A.getDimension() != B.getDimension())
    {
-      throw BadMatrix("Both matrices should be the same dimension.");
+      throw MatrixNotSquare("Both matrices should be the same dimension.");
    }
    else
    {
@@ -121,6 +134,30 @@ Matrix operator+(const Matrix &A, const Matrix &B)
 
       return result;
    }
+}
+
+// Multiplication d'une matrice par un vecteur transposé.
+
+std::vector<uint32_t> operator *(const Matrix &K, const std::vector<uint32_t> &V)
+{
+   std::vector<uint32_t> soln(K.getDimension(), 0);
+   const int32_t mod = K.getModulo();
+   const std::vector<std::vector<int32_t> > mat = K.getMatrix();
+
+   uint32_t i = 0;
+   for (const auto row : mat)
+   {
+      uint32_t j = 0;
+      for (const auto number : row)
+      {
+         soln[i] += number * V[j];
+         j++;
+      }
+      soln[i] %= mod;
+      i++;
+   }
+
+   return soln;
 }
 
 // Retourne le mineur d'ordre dim -1 de M.
@@ -144,7 +181,7 @@ Matrix Matrix::getMinor(const uint32_t row, const uint32_t col) const
    }
    else
    {
-      throw BadMatrix("Index for minor out of range");
+      throw MatrixOutOfRange("Index for minor is out of range");
    }
 
    return result;
@@ -195,25 +232,27 @@ int32_t Matrix::diagonalProduct(const Matrix &A)
 }
 
 // Vérifie si la matrice A est carrée.
+
 bool Matrix::isSquare(const Matrice &A)
 {
    const uint32_t A_size = A.size();
-   for(auto V : A)
+   for (auto V : A)
    {
-      if(V.size() != A_size)
+      if (V.size() != A_size)
       {
          return false;
       }
    }
-   
+
    return true;
 }
 
 // Retourne le déterminant de la matrice A donnée.
 
-int32_t Matrix::det(Matrix &A)
+int32_t Matrix::det(const Matrix &B)
 {
    int32_t determinant = 0;
+   Matrix A = B;
    const int32_t mod = A.getModulo();
    const uint32_t dim = A.getDimension();
 
@@ -266,11 +305,12 @@ int32_t Matrix::det(Matrix &A)
    return determinant;
 }
 
-// Retourne l'inverse de la matrice A selon la méthode de Gauss-Jordan.
+// Retourne l'inverse de la matrice A selon la méthode de Gauss-Jordan à pivots.
 
-Matrix Matrix::inverse(Matrix &A)
+Matrix Matrix::inverse(const Matrix &B)
 {
    Matrix result;
+   Matrix A = B;
    const int32_t mod_A = A.getModulo();
    const uint32_t dim_A = A.getDimension();
 
@@ -303,47 +343,51 @@ Matrix Matrix::inverse(Matrix &A)
          default:
          {
             result.setIdentity();
-            
+
             for (uint32_t n = 1; n < dim_A; ++n)
             {
                // Si le pivot est nul, on doit l'échanger avec un autre non nul.
-               // Si aucun pivot n'est trouvé, la colonne n ne contient que des 0 sous A(n,n).
-               // Donc, det(A) = 0.
                if (A(n, n) == 0)
                {
                   A.swapRows(A.findNonZero(n), n - 1);
-                  result.swapRows(result.findNonZero(n), n-1);
+                  result.swapRows(result.findNonZero(n), n - 1);
                }
 
-               // Li = Li + q*Ln.
                const uint32_t inv = getModInverse(A(n, n), mod_A);
                for (uint32_t i = n + 1; i <= dim_A; ++i)
                {
-                  // Pour les lignes.
+                  // Pour les lignes. Li = Li + lq*Ln.
                   const int32_t lq = (inv * (mod_A - A(i, n))) % mod_A;
-                  const int32_t ilq = (inv * (mod_A - result(i, n))) % mod_A;
-                  
-                  // Pour les colonnes.
-                  const int32_t cq = (inv * (mod_A - A(n, i))) % mod_A;
-                  const int32_t icq = (inv * (mod_A - result(n, i))) % mod_A;
+                  //const int32_t ilq = (inv * (mod_A - result(i, n))) % mod_A;
+
+                  //const int32_t icq = (inv * (mod_A - result(n, i))) % mod_A;
                   for (uint32_t j = n; j <= dim_A; ++j)
                   {
                      A.set(i, j, (A(i, j) + (lq * A(n, j))) % mod_A);
-                     result.set(i, j, result(i, j) + (ilq * result(n, j)) % mod_A);
-                     
+                     result.set(i, j, result(i, j) + (lq * result(n, j)) % mod_A);
+                  }
+               }
+
+               for (uint32_t i = n + 1; i <= dim_A; ++i)
+               {
+                  // Pour les colonnes. Ci = Ci + cq*Ln.
+                  const int32_t cq = (inv * (mod_A - A(n, i))) % mod_A;
+
+                  for (uint32_t j = n; j <= dim_A; ++j)
+                  {
                      A.set(j, i, (A(j, i) + (cq * A(j, n))) % mod_A);
-                     result.set(j, i, result(j, i) + (icq * result(j, n)) % mod_A);
+                     result.set(j, i, result(j, i) + (cq * result(j, n)) % mod_A);
                   }
                }
             }
-            
+
             // On rend la matrice A = identité => des 1 dans la diagonale.
-            for(uint32_t n = 1; n <= dim_A; ++n)
+            for (uint32_t n = 1; n <= dim_A; ++n)
             {
                const int32_t inv = getModInverse(A(n, n), mod_A);
-               for(uint32_t i = 1; i <= dim_A; ++i)
+               for (uint32_t i = 1; i <= dim_A; ++i)
                {
-                  result.set(n, i, (A(n, i) * inv) % mod_A);
+                  result.set(n, i, (result(n, i) * inv) % mod_A);
                }
             } // fin FOR n
          } // fin Default
@@ -356,9 +400,9 @@ Matrix Matrix::inverse(Matrix &A)
 void Matrix::display(const Matrix &A)
 {
    const uint32_t dim = A.getDimension();
-   for(uint32_t i = 1; i <= dim; ++i)
+   for (uint32_t i = 1; i <= dim; ++i)
    {
-      for(uint32_t j = 1; j <= dim; ++j)
+      for (uint32_t j = 1; j <= dim; ++j)
       {
          std::cout << A(i, j) << " ";
       }

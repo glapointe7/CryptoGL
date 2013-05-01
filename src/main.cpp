@@ -42,10 +42,10 @@ int main()
    }
    catch(BadMatrix &BM)
    {
-      std::cout << BM.what();
+      std::cout << BM.what() << "\n\n";
    }
    
-   //std::cout << getModInverse(18, 29);
+   //std::cout << getModInverse(28, 29);
    //const std::string text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
    /*const std::string text = "XFADDFDAVXAFDFVAFFDFDFDFFFFDAFGFFFDDDDAFDDVFDVFXAXAXFFFVVXFFAFFAXXVAFAAVVXXDVAFAFFVAFFFFFDVDXXDFXXFXFVFAXDVAXFGXDDXFDAVVVVVADFDAGFGDAFAXXDFAVVDDXDDFFF";
    const std::string key = "MARCEL";

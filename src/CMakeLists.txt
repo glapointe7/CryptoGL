@@ -32,6 +32,8 @@ set(SRC
    MatrixKeyNotReversible.hpp MatrixKeyNotReversible.cpp
    BadMatrix.hpp BadMatrix.cpp
    EmptyMatrix.hpp EmptyMatrix.cpp
+   MatrixNotSquare.hpp MatrixNotSquare.cpp
+   MatrixOutOfRange.hpp MatrixOutOfRange.cpp
 	
 	Adfgvx.hpp Adfgvx.cpp
 	Collon.hpp Collon.cpp
