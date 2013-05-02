@@ -49,7 +49,7 @@ public:
    {
       if(key.empty())
       {
-         throw EmptyKey("Your key should not be empty or not set.");
+         throw EmptyKey("Your key should not be empty.");
       }
       this->key = key;
    }

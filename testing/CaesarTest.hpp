@@ -17,7 +17,6 @@ protected:
    }
 };
 
-// Test Caesar encoding with key 3.
 TEST_F(CaesarTest, encode) 
 {
   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";

@@ -5,6 +5,7 @@ project (Cryptology_exe)
 set(testing
 	main.cpp
 	CaesarTest.hpp
+   VigenereTest.hpp
 )
 
 #add_library(Cryptology ${testing})

@@ -1,9 +1,5 @@
-Construire la classe abstraite Matrix et ses enfants MatrixReel et MatrixInteger en intégrant les opérateurs de manipulation de Matrices.
-
 Encodage / Décodage Rabbit ne renvoie pas la bonne réponse.
 
 Coder le decode de DES.
-
-Ajouter une fonction dans SquareCipher qui ajoute des caractères quelconques pour que le texte soit un multiple d'une autre longueur.
 
 Régler le problème du LITTLE ENDIAN dans l'encodage MD5.

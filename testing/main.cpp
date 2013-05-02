@@ -3,6 +3,7 @@
  */
 #include <gtest/gtest.h>
 #include "CaesarTest.hpp"
+#include "VigenereTest.hpp"
 //#include "DES.hpp"
 //#include "Rabbit.hpp"
 //#include "FrequenciesAnalysis.hpp"
