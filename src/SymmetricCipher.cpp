@@ -15,11 +15,11 @@ SymmetricCipher::BytesContainer SymmetricCipher::load(const std::string &filenam
 }
 
 // Transforme les octets en nombres hexadécimaux sous forme d'une string.
-std::string SymmetricCipher::hexDigest(const BytesContainer &bytes)
+const std::string SymmetricCipher::hexDigest(const BytesContainer &bytes)
 {
    std::stringstream ss;
 
-   for (auto byte : bytes)
+   for (const auto byte : bytes)
    {
       ss << std::hex << static_cast<uint32_t>(byte);
       ss << " ";

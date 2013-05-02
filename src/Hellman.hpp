@@ -10,20 +10,20 @@ class Hellman : public AsymmetricCipher
 {
 public:
    
-   const Numbers encode(const BytesContainer &) final;
-   const BytesContainer decode(const Numbers &) final;
+   const UInt64Container encode(const BytesContainer &) final;
+   const BytesContainer decode(const UInt64Container &) final;
    
    void setPublicKey() final;
-   void setPrivateKey(const Numbers &) final;
+   void setPrivateKey(const UInt64Container &) final;
    
-   void setModulo(const uint32_t &);
-   void setCoprime(const uint32_t &);
+   void setModulo(const uint64_t &mod);
+   void setDividend(const uint64_t &div);
    
 private:
-   uint32_t modulo;
-   uint32_t coprime;
+   uint64_t modulo;
+   uint64_t dividend;
    
-   void executeGlouton(std::vector<bool> &bits, const uint32_t T, const unsigned int i) const;
+   void executeGlouton(std::vector<bool> &bits, const uint64_t T, const uint32_t i) const;
 };
 
 #endif

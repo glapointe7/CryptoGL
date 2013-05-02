@@ -4,10 +4,10 @@
 #include "Matrix.hpp"
 
 // Exceptions
-#include "EmptyMatrix.hpp"
-#include "MatrixNotSquare.hpp"
+#include "exceptions/EmptyMatrix.hpp"
+#include "exceptions/MatrixNotSquare.hpp"
 #include "MathematicalTools.hpp"
-#include "MatrixOutOfRange.hpp"
+#include "exceptions/MatrixOutOfRange.hpp"
 
 #include <algorithm>  // swap
 #include <iostream>   // Matrix::display

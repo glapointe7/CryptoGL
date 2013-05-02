@@ -12,8 +12,6 @@ class Fleissner : public StringCipher
 public:
    
    typedef std::pair<unsigned short, unsigned short> Coordinates;
-   
-   Fleissner();
 
    const ClassicalType encode(const ClassicalType &) final;
    const ClassicalType decode(const ClassicalType &) final;
@@ -23,7 +21,7 @@ public:
 
 private:
    bool checkMask(std::vector<Coordinates> &coords) const;
-   void fillWithRandomChars(ClassicalType &text);
+   //void fillWithRandomChars(ClassicalType &text);
 
    // Dimension de la grille de chiffrement.
    unsigned short grid_dim;

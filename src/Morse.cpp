@@ -20,8 +20,9 @@ Morse::Morse()
 const Morse::ClassicalType Morse::encode(const ClassicalType &clear_text)
 {
    ClassicalType crypted = "";
+   crypted.reserve(7 * clear_text.length());
 
-   for (auto c : clear_text)
+   for (const auto c : clear_text)
    {
       crypted += morse[alpha.find(c)] + " ";
    }
@@ -34,11 +35,11 @@ const Morse::ClassicalType Morse::encode(const ClassicalType &clear_text)
 const Morse::ClassicalType Morse::decode(const ClassicalType &cipher_text)
 {
    ClassicalType decrypted = "";
-   std::vector<std::string> cipher_word = split(cipher_text);
+   std::vector<std::string> cipher_word(split(cipher_text));
 
-   for (auto str : cipher_word)
+   for (const auto str : cipher_word)
    {
-      const unsigned int pos = std::find(morse.begin(), morse.end(), str) - morse.begin();
+      const uint32_t pos = std::find(morse.begin(), morse.end(), str) - morse.begin();
       decrypted += alpha[pos];
    }
 

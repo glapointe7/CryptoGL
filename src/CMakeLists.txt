@@ -21,19 +21,24 @@ set(SRC
 	Tools.hpp Tools.cpp
 	Transposition.hpp Transposition.cpp
 
-   Exception.hpp
-   BadAlpha.hpp BadAlpha.cpp
-   BadLength.hpp BadLength.cpp
-   BadKey.hpp BadKey.cpp
-   BadKeyLength.hpp BadKeyLength.cpp
-   BadChar.hpp BadChar.cpp
-   EmptyAlpha.hpp EmptyAlpha.cpp
-   EmptyKey.hpp EmptyKey.cpp
-   MatrixKeyNotReversible.hpp MatrixKeyNotReversible.cpp
-   BadMatrix.hpp BadMatrix.cpp
-   EmptyMatrix.hpp EmptyMatrix.cpp
-   MatrixNotSquare.hpp MatrixNotSquare.cpp
-   MatrixOutOfRange.hpp MatrixOutOfRange.cpp
+   exceptions/Exception.hpp
+   exceptions/BadAlpha.hpp exceptions/BadAlpha.cpp
+   exceptions/BadLength.hpp exceptions/BadLength.cpp
+   exceptions/BadKey.hpp exceptions/BadKey.cpp
+   exceptions/BadKeyLength.hpp exceptions/BadKeyLength.cpp
+   exceptions/BadChar.hpp exceptions/BadChar.cpp
+   exceptions/EmptyAlpha.hpp exceptions/EmptyAlpha.cpp
+   exceptions/EmptyKey.hpp exceptions/EmptyKey.cpp
+   exceptions/MatrixKeyNotReversible.hpp exceptions/MatrixKeyNotReversible.cpp
+   exceptions/BadMatrix.hpp exceptions/BadMatrix.cpp
+   exceptions/EmptyMatrix.hpp exceptions/EmptyMatrix.cpp
+   exceptions/MatrixNotSquare.hpp exceptions/MatrixNotSquare.cpp
+   exceptions/MatrixOutOfRange.hpp exceptions/MatrixOutOfRange.cpp
+   exceptions/EmptyGridKey.hpp exceptions/EmptyGridKey.cpp
+   exceptions/BadGridDimension.hpp exceptions/BadGridDimension.cpp
+   exceptions/KeyNotSuperIncreasing.hpp exceptions/KeyNotSuperIncreasing.cpp
+   exceptions/IntegersNotCoprime.hpp exceptions/IntegersNotCoprime.cpp
+   exceptions/BadModulo.hpp exceptions/BadModulo.cpp
 	
 	Adfgvx.hpp Adfgvx.cpp
 	Collon.hpp Collon.cpp

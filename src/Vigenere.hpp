@@ -9,7 +9,8 @@
 #include <sstream>
 
 #include "Tools.hpp"  // fonction split
-#include "EmptyKey.hpp"
+#include "exceptions/EmptyKey.hpp"
+#include "exceptions/BadChar.hpp"
 
 // Vigenere : CIPHER = CLEAR + KEY
 
@@ -49,18 +50,34 @@ public:
    {
       if(key.empty())
       {
-         throw EmptyKey("Your key should not be empty.");
+         throw EmptyKey("Your key is empty.");
       }
+      
+      if(badAlphaFound(key))
+      {
+         throw BadChar("Your key contains at least one character that is not in your alphabet.");
+      }
+      
       this->key = key;
    }
 
    const ClassicalType encode(const ClassicalType &clear_text)
    {
+      if(key.empty())
+      {
+         throw EmptyKey("Your key is not set.");
+      }
+      
       return process(clear_text, charEncode);
    }
 
    const ClassicalType decode(const ClassicalType &cipher_text)
    {
+      if(key.empty())
+      {
+         throw EmptyKey("Your key is not set.");
+      }
+      
       return process(cipher_text, charDecode);
    }
 
@@ -99,6 +116,16 @@ public:
 
    virtual void setKey(const ClassicalType &v_key) final
    {
+      if(v_key.empty())
+      {
+         throw EmptyKey("Your key is empty.");
+      }
+      
+      if(badAlphaFound(v_key))
+      {
+         throw BadChar("Your key contains at least one character that is not in your alphabet.");
+      }
+      
       const unsigned int key_length = v_key.length();
       const uint32_t alpha_len = alpha.length();
       key = "";
@@ -122,7 +149,7 @@ public:
 
    // Si la clé est négative et > alpha_len, on doit la remettre dans {0,...,alpha_len-1}.
    void setKey(const char c_key)
-   {
+   {      
       const int16_t alpha_len = alpha.length();
       char the_key = c_key % alpha_len;
       the_key = (the_key + alpha_len) % alpha_len;
@@ -155,6 +182,11 @@ public:
 
    const ClassicalType decode(const ClassicalType &cipher_text)
    {
+      if(key.empty())
+      {
+         throw EmptyKey("Your key is not set.");
+      }
+      
       const unsigned int key_length = key.length();
 
       ClassicalType toReturn = "";

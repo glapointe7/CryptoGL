@@ -7,8 +7,8 @@
 #include <algorithm>
 
 #include "Tools.hpp"
-#include "EmptyAlpha.hpp"
-#include "MultipleChar.hpp"
+#include "exceptions/EmptyAlpha.hpp"
+#include "exceptions/MultipleChar.hpp"
 
 const StringCipher::ClassicalType StringCipher::ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -58,16 +58,15 @@ void StringCipher::setAlpha(const ClassicalType &alpha)
 {
    if (alpha.empty())
    {
-      throw EmptyAlpha("Your alphabet should not be empty.");
+      throw EmptyAlpha("Your alphabet is empty.");
    }
-   else if (!isUniqueChar(alpha))
+   
+   if (!isUniqueChar(alpha))
    {
-      throw MultipleChar("Your alphabet should contain unique characters.");
+      throw MultipleChar("Your alphabet have to contain unique characters.");
    }
-   else
-   {
-      this->alpha = alpha;
-   }
+   
+   this->alpha = alpha;
 }
 
 const StringCipher::ClassicalType StringCipher::getAlpha() const
@@ -88,4 +87,19 @@ StringCipher::appendChars(const ClassicalType &text, const uint32_t mod, const c
    }
 
    return full_text;
+}
+
+// Vérifie si text contient au moins un caractère n'appartenant pas à alpha.
+// Retourne 0 si aucun caractère n'est trouvé, sinon renvoie le premier caractère erroné.
+const char StringCipher::badAlphaFound(const ClassicalType &text) const
+{
+   for(auto c : text)
+   {
+      if(alpha.find(c) == -1)
+      {
+         return c;
+      }
+   }
+   
+   return 0;
 }

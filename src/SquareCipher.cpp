@@ -3,13 +3,24 @@
 
 #include "Tools.hpp"
 
-#include "EmptyKey.hpp"
+#include "exceptions/EmptyKey.hpp"
+#include "exceptions/BadChar.hpp"
+#include "exceptions/BadGridDimension.hpp"
+
+SquareCipher::SquareCipher()
+{
+   setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
+}
 
 void SquareCipher::setKey(const Key &key)
 {
    if(key.empty())
    {
       throw EmptyKey("The Key should not be empty or not set.");
+   }
+   else if(badAlphaFound(key))
+   {
+      throw BadChar("Your key contains at least one character that is not in your alphabet.");
    }
    else
    {
@@ -20,7 +31,14 @@ void SquareCipher::setKey(const Key &key)
 // La dimension doit être > 0 et non vide.
 void SquareCipher::setGridDimension(const unsigned int dim)
 {
-   this->dim = dim;
+   if(dim <= 0)
+   {
+      throw BadGridDimension("The dimension of the grid should be greater than zero.");
+   }
+   else
+   {
+      this->dim = dim;
+   }
 }
 
 // Construction de la grille de chiffrement.
@@ -45,9 +63,9 @@ const SquareCipher::Coordinates
 SquareCipher::getCharCoordinates(const char c, const Grid &grid)
 {
    auto coords = std::make_pair(0u, 0u);
-   for (auto str : grid)
+   for (const auto str : grid)
    {
-      int32_t first = str.find(c);
+      const int32_t first = str.find(c);
       if (first != -1)
       {
          coords.first = static_cast<uint32_t>(first);

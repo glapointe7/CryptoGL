@@ -9,8 +9,6 @@
 class Collon : public SquareCipher
 {
 public:
-   Collon();
-
    const ClassicalType encode(const ClassicalType &) final;
    const ClassicalType decode(const ClassicalType &) final;
 

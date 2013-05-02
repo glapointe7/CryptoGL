@@ -1,22 +1,28 @@
 
 #include "Playfair.hpp"
 
-#include <utility>
+#include "exceptions/BadGridDimension.hpp"
+#include "exceptions/EmptyKey.hpp"
 
-Playfair::Playfair()
-{
-   setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
-}
+#include "MathematicalTools.hpp"
+
+#include <utility>
 
 // Encode un texte clair avec la méthode de Playfair.
 
 const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
 {
-   ClassicalType full_text(clear_text);
-   if (clear_text.length() % 2 != 0)
+   if(key.empty())
    {
-      full_text += "X";
+      throw EmptyKey("You have to set the key before encoding your message.");
    }
+   
+   if(!isPerfectSquare(alpha.size()))
+   {
+      throw BadGridDimension("The length of your alphabet should be a perfect square.");
+   }
+   
+   ClassicalType full_text(appendChars(clear_text, 2, 'X'));
    const unsigned int clear_len = full_text.length();
    ClassicalType crypted = "";
    crypted.reserve(clear_len);
@@ -63,7 +69,17 @@ const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
 
 const Playfair::ClassicalType Playfair::decode(const ClassicalType &cipher_text)
 {
-   unsigned int cipher_len = cipher_text.length();
+   if(key.empty())
+   {
+      throw EmptyKey("You have to set the key before decoding your message.");
+   }
+   
+   if(!isPerfectSquare(alpha.size()))
+   {
+      throw BadGridDimension("The length of your alphabet should be a perfect square.");
+   }
+   
+   const unsigned int cipher_len = cipher_text.length();
    ClassicalType decrypted = "";
    decrypted.reserve(cipher_len);
    

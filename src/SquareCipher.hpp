@@ -1,3 +1,6 @@
+/*
+ * Introduire les langues : Français et anglais.
+ */
 #ifndef SQUARECIPHER_HPP
 #define	SQUARECIPHER_HPP
 
@@ -14,6 +17,8 @@ public:
    typedef std::pair<unsigned char, unsigned char> Coordinates;
    typedef std::vector<ClassicalType> Grid;
 
+   SquareCipher(); 
+   
    virtual const ClassicalType encode(const ClassicalType &) = 0;
    virtual const ClassicalType decode(const ClassicalType &) = 0;
 

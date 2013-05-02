@@ -2,20 +2,19 @@
 
 #include "Tools.hpp"
 
-#include "BadKeyLength.hpp"
+#include "exceptions/BadKeyLength.hpp"
+#include "exceptions/EmptyKey.hpp"
 
 // La clé doit être de 64 bits (8 octets).
 
 void DES::setKey(const BytesContainer &key)
 {
-   if(key.size() == 8)
-   {
-      this->key = key;
-   }
-   else
+   if(key.size() != 8)
    {
       throw BadKeyLength("The key must be 8 bytes length.", key.size());
    }
+   
+   this->key = key;
 }
 
 DES::UInt64Container DES::getKeySchedule()
@@ -110,6 +109,11 @@ uint64_t DES::F(const uint64_t &data, const uint64_t &subkey) const
 
 const DES::BytesContainer DES::encode(const BytesContainer &clear_text)
 {
+   if(key.empty())
+   {
+      throw EmptyKey("Your key is not set.");
+   }
+   
    // On ajoute des 0x00 pour avoir un multiple de 8 octets.
    BytesContainer full_text(clear_text);
    unsigned char rest = clear_text.size() % 8;
@@ -169,6 +173,11 @@ const DES::BytesContainer DES::encode(const BytesContainer &clear_text)
 
 const DES::BytesContainer DES::decode(const BytesContainer &cipher_text)
 {
+   if(key.empty())
+   {
+      throw EmptyKey("Your key is not set.");
+   }
+   
    BytesContainer decrypted;
 
    return decrypted;

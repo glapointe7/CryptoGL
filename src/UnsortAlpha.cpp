@@ -2,7 +2,8 @@
 #include "UnsortAlpha.hpp"
 
 #include "Tools.hpp"
-#include "EmptyKey.hpp"
+#include "exceptions/EmptyKey.hpp"
+#include "exceptions/BadChar.hpp"
 
 UnsortAlpha::UnsortAlpha()
 {
@@ -11,10 +12,16 @@ UnsortAlpha::UnsortAlpha()
 
 void UnsortAlpha::setKey(const std::string key)
 {
-   if(key.empty())
+   if (key.empty())
    {
       throw EmptyKey("Tour key should not be empty or not set.");
    }
+
+   if (badAlphaFound(key))
+   {
+      throw BadChar("Your key contains at least one character that is not in your alphabet.");
+   }
+
    this->key = key;
 }
 
@@ -22,6 +29,11 @@ void UnsortAlpha::setKey(const std::string key)
 
 void UnsortAlpha::setHorizontalAlpha()
 {
+   if (key.empty())
+   {
+      throw EmptyKey("Your key is not set.");
+   }
+   
    unsort_alpha = removeRepeatedLetters(key + alpha);
 }
 
@@ -30,6 +42,11 @@ void UnsortAlpha::setHorizontalAlpha()
 
 void UnsortAlpha::setVerticalAlpha()
 {
+   if (key.empty())
+   {
+      throw EmptyKey("Your key is not set.");
+   }
+
    const ClassicalType new_key(removeRepeatedLetters(key));
    const ClassicalType str(removeRepeatedLetters(new_key + alpha));
    const unsigned int key_len = new_key.length();
@@ -53,7 +70,7 @@ const UnsortAlpha::ClassicalType UnsortAlpha::encode(const ClassicalType &clear_
    ClassicalType crypted = "";
    crypted.reserve(clear_text.length());
 
-   for (auto c : clear_text)
+   for (const auto c : clear_text)
    {
       crypted += unsort_alpha[alpha.find(c)];
    }
@@ -68,7 +85,7 @@ const UnsortAlpha::ClassicalType UnsortAlpha::decode(const ClassicalType &cipher
    ClassicalType decrypted = "";
    decrypted.reserve(cipher_text.length());
 
-   for (auto c : cipher_text)
+   for (const auto c : cipher_text)
    {
       decrypted += alpha[unsort_alpha.find(c)];
    }

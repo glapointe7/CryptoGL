@@ -1,11 +1,10 @@
 
 #include "Hill.hpp"
-#include "EmptyMatrix.hpp"
-#include "MatrixNotSquare.hpp"
-#include "MatrixKeyNotReversible.hpp"
-#include "MathematicalTools.hpp" // GCD
-
-#include <iostream>
+#include "exceptions/EmptyMatrix.hpp"
+#include "exceptions/MatrixNotSquare.hpp"
+#include "exceptions/MatrixKeyNotReversible.hpp"
+#include "MathematicalTools.hpp"
+#include "exceptions/EmptyKey.hpp" // GCD
 
 void Hill::setKey(const Matrice &key)
 {
@@ -17,11 +16,11 @@ void Hill::setKey(const Matrice &key)
    }
    catch (EmptyMatrix & EM)
    {
-      std::cout << EM.what();
+      throw EM.what();
    }
    catch (MatrixNotSquare &MNS)
    {
-      std::cout << MNS.what();
+      throw MNS.what();
    }
 
    // La clé doit être inversible.
@@ -29,16 +28,19 @@ void Hill::setKey(const Matrice &key)
    {
       throw MatrixKeyNotReversible("Your matrix key should be reversible to be able to decode the message.");
    }
-   else
-   {
-      this->key = M;
-   }
+   
+   this->key = M;
 }
 
 // Exécute l'encodage / décodage de data avec la clé K.
 
 const Hill::ClassicalType Hill::process(const ClassicalType &data, const Matrix &K)
 {
+   if(key.getMatrix().empty())
+   {
+      throw EmptyKey("The matrix key is not set.");
+   }
+   
    const uint32_t key_dim = key.getDimension();
    const uint32_t data_len = data.length();
    ClassicalType message = "";

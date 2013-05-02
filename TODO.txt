@@ -3,3 +3,15 @@ Encodage / Décodage Rabbit ne renvoie pas la bonne réponse.
 Coder le decode de DES.
 
 Régler le problème du LITTLE ENDIAN dans l'encodage MD5.
+
+Coder le save et load de SymmetricCipher.
+
+EXCEPTIONS :
+
+   1. BadChar : devrait avoir un 2e paramètre recevant le mauvais caractère trouvé.
+
+   2. MatrixKeyNotReversible : 2e paramètre indiquant le déterminant de la matrice en cours.
+
+   3. MatrixOutOfRange : 2e paramètre indiquant les coordonnées erronées et un 3e paramètre pour la dimension en cours.
+
+   4. BadLengthKey : 2e paramètre indiquant la longueur donnée et un 3e indiquant le range de la longueur demandée.

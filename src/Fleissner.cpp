@@ -5,11 +5,6 @@
 #include <time.h>
 #include <vector>
 
-Fleissner::Fleissner()
-{
-   setAlpha("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!,:;?_-'\"/*+=()[]{}%$#");
-}
-
 // La clé correspond au masque, c'est-à-dire les coordonnées de chaque trous du masque.
 
 void Fleissner::setKey(const std::vector<Coordinates> key)
@@ -91,7 +86,7 @@ bool Fleissner::checkMask(std::vector<Coordinates> &coords) const
 // Remplit le texte clair par des caractères au hasard afin d'obtenir 
 // un multiple du carré de grid_dim.
 
-void Fleissner::fillWithRandomChars(ClassicalType &text)
+/*void Fleissner::fillWithRandomChars(ClassicalType &text)
 {
    unsigned int fillers = text.length() % (grid_dim * grid_dim);
    unsigned short alpha_len = alpha.length() + 1;
@@ -102,7 +97,7 @@ void Fleissner::fillWithRandomChars(ClassicalType &text)
       unsigned short rnd_alpha_pos = rand() % alpha_len;
       text += alpha[rnd_alpha_pos];
    }
-}
+}*/
 
 // Encode un texte avec la grille tournante de Fleissner.
 
@@ -115,8 +110,8 @@ const Fleissner::ClassicalType Fleissner::encode(const ClassicalType &clear_text
    // Si le masque est valide.
    if (checkMask(coords) == true)
    {
-      ClassicalType full_text(clear_text);
-      fillWithRandomChars(full_text);
+      ClassicalType full_text(appendChars(clear_text, dim, 'X'));
+      //fillWithRandomChars(full_text);
 
       // On réserve l'espace selon grid_dim pour la grille.
       std::vector<std::string> grid;

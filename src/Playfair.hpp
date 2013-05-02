@@ -9,8 +9,6 @@
 class Playfair : public SquareCipher
 {
 public:
-   Playfair();
-
    virtual const ClassicalType encode(const ClassicalType &);
    virtual const ClassicalType decode(const ClassicalType &);
 };

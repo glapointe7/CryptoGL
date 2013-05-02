@@ -26,11 +26,12 @@ public:
    
    void eraseBadCharacters(ClassicalType &) const;
    
-   void setAlpha(const ClassicalType &letters);
+   void setAlpha(const ClassicalType &);
    const ClassicalType getAlpha() const;
 
 protected: 
    const ClassicalType appendChars(const ClassicalType &, const uint32_t, const char);
+   const char badAlphaFound(const ClassicalType &) const;
    
    ClassicalType alpha;
 };

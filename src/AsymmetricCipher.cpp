@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-AsymmetricCipher::Numbers 
+AsymmetricCipher::UInt64Container 
 AsymmetricCipher::getPublicKey() const
 {
    return public_key;
@@ -23,7 +23,7 @@ std::string AsymmetricCipher::hexDigest(const BytesContainer &bytes)
 }
 
 // Transforme le vecteur d'entiers en une string d'entiers.
-std::string AsymmetricCipher::toString(const Numbers &numbers)
+std::string AsymmetricCipher::toString(const UInt64Container &numbers)
 {
    std::string str("");
    str.reserve(3 * numbers.size());

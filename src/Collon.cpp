@@ -1,13 +1,12 @@
 
 #include "Collon.hpp"
+#include "exceptions/BadLength.hpp"
+#include "MathematicalTools.hpp"
+#include "exceptions/BadGridDimension.hpp"
+#include "exceptions/EmptyKey.hpp"
 
-#include <utility>
-
-Collon::Collon()
-{
-   setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
-}
-
+// La longueur doit être entre 1 et la longueur du texte.
+// BadLength ???
 void Collon::setBlockLength(const unsigned int series)
 {
    block_len = series;
@@ -16,6 +15,21 @@ void Collon::setBlockLength(const unsigned int series)
 const Collon::ClassicalType Collon::encode(const ClassicalType &clear_text)
 {
    const unsigned int clear_len = clear_text.length();
+   if(block_len <= 0 || block_len > clear_len)
+   {
+      throw BadLength("The block length you specified should be between 1 and the length of your message.");
+   }
+   
+   if(key.empty())
+   {
+      throw EmptyKey("You have to set the key before encoding your message.");
+   }
+   
+   if(!isPerfectSquare(alpha.size()))
+   {
+      throw BadGridDimension("The length of your alphabet should be a perfect square.");
+   }
+   
    std::string line1 = "";
    line1.reserve(clear_len);
    std::string line2(line1);
@@ -27,7 +41,7 @@ const Collon::ClassicalType Collon::encode(const ClassicalType &clear_text)
 
    // Chaque caractères situé en (x,y) est encodé par un bigramme AB tel que
    // A = (a,y) et B = (x,b).
-   for (auto c : clear_text)
+   for (const auto c : clear_text)
    {
       const auto coords = getCharCoordinates(c, grid);
 
@@ -50,6 +64,21 @@ const Collon::ClassicalType Collon::decode(const ClassicalType &cipher_text)
 {
    const unsigned int cipher_len = cipher_text.length();
    const unsigned int line_len = cipher_len >> 1;
+   if(block_len <= 0 || block_len > line_len)
+   {
+      throw BadLength("The block length you specified should be between 1 and the half length of your message.");
+   }
+   
+   if(key.empty())
+   {
+      throw EmptyKey("You have to set the key before decoding your message.");
+   }
+   
+   if(!isPerfectSquare(alpha.size()))
+   {
+      throw BadGridDimension("The length of your alphabet should be a perfect square.");
+   }
+   
    ClassicalType decrypted = "";
    decrypted.reserve(line_len);
    std::string line1 = "";

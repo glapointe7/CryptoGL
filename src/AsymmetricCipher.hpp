@@ -7,34 +7,34 @@
 #include <string>
 #include <vector>
 
-class AsymmetricCipher : public Cipher<std::vector<unsigned long>, std::vector<unsigned char> >
+class AsymmetricCipher : public Cipher<std::vector<uint64_t>, std::vector<unsigned char> >
 {
    // Hide Warning : "hides overloaded virtual function [-Woverloaded-virtual]"
    using Cipher::decode;
    
 public:
    
-   typedef std::vector<unsigned long> Numbers;
+   typedef std::vector<uint64_t> UInt64Container;
    typedef std::vector<unsigned char> BytesContainer;
    
-   virtual const Numbers encode(const BytesContainer &) = 0;
-   virtual const BytesContainer decode(const Numbers &) = 0;
+   virtual const UInt64Container encode(const BytesContainer &) = 0;
+   virtual const BytesContainer decode(const UInt64Container &) = 0;
    
-   Numbers getPublicKey() const;
+   UInt64Container getPublicKey() const;
    virtual void setPublicKey() = 0;
-   virtual void setPrivateKey(const Numbers &) = 0;
+   virtual void setPrivateKey(const UInt64Container &) = 0;
    
    static void save(const std::string &, const std::string &);
    static std::string load(const std::string &);
    
    // Pour obtenir les octets sous forme d'une chaîne hexadécimale.
    static std::string hexDigest(const BytesContainer &);
-   static std::string toString(const Numbers &);
+   static std::string toString(const UInt64Container &);
    static BytesContainer toBytes(const std::string &);
    
 protected:
-   Numbers public_key;
-   Numbers private_key;
+   UInt64Container public_key;
+   UInt64Container private_key;
 };
 
 #endif

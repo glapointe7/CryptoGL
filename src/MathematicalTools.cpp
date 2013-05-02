@@ -1,7 +1,7 @@
 #include "MathematicalTools.hpp"
 
 #include <cmath>
-#include "Exception.hpp"
+#include "exceptions/Exception.hpp"
 
 // Retourne PGCD(a,b).
 
@@ -89,4 +89,21 @@ uint64_t getLegendreSymbol(const uint64_t x, const uint64_t e, const uint64_t n)
    }
 
    return a;
+}
+
+// Tout carré parfait en base 16 se termine par 0,1,4 ou 9.
+bool isPerfectSquare(const uint32_t value)
+{
+   const uint32_t h = value & 0xF; 
+   if (h > 9)
+   {
+      return false;
+   }
+   
+   if (h != 2 && h != 3 && h != 5 && h != 6 && h != 7 && h != 8)
+   {
+      const uint32_t t = static_cast<uint32_t>(floor(sqrt(static_cast<double>(value)) + 0.5));
+      return value == t * t;
+   }
+   return 0;
 }

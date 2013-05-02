@@ -22,7 +22,7 @@ public:
    static void save(const std::string &, const BytesContainer &);
    static BytesContainer load(const std::string &);
 
-   static std::string hexDigest(const BytesContainer &);
+   static const std::string hexDigest(const BytesContainer &);
    static const BytesContainer getBytesFromString(const std::string &);
    static const std::string getStringFromBytes(const BytesContainer &);
 

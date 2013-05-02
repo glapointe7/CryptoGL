@@ -24,7 +24,7 @@ Transposition::readFinalTable(const std::vector<ClassicalType>& s_table) const
 {
    ClassicalType data = "";
    data.reserve(s_table.size() * key.length());
-   for (auto str : s_table)
+   for (const auto str : s_table)
    {
       data += str;
    }
@@ -60,7 +60,7 @@ Transposition::swapColumnsDecode(const std::map<char, unsigned int>& sorted_key)
    {
       std::string row(key_len, 'A');
       unsigned int j = 0;
-      for (auto pair : sorted_key)
+      for (const auto pair : sorted_key)
       {
          row[key.find(pair.first)] = table[i][j];
          j++;
@@ -82,7 +82,7 @@ Transposition::swapColumnsEncode(const std::map<char, unsigned int>& sorted_key)
    {
       std::string row;
       row.reserve(key_len);
-      for (auto pair : sorted_key)
+      for (const auto pair : sorted_key)
       {
          row += table[i][pair.second];
       }

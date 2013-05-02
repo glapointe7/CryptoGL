@@ -1,13 +1,13 @@
 
 #include "Delastelle.hpp"
 
+#include "exceptions/BadLength.hpp"
+#include "MathematicalTools.hpp"
+#include "exceptions/BadGridDimension.hpp"
+#include "exceptions/EmptyKey.hpp"
+
 #include <vector>
 #include <utility>
-
-Delastelle::Delastelle()
-{
-   setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
-}
 
 void Delastelle::setBlockLength(const unsigned int block_len)
 {
@@ -16,14 +16,24 @@ void Delastelle::setBlockLength(const unsigned int block_len)
 
 const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_text)
 {
-   ClassicalType full_text(clear_text);
-   const unsigned int rest = clear_text.length() % block_len;
-   if(rest != 0)
+   if(block_len <= 0 || block_len > clear_text.length())
    {
-      full_text.append(block_len - rest, 'X');
+      throw BadLength("The block length you specified should be between 1 and the length of your message.");
    }
+   
+   if(key.empty())
+   {
+      throw EmptyKey("You have to set the key before encoding your message.");
+   }
+   
+   if(!isPerfectSquare(alpha.size()))
+   {
+      throw BadGridDimension("The length of your alphabet should be a perfect square.");
+   }
+   
+   ClassicalType full_text(appendChars(clear_text, block_len, 'X'));
    const unsigned int clear_len = full_text.length();
-
+   
    // Prendre chaque bloc de block_len caractères.
    Grid block;
    for (unsigned int i = 0; i < clear_len; i += block_len)
@@ -97,6 +107,21 @@ const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_te
 const Delastelle::ClassicalType Delastelle::decode(const ClassicalType &cipher_text)
 {
    const unsigned int cipher_len = cipher_text.length();
+   if(block_len <= 0 || block_len > cipher_len)
+   {
+      throw BadLength("The block length you specified should be between 1 and the length of your message.");
+   }
+   
+   if(key.empty())
+   {
+      throw EmptyKey("You have to set the key before encoding your message.");
+   }
+   
+   if(!isPerfectSquare(alpha.size()))
+   {
+      throw BadGridDimension("The length of your alphabet should be a perfect square.");
+   }
+   
    ClassicalType decrypted = "";
    decrypted.reserve(cipher_len);
    

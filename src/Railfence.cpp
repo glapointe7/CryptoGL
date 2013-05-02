@@ -1,10 +1,16 @@
 #include "Railfence.hpp"
+#include "exceptions/BadKeyLength.hpp"
 
 #include <string>
 #include <utility>
 
 void Railfence::setKey(const unsigned int key)
 {
+   if(key == 0)
+   {
+      throw BadKeyLength("Your key have to be greater than zero.", 0);
+   }
+   
    this->key = key;
 }
 

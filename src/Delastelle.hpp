@@ -8,8 +8,6 @@
 class Delastelle : public SquareCipher
 {
 public:
-   Delastelle();
-   
    const ClassicalType encode(const ClassicalType &) final;
    const ClassicalType decode(const ClassicalType &) final;
    
