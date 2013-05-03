@@ -22,23 +22,22 @@ set(SRC
 	Transposition.hpp Transposition.cpp
 
    exceptions/Exception.hpp
-   exceptions/BadAlpha.hpp exceptions/BadAlpha.cpp
-   exceptions/BadLength.hpp exceptions/BadLength.cpp
-   exceptions/BadKey.hpp exceptions/BadKey.cpp
+   exceptions/BadAlpha.hpp
+   exceptions/BadLength.hpp
+   exceptions/BadKey.hpp
    exceptions/BadKeyLength.hpp exceptions/BadKeyLength.cpp
-   exceptions/BadChar.hpp exceptions/BadChar.cpp
-   exceptions/EmptyAlpha.hpp exceptions/EmptyAlpha.cpp
-   exceptions/EmptyKey.hpp exceptions/EmptyKey.cpp
-   exceptions/MatrixKeyNotReversible.hpp exceptions/MatrixKeyNotReversible.cpp
-   exceptions/BadMatrix.hpp exceptions/BadMatrix.cpp
-   exceptions/EmptyMatrix.hpp exceptions/EmptyMatrix.cpp
-   exceptions/MatrixNotSquare.hpp exceptions/MatrixNotSquare.cpp
-   exceptions/MatrixOutOfRange.hpp exceptions/MatrixOutOfRange.cpp
-   exceptions/EmptyGridKey.hpp exceptions/EmptyGridKey.cpp
-   exceptions/BadGridDimension.hpp exceptions/BadGridDimension.cpp
-   exceptions/KeyNotSuperIncreasing.hpp exceptions/KeyNotSuperIncreasing.cpp
-   exceptions/IntegersNotCoprime.hpp exceptions/IntegersNotCoprime.cpp
-   exceptions/BadModulo.hpp exceptions/BadModulo.cpp
+   exceptions/BadChar.hpp
+   exceptions/EmptyAlpha.hpp
+   exceptions/EmptyKey.hpp
+   exceptions/MatrixKeyNotReversible.hpp
+   exceptions/BadMatrix.hpp
+   exceptions/EmptyMatrix.hpp
+   exceptions/MatrixNotSquare.hpp
+   exceptions/MatrixOutOfRange.hpp
+   exceptions/EmptyGridKey.hpp
+   exceptions/BadGridDimension.hpp
+   exceptions/IntegersNotCoprime.hpp
+   exceptions/BadModulo.hpp
 	
 	Adfgvx.hpp Adfgvx.cpp
 	Collon.hpp Collon.cpp

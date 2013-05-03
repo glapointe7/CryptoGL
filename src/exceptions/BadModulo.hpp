@@ -8,7 +8,7 @@ class BadModulo : public Exception
 {
 public:
    BadModulo() {}
-   BadModulo(const std::string &text) { message = text; }
+   BadModulo(const std::string &text) : Exception(text) {}
 };
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Interface pour la gestion des exceptions.
+ * Interface for exceptions handler.
  */
 #ifndef EXCEPTION_HPP
 #define EXCEPTION_HPP
@@ -16,7 +16,7 @@ public:
    const std::string what() const noexcept { return message; };
    
 protected:
-   std::string message;
+   std::string message = "";
 };
 
 #endif

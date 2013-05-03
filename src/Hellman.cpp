@@ -3,7 +3,6 @@
 #include "MathematicalTools.hpp"
 #include "Tools.hpp"
 #include "converterTools.hpp"
-#include "exceptions/KeyNotSuperIncreasing.hpp"
 #include "exceptions/IntegersNotCoprime.hpp"
 #include "exceptions/BadModulo.hpp"
 

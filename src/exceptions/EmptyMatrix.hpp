@@ -8,7 +8,7 @@ class EmptyMatrix : public BadMatrix
 {
 public:
    EmptyMatrix() {}
-   EmptyMatrix(const std::string &text) { message = text; }
+   EmptyMatrix(const std::string &text) : BadMatrix(text) {}
 };
 
 #endif

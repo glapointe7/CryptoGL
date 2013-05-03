@@ -8,7 +8,7 @@ class BadKey : public Exception
 {
 public:
    BadKey() {}
-   BadKey(const std::string &); 
+   BadKey(const std::string &text) : Exception(text) {}
    virtual ~BadKey() {};
 };
 

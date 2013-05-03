@@ -8,7 +8,7 @@ class MatrixOutOfRange : public BadMatrix
 {
 public:
    MatrixOutOfRange() {}
-   MatrixOutOfRange(const std::string &text) { message = text; }
+   MatrixOutOfRange(const std::string &text) : BadMatrix(text) {}
 };
 
 #endif

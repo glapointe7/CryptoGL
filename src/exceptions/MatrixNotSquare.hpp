@@ -8,7 +8,7 @@ class MatrixNotSquare : public BadMatrix
 {
 public:
    MatrixNotSquare() {}
-   MatrixNotSquare(const std::string &text) { message = text; }
+   MatrixNotSquare(const std::string &text) : BadMatrix(text) {}
 };
 
 #endif

@@ -5,8 +5,8 @@
 #include "exceptions/BadGridDimension.hpp"
 #include "exceptions/EmptyKey.hpp"
 
-// La longueur doit être entre 1 et la longueur du texte.
-// BadLength ???
+// Series length have to be between 1 and text length.
+
 void Collon::setBlockLength(const unsigned int series)
 {
    block_len = series;

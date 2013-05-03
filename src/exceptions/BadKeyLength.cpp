@@ -8,7 +8,7 @@ BadKeyLength::BadKeyLength(const std::string &text, const uint32_t len)
    ss << text
       << " Your key length is : "
       << len
-      << "byte(s)";
+      << "byte(s).";
    
    message = ss.str();
 }

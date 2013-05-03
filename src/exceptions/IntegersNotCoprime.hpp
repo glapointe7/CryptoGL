@@ -8,7 +8,7 @@ class IntegersNotCoprime : public Exception
 {
 public:
    IntegersNotCoprime() {}
-   IntegersNotCoprime(const std::string &text) { message = text; }
+   IntegersNotCoprime(const std::string &text) : Exception(text) {}
 };
 
 #endif

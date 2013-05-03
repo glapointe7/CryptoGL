@@ -10,8 +10,6 @@
 #include "exceptions/EmptyAlpha.hpp"
 #include "exceptions/MultipleChar.hpp"
 
-const StringCipher::ClassicalType StringCipher::ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
 void StringCipher::save(const std::string &filename, const ClassicalType &data)
 {
    try

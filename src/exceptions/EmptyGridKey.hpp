@@ -8,7 +8,7 @@ class EmptyGridKey : public EmptyKey
 {
 public:
    EmptyGridKey() {}
-   EmptyGridKey(const std::string &text) { message = text; }
+   EmptyGridKey(const std::string &text) : EmptyKey(text) {}
 };
 
 #endif

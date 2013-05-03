@@ -8,7 +8,7 @@ class MatrixKeyNotReversible : public BadKey
 {
 public:
    MatrixKeyNotReversible() {}
-   MatrixKeyNotReversible(const std::string &text) { message = text; }
+   MatrixKeyNotReversible(const std::string &text) : BadKey(text) {}
 };
 
 #endif

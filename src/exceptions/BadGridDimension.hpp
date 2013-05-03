@@ -8,7 +8,7 @@ class BadGridDimension : public Exception
 {
 public:
    BadGridDimension() {}
-   BadGridDimension(const std::string &text) { message = text; }
+   BadGridDimension(const std::string &text) : Exception(text) {}
 };
 
 #endif

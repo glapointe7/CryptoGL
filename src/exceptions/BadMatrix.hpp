@@ -8,7 +8,7 @@ class BadMatrix : public Exception
 {
 public:
    BadMatrix() {}
-   BadMatrix(const std::string &text) { message = text; }
+   BadMatrix(const std::string &text) : Exception(text) {}
    virtual ~BadMatrix() {}
 };
 

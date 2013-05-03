@@ -3,13 +3,15 @@
 #define	HELLMAN_HPP
 
 #include "AsymmetricCipher.hpp"
+#include "exceptions/BadKey.hpp"
 
 #include <vector>
 
 class Hellman : public AsymmetricCipher
-{
-public:
+{   
+   using KeyNotSuperIncreasing = BadKey;
    
+public:   
    const UInt64Container encode(const BytesContainer &) final;
    const BytesContainer decode(const UInt64Container &) final;
    

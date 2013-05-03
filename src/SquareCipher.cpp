@@ -9,7 +9,7 @@
 
 SquareCipher::SquareCipher()
 {
-   setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
+   setAlpha(String::grid_uppercase_fr);
 }
 
 void SquareCipher::setKey(const Key &key)

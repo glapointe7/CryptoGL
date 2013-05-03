@@ -8,7 +8,7 @@ class BadChar : public BadAlpha
 {
 public:
    BadChar() {}
-   BadChar(const std::string &text) { message = text; }
+   BadChar(const std::string &text) : BadAlpha(text) {}
 };
 
 #endif

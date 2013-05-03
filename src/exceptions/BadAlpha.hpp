@@ -8,7 +8,7 @@ class BadAlpha : public Exception
 {
 public:
    BadAlpha() {}
-   BadAlpha(const std::string &text) { message = text; }
+   BadAlpha(const std::string &text) : Exception(text) {}
    virtual ~BadAlpha() {};
 };
 

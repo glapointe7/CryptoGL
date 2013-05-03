@@ -8,7 +8,7 @@ class EmptyKey : public BadKey
 {
 public:
    EmptyKey() {}
-   EmptyKey(const std::string &text) { message = text; }
+   EmptyKey(const std::string &text) : BadKey(text) {}
 };
 
 #endif
