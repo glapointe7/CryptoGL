@@ -53,9 +53,10 @@ public:
          throw EmptyKey("Your key is empty.");
       }
       
-      if(badAlphaFound(key))
+      const char c = badAlphaFound(key);
+      if(c != 0)
       {
-         throw BadChar("Your key contains at least one character that is not in your alphabet.");
+         throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
       }
       
       this->key = key;
@@ -121,9 +122,10 @@ public:
          throw EmptyKey("Your key is empty.");
       }
       
-      if(badAlphaFound(v_key))
+      const char c = badAlphaFound(v_key);
+      if(c != 0)
       {
-         throw BadChar("Your key contains at least one character that is not in your alphabet.");
+         throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
       }
       
       const unsigned int key_length = v_key.length();

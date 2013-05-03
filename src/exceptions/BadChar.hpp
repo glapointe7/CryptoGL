@@ -7,8 +7,11 @@
 class BadChar : public BadAlpha
 {
 public:
+
    BadChar() {}
-   BadChar(const std::string &text) : BadAlpha(text) {}
+
+   BadChar(const std::string &text, const char c)
+      : BadAlpha(text + " The bad character is : '" + c + "'.") {}
 };
 
 #endif

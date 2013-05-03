@@ -17,7 +17,7 @@ public:
    void setGridKey(const Grid &grid);
 
 private:
-   static const bool is6X6(const Grid &grid);
+   static const uint8_t is6X6(const Grid &grid);
    
    // Grille 6X6 de caractères A-Z, 0-9 servant de 2e clé.
    Grid grid_key;

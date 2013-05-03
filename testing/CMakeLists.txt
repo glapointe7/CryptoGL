@@ -6,6 +6,13 @@ set(testing
 	main.cpp
 	CaesarTest.hpp
    VigenereTest.hpp
+   RozierTest.hpp
+   BeaufortTest.hpp
+   BeaufortGermanTest.hpp
+   PlayfairTest.hpp
+   PolybeTest.hpp
+   CollonTest.hpp
+   AdfgvxTest.hpp
 )
 
 #add_library(Cryptology ${testing})

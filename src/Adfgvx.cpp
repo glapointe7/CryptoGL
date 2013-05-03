@@ -12,12 +12,9 @@ const std::string Adfgvx::code = "ADFGVX";
 
 Adfgvx::Adfgvx()
 {
-   setAlpha("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+   setAlpha(String::uppercase_digits);
 }
 
-// La grille ne doit pas être vide.
-// La grille doit être de 6 X 6.
-// La grille ne doit pas contenir d'autres caractères que ceux d'alpha.
 void Adfgvx::setGridKey(const Grid &grid)
 {
    if(grid.empty())
@@ -25,16 +22,18 @@ void Adfgvx::setGridKey(const Grid &grid)
       throw EmptyGridKey("Your grid key is empty.");
    }
    
-   if(!is6X6(grid))
+   const uint8_t dimension = is6X6(grid);
+   if(dimension != 6)
    {
-      throw BadGridDimension("Your grid key should be of dimension 6 by 6.");
+      throw BadGridDimension("Your grid key should be of dimension 6 by 6.", dimension);
    }
    
    for(const auto row : grid)
    {
-      if(badAlphaFound(row))
+      const char c = badAlphaFound(row);
+      if(c != 0)
       {
-         throw BadChar("At least one character in your grid is not in your alphabet.");
+         throw BadChar("At least one character in your grid is not in your alphabet.", c);
       }
    }
    
@@ -94,20 +93,22 @@ const Adfgvx::ClassicalType Adfgvx::decode(const ClassicalType &cipher_text)
 }
 
 // Vérifie si la grille est de dimension 6X6.
-const bool Adfgvx::is6X6(const Grid &grid)
+const uint8_t Adfgvx::is6X6(const Grid &grid)
 {
-   if(grid.size() != 6)
+   const uint8_t grid_size = grid.size();
+   if(grid_size != 6)
    {
-      return false;
+      return grid_size;
    }
    
    for(const auto row : grid)
    {
-      if(row.size() != 6)
+      const uint8_t row_size = row.size();
+      if(row_size != 6)
       {
-         return false;
+         return row_size;
       }
    }
    
-   return true;
+   return grid_size;
 }

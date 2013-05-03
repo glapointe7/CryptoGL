@@ -1,9 +1,8 @@
 
 #include "Delastelle.hpp"
 
-#include "exceptions/BadLength.hpp"
+#include "exceptions/BadAlphaLength.hpp"
 #include "MathematicalTools.hpp"
-#include "exceptions/BadGridDimension.hpp"
 #include "exceptions/EmptyKey.hpp"
 
 #include <vector>
@@ -18,7 +17,7 @@ const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_te
 {
    if(block_len <= 0 || block_len > clear_text.length())
    {
-      throw BadLength("The block length you specified should be between 1 and the length of your message.");
+      throw Exception("The block length you specified should be between 1 and the length of your message.");
    }
    
    if(key.empty())
@@ -26,9 +25,9 @@ const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_te
       throw EmptyKey("You have to set the key before encoding your message.");
    }
    
-   if(!isPerfectSquare(alpha.size()))
+   if(!isPerfectSquare(alpha.length()))
    {
-      throw BadGridDimension("The length of your alphabet should be a perfect square.");
+      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
    }
    
    ClassicalType full_text(appendChars(clear_text, block_len, 'X'));
@@ -48,10 +47,10 @@ const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_te
    std::vector<std::pair<std::vector<unsigned char>, std::vector<unsigned char> > > coords_block;
 
    // Sous chaque lettre, on note les coordonnées des lettres verticalement.
-   for (auto str : block)
+   for (const auto str : block)
    {
       std::vector<unsigned char> X, Y;
-      for (auto c : str)
+      for (const auto c : str)
       {
          const auto coords = getCharCoordinates(c, grid);
          X.push_back(coords.first);
@@ -63,7 +62,7 @@ const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_te
    // Vecteur de toutes les coordonnées chiffrées.
    std::vector<std::pair<unsigned char, unsigned char> > encoded_coords;
 
-   for (auto XY : coords_block)
+   for (const auto XY : coords_block)
    {
       if ((block_len % 2) == 0)
       {
@@ -109,7 +108,7 @@ const Delastelle::ClassicalType Delastelle::decode(const ClassicalType &cipher_t
    const unsigned int cipher_len = cipher_text.length();
    if(block_len <= 0 || block_len > cipher_len)
    {
-      throw BadLength("The block length you specified should be between 1 and the length of your message.");
+      throw Exception("The block length you specified should be between 1 and the length of your message.");
    }
    
    if(key.empty())
@@ -117,9 +116,9 @@ const Delastelle::ClassicalType Delastelle::decode(const ClassicalType &cipher_t
       throw EmptyKey("You have to set the key before encoding your message.");
    }
    
-   if(!isPerfectSquare(alpha.size()))
+   if(!isPerfectSquare(alpha.length()))
    {
-      throw BadGridDimension("The length of your alphabet should be a perfect square.");
+      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
    }
    
    ClassicalType decrypted = "";
@@ -127,7 +126,7 @@ const Delastelle::ClassicalType Delastelle::decode(const ClassicalType &cipher_t
    
    const Grid grid(getGrid(key + alpha));
    std::vector<unsigned char > chars_coords;
-   for(auto c : cipher_text)
+   for(const auto c : cipher_text)
    {
       const auto coords = getCharCoordinates(c, grid);
       chars_coords.push_back(coords.second);

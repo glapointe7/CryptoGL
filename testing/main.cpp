@@ -2,39 +2,23 @@
  * Tests automatisés sur les cryptos en place dans le système.
  */
 #include <gtest/gtest.h>
+
 #include "CaesarTest.hpp"
 #include "VigenereTest.hpp"
-//#include "DES.hpp"
-//#include "Rabbit.hpp"
-//#include "FrequenciesAnalysis.hpp"
-//#include "RC4.hpp"
-//#include "Delastelle.hpp"
-//#include "Matrix.hpp"
-//#include "BadMatrix.hpp"
-//#include "Railfence.h"
-//#include "Playfair.h"
-//#include "Polybe.h"
-//#include "Vigenere.hpp"
-//#include "Wolseley.h"
-//#include "StringCipher.h"
-//#include "Tools.h"
-//#include "converterTools.h"
-//#include "Morse.h"
-//#include "MD5.hpp"
-//#include "SHA1.hpp"
-//#include "Adfgvx.hpp"
-//#include "MathematicalTools.hpp"
-//#include <iostream>
+#include "RozierTest.hpp"
+#include "BeaufortTest.hpp"
+#include "BeaufortGermanTest.hpp"
+#include "PlayfairTest.hpp"
+#include "PolybeTest.hpp"
+#include "CollonTest.hpp"
+#include "AdfgvxTest.hpp"
 
 int main(int argc, char **argv)
 {
+   //::testing::GTEST_FLAG(throw_on_failure) = true;
    ::testing::InitGoogleTest(&argc, argv);
    return RUN_ALL_TESTS();
-   /*const std::string text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
-   Caesar *C = new Caesar();
-   C->setAlpha("ABCDEFGHIJKLMNOPQRST");
-   C->setKey(24);
-   std::cout << C->encode(text);*/
+   
    /*Matrix M;
    M.setModulo(29);
    

@@ -1,6 +1,6 @@
 
 #include "Collon.hpp"
-#include "exceptions/BadLength.hpp"
+#include "exceptions/BadAlphaLength.hpp"
 #include "MathematicalTools.hpp"
 #include "exceptions/BadGridDimension.hpp"
 #include "exceptions/EmptyKey.hpp"
@@ -17,7 +17,7 @@ const Collon::ClassicalType Collon::encode(const ClassicalType &clear_text)
    const unsigned int clear_len = clear_text.length();
    if(block_len <= 0 || block_len > clear_len)
    {
-      throw BadLength("The block length you specified should be between 1 and the length of your message.");
+      throw Exception("The block length you specified should be between 1 and the length of your message.");
    }
    
    if(key.empty())
@@ -25,9 +25,9 @@ const Collon::ClassicalType Collon::encode(const ClassicalType &clear_text)
       throw EmptyKey("You have to set the key before encoding your message.");
    }
    
-   if(!isPerfectSquare(alpha.size()))
+   if(!isPerfectSquare(alpha.length()))
    {
-      throw BadGridDimension("The length of your alphabet should be a perfect square.");
+      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
    }
    
    std::string line1 = "";
@@ -66,7 +66,7 @@ const Collon::ClassicalType Collon::decode(const ClassicalType &cipher_text)
    const unsigned int line_len = cipher_len >> 1;
    if(block_len <= 0 || block_len > line_len)
    {
-      throw BadLength("The block length you specified should be between 1 and the half length of your message.");
+      throw Exception("The block length you specified should be between 1 and the half length of your message.");
    }
    
    if(key.empty())
@@ -74,9 +74,9 @@ const Collon::ClassicalType Collon::decode(const ClassicalType &cipher_text)
       throw EmptyKey("You have to set the key before decoding your message.");
    }
    
-   if(!isPerfectSquare(alpha.size()))
+   if(!isPerfectSquare(alpha.length()))
    {
-      throw BadGridDimension("The length of your alphabet should be a perfect square.");
+      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
    }
    
    ClassicalType decrypted = "";

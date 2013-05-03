@@ -17,9 +17,10 @@ void UnsortAlpha::setKey(const std::string key)
       throw EmptyKey("Tour key should not be empty or not set.");
    }
 
-   if (badAlphaFound(key))
+   const char c = badAlphaFound(key);
+   if(c != 0)
    {
-      throw BadChar("Your key contains at least one character that is not in your alphabet.");
+      throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
    }
 
    this->key = key;

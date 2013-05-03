@@ -31,7 +31,7 @@ protected:
 
    Key key;
 
-   // Dimension de la grille carrée.
+   // Dimension of the square grid.
    unsigned int dim;
 };
 

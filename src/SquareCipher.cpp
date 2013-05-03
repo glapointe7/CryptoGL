@@ -7,7 +7,7 @@
 #include "exceptions/BadChar.hpp"
 #include "exceptions/BadGridDimension.hpp"
 
-SquareCipher::SquareCipher()
+SquareCipher::SquareCipher() : dim(5)
 {
    setAlpha(String::grid_uppercase_fr);
 }
@@ -18,30 +18,27 @@ void SquareCipher::setKey(const Key &key)
    {
       throw EmptyKey("The Key should not be empty or not set.");
    }
-   else if(badAlphaFound(key))
+   
+   const char c = badAlphaFound(key);
+   if(c != 0)
    {
-      throw BadChar("Your key contains at least one character that is not in your alphabet.");
+      throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
    }
-   else
-   {
-      this->key = key;
-   }
+      
+   this->key = key;
 }
 
-// La dimension doit être > 0 et non vide.
 void SquareCipher::setGridDimension(const unsigned int dim)
 {
    if(dim <= 0)
    {
-      throw BadGridDimension("The dimension of the grid should be greater than zero.");
+      throw BadGridDimension("The dimension of the grid have to be greater than zero.", dim);
    }
-   else
-   {
-      this->dim = dim;
-   }
+   
+   this->dim = dim;
 }
 
-// Construction de la grille de chiffrement.
+// Construction of the cipher grid.
 
 const SquareCipher::Grid
 SquareCipher::getGrid(const ClassicalType &chars) const
@@ -49,7 +46,7 @@ SquareCipher::getGrid(const ClassicalType &chars) const
    const ClassicalType new_alpha(removeRepeatedLetters(chars));
    Grid grid;
 
-   // Séparation de la chaîne pour former une grille carrée (dim X dim) de caractères.
+   // Split the string to set a square grid of dimension (dim X dim) of chars.
    for (unsigned char i = 0; i < dim; ++i)
    {
       grid.push_back(new_alpha.substr(i * dim, dim));
@@ -58,7 +55,7 @@ SquareCipher::getGrid(const ClassicalType &chars) const
    return grid;
 }
 
-// Retourne les coordonées d'un caractère dans la grille de chiffrement.
+// Return character coordinates from the cipher grid.
 const SquareCipher::Coordinates
 SquareCipher::getCharCoordinates(const char c, const Grid &grid)
 {

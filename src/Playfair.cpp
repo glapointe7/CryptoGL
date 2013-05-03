@@ -1,8 +1,8 @@
 
 #include "Playfair.hpp"
 
-#include "exceptions/BadGridDimension.hpp"
 #include "exceptions/EmptyKey.hpp"
+#include "exceptions/BadAlphaLength.hpp"
 
 #include "MathematicalTools.hpp"
 
@@ -17,9 +17,9 @@ const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
       throw EmptyKey("You have to set the key before encoding your message.");
    }
    
-   if(!isPerfectSquare(alpha.size()))
+   if(!isPerfectSquare(alpha.length()))
    {
-      throw BadGridDimension("The length of your alphabet should be a perfect square.");
+      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
    }
    
    ClassicalType full_text(appendChars(clear_text, 2, 'X'));
@@ -76,7 +76,7 @@ const Playfair::ClassicalType Playfair::decode(const ClassicalType &cipher_text)
    
    if(!isPerfectSquare(alpha.size()))
    {
-      throw BadGridDimension("The length of your alphabet should be a perfect square.");
+      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
    }
    
    const unsigned int cipher_len = cipher_text.length();

@@ -25,7 +25,7 @@ set(SRC
    exceptions/BadAlpha.hpp
    exceptions/BadLength.hpp
    exceptions/BadKey.hpp
-   exceptions/BadKeyLength.hpp exceptions/BadKeyLength.cpp
+   exceptions/BadKeyLength.hpp
    exceptions/BadChar.hpp
    exceptions/EmptyAlpha.hpp
    exceptions/EmptyKey.hpp

@@ -5,6 +5,7 @@
 #include "exceptions/EmptyKey.hpp"
 
 #include "MathematicalTools.hpp"
+#include "exceptions/BadAlphaLength.hpp"
 
 #include <utility> 
 
@@ -17,9 +18,9 @@ const Polybe::ClassicalType Polybe::encode(const ClassicalType &clear_text)
       throw EmptyKey("You have to set the key before encoding your message.");
    }
    
-   if(!isPerfectSquare(alpha.size()))
+   if(!isPerfectSquare(alpha.length()))
    {
-      throw BadGridDimension("The length of your alphabet should be a perfect square.");
+      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
    }
    
    ClassicalType crypted = "";
@@ -50,9 +51,9 @@ const Polybe::ClassicalType Polybe::decode(const ClassicalType &cipher_text)
       throw EmptyKey("You have to set the key before encoding your message.");
    }
    
-   if(!isPerfectSquare(alpha.size()))
+   if(!isPerfectSquare(alpha.length()))
    {
-      throw BadGridDimension("The length of your alphabet should be a perfect square.");
+      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
    }
    
    const unsigned int cipher_len = cipher_text.length();
