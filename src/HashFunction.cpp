@@ -8,10 +8,12 @@ const std::string HashFunction::hexDigest(const BytesContainer &bytes)
 {
    std::stringstream ss;
 
-   for (auto byte : bytes)
+   for (const auto byte : bytes)
    {
-      ss << std::hex << (unsigned int)byte;
-      ss << " ";
+      ss.setf(std::ios::hex, std::ios::basefield);
+      ss.fill('0');
+      ss.width(2);
+      ss << static_cast<uint16_t>(byte);
    }
    
    return ss.str();

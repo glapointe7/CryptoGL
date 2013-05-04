@@ -13,6 +13,10 @@ set(testing
    PolybeTest.hpp
    CollonTest.hpp
    AdfgvxTest.hpp
+   DelastelleTest.hpp
+   RailfenceTest.hpp
+   WolseleyTest.hpp
+   SHA1Test.hpp
 )
 
 #add_library(Cryptology ${testing})

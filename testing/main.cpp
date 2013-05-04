@@ -12,10 +12,13 @@
 #include "PolybeTest.hpp"
 #include "CollonTest.hpp"
 #include "AdfgvxTest.hpp"
+#include "DelastelleTest.hpp"
+#include "RailfenceTest.hpp"
+#include "WolseleyTest.hpp"
+#include "SHA1Test.hpp"
 
 int main(int argc, char **argv)
 {
-   //::testing::GTEST_FLAG(throw_on_failure) = true;
    ::testing::InitGoogleTest(&argc, argv);
    return RUN_ALL_TESTS();
    
