@@ -12,11 +12,11 @@ class Hellman : public AsymmetricCipher
    using KeyNotSuperIncreasing = BadKey;
    
 public:   
-   const UInt64Container encode(const BytesContainer &) final;
-   const BytesContainer decode(const UInt64Container &) final;
+   virtual const UInt64Container encode(const BytesContainer &) final;
+   virtual const BytesContainer decode(const UInt64Container &) final;
    
-   void setPublicKey() final;
-   void setPrivateKey(const UInt64Container &) final;
+   virtual void setPublicKey() final;
+   virtual void setPrivateKey(const UInt64Container &) final;
    
    void setModulo(const uint64_t &mod);
    void setDividend(const uint64_t &div);

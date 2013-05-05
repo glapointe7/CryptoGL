@@ -6,8 +6,6 @@
 
 #include "Cipher.hpp"
 
-#include "String.hpp"
-
 #include <string>
 
 class StringCipher : public Cipher<std::string>
@@ -15,7 +13,7 @@ class StringCipher : public Cipher<std::string>
 public:
    typedef std::string ClassicalType; 
    
-   StringCipher() : alpha(String::uppercase) {}
+   StringCipher();
    virtual ~StringCipher() {}
 
    virtual const ClassicalType encode(const ClassicalType &) = 0;

@@ -2,6 +2,7 @@
 #include "SquareCipher.hpp"
 
 #include "Tools.hpp"
+#include "String.hpp"
 
 #include "exceptions/EmptyKey.hpp"
 #include "exceptions/BadChar.hpp"

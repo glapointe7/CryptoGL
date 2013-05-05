@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "Tools.hpp"
+#include "String.hpp"
 
 Morse::Morse()
 {

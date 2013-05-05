@@ -1,9 +1,8 @@
 cmake_minimum_required (VERSION 2.8)
-project (Cryptology_exe)
 
-# http://stackoverflow.com/questions/6352123/multiple-directories-under-cmake
+# All CPP and HPP source files.
 set(SRC
-	main.cpp
+   main.cpp
 	Cipher.hpp
 
 	StringCipher.hpp StringCipher.cpp
@@ -20,10 +19,11 @@ set(SRC
 	LittleIndian.hpp
 	Tools.hpp Tools.cpp
 	Transposition.hpp Transposition.cpp
+   String.hpp String.cpp
 
    exceptions/Exception.hpp
    exceptions/BadAlpha.hpp
-   exceptions/BadLength.hpp
+   exceptions/BadAlphaLength.hpp
    exceptions/BadKey.hpp
    exceptions/BadKeyLength.hpp
    exceptions/BadChar.hpp
@@ -45,7 +45,7 @@ set(SRC
 	DES.hpp DES.cpp
 	Fleissner.hpp Fleissner.cpp
 	Hellman.hpp Hellman.cpp
-	#Hill.hpp Hill.cpp
+	Hill.hpp Hill.cpp
 	MD5.hpp MD5.cpp
 	SHA1.hpp SHA1.cpp
 	Morse.hpp Morse.cpp
@@ -55,11 +55,11 @@ set(SRC
 	Railfence.hpp Railfence.cpp
 	RC4.hpp RC4.cpp
 	UnsortAlpha.hpp UnsortAlpha.cpp
-	Vigenere.hpp Vigenere.hpp
+	Vigenere.hpp Vigenere.cpp
 	Wolseley.hpp Wolseley.cpp
 )
 
-#add_library(Cryptology ${SRC})
-add_executable(Cryptology ${SRC})
+# Create libcomponants.a with all the source files provided by SRC.
+add_library(componants ${SRC})
 
 

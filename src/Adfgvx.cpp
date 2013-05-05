@@ -2,6 +2,8 @@
 #include "Adfgvx.hpp"
 
 #include "Transposition.hpp"
+#include "String.hpp"
+
 #include "exceptions/EmptyGridKey.hpp"
 #include "exceptions/BadGridDimension.hpp"
 #include "exceptions/BadChar.hpp"

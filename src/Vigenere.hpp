@@ -37,6 +37,8 @@ protected:
       return ClassicalType(1, alpha[(alpha.find(key_pos) - alpha.find(c) + alpha.length()) % alpha.length()]);
    }
 
+   const ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
+   
    ClassicalType key;
    const GetCharFunction charEncode, charDecode;
 
@@ -46,44 +48,10 @@ public:
    Vigenere()
    : charEncode(clearPlusKey), charDecode(clearMinusKey) {}
 
-   void setKey(const Key &key)
-   {
-      if(key.empty())
-      {
-         throw EmptyKey("Your key is empty.");
-      }
-      
-      const char c = badAlphaFound(key);
-      if(c != 0)
-      {
-         throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
-      }
-      
-      this->key = key;
-   }
+   void setKey(const Key &key);
 
-   const ClassicalType encode(const ClassicalType &clear_text)
-   {
-      if(key.empty())
-      {
-         throw EmptyKey("Your key is not set.");
-      }
-      
-      return process(clear_text, charEncode);
-   }
-
-   const ClassicalType decode(const ClassicalType &cipher_text)
-   {
-      if(key.empty())
-      {
-         throw EmptyKey("Your key is not set.");
-      }
-      
-      return process(cipher_text, charDecode);
-   }
-
-private:
-   const ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
+   const ClassicalType encode(const ClassicalType &clear_text);
+   const ClassicalType decode(const ClassicalType &cipher_text);
 };
 
 // Beaufort : CIPHER = -CLEAR + KEY

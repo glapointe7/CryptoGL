@@ -1,4 +1,6 @@
-
+/*
+ * Symmetric cipher abstract class for modern cryptology.
+ */
 #ifndef SYMMETRICCIPHER_HPP
 #define	SYMMETRICCIPHER_HPP
 
@@ -12,6 +14,15 @@ class SymmetricCipher : public Cipher<std::vector<unsigned char>>
 public:
    typedef std::vector<unsigned char> BytesContainer;
 
+   // Useful constant modes for loading / saving data in a file.
+   enum class io_mode : uint8_t 
+   {
+      hex_nospace,
+      hex_space,
+      str,
+      byte
+   };
+   
    virtual ~SymmetricCipher() {}
 
    virtual const BytesContainer encode(const BytesContainer &) = 0;

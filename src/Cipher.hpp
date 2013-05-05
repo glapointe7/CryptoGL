@@ -1,5 +1,5 @@
 /*
- * Interface représentant tous les types de ciphers.
+ * Interface for all cipher types.
  */
 #ifndef CIPHER_H
 #define CIPHER_H
@@ -14,8 +14,7 @@ public:
    virtual ~Cipher() {}
 
    virtual const ReturnType encode(const ParamType &) = 0;
-   virtual const ReturnType decode(const ParamType &) = 0;
+   virtual const ParamType decode(const ReturnType &) = 0;
 };
 
-#endif // CIPHER_H
-
+#endif

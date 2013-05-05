@@ -3,6 +3,7 @@
 #include "MathematicalTools.hpp"
 #include "Tools.hpp"
 #include "converterTools.hpp"
+
 #include "exceptions/IntegersNotCoprime.hpp"
 #include "exceptions/BadModulo.hpp"
 
@@ -18,7 +19,7 @@ void Hellman::setDividend(const uint64_t &dividend)
    this->dividend = dividend;
 }
 
-// Vérifier la super croissance de la suite d'entiers donnée dans la clé privée.
+// Check if the have super increasing terms in the private key set.
 
 void Hellman::setPrivateKey(const UInt64Container &private_key)
 {
@@ -30,24 +31,24 @@ void Hellman::setPrivateKey(const UInt64Container &private_key)
    this->private_key = private_key;
 }
 
-// Vérifier si modulo et coprime sont copremiers.
+// Build the public key.
 
 void Hellman::setPublicKey()
 {
    if (GCD(modulo, dividend) != 1)
    {
-      throw IntegersNotCoprime("The modulo and dividend are not coprime.");
+      throw IntegersNotCoprime("The modulo and dividend have to be coprime.");
    }
    
    if (modulo > dividend)
    {
-      throw BadModulo("Your modulo should be greater than your dividend.");
+      throw BadModulo("Your modulo have to be greater than your dividend.");
    }
    
    const uint64_t sum = std::accumulate(private_key.begin(), private_key.end(), 0);
    if(modulo < sum)
    {
-      throw BadModulo("Your modulo should be greater than the sum of numbers in your private key.");
+      throw BadModulo("Your modulo have to be greater than the sum of numbers in your private key.");
    }
    
    for (const auto number : private_key)
@@ -56,7 +57,7 @@ void Hellman::setPublicKey()
    }
 }
 
-// Utilise l'algorithme Glouton pour retrouver le binaire initial.
+// Use Glouton's algorithm to find the initial binary vector.
 
 void Hellman::executeGlouton(std::vector<bool> &bits, const uint64_t T, const uint32_t i) const
 {
@@ -77,24 +78,23 @@ void Hellman::executeGlouton(std::vector<bool> &bits, const uint64_t T, const ui
    }
 }
 
-const AsymmetricCipher::UInt64Container Hellman::encode(const BytesContainer &clear_text)
+const Hellman::UInt64Container Hellman::encode(const BytesContainer &clear_text)
 {
    UInt64Container crypted;
 
-   // Ayant la clé privée, le modulo et le coprime respectant les conditions,
-   // on peut donc construire la clé publique.
+   // To encode, we need to build the public key.
    setPublicKey();
    const uint32_t block_size = private_key.size();
 
-   // On convertit les octets recueillis en binaire.
-   // Ensuite, on ajoute des 1 jusqu'à l'obtention d'un multiple de block_size.
+   // Converts given bytes into binary vector.
+   // Then, add ones until we get a multiple of block_size.
    std::vector<bool> binary(convertBytesToBinary(clear_text));
    binary.insert(binary.end(), block_size - (binary.size() % block_size), 1);
 
-   // Obtenir la chaîne binaire en blocs de block_size bits.
+   // Split the binary vector into blocks of block_size bits.
    std::vector < std::vector<bool> > bin_blocks(getBlockBinary(binary, block_size));
 
-   // Calculer Somme_{i=0}^{block_size} (block[i] * publi_key[i]).
+   // Calculate Sum_{i=0}^{block_size} (block[i] * public_key[i]).
    for (const auto block : bin_blocks)
    {
       uint32_t i = 0;
@@ -110,9 +110,9 @@ const AsymmetricCipher::UInt64Container Hellman::encode(const BytesContainer &cl
    return crypted;
 }
 
-const AsymmetricCipher::BytesContainer Hellman::decode(const UInt64Container &cipher_text)
+const Hellman::BytesContainer Hellman::decode(const UInt64Container &cipher_text)
 {
-   // On calcule x = coprime^{-1} (mod modulo).
+   // We have to calculate x = dividend^{-1} (mod modulo).
    const uint64_t inv_coprime = getModInverse(dividend, modulo);
 
    std::vector<bool> bits(cipher_text.size() * private_key.size(), 0);

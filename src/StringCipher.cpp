@@ -6,9 +6,15 @@
 #include <sstream>
 #include <algorithm>
 
+#include "String.hpp"
 #include "Tools.hpp"
 #include "exceptions/EmptyAlpha.hpp"
 #include "exceptions/MultipleChar.hpp"
+
+StringCipher::StringCipher()
+{
+   alpha = String::uppercase;
+}
 
 void StringCipher::save(const std::string &filename, const ClassicalType &data)
 {
@@ -91,9 +97,9 @@ StringCipher::appendChars(const ClassicalType &text, const uint32_t mod, const c
 // Retourne 0 si aucun caractère n'est trouvé, sinon renvoie le premier caractère erroné.
 const char StringCipher::badAlphaFound(const ClassicalType &text) const
 {
-   for(auto c : text)
+   for(const auto c : text)
    {
-      if(alpha.find(c) == -1)
+      if(alpha.find(c) == std::string::npos)
       {
          return c;
       }
