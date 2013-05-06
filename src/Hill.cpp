@@ -1,10 +1,12 @@
 
 #include "Hill.hpp"
+
 #include "exceptions/EmptyMatrix.hpp"
 #include "exceptions/MatrixNotSquare.hpp"
 #include "exceptions/MatrixKeyNotReversible.hpp"
+#include "exceptions/EmptyKey.hpp"
+
 #include "MathematicalTools.hpp"
-#include "exceptions/EmptyKey.hpp" // GCD
 
 void Hill::setKey(const Matrice &key)
 {

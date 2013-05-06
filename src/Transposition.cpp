@@ -1,15 +1,12 @@
 
 #include "Transposition.hpp"
 
+#include <random>
+
 void Transposition::setStartingTable(const ClassicalType &data)
 {
    const unsigned int key_len = key.length();
-   ClassicalType full_data(data);
-   const unsigned int rest = data.length() % key_len;
-   if(rest != 0)
-   {
-      full_data.append(key_len - rest, 'X');
-   }
+   ClassicalType full_data(appendChars(data, key_len, 'X'));
    const unsigned int data_len = full_data.length();
 
    // On remplit la grille qu'on doit lire en colonne. 
@@ -19,7 +16,7 @@ void Transposition::setStartingTable(const ClassicalType &data)
    }
 }
 
-Transposition::ClassicalType 
+const Transposition::ClassicalType
 Transposition::readFinalTable(const std::vector<ClassicalType>& s_table) const
 {
    ClassicalType data = "";
@@ -49,7 +46,7 @@ const std::map<char, unsigned int> Transposition::sortKey() const
 
 // Ordonner les lignes selon l'ordre alphabétique des lettres de la clé.
 
-std::vector<Transposition::ClassicalType>
+const std::vector<Transposition::ClassicalType>
 Transposition::swapColumnsDecode(const std::map<char, unsigned int>& sorted_key) const
 {
    std::vector<ClassicalType> sorted_table;
@@ -71,7 +68,7 @@ Transposition::swapColumnsDecode(const std::map<char, unsigned int>& sorted_key)
    return sorted_table;
 }
 
-std::vector<Transposition::ClassicalType>
+const std::vector<Transposition::ClassicalType>
 Transposition::swapColumnsEncode(const std::map<char, unsigned int>& sorted_key) const
 {
    std::vector<ClassicalType> sorted_table;

@@ -23,7 +23,10 @@ public:
    static const std::string printable;
    static const std::string punctuation;
    static const std::string white_space;
-   static const std::string french_accent;
+   
+   static void upperCase(std::string &text);
+   static void lowerCase(std::string &text);
+   static void removeChars(std::string &text, const std::string &chars);
 };
 
 #endif

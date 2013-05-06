@@ -7,13 +7,13 @@ class RC4 : public StreamCipher
 {
 public:
    
-   virtual const BytesContainer encode(const BytesContainer &);
-   virtual const BytesContainer decode(const BytesContainer &);
+   virtual const BytesContainer encode(const BytesContainer &) final;
+   virtual const BytesContainer decode(const BytesContainer &) final;
    
-   virtual void setKey(const BytesContainer &);
+   virtual void setKey(const BytesContainer &) final;
    
 private:
-   void initKeySchedule();
+   virtual void keySetup() final;
    void initialize();
    
    BytesContainer state;

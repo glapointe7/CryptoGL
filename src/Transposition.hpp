@@ -4,6 +4,10 @@
 
 #include "StringCipher.hpp"
 
+#include "exceptions/EmptyKey.hpp"
+#include "exceptions/BadChar.hpp"
+#include "exceptions/BadKeyLength.hpp"
+
 #include <algorithm>
 #include <map>
 #include <string>
@@ -31,18 +35,29 @@ public:
    
    void setKey(const Key &key)
    {
+      if(key.empty())
+      {
+         throw EmptyKey("Your key is empty.");
+      }
+      
+      const char c = badAlphaFound(key);
+      if(c != 0)
+      {
+         throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
+      }
+      
       this->key = key;
    }
    
 protected:
    virtual void setTable(const ClassicalType &data) = 0;
-   virtual std::string read(const std::vector<ClassicalType>&) const = 0;
+   virtual const ClassicalType read(const std::vector<ClassicalType>&) const = 0;
    
    void setStartingTable(const ClassicalType &data);
    const std::map<char, unsigned int> sortKey() const;
-   std::vector<ClassicalType> swapColumnsEncode(const std::map<char, unsigned int>& sorted_key) const;
-   std::vector<ClassicalType> swapColumnsDecode(const std::map<char, unsigned int>& sorted_key) const;
-   ClassicalType readFinalTable(const std::vector<ClassicalType>&) const;
+   const std::vector<ClassicalType> swapColumnsEncode(const std::map<char, unsigned int>& sorted_key) const;
+   const std::vector<ClassicalType> swapColumnsDecode(const std::map<char, unsigned int>& sorted_key) const;
+   const ClassicalType readFinalTable(const std::vector<ClassicalType>&) const;
    
    Key key;
    std::vector<ClassicalType> table;
@@ -58,7 +73,7 @@ public:
       setStartingTable(data);
    }
    
-   ClassicalType read(const std::vector<ClassicalType> &s_table) const
+   const ClassicalType read(const std::vector<ClassicalType> &s_table) const
    {
       return readFinalTable(s_table);
    }
@@ -70,9 +85,9 @@ class TranspositionColumns : public Transposition
 public:
    void setTable(const ClassicalType &data)
    {
-      unsigned int key_len = key.length();
-      unsigned int data_len = data.length();
-      unsigned int table_size = data_len / key_len;
+      const unsigned int key_len = key.length();
+      const unsigned int data_len = data.length();
+      const unsigned int table_size = data_len / key_len;
 
       for (unsigned int i = 0; i < table_size; i++)
       {
@@ -86,14 +101,14 @@ public:
       }
    }
    
-   ClassicalType read(const std::vector<ClassicalType> &s_table) const
+   const ClassicalType read(const std::vector<ClassicalType> &s_table) const
    {
-      unsigned int key_len = key.length();
+      const unsigned int key_len = key.length();
       ClassicalType data = "";
       data.reserve(s_table.size() * key_len);
       for (unsigned int i = 0; i < key_len; i++)
       {
-         for (auto str : s_table)
+         for (const auto str : s_table)
          {
             data += str[i];
          }
@@ -108,17 +123,24 @@ public:
 class TranspositionDouble : public Transposition
 {
 public:
-   void setKeyRow(std::vector<unsigned int>& key_row)
+   void setKeyRow(const std::vector<uint8_t> &key_row)
    {
+      if(key_row.size() != key.length())
+      {
+         throw BadKeyLength("Your rows key have to be the same length as the columns key.", key_row.size());
+      }
+      
       this->key_row = key_row;
    }
    
-   ClassicalType read(const std::vector<ClassicalType> &s_table) const
+   const ClassicalType read(const std::vector<ClassicalType> &s_table) const
    {
       std::vector<ClassicalType> col_table;
-      for (auto row : key_row)
+      col_table.reserve(s_table.size());
+      
+      for (const auto row : key_row)
       {
-         col_table.push_back(s_table[row]);
+         col_table.push_back(s_table[row-1]);
       }
 
       return readFinalTable(col_table);
@@ -127,19 +149,17 @@ public:
    void setTable(const ClassicalType &data)
    {
       setStartingTable(data);
-      unsigned int key_len = key_row.size();
-      std::vector<ClassicalType> tmp;
 
-      for (unsigned int i = 0; i < key_len; i++)
+      uint32_t i = 0;
+      for (const auto pos : key_row)
       {
-         auto pos = std::find(key_row.begin(), key_row.end(), i);
-         tmp.push_back(table[*pos]);
+         std::swap(table[i], table[pos-1]);
+         i++;
       }
-      table = tmp;
    }
    
 private:
-   std::vector<unsigned int> key_row;
+   std::vector<uint8_t> key_row;
 };
 
 #endif

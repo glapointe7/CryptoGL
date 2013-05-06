@@ -37,8 +37,6 @@ protected:
       return ClassicalType(1, alpha[(alpha.find(key_pos) - alpha.find(c) + alpha.length()) % alpha.length()]);
    }
 
-   const ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
-   
    ClassicalType key;
    const GetCharFunction charEncode, charDecode;
 
@@ -52,6 +50,9 @@ public:
 
    const ClassicalType encode(const ClassicalType &clear_text);
    const ClassicalType decode(const ClassicalType &cipher_text);
+
+private:
+   const ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
 };
 
 // Beaufort : CIPHER = -CLEAR + KEY
@@ -85,17 +86,17 @@ public:
 
    virtual void setKey(const ClassicalType &v_key) final
    {
-      if(v_key.empty())
+      if (v_key.empty())
       {
          throw EmptyKey("Your key is empty.");
       }
-      
+
       const char c = badAlphaFound(v_key);
-      if(c != 0)
+      if (c != 0)
       {
          throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
       }
-      
+
       const unsigned int key_length = v_key.length();
       const uint32_t alpha_len = alpha.length();
       key = "";
@@ -118,8 +119,9 @@ public:
    : Vigenere(clearPlusKey, clearMinusKey) {}
 
    // Si la clé est négative et > alpha_len, on doit la remettre dans {0,...,alpha_len-1}.
+
    void setKey(const char c_key)
-   {      
+   {
       const int16_t alpha_len = alpha.length();
       char the_key = c_key % alpha_len;
       the_key = (the_key + alpha_len) % alpha_len;
@@ -147,16 +149,15 @@ class VigenereMult : public Vigenere
 public:
 
    VigenereMult()
-   : Vigenere(clearMultKey, keyDivideCipher)
-   {}
+   : Vigenere(clearMultKey, keyDivideCipher) {}
 
    const ClassicalType decode(const ClassicalType &cipher_text)
    {
-      if(key.empty())
+      if (key.empty())
       {
          throw EmptyKey("Your key is not set.");
       }
-      
+
       const unsigned int key_length = key.length();
 
       ClassicalType toReturn = "";

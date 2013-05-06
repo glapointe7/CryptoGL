@@ -16,6 +16,13 @@ set(Testing
    WolseleyTest.cpp
    SHA1Test.cpp
    HellmanTest.cpp
+   TranspositionRowsTest.cpp
+   TranspositionColumnsTest.cpp
+   TranspositionDoubleTest.cpp
+   MorseTest.cpp
+   UnsortAlphaTest.cpp
+   DESTest.cpp
+   RC4Test.cpp
 )
 
 add_library(test_classes ${Testing})

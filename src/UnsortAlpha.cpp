@@ -14,7 +14,7 @@ void UnsortAlpha::setKey(const std::string key)
 {
    if (key.empty())
    {
-      throw EmptyKey("Tour key should not be empty or not set.");
+      throw EmptyKey("Your key is empty.");
    }
 
    const char c = badAlphaFound(key);

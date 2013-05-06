@@ -17,6 +17,13 @@
 #include "../testing/WolseleyTest.cpp"
 #include "../testing/SHA1Test.cpp"
 #include "../testing/HellmanTest.cpp"
+#include "../testing/TranspositionRowsTest.cpp"
+#include "../testing/TranspositionColumnsTest.cpp"
+#include "../testing/TranspositionDoubleTest.cpp"
+#include "../testing/MorseTest.cpp"
+#include "../testing/UnsortAlphaTest.cpp"
+#include "../testing/DESTest.cpp"
+#include "../testing/RC4Test.cpp"
 
 int main(int argc, char **argv)
 {

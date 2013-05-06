@@ -15,7 +15,7 @@ void RC4::setKey(const BytesContainer &key)
    
    if(key.size() > 32)
    {
-      throw BadKeyLength("Your RC4 key length should not be greater than 32 bytes.", key.size());
+      throw BadKeyLength("Your RC4 key length is greater than 32 bytes.", key.size());
    }
    
    this->key = key;
@@ -31,7 +31,7 @@ void RC4::initialize()
 }
 
 
-void RC4::initKeySchedule()
+void RC4::keySetup()
 {
    unsigned char key_len = key.size();
    unsigned char j = 0;
@@ -44,16 +44,15 @@ void RC4::initKeySchedule()
 
 const RC4::BytesContainer RC4::encode(const BytesContainer &clear_text)
 {
-   unsigned int clear_len = clear_text.size();
    BytesContainer crypted;
-   crypted.reserve(clear_len);
+   crypted.reserve(clear_text.size());
    
    initialize();
-   initKeySchedule();
+   keySetup();
    
    unsigned char j = 0;
    unsigned char k = 0;
-   for(auto byte : clear_text)
+   for(const auto byte : clear_text)
    {
       j = (j + 1) & 0xFF;
       k = (state[j] + k) & 0xFF;
@@ -64,7 +63,6 @@ const RC4::BytesContainer RC4::encode(const BytesContainer &clear_text)
    return crypted;
 }
 
-// TODO
 const RC4::BytesContainer RC4::decode(const BytesContainer &cipher_text)
 {
    return encode(cipher_text);

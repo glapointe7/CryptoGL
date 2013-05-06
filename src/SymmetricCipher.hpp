@@ -13,14 +13,12 @@ class SymmetricCipher : public Cipher<std::vector<unsigned char>>
 {
 public:
    typedef std::vector<unsigned char> BytesContainer;
-
+   
    // Useful constant modes for loading / saving data in a file.
    enum class io_mode : uint8_t 
    {
-      hex_nospace,
-      hex_space,
-      str,
-      byte
+      str,           // string of characters (can be a string of hex).
+      byte           // vector of bytes.
    };
    
    virtual ~SymmetricCipher() {}
@@ -30,14 +28,15 @@ public:
 
    virtual void setKey(const BytesContainer &) = 0;
 
-   static void save(const std::string &, const BytesContainer &);
-   static BytesContainer load(const std::string &);
+   static void save(const std::string &filename, const BytesContainer &data);
+   static const BytesContainer load(const std::string &filename);
 
-   static const std::string hexDigest(const BytesContainer &);
-   static const BytesContainer getBytesFromString(const std::string &);
-   static const std::string getStringFromBytes(const BytesContainer &);
+   static const std::string hexDigest(const BytesContainer &bytes);
+   static const BytesContainer getBytesFromString(const std::string &str);
+   static const BytesContainer getBytesFromHexDigest(const std::string &hex_str);
+   static const std::string getStringFromBytes(const BytesContainer &bytes);
 
-protected:
+protected:   
    BytesContainer key;
 };
 

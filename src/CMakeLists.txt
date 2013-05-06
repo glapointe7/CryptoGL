@@ -20,6 +20,7 @@ set(SRC
 	Tools.hpp Tools.cpp
 	Transposition.hpp Transposition.cpp
    String.hpp String.cpp
+   Random.hpp Random.cpp
 
    exceptions/Exception.hpp
    exceptions/BadAlpha.hpp
