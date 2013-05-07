@@ -1,6 +1,5 @@
-
 #ifndef TRANSPOSITIONDOUBLETEST_HPP
-#define	TRANSPOSITIONDOUBLETEST_HPP
+#define TRANSPOSITIONDOUBLETEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Transposition.hpp"

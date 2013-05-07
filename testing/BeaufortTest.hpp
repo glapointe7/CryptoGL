@@ -1,6 +1,5 @@
-
 #ifndef BEAUFORTTEST_HPP
-#define	BEAUFORTTEST_HPP
+#define BEAUFORTTEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Vigenere.hpp"

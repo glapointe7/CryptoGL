@@ -1,6 +1,5 @@
-
 #ifndef HELLMANTEST_HPP
-#define	HELLMANTEST_HPP
+#define HELLMANTEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Hellman.hpp"

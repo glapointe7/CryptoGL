@@ -1,6 +1,5 @@
-
 #ifndef RAILFENCETEST_HPP
-#define	RAILFENCETEST_HPP
+#define RAILFENCETEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Railfence.hpp"

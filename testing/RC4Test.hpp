@@ -2,9 +2,8 @@
  * Test vectors from http://en.wikipedia.org/wiki/RC4#Test_vectors
  * http://tools.ietf.org/html/rfc6229
  */
-
 #ifndef RC4TEST_HPP
-#define	RC4TEST_HPP
+#define RC4TEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/RC4.hpp"

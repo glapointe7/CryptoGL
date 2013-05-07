@@ -1,6 +1,5 @@
-
 #ifndef DESTEST_HPP
-#define	DESTEST_HPP
+#define DESTEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/DES.hpp"

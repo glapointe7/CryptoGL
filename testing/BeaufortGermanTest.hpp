@@ -1,19 +1,17 @@
-
-#ifndef VIGENERETEST_HPP
-#define	VIGENERETEST_HPP
+#ifndef BEAUFORTGERMANTEST_HPP
+#define BEAUFORTGERMANTEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Vigenere.hpp"
-#include "../src/String.hpp"
 
-class VigenereTest : public ::testing::Test
+class BeaufortGermanTest : public ::testing::Test
 {
 protected:
-   Vigenere *V;
+   BeaufortGerman *V;
 
    virtual void SetUp()
    {
-      V = new Vigenere();
+      V = new BeaufortGerman();
    }
 
    virtual void TearDown()
@@ -22,36 +20,36 @@ protected:
    }
 };
 
-TEST_F(VigenereTest, encode) 
+TEST_F(BeaufortGermanTest, encode) 
 {
   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
   
   V->setKey("TESTING");
-  EXPECT_EQ("LEDNBAOEMDIIEGBXINMGAVSFGIVYEEHKWTXTQETBVUGSJBMAZXIGURRZLYJEMOUNXVXAQUBKLL", V->encode(clear_text));
+  EXPECT_EQ("ZWTBLACSETWSEUPPYBWGOJKVUSVMSWXYGTLHIUHLVIUKZPWANLAWIBRNZQZSWOIBPLLKQIPCBZ", V->encode(clear_text));
   
-  V->setAlpha(String::alpha_numeric);
+  /*V->setAlpha(String::alpha_numeric);
   V->setKey("V1Gen3rE");
   EXPECT_EQ("n1Ry6GzPdCVe43zXlLKx755Ri1Owy36Vj7XezFrXdFTs4BvRo5KsoCvXnLXpr45Yo4KwqHzKoJ", V->encode(clear_text));
   
   V->setAlpha(String::letters);
   V->setKey("vvvvvvvv");
-  EXPECT_EQ("NvGPOIDGDGKvMvDOLPzOPxJIIvDNGvKMJBMvHHvODJIJMDzIOzzJwEzONPMGzwJPOyzNyJDBON", V->encode(clear_text));
+  EXPECT_EQ("NvGPOIDGDGKvMvDOLPzOPxJIIvDNGvKMJBMvHHvODJIJMDzIOzzJwEzONPMGzwJPOyzNyJDBON", V->encode(clear_text));*/
 }
 
-TEST_F(VigenereTest, decode) 
+TEST_F(BeaufortGermanTest, decode) 
 {
   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
   
   V->setKey("TESTING");
-  EXPECT_EQ(clear_text, V->decode("LEDNBAOEMDIIEGBXINMGAVSFGIVYEEHKWTXTQETBVUGSJBMAZXIGURRZLYJEMOUNXVXAQUBKLL"));
+  EXPECT_EQ(clear_text, V->decode("ZWTBLACSETWSEUPPYBWGOJKVUSVMSWXYGTLHIUHLVIUKZPWANLAWIBRNZQZSWOIBPLLKQIPCBZ"));
   
-  V->setAlpha(String::alpha_numeric);
+  /*V->setAlpha(String::alpha_numeric);
   V->setKey("V1Gen3rE");
   EXPECT_EQ(clear_text, V->decode("n1Ry6GzPdCVe43zXlLKx755Ri1Owy36Vj7XezFrXdFTs4BvRo5KsoCvXnLXpr45Yo4KwqHzKoJ"));
   
   V->setAlpha(String::letters);
   V->setKey("vvvvvvvv");
-  EXPECT_EQ(clear_text, V->decode("NvGPOIDGDGKvMvDOLPzOPxJIIvDNGvKMJBMvHHvODJIJMDzIOzzJwEzONPMGzwJPOyzNyJDBON"));
+  EXPECT_EQ(clear_text, V->decode("NvGPOIDGDGKvMvDOLPzOPxJIIvDNGvKMJBMvHHvODJIJMDzIOzzJwEzONPMGzwJPOyzNyJDBON"));*/
 }
 
 #endif

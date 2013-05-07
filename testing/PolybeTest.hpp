@@ -1,6 +1,5 @@
-
 #ifndef POLYBETEST_HPP
-#define	POLYBETEST_HPP
+#define POLYBETEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Polybe.hpp"

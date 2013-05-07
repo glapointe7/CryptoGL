@@ -1,6 +1,5 @@
-
 #ifndef TRANSPOSITIONCOLUMNSTEST_HPP
-#define	TRANSPOSITIONCOLUMNSTEST_HPP
+#define TRANSPOSITIONCOLUMNSTEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Transposition.hpp"

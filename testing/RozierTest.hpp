@@ -1,6 +1,5 @@
-
 #ifndef ROZIERTEST_HPP
-#define	ROZIERTEST_HPP
+#define ROZIERTEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Vigenere.hpp"

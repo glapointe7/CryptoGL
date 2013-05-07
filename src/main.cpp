@@ -1,29 +1,30 @@
 /*
- * Tests automatisés sur les cryptos en place dans le système.
+ * .
  */
-//#include <gtest/gtest.h>
+#include <gtest/gtest.h>
 
-#include "../testing/CaesarTest.cpp"
-#include "../testing/VigenereTest.cpp"
-#include "../testing/RozierTest.cpp"
-#include "../testing/BeaufortTest.cpp"
-#include "../testing/BeaufortGermanTest.cpp"
-#include "../testing/PlayfairTest.cpp"
-#include "../testing/PolybeTest.cpp"
-#include "../testing/CollonTest.cpp"
-#include "../testing/AdfgvxTest.cpp"
-#include "../testing/DelastelleTest.cpp"
-#include "../testing/RailfenceTest.cpp"
-#include "../testing/WolseleyTest.cpp"
-#include "../testing/SHA1Test.cpp"
-#include "../testing/HellmanTest.cpp"
-#include "../testing/TranspositionRowsTest.cpp"
-#include "../testing/TranspositionColumnsTest.cpp"
-#include "../testing/TranspositionDoubleTest.cpp"
-#include "../testing/MorseTest.cpp"
-#include "../testing/UnsortAlphaTest.cpp"
-#include "../testing/DESTest.cpp"
-#include "../testing/RC4Test.cpp"
+#include "../testing/CaesarTest.hpp"
+#include "../testing/VigenereTest.hpp"
+#include "../testing/RozierTest.hpp"
+#include "../testing/BeaufortTest.hpp"
+#include "../testing/BeaufortGermanTest.hpp"
+#include "../testing/PlayfairTest.hpp"
+#include "../testing/PolybeTest.hpp"
+#include "../testing/CollonTest.hpp"
+#include "../testing/AdfgvxTest.hpp"
+#include "../testing/DelastelleTest.hpp"
+#include "../testing/RailfenceTest.hpp"
+#include "../testing/WolseleyTest.hpp"
+#include "../testing/SHA1Test.hpp"
+#include "../testing/HellmanTest.hpp"
+#include "../testing/TranspositionRowsTest.hpp"
+#include "../testing/TranspositionColumnsTest.hpp"
+#include "../testing/TranspositionDoubleTest.hpp"
+#include "../testing/MorseTest.hpp"
+#include "../testing/UnsortAlphaTest.hpp"
+#include "../testing/DESTest.hpp"
+#include "../testing/RC4Test.hpp"
+#include "../testing/HillTest.hpp"
 
 int main(int argc, char **argv)
 {

@@ -10,11 +10,11 @@
 
 void Hill::setKey(const Matrice &key)
 {
-   Matrix M;
+   Matrix *M = new Matrix();
    try
    {
-      M.setMatrix(key);
-      M.setModulo(alpha.length());
+      M->setMatrix(key);
+      M->setModulo(alpha.length());
    }
    catch (EmptyMatrix & EM)
    {
@@ -25,28 +25,29 @@ void Hill::setKey(const Matrice &key)
       throw MNS.what();
    }
 
-   // La clé doit être inversible.
-   if (GCD(Matrix::det(M), M.getModulo()) != 1)
+   // The key must be reversible.
+   if (GCD(M->det(), M->getModulo()) != 1)
    {
       throw MatrixKeyNotReversible("Your matrix key should be reversible to be able to decode the message.");
    }
    
-   this->key = M;
+   this->key = new Matrix(*M);
+   delete M;
 }
 
-// Exécute l'encodage / décodage de data avec la clé K.
+// Process encode / decode of the data with the matrix key K.
 
-const Hill::ClassicalType Hill::process(const ClassicalType &data, const Matrix &K)
+const Hill::ClassicalType Hill::process(const ClassicalType &data, const Matrix *K)
 {
-   if(key.getMatrix().empty())
+   if(key->getMatrix().empty())
    {
       throw EmptyKey("The matrix key is not set.");
    }
    
-   const uint32_t key_dim = key.getDimension();
+   const uint32_t key_dim = K->getDimension();
    const uint32_t data_len = data.length();
    ClassicalType message = "";
-   message.reserve(data_len * key_dim);
+   message.reserve(data_len + key_dim);
 
    for (uint32_t i = 0; i < data_len; i += key_dim)
    {
@@ -69,12 +70,12 @@ const Hill::ClassicalType Hill::process(const ClassicalType &data, const Matrix 
 
 const Hill::ClassicalType Hill::encode(const ClassicalType &clear_text)
 {
-   const ClassicalType full_text(appendChars(clear_text, key.getDimension(), 'X'));
+   const ClassicalType full_text(appendChars(clear_text, key->getDimension(), 'X'));
    
    return process(full_text, key);
 }
 
 const Hill::ClassicalType Hill::decode(const ClassicalType &cipher_text)
 {
-   return process(cipher_text, Matrix::inverse(key));
+   return process(cipher_text, key->inverse());
 }

@@ -1,6 +1,5 @@
 /*
- * Matrices carrées dans M(Z_n)
- * TODO : Exceptions sur les matrices. (dim doit être >= 1)
+ * Square matrix in the group M(Z_n).
  */
 #ifndef MATRIX_HPP
 #define	MATRIX_HPP
@@ -14,6 +13,8 @@ class Matrix
 
 public:
 
+   Matrix() {}
+   Matrix(const Matrix &A);
    virtual ~Matrix() {}
 
    void setMatrix(const Matrice &);
@@ -27,25 +28,22 @@ public:
    const int32_t getModulo() const;
    void setModulo(const int32_t);
 
-   // Obtention d'une valeur de la matrice.
-   const int32_t operator()(const uint32_t r, const uint32_t c) const;
    friend Matrix operator +(const Matrix& a, const Matrix& b);
-   friend std::vector<uint32_t> operator *(const Matrix &K, const std::vector<uint32_t> &V);
+   friend std::vector<uint32_t> operator *(const Matrix *K, const std::vector<uint32_t> &V);
 
    void swapRows(const uint32_t r1, const uint32_t r2);
    Matrix getMinor(const uint32_t row, const uint32_t col) const;
    void setIdentity();
    void zeros();
    
-   static int32_t trace(const Matrix &A);
-   static int32_t diagonalProduct(const Matrix &A);
-   static int32_t det(const Matrix &B);
-   static Matrix inverse(const Matrix &B);
-   static void display(const Matrix &A);
+   int32_t getTrace() const;
+   int32_t getDiagonalProduct() const;
+   int32_t det() const;
+   const Matrix* inverse() const;
    
 private:
-   const uint32_t findNonZero(const uint32_t from) const;
-   static bool isSquare(const Matrice &A);
+   uint32_t findNonZero(const uint32_t from) const;
+   static bool isSquare(const Matrice &mat);
    
    // Dimension de la matrice carrée.
    uint32_t dim = 0;

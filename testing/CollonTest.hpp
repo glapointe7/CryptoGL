@@ -1,6 +1,5 @@
-
 #ifndef COLLONTEST_HPP
-#define	COLLONTEST_HPP
+#define COLLONTEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Collon.hpp"

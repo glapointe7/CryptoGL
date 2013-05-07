@@ -10,8 +10,8 @@ set (CMAKE_CXX_FLAGS                "-Wall -Werror -pedantic-errors -lgtest -pth
 # Add the source files code (CPP, HPP and the CMakeLists.txt).
 add_subdirectory (src)
 
-#Add the testing source files.
-add_subdirectory (testing)
+#Include the testing source file headers.
+include_directories (testing)
 
 enable_testing()
 find_package(GTest REQUIRED)
@@ -26,9 +26,6 @@ target_link_libraries(${Project_Name} ${GTEST_BOTH_LIBRARIES})
 
 # Link the SRC librairies of the project.
 target_link_libraries (${Project_Name} componants)
-
-# Link the testing test classes librairies of the project.
-target_link_libraries (${Project_Name} test_classes)
 
 add_test(AllTestsInCryptology ${Project_Name})
 

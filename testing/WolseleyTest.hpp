@@ -1,6 +1,5 @@
-
 #ifndef WOLSELEYTEST_HPP
-#define	WOLSELEYTEST_HPP
+#define WOLSELEYTEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Wolseley.hpp"

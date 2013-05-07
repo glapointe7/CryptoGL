@@ -1,6 +1,5 @@
-
 #ifndef ADFGVXTEST_HPP
-#define	ADFGVXTEST_HPP
+#define ADFGVXTEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Adfgvx.hpp"

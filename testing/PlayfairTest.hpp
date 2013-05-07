@@ -1,6 +1,5 @@
-
 #ifndef PLAYFAIRTEST_HPP
-#define	PLAYFAIRTEST_HPP
+#define PLAYFAIRTEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Playfair.hpp"

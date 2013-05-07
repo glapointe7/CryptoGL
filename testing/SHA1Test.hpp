@@ -1,6 +1,5 @@
-
 #ifndef SHA1TEST_HPP
-#define	SHA1TEST_HPP
+#define SHA1TEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/SHA1.hpp"

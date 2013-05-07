@@ -1,6 +1,5 @@
-
 #ifndef DELASTELLETEST_HPP
-#define	DELASTELLETEST_HPP
+#define DELASTELLETEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Delastelle.hpp"

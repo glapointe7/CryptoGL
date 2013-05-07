@@ -1,6 +1,5 @@
-
 #ifndef UNSORTALPHATEST_HPP
-#define	UNSORTALPHATEST_HPP
+#define UNSORTALPHATEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/UnsortAlpha.hpp"

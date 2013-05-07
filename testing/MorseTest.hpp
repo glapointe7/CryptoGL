@@ -1,6 +1,5 @@
-
 #ifndef MORSETEST_HPP
-#define	MORSETEST_HPP
+#define MORSETEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Morse.hpp"

@@ -1,3 +1,6 @@
+#ifndef CAESARTEST_HPP
+#define CAESARTEST_HPP
+
 #include <gtest/gtest.h>
 #include "../src/Vigenere.hpp"
 #include "../src/String.hpp"
@@ -68,3 +71,5 @@ TEST_F(CaesarTest, decode)
    C->setKey(-71);
    EXPECT_EQ(clear_text, C->decode("J1CLKE9C9CG1I19KHL5KL3FEE19JC1GIF7I1DD1K9FEFI95EK55F2A5KJLIC52FLK45J4F97KJ"));
 }
+
+#endif
