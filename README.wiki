@@ -1,0 +1,37 @@
+Cryptology is a c++ library containing classical and modern cryptology with hash functions like MD5 or SHA1. 
+
+1. Procedure to install GoogleTest (gtest) on your computer (http://code.google.com/p/tonatiuh/wiki/InstallingGoogleTestForLinux):
+
+tar -xzvf gtest-1.6.0.tar.gz
+
+cd gtest-1.6.0
+mkdir mybuild
+cd mybuild
+cmake -G"Unix Makefiles" ..
+make
+
+cp -r ../include/gtest /usr/local/include
+cp lib*.a /usr/local/lib
+
+********************************************************************
+
+2. If you are using NetBeans :
+
+Right click on your project name and choose PROPERTIES.
+Under Categories at your left, select C++ COMPILER.
+At your right, in the ADDITIONAL OPTIONS, add '-lgtest -pthread' without the quotes. This will link to the gtest and gtest_main libraries.
+
+******************************************************************** 
+
+À faire dans le build du projet :
+
+cmake ..
+make Cryptology
+
+Pour exécuter les tests de Google test :
+
+./Cryptology
+
+Pour utiliser le ctest de cmake :
+
+ctest --output-on-failure .
