@@ -20,7 +20,7 @@ public:
    virtual const ClassicalType decode(const ClassicalType &) = 0;
    
    void save(const std::string &, const ClassicalType &);
-   const ClassicalType load(const std::string &);
+   const ClassicalType load(const std::string &filename);
    
    void eraseBadCharacters(ClassicalType &) const;
    

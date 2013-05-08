@@ -58,6 +58,7 @@ set(SRC
 	UnsortAlpha.hpp UnsortAlpha.cpp
 	Vigenere.hpp Vigenere.cpp
 	Wolseley.hpp Wolseley.cpp
+   Affine.hpp Affine.cpp
 )
 
 # Create libcomponants.a with all the source files provided by SRC.

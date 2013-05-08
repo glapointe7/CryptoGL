@@ -25,11 +25,22 @@
 #include "../testing/DESTest.hpp"
 #include "../testing/RC4Test.hpp"
 #include "../testing/HillTest.hpp"
+#include "../testing/AffineTest.hpp"
 
-int main(int argc, char **argv)
+//#include "attacks/CaesarAttack.hpp"
+#include "Affine.hpp"
+
+// int argc, char **argv
+int main()
 {
-   ::testing::InitGoogleTest(&argc, argv);
-   return RUN_ALL_TESTS();
+   /*CaesarAttack *CA = new CaesarAttack();
+   CA->setFilename(R"(../GIT_CryptoCode/src/attacks/caesar_attack2.txt)");
+   CA->setAlpha(String::lower_ordered_alpha_numeric);
+   std::string cipher_text(CA->load(R"(../GIT_CryptoCode/src/attacks/mtc3-esslinger-05-caesar.txt)"));
+   CA->attack(cipher_text);*/
+   
+   //::testing::InitGoogleTest(&argc, argv);
+   //return RUN_ALL_TESTS();
    
    /*Matrix M;
    M.setModulo(29);

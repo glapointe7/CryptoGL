@@ -66,7 +66,7 @@ void Matrix::setModulo(const int32_t n)
 
 const int32_t Matrix::get(const uint32_t row, const uint32_t col) const
 {
-   if (row >= 0 && row < dim && col >= 0 && col < dim)
+   if (row < dim && col < dim)
    {
       return M[row][col];
    }
@@ -78,7 +78,7 @@ const int32_t Matrix::get(const uint32_t row, const uint32_t col) const
 
 void Matrix::set(const uint32_t row, const uint32_t col, const int32_t value)
 {
-   if (row >= 0 && row < dim && col >= 0 && col < dim)
+   if (row < dim && col < dim)
    {
       M[row][col] = value;
    }
@@ -389,6 +389,7 @@ const Matrix* Matrix::inverse() const
                   result->set(k, i, (result->get(k, i) * inv) % mod);
                }
             } // end FOR k
+            delete A;
          } // end Default
       } // end Switch
    } // end IF

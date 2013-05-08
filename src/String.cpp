@@ -39,6 +39,12 @@ String::hex_digits = "0123456789ABCDEF";
 const std::string
 String::alpha_numeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+const std::string 
+String::ascii_ordered_alpha_numeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+const std::string 
+String::lower_ordered_alpha_numeric = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
 const std::string
 String::punctuation = "!\"'().:;?-";
 

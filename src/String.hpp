@@ -20,6 +20,8 @@ public:
    static const std::string lowercase_digits;
    static const std::string hex_digits;
    static const std::string alpha_numeric;
+   static const std::string ascii_ordered_alpha_numeric;
+   static const std::string lower_ordered_alpha_numeric;
    static const std::string printable;
    static const std::string punctuation;
    static const std::string white_space;
