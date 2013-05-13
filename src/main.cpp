@@ -28,20 +28,63 @@
 #include "../testing/AffineTest.hpp"
 
 //#include "attacks/CaesarAttack.hpp"
-#include "Affine.hpp"
+//#include "attacks/TranspositionAttack.hpp"
 
-// int argc, char **argv
-int main()
+int main(int argc, char **argv)
 {
+   ::testing::InitGoogleTest(&argc, argv);
+   return RUN_ALL_TESTS();
+   /*const std::string pi = "141592653589793238462643383279502884197169399375105820974944"
+           "59230781640628620899862803482534211706798214808651328230664709384460955058223172"
+           "53594081284811174502841027019385211055596446229489549303819644288109756659334461"
+           "28475648233786783165271201909145648566923460348610454326648213393607260249141273"
+           "72458700660631558817488152092096282925409171536436789259036001133053054882046652"
+           "13841469519415116094330572703657595919530921861173819326117931051185480744623799"
+           "62749567351885752724891227938183011949129833673362440656643086021394946395224737"
+           "19070217986094370277053921717629317675238467481846766940513200056812714526356082"
+           "77857713427577896091736371787214684409012249534301465495853710507922796892589235"
+           "42019956112129021960864034418159813629774771309960518707211349999998372978049951"
+           "05973173281609631859502445945534690830264252230825334468503526193118817101000313"
+           "78387528865875332083814206171776691473035982534904287554687311595628638823537875"
+           "93751957781857780532171226806613001927876611195909216420198938095257201065485863"
+           "278865936153381827968230301952";
+
+   Gronsfeld *G = new Gronsfeld();
+   std::string cipher_text(G->load(R"(../GIT_CryptoCode/src/attacks/mtc3-esslinger-06-onetimepad-cipher.txt)"));
+   G->eraseBadCharacters(cipher_text);
+   const uint32_t cipher_len = cipher_text.length();
+   const uint32_t double_len = cipher_len << 1;
+   
+   std::ofstream out(R"(../GIT_CryptoCode/src/attacks/Gronsfeld_attack.txt)");
+   
+   for(uint8_t offset = 1; offset < 100; ++offset)
+   {
+      std::vector<int32_t> key;
+      key.reserve(cipher_len);
+      for(uint16_t i = 0; i < double_len; i += 2)
+      {
+         const int32_t number = atoi(pi.substr(offset + i, 2).c_str());
+         key.push_back(number);
+      }
+      
+      G->setKey(key);
+      out << G->decode(cipher_text) << "\n";
+   }
+   out.close();*/
+
+   /*TranspositionAttack *TA = new TranspositionAttack();
+   TA->setFilename(R"(../GIT_CryptoCode/src/attacks/TranspoRowsAttack.txt)");
+   TA->setKeyLength(4);
+   TA->setAlpha(String::letters + "-");
+   std::string cipher_text(TA->load(R"(../GIT_CryptoCode/src/attacks/mtc3-esslinger-16-cipher-en.txt)"));
+   TA->attack(cipher_text);*/
+
    /*CaesarAttack *CA = new CaesarAttack();
-   CA->setFilename(R"(../GIT_CryptoCode/src/attacks/caesar_attack2.txt)");
-   CA->setAlpha(String::lower_ordered_alpha_numeric);
-   std::string cipher_text(CA->load(R"(../GIT_CryptoCode/src/attacks/mtc3-esslinger-05-caesar.txt)"));
+   CA->setFilename(R"(../GIT_CryptoCode/src/attacks/caesar_attack_dwarf.txt)");
+   CA->setAlpha(String::letters);
+   std::string cipher_text("dlsjvtlAvPumvythApvuZljBypAFDpAopuAolZuvD");
    CA->attack(cipher_text);*/
-   
-   //::testing::InitGoogleTest(&argc, argv);
-   //return RUN_ALL_TESTS();
-   
+
    /*Matrix M;
    M.setModulo(29);
    
@@ -60,7 +103,7 @@ int main()
    {
       std::cout << BM.what() << "\n\n";
    }*/
-   
+
    //std::cout << getModInverse(28, 29);
    //const std::string text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
    /*const std::string text = "XFADDFDAVXAFDFVAFFDFDFDFFFFDAFGFFFDDDDAFDDVFDVFXAXAXFFFVVXFFAFFAXXVAFAAVVXXDVAFAFFVAFFFFFDVDXXDFXXFXFVFAXDVAXFGXDDXFDAVVVVVADFDAGFGDAFAXXDFAVVDDXDDFFF";

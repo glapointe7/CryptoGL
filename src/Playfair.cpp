@@ -23,7 +23,7 @@ const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
    }
    
    ClassicalType full_text(appendChars(clear_text, 2, 'X'));
-   const unsigned int clear_len = full_text.length();
+   unsigned int clear_len = full_text.length();
    ClassicalType crypted = "";
    crypted.reserve(clear_len);
 
@@ -39,26 +39,27 @@ const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
       // R�gle 1 : Si x != a ET y != b, alors X = (x,b) et A = (a,y).
       if (X.first != A.first && A.second != X.second)
       {
-         crypted += grid[A.first][X.second];
-         crypted += grid[X.first][A.second];
+         crypted += grid[X.second][A.first];
+         crypted += grid[A.second][X.first];
       }
          // R�gle 2 : Si x = a ET y != b, alors X = (x+1,y) et A = (a+1,b).
       else if (X.first == A.first && X.second != A.second)
       {
-         crypted += grid[X.first][(X.second + 1) % dim];
-         crypted += grid[A.first][(A.second + 1) % dim];
+         crypted += grid[(X.second + 1) % dim][X.first];
+         crypted += grid[(A.second + 1) % dim][A.first];
       }
          // R�gle 3 : Si x != a ET y = b, alors X = (x,y+1) et A = (a,b+1).
       else if (X.first != A.first && A.second == X.second)
       {
-         crypted += grid[(X.first + 1) % dim][X.second];
-         crypted += grid[(A.first + 1) % dim][A.second];
+         crypted += grid[X.second][(X.first + 1) % dim];
+         crypted += grid[A.second][(A.first + 1) % dim];
       }
          // R�gle 4 : Si x = a ET y = b, alors X = (x,y) et A = NUL = X.
       else
       {
-         crypted += grid[X.first][X.second];
-         crypted += "X";
+         full_text.insert(full_text.begin() + i + 1, 'X');
+         i -= 2;
+         clear_len++;
       }
    }
 
@@ -88,27 +89,27 @@ const Playfair::ClassicalType Playfair::decode(const ClassicalType &cipher_text)
    for (unsigned int i = 0; i < cipher_len; i += 2)
    {
       // Obtenir les coordonnées (x,y) et (a,b) des lettres du bigramme dans la grille.
-      const auto x = getCharCoordinates(cipher_text[i], grid);
-      const auto y = getCharCoordinates(cipher_text[i+1], grid);
+      const auto X = getCharCoordinates(cipher_text[i], grid);
+      const auto A = getCharCoordinates(cipher_text[i+1], grid);
 
       // Soient A = (x,y) et B = (a,b)
       // R�gle 1 : Si x != a ET y != b, alors A = (x,b) et B = (a,y).
-      if (x.first != y.first && x.second != y.second)
+      if (X.first != A.first && X.second != A.second)
       {
-         decrypted += grid[x.first][y.second];
-         decrypted += grid[y.first][x.second];
+         decrypted += grid[X.second][A.first];
+         decrypted += grid[A.second][X.first];
       }
          // R�gle 2 : Si x = a ET y != b, alors A = (x+1,y) et B = (a+1,b).
-      else if (x.first == y.first && x.second != y.second)
+      else if (X.first == A.first && X.second != A.second)
       {
-         decrypted += grid[x.first][(x.second + dim - 1) % dim];
-         decrypted += grid[y.first][(y.second + dim - 1) % dim];
+         decrypted += grid[(X.second + dim - 1) % dim][X.first];
+         decrypted += grid[(A.second + dim - 1) % dim][A.first];
       }
          // R�gle 3 : Si x != a ET y = b, alors A = (x,y+1) et B = (a,b+1).
-      else if (x.first != y.first && x.second == y.second)
+      else if (X.first != A.first && X.second == A.second)
       {
-         decrypted += grid[(x.first + dim - 1) % dim][x.second];
-         decrypted += grid[(y.first + dim - 1) % dim][y.second];
+         decrypted += grid[X.second][(X.first + dim - 1) % dim];
+         decrypted += grid[A.second][(A.first + dim - 1) % dim];
       }
    }
 

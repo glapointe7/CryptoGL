@@ -23,7 +23,7 @@ protected:
 TEST_F(AdfgvxTest, encode)
 {
    const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
-   const std::vector<std::string> grid_key = {"CLOFWJ", "YMT5B4", "I7A28S", "P30QHX", "KEUL6D", "VRGZN9"};
+   const std::vector<std::string> grid_key = {"C1OFWJ", "YMT5B4", "I7A28S", "P30QHX", "KEUL6D", "VRGZN9"};
 
    A->setKey("GABRIEL");
    A->setGridKey(grid_key);
@@ -33,8 +33,8 @@ TEST_F(AdfgvxTest, encode)
 
 TEST_F(AdfgvxTest, decode)
 {
-   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
-   const std::vector<std::string> grid_key = {"CLOFWJ", "YMT5B4", "I7A28S", "P30QHX", "KEUL6D", "VRGZN9"};
+   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS999";
+   const std::vector<std::string> grid_key = {"C1OFWJ", "YMT5B4", "I7A28S", "P30QHX", "KEUL6D", "VRGZN9"};
 
    A->setKey("GABRIEL");
    A->setGridKey(grid_key);

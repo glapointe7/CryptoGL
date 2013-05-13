@@ -34,7 +34,7 @@ void CaesarAttack::attack(std::string &cipher_text)
 
    try
    {
-      std::ofstream out(filename.c_str(), std::ios::app);
+      std::ofstream out(filename.c_str());
 
       for (uint8_t i = 1; i < alpha_len; ++i)
       {

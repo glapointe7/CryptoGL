@@ -11,8 +11,6 @@
 #include "exceptions/EmptyAlpha.hpp"
 #include "exceptions/MultipleChar.hpp"
 
-#include <iostream>
-
 StringCipher::StringCipher()
 {
    alpha = String::uppercase;
@@ -32,7 +30,7 @@ void StringCipher::save(const std::string &filename, const ClassicalType &data)
    }
 }
 
-const StringCipher::ClassicalType StringCipher::load(const std::string &filename)
+const StringCipher::ClassicalType StringCipher::load(const std::string &filename) const
 {
    ClassicalType contents;
    std::ifstream in(filename.c_str(), std::ios::binary);

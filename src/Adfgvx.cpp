@@ -9,6 +9,7 @@
 #include "exceptions/BadChar.hpp"
 
 #include <utility>
+#include <algorithm>
 
 const std::string Adfgvx::code = "ADFGVX";
 
@@ -42,6 +43,22 @@ void Adfgvx::setGridKey(const Grid &grid)
    this->grid_key = grid;
 }
 
+const std::vector<uint8_t> Adfgvx::getPermutationKey() const
+{
+   std::string sorted_key(key);
+   std::sort(sorted_key.begin(), sorted_key.end());
+   
+   std::vector<uint8_t> perm_key;
+   perm_key.reserve(key.length());
+   
+   for(const auto c : key)
+   {
+      perm_key.push_back(static_cast<uint8_t>(sorted_key.find(c)));
+   }
+   
+   return perm_key;
+}
+
 const Adfgvx::ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
 {
    if(grid_key.empty())
@@ -65,7 +82,7 @@ const Adfgvx::ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
 
    // Étape 2 : On surchiffre à l'aide d'une transposition avec la clé key.
    TranspositionColumns *TCol = new TranspositionColumns();
-   TCol->setKey(key);
+   TCol->setKey(getPermutationKey());
    
    return TCol->encode(first_encoding);
 }
@@ -82,8 +99,8 @@ const Adfgvx::ClassicalType Adfgvx::decode(const ClassicalType &cipher_text)
    decrypted.reserve(cipher_len >> 1);
    
    TranspositionColumns *TCol = new TranspositionColumns();
-   TCol->setKey(key);
-   const std::string first_decoding = TCol->decode(cipher_text);
+   TCol->setKey(getPermutationKey());
+   std::string first_decoding = TCol->decode(cipher_text);
    
    for(unsigned int i = 0; i < cipher_len; i += 2)
    {

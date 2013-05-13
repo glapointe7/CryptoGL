@@ -5,7 +5,7 @@
 #include <time.h>
 #include <vector>
 
-// La clé correspond au masque, c'est-à-dire les coordonnées de chaque trous du masque.
+// The key is represented by the coordinates of each 'hole' in the grid's mask.
 
 void Fleissner::setKey(const std::vector<Coordinates> key)
 {
@@ -17,36 +17,34 @@ void Fleissner::setGridDimension(const unsigned short dim)
    grid_dim = dim;
 }
 
-// Vérifie que le masque initial contient exactement le quart des cellules de la grille.
+// Check if the initial mask holes represent exactly the quarter of the number of cells grid.
 
 bool Fleissner::checkMask(std::vector<Coordinates> &coords) const
 {
-   unsigned short key_size = key.size();
-   unsigned short mask_size_approuved = key_size * 4;
+   const unsigned short key_size = key.size();
+   const unsigned short mask_size_approuved = key_size << 2;
 
-   // La matrice doit être carrée.
+   // The gris has to be square.
    if (mask_size_approuved != (grid_dim * grid_dim))
    {
       return false;
    }
 
-   // Afin d'ordonner les coordonnées pour chaque rotation.
+   // Sort coordinates for each rotation.
    std::set<Coordinates> rotation90, rotation180, rotation270;
    std::set<Coordinates> cmp;
    std::pair < std::set<Coordinates>::iterator, bool> is_unique;
 
-   // On remplit le SET du masque initial key et on insert les rotations ordonnées 
-   // en s'assurant que les coordonnées sont uniques.
-   for (auto xy : key)
+   // Make sure that the coordinates are unique.
+   for (const auto xy : key)
    {
       cmp.insert(std::make_pair(xy.first, xy.second));
    }
 
-   // On vérifie si les coordonnées des rotations existent. 
-   // Si l'une d'elles existe, alors le masque initial n'est pas valide.
-   for (auto xy : key)
+   // If the rotation coordinates exist, then the mask is not valid. 
+   for (const auto xy : key)
    {
-      // 270 degrés
+      // 270 degrees
       is_unique = cmp.insert(std::make_pair(grid_dim - 1 - xy.second, xy.first));
       if (is_unique.second == false)
       {
@@ -56,9 +54,9 @@ bool Fleissner::checkMask(std::vector<Coordinates> &coords) const
    }
    coords.insert(coords.end(), rotation270.begin(), rotation270.end());
 
-   for (auto xy : key)
+   for (const auto xy : key)
    {
-      // 180 degrés
+      // 180 degrees
       is_unique = cmp.insert(std::make_pair(grid_dim - 1 - xy.first, grid_dim - 1 - xy.second));
       if (is_unique.second == false)
       {
@@ -68,9 +66,9 @@ bool Fleissner::checkMask(std::vector<Coordinates> &coords) const
    }
    coords.insert(coords.end(), rotation180.begin(), rotation180.end());
 
-   for (auto xy : key)
+   for (const auto xy : key)
    {
-      // 90 degrés
+      // 90 degrees
       is_unique = cmp.insert(std::make_pair(xy.second, grid_dim - 1 - xy.first));
       if (is_unique.second == false)
       {
@@ -83,35 +81,15 @@ bool Fleissner::checkMask(std::vector<Coordinates> &coords) const
    return true;
 }
 
-// Remplit le texte clair par des caractères au hasard afin d'obtenir 
-// un multiple du carré de grid_dim.
-
-/*void Fleissner::fillWithRandomChars(ClassicalType &text)
-{
-   unsigned int fillers = text.length() % (grid_dim * grid_dim);
-   unsigned short alpha_len = alpha.length() + 1;
-   srand(time(0));
-
-   for (unsigned int i = 0; i < fillers; i++)
-   {
-      unsigned short rnd_alpha_pos = rand() % alpha_len;
-      text += alpha[rnd_alpha_pos];
-   }
-}*/
-
-// Encode un texte avec la grille tournante de Fleissner.
-
 const Fleissner::ClassicalType Fleissner::encode(const ClassicalType &clear_text)
 {
    ClassicalType crypted = "";
    std::vector<Coordinates> coords(key);
    unsigned short dim = grid_dim * grid_dim;
 
-   // Si le masque est valide.
    if (checkMask(coords) == true)
    {
       ClassicalType full_text(appendChars(clear_text, dim, 'X'));
-      //fillWithRandomChars(full_text);
 
       // On réserve l'espace selon grid_dim pour la grille.
       std::vector<std::string> grid;
@@ -121,22 +99,19 @@ const Fleissner::ClassicalType Fleissner::encode(const ClassicalType &clear_text
          grid[p].reserve(grid_dim);
       }
 
-      // Construire la chaîne de cryptage complète.
-      // Si la grille est pleine, alors on la vide et on recommence le processus.
-      unsigned int clear_len = full_text.length();
-      unsigned short max_grid = static_cast<unsigned short> (clear_len / dim);
+      // If the grid is filled, we clear it and we start the process again.
+      const unsigned int clear_len = full_text.length();
+      const unsigned short max_grid = static_cast<unsigned short> (clear_len / dim);
       unsigned int k = 0;
 
       for (unsigned short i = 0; i < max_grid; i++)
       {
-         // Remplir la grille de chiffrement selon les coordonnées recueillies.
          for (unsigned short j = 0; j < dim; j++, k++)
          {
             grid[coords[j].first][coords[j].second] = full_text[k];
          }
 
-         // Construire la cha�ne de chiffrement et vider la grille.
-         for (auto str : grid)
+         for (const auto str : grid)
          {
             crypted += str;
          }
@@ -147,8 +122,6 @@ const Fleissner::ClassicalType Fleissner::encode(const ClassicalType &clear_text
    return crypted;
 }
 
-// Décode un cryptogramme de la grille de Fleissner.
-
 const Fleissner::ClassicalType Fleissner::decode(const ClassicalType &cipher_text)
 {
    ClassicalType decrypted = "";
@@ -156,7 +129,6 @@ const Fleissner::ClassicalType Fleissner::decode(const ClassicalType &cipher_tex
    std::vector<Coordinates> coords(key);
    const unsigned short dim = grid_dim * grid_dim;
 
-   // On v�rifie si le masque initial est valide et on obtient les coordonn�es de ses rotations.
    if (checkMask(coords) == true)
    {
       const unsigned short max_grid = static_cast<unsigned short> (cipher_text.length() / dim);
@@ -165,7 +137,7 @@ const Fleissner::ClassicalType Fleissner::decode(const ClassicalType &cipher_tex
 
       for (unsigned int i = 0; i < max_grid; i++)
       {
-         // On remplit la grille du cipher text.
+         // Fill the grid with the cipher text.
          for (unsigned short j = 0; j < grid_dim; j++)
          {
             grid.push_back(cipher_text.substr(k, grid_dim));

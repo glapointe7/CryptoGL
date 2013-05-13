@@ -27,8 +27,8 @@ TEST_F(HellmanTest, encode)
    22ull, 16ull, 22ull, 44ull, 9ull, 16ull};
    
    H->setPrivateKey({1ull, 2ull, 4ull, 9ull});
-   H->setDividend(15ull);
-   H->setModulo(17ull);
+   H->setDividend(15);
+   H->setModulo(17);
    EXPECT_EQ(expected, H->encode(Hellman::stringToBytes(clear_text)));
 }
 
@@ -39,8 +39,8 @@ TEST_F(HellmanTest, decode)
    22ull, 16ull, 22ull, 44ull, 9ull, 16ull};
    
    H->setPrivateKey({1ull, 2ull, 4ull, 9ull});
-   H->setDividend(15ull);
-   H->setModulo(17ull);
+   H->setDividend(15);
+   H->setModulo(17);
    EXPECT_EQ(clear_text, Hellman::byteToString(H->decode(expected)));
 }
 

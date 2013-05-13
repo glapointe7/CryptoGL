@@ -37,7 +37,7 @@ protected:
       return ClassicalType(1, alpha[(alpha.find(key_pos) - alpha.find(c) + alpha.length()) % alpha.length()]);
    }
 
-   ClassicalType key;
+   ClassicalType key = "";
    const GetCharFunction charEncode, charDecode;
 
 public:
@@ -84,7 +84,7 @@ public:
    Rozier()
    : Vigenere(clearPlusKey, clearMinusKey) {}
 
-   virtual void setKey(const ClassicalType &v_key) final
+   void setKey(const ClassicalType &v_key)
    {
       if (v_key.empty())
       {
@@ -97,15 +97,15 @@ public:
          throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
       }
 
-      const unsigned int key_length = v_key.length();
-      const uint32_t alpha_len = alpha.length();
-      key = "";
+      const uint32_t key_length = v_key.length();
+      const uint8_t alpha_len = alpha.length();
       key.reserve(key_length);
 
-      for (unsigned int i = 0; i < key_length - 1; ++i)
+      for (uint32_t i = 0; i < key_length - 1; ++i)
       {
          key += alpha[(alpha.find(v_key[i + 1]) - alpha.find(v_key[i]) + alpha_len) % alpha_len];
       }
+      key += alpha[(alpha.find(v_key[key_length - 1]) - alpha.find(v_key[0]) + alpha_len) % alpha_len];
    }
 };
 
@@ -174,6 +174,26 @@ public:
       }
 
       return toReturn;
+   }
+};
+
+class Gronsfeld : public Vigenere
+{
+public:
+   Gronsfeld()
+   : Vigenere(clearPlusKey, clearMinusKey) {}
+   
+   void setKey(const std::vector<int32_t> &grons_key)
+   {
+      const int8_t alpha_len = alpha.length();
+      key.clear();
+      key.reserve(grons_key.size());
+      
+      for(const auto number : grons_key)
+      {
+         const int8_t x = number % alpha_len;
+         key += alpha[(x + alpha_len) % alpha_len];
+      }
    }
 };
 

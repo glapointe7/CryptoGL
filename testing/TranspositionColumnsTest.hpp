@@ -24,7 +24,8 @@ TEST_F(TranspositionColumnsTest, encode)
 {
    const std::string clear_text = "SALUTLESPETITSPOTS";
 
-   TC->setKey("GRAIN");
+   // G R A I N
+   TC->setKey({1, 4, 0, 2, 3});
    EXPECT_EQ("LSTSSLTOUPSXTEPXAEIT", TC->encode(clear_text));
 }
 
@@ -32,7 +33,7 @@ TEST_F(TranspositionColumnsTest, decode)
 {
    const std::string clear_text = "SALUTLESPETITSPOTSXX";
 
-   TC->setKey("GRAIN");
+   TC->setKey({1, 4, 0, 2, 3});
    EXPECT_EQ(clear_text, TC->decode("LSTSSLTOUPSXTEPXAEIT"));
 }
 
