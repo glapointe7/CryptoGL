@@ -36,14 +36,14 @@ std::string convertBytesToBinaryString(const std::vector<unsigned char> &bytes)
    return bits;
 }
 
-std::vector<bool> convertBytesToBinary(const std::vector<unsigned char> &bytes)
+const std::vector<bool> convertBytesToBinary(const std::vector<unsigned char> &bytes)
 {
    std::vector<bool> all_bits;
    
-   for (auto c : bytes)
+   for (const auto c : bytes)
    {
       std::bitset<8> byte(c);
-      for(int i = 8; i >= 0; --i)
+      for(char i = 7; i >= 0; --i)
       {
          all_bits.push_back(byte.test(i));
       }

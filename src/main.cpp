@@ -19,7 +19,7 @@
 #include "../testing/HellmanTest.hpp"
 #include "../testing/TranspositionRowsTest.hpp"
 #include "../testing/TranspositionColumnsTest.hpp"
-#include "../testing/TranspositionDoubleTest.hpp"
+//#include "../testing/TranspositionDoubleTest.hpp"
 #include "../testing/MorseTest.hpp"
 #include "../testing/UnsortAlphaTest.hpp"
 #include "../testing/DESTest.hpp"

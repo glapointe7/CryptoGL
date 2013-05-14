@@ -23,8 +23,8 @@ protected:
 TEST_F(TranspositionDoubleTest, encode)
 {
    const std::string clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPERATIONS";
-   const std::vector<uint32_t> key_row = {5ul, 2ul, 1ul, 4ul, 3ul, 6ul, 0ul};
-   const std::vector<uint8_t> key = {5u, 2u, 1u, 4u, 3u, 6u, 0u};
+   const std::vector<uint32_t> key_row = {5, 2, 1, 4, 3, 6, 0};
+   const std::vector<uint8_t> key = {5, 2, 1, 4, 3, 6, 0};
    
    TD->setKey(key);
    TD->setKeyRow(key_row);
@@ -34,8 +34,8 @@ TEST_F(TranspositionDoubleTest, encode)
 TEST_F(TranspositionDoubleTest, decode)
 {
    const std::string clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPERATIONS";
-   const std::vector<uint32_t> key_row = {5ul, 2ul, 1ul, 4ul, 3ul, 6ul, 0ul};
-   const std::vector<uint8_t> key = {5u, 2u, 1u, 4u, 3u, 6u, 0u};
+   const std::vector<uint32_t> key_row = {5, 2, 1, 4, 3, 6, 0};
+   const std::vector<uint8_t> key = {5, 2, 1, 4, 3, 6, 0};
    
    TD->setKey(key);
    TD->setKeyRow(key_row);

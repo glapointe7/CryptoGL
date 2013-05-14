@@ -20,7 +20,7 @@ Transposition::setStartingTable(const ClassicalType &data)
 }
 
 const Transposition::ClassicalType 
-Transposition::readFinalTable(const std::vector<ClassicalType> &table)
+Transposition::readFinalTable(const std::vector<ClassicalType> &table) const
 {
    ClassicalType data = "";
    data.reserve(table.size() * key.size());

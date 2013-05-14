@@ -12,7 +12,7 @@ class Hill : public StringCipher
    typedef std::vector<std::vector<int32_t> > Matrice;
    
 public:
-   Hill() {key = new Matrix(); }
+   Hill() { key = new Matrix(); }
    ~Hill() { delete key; }
    
    const ClassicalType encode(const ClassicalType &) final;

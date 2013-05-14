@@ -9,7 +9,7 @@ std::string baseConvertString(const std::string &number, const unsigned char fro
 
 void uppercase(std::string &text);
 void convertMajMinToSymbol(std::string &text, const std::string symbol);
-std::vector<bool> convertBytesToBinary(const std::vector<unsigned char> &bytes);
+const std::vector<bool> convertBytesToBinary(const std::vector<unsigned char> &bytes);
 
 std::string convertBytesToBinaryString(const std::vector<unsigned char> &bytes);
 

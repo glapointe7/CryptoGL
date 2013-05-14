@@ -10,11 +10,10 @@
 
 void Hill::setKey(const Matrice &key)
 {
-   Matrix *M = new Matrix();
    try
    {
-      M->setMatrix(key);
-      M->setModulo(alpha.length());
+      this->key->setMatrix(key);
+      this->key->setModulo(alpha.length());
    }
    catch (EmptyMatrix & EM)
    {
@@ -26,13 +25,10 @@ void Hill::setKey(const Matrice &key)
    }
 
    // The key must be reversible.
-   if (GCD(M->det(), M->getModulo()) != 1)
+   if (GCD(this->key->det(), this->key->getModulo()) != 1)
    {
       throw MatrixKeyNotReversible("Your matrix key should be reversible to be able to decode the message.");
    }
-   
-   this->key = new Matrix(*M);
-   delete M;
 }
 
 // Process encode / decode of the data with the matrix key K.

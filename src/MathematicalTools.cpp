@@ -3,7 +3,7 @@
 #include <cmath>
 #include "exceptions/Exception.hpp"
 
-// Retourne PGCD(a,b).
+// Return GCD(a,b).
 
 uint32_t GCD(uint32_t a, uint32_t b)
 {
@@ -13,25 +13,12 @@ uint32_t GCD(uint32_t a, uint32_t b)
    return GCD(b, a % b);
 }
 
-// Retourne le reste d'une division enti�re.
-
-int32_t getIntegerMod(const int32_t n, const int32_t mod)
-{
-   int32_t ans = n;
-   int32_t x = floor((float) n / mod);
-   ans -= (x * mod);
-   if (ans < 0)
-      ans += mod;
-
-   return ans;
-}
-
 // Calcule l'inverse de a modulo n dans Z_b.
-// Théorème de Bézout : a*u + b*v = 1. v est l'inverse recherché.
+// Theorem of Bézout : a*u + b*v = 1. v is the inverse to find.
 
 int32_t getModInverse(int32_t a, const int32_t b)
 {
-   // Si a et n sont copremiers, alors a^-1 existe dans Z_b.
+   // If a and n are coprimes, then a^-1 exists in Z_b.
    int32_t v = 0;
    if (GCD(a, b) == 1)
    {

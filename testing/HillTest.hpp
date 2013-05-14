@@ -38,4 +38,22 @@ TEST_F(HillTest, decode)
    EXPECT_EQ(clear_text, H->decode("CMJBFEQJQJTXZHWDYAKJQOQFNNSUHDJUOUZHGMYPCKRJFBMHVBQQNIKJEKRCQDSQRSGANLWQZX"));
 }
 
+TEST_F(HillTest, encode3X3)
+{
+   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
+   const std::vector<std::vector<int32_t> > key = {{1, 3, 1}, {1, 1, 0}, {2, 9, 3}};
+   
+   H->setKey(key);
+   EXPECT_EQ("DSRMNQXTJEABZRGJJIDXFFQNVNYZDFCGRFXJWYCFBWUBVHMNJXIAPMBXZELSVFHCNMJWXSWOSLJ", H->encode(clear_text));
+}
+
+TEST_F(HillTest, decode3X3)
+{
+   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTSX";
+   const std::vector<std::vector<int32_t> > key = {{1, 3, 1}, {1, 1, 0}, {2, 9, 3}};
+   
+   H->setKey(key);
+   EXPECT_EQ(clear_text, H->decode("DSRMNQXTJEABZRGJJIDXFFQNVNYZDFCGRFXJWYCFBWUBVHMNJXIAPMBXZELSVFHCNMJWXSWOSLJ"));
+}
+
 #endif

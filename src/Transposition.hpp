@@ -49,7 +49,7 @@ protected:
    
    const std::vector<ClassicalType> setStartingTable(const ClassicalType &data);
    const std::vector<ClassicalType> swapColumns(const std::vector<ClassicalType> &table);
-   const ClassicalType readFinalTable(const std::vector<ClassicalType> &table);
+   const ClassicalType readFinalTable(const std::vector<ClassicalType> &table) const;
 
    std::vector<uint8_t> key;
 };
@@ -159,14 +159,14 @@ private:
       return s_table;
    }
    
-   const std::vector<ClassicalType> swapRowsEncode(const std::vector<ClassicalType> &table)
+   const std::vector<ClassicalType> swapRowsEncode(const std::vector<ClassicalType> &table) const
    {
-      std::vector<ClassicalType> s_table(table.size(), "");
-      const uint32_t key_len = key_row.size();
+      std::vector<ClassicalType> s_table;
+      s_table.reserve(key_row.size());
       
-      for (uint32_t j = 0; j < key_len; ++j)
+      for (const auto x : key_row)
       {
-         s_table[j] = table[key_row[j]];
+         s_table.push_back(table[x]);
       }
 
       return s_table;
@@ -179,15 +179,13 @@ private:
 
    const ClassicalType read(const std::vector<ClassicalType> &table)
    {
-      std::vector<ClassicalType> s_table(swapRowsEncode(table));
-
-      return readFinalTable(s_table);
+      return readFinalTable(swapRowsEncode(table));
    }
 
    const std::vector<ClassicalType> setTable(const ClassicalType &data)
    {
-      std::vector<ClassicalType> table(setStartingTable(data));
-      std::vector<ClassicalType> s_table(swapRows(table));
+      const std::vector<ClassicalType> table(setStartingTable(data));
+      const std::vector<ClassicalType> s_table(swapRows(table));
 
       return s_table;
    }

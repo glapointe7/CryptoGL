@@ -40,16 +40,16 @@ void Hellman::setPublicKey()
       throw IntegersNotCoprime("The modulo and dividend have to be coprime.");
    }
    
-   if (modulo > dividend)
+   if (modulo <= dividend)
    {
       throw BadModulo("Your modulo have to be greater than your dividend.");
    }
    
-   const uint64_t sum = std::accumulate(private_key.begin(), private_key.end(), 0);
+   /*const uint64_t sum = std::accumulate(private_key.begin(), private_key.end(), 0);
    if(modulo < sum)
    {
       throw BadModulo("Your modulo have to be greater than the sum of numbers in your private key.");
-   }
+   }*/
    
    for (const auto number : private_key)
    {
@@ -89,10 +89,14 @@ const Hellman::UInt64Container Hellman::encode(const BytesContainer &clear_text)
    // Converts given bytes into binary vector.
    // Then, add ones until we get a multiple of block_size.
    std::vector<bool> binary(convertBytesToBinary(clear_text));
-   binary.insert(binary.end(), block_size - (binary.size() % block_size), 1);
+   const uint64_t rest = binary.size() % block_size;
+   if(rest != 0)
+   {
+      binary.insert(binary.end(), block_size - rest, 1);
+   }
 
    // Split the binary vector into blocks of block_size bits.
-   std::vector < std::vector<bool> > bin_blocks(getBlockBinary(binary, block_size));
+  const std::vector<std::vector<bool> > bin_blocks(getBlockBinary(binary, block_size));
 
    // Calculate Sum_{i=0}^{block_size} (block[i] * public_key[i]).
    for (const auto block : bin_blocks)
@@ -116,7 +120,7 @@ const Hellman::BytesContainer Hellman::decode(const UInt64Container &cipher_text
    const uint64_t inv_coprime = getModInverse(dividend, modulo);
 
    std::vector<bool> bits(cipher_text.size() * private_key.size(), 0);
-   unsigned int i = 0;
+   uint32_t i = 0;
 
    for (const auto number : cipher_text)
    {
