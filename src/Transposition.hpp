@@ -138,68 +138,44 @@ public:
    }
 };
 
-// Chiffre à transposition double : permutation des colonnes puis des lignes du tableau.
+// Double columnar transposition.
 
-class TranspositionDouble : public Transposition
+class TranspositionDouble : public StringCipher
 {
 private:
-   std::vector<uint32_t> key_row;
-
-   const std::vector<ClassicalType> swapRows(const std::vector<ClassicalType> &table)
-   {
-      std::vector<ClassicalType> s_table(table.size(), "");
-      const uint32_t key_len = key_row.size();
-      
-      for (uint32_t j = 0; j < key_len; ++j)
-      {
-         const uint32_t pos = std::find(key_row.begin(), key_row.end(), j) - key_row.begin();
-         s_table[j] = table[pos];
-      }
-
-      return s_table;
-   }
-   
-   const std::vector<ClassicalType> swapRowsEncode(const std::vector<ClassicalType> &table) const
-   {
-      std::vector<ClassicalType> s_table;
-      s_table.reserve(key_row.size());
-      
-      for (const auto x : key_row)
-      {
-         s_table.push_back(table[x]);
-      }
-
-      return s_table;
-   }
-   
-   const std::vector<ClassicalType> swapColumnsDecode(const std::vector<ClassicalType> &table)
-   {
-      return swapColumns(table);
-   }
-
-   const ClassicalType read(const std::vector<ClassicalType> &table)
-   {
-      return readFinalTable(swapRowsEncode(table));
-   }
-
-   const std::vector<ClassicalType> setTable(const ClassicalType &data)
-   {
-      const std::vector<ClassicalType> table(setStartingTable(data));
-      const std::vector<ClassicalType> s_table(swapRows(table));
-
-      return s_table;
-   }
+   std::vector<uint8_t> second_key;
+   std::vector<uint8_t> key;
 
 public:
 
-   void setKeyRow(const std::vector<uint32_t> &key_row)
+   void setKey(const std::vector<uint8_t> &key)
    {
-      if (key_row.size() != key.size())
-      {
-         throw BadKeyLength("Your rows key have to be the same length as the columns key.", key_row.size());
-      }
-
-      this->key_row = key_row;
+      this->key = key;
+   }
+   
+   void setSecondKey(const std::vector<uint8_t> &second_key)
+   {
+      this->second_key = second_key;
+   }
+   
+   const ClassicalType encode(const ClassicalType &clear_text)
+   {
+      TranspositionColumns *TC = new TranspositionColumns();
+      TC->setKey(key);
+      const ClassicalType first_encoded = TC->encode(clear_text);
+      TC->setKey(second_key);
+      
+      return TC->encode(first_encoded);
+   }
+   
+   const ClassicalType decode(const ClassicalType &cipher_text)
+   {
+      TranspositionColumns *TC = new TranspositionColumns();
+      TC->setKey(second_key);
+      const ClassicalType first_decoded = TC->decode(cipher_text);
+      TC->setKey(key);
+      
+      return TC->decode(first_decoded);
    }
 };
 

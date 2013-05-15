@@ -13,12 +13,10 @@ void Wolseley::setKey(const std::string &key)
 {
    if(key.empty())
    {
-      throw EmptyKey("Tour key should not be empty or not set.");
+      throw EmptyKey("Tour key have to be not empty.");
    }
-   else
-   {
-      this->key = key;
-   }
+   
+   this->key = key;
 }
 
 // Encode un message avec le chiffre de Wolseley.

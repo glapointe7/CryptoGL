@@ -22,27 +22,26 @@ public:
 
    const uint32_t getDimension() const;
    void setDimension(const uint32_t);
+   
    const int32_t getModulo() const;
    void setModulo(const int32_t);
 
-   friend Matrix operator +(const Matrix& a, const Matrix& b);
    friend std::vector<uint32_t> operator *(const Matrix *K, const std::vector<uint32_t> &V);
 
-   void setIdentity();
    const Matrice identity() const;
-   void zeros();
    
-   int32_t getTrace() const;
-   int32_t getDiagonalProduct(const Matrice &A) const;
    int32_t det() const;
    const Matrix* inverse() const;
    
 private:
    uint32_t findNonZero(const Matrice &A, const uint32_t from) const;
    static bool isSquare(const Matrice &mat);
+   int32_t getDiagonalProduct(const Matrice &A) const;
+   void setIdentity();
+   void triangularize(Matrice &A, Matrice &I, const uint32_t k, const uint32_t lower_i, const uint32_t upper_i) const;
    
    // Dimension de la matrice carrée.
-   uint32_t dim = 0;
+   uint32_t dim;
 
    // Matrice d'entiers modulo n (M est dans GL_dim(Z_n)).
    int32_t n = 1;

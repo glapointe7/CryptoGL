@@ -93,33 +93,6 @@ uint32_t Matrix::findNonZero(const Matrice &A, const uint32_t from) const
    return pos;
 }
 
-Matrix operator+(const Matrix &A, const Matrix &B)
-{
-   if (A.getDimension() == 0 || B.getDimension() == 0)
-   {
-      throw EmptyMatrix("Dimension of the matrices should not be zero.");
-   }
-   else if (A.getDimension() != B.getDimension())
-   {
-      throw MatrixNotSquare("Both matrices should be the same dimension.");
-   }
-   else
-   {
-      Matrix result;
-      const uint32_t dim_A = A.getDimension();
-      result.setDimension(dim_A);
-      for (uint32_t row = 0; row < dim_A; row++)
-      {
-         for (uint32_t col = 0; col < dim_A; col++)
-         {
-            result.set(row, col, A.get(row, col) + B.get(row, col));
-         }
-      }
-
-      return result;
-   }
-}
-
 // Multiply a matrix and a column-vector. Return the column-vector solution.
 
 std::vector<uint32_t> operator *(const Matrix *K, const std::vector<uint32_t> &V)
@@ -155,6 +128,8 @@ void Matrix::setIdentity()
    }
 }
 
+// Return the matrix Identity.
+
 const Matrix::Matrice Matrix::identity() const
 {
    Matrice Mat = Matrice(dim, std::vector<int32_t>(dim, 0));
@@ -162,28 +137,8 @@ const Matrix::Matrice Matrix::identity() const
    {
       Mat[i][i] = 1;
    }
-   
+
    return Mat;
-}
-
-// Initialize to the zero matrix.
-
-void Matrix::zeros()
-{
-   M = Matrice(dim, std::vector<int32_t>(dim, 0));
-}
-
-// Get the trace of the current matrix : tr(A) = somme(a_{i,i}).
-
-int32_t Matrix::getTrace() const
-{
-   int32_t tr = 0;
-   for (uint32_t i = 0; i < dim; ++i)
-   {
-      tr += M[i][i];
-   }
-
-   return tr;
 }
 
 // Return diagonal product.
@@ -213,6 +168,29 @@ bool Matrix::isSquare(const Matrice &mat)
    }
 
    return true;
+}
+
+void Matrix::triangularize(Matrice &A, Matrice &I, const uint32_t k, const uint32_t lower_i, const uint32_t upper_i) const
+{
+   // Swap null pivot with a non null one.
+   if (A[k][k] == 0 || GCD(A[k][k], n) != 1)
+   {
+      const uint32_t pivot = findNonZero(A, k);
+      std::swap(A[pivot], A[k]);
+      std::swap(I[pivot], I[k]);
+   }
+
+   const int32_t inv = getModInverse(A[k][k], n);
+   for (uint32_t i = lower_i; i < upper_i; ++i)
+   {
+      // For rows : Li = Li + lq*Ln.
+      const int32_t lq = (inv * (n - A[i][k])) % n;
+      for (uint32_t j = 0; j < dim; ++j)
+      {
+         A[i][j] = (A[i][j] + (lq * A[k][j])) % n;
+         I[i][j] = (I[i][j] + (lq * I[k][j])) % n;
+      }
+   }
 }
 
 // Return the determinant of the current matrix.
@@ -317,50 +295,16 @@ const Matrix* Matrix::inverse() const
             A = M;
             Matrice I = identity();
 
+            // Triangular inferior.
             for (uint32_t k = 0; k < dim - 1; ++k)
             {
-               // Swap null pivot with a non null one.
-               if (A[k][k] == 0 || GCD(A[k][k], n) != 1)
-               {
-                  const uint32_t pivot = findNonZero(A, k);
-                  std::swap(A[pivot], A[k]);
-                  std::swap(I[pivot], I[k]);
-               }
-
-               const int32_t inv = getModInverse(A[k][k], n);
-               for (uint32_t i = k + 1; i < dim; ++i)
-               {
-                  // For rows : Li = Li + lq*Ln.
-                  const int32_t lq = (inv * (n - A[i][k])) % n;
-                  for (uint32_t j = 0; j < dim; ++j)
-                  {
-                     A[i][j] = (A[i][j] + (lq * A[k][j])) % n;
-                     I[i][j] = (I[i][j] + (lq * I[k][j])) % n;
-                  }
-               }
+               triangularize(A, I, k, k+1, dim);
             }
             
-            for (uint32_t k = dim-1; k >= 1; --k)
+            // Triangular superior.
+            for (uint32_t k = dim - 1; k >= 1; --k)
             {
-               // Swap null pivot with a non null one.
-               if (A[k][k] == 0 || GCD(A[k][k], n) != 1)
-               {
-                  const uint32_t pivot = findNonZero(A, k);
-                  std::swap(A[pivot], A[k]);
-                  std::swap(I[pivot], I[k]);
-               }
-
-               const int32_t inv = getModInverse(A[k][k], n);
-               for (uint32_t i = 0; i < k; ++i)
-               {
-                  // For columns : Ci = Ci + cq*Cn.
-                  const int32_t cq = (inv * (n - A[i][k])) % n;
-                  for (uint32_t j = 0; j < dim; ++j)
-                  {
-                     A[i][j] = (A[i][j] + (cq * A[k][j])) % n;
-                     I[i][j] = (I[i][j] + (cq * I[k][j])) % n;
-                  }
-               }
+               triangularize(A, I, k, 0, k);
             }
 
             // Now we transform A to the identity matrix.

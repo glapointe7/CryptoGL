@@ -1,17 +1,23 @@
-Encodage / Décodage Rabbit ne renvoie pas la bonne réponse.
+1. Encodage / Décodage Rabbit ne renvoie pas la bonne réponse.
 
-Coder le decode de DES.
+2. Coder le decode de DES.
 
-Régler le problème du LITTLE ENDIAN dans l'encodage MD5.
+3. Régler le problème du LITTLE ENDIAN dans l'encodage MD5.
 
-Coder le save et load de SymmetricCipher.
+4. Tester la substitution monoalpha.
 
-EXCEPTIONS :
+5. Implémenter RailFence Cipher et Redefense Cipher : vecteur de permutation et offset.
 
-   1. BadChar : devrait avoir un 2e paramètre recevant le mauvais caractère trouvé.
+6. Implémenter un Loader et Saver.
 
-   2. MatrixKeyNotReversible : 2e paramètre indiquant le déterminant de la matrice en cours.
+7. Donner la possibilité d'avoir une transpo. incomplète.
 
-   3. MatrixOutOfRange : 2e paramètre indiquant les coordonnées erronées et un 3e paramètre pour la dimension en cours.
+8. Tester les transpos. incomplètes + double.
 
-   4. BadLengthKey : 2e paramètre indiquant la longueur donnée et un 3e indiquant le range de la longueur demandée.
+9. Tester MD5.
+
+10. Implémenter l'algorithme de la génétique pour l'attaque sur la substitution monoalpha.
+
+11. Implémenter l'attaque sur Fleissner avec masque-clé incomplet.
+
+

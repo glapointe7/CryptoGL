@@ -1,5 +1,5 @@
 /*
- * TO DO : Save
+ * Frequencies taken on : http://www.letterfrequency.org/
  */
 #ifndef FREQUENCIESANALYSIS_HPP
 #define	FREQUENCIESANALYSIS_HPP
@@ -10,22 +10,28 @@
 class FrequenciesAnalysis
 {
 public:
-   FrequenciesAnalysis();
    virtual ~FrequenciesAnalysis() {}
+   
+   enum class Language : uint8_t {
+      french,
+      english,
+      spanish,
+      german,
+      dutch
+   };
    
    void calculateIC(const std::string &);
    double getIC() const;
    
-   void setAlpha(const std::string &);
+   void setAlpha(const std::string &alpha);
+   void setLanguage(const Language &lang);
    
-   std::map<char, unsigned int> getCharsCount(const std::string &);
-   
-   static std::string load(const std::string &);
-   static void save(const std::string &, const std::string &);
+   const std::map<char, unsigned int> getCharsCount(const std::string &text) const;
    
 private:
    double ic = 0;
    std::string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+   std::string language = "etaoinsrhldcumfgpywbvkxjqz";
 };
 
 #endif

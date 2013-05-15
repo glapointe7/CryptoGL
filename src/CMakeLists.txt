@@ -59,6 +59,7 @@ set(SRC
 	Vigenere.hpp Vigenere.cpp
 	Wolseley.hpp Wolseley.cpp
    Affine.hpp Affine.cpp
+   MonoalphabeticSubstitution.hpp MonoalphabeticSubstitution.cpp
 )
 
 # Create libcomponants.a with all the source files provided by SRC.
