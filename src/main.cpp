@@ -26,6 +26,7 @@
 #include "../testing/RC4Test.hpp"
 #include "../testing/HillTest.hpp"
 #include "../testing/AffineTest.hpp"
+#include "../testing/RabbitTest.hpp"
 
 //#include "attacks/CaesarAttack.hpp"
 //#include "attacks/TranspositionAttack.hpp"

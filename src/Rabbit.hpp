@@ -6,10 +6,15 @@
 
 #include "StreamCipher.hpp"
 
+#include "exceptions/BadKeyLength.hpp"
+
 #include <vector>
 
 class Rabbit : public StreamCipher
 {
+   using BadIVLength = BadKeyLength;
+   using BadDataLength = BadKeyLength;
+   
 public:
    const BytesContainer encode(const BytesContainer &) final;
    const BytesContainer decode(const BytesContainer &) final;
@@ -22,7 +27,7 @@ private:
    void keySetup() final;
    void IVSetup();
    void nextState();
-   BytesContainer getOutput();
+   static uint32_t g(const uint32_t x);
    
    // Initialise le counters et le states en mettant le carry bit à 0.
    // States : divisé en 8 states de 32 bits chacun (uint32).

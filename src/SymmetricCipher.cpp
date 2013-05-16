@@ -4,12 +4,13 @@
 #include <fstream>
 
 // FILE old style is faster than the c++ STL ofstream to write bytes in a file.
+
 void SymmetricCipher::save(const std::string &filename, const BytesContainer &data)
 {
    FILE *pFile;
    pFile = fopen(filename.c_str(), "wb");
    size_t data_size = data.size();
-   
+
    fwrite(&data.front(), 1, data_size, pFile);
    fclose(pFile);
 }
@@ -39,13 +40,14 @@ SymmetricCipher::load(const std::string &filename)
 const std::string SymmetricCipher::hexDigest(const BytesContainer &bytes)
 {
    std::stringstream ss;
+   ss.setf(std::ios::hex, std::ios::basefield);
+   ss << std::uppercase;
 
    for (const auto byte : bytes)
    {
-      ss.setf(std::ios::hex, std::ios::basefield);
       ss.fill('0');
       ss.width(2);
-      ss << std::uppercase << static_cast<uint16_t> (byte);
+      ss << static_cast<uint16_t> (byte);
    }
 
    return ss.str();

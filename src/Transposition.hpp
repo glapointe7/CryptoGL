@@ -112,7 +112,6 @@ public:
          s_table[i].reserve(key_len);
          for (uint8_t j = 0; j < key_len; ++j)
          {
-            //const uint8_t pos = std::find(key.begin(), key.end(), j) - key.begin();
             s_table[i] += table[i][key[j]];
          }
       }
