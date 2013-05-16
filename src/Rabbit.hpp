@@ -21,7 +21,6 @@ public:
 
    void setKey(const BytesContainer &) final;
    void setIV(const BytesContainer &);
-   void reset();
 
 private:
    void keySetup() final;

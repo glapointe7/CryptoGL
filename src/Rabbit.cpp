@@ -152,15 +152,6 @@ void Rabbit::IVSetup()
    }
 }
 
-// Initialize states, counters and counter_carry_bit.
-
-void Rabbit::reset()
-{
-   states = {0, 0, 0, 0, 0, 0, 0, 0};
-   counters = {0, 0, 0, 0, 0, 0, 0, 0};
-   counter_carry_bit = 0;
-}
-
 const Rabbit::BytesContainer Rabbit::encode(const BytesContainer &clear_text)
 {
    // Clear_text have to be a multiple of 16 bytes.

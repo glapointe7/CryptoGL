@@ -1,7 +1,7 @@
 /*
  * Encryption MD5
  * 
- * Données tests : (http://tools.ietf.org/html/rfc1321)
+ * Tests from (http://tools.ietf.org/html/rfc1321)
  * 
 MD5 ("") = d41d8cd98f00b204e9800998ecf8427e
 MD5 ("a") = 0cc175b9c0f1b6a831c399e269772661
@@ -25,15 +25,15 @@ MD5 ("12345678901234567890123456789012345678901234567890123456789012345678901234
 class MD5 : public HashFunction
 {
 public:
-   virtual const BytesContainer encode(const BytesContainer &);
+   virtual const BytesContainer encode(const BytesContainer &data);
 
 private:
-   virtual const BitsContainer addPadding(const BitsContainer &);
+   virtual const BitsContainer addPadding(const BitsContainer &data_bits);
 
-   static uint32_t F(uint32_t x, uint32_t y, uint32_t z);
-   static uint32_t G(uint32_t x, uint32_t y, uint32_t z);
-   static uint32_t H(uint32_t x, uint32_t y, uint32_t z);
-   static uint32_t I(uint32_t x, uint32_t y, uint32_t z);
+   static uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z);
+   static uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z);
+   static uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z);
+   static uint32_t I(const uint32_t x, const uint32_t y, const uint32_t z);
 
    WordsContainer state = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
 

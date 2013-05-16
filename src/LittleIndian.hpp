@@ -8,7 +8,8 @@ class LittleIndian {
     const uint32_t mod = sizeof(T);
 
 public:
-    void add(const uint8_t byte, const uint32_t offset) {
+    void add(const uint8_t byte, const uint32_t offset) 
+    {
         value |= byte << (8 * (offset % mod));
     }
 
