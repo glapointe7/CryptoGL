@@ -30,5 +30,6 @@ const uint64_t rotateRight(const int64_t &value, const unsigned char shift, cons
 const uint64_t getBitsFromTable(const uint64_t &data, const Table &table, const uint64_t from, const uint64_t to);
 void endianSwap32(uint32_t &value);
 void endianSwap64(uint64_t &value);
+const std::vector<uint8_t> getXORedBlock(const std::vector<uint8_t> &block1, const std::vector<uint8_t> &block2);
 
 #endif

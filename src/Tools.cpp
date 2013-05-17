@@ -268,3 +268,17 @@ const uint64_t getBitsFromTable(const uint64_t &data, const Table &table, const 
 
    return output;
 }
+
+const std::vector<uint8_t> getXORedBlock(const std::vector<uint8_t> &block1, const std::vector<uint8_t> &block2)
+{
+   const uint32_t size = block1.size();
+   std::vector<uint8_t> xored_block;
+   xored_block.reserve(size);
+   
+   for(uint8_t i = 0; i < size; ++i)
+   {
+      xored_block.push_back(block1[i] ^ block2[i]);
+   }
+   
+   return xored_block;
+}

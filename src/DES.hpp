@@ -8,11 +8,14 @@
 
 #include "Feistel.hpp"
 
+#include "exceptions/EmptyKey.hpp"
+
 #include <vector>
 
 class DES : public Feistel
 {
    typedef std::vector<std::vector<uint8_t> > SBox;
+   using EmptyIV = EmptyKey;
 
 public:
    virtual const BytesContainer encode(const BytesContainer &) final;

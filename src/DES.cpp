@@ -3,7 +3,6 @@
 #include "Tools.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
-#include "exceptions/EmptyKey.hpp"
 
 void DES::setKey(const BytesContainer &key)
 {
@@ -101,12 +100,32 @@ DES::process(const BytesContainer &data, const int8_t upper_round, const int8_t 
 {
    const uint32_t clear_len = data.size();
    BytesContainer toReturn(clear_len, 0);
-
+   //BytesContainer data_0;
+   
    int8_t is_increasing = 1;
    if(lower_round < 0)
    {
       is_increasing = -1;
    }
+   
+   // Initialization block depending of an operation mode chosen.
+   /*if(Mode != OpModes::ECB)
+   {
+      if(IV.empty())
+      {
+         throw EmptyIV("Your IV have to be set.");
+      }
+      
+      switch(Mode)
+      {
+         case OpModes::CBC : 
+         case OpModes::PCBC :
+         {
+            data_0 = getXORedBlock(IV, BytesContainer(data.begin(), data.begin + 8)); 
+            break;
+         }
+      }
+   }*/
    
    uint64_t x;
    for (uint32_t n = 0; n < clear_len; n += 8)
