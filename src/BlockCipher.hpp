@@ -15,10 +15,9 @@ public:
    virtual const BytesContainer decode(const BytesContainer &) = 0;
    
    virtual void setKey(const BytesContainer &) = 0;
-   virtual UInt64Container getKeySchedule() = 0;
    
 protected:
-
+   virtual const UInt64Container getKeySchedule() = 0;
 };
 
 #endif

@@ -12,7 +12,7 @@ void Blowfish::setKey(const BytesContainer &key)
    this->key = key;
 }
 
-Blowfish::UInt64Container Blowfish::getKeySchedule()
+const Blowfish::UInt64Container Blowfish::getKeySchedule()
 {
    UInt64Container subkeys(18, 0);
    //const uint32_t key_len = key.size();

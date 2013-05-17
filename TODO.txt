@@ -1,5 +1,3 @@
-2. Coder le decode de DES.
-
 3. Régler le problème du LITTLE ENDIAN dans l'encodage MD5.
 
 4. Tester la substitution monoalpha.
@@ -18,4 +16,8 @@
 
 11. Implémenter l'attaque sur Fleissner avec masque-clé incomplet.
 
+12. Implémenter un générateur aléatoire de bits.
 
+13. Comprendre les 3 modes d'encryption du DES : ECB, CBC et CFB.
+
+14. Feistel : Redondance du code lors de l'exécution des 16 rounds pour toutes les cryptos qui seront sous Feistel.

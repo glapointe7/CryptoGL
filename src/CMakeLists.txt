@@ -44,6 +44,7 @@ set(SRC
 	Collon.hpp Collon.cpp
 	Delastelle.hpp Delastelle.cpp
 	DES.hpp DES.cpp
+   TripleDES.hpp TripleDES.cpp
 	Fleissner.hpp Fleissner.cpp
 	Hellman.hpp Hellman.cpp
 	Hill.hpp Hill.cpp

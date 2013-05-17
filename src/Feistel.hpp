@@ -18,14 +18,13 @@ class Feistel : public BlockCipher
 public:
    virtual const BytesContainer encode(const BytesContainer &) = 0;
    virtual const BytesContainer decode(const BytesContainer &) = 0;
-   
    virtual void setKey(const BytesContainer &) = 0;
-   virtual UInt64Container getKeySchedule() = 0;
-   
-   virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const = 0;
-  
-private:
 
+protected:
+   virtual const UInt64Container getKeySchedule() = 0;
+   virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const = 0;
+   
+   
 };
 
 #endif

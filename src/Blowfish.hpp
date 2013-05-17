@@ -14,13 +14,13 @@ class Blowfish : public Feistel
    typedef std::vector<uint32_t> SBox;
 
 public:
-   virtual const BytesContainer encode(const BytesContainer &);
-   virtual const BytesContainer decode(const BytesContainer &);
+   virtual const BytesContainer encode(const BytesContainer &) final;
+   virtual const BytesContainer decode(const BytesContainer &) final;
    
-   virtual void setKey(const BytesContainer &);
-   virtual UInt64Container getKeySchedule();
+   virtual void setKey(const BytesContainer &key) final;
+   virtual const UInt64Container getKeySchedule() final;
    
-   virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const;
+   virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
    
 private:
 

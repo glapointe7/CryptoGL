@@ -1,6 +1,6 @@
 /*
  * http://en.wikipedia.org/wiki/Data_Encryption_Standard
- * 
+ * http://www.orlingrabbe.com/des.htm
  */
 
 #ifndef DES_HPP
@@ -12,23 +12,20 @@
 
 class DES : public Feistel
 {
-   typedef std::vector<std::vector<unsigned char> > SBox;
+   typedef std::vector<std::vector<uint8_t> > SBox;
 
 public:
-   BytesContainer const encode(const BytesContainer &) final;
-   BytesContainer const decode(const BytesContainer &) final;
+   virtual const BytesContainer encode(const BytesContainer &) final;
+   virtual const BytesContainer decode(const BytesContainer &) final;
 
-   void setKey(const BytesContainer &) final;
-   UInt64Container getKeySchedule() final;
+   virtual void setKey(const BytesContainer &key) final;
    //uint8_t getParityBits();
 
 
 private:
-   //uint64_t getInitialPermutation(const uint64_t &data)const;
-   //uint64_t getFinalPermutation(const uint64_t &data) const;
-   //uint64_t expendBlock(const uint32_t data) const;
+   virtual const UInt64Container getKeySchedule() final;
    uint64_t getSubstitution(const uint64_t &key_mixed) const;
-   //uint32_t getOutput(const uint32_t s_block) const;
+   const BytesContainer process(const BytesContainer &data, const int8_t upper_round, const int8_t lower_round);
 
    // La fonction F de Feistel.
    uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
