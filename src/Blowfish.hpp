@@ -1,6 +1,6 @@
 /*
- * Constantes prises ici : http://www.schneier.com/code/constants.txt
- * Blowfish : Respecte aussi le réseau de Feistel.
+ * Constants taken here : http://www.schneier.com/code/constants.txt
+ * Blowfish is a network Feistel with 16 rounds.
  */
 #ifndef BLOWFISH_HPP
 #define	BLOWFISH_HPP
@@ -11,18 +11,17 @@
 
 class Blowfish : public Feistel
 {
-   typedef std::vector<uint32_t> SBox;
-
 public:
    virtual const BytesContainer encode(const BytesContainer &) final;
    virtual const BytesContainer decode(const BytesContainer &) final;
    
    virtual void setKey(const BytesContainer &key) final;
-   virtual const UInt64Container getKeySchedule() final;
-   
-   virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
    
 private:
+   typedef std::vector<uint32_t> SBox;
+   
+   virtual const UInt64Container getKeySchedule() final;
+   virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
 
    const SBox sbox0 = {
       0xd1310ba6L, 0x98dfb5acL, 0x2ffd72dbL, 0xd01adfb7L, 0xb8e1afedL, 0x6a267e96L,
@@ -209,7 +208,7 @@ private:
       0xb74e6132L, 0xce77e25bL, 0x578fdfe3L, 0x3ac372e6L
    };
 
-   // 18 sous-clés tirées des décimales de Pi.
+   // 18 sub-keys from the decimals of PI.
    const SBox P = {
       0x243f6a88L, 0x85a308d3L, 0x13198a2eL, 0x03707344L, 0xa4093822L, 0x299f31d0L,
       0x082efa98L, 0xec4e6c89L, 0x452821e6L, 0x38d01377L, 0xbe5466cfL, 0x34e90c6cL,

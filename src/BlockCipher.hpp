@@ -1,3 +1,17 @@
+/* MODES OF OPERATION
+ * 
+ * CBC : C_i = encode(P_i ^ C_i-1) with IV = C_0.
+ *       P_i = decode(C_i) ^ C_i-1 with IV = C_0.
+ * 
+ * PCBC: C_i = encode(P_i ^ P_i-1 ^ C_i) with IV = C_0 ^ P_0.
+ *       P_i = decode(C_i) ^ P_i-1 ^ C_i with IV = C_0 ^ P_0.
+ * 
+ * CFB : C_i = encode(C_i-1) ^ P_i with IV = C_0.
+ *       P_i = encode(C_i-1) ^ C_i ^ C_i with IV = C_0.
+ * 
+ * OFB : C_i = P_i ^ O_i with IV = I_0 and O_i = encode(I_i) and I_i = O_i-1.
+ *       P_i = C_i ^ O_i with IV = I_0.and O_i = encode(I_i) and I_i = O_i-1.
+ */
 #ifndef BLOCKCIPHER_HPP
 #define	BLOCKCIPHER_HPP
 
@@ -44,4 +58,3 @@ protected:
 };
 
 #endif
-

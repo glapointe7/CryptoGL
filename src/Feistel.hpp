@@ -23,8 +23,6 @@ public:
 protected:
    virtual const UInt64Container getKeySchedule() = 0;
    virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const = 0;
-   
-   
 };
 
 #endif

@@ -27,8 +27,9 @@ public:
 
 private:
    virtual const UInt64Container getKeySchedule() final;
+   const BytesContainer getOutputBlock(const BytesContainer &data, const uint32_t block, const int8_t lower_round);
    uint64_t getSubstitution(const uint64_t &key_mixed) const;
-   const BytesContainer process(const BytesContainer &data, const int8_t upper_round, const int8_t lower_round);
+   const BytesContainer process(const BytesContainer &data, const int8_t lower_round);
 
    // La fonction F de Feistel.
    uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
