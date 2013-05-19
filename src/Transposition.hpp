@@ -81,7 +81,8 @@ public:
 class TranspositionColumns : public Transposition
 {
 public:
-
+// ICI : incomplète => on ajoute pas de X => on doit connaître datalen % key_len
+// et faire attention à la dernière ligne.
    const std::vector<ClassicalType> setTable(const ClassicalType &data)
    {
       const uint8_t key_len = key.size();
@@ -100,7 +101,8 @@ public:
 
       return table;
    }
-
+// ICI : incomplète => on ajoute pas de X => on doit connaître datalen % key_len
+// et faire attention à la dernière ligne.
    const std::vector<ClassicalType> swapColumnsDecode(const std::vector<ClassicalType> &table)
    {
       const uint8_t key_len = key.size();
@@ -118,7 +120,8 @@ public:
 
       return s_table;
    }
-
+// ICI : incomplète => on ajoute pas de X => on doit connaître datalen % key_len
+// et faire attention à la dernière ligne.
    const ClassicalType read(const std::vector<ClassicalType> &table)
    {
       const uint8_t key_len = key.size();
@@ -137,7 +140,7 @@ public:
    }
 };
 
-// Double columnar transposition.
+// Double columns transposition.
 
 class TranspositionDouble : public StringCipher
 {

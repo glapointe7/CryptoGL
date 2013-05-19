@@ -1,16 +1,12 @@
+
 #include "BlockCipher.hpp"
 
-void BlockCipher::setMode(const OpModes &Mode)
+BlockCipher::BlockCipher(const OperationModes mode)
+   : blockStrategy(BlockCipherStrategy::Factory(mode))
+{}
+
+BlockCipher::~BlockCipher()
 {
-   this->Mode = Mode;
+   delete blockStrategy;
 }
 
-void BlockCipher::setIV(const BytesContainer &IV)
-{
-   if(IV.size() != 8)
-   {
-      throw BadIVLength("Your IV have to be 8 bytes length.", IV.size());
-   }
-   
-   this->IV = IV;
-}

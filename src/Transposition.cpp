@@ -6,6 +6,8 @@ Transposition::setStartingTable(const ClassicalType &data)
 {
    std::vector<ClassicalType> table;
    const uint8_t key_len = key.size();
+// ICI : incomplète => on ajoute pas de X => on doit connaître datalen % key_len
+// et faire attention à la dernière ligne.
    ClassicalType full_data(appendChars(data, key_len, 'X'));
    const unsigned int data_len = full_data.length();
    table.reserve(data_len / key_len);
@@ -21,7 +23,7 @@ Transposition::setStartingTable(const ClassicalType &data)
 
 const Transposition::ClassicalType 
 Transposition::readFinalTable(const std::vector<ClassicalType> &table) const
-{
+{// Faire attention à la dernière ligne.
    ClassicalType data = "";
    data.reserve(table.size() * key.size());
    for (const auto str : table)
@@ -34,7 +36,7 @@ Transposition::readFinalTable(const std::vector<ClassicalType> &table) const
 
 const std::vector<Transposition::ClassicalType> 
 Transposition::swapColumns(const std::vector<ClassicalType> &table)
-{
+{// Faire attention à la dernière ligne.
    const uint8_t key_len = key.size();
    const unsigned int rows = table.size();
    std::vector<ClassicalType> s_table(rows, "");

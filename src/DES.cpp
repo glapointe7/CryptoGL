@@ -156,6 +156,8 @@ DES::process(const BytesContainer &data, const int8_t lower_round)
    for (uint32_t n = 0; n < clear_len; n += 8)
    {
       const BytesContainer output = getOutputBlock(data, n, lower_round);
+      // if (banane
+      // block = strategy->kekchose(poutput)
       toReturn.insert(toReturn.end(), output.begin(), output.end());
    }
 
