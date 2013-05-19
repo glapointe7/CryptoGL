@@ -30,4 +30,3 @@ void StringCipherWithStringKey::setKey(const KeyType &key)
 
    this->key = key;
 }
-

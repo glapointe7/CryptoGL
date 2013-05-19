@@ -6,18 +6,16 @@
 
 #include "BlockCipherOperationModes.hpp"
 #include "BlockCipherStrategy.hpp"
-#include "exceptions/BadKeyLength.hpp"
 
 class BlockCipher : public SymmetricCipher
-{
-   using BadIVLength = BadKeyLength;
-   
+{  
 public:
    typedef std::vector<uint32_t> UInt32Container;
    typedef std::vector<uint64_t> UInt64Container;
    
-   BlockCipher(const OperationModes modes);
-   virtual ~BlockCipher();
+   BlockCipher(const OperationModes mode)
+      : block_strategy(BlockCipherStrategyFactory::createBlockCipherStrategy(mode)) {}
+   virtual ~BlockCipher() { delete block_strategy; }
    
    virtual const BytesContainer encode(const BytesContainer &) = 0;
    virtual const BytesContainer decode(const BytesContainer &) = 0;
@@ -26,9 +24,11 @@ public:
    
 protected:
    virtual const UInt64Container getKeySchedule() = 0;
+   virtual const BytesContainer getOutputBlock(const BytesContainer &data, const int8_t lower_round) = 0;
+   
+   const BytesContainer process(const BytesContainer &data, const int8_t lower_round);
 
-   BlockCipherStrategy *blockStrategy;
+   BlockCipherStrategy *block_strategy;
 };
 
 #endif
-

@@ -12,6 +12,9 @@
 class Blowfish : public Feistel
 {
 public:
+   Blowfish() : Feistel(OperationModes::ECB) {}
+   Blowfish(const OperationModes mode) : Feistel(mode) {}
+   
    virtual const BytesContainer encode(const BytesContainer &) final;
    virtual const BytesContainer decode(const BytesContainer &) final;
    
@@ -22,6 +25,7 @@ private:
    
    virtual const UInt64Container getKeySchedule() final;
    virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
+   virtual const BytesContainer getOutputBlock(const BytesContainer &data, const int8_t lower_round) final;
 
    const SBox sbox0 = {
       0xd1310ba6L, 0x98dfb5acL, 0x2ffd72dbL, 0xd01adfb7L, 0xb8e1afedL, 0x6a267e96L,

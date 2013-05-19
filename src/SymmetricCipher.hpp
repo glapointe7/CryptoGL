@@ -9,17 +9,10 @@
 #include <string>
 #include <vector>
 
-class SymmetricCipher : public Cipher<std::vector<unsigned char>>
+class SymmetricCipher : public Cipher<std::vector<unsigned char> >
 {
 public:
-   typedef std::vector<unsigned char> BytesContainer;
-   
-   // Useful constant modes for loading / saving data in a file.
-   enum class io_mode : uint8_t 
-   {
-      str,           // string of characters (can be a string of hex).
-      byte           // vector of bytes.
-   };
+   typedef std::vector<uint8_t> BytesContainer;
    
    virtual ~SymmetricCipher() {}
 

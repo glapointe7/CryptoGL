@@ -2,15 +2,16 @@
 #include "UnsortAlpha.hpp"
 
 #include "Tools.hpp"
-#include "exceptions/EmptyKey.hpp"
+
 #include "exceptions/BadChar.hpp"
+#include "exceptions/EmptyKey.hpp"
 
 UnsortAlpha::UnsortAlpha()
 {
    unsort_alpha.reserve(alpha.length());
 }
 
-void UnsortAlpha::setKey(const std::string key)
+void UnsortAlpha::setKey(const std::string &key)
 {
    if (key.empty())
    {
@@ -18,7 +19,7 @@ void UnsortAlpha::setKey(const std::string key)
    }
 
    const char c = badAlphaFound(key);
-   if(c != 0)
+   if (c != 0)
    {
       throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
    }
@@ -26,36 +27,23 @@ void UnsortAlpha::setKey(const std::string key)
    this->key = key;
 }
 
-// Désordonné un alphabet en concaténant la clé et l'alphabet puis en enlevant les doublons.
-
 void UnsortAlpha::setHorizontalAlpha()
-{
-   if (key.empty())
-   {
-      throw EmptyKey("Your key is not set.");
-   }
-   
+{  
    unsort_alpha = removeRepeatedLetters(key + alpha);
 }
 
-// Construit l'alphabet désordonné de façon verticale selon 
-// la longueur de la clé épurée de doublons.
+// Build an unordered vertical alphabet by transforming the key with only unique chars. 
 
 void UnsortAlpha::setVerticalAlpha()
 {
-   if (key.empty())
-   {
-      throw EmptyKey("Your key is not set.");
-   }
+   const std::string new_key(removeRepeatedLetters(key));
+   const std::string str(removeRepeatedLetters(new_key + alpha));
+   const uint32_t key_len = new_key.length();
+   const uint32_t alpha_len = str.length();
 
-   const ClassicalType new_key(removeRepeatedLetters(key));
-   const ClassicalType str(removeRepeatedLetters(new_key + alpha));
-   const unsigned int key_len = new_key.length();
-   const unsigned int alpha_len = str.length();
-
-   for (unsigned int i = 0; i < key_len; i++)
+   for (uint32_t i = 0; i < key_len; i++)
    {
-      unsigned int j = i;
+      uint32_t j = i;
       while (j < alpha_len)
       {
          unsort_alpha += str[j];
@@ -63,8 +51,6 @@ void UnsortAlpha::setVerticalAlpha()
       }
    }
 }
-
-// Encode un texte avec un alphabet désordonné choisi.
 
 const UnsortAlpha::ClassicalType UnsortAlpha::encode(const ClassicalType &clear_text)
 {
@@ -78,8 +64,6 @@ const UnsortAlpha::ClassicalType UnsortAlpha::encode(const ClassicalType &clear_
 
    return crypted;
 }
-
-// Encode un texte avec un alphabet désordonné choisi.
 
 const UnsortAlpha::ClassicalType UnsortAlpha::decode(const ClassicalType &cipher_text)
 {

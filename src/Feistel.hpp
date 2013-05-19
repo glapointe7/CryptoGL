@@ -16,6 +16,9 @@
 class Feistel : public BlockCipher
 {
 public:
+   Feistel() : BlockCipher(OperationModes::ECB) {}
+   Feistel(const OperationModes mode)  : BlockCipher(mode) {}
+   
    virtual const BytesContainer encode(const BytesContainer &) = 0;
    virtual const BytesContainer decode(const BytesContainer &) = 0;
    virtual void setKey(const BytesContainer &) = 0;

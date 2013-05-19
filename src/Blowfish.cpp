@@ -36,6 +36,51 @@ uint64_t Blowfish::F(const uint64_t &data, const uint64_t &subkey) const
    return (((sbox0[V[0]] + sbox1[V[1]]) & 0xFFFFFFFF) ^ (sbox2[V[2]])) + (sbox3[V[3]] & 0xFFFFFFFF);
 }
 
+const Blowfish::BytesContainer 
+Blowfish::getOutputBlock(const BytesContainer &data, const int8_t lower_round)
+{
+   int8_t is_increasing = 1;
+   if (lower_round < 0)
+   {
+      is_increasing = -1;
+   }
+   
+   uint64_t value = 0;
+   for (uint8_t j = 0, i = 56; j < 8; ++j, i -= 8)
+   {
+      const uint64_t x = data[j];
+      value |= (x << i);
+   }
+   
+   uint64_t L0 = (value >> 32) & 0xFFFFFFFF;
+   uint64_t R0 = value & 0xFFFFFFFF;
+
+   // On obtient les 16 sous-clés de 48 bits chacune.
+   const UInt64Container subkeys = getKeySchedule();
+
+   // Process the 16 Feistel rounds.
+   uint64_t R, L;
+   for (int8_t round = lower_round; round <= lower_round + 15; ++round)
+   {
+      L = R0;
+      R = L0 ^ F(R0, subkeys[round * is_increasing]);
+      L0 = L;
+      R0 = R;
+   }
+
+   // On effectue la permutation finale de R16.L16. avec la table IP_inverse.
+   const uint64_t R16L16 = (R << 32) | L;
+   
+   // Transform the encoded / decoded block to 8 blocks of 8 bits.
+   BytesContainer output_block(8, 0);
+   for (int8_t j = 7, i = 0; j >= 0; --j, i += 8)
+   {
+      output_block[j] = (R16L16 >> i) & 0xFF;
+   }
+   
+   return output_block;
+}
+
 const Blowfish::BytesContainer Blowfish::encode(const BytesContainer &clear_text)
 {
    BytesContainer crypted;

@@ -2,24 +2,31 @@
 #include "Wolseley.hpp"
 
 #include "Tools.hpp"
+#include "String.hpp"
+
+#include "exceptions/BadChar.hpp"
 #include "exceptions/EmptyKey.hpp"
 
 Wolseley::Wolseley()
 {
-   setAlpha("ABCDEFGHIJKLMNOPQRSTUVXYZ");
+   setAlpha(String::grid_uppercase_fr);
 }
 
 void Wolseley::setKey(const std::string &key)
 {
-   if(key.empty())
+   if (key.empty())
    {
-      throw EmptyKey("Tour key have to be not empty.");
+      throw EmptyKey("Your key is empty.");
    }
-   
+
+   const char c = badAlphaFound(key);
+   if (c != 0)
+   {
+      throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
+   }
+
    this->key = key;
 }
-
-// Encode un message avec le chiffre de Wolseley.
 
 const Wolseley::ClassicalType Wolseley::encode(const ClassicalType &clear_text)
 {
@@ -29,7 +36,7 @@ const Wolseley::ClassicalType Wolseley::encode(const ClassicalType &clear_text)
    const std::string key_alpha(key + alpha);
    const ClassicalType new_alpha(removeRepeatedLetters(key_alpha));
 
-   for (auto c : clear_text)
+   for (const auto c : clear_text)
    {
       const std::string::size_type pos = new_alpha.find(c);
       crypted += new_alpha[24 - pos];
@@ -37,8 +44,6 @@ const Wolseley::ClassicalType Wolseley::encode(const ClassicalType &clear_text)
 
    return crypted;
 }
-
-// Décode un cryptogramme chiffré avec Wolseley.
 
 const Wolseley::ClassicalType Wolseley::decode(const ClassicalType &cipher_text)
 {

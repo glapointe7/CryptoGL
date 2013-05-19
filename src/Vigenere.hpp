@@ -9,8 +9,9 @@
 #include <sstream>
 
 #include "Tools.hpp"  // fonction split
-#include "exceptions/EmptyKey.hpp"
+
 #include "exceptions/BadChar.hpp"
+#include "exceptions/EmptyKey.hpp"
 
 // Vigenere : CIPHER = CLEAR + KEY
 
@@ -18,7 +19,7 @@ class Vigenere : public StringCipher
 {
 protected:
    typedef std::function<ClassicalType(const ClassicalType &, const char, const char)> GetCharFunction;
-
+   
    Vigenere(const GetCharFunction &charEncode, const GetCharFunction &charDecode)
    : charEncode(charEncode), charDecode(charDecode) {}
 
@@ -37,22 +38,22 @@ protected:
       return ClassicalType(1, alpha[(alpha.find(key_pos) - alpha.find(c) + alpha.length()) % alpha.length()]);
    }
 
-   ClassicalType key = "";
    const GetCharFunction charEncode, charDecode;
+   std::string key;
 
 public:
-   typedef ClassicalType Key;
-
    Vigenere()
    : charEncode(clearPlusKey), charDecode(clearMinusKey) {}
 
-   void setKey(const Key &key);
-
    const ClassicalType encode(const ClassicalType &clear_text);
    const ClassicalType decode(const ClassicalType &cipher_text);
+   
+   void setKey(const std::string &key);
 
-private:
+private:   
    const ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
+   
+   
 };
 
 // Beaufort : CIPHER = -CLEAR + KEY
@@ -84,28 +85,16 @@ public:
    Rozier()
    : Vigenere(clearPlusKey, clearMinusKey) {}
 
-   void setKey(const ClassicalType &v_key)
+   void setKey(const ClassicalType &rozier_key)
    {
-      if (v_key.empty())
-      {
-         throw EmptyKey("Your key is empty.");
-      }
-
-      const char c = badAlphaFound(v_key);
-      if (c != 0)
-      {
-         throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
-      }
-
-      const uint32_t key_length = v_key.length();
+      const uint32_t key_length = rozier_key.length();
       const uint8_t alpha_len = alpha.length();
-      key.reserve(key_length);
 
       for (uint32_t i = 0; i < key_length - 1; ++i)
       {
-         key += alpha[(alpha.find(v_key[i + 1]) - alpha.find(v_key[i]) + alpha_len) % alpha_len];
+         key += alpha[(alpha.find(rozier_key[i + 1]) - alpha.find(rozier_key[i]) + alpha_len) % alpha_len];
       }
-      key += alpha[(alpha.find(v_key[key_length - 1]) - alpha.find(v_key[0]) + alpha_len) % alpha_len];
+      key += alpha[(alpha.find(rozier_key[key_length - 1]) - alpha.find(rozier_key[0]) + alpha_len) % alpha_len];
    }
 };
 
@@ -120,10 +109,10 @@ public:
 
    // Si la clé est négative et > alpha_len, on doit la remettre dans {0,...,alpha_len-1}.
 
-   void setKey(const char c_key)
+   void setKey(const char caesar_key)
    {
-      const int16_t alpha_len = alpha.length();
-      char the_key = c_key % alpha_len;
+      const int8_t alpha_len = alpha.length();
+      char the_key = caesar_key % alpha_len;
       the_key = (the_key + alpha_len) % alpha_len;
       key = std::string(1, alpha[the_key]);
    }
@@ -153,21 +142,16 @@ public:
 
    const ClassicalType decode(const ClassicalType &cipher_text)
    {
-      if (key.empty())
-      {
-         throw EmptyKey("Your key is not set.");
-      }
-
-      const unsigned int key_length = key.length();
+      const uint32_t key_length = key.length();
 
       ClassicalType toReturn = "";
       std::vector<std::string> cipher_numbers(split(cipher_text));
       toReturn.reserve(cipher_text.length());
 
-      unsigned int idx = 0;
-      for (auto number : cipher_numbers)
+      uint32_t idx = 0;
+      for (const auto number : cipher_numbers)
       {
-         unsigned short num;
+         uint16_t num;
          std::istringstream(number) >> num;
          toReturn += keyDivideCipher(alpha, num, key[idx]);
          idx = (idx + 1) % key_length;

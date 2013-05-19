@@ -11,8 +11,8 @@ class Wolseley : public StringCipher
 public:
    Wolseley();
 
-   const ClassicalType encode(const ClassicalType &) final;
-   const ClassicalType decode(const ClassicalType &) final;
+   const ClassicalType encode(const ClassicalType &clear_text) final;
+   const ClassicalType decode(const ClassicalType &cipher_text) final;
 
    void setKey(const std::string &key);
 

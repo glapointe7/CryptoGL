@@ -14,12 +14,11 @@ public:
    StringCipherWithStringKey();
    virtual ~StringCipherWithStringKey();
 
-   void getKey() const { return key; }
+   const KeyType getKey() const { return key; }
    virtual void setKey(const KeyType &key);
 
 private:
    KeyType key;
 };
 
-#endif // STRINGCIPHERWITHSTRINGKEY_HPP
-
+#endif

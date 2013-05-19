@@ -1,4 +1,7 @@
 
+#ifndef BLOCKCIPHEROPERATIONMODES_HPP
+#define BLOCKCIPHEROPERATIONMODES_HPP
+
 /* MODES OF OPERATION
  * 
  * ECB : C_i = encode(P_i).
@@ -23,9 +26,10 @@ enum class OperationModes : uint8_t
 {
    ECB,     // electronic codebook
    CBC,     // Cipher-block chaining
-   PCBC,    // Propagating cipher-block chaining
-   CFB,     // Cipher feedback
-   OFB,     // Output feedback
-   CTR      // Counter
+   //PCBC,    // Propagating cipher-block chaining
+   //CFB,     // Cipher feedback
+   //OFB,     // Output feedback
+   //CTR      // Counter
 };
 
+#endif

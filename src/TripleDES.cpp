@@ -1,6 +1,7 @@
 #include "TripleDES.hpp"
 
 #include "DES.hpp"
+#include "BlockCipherOperationModes.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
 #include "exceptions/EmptyKey.hpp"
@@ -35,9 +36,14 @@ void TripleDES::setThirdKey(const BytesContainer &key3)
    this->key3 = key3;
 }
 
-const TripleDES::BytesContainer TripleDES::encode(const BytesContainer &clear_text)
+void TripleDES::setOperationMode(const OperationModes mode)
 {
-   DES *D = new DES();
+   this->mode = mode;
+}
+
+const TripleDES::BytesContainer TripleDES::encode(const BytesContainer &clear_text)
+{  
+   DES *D = new DES(mode);
    D->setKey(key);
    const BytesContainer first = D->encode(clear_text);
    
@@ -55,7 +61,7 @@ const TripleDES::BytesContainer TripleDES::encode(const BytesContainer &clear_te
 
 const TripleDES::BytesContainer TripleDES::decode(const BytesContainer &cipher_text)
 {
-   DES *D = new DES();
+   DES *D = new DES(mode);
    
    if(key3.empty())
    {

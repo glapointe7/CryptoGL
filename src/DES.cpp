@@ -3,6 +3,7 @@
 #include "Tools.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
+#include "exceptions/EmptyKey.hpp"
 
 void DES::setKey(const BytesContainer &key)
 {
@@ -97,7 +98,7 @@ uint64_t DES::F(const uint64_t &data, const uint64_t &subkey) const
 }
 
 const DES::BytesContainer
-DES::getOutputBlock(const BytesContainer &data, const uint32_t block, const int8_t lower_round)
+DES::getOutputBlock(const BytesContainer &data, const int8_t lower_round)
 {
    int8_t is_increasing = 1;
    if (lower_round < 0)
@@ -108,7 +109,7 @@ DES::getOutputBlock(const BytesContainer &data, const uint32_t block, const int8
    uint64_t value = 0;
    for (uint8_t j = 0, i = 56; j < 8; ++j, i -= 8)
    {
-      const uint64_t x = data[j + block];
+      const uint64_t x = data[j];
       value |= (x << i);
    }
 
@@ -144,24 +145,6 @@ DES::getOutputBlock(const BytesContainer &data, const uint32_t block, const int8
    }
    
    return output_block;
-}
-
-const DES::BytesContainer
-DES::process(const BytesContainer &data, const int8_t lower_round)
-{
-   const uint32_t clear_len = data.size();
-   BytesContainer toReturn;
-   toReturn.reserve(clear_len);
-
-   for (uint32_t n = 0; n < clear_len; n += 8)
-   {
-      const BytesContainer output = getOutputBlock(data, n, lower_round);
-      // if (banane
-      // block = strategy->kekchose(poutput)
-      toReturn.insert(toReturn.end(), output.begin(), output.end());
-   }
-
-   return toReturn;
 }
 
 const DES::BytesContainer DES::encode(const BytesContainer &clear_text)

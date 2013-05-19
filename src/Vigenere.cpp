@@ -1,6 +1,6 @@
 #include "Vigenere.hpp"
 
-void Vigenere::setKey(const Key &key)
+void Vigenere::setKey(const std::string &key)
 {
    if (key.empty())
    {
@@ -21,13 +21,13 @@ void Vigenere::setKey(const Key &key)
 const Vigenere::ClassicalType
 Vigenere::process(const ClassicalType &text, const GetCharFunction &getNextChar)
 {
-   const unsigned int key_length = key.length();
+   const uint32_t key_length = key.length();
 
    ClassicalType toReturn = "";
    toReturn.reserve(text.length());
 
-   unsigned int idx = 0;
-   for (auto c : text)
+   uint32_t idx = 0;
+   for (const auto c : text)
    {
       toReturn += getNextChar(alpha, c, key[idx]);
       idx = (idx + 1) % key_length;
@@ -38,20 +38,10 @@ Vigenere::process(const ClassicalType &text, const GetCharFunction &getNextChar)
 
 const Vigenere::ClassicalType Vigenere::encode(const ClassicalType &clear_text)
 {
-   if (key.empty())
-   {
-      throw EmptyKey("Your key is not set.");
-   }
-
    return process(clear_text, charEncode);
 }
 
 const Vigenere::ClassicalType Vigenere::decode(const ClassicalType &cipher_text)
 {
-   if (key.empty())
-   {
-      throw EmptyKey("Your key is not set.");
-   }
-
    return process(cipher_text, charDecode);
 }

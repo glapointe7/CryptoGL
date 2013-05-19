@@ -17,6 +17,7 @@ set(SRC
 	converterTools.hpp converterTools.cpp
    MathematicalTools.hpp MathematicalTools.cpp
 	LittleIndian.hpp
+   BlockCipherOperationModes.hpp
 	Tools.hpp Tools.cpp
 	Transposition.hpp Transposition.cpp
    String.hpp String.cpp
@@ -61,6 +62,8 @@ set(SRC
 	Wolseley.hpp Wolseley.cpp
    Affine.hpp Affine.cpp
    MonoalphabeticSubstitution.hpp MonoalphabeticSubstitution.cpp
+   BlockCipher.hpp BlockCipher.cpp
+   BlockCipherStrategy.hpp BlockCipherStrategy.cpp
 )
 
 # Create libcomponants.a with all the source files provided by SRC.

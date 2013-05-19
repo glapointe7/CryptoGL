@@ -76,13 +76,13 @@ const StringCipher::ClassicalType StringCipher::getAlpha() const
 // Ajoute le caractère c text.length() % mod fois à la fin de text.
 
 const StringCipher::ClassicalType
-StringCipher::appendChars(const ClassicalType &text, const uint32_t mod, const char c)
+StringCipher::appendChars(const ClassicalType &data, const uint32_t to_add, const char c)
 {
-   ClassicalType full_text(text);
-   const uint32_t rest = text.length() % mod;
+   ClassicalType full_text(data);
+   const uint32_t rest = data.length() % to_add;
    if (rest != 0)
    {
-      full_text.append(mod - rest, c);
+      full_text.append(to_add - rest, c);
    }
 
    return full_text;

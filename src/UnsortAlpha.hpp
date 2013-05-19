@@ -11,16 +11,17 @@ class UnsortAlpha : public StringCipher
 public:
    UnsortAlpha();
    
-   virtual const ClassicalType encode(const ClassicalType &);
-   virtual const ClassicalType decode(const ClassicalType &);
+   virtual const ClassicalType encode(const ClassicalType &clear_text);
+   virtual const ClassicalType decode(const ClassicalType &cipher_text);
 
    void setVerticalAlpha();
    void setHorizontalAlpha();
-   void setKey(const std::string key);
+   
+   void setKey(const std::string &key);
 
 private:
-   std::string key;
    ClassicalType unsort_alpha;
+   std::string key;
 };
 
 #endif

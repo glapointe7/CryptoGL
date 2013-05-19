@@ -8,16 +8,16 @@
 
 #include "Feistel.hpp"
 
-#include "exceptions/EmptyKey.hpp"
-
 #include <vector>
 
 class DES : public Feistel
 {
    typedef std::vector<std::vector<uint8_t> > SBox;
-   using EmptyIV = EmptyKey;
 
 public:
+   DES() : Feistel(OperationModes::ECB) {}
+   DES(const OperationModes mode) : Feistel(mode) {}
+   
    virtual const BytesContainer encode(const BytesContainer &) final;
    virtual const BytesContainer decode(const BytesContainer &) final;
 
@@ -27,14 +27,13 @@ public:
 
 private:
    virtual const UInt64Container getKeySchedule() final;
-   const BytesContainer getOutputBlock(const BytesContainer &data, const uint32_t block, const int8_t lower_round);
+   virtual const BytesContainer getOutputBlock(const BytesContainer &data, const int8_t lower_round) final;
    uint64_t getSubstitution(const uint64_t &key_mixed) const;
-   const BytesContainer process(const BytesContainer &data, const int8_t lower_round);
 
-   // La fonction F de Feistel.
+   // Feistel function F.
    uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
 
-   // Première table : Permutation initiale.
+   // First table : initial permutation.
    const SBox IP = {
       {58, 50, 42, 34, 26, 18, 10, 2},
       {60, 52, 44, 36, 28, 20, 12, 4},
@@ -46,7 +45,7 @@ private:
       {63, 55, 47, 39, 31, 23, 15, 7}
    };
 
-   // Deuxième table : Permutation initiale inverse.
+   // 2nd table : inverse initial permutation.
    const SBox IP_inverse = {
       {40, 8, 48, 16, 56, 24, 64, 32},
       {39, 7, 47, 15, 55, 23, 63, 31},
@@ -58,7 +57,7 @@ private:
       {33, 1, 41, 9, 49, 17, 57, 25}
    };
 
-   // Table d'expension de la permutation.
+   // Expansion table.
    const SBox E = {
       {32, 1, 2, 3, 4, 5},
       {4, 5, 6, 7, 8, 9},
@@ -70,7 +69,7 @@ private:
       {28, 29, 30, 31, 32, 1}
    };
 
-   // Table de permutation.
+   // Permutation table.
    const SBox P = {
       {16, 7, 20, 21},
       {29, 12, 28, 17},
@@ -82,7 +81,7 @@ private:
       {22, 11, 4, 25}
    };
 
-   // Tables de substitution.
+   // Substitution tables.
    const std::vector<SBox> S = {
       {
          {14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7},
@@ -134,7 +133,7 @@ private:
       }
    };
 
-   // Table de choix de permutation 1.
+   // Permutation choice table 1.
    const SBox PC1 = {
       {57, 49, 41, 33, 25, 17, 9},
       {1, 58, 50, 42, 34, 26, 18},
@@ -146,7 +145,7 @@ private:
       {21, 13, 5, 28, 20, 12, 4}
    };
 
-   // Table de choix de permutation 2.
+   // Permutation choice table 2.
    const SBox PC2 = {
          {14, 17, 11, 24, 1, 5},
          {3, 28, 15, 6, 21, 10},
@@ -158,7 +157,7 @@ private:
          {46, 42, 50, 36, 29, 32}
    };
 
-   // Table de rotations à gauche pour les 16 rounds.
+   // Left rotation table for the 16 rounds.
    const BytesContainer rot_table = {1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
 };
 
