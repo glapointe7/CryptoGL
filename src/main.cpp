@@ -29,6 +29,7 @@
 #include "../testing/RabbitTest.hpp"
 #include "../testing/MD5Test.hpp"
 #include "../testing/TripleDESTest.hpp"
+#include "../testing/BlowfishTest.hpp"
 
 //#include "attacks/CaesarAttack.hpp"
 //#include "attacks/TranspositionAttack.hpp"

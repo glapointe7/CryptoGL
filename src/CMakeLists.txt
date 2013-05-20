@@ -61,8 +61,10 @@ set(SRC
 	Vigenere.hpp Vigenere.cpp
 	Wolseley.hpp Wolseley.cpp
    Affine.hpp Affine.cpp
+   Blowfish.hpp Blowfish.cpp
    MonoalphabeticSubstitution.hpp MonoalphabeticSubstitution.cpp
    BlockCipher.hpp BlockCipher.cpp
+   Feistel.hpp Feistel.cpp
    BlockCipherStrategy.hpp BlockCipherStrategy.cpp
 )
 

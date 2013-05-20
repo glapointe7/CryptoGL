@@ -10,6 +10,7 @@ BlockCipher::process(const BytesContainer &data, const int8_t lower_round)
    BytesContainer toReturn;
    toReturn.reserve(data_len);
 
+   const UInt64Container subkeys = getKeySchedule();
    for (uint32_t n = 0; n < data_len; n += 8)
    {
       // Get data block.
@@ -28,9 +29,22 @@ BlockCipher::process(const BytesContainer &data, const int8_t lower_round)
          block = block_strategy->getCipherBlock(data_block, n >> 3);
       }
       
-      const BytesContainer output = getOutputBlock(block, lower_round);
+      const BytesContainer output = getOutputBlock(block, subkeys, lower_round);
       toReturn.insert(toReturn.end(), output.begin(), output.end());
    }
 
    return toReturn;
+}
+
+const BlockCipher::BytesContainer 
+BlockCipher::addPadding(const BytesContainer &data, const uint32_t block_length, const uint8_t fill_with)
+{
+   BytesContainer full_data(data);
+   const uint8_t rest = data.size() % block_length;
+   if (rest != 0)
+   {
+      full_data.insert(full_data.end(), block_length - rest, fill_with);
+   }
+   
+   return full_data;
 }

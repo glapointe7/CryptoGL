@@ -24,9 +24,11 @@ public:
    
 protected:
    virtual const UInt64Container getKeySchedule() = 0;
-   virtual const BytesContainer getOutputBlock(const BytesContainer &data, const int8_t lower_round) = 0;
+   virtual const BytesContainer getOutputBlock(const BytesContainer &data, 
+           const UInt64Container &subkeys, const int8_t lower_round) = 0;
    
    const BytesContainer process(const BytesContainer &data, const int8_t lower_round);
+   static const BytesContainer addPadding(const BytesContainer &data, const uint32_t block_length, const uint8_t fill_with);
 
    BlockCipherStrategy *block_strategy;
 };

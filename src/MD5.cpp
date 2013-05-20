@@ -31,21 +31,19 @@ const MD5::BitsContainer MD5::addPadding(const BitsContainer &data_bits)
    BitsContainer bits_pad(data_bits);
    bits_pad.reserve(bits_len + 576);
 
-   // Ajout du bit 1 à la fin du message.
+   // Pad a bit '1' at the end.
    bits_pad.push_back(1);
 
    // Ajouter à la fin du message des bits = 0 jusqu'à une longueur de 448 (mod 512).
    const uint32_t bits_pad_len = (512 + (448 - (bits_pad.size() & 0x1FF))) & 0x1FF;
    bits_pad.insert(bits_pad.end(), bits_pad_len, 0);
 
-   // On ajoute les 64 bits de l'entier représentant la longueur initiale de 'bits'. LITTLE ENDIAN
-   for (uint8_t i = 0; i < 64; i += 8)
+   // Pad with the 64-bits of the initial length of 'bits'.
+   // Split in 2 32-bits and pad with the low order 32-bits first.
+   const uint64_t low_order_length = ((bits_len & 0xFFFFFFFF) << 32) | ((bits_len >> 32) & 0xFFFFFFFF);
+   for (int8_t i = 63; i >= 0; --i)
    {
-      const uint8_t x = static_cast<uint8_t>((bits_len >> i) & 0xFF);
-      for (uint8_t j = 0; j < 8; ++j)
-      {
-         bits_pad.push_back((x >> (7-j)) & 0x1);
-      }
+      bits_pad.push_back((low_order_length >> i) & 0x1);
    }
 
    return bits_pad;
