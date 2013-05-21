@@ -16,7 +16,7 @@ class DES : public Feistel
 
 public:
    DES() : Feistel(OperationModes::ECB) {}
-   DES(const OperationModes mode) : Feistel(mode) {}
+   explicit DES(const OperationModes mode) : Feistel(mode) {}
    
    virtual const BytesContainer encode(const BytesContainer &) final;
    virtual const BytesContainer decode(const BytesContainer &) final;

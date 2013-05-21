@@ -13,7 +13,7 @@ class Blowfish : public Feistel
 {
 public:
    Blowfish() : Feistel(OperationModes::ECB) {}
-   Blowfish(const OperationModes mode) : Feistel(mode) {}
+   explicit Blowfish(const OperationModes mode) : Feistel(mode) {}
    
    virtual const BytesContainer encode(const BytesContainer &) final;
    virtual const BytesContainer decode(const BytesContainer &) final;
@@ -24,11 +24,12 @@ private:
    typedef std::vector<uint32_t> SBox;
    
    virtual const UInt64Container getKeySchedule() final;
+   virtual const BytesContainer getOutputBlock(const BytesContainer &data, 
+           const UInt64Container &subkeys, const int8_t lower_round) final;
+   
    virtual uint64_t F(const uint64_t &data, const uint64_t &) const final;
    virtual void processFeistelRounds(uint64_t &L, uint64_t &R, const UInt64Container &subkeys, 
            const int8_t lower_round, const int8_t round_max) final;
-   virtual const BytesContainer getOutputBlock(const BytesContainer &data, 
-           const UInt64Container &subkeys, const int8_t lower_round) final;
 
    std::vector<SBox> sboxes;
    static const std::vector<SBox> sbox;

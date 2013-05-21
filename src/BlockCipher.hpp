@@ -13,7 +13,7 @@ public:
    typedef std::vector<uint32_t> UInt32Container;
    typedef std::vector<uint64_t> UInt64Container;
    
-   BlockCipher(const OperationModes mode)
+   explicit BlockCipher(const OperationModes mode)
       : block_strategy(BlockCipherStrategyFactory::createBlockCipherStrategy(mode)) {}
    virtual ~BlockCipher() { delete block_strategy; }
    
@@ -27,7 +27,10 @@ protected:
    virtual const BytesContainer getOutputBlock(const BytesContainer &data, 
            const UInt64Container &subkeys, const int8_t lower_round) = 0;
    
+   /* Process general encoding / decoding for block ciphers. */
    const BytesContainer process(const BytesContainer &data, const int8_t lower_round);
+   
+   /* Pad 'data' with 'block_length' values given by 'fill_with'. */
    static const BytesContainer addPadding(const BytesContainer &data, const uint32_t block_length, const uint8_t fill_with);
 
    BlockCipherStrategy *block_strategy;

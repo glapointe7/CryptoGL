@@ -3,13 +3,14 @@
 #include "exceptions/BadKeyLength.hpp"
 #include "exceptions/EmptyKey.hpp"
 
-// 18 initial sub-keys from the decimals of PI.
+// 18 initial sub-keys from the first decimals of PI.
 const Blowfish::UInt64Container Blowfish::P = {
    0x243f6a88L, 0x85a308d3L, 0x13198a2eL, 0x03707344L, 0xa4093822L, 0x299f31d0L,
    0x082efa98L, 0xec4e6c89L, 0x452821e6L, 0x38d01377L, 0xbe5466cfL, 0x34e90c6cL,
    0xc0ac29b7L, 0xc97c50ddL, 0x3f84d5b5L, 0xb5470917L, 0x9216d5d9L, 0x8979fb1bL
 };
 
+// Other following constants from the decimals of PI.
 const std::vector<Blowfish::SBox> Blowfish::sbox = {
    {0xd1310ba6L, 0x98dfb5acL, 0x2ffd72dbL, 0xd01adfb7L, 0xb8e1afedL, 0x6a267e96L,
       0xba7c9045L, 0xf12c7f99L, 0x24a19947L, 0xb3916cf7L, 0x0801f2e2L, 0x858efc16L,
@@ -204,6 +205,8 @@ void Blowfish::setKey(const BytesContainer &key)
    this->key = key;
 }
 
+// Process the Feistel algorithm modified for the blowfish algorithm.
+
 void Blowfish::processFeistelRounds(uint64_t &L, uint64_t &R, const UInt64Container &subkeys,
         const int8_t lower_round, const int8_t round_max)
 {
@@ -260,8 +263,8 @@ const Blowfish::UInt64Container Blowfish::getKeySchedule()
    for (uint8_t i = 0; i < 18; i += 2)
    {
       processFeistelRounds(L, R, subkeys, 0, 15);
-      subkeys[i] = L & 0xFFFFFFFF;
-      subkeys[i + 1] = R & 0xFFFFFFFF;
+      subkeys[i] = L;
+      subkeys[i + 1] = R;
    }
 
    for (uint8_t i = 0; i < 4; ++i)
@@ -307,7 +310,7 @@ Blowfish::getOutputBlock(const BytesContainer &data, const UInt64Container &subk
    uint64_t R = value & 0xFFFFFFFF;
    processFeistelRounds(L, R, subkeys, lower_round, 15);
 
-   const uint64_t RL = (R << 32) | L;
+   const uint64_t RL = (L << 32) | R;
 
    // Transform the encoded / decoded block to 8 blocks of 8 bits.
    BytesContainer output_block(8, 0);
@@ -337,5 +340,5 @@ const Blowfish::BytesContainer Blowfish::decode(const BytesContainer &cipher_tex
       throw EmptyKey("Your key is not set.");
    }
 
-   return process(cipher_text, -15);
+   return process(cipher_text, -17);
 }
