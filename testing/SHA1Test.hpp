@@ -3,6 +3,7 @@
 
 #include <gtest/gtest.h>
 #include "../src/SHA1.hpp"
+#include "../src/String.hpp"
 
 class SHA1Test : public ::testing::Test
 {
@@ -23,8 +24,10 @@ protected:
 TEST_F(SHA1Test, encode)
 {
    const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
-
-   EXPECT_EQ("f5e6523299ac71b900615f641a4a74db4c19a0ab", SHA1::hexDigest(S->encode(SHA1::getBytesFromString(clear_text))));
+   std::string hash = "f5e6523299ac71b900615f641a4a74db4c19a0ab";
+   String::upperCase(hash);
+   
+   EXPECT_EQ(hash, SHA1::hexDigest(S->encode(SHA1::getBytesFromString(clear_text))));
 }
 
 #endif

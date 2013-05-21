@@ -3,6 +3,32 @@
 #include "Tools.hpp"
 #include "converterTools.hpp"
 
+const MD5::BytesContainer MD5::routine = {
+   7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21,
+   5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
+   4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
+   6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21
+};
+
+const MD5::WordsContainer MD5::K = {
+   0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
+   0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
+   0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
+   0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821,
+   0xf61e2562, 0xc040b340, 0x265e5a51, 0xe9b6c7aa,
+   0xd62f105d, 0x02441453, 0xd8a1e681, 0xe7d3fbc8,
+   0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed,
+   0xa9e3e905, 0xfcefa3f8, 0x676f02d9, 0x8d2a4c8a,
+   0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c,
+   0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70,
+   0x289b7ec6, 0xeaa127fa, 0xd4ef3085, 0x04881d05,
+   0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665,
+   0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039,
+   0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1,
+   0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
+   0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391
+};
+
 uint32_t MD5::F(const uint32_t x, const uint32_t y, const uint32_t z)
 {
    return (x & y) | (~x & z);
@@ -23,9 +49,7 @@ uint32_t MD5::I(const uint32_t x, const uint32_t y, const uint32_t z)
    return y ^ (x | ~z);
 }
 
-// Remplit le message avec des bits pour obtenir un multiple de 512 bits.
-
-const MD5::BitsContainer MD5::addPadding(const BitsContainer &data_bits)
+const MD5::BitsContainer MD5::addPadding(const BitsContainer &data_bits) const
 {
    const uint64_t bits_len = data_bits.size();
    BitsContainer bits_pad(data_bits);
@@ -34,16 +58,19 @@ const MD5::BitsContainer MD5::addPadding(const BitsContainer &data_bits)
    // Pad a bit '1' at the end.
    bits_pad.push_back(1);
 
-   // Ajouter à la fin du message des bits = 0 jusqu'à une longueur de 448 (mod 512).
+   // Pad with '0' bits at the end of bits_pad until the length is 448 (mod 512).
    const uint32_t bits_pad_len = (512 + (448 - (bits_pad.size() & 0x1FF))) & 0x1FF;
    bits_pad.insert(bits_pad.end(), bits_pad_len, 0);
 
    // Pad with the 64-bits of the initial length of 'bits'.
-   // Split in 2 32-bits and pad with the low order 32-bits first.
-   const uint64_t low_order_length = ((bits_len & 0xFFFFFFFF) << 32) | ((bits_len >> 32) & 0xFFFFFFFF);
-   for (int8_t i = 63; i >= 0; --i)
+   // Pad in LITTLE ENDIAN.
+   for (uint8_t i = 0; i < 64; i += 8)
    {
-      bits_pad.push_back((low_order_length >> i) & 0x1);
+      const uint8_t byte = (bits_len >> i) & 0xFF;
+      for (int8_t j = 7; j >= 0; --j)
+      {
+         bits_pad.push_back((byte >> j) & 0x1);
+      }
    }
 
    return bits_pad;
@@ -54,22 +81,20 @@ const MD5::BytesContainer MD5::encode(const BytesContainer &data)
    BitsContainer bits(addPadding(getBitsFromData(data)));
    const uint32_t bits_len = bits.size();
    WordsContainer hash;
+   hash.reserve(4);
 
    for (uint32_t i = 0; i < bits_len; i += 512)
    {
-      // Transformer un bloc de 512 bits en 16 blocs uint32 en LITTLE ENDIAN.
-      WordsContainer words(16, 0);
-      uint8_t n = 0;
+      WordsContainer words;
+      words.reserve(16);
       for (uint16_t k = 0; k < 512; k += 32)
       {
-         uint32_t x = 0;
-         for (uint8_t j = 0; j < 32; ++j)
+         uint32_t word = 0;
+         for (int8_t j = 31; j >= 0; --j)
          {
-            x |= bits[j + k + i] << (31 - j);
-            //words[n] |= (bits[j + k + i] << (31 - j));
+            word |= bits[i+k+j] << j;
          }
-         words[n] = ((x & 0xFF) << 24) | (((x >> 8) & 0xFF) << 16) | (((x >> 16) & 0xFF) << 8) | ((x >> 24) & 0xFF);
-         n++;
+         words.push_back(__builtin_bswap32(word));
       }
 
       hash = state;
@@ -81,12 +106,12 @@ const MD5::BytesContainer MD5::encode(const BytesContainer &data)
             f = F(hash[1], hash[2], hash[3]);
             g = j;
          }
-         else if (i < 32)
+         else if (j < 32)
          {
             f = G(hash[1], hash[2], hash[3]);
             g = ((5 * j) + 1) & 0xF;
          }
-         else if (i < 48)
+         else if (j < 48)
          {
             f = H(hash[1], hash[2], hash[3]);
             g = ((3 * j) + 5) & 0xF;
@@ -100,7 +125,7 @@ const MD5::BytesContainer MD5::encode(const BytesContainer &data)
          uint32_t tmp = hash[3];
          hash[3] = hash[2];
          hash[2] = hash[1];
-         hash[1] += rotateLeft(hash[0] + f + words[g] + k[j], routine[j], 32);
+         hash[1] += rotateLeft(hash[0] + f + words[g] + K[j], routine[j], 32);
          hash[0] = tmp;
       }
 
@@ -110,16 +135,15 @@ const MD5::BytesContainer MD5::encode(const BytesContainer &data)
       }
    }
 
-   // On concatène hash[i] pour i=0,1,2,3 pour avoir un bloc de 128 bits 
-   // (16 blocs de 8 bits chaque) en LITTLE ENDIAN (LSB ... MSB).
+   // 16 bytes read low order byte first from state[0] to state[3]. 
    BytesContainer crypted;
    crypted.reserve(16);
    for (uint8_t j = 0; j < 4; ++j)
    {
-      for (uint8_t i = 0; i < 4; ++i)
-      {
-         crypted.push_back((state[j] >> (i << 3)) & 0xFF);
-      }
+      crypted.push_back(state[j] & 0xFF);
+      crypted.push_back((state[j] >> 8) & 0xFF);
+      crypted.push_back((state[j] >> 16) & 0xFF);
+      crypted.push_back((state[j] >> 24) & 0xFF);
    }
 
    return crypted;

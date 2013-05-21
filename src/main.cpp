@@ -27,7 +27,7 @@
 #include "../testing/HillTest.hpp"
 #include "../testing/AffineTest.hpp"
 #include "../testing/RabbitTest.hpp"
-#include "../testing/MD5Test.hpp"
+//#include "../testing/MD5Test.hpp"
 #include "../testing/TripleDESTest.hpp"
 #include "../testing/BlowfishTest.hpp"
 

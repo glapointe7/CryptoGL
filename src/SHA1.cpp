@@ -18,7 +18,7 @@ uint32_t SHA1::H(uint32_t x, uint32_t y, uint32_t z)
    return x ^ y ^ z;
 }
 
-const SHA1::BitsContainer SHA1::addPadding(const BitsContainer &bits)
+const SHA1::BitsContainer SHA1::addPadding(const BitsContainer &bits) const
 {
    const uint64_t bits_len = bits.size();
    BitsContainer bits_pad(bits);

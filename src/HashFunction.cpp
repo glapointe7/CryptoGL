@@ -7,15 +7,16 @@
 const std::string HashFunction::hexDigest(const BytesContainer &bytes)
 {
    std::stringstream ss;
+   ss.setf(std::ios::hex, std::ios::basefield);
+   ss << std::uppercase;
 
    for (const auto byte : bytes)
    {
-      ss.setf(std::ios::hex, std::ios::basefield);
       ss.fill('0');
       ss.width(2);
-      ss << static_cast<uint16_t>(byte);
+      ss << static_cast<uint16_t> (byte);
    }
-   
+
    return ss.str();
 }
 
@@ -36,7 +37,7 @@ const HashFunction::BitsContainer HashFunction::getBitsFromData(const BytesConta
    BitsContainer bits;
    bits.reserve(data.size() * 8);
    
-   for(auto byte : data)
+   for(const auto byte : data)
    {
       for(char i = 7; i >= 0; --i)
       {
@@ -45,4 +46,24 @@ const HashFunction::BitsContainer HashFunction::getBitsFromData(const BytesConta
    }
    
    return bits;
+}
+
+const HashFunction::BytesContainer
+HashFunction::getBytesFromHexDigest(const std::string &hex_str)
+{
+   const uint32_t hex_len = hex_str.length();
+   BytesContainer bytes;
+   bytes.reserve(hex_len >> 1);
+
+   for (uint32_t i = 0; i < hex_len; i += 2)
+   {
+      const std::string hexa = hex_str.substr(i, 2);
+      std::stringstream ss(hexa);
+      ss.setf(std::ios::hex, std::ios::basefield);
+      uint16_t x;
+      ss >> x;
+      bytes.push_back(static_cast<uint8_t> (x));
+   }
+
+   return bytes;
 }

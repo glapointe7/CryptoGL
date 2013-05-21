@@ -16,17 +16,16 @@ public:
    
    virtual const BytesContainer encode(const BytesContainer &) = 0;
    
-   // Pour obtenir les octets sous forme d'une chaîne hexadécimale.
+   /* Get the hexadecimal string from a vector of bytes. */
    static const std::string hexDigest(const BytesContainer &data);
    static const BytesContainer getBytesFromString(const std::string &str);
    static const std::string getStringFromBytes(const BytesContainer &bytes);
+   static const BytesContainer getBytesFromHexDigest(const std::string &hex_str);
    
 protected:
-   virtual const BitsContainer addPadding(const BitsContainer &) = 0;
+   virtual const BitsContainer addPadding(const BitsContainer &) const = 0;
    
-   static const BitsContainer getBitsFromData(const BytesContainer &);
+   static const BitsContainer getBitsFromData(const BytesContainer &data);
 };
 
 #endif
-
-

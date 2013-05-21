@@ -9,10 +9,10 @@
 class SHA1 : public HashFunction
 {
 public:
-   const BytesContainer encode(const BytesContainer &) final;
+   virtual const BytesContainer encode(const BytesContainer &) final;
    
 private:
-   const BitsContainer addPadding(const BitsContainer &) final;
+   virtual const BitsContainer addPadding(const BitsContainer &) const final;
    
    // variables d'état initialisées en LITTLE ENDIAN.
    WordsContainer state = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xC3D2E1F0};

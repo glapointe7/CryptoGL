@@ -31,8 +31,8 @@ private:
            const UInt64Container &subkeys, const int8_t lower_round) final;
    uint64_t getSubstitution(const uint64_t &key_mixed) const;
 
-   // Feistel function F.
-   uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
+   /* Feistel function F. */
+   virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
 
    static const SBox IP;
    static const SBox IP_inverse;
