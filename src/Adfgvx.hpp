@@ -9,21 +9,20 @@
 class Adfgvx : public SquareCipher
 {
 public:
-   Adfgvx();
+   Adfgvx(const KeyType &key);
 
-   const ClassicalType encode(const ClassicalType &) final;
-   const ClassicalType decode(const ClassicalType &) final;
+   virtual const ClassicalType encode(const ClassicalType &clear_text) final;
+   virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
 
    void setGridKey(const Grid &grid);
 
 private:
-   static const uint8_t is6X6(const Grid &grid);
-   const std::vector<uint8_t> getPermutationKey() const;
+   static uint8_t is6X6(const Grid &grid);
+   const std::vector<int32_t> getPermutationKey() const;
    
    // Grille 6X6 de caractères A-Z, 0-9 servant de 2e clé.
    Grid grid_key;
 
-   // Dimension de la grille carrée.
    static const std::string code;
 };
 

@@ -1,38 +1,34 @@
 /*
- * Introduire les langues : Français et anglais.
+ * All classical ciphers that use a grid.
  */
 #ifndef SQUARECIPHER_HPP
 #define	SQUARECIPHER_HPP
 
-#include "StringCipher.hpp"
+#include "StringCipherWithStringKey.hpp"
 
 #include <string>
 #include <utility>
 #include <vector>
 
-class SquareCipher : public StringCipher
+class SquareCipher : public StringCipherWithStringKey
 {
 public:  
-   typedef ClassicalType Key;
-   typedef std::pair<unsigned char, unsigned char> Coordinates;
-   typedef std::vector<ClassicalType> Grid;
-
-   SquareCipher(); 
+   SquareCipher(const KeyType &key); 
    
    virtual const ClassicalType encode(const ClassicalType &) = 0;
    virtual const ClassicalType decode(const ClassicalType &) = 0;
 
-   void setGridDimension(const unsigned int dim);
-   void setKey(const Key &key);
+   void setGridDimension(const uint32_t dim);
 
 protected:
+   typedef std::pair<uint8_t, uint8_t> Coordinates;
+   typedef std::vector<ClassicalType> Grid;
+   
    const Grid getGrid(const ClassicalType &chars) const;
    static const Coordinates getCharCoordinates(const char c, const Grid &grid);
 
-   Key key;
-
    // Dimension of the square grid.
-   unsigned int dim;
+   uint32_t dim;
 };
 
 

@@ -4,11 +4,13 @@ cmake_minimum_required (VERSION 2.8)
 set(SRC
    main.cpp
 	Cipher.hpp
+   HashFunction.hpp HashFunction.cpp
 
 	StringCipher.hpp StringCipher.cpp
 	SquareCipher.hpp SquareCipher.cpp
+   StringCipherWithStringKey.hpp StringCipherWithStringKey.cpp
+   StringCipherWithPermutationKey.hpp StringCipherWithPermutationKey.cpp
 
-	HashFunction.hpp HashFunction.cpp
 	StreamCipher.hpp StreamCipher.cpp	
 	AsymmetricCipher.hpp AsymmetricCipher.cpp
 	SymmetricCipher.hpp SymmetricCipher.cpp

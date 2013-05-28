@@ -2,22 +2,17 @@
 #ifndef WOLSELEY_HPP
 #define WOLSELEY_HPP
 
-#include "StringCipher.hpp"
+#include "StringCipherWithStringKey.hpp"
 
 #include <string>
 
-class Wolseley : public StringCipher
+class Wolseley : public StringCipherWithStringKey
 {
 public:
-   Wolseley();
+   Wolseley(const KeyType &key);
 
-   const ClassicalType encode(const ClassicalType &clear_text) final;
-   const ClassicalType decode(const ClassicalType &cipher_text) final;
-
-   void setKey(const std::string &key);
-
-private:
-   std::string key;
+   virtual const ClassicalType encode(const ClassicalType &clear_text) final;
+   virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
 };
 
 #endif

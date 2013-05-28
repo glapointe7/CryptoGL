@@ -3,41 +3,24 @@
 
 #include "Tools.hpp"
 
-#include "exceptions/BadChar.hpp"
-#include "exceptions/EmptyKey.hpp"
-
-UnsortAlpha::UnsortAlpha()
+UnsortAlpha::UnsortAlpha(const KeyType &key)
+   : charEncode(sortAlpha), charDecode(unorderedAlpha)
 {
    unsort_alpha.reserve(alpha.length());
-}
-
-void UnsortAlpha::setKey(const std::string &key)
-{
-   if (key.empty())
-   {
-      throw EmptyKey("Your key is empty.");
-   }
-
-   const char c = badAlphaFound(key);
-   if (c != 0)
-   {
-      throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
-   }
-
-   this->key = key;
+   setKey(key);
 }
 
 void UnsortAlpha::setHorizontalAlpha()
 {  
-   unsort_alpha = removeRepeatedLetters(key + alpha);
+   unsort_alpha = removeRepeatedLetters(getKey() + alpha);
 }
 
 // Build an unordered vertical alphabet by transforming the key with only unique chars. 
 
 void UnsortAlpha::setVerticalAlpha()
 {
-   const std::string new_key(removeRepeatedLetters(key));
-   const std::string str(removeRepeatedLetters(new_key + alpha));
+   const ClassicalType new_key(removeRepeatedLetters(getKey()));
+   const ClassicalType str(removeRepeatedLetters(new_key + alpha));
    const uint32_t key_len = new_key.length();
    const uint32_t alpha_len = str.length();
 
@@ -52,28 +35,26 @@ void UnsortAlpha::setVerticalAlpha()
    }
 }
 
-const UnsortAlpha::ClassicalType UnsortAlpha::encode(const ClassicalType &clear_text)
+const UnsortAlpha::ClassicalType 
+UnsortAlpha::process(const ClassicalType &text, const GetCharFunction &getNextChar)
 {
-   ClassicalType crypted = "";
-   crypted.reserve(clear_text.length());
+   ClassicalType toReturn;
+   toReturn.reserve(text.length());
 
-   for (const auto c : clear_text)
+   for (const auto c : text)
    {
-      crypted += unsort_alpha[alpha.find(c)];
+      toReturn += getNextChar(alpha, unsort_alpha, c);
    }
 
-   return crypted;
+   return toReturn;
+}
+
+const UnsortAlpha::ClassicalType UnsortAlpha::encode(const ClassicalType &clear_text)
+{
+   return process(clear_text, charEncode);
 }
 
 const UnsortAlpha::ClassicalType UnsortAlpha::decode(const ClassicalType &cipher_text)
 {
-   ClassicalType decrypted = "";
-   decrypted.reserve(cipher_text.length());
-
-   for (const auto c : cipher_text)
-   {
-      decrypted += alpha[unsort_alpha.find(c)];
-   }
-
-   return decrypted;
+   return process(cipher_text, charDecode);
 }

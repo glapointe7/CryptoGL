@@ -4,34 +4,17 @@
 #include "Tools.hpp"
 #include "String.hpp"
 
-#include "exceptions/EmptyKey.hpp"
-#include "exceptions/BadChar.hpp"
 #include "exceptions/BadGridDimension.hpp"
 
-SquareCipher::SquareCipher() : dim(5)
+SquareCipher::SquareCipher(const KeyType &key) : dim(5)
 {
    setAlpha(String::grid_uppercase_fr);
+   setKey(key);
 }
 
-void SquareCipher::setKey(const Key &key)
+void SquareCipher::setGridDimension(const uint32_t dim)
 {
-   if(key.empty())
-   {
-      throw EmptyKey("The Key should not be empty or not set.");
-   }
-   
-   const char c = badAlphaFound(key);
-   if(c != 0)
-   {
-      throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
-   }
-      
-   this->key = key;
-}
-
-void SquareCipher::setGridDimension(const unsigned int dim)
-{
-   if(dim <= 0)
+   if(dim == 0)
    {
       throw BadGridDimension("The dimension of the grid have to be greater than zero.", dim);
    }
@@ -46,6 +29,7 @@ SquareCipher::getGrid(const ClassicalType &chars) const
 {
    const ClassicalType new_alpha(removeRepeatedLetters(chars));
    Grid grid;
+   grid.reserve(dim);
 
    // Split the string to set a square grid of dimension (dim X dim) of chars.
    for (unsigned char i = 0; i < dim; ++i)

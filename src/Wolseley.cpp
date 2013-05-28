@@ -4,28 +4,10 @@
 #include "Tools.hpp"
 #include "String.hpp"
 
-#include "exceptions/BadChar.hpp"
-#include "exceptions/EmptyKey.hpp"
-
-Wolseley::Wolseley()
+Wolseley::Wolseley(const KeyType &key)
 {
    setAlpha(String::grid_uppercase_fr);
-}
-
-void Wolseley::setKey(const std::string &key)
-{
-   if (key.empty())
-   {
-      throw EmptyKey("Your key is empty.");
-   }
-
-   const char c = badAlphaFound(key);
-   if (c != 0)
-   {
-      throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
-   }
-
-   this->key = key;
+   setKey(key);
 }
 
 const Wolseley::ClassicalType Wolseley::encode(const ClassicalType &clear_text)
@@ -33,7 +15,7 @@ const Wolseley::ClassicalType Wolseley::encode(const ClassicalType &clear_text)
    ClassicalType crypted = "";
    crypted.reserve(clear_text.length());
 
-   const std::string key_alpha(key + alpha);
+   const std::string key_alpha(getKey() + alpha);
    const ClassicalType new_alpha(removeRepeatedLetters(key_alpha));
 
    for (const auto c : clear_text)

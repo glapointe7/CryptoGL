@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
 
 std::string baseConvertString(const std::string &number, const unsigned char from_base,
         const unsigned char to_base);
@@ -27,6 +28,14 @@ Type convertToLittleEndian(const Type value)
 }
 
 template <class Type>
-Type lexical_cast(const std::string &textNumber);
+const Type lexical_cast(const std::string &textNumber)
+{
+   std::istringstream ss(textNumber);
+
+   Type number;
+   ss >> number;
+
+   return number;
+}
 
 #endif

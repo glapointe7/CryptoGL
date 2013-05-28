@@ -11,13 +11,13 @@ class StringCipherWithStringKey : public StringCipher
 public:
    typedef std::string KeyType;
 
-   StringCipherWithStringKey();
-   virtual ~StringCipherWithStringKey();
+   StringCipherWithStringKey() : key("") {}
+   virtual ~StringCipherWithStringKey() {}
 
    const KeyType getKey() const { return key; }
    virtual void setKey(const KeyType &key);
 
-private:
+private:   
    KeyType key;
 };
 

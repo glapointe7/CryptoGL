@@ -7,11 +7,11 @@
 class TranspositionColumnsTest : public ::testing::Test
 {
 protected:
-   TranspositionColumns *TC;
+   TranspositionCompleteColumns *TC;
 
    virtual void SetUp()
    {
-      TC = new TranspositionColumns();
+      TC = new TranspositionCompleteColumns({1u, 4u, 0u, 2u, 3u});
    }
 
    virtual void TearDown()
@@ -24,8 +24,6 @@ TEST_F(TranspositionColumnsTest, encode)
 {
    const std::string clear_text = "SALUTLESPETITSPOTS";
 
-   // G R A I N
-   TC->setKey({1, 4, 0, 2, 3});
    EXPECT_EQ("LSTSSLTOUPSXTEPXAEIT", TC->encode(clear_text));
 }
 
@@ -33,7 +31,6 @@ TEST_F(TranspositionColumnsTest, decode)
 {
    const std::string clear_text = "SALUTLESPETITSPOTSXX";
 
-   TC->setKey({1, 4, 0, 2, 3});
    EXPECT_EQ(clear_text, TC->decode("LSTSSLTOUPSXTEPXAEIT"));
 }
 

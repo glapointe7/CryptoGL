@@ -11,9 +11,9 @@ protected:
 
    virtual void SetUp()
    {
-      W = new Wolseley();
+      W = new Wolseley("TESTING");
    }
-
+   
    virtual void TearDown()
    {
       delete W;
@@ -24,7 +24,6 @@ TEST_F(WolseleyTest, encode)
 {
    const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
 
-   W->setKey("TESTING");
    EXPECT_EQ("XQFNZUVFVFBQGQVZANYZNOCUUQVXFQBGCRGQDDQZVCUCGVYUZYYCPJYZXNGFYPCNZMYXMCVRZX", W->encode(clear_text));
 }
 

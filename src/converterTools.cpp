@@ -1,7 +1,6 @@
 #include "converterTools.hpp"
 
 #include <bitset>
-#include <sstream>
 #include <algorithm>
 #include <vector>
 
@@ -57,19 +56,6 @@ const std::vector<bool> convertBytesToBinary(const std::vector<unsigned char> &b
 void uppercase(std::string &text)
 {
    std::transform(text.begin(), text.end(), text.begin(), ::toupper);
-}
-
-// Transforme un String en un nombre.
-
-template <class Type>
-Type lexical_cast(const std::string &textNumber)
-{
-   std::istringstream ss(textNumber);
-
-   Type number;
-   ss >> number;
-
-   return number;
 }
 
 /**

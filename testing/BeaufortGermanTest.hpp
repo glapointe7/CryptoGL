@@ -8,10 +8,10 @@ class BeaufortGermanTest : public ::testing::Test
 {
 protected:
    BeaufortGerman *V;
-
+   
    virtual void SetUp()
    {
-      V = new BeaufortGerman();
+      V = new BeaufortGerman("TESTING");
    }
 
    virtual void TearDown()
@@ -24,9 +24,8 @@ TEST_F(BeaufortGermanTest, encode)
 {
   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
   
-  V->setKey("TESTING");
   EXPECT_EQ("ZWTBLACSETWSEUPPYBWGOJKVUSVMSWXYGTLHIUHLVIUKZPWANLAWIBRNZQZSWOIBPLLKQIPCBZ", V->encode(clear_text));
-  
+
   /*V->setAlpha(String::alpha_numeric);
   V->setKey("V1Gen3rE");
   EXPECT_EQ("n1Ry6GzPdCVe43zXlLKx755Ri1Owy36Vj7XezFrXdFTs4BvRo5KsoCvXnLXpr45Yo4KwqHzKoJ", V->encode(clear_text));
@@ -42,7 +41,7 @@ TEST_F(BeaufortGermanTest, decode)
   
   V->setKey("TESTING");
   EXPECT_EQ(clear_text, V->decode("ZWTBLACSETWSEUPPYBWGOJKVUSVMSWXYGTLHIUHLVIUKZPWANLAWIBRNZQZSWOIBPLLKQIPCBZ"));
-  
+
   /*V->setAlpha(String::alpha_numeric);
   V->setKey("V1Gen3rE");
   EXPECT_EQ(clear_text, V->decode("n1Ry6GzPdCVe43zXlLKx755Ri1Owy36Vj7XezFrXdFTs4BvRo5KsoCvXnLXpr45Yo4KwqHzKoJ"));

@@ -11,7 +11,7 @@ protected:
 
    virtual void SetUp()
    {
-      TD = new TranspositionDouble();
+      TD = new TranspositionDouble({2, 3, 7, 1, 6, 5, 0, 4}, {1, 6, 0, 7, 8, 4, 3, 5, 2});
    }
 
    virtual void TearDown()
@@ -22,24 +22,16 @@ protected:
 
 TEST_F(TranspositionDoubleTest, encode)
 {
-   const std::string clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPERATIONS";
-   const std::vector<uint32_t> key_row = {5, 2, 1, 4, 3, 6, 0};
-   const std::vector<uint8_t> key = {5, 2, 1, 4, 3, 6, 0};
-   
-   TD->setKey(key);
-   TD->setKeyRow(key_row);
-   EXPECT_EQ("PRVOEEITRTCUISIVSSONNSOPRUUTASNVANONTAOISRDTTNEOA", TD->encode(clear_text));
+   const std::string clear_text = "YOURMOTHERWASAHAMSTERANDYOURFATHERSMELTOFELDERBERRIES";
+
+   EXPECT_EQ("NDODRWTRFHASEERAERMROFLBEOERSAYEAEIHMRALUTERHMTTYSOSU", TD->encode(clear_text));
 }
 
 TEST_F(TranspositionDoubleTest, decode)
 {
-   const std::string clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPERATIONS";
-   const std::vector<uint32_t> key_row = {5, 2, 1, 4, 3, 6, 0};
-   const std::vector<uint8_t> key = {5, 2, 1, 4, 3, 6, 0};
-   
-   TD->setKey(key);
-   TD->setKeyRow(key_row);
-   EXPECT_EQ(clear_text, TD->decode("PRVOEEITRTCUISIVSSONNSOPRUUTASNVANONTAOISRDTTNEOA"));
+   const std::string clear_text = "YOURMOTHERWASAHAMSTERANDYOURFATHERSMELTOFELDERBERRIES";
+ 
+   EXPECT_EQ(clear_text, TD->decode("NDODRWTRFHASEERAERMROFLBEOERSAYEAEIHMRALUTERHMTTYSOSU"));
 }
 
 #endif

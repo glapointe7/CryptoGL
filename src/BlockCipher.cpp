@@ -2,7 +2,7 @@
 #include "BlockCipher.hpp"
 
 const BlockCipher::BytesContainer
-BlockCipher::process(const BytesContainer &data, const int8_t lower_round)
+BlockCipher::process(const BytesContainer &data, const uint8_t lower_round)
 {
    const uint32_t data_len = data.size();
    BytesContainer toReturn;

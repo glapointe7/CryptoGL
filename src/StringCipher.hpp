@@ -22,6 +22,9 @@ public:
    void save(const std::string &filename, const ClassicalType &data);
    const ClassicalType load(const std::string &filename) const;
    
+   void encodeFile(const std::string &clear_text_file, const std::string &cipher_text_file);
+   void decodeFile(const std::string &clear_text_file, const std::string &cipher_text_file);
+   
    void eraseBadCharacters(ClassicalType &) const;
    
    void setAlpha(const ClassicalType &alpha);

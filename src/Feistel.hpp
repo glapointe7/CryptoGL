@@ -27,10 +27,10 @@ protected:
    virtual const UInt64Container getKeySchedule() = 0;
    virtual uint64_t F(const uint64_t &data, const uint64_t &) const = 0;
    virtual const BytesContainer getOutputBlock(const BytesContainer &data, 
-           const UInt64Container &subkeys, const int8_t lower_round) = 0;
+           const UInt64Container &subkeys, const uint8_t lower_round) = 0;
    
    virtual void processFeistelRounds(uint64_t &L, uint64_t &R, const UInt64Container &subkeys, 
-           const int8_t lower_round, const int8_t round_max);
+           const uint8_t lower_round, const uint8_t rounds, const int8_t is_increasing);
 };
 
 #endif

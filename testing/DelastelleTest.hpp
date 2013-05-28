@@ -11,7 +11,7 @@ protected:
 
    virtual void SetUp()
    {
-      D = new Delastelle();
+      D = new Delastelle("ERABLE");
    }
 
    virtual void TearDown()
@@ -24,7 +24,6 @@ TEST_F(DelastelleTest, encode)
 {
    const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
 
-   D->setKey("ERABLE");
    D->setBlockLength(5);
    EXPECT_EQ("OLSNLKALLLOEJJISUTILVQIEZAOABXOPRCPAIQSNMMELRIMELUBAEBCSULOHETOOLCPPBCJSUTQ", D->encode(clear_text));
 }
@@ -33,7 +32,6 @@ TEST_F(DelastelleTest, decode)
 {
    const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTSX";
 
-   D->setKey("ERABLE");
    D->setBlockLength(5);
    EXPECT_EQ(clear_text, D->decode("OLSNLKALLLOEJJISUTILVQIEZAOABXOPRCPAIQSNMMELRIMELUBAEBCSULOHETOOLCPPBCJSUTQ"));
 }

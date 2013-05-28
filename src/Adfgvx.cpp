@@ -13,7 +13,8 @@
 
 const std::string Adfgvx::code = "ADFGVX";
 
-Adfgvx::Adfgvx()
+Adfgvx::Adfgvx(const KeyType &key)
+   : SquareCipher(key)
 {
    setAlpha(String::uppercase_digits);
 }
@@ -43,17 +44,18 @@ void Adfgvx::setGridKey(const Grid &grid)
    this->grid_key = grid;
 }
 
-const std::vector<uint8_t> Adfgvx::getPermutationKey() const
+const std::vector<int32_t> Adfgvx::getPermutationKey() const
 {
+   const KeyType key = getKey();
    std::string sorted_key(key);
    std::sort(sorted_key.begin(), sorted_key.end());
    
-   std::vector<uint8_t> perm_key;
+   std::vector<int32_t> perm_key;
    perm_key.reserve(key.length());
    
    for(const auto c : key)
    {
-      perm_key.push_back(static_cast<uint8_t>(sorted_key.find(c)));
+      perm_key.push_back(sorted_key.find(c));
    }
    
    return perm_key;
@@ -69,6 +71,7 @@ const Adfgvx::ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
    // Étape 1 : On prend les coordonnées de chaque lettre et on les remplace
    // par A,D,F,G,V ou X tels que A=0, D=1, F=2, G=3, V=4, X=5.
    // Exemple : Si la lettre 'K' se situe à (2,3), alors K s'encode FG.
+   const KeyType key = getKey();
    std::string first_encoding = "";
    first_encoding.reserve((clear_text.length() + key.length()) << 1);
    
@@ -81,8 +84,7 @@ const Adfgvx::ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
    }
 
    // Étape 2 : On surchiffre à l'aide d'une transposition avec la clé key.
-   TranspositionColumns *TCol = new TranspositionColumns();
-   TCol->setKey(getPermutationKey());
+   TranspositionCompleteColumns *TCol = new TranspositionCompleteColumns(getPermutationKey());
    
    return TCol->encode(first_encoding);
 }
@@ -94,15 +96,15 @@ const Adfgvx::ClassicalType Adfgvx::decode(const ClassicalType &cipher_text)
       throw EmptyGridKey("Your grid key is not set.");
    }
    
-   const unsigned int cipher_len = cipher_text.length();
+   const uint32_t cipher_len = cipher_text.length();
    ClassicalType decrypted = "";
    decrypted.reserve(cipher_len >> 1);
    
-   TranspositionColumns *TCol = new TranspositionColumns();
-   TCol->setKey(getPermutationKey());
+   TranspositionCompleteColumns *TCol = new TranspositionCompleteColumns(getPermutationKey());
    std::string first_decoding = TCol->decode(cipher_text);
+   delete TCol;
    
-   for(unsigned int i = 0; i < cipher_len; i += 2)
+   for(uint32_t i = 0; i < cipher_len; i += 2)
    {
       const auto coords = std::make_pair(code.find(first_decoding[i]), code.find(first_decoding[i+1]));
       decrypted += grid_key[coords.first][coords.second];
@@ -111,8 +113,8 @@ const Adfgvx::ClassicalType Adfgvx::decode(const ClassicalType &cipher_text)
    return decrypted;
 }
 
-// Vérifie si la grille est de dimension 6X6.
-const uint8_t Adfgvx::is6X6(const Grid &grid)
+// Check if the grid is 6X6.
+uint8_t Adfgvx::is6X6(const Grid &grid)
 {
    const uint8_t grid_size = grid.size();
    if(grid_size != 6)
@@ -122,7 +124,7 @@ const uint8_t Adfgvx::is6X6(const Grid &grid)
    
    for(const auto row : grid)
    {
-      const uint8_t row_size = row.size();
+      const uint8_t row_size = row.length();
       if(row_size != 6)
       {
          return row_size;

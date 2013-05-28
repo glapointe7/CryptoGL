@@ -11,7 +11,7 @@ protected:
 
    virtual void SetUp()
    {
-      P = new Playfair();
+      P = new Playfair("TESTING");
    }
 
    virtual void TearDown()
@@ -24,7 +24,6 @@ TEST_F(PlayfairTest, encode)
 {
   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
   
-  P->setKey("TESTING");
   EXPECT_EQ("EBFZETNKNKOBODNEMYSEYGREEDNIHDQMMAODPUOGENREPMNSTESVAVJPSETXZRSAMVNGSIARTCEI", P->encode(clear_text));
 }
 
@@ -32,7 +31,6 @@ TEST_F(PlayfairTest, decode)
 {
   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMXMATIONORIENTEXEOBJETSURLEBOUTDESDOIGTS";
   
-  P->setKey("TESTING");
   EXPECT_EQ(clear_text, P->decode("EBFZETNKNKOBODNEMYSEYGREEDNIHDQMMAODPUOGENREPMNSTESVAVJPSETXZRSAMVNGSIARTCEI"));
 }
 

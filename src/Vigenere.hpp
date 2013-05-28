@@ -2,23 +2,24 @@
 #ifndef VIGENERE_HPP
 #define VIGENERE_HPP
 
-#include "StringCipher.hpp"
+#include "StringCipherWithStringKey.hpp"
 
 #include <functional>
 #include <string>
 #include <sstream>
+#include <vector>
 
 #include "Tools.hpp"  // fonction split
 
-#include "exceptions/BadChar.hpp"
-#include "exceptions/EmptyKey.hpp"
-
 // Vigenere : CIPHER = CLEAR + KEY
 
-class Vigenere : public StringCipher
+class Vigenere : public StringCipherWithStringKey
 {
 protected:
-   typedef std::function<ClassicalType(const ClassicalType &, const char, const char)> GetCharFunction;
+   typedef std::function<const ClassicalType(const ClassicalType &, const char, const char)> GetCharFunction;
+   
+   Vigenere(const GetCharFunction &charEncode, const GetCharFunction &charDecode, const KeyType &key)
+   : charEncode(charEncode), charDecode(charDecode) { setKey(key); }
    
    Vigenere(const GetCharFunction &charEncode, const GetCharFunction &charDecode)
    : charEncode(charEncode), charDecode(charDecode) {}
@@ -39,21 +40,16 @@ protected:
    }
 
    const GetCharFunction charEncode, charDecode;
-   std::string key;
 
 public:
-   Vigenere()
-   : charEncode(clearPlusKey), charDecode(clearMinusKey) {}
+   Vigenere(const KeyType &key)
+   : charEncode(clearPlusKey), charDecode(clearMinusKey) { setKey(key); }
 
-   const ClassicalType encode(const ClassicalType &clear_text);
-   const ClassicalType decode(const ClassicalType &cipher_text);
-   
-   void setKey(const std::string &key);
+   virtual const ClassicalType encode(const ClassicalType &clear_text);
+   virtual const ClassicalType decode(const ClassicalType &cipher_text);
 
 private:   
    const ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
-   
-   
 };
 
 // Beaufort : CIPHER = -CLEAR + KEY
@@ -62,8 +58,8 @@ class Beaufort : public Vigenere
 {
 public:
 
-   Beaufort()
-   : Vigenere(keyMinusClear, keyMinusClear) {}
+   Beaufort(const KeyType &key)
+   : Vigenere(keyMinusClear, keyMinusClear, key) { setKey(key); }
 };
 
 // Beaufort German : CIPHER = CLEAR - KEY
@@ -72,8 +68,8 @@ class BeaufortGerman : public Vigenere
 {
 public:
 
-   BeaufortGerman()
-   : Vigenere(clearMinusKey, clearPlusKey) {}
+   BeaufortGerman(const KeyType &key)
+   : Vigenere(clearMinusKey, clearPlusKey, key) { setKey(key); }
 };
 
 // Rozier : CIPHER = CLEAR + KEY
@@ -82,39 +78,47 @@ class Rozier : public Vigenere
 {
 public:
 
-   Rozier()
-   : Vigenere(clearPlusKey, clearMinusKey) {}
+   Rozier(const KeyType &key)
+   : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
 
+   /* Specific to Rozier cipher : the rozier_key is a string. */
    void setKey(const ClassicalType &rozier_key)
    {
       const uint32_t key_length = rozier_key.length();
       const uint8_t alpha_len = alpha.length();
+      KeyType new_key;
+      new_key.reserve(key_length);
 
       for (uint32_t i = 0; i < key_length - 1; ++i)
       {
-         key += alpha[(alpha.find(rozier_key[i + 1]) - alpha.find(rozier_key[i]) + alpha_len) % alpha_len];
+         new_key += alpha[(alpha.find(rozier_key[i + 1]) - alpha.find(rozier_key[i]) + alpha_len) % alpha_len];
       }
-      key += alpha[(alpha.find(rozier_key[key_length - 1]) - alpha.find(rozier_key[0]) + alpha_len) % alpha_len];
+      new_key += alpha[(alpha.find(rozier_key[key_length - 1]) - alpha.find(rozier_key[0]) + alpha_len) % alpha_len];
+      
+      StringCipherWithStringKey::setKey(new_key);
    }
 };
 
-// Chiffre de Caesar : Cipher = Clear + key où key est un entier char.
+// Caesar : Cipher = Clear + key where key is a byte.
 
 class Caesar : public Vigenere
 {
+   using StringCipherWithStringKey::setKey;
+   
 public:
 
-   Caesar()
-   : Vigenere(clearPlusKey, clearMinusKey) {}
+   explicit Caesar(const char key)
+   : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
 
-   // Si la clé est négative et > alpha_len, on doit la remettre dans {0,...,alpha_len-1}.
-
+   // If the key is < 0 and > alpha_len, we make sure the key will be in the set {0,...,alpha_len-1}.
+   /* Specific to Caesar cipher : the caesar_key is a byte. */
    void setKey(const char caesar_key)
    {
       const int8_t alpha_len = alpha.length();
       char the_key = caesar_key % alpha_len;
       the_key = (the_key + alpha_len) % alpha_len;
-      key = std::string(1, alpha[the_key]);
+      const KeyType new_key = std::string(1, alpha[the_key]);
+      StringCipherWithStringKey::setKey(new_key);
    }
 };
 
@@ -137,15 +141,17 @@ class VigenereMult : public Vigenere
 
 public:
 
-   VigenereMult()
-   : Vigenere(clearMultKey, keyDivideCipher) {}
+   VigenereMult(const KeyType &key)
+   : Vigenere(clearMultKey, keyDivideCipher, key) { setKey(key); }
 
-   const ClassicalType decode(const ClassicalType &cipher_text)
+   /* Decode the Vigenere Multiplication cipher with the given cipher_text. */
+   virtual const ClassicalType decode(const ClassicalType &cipher_text) final
    {
-      const uint32_t key_length = key.length();
+      const KeyType my_key = getKey();
+      const uint32_t key_length = my_key.length();
 
-      ClassicalType toReturn = "";
-      std::vector<std::string> cipher_numbers(split(cipher_text));
+      ClassicalType toReturn;
+      const std::vector<std::string> cipher_numbers(split(cipher_text));
       toReturn.reserve(cipher_text.length());
 
       uint32_t idx = 0;
@@ -153,7 +159,7 @@ public:
       {
          uint16_t num;
          std::istringstream(number) >> num;
-         toReturn += keyDivideCipher(alpha, num, key[idx]);
+         toReturn += keyDivideCipher(alpha, num, my_key[idx]);
          idx = (idx + 1) % key_length;
       }
 
@@ -163,21 +169,25 @@ public:
 
 class Gronsfeld : public Vigenere
 {
-public:
-   Gronsfeld()
-   : Vigenere(clearPlusKey, clearMinusKey) {}
+   using StringCipherWithStringKey::setKey;
    
+public:
+   Gronsfeld(const std::vector<int32_t> &key)
+   : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
+   
+   /* Specific to Gronsfeld cipher : the grons_key is a vector of integers. */
    void setKey(const std::vector<int32_t> &grons_key)
    {
       const int8_t alpha_len = alpha.length();
-      key.clear();
-      key.reserve(grons_key.size());
+      KeyType new_key;
+      new_key.reserve(grons_key.size());
       
       for(const auto number : grons_key)
       {
          const int8_t x = number % alpha_len;
-         key += alpha[(x + alpha_len) % alpha_len];
+         new_key += alpha[(x + alpha_len) % alpha_len];
       }
+      StringCipherWithStringKey::setKey(new_key);
    }
 };
 

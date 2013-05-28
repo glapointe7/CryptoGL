@@ -1,19 +1,8 @@
 
 #include "StringCipherWithStringKey.hpp"
 
-#include "exceptions/BadChar.hpp"
 #include "exceptions/EmptyKey.hpp"
-
-StringCipherWithStringKey::StringCipherWithStringKey()
-   : key("")
-{
-
-}
-
-StringCipherWithStringKey::~StringCipherWithStringKey()
-{
-
-}
+#include "exceptions/BadChar.hpp"
 
 void StringCipherWithStringKey::setKey(const KeyType &key)
 {

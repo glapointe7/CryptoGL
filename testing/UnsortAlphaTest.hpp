@@ -12,7 +12,7 @@ protected:
 
    virtual void SetUp()
    {
-      UA = new UnsortAlpha();
+      UA = new UnsortAlpha("TESTING");
    }
 
    virtual void TearDown()
@@ -25,7 +25,6 @@ TEST_F(UnsortAlphaTest, encode_horiz)
 {
    const std::string clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
    
-   UA->setKey("TESTING");
    UA->setHorizontalAlpha();
    EXPECT_EQ("TRRNKILKQVLQCKQRPUSRCLKQTVTKRMLUPQUCVPNLMPTRCLKQ", UA->encode(clear_text));
 }

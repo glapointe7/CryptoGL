@@ -1,31 +1,47 @@
 
 #include "Transposition.hpp"
 
-const std::vector<Transposition::ClassicalType> 
-Transposition::setStartingTable(const ClassicalType &data)
+#include <set>
+
+const Transposition::Table Transposition::createTable(const ClassicalType &data)
 {
-   std::vector<ClassicalType> table;
-   const uint8_t key_len = key.size();
-// ICI : incomplète => on ajoute pas de X => on doit connaître datalen % key_len
-// et faire attention à la dernière ligne.
-   ClassicalType full_data(appendChars(data, key_len, 'X'));
-   const unsigned int data_len = full_data.length();
+   const uint32_t key_len = getKey().size();
+   const ClassicalType full_data(appendChars(data, key_len, 'X'));
+   const uint32_t data_len = full_data.length();
+   Table table;
    table.reserve(data_len / key_len);
 
    // We fill the grid that will be read by column. 
-   for (unsigned int i = 0; i < data_len; i += key_len)
+   for (uint32_t i = 0; i < data_len; i += key_len)
    {
       table.push_back(full_data.substr(i, key_len));
    }
-   
+
    return table;
 }
 
-const Transposition::ClassicalType 
-Transposition::readFinalTable(const std::vector<ClassicalType> &table) const
-{// Faire attention à la dernière ligne.
+const Transposition::Table Transposition::createIncompleteTable(const ClassicalType &data)
+{
+   const uint32_t key_len = getKey().size();
+   const uint32_t data_len = data.length();
+   const uint32_t rows = data_len / key_len;
+   Table table;
+   table.reserve(rows);
+
+   for (uint32_t i = 0; i < data_len - key_len; i += key_len)
+   {
+      table.push_back(data.substr(i, key_len));
+   }
+   table.push_back(data.substr(rows * key_len));
+
+   return table;
+}
+
+const Transposition::ClassicalType
+Transposition::readPermutedTable(const Table &table)
+{
    ClassicalType data = "";
-   data.reserve(table.size() * key.size());
+   data.reserve(table.size() * getKey().size());
    for (const auto str : table)
    {
       data += str;
@@ -34,22 +50,154 @@ Transposition::readFinalTable(const std::vector<ClassicalType> &table) const
    return data;
 }
 
-const std::vector<Transposition::ClassicalType> 
-Transposition::swapColumns(const std::vector<ClassicalType> &table)
-{// Faire attention à la dernière ligne.
-   const uint8_t key_len = key.size();
-   const unsigned int rows = table.size();
-   std::vector<ClassicalType> s_table(rows, "");
-
-   for (unsigned int i = 0; i < rows; ++i)
+// Rows complete encode / decode
+const Transposition::ClassicalType
+TranspositionCompleteRows::readPermutedTable(const Table &table)
+{
+   const KeyType key = getKey();
+   ClassicalType data;
+   data.reserve(table.size() * getKey().size());
+   
+   for (const auto str : table)
    {
-      s_table[i].reserve(key_len);
-      for (uint8_t j = 0; j < key_len; ++j)
+      for(const auto k : key)
       {
-         const uint8_t pos = std::find(key.begin(), key.end(), j) - key.begin();
-         s_table[i] += table[i][pos];
+         data += str[k];
+      }
+   }
+
+   return data;
+}
+
+// Rows incomplete encode / decode
+const Transposition::ClassicalType
+TranspositionIncompleteRows::readPermutedTable(const Table &table)
+{
+   const KeyType key = getKey();
+   const uint32_t key_len = key.size();
+   const uint32_t rows = table.size();
+   ClassicalType data;
+   data.reserve(rows * key_len);
+   
+   for (uint32_t i = 0; i < rows-1; ++i)
+   {
+      for(const auto k : key)
+      {
+         data += table[i][k];
       }
    }
    
-   return s_table;
+   const uint32_t rest = table[rows - 1].length();
+   const std::set<uint32_t> last_row_sorted(key.begin(), key.begin() + rest);
+   for (uint32_t j = 0; j < rest; ++j)
+   {
+      const auto it = std::next(last_row_sorted.begin(), key[j]);
+      const uint32_t pos = std::find(key.begin(), key.end(), *it) - key.begin();
+      data += table[rows - 1][pos];
+   }
+
+   return data;
+}
+
+/* Implementation of TranspositionColumns */
+
+const Transposition::Table
+TranspositionCompleteColumns::createTable(const ClassicalType &data)
+{
+   const uint32_t key_len = getKey().size();
+   const uint32_t data_len = data.length();
+   const uint32_t rows = data_len / key_len;
+   Table table(rows, ClassicalType(key_len, '.'));
+
+   uint32_t k = 0;
+   for (uint32_t i = 0; i < rows; i++)
+   {
+      for (uint32_t j = i; j < data_len; j += rows)
+      {
+         const uint32_t pos = std::find(key.begin(), key.end(), k) - key.begin();
+         table[i][pos] = data[j];
+         k = (k+1) % key_len;
+      }
+   }
+
+   return table;
+}
+
+const Transposition::ClassicalType
+TranspositionCompleteColumns::readPermutedTable(const Table &table)
+{
+   const uint32_t key_len = getKey().size();
+   const uint32_t rows = table.size();
+   ClassicalType data;
+   data.reserve(rows * key_len);
+
+   for (uint32_t i = 0; i < key_len; ++i)
+   {
+      const uint32_t pos = std::find(key.begin(), key.end(), i) - key.begin();
+      for(uint32_t j = 0; j < rows; ++j)
+      {
+         data += table[j][pos];
+      }
+   }
+
+   return data;
+}
+
+/* Implementation of TranspositionIncompleteColumns */
+
+const Transposition::Table
+TranspositionIncompleteColumns::createIncompleteTable(const ClassicalType &data)
+{
+   const KeyType key = getKey();
+   const uint32_t key_len = getKey().size();
+   const uint32_t data_len = data.length();
+   const uint32_t rows = (data_len / key_len)+1;
+   const uint32_t rest = data_len % key_len;
+   Table table(rows-1, std::string(key_len, '.'));
+   table.push_back(std::string(rest, '.'));
+   
+   uint32_t k = 0;
+   for (uint32_t i = 0; i < key_len; i++)
+   {
+      const uint32_t pos = std::find(key.begin(), key.end(), i) - key.begin();
+      uint32_t total = rows;
+      if(pos >= rest)
+      {
+         total--;
+      }
+      for(uint32_t j = 0; j < total; ++j, ++k)
+      {
+         table[j][pos] = data[k];
+      }
+   }
+
+   return table;
+}
+
+const Transposition::ClassicalType
+TranspositionIncompleteColumns::readPermutedTable(const std::vector<ClassicalType> &table)
+{
+   const KeyType key = getKey();
+   const uint32_t key_len = key.size();
+   const uint32_t rows = table.size();
+   const uint32_t last_row = table[rows - 1].length();
+   ClassicalType data;
+   data.reserve(rows * key_len);
+
+   for (uint32_t i = 0; i < key_len; ++i)
+   {
+      uint32_t total = rows;
+      const uint32_t pos = std::find(key.begin(), key.end(), i) - key.begin();
+      if(pos >= last_row)
+      {
+         total = rows - 1;
+      }
+      
+      for (uint32_t j = 0; j < total; ++j)
+      {
+         data += table[j][pos];
+      }
+   }
+
+   return data;
 }

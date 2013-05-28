@@ -8,10 +8,10 @@ class RozierTest : public ::testing::Test
 {
 protected:
    Rozier *R;
-
+   
    virtual void SetUp()
    {
-      R = new Rozier();
+      R = new Rozier("TESTING");
    }
 
    virtual void TearDown()
@@ -24,7 +24,6 @@ TEST_F(RozierTest, encode)
 {
   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
   
-  R->setKey("TESTING");
   EXPECT_EQ("DOMJYGVWWMEFKNTHRJJMHNCOCFBFWOQGTZELANPYBBYCSXJGGPSPQOXGDISAJUBFHETXWBTUUH", R->encode(clear_text));
   
   /*R->setAlpha(String::alpha_numeric);

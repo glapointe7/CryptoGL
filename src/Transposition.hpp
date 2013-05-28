@@ -2,182 +2,157 @@
 #ifndef TRANSPOSITION_HPP
 #define	TRANSPOSITION_HPP
 
-#include "StringCipher.hpp"
-
-#include "exceptions/EmptyKey.hpp"
-#include "exceptions/BadChar.hpp"
-#include "exceptions/BadKeyLength.hpp"
+#include "StringCipherWithPermutationKey.hpp"
 
 #include <algorithm>
 #include <string>
 #include <vector>
 
-class Transposition : public StringCipher
+/* Abstract class for all transposition cipher types. */
+class Transposition : public StringCipherWithPermutationKey
 {
 public:
-
-   const ClassicalType encode(const ClassicalType &clear_text)
-   {
-      const std::vector<ClassicalType> table(setStartingTable(clear_text));
-      const std::vector<ClassicalType> s_table(swapColumns(table));
-
-      return read(s_table);
-   }
-
-   const ClassicalType decode(const ClassicalType &cipher_text)
-   {
-      const std::vector<ClassicalType> table(setTable(cipher_text));
-      const std::vector<ClassicalType> s_table(swapColumnsDecode(table));
-
-      return readFinalTable(s_table);
-   }
-
-   void setKey(const std::vector<uint8_t> &key)
-   {
-      if (key.empty())
-      {
-         throw EmptyKey("Your key is empty.");
-      }
-
-      this->key = key;
-   }
+   virtual const ClassicalType encode(const ClassicalType &) = 0;
+   virtual const ClassicalType decode(const ClassicalType &) = 0;
 
 protected:
-   virtual const std::vector<ClassicalType> setTable(const ClassicalType &data) = 0;
-   virtual const ClassicalType read(const std::vector<ClassicalType> &table) = 0;
-   virtual const std::vector<ClassicalType> swapColumnsDecode(const std::vector<ClassicalType> &table) = 0;
-   
-   const std::vector<ClassicalType> setStartingTable(const ClassicalType &data);
-   const std::vector<ClassicalType> swapColumns(const std::vector<ClassicalType> &table);
-   const ClassicalType readFinalTable(const std::vector<ClassicalType> &table) const;
+   typedef std::vector<ClassicalType> Table;
 
-   std::vector<uint8_t> key;
+   virtual const Table createTable(const ClassicalType &data);
+   virtual const Table createIncompleteTable(const ClassicalType &data);
+   virtual const ClassicalType readPermutedTable(const Table &table);
 };
 
-// Transposition en ligne : permutation des colonnes du tableau et lecture en ligne.
-
-class TranspositionRows : public Transposition
+class TranspositionCompleteRows : public Transposition
 {
 public:
-
-   const std::vector<ClassicalType> setTable(const ClassicalType &data)
+   TranspositionCompleteRows(const KeyType &key) { setKey(key); }
+   
+   virtual const ClassicalType encode(const ClassicalType &clear_text) final
    {
-      return setStartingTable(data);
+      const Table table(createTable(clear_text));
+
+      return readPermutedTable(table);
+   }
+
+   virtual const ClassicalType decode(const ClassicalType &cipher_text) final
+   {
+      const Table table(createTable(cipher_text));
+
+      return readPermutedTable(table);
    }
    
-   const std::vector<ClassicalType> swapColumnsDecode(const std::vector<ClassicalType> &table)
-   {
-      return swapColumns(table);
-   }
-
-   const ClassicalType read(const std::vector<ClassicalType> &table)
-   {
-      return readFinalTable(table);
-   }
+private:
+   virtual const ClassicalType readPermutedTable(const Table &table) final;
 };
 
-// Transposition en colonnes : permutation des colonnes du tableau et lecture en colonne.
-
-class TranspositionColumns : public Transposition
+class TranspositionIncompleteRows : public Transposition
 {
 public:
-// ICI : incomplète => on ajoute pas de X => on doit connaître datalen % key_len
-// et faire attention à la dernière ligne.
-   const std::vector<ClassicalType> setTable(const ClassicalType &data)
+   TranspositionIncompleteRows(const KeyType &key) { setKey(key); }
+   
+   virtual const ClassicalType encode(const ClassicalType &clear_text) final
    {
-      const uint8_t key_len = key.size();
-      const uint32_t data_len = data.length();
-      const uint32_t rows = data_len / key_len;
-      std::vector<ClassicalType> table(rows, "");
+      const Table table(createIncompleteTable(clear_text));
 
-      for (uint32_t i = 0; i < rows; i++)
-      {
-         for (uint32_t j = i; j < data_len; j += rows)
-         {
-            table[i].reserve(key_len);
-            table[i] += data[j];
-         }
-      }
-
-      return table;
+      return readPermutedTable(table);
    }
-// ICI : incomplète => on ajoute pas de X => on doit connaître datalen % key_len
-// et faire attention à la dernière ligne.
-   const std::vector<ClassicalType> swapColumnsDecode(const std::vector<ClassicalType> &table)
+
+   virtual const ClassicalType decode(const ClassicalType &cipher_text) final
    {
-      const uint8_t key_len = key.size();
-      const unsigned int rows = table.size();
-      std::vector<ClassicalType> s_table(rows, "");
+      const Table table(createIncompleteTable(cipher_text));
 
-      for (unsigned int i = 0; i < rows; ++i)
-      {
-         s_table[i].reserve(key_len);
-         for (uint8_t j = 0; j < key_len; ++j)
-         {
-            s_table[i] += table[i][key[j]];
-         }
-      }
-
-      return s_table;
+      return readPermutedTable(table);
    }
-// ICI : incomplète => on ajoute pas de X => on doit connaître datalen % key_len
-// et faire attention à la dernière ligne.
-   const ClassicalType read(const std::vector<ClassicalType> &table)
-   {
-      const uint8_t key_len = key.size();
-      ClassicalType data = "";
-      data.reserve(table.size() * key_len);
-
-      for (uint8_t i = 0; i < key_len; i++)
-      {
-         for (const auto str : table)
-         {
-            data += str[i];
-         }
-      }
-
-      return data;
-   }
+   
+private:
+   virtual const ClassicalType readPermutedTable(const Table &table) final;
 };
 
-// Double columns transposition.
+class TranspositionCompleteColumns : public Transposition
+{
+public:
+   TranspositionCompleteColumns(const KeyType &key) { setKey(key); }
+   
+   virtual const ClassicalType encode(const ClassicalType &clear_text) final
+   {
+      const Table table(Transposition::createTable(clear_text));
 
-class TranspositionDouble : public StringCipher
+      return readPermutedTable(table);
+   }
+
+   virtual const ClassicalType decode(const ClassicalType &cipher_text) final
+   {
+      const Table table(createTable(cipher_text));
+
+      return Transposition::readPermutedTable(table);
+   }
+
+private:
+   virtual const Table createTable(const ClassicalType &data) final;
+   virtual const ClassicalType readPermutedTable(const Table &table);
+};
+
+class TranspositionIncompleteColumns : public Transposition
+{
+public:
+   TranspositionIncompleteColumns(const KeyType &key) { setKey(key); }
+   
+   virtual const ClassicalType encode(const ClassicalType &clear_text) final
+   {
+      const Table table(Transposition::createIncompleteTable(clear_text));
+
+      return readPermutedTable(table);
+   }
+
+   virtual const ClassicalType decode(const ClassicalType &cipher_text) final
+   {
+      const Table table(createIncompleteTable(cipher_text));
+
+      return Transposition::readPermutedTable(table);
+   }
+
+private:
+   virtual const Table createIncompleteTable(const ClassicalType &data) final;
+   virtual const ClassicalType readPermutedTable(const Table &table) final;
+};
+
+
+class TranspositionDouble : public Transposition
 {
 private:
-   std::vector<uint8_t> second_key;
-   std::vector<uint8_t> key;
-
-public:
-
-   void setKey(const std::vector<uint8_t> &key)
-   {
-      this->key = key;
-   }
+   KeyType second_key;
    
-   void setSecondKey(const std::vector<uint8_t> &second_key)
-   {
+   
+public:
+   /* Constructor receives 2 keys : 'first_key' for the first encryption key. */
+   TranspositionDouble(const KeyType &first_key, const KeyType &second_key) 
+   { 
+      setKey(first_key); 
       this->second_key = second_key;
    }
    
    const ClassicalType encode(const ClassicalType &clear_text)
    {
-      TranspositionColumns *TC = new TranspositionColumns();
-      TC->setKey(key);
-      const ClassicalType first_encoded = TC->encode(clear_text);
-      TC->setKey(second_key);
+      TranspositionIncompleteColumns *TIC_first = new TranspositionIncompleteColumns(getKey());
+      const ClassicalType first_encoded = TIC_first->encode(clear_text);
+      delete TIC_first;
       
-      return TC->encode(first_encoded);
+      TranspositionIncompleteColumns *TIC_second = new TranspositionIncompleteColumns(second_key);
+  
+      return TIC_second->encode(first_encoded);
    }
    
    const ClassicalType decode(const ClassicalType &cipher_text)
    {
-      TranspositionColumns *TC = new TranspositionColumns();
-      TC->setKey(second_key);
-      const ClassicalType first_decoded = TC->decode(cipher_text);
-      TC->setKey(key);
+      const KeyType key = getKey();
+      TranspositionIncompleteColumns *TIC_second = new TranspositionIncompleteColumns(second_key);
+      const ClassicalType first_decoded = TIC_second->decode(cipher_text);
+      delete TIC_second;
       
-      return TC->decode(first_decoded);
+      TranspositionIncompleteColumns *TIC_first = new TranspositionIncompleteColumns(key);
+      
+      return TIC_first->decode(first_decoded);
    }
 };
 

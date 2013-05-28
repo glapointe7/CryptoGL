@@ -1,7 +1,6 @@
 
 #include "Playfair.hpp"
 
-#include "exceptions/EmptyKey.hpp"
 #include "exceptions/BadAlphaLength.hpp"
 
 #include "MathematicalTools.hpp"
@@ -11,25 +10,20 @@
 // Encode un texte clair avec la méthode de Playfair.
 
 const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
-{
-   if(key.empty())
-   {
-      throw EmptyKey("You have to set the key before encoding your message.");
-   }
-   
+{  
    if(!isPerfectSquare(alpha.length()))
    {
       throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
    }
    
    ClassicalType full_text(appendChars(clear_text, 2, 'X'));
-   unsigned int clear_len = full_text.length();
+   uint32_t clear_len = full_text.length();
    ClassicalType crypted = "";
    crypted.reserve(clear_len);
 
-   const Grid grid(getGrid(key + alpha));
+   const Grid grid(getGrid(getKey() + alpha));
 
-   for (unsigned int i = 0; i < clear_len; i += 2)
+   for (uint32_t i = 0; i < clear_len; i += 2)
    {
       // Obtenir les coordonnées (x,y) et (a,b) des lettres du bigramme dans la grille.
       const auto X = getCharCoordinates(full_text[i], grid);
@@ -70,23 +64,18 @@ const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
 
 const Playfair::ClassicalType Playfair::decode(const ClassicalType &cipher_text)
 {
-   if(key.empty())
-   {
-      throw EmptyKey("You have to set the key before decoding your message.");
-   }
-   
-   if(!isPerfectSquare(alpha.size()))
+   if(!isPerfectSquare(alpha.length()))
    {
       throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
    }
    
-   const unsigned int cipher_len = cipher_text.length();
+   const uint32_t cipher_len = cipher_text.length();
    ClassicalType decrypted = "";
    decrypted.reserve(cipher_len);
    
-   const Grid grid(getGrid(key + alpha));
+   const Grid grid(getGrid(getKey() + alpha));
 
-   for (unsigned int i = 0; i < cipher_len; i += 2)
+   for (uint32_t i = 0; i < cipher_len; i += 2)
    {
       // Obtenir les coordonnées (x,y) et (a,b) des lettres du bigramme dans la grille.
       const auto X = getCharCoordinates(cipher_text[i], grid);

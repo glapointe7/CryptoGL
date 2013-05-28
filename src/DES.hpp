@@ -18,8 +18,8 @@ public:
    DES() : Feistel(OperationModes::ECB) {}
    explicit DES(const OperationModes mode) : Feistel(mode) {}
    
-   virtual const BytesContainer encode(const BytesContainer &) final;
-   virtual const BytesContainer decode(const BytesContainer &) final;
+   virtual const BytesContainer encode(const BytesContainer &clear_text) final;
+   virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
 
    virtual void setKey(const BytesContainer &key) final;
    //uint8_t getParityBits();
@@ -28,7 +28,7 @@ public:
 private:
    virtual const UInt64Container getKeySchedule() final;
    virtual const BytesContainer getOutputBlock(const BytesContainer &data, 
-           const UInt64Container &subkeys, const int8_t lower_round) final;
+           const UInt64Container &subkeys, const uint8_t lower_round) final;
    uint64_t getSubstitution(const uint64_t &key_mixed) const;
 
    /* Feistel function F. */

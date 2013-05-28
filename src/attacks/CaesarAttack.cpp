@@ -4,7 +4,7 @@
 
 CaesarAttack::CaesarAttack()
 {
-   C = new Caesar();
+   C = new Caesar(0);
 }
 
 CaesarAttack::~CaesarAttack()

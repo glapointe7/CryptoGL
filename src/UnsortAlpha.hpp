@@ -2,26 +2,42 @@
 #ifndef UNSORTALPHA_HPP
 #define UNSORTALPHA_HPP
 
-#include "StringCipher.hpp"
+#include "StringCipherWithStringKey.hpp"
 
 #include <string>
+#include <functional>
 
-class UnsortAlpha : public StringCipher
+class UnsortAlpha : public StringCipherWithStringKey
 {
 public:
-   UnsortAlpha();
+   UnsortAlpha(const KeyType &key);
    
-   virtual const ClassicalType encode(const ClassicalType &clear_text);
-   virtual const ClassicalType decode(const ClassicalType &cipher_text);
+   virtual const ClassicalType encode(const ClassicalType &clear_text) final;
+   virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
 
+   /* Unordered the alphabet in the vertical way. */
    void setVerticalAlpha();
-   void setHorizontalAlpha();
    
-   void setKey(const std::string &key);
+   /* Unordered the alphabet in the horizontal way. */
+   void setHorizontalAlpha();
 
 private:
+   typedef std::function<const char(const ClassicalType &, const ClassicalType &, const char)> GetCharFunction;
+   
    ClassicalType unsort_alpha;
-   std::string key;
+   const GetCharFunction charEncode, charDecode;
+   
+   static const char sortAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
+   {
+      return unsort_alpha[alpha.find(c)];
+   }
+
+   static const char unorderedAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
+   {
+      return alpha[unsort_alpha.find(c)];
+   }
+   
+   const ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
 };
 
 #endif

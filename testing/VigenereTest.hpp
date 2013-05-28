@@ -9,10 +9,10 @@ class VigenereTest : public ::testing::Test
 {
 protected:
    Vigenere *V;
-
+   
    virtual void SetUp()
    {
-      V = new Vigenere();
+      V = new Vigenere("TESTING");
    }
 
    virtual void TearDown()
@@ -25,7 +25,6 @@ TEST_F(VigenereTest, encode)
 {
   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
   
-  V->setKey("TESTING");
   EXPECT_EQ("LEDNBAOEMDIIEGBXINMGAVSFGIVYEEHKWTXTQETBVUGSJBMAZXIGURRZLYJEMOUNXVXAQUBKLL", V->encode(clear_text));
   
   V->setAlpha(String::alpha_numeric);

@@ -4,29 +4,33 @@
 
 #include "StringCipher.hpp"
 
+#include "exceptions/BadKey.hpp"
+
 #include <vector>
 #include <string>
+#include <set>
 
 class Fleissner : public StringCipher
 {  
-public:
+   typedef std::pair<uint16_t, uint16_t> Cell;
+   typedef std::vector<Cell> Coordinates;
+   using KeyCellNotUnique = BadKey;
    
-   typedef std::pair<unsigned short, unsigned short> Coordinates;
+public:
+   Fleissner(const Coordinates &key, const uint16_t grid_dim, const bool clockwise);
+   
+   virtual const ClassicalType encode(const ClassicalType &clear_text) final;
+   virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
 
-   const ClassicalType encode(const ClassicalType &) final;
-   const ClassicalType decode(const ClassicalType &) final;
+   void setGridDimension(const uint16_t dim);
 
-   void setKey(const std::vector<Coordinates> key);
-   void setGridDimension(const unsigned short dim);
+private:   
+   void rotationExists(std::set<Cell> &cmp, const uint16_t x, const uint16_t y) const;
 
-private:
-   bool checkMask(std::vector<Coordinates> &coords) const;
-   //void fillWithRandomChars(ClassicalType &text);
+   // Dimension of the cipher grid.
+   uint16_t grid_dim;
 
-   // Dimension de la grille de chiffrement.
-   unsigned short grid_dim;
-
-   std::vector<Coordinates> key;
+   Coordinates key;
 };
 
 #endif
