@@ -10,7 +10,7 @@ bool isUniqueChar(const std::string &text)
 {
    std::vector<bool> array(256, 0);
 
-   for (auto c : text)
+   for (const auto c : text)
    {
       if (array[c] == true)
       {
@@ -25,16 +25,14 @@ bool isUniqueChar(const std::string &text)
    return true;
 }
 
-// On enl�ve les lettres doublons de la clef.
-
-std::string removeRepeatedLetters(const std::string key)
+const std::string removeRepeatedLetters(const std::string key)
 {
-   unsigned int keylen = key.length();
+   uint32_t keylen = key.length();
    std::string result(key);
 
-   for (unsigned int i = 0; i < keylen; i++)
+   for (uint32_t i = 0; i < keylen; i++)
    {
-      for (unsigned int j = i + 1; j < keylen; j++)
+      for (uint32_t j = i + 1; j < keylen; j++)
       {
          if (result[i] == result[j])
          {
@@ -102,7 +100,7 @@ std::string getBinaryShifter(const std::string &bin_text, const unsigned int shi
 
 // S�pare une cha�ne de caract�res par l'espace et met chaque mot dans un vecteur.
 
-std::vector<std::string> split(const std::string &text)
+const std::vector<std::string> split(const std::string &text)
 {
    std::istringstream iss(text);
    std::vector<std::string> split_text;

@@ -1,6 +1,4 @@
-/*
- * 
- */
+
 #ifndef STRINGCIPHER_HPP
 #define STRINGCIPHER_HPP
 
@@ -19,15 +17,15 @@ public:
    virtual const ClassicalType encode(const ClassicalType &) = 0;
    virtual const ClassicalType decode(const ClassicalType &) = 0;
    
-   void save(const std::string &filename, const ClassicalType &data);
-   const ClassicalType load(const std::string &filename) const;
+   static void save(const std::string &filename, const ClassicalType &data);
+   static const ClassicalType load(const std::string &filename);
    
    void encodeFile(const std::string &clear_text_file, const std::string &cipher_text_file);
    void decodeFile(const std::string &clear_text_file, const std::string &cipher_text_file);
    
    void eraseBadCharacters(ClassicalType &) const;
    
-   void setAlpha(const ClassicalType &alpha);
+   virtual void setAlpha(const ClassicalType &alpha);
    const ClassicalType getAlpha() const;
 
 protected: 

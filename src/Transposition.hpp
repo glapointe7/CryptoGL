@@ -26,7 +26,7 @@ protected:
 class TranspositionCompleteRows : public Transposition
 {
 public:
-   TranspositionCompleteRows(const KeyType &key) { setKey(key); }
+   explicit TranspositionCompleteRows(const KeyType &key) { setKey(key); }
    
    virtual const ClassicalType encode(const ClassicalType &clear_text) final
    {
@@ -49,7 +49,7 @@ private:
 class TranspositionIncompleteRows : public Transposition
 {
 public:
-   TranspositionIncompleteRows(const KeyType &key) { setKey(key); }
+   explicit TranspositionIncompleteRows(const KeyType &key) { setKey(key); }
    
    virtual const ClassicalType encode(const ClassicalType &clear_text) final
    {
@@ -72,7 +72,7 @@ private:
 class TranspositionCompleteColumns : public Transposition
 {
 public:
-   TranspositionCompleteColumns(const KeyType &key) { setKey(key); }
+   explicit TranspositionCompleteColumns(const KeyType &key) { setKey(key); }
    
    virtual const ClassicalType encode(const ClassicalType &clear_text) final
    {
@@ -96,7 +96,7 @@ private:
 class TranspositionIncompleteColumns : public Transposition
 {
 public:
-   TranspositionIncompleteColumns(const KeyType &key) { setKey(key); }
+   explicit TranspositionIncompleteColumns(const KeyType &key) { setKey(key); }
    
    virtual const ClassicalType encode(const ClassicalType &clear_text) final
    {

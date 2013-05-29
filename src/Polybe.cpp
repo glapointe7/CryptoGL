@@ -1,21 +1,11 @@
 
 #include "Polybe.hpp"
 
-#include "exceptions/BadGridDimension.hpp"
-#include "exceptions/BadAlphaLength.hpp"
-
-#include "MathematicalTools.hpp"
-
 #include <utility> 
 
 const Polybe::ClassicalType Polybe::encode(const ClassicalType &clear_text)
-{
-   if(!isPerfectSquare(alpha.length()))
-   {
-      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
-   }
-   
-   ClassicalType crypted = "";
+{  
+   ClassicalType crypted;
    crypted.reserve(clear_text.length() << 1);
 
    // Construction de la grille de chiffrement.
@@ -26,7 +16,6 @@ const Polybe::ClassicalType Polybe::encode(const ClassicalType &clear_text)
    for (const auto c : clear_text)
    {
       const auto pos = getCharCoordinates(c, grid);
-
       crypted += (pos.second + '1');
       crypted += (pos.first + '1');
    }
@@ -38,13 +27,8 @@ const Polybe::ClassicalType Polybe::encode(const ClassicalType &clear_text)
 
 const Polybe::ClassicalType Polybe::decode(const ClassicalType &cipher_text)
 {  
-   if(!isPerfectSquare(alpha.length()))
-   {
-      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
-   }
-   
    const uint32_t cipher_len = cipher_text.length();
-   ClassicalType decrypted = "";
+   ClassicalType decrypted;
    decrypted.reserve(cipher_len >> 1);
    const Grid grid(getGrid(getKey() + alpha));
 

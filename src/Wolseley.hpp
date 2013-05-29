@@ -9,7 +9,7 @@
 class Wolseley : public StringCipherWithStringKey
 {
 public:
-   Wolseley(const KeyType &key);
+   explicit Wolseley(const KeyType &key);
 
    virtual const ClassicalType encode(const ClassicalType &clear_text) final;
    virtual const ClassicalType decode(const ClassicalType &cipher_text) final;

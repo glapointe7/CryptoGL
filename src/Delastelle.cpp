@@ -1,7 +1,6 @@
 
 #include "Delastelle.hpp"
 
-#include "exceptions/BadAlphaLength.hpp"
 #include "MathematicalTools.hpp"
 
 #include <vector>
@@ -9,21 +8,16 @@
 
 void Delastelle::setBlockLength(const uint32_t block_len)
 {
+   if(block_len == 0)
+   {
+      throw ZeroBlockLength("The block length you provided has to be greater than zero.");
+   }
+   
    this->block_len = block_len;
 }
 
 const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_text)
-{
-   if(block_len <= 0 || block_len > clear_text.length())
-   {
-      throw Exception("The block length you specified should be between 1 and the length of your message.");
-   }
-   
-   if(!isPerfectSquare(alpha.length()))
-   {
-      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
-   }
-   
+{   
    ClassicalType full_text(appendChars(clear_text, block_len, 'X'));
    const uint32_t clear_len = full_text.length();
    
@@ -100,17 +94,7 @@ const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_te
 const Delastelle::ClassicalType Delastelle::decode(const ClassicalType &cipher_text)
 {
    const uint32_t cipher_len = cipher_text.length();
-   if(block_len <= 0 || block_len > cipher_len)
-   {
-      throw Exception("The block length you specified should be between 1 and the length of your message.");
-   }
-   
-   if(!isPerfectSquare(alpha.length()))
-   {
-      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
-   }
-   
-   ClassicalType decrypted = "";
+   ClassicalType decrypted;
    decrypted.reserve(cipher_len);
    
    const Grid grid(getGrid(getKey() + alpha));

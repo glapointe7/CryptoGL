@@ -1,6 +1,7 @@
 #include "MathematicalTools.hpp"
 
 #include <cmath>
+#include <map>
 #include "exceptions/Exception.hpp"
 
 // Return GCD(a,b).
@@ -47,7 +48,7 @@ bool isSuperIncresing(const std::vector<uint64_t> &sequence)
 {
    uint64_t sum = 0;
 
-   for (auto number : sequence)
+   for (const auto number : sequence)
    {
       if (number > sum)
       {
@@ -79,18 +80,42 @@ uint64_t getLegendreSymbol(const uint64_t x, const uint64_t e, const uint64_t n)
 }
 
 // Tout carré parfait en base 16 se termine par 0,1,4 ou 9.
+
 bool isPerfectSquare(const uint32_t value)
 {
-   const uint32_t h = value & 0xF; 
+   const uint32_t h = value & 0xF;
    if (h > 9)
    {
       return false;
    }
-   
+
    if (h != 2 && h != 3 && h != 5 && h != 6 && h != 7 && h != 8)
    {
-      const uint32_t t = static_cast<uint32_t>(floor(sqrt(static_cast<double>(value)) + 0.5));
+      const uint32_t t = static_cast<uint32_t> (floor(sqrt(static_cast<double> (value)) + 0.5));
       return value == t * t;
    }
    return 0;
+}
+
+uint8_t getByteSqrt(const uint8_t sqr)
+{
+   const std::map<uint8_t, uint8_t> byte_squares({
+      {1, 1},
+      {4, 2},
+      {9, 3},
+      {16, 4},
+      {25, 5},
+      {36, 6},
+      {49, 7},
+      {64, 8},
+      {81, 9},
+      {100, 10},
+      {121, 11},
+      {144, 12},
+      {169, 13},
+      {196, 14},
+      {225, 15}
+   });
+
+   return byte_squares.find(sqr)->second;
 }

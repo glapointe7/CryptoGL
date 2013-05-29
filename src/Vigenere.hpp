@@ -42,7 +42,7 @@ protected:
    const GetCharFunction charEncode, charDecode;
 
 public:
-   Vigenere(const KeyType &key)
+   explicit Vigenere(const KeyType &key)
    : charEncode(clearPlusKey), charDecode(clearMinusKey) { setKey(key); }
 
    virtual const ClassicalType encode(const ClassicalType &clear_text);
@@ -58,7 +58,7 @@ class Beaufort : public Vigenere
 {
 public:
 
-   Beaufort(const KeyType &key)
+   explicit Beaufort(const KeyType &key)
    : Vigenere(keyMinusClear, keyMinusClear, key) { setKey(key); }
 };
 
@@ -68,7 +68,7 @@ class BeaufortGerman : public Vigenere
 {
 public:
 
-   BeaufortGerman(const KeyType &key)
+   explicit BeaufortGerman(const KeyType &key)
    : Vigenere(clearMinusKey, clearPlusKey, key) { setKey(key); }
 };
 
@@ -78,7 +78,7 @@ class Rozier : public Vigenere
 {
 public:
 
-   Rozier(const KeyType &key)
+   explicit Rozier(const KeyType &key)
    : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
 
    /* Specific to Rozier cipher : the rozier_key is a string. */
@@ -141,7 +141,7 @@ class VigenereMult : public Vigenere
 
 public:
 
-   VigenereMult(const KeyType &key)
+   explicit VigenereMult(const KeyType &key)
    : Vigenere(clearMultKey, keyDivideCipher, key) { setKey(key); }
 
    /* Decode the Vigenere Multiplication cipher with the given cipher_text. */
@@ -172,7 +172,7 @@ class Gronsfeld : public Vigenere
    using StringCipherWithStringKey::setKey;
    
 public:
-   Gronsfeld(const std::vector<int32_t> &key)
+   explicit Gronsfeld(const std::vector<int32_t> &key)
    : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
    
    /* Specific to Gronsfeld cipher : the grons_key is a vector of integers. */

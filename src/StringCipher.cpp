@@ -30,7 +30,7 @@ void StringCipher::encodeFile(const std::string &clear_text_file, const std::str
 
    
    ClassicalType contents;
-   const uint16_t size = std::numeric_limits<uint16_t>::max();
+   const uint16_t size = std::numeric_limits<uint16_t>::max()-1;
    if (file_size > size)
    {
       const uint64_t toRepeat = file_size / size;
@@ -46,6 +46,7 @@ void StringCipher::encodeFile(const std::string &clear_text_file, const std::str
       contents.reserve(rest);
       contents.resize(rest);
       in.read(&contents[0], rest);
+      contents.erase(rest - 1);
       out << this->encode(contents);
    }
    else
@@ -74,7 +75,7 @@ void StringCipher::save(const std::string &filename, const ClassicalType &data)
    }
 }
 
-const StringCipher::ClassicalType StringCipher::load(const std::string &filename) const
+const StringCipher::ClassicalType StringCipher::load(const std::string &filename)
 {
    ClassicalType contents;
    std::ifstream in(filename.c_str(), std::ios::binary);

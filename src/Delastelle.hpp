@@ -5,10 +5,12 @@
 #include "SquareCipher.hpp"
 #include <string>
 
+#include "exceptions/Exception.hpp"
+
 class Delastelle : public SquareCipher
 {
 public:
-   Delastelle(const KeyType &key) : SquareCipher(key) {}
+   explicit Delastelle(const KeyType &key) : SquareCipher(key) {}
    
    virtual const ClassicalType encode(const ClassicalType &clear_text) final;
    virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
@@ -16,7 +18,9 @@ public:
    void setBlockLength(const uint32_t block_len);
   
 private:
-   uint32_t block_len;
+   using ZeroBlockLength = Exception;
+   
+   uint32_t block_len = 5;
 };
 
 #endif

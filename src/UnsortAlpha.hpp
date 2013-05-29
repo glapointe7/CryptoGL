@@ -10,7 +10,7 @@
 class UnsortAlpha : public StringCipherWithStringKey
 {
 public:
-   UnsortAlpha(const KeyType &key);
+   explicit UnsortAlpha(const KeyType &key);
    
    virtual const ClassicalType encode(const ClassicalType &clear_text) final;
    virtual const ClassicalType decode(const ClassicalType &cipher_text) final;

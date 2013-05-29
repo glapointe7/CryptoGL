@@ -46,18 +46,21 @@ int main(int argc, char **argv)
    gettimeofday(&tim, NULL);
    double t1 = tim.tv_sec + (tim.tv_usec / 1000000.0);
    
-   Rozier *C = new Rozier("TESTING");
-   C->setAlpha(String::uppercase_digits);
-   C->encodeFile(R"(../GIT_CryptoCode/testing/TestFiles/clear_text.txt)",
+   //const std::vector<std::string> grid_key = {"CLOFWJ", "YMT5B4", "I7A28S", "P30QHX", "KEUL6D", "VRGZN9"};
+   
+   Delastelle *A = new Delastelle("MARCEL");
+   A->setBlockLength(57);
+   A->setAlpha(String::uppercase_digits);
+   A->encodeFile(R"(../GIT_CryptoCode/testing/TestFiles/clear_text.txt)",
            R"(../GIT_CryptoCode/testing/TestFiles/cipher_text.txt)");
    //C->decodeFile(R"(../GIT_CryptoCode/testing/TestFiles/cipher_text.txt)",
    //        R"(../GIT_CryptoCode/testing/TestFiles/clear_text2.txt)");
-   delete C;
+   delete A;
    
    gettimeofday(&tim, NULL);
    double t2 = tim.tv_sec + (tim.tv_usec / 1000000.0);
-   std::cout << " Time elapsed: " << t2 - t1 << " seconds";
-*/
+   std::cout << "Time elapsed: " << t2 - t1 << " seconds";*/
+
    /*const std::string pi = "141592653589793238462643383279502884197169399375105820974944"
            "59230781640628620899862803482534211706798214808651328230664709384460955058223172"
            "53594081284811174502841027019385211055596446229489549303819644288109756659334461"

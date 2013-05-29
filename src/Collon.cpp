@@ -1,36 +1,26 @@
 
 #include "Collon.hpp"
 
-#include "MathematicalTools.hpp"
-
-#include "exceptions/BadAlphaLength.hpp"
-#include "exceptions/BadGridDimension.hpp"
-
 // Series length have to be between 1 and text length.
 
-void Collon::setBlockLength(const uint32_t series)
+void Collon::setBlockLength(const uint32_t block_len)
 {
-   block_len = series;
+   if (block_len == 0)
+   {
+      throw ZeroBlockLength("The block length you provided has to be greater than zero.");
+   }
+   
+   this->block_len = block_len;
 }
 
 const Collon::ClassicalType Collon::encode(const ClassicalType &clear_text)
 {
    const uint32_t clear_len = clear_text.length();
-   if(block_len <= 0 || block_len > clear_len)
-   {
-      throw Exception("The block length you specified should be between 1 and the length of your message.");
-   }
-   
-   if(!isPerfectSquare(alpha.length()))
-   {
-      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
-   }
-   
-   std::string line1 = "";
+   std::string line1, line2;
    line1.reserve(clear_len);
-   std::string line2(line1);
-   ClassicalType crypted = "";
-   crypted.reserve(clear_len << 1);
+   line2.reserve(clear_len);
+   ClassicalType crypted;
+   crypted.reserve(clear_len * 2);
 
    // Création de la grille de chiffrement avec lettres doublons effacées.
    const Grid grid(getGrid(getKey() + alpha));
@@ -40,18 +30,21 @@ const Collon::ClassicalType Collon::encode(const ClassicalType &clear_text)
    for (const auto c : clear_text)
    {
       const auto coords = getCharCoordinates(c, grid);
-
       line1 += grid[coords.second][0];
       line2 += grid[dim - 1][coords.first];
    }
 
    // On lit ensuite le texte par bloc. Par exemple pour un bloc de 3 :
    // L1 = MHD et L2 = JME => crypted = MHDJME. On recommence pour tout le texte.
+   //const uint32_t rest = clear_len % block_len;
+   //const uint32_t clear_rest = clear_len - rest;
    for (uint32_t j = 0; j < clear_len; j += block_len)
    {
       crypted += line1.substr(j, block_len);
       crypted += line2.substr(j, block_len);
    }
+   //crypted += line1.substr(clear_rest);
+   //crypted += line2.substr(clear_rest);
 
    return crypted;
 }
@@ -59,28 +52,19 @@ const Collon::ClassicalType Collon::encode(const ClassicalType &clear_text)
 const Collon::ClassicalType Collon::decode(const ClassicalType &cipher_text)
 {
    const uint32_t cipher_len = cipher_text.length();
-   const uint32_t line_len = cipher_len >> 1;
-   if(block_len <= 0 || block_len > line_len)
-   {
-      throw Exception("The block length you specified should be between 1 and the half length of your message.");
-   }
-   
-   if(!isPerfectSquare(alpha.length()))
-   {
-      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
-   }
-   
-   ClassicalType decrypted = "";
+   const uint32_t line_len = cipher_len / 2;
+
+   ClassicalType decrypted;
    decrypted.reserve(line_len);
-   std::string line1 = "";
+   std::string line1, line2;
    line1.reserve(line_len);
-   std::string line2(line1);
+   line2.reserve(line_len);
 
    const Grid grid(getGrid(getKey() + alpha));
 
    // Remise des bigrammes en 2 lignes de texte. Généralement, la longueur de la ligne n'est
    // pas multiple de la longueur du bloc. Pour cela, on doit garder le reste.
-   const uint16_t double_block_len = block_len << 1;
+   const uint32_t double_block_len = block_len << 1;
    const uint32_t line_rest_len = line_len % double_block_len;
    const uint32_t line_blocks_len = cipher_len - (line_rest_len << 1);
 

@@ -7,8 +7,8 @@
 class Affine : public StringCipher
 {
 public:
-   virtual const ClassicalType encode(const ClassicalType &) final;
-   virtual const ClassicalType decode(const ClassicalType &) final;
+   virtual const ClassicalType encode(const ClassicalType &clear_text) final;
+   virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
    
    void setKey(const int32_t a, const int32_t b);
 

@@ -3,8 +3,9 @@
 
 #include "Tools.hpp"
 #include "String.hpp"
+#include "MathematicalTools.hpp"
 
-#include "exceptions/BadGridDimension.hpp"
+#include "exceptions/BadAlphaLength.hpp"
 
 SquareCipher::SquareCipher(const KeyType &key) : dim(5)
 {
@@ -12,14 +13,17 @@ SquareCipher::SquareCipher(const KeyType &key) : dim(5)
    setKey(key);
 }
 
-void SquareCipher::setGridDimension(const uint32_t dim)
+void SquareCipher::setAlpha(const ClassicalType &alpha)
 {
-   if(dim == 0)
+   if (!isPerfectSquare(alpha.length()))
    {
-      throw BadGridDimension("The dimension of the grid have to be greater than zero.", dim);
+      throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
    }
    
-   this->dim = dim;
+   // get grid dimension from alphabet assuming length is a perfect square by the previous IF.
+   dim = getByteSqrt(alpha.length());
+   
+   StringCipher::setAlpha(alpha);
 }
 
 // Construction of the cipher grid.
@@ -32,7 +36,7 @@ SquareCipher::getGrid(const ClassicalType &chars) const
    grid.reserve(dim);
 
    // Split the string to set a square grid of dimension (dim X dim) of chars.
-   for (unsigned char i = 0; i < dim; ++i)
+   for (uint8_t i = 0; i < dim; ++i)
    {
       grid.push_back(new_alpha.substr(i * dim, dim));
    }
@@ -42,7 +46,7 @@ SquareCipher::getGrid(const ClassicalType &chars) const
 
 // Return character coordinates from the cipher grid.
 const SquareCipher::Coordinates
-SquareCipher::getCharCoordinates(const char c, const Grid &grid)
+SquareCipher::getCharCoordinates(const char c, const Grid &grid) const
 {
    auto coords = std::make_pair(0u, 0u);
    for (const auto str : grid)
@@ -50,7 +54,7 @@ SquareCipher::getCharCoordinates(const char c, const Grid &grid)
       const int32_t first = str.find(c);
       if (first != -1)
       {
-         coords.first = static_cast<uint32_t>(first);
+         coords.first = static_cast<uint8_t>(first);
          break;
       }
       coords.second++;

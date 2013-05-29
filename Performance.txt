@@ -1,0 +1,23 @@
+Clear_text text file : 135.8 Kb.
+
+Ceasar(3) => Time elapsed: 0.03967 seconds
+
+TranspositionCompleteRows({5,7,3,6,0,2,1,4}) : Time elapsed: 0.013309 seconds
+TranspositionCompleteColumns({5,7,3,6,0,2,1,4}) : Time elapsed: 0.00868106 seconds
+TranspositionIncompleteRows({5,7,3,6,0,2,1,4}) : Time elapsed: 0.0143671 seconds
+TranspositionIncompleteColumns({5,7,3,6,0,2,1,4}) : Time elapsed: 0.00994182 seconds
+TranspositionDouble({5,7,3,6,0,2,1,4}, {6,2,3,0,4,1,5}) : Time elapsed: 0.019789 seconds
+
+Affine(23, 7) : Time elapsed: 0.0159531 seconds
+
+Wolseley("TESTING") : Time elapsed: 0.0133591 seconds
+
+Adfgvx("MARCEL") : Time elapsed: 0.071547 seconds
+
+Collon("MARCEL") : Time elapsed: 0.0455151 seconds
+
+Playfair("MARCEL") : Time elapsed: 0.0566199 seconds
+
+Polibe("MARCEL") : Time elapsed: 0.0394981 seconds
+
+Delastelle("MARCEL") : Time elapsed: 0.0937021 seconds
