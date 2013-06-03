@@ -14,4 +14,3 @@ bool isPerfectSquare(const uint32_t value);
 uint8_t getByteSqrt(const uint8_t sqr);
 
 #endif
-

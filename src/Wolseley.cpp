@@ -12,7 +12,7 @@ Wolseley::Wolseley(const KeyType &key)
 
 const Wolseley::ClassicalType Wolseley::encode(const ClassicalType &clear_text)
 {
-   ClassicalType crypted = "";
+   ClassicalType crypted;
    crypted.reserve(clear_text.length());
 
    const std::string key_alpha(getKey() + alpha);

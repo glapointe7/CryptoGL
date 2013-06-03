@@ -6,37 +6,38 @@
 #include "Tools.hpp"
 #include "String.hpp"
 
+const std::vector<Morse::ClassicalType> Morse::morse = {
+   ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..",
+   ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.",
+   "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", "-----",
+   ".----", "..---", "...--", "....-", ".....", "-....", "--...",
+   "---..", "----."
+};
+
 Morse::Morse()
 {
-   morse = {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..",
-      ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.",
-      "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", "-----",
-      ".----", "..---", "...--", "....-", ".....", "-....", "--...",
-      "---..", "----."};
    setAlpha(String::uppercase_digits);
 }
 
-// Encode un message clair en langage Morse.
-
 const Morse::ClassicalType Morse::encode(const ClassicalType &clear_text)
 {
-   ClassicalType crypted = "";
-   crypted.reserve(7 * clear_text.length());
+   ClassicalType crypted;
+   crypted.reserve(6 * clear_text.length()); 
 
    for (const auto c : clear_text)
    {
-      crypted += morse[alpha.find(c)] + " ";
+      crypted += morse[alpha.find(c)];
+      crypted += " ";
    }
 
    return crypted;
 }
 
-// D�code un message crypt� en langage Morse.
-
 const Morse::ClassicalType Morse::decode(const ClassicalType &cipher_text)
 {
-   ClassicalType decrypted = "";
-   std::vector<std::string> cipher_word(split(cipher_text));
+   ClassicalType decrypted;
+   decrypted.reserve(cipher_text.size() / 2);
+   const std::vector<std::string> cipher_word(split(cipher_text));
 
    for (const auto str : cipher_word)
    {

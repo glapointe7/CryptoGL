@@ -2,30 +2,27 @@
 
 #include <sstream>
 
-const AsymmetricCipher::UInt64Container 
-AsymmetricCipher::getPublicKey() const
-{
-   return public_key;
-}
-
 // Transforme les caractères en hexadécimal et renvoie la chaîne d'hexa.
 const std::string AsymmetricCipher::hexDigest(const BytesContainer &bytes)
 {
    std::stringstream ss;
+   ss.setf(std::ios::hex, std::ios::basefield);
+   ss << std::uppercase;
 
    for (const auto byte : bytes)
    {
-      ss << std::hex << static_cast<uint32_t>(byte);
-      ss << " ";
+      ss.fill('0');
+      ss.width(2);
+      ss << static_cast<uint16_t> (byte);
    }
-   
+
    return ss.str();
 }
 
 // Transforme le vecteur d'entiers en une string d'entiers.
 const std::string AsymmetricCipher::dwordToString(const UInt64Container &numbers)
 {
-   std::string str("");
+   std::string str;
    str.reserve(3 * numbers.size());
    
    for(const auto number : numbers)
@@ -39,7 +36,7 @@ const std::string AsymmetricCipher::dwordToString(const UInt64Container &numbers
 // Transforme le vecteur d'entiers en une string d'entiers.
 const std::string AsymmetricCipher::byteToString(const BytesContainer &numbers)
 {
-   std::string str("");
+   std::string str;
    str.reserve(3 * numbers.size());
    
    for(const auto number : numbers)

@@ -15,9 +15,12 @@
 
 class Vigenere : public StringCipherWithStringKey
 {
-protected:
+private:
    typedef std::function<const ClassicalType(const ClassicalType &, const char, const char)> GetCharFunction;
+   const GetCharFunction charEncode, charDecode;
+   const ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
    
+protected:   
    Vigenere(const GetCharFunction &charEncode, const GetCharFunction &charDecode, const KeyType &key)
    : charEncode(charEncode), charDecode(charDecode) { setKey(key); }
    
@@ -39,17 +42,12 @@ protected:
       return ClassicalType(1, alpha[(alpha.find(key_pos) - alpha.find(c) + alpha.length()) % alpha.length()]);
    }
 
-   const GetCharFunction charEncode, charDecode;
-
 public:
    explicit Vigenere(const KeyType &key)
    : charEncode(clearPlusKey), charDecode(clearMinusKey) { setKey(key); }
 
    virtual const ClassicalType encode(const ClassicalType &clear_text);
    virtual const ClassicalType decode(const ClassicalType &cipher_text);
-
-private:   
-   const ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
 };
 
 // Beaufort : CIPHER = -CLEAR + KEY
@@ -114,7 +112,7 @@ public:
    /* Specific to Caesar cipher : the caesar_key is a byte. */
    void setKey(const char caesar_key)
    {
-      const int8_t alpha_len = alpha.length();
+      const uint8_t alpha_len = alpha.length();
       char the_key = caesar_key % alpha_len;
       the_key = (the_key + alpha_len) % alpha_len;
       const KeyType new_key = std::string(1, alpha[the_key]);

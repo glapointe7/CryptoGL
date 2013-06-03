@@ -11,7 +11,7 @@ protected:
 
    virtual void SetUp()
    {
-      H = new Hill();
+      H = new Hill({{3, 4}, {5, 9}});
    }
 
    virtual void TearDown()
@@ -23,18 +23,14 @@ protected:
 TEST_F(HillTest, encode)
 {
    const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
-   const std::vector<std::vector<int32_t> > key = {{3, 4}, {5, 9}};
-   
-   H->setKey(key);
+
    EXPECT_EQ("CMJBFEQJQJTXZHWDYAKJQOQFNNSUHDJUOUZHGMYPCKRJFBMHVBQQNIKJEKRCQDSQRSGANLWQZX", H->encode(clear_text));
 }
 
 TEST_F(HillTest, decode)
 {
    const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
-   const std::vector<std::vector<int32_t> > key = {{3, 4}, {5, 9}};
    
-   H->setKey(key);
    EXPECT_EQ(clear_text, H->decode("CMJBFEQJQJTXZHWDYAKJQOQFNNSUHDJUOUZHGMYPCKRJFBMHVBQQNIKJEKRCQDSQRSGANLWQZX"));
 }
 

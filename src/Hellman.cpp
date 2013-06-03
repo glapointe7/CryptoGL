@@ -33,7 +33,7 @@ void Hellman::setPrivateKey(const UInt64Container &private_key)
 
 // Build the public key.
 
-void Hellman::setPublicKey()
+void Hellman::buildPublicKey()
 {
    if (GCD(modulo, dividend) != 1)
    {
@@ -78,12 +78,12 @@ void Hellman::executeGlouton(std::vector<bool> &bits, const uint64_t T, const ui
    }
 }
 
-const Hellman::UInt64Container Hellman::encode(const BytesContainer &clear_text)
+const AsymmetricCipher::UInt64Container Hellman::encode(const BytesContainer &clear_text)
 {
    UInt64Container crypted;
 
    // To encode, we need to build the public key.
-   setPublicKey();
+   buildPublicKey();
    const uint32_t block_size = private_key.size();
 
    // Converts given bytes into binary vector.
@@ -114,7 +114,7 @@ const Hellman::UInt64Container Hellman::encode(const BytesContainer &clear_text)
    return crypted;
 }
 
-const Hellman::BytesContainer Hellman::decode(const UInt64Container &cipher_text)
+const AsymmetricCipher::BytesContainer Hellman::decode(const UInt64Container &cipher_text)
 {
    // We have to calculate x = dividend^{-1} (mod modulo).
    const uint64_t inv_coprime = getModInverse(dividend, modulo);

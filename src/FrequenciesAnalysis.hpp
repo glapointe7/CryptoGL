@@ -24,9 +24,9 @@ public:
    double getIC() const;
    
    void setAlpha(const std::string &alpha);
-   void setLanguage(const Language &lang);
+   void setLanguage(const Language lang);
    
-   const std::map<char, unsigned int> getCharsCount(const std::string &text) const;
+   const std::map<char, uint32_t> getCharsCount(const std::string &text) const;
    
 private:
    double ic = 0;

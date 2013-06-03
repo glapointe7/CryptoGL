@@ -1,6 +1,4 @@
-/*
- * TODO : Code redondant dans inverse et det.
- */
+
 #include "Matrix.hpp"
 
 // Exceptions
@@ -19,15 +17,14 @@ void Matrix::setMatrix(const Matrice &M)
    {
       throw EmptyMatrix("The matrix is empty.");
    }
-   else if (!isSquare(M))
+   
+   if (!isSquare(M))
    {
       throw MatrixNotSquare("The matrix is not square.");
    }
-   else
-   {
-      this->M = M;
-      setDimension(M.size());
-   }
+   
+   this->M = M;
+   setDimension(M.size());
 }
 
 const Matrix::Matrice Matrix::getMatrix() const
@@ -108,10 +105,10 @@ std::vector<uint32_t> operator *(const Matrix *K, const std::vector<uint32_t> &V
       for (const auto number : row)
       {
          soln[i] += number * V[j];
-         j++;
+         ++j;
       }
       soln[i] %= mod;
-      i++;
+      ++i;
    }
 
    return soln;

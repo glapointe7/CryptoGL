@@ -12,8 +12,6 @@
 
 class DES : public Feistel
 {
-   typedef std::vector<std::vector<uint8_t> > SBox;
-
 public:
    DES() : Feistel(OperationModes::ECB) {}
    explicit DES(const OperationModes mode) : Feistel(mode) {}
@@ -24,8 +22,9 @@ public:
    virtual void setKey(const BytesContainer &key) final;
    //uint8_t getParityBits();
 
-
 private:
+   typedef std::vector<std::vector<uint8_t> > SBox;
+   
    virtual const UInt64Container getKeySchedule() final;
    virtual const BytesContainer getOutputBlock(const BytesContainer &data, 
            const UInt64Container &subkeys, const uint8_t lower_round) final;

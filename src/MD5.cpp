@@ -3,14 +3,14 @@
 #include "Tools.hpp"
 #include "converterTools.hpp"
 
-const MD5::BytesContainer MD5::routine = {
+const HashFunction::BytesContainer MD5::routine = {
    7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21,
    5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
    4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
    6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21
 };
 
-const MD5::WordsContainer MD5::K = {
+const HashFunction::WordsContainer MD5::K = {
    0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
    0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
    0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
@@ -49,7 +49,7 @@ uint32_t MD5::I(const uint32_t x, const uint32_t y, const uint32_t z)
    return y ^ (x | ~z);
 }
 
-const MD5::BitsContainer MD5::addPadding(const BitsContainer &data_bits) const
+const HashFunction::BitsContainer MD5::addPadding(const BitsContainer &data_bits) const
 {
    const uint64_t bits_len = data_bits.size();
    BitsContainer bits_pad(data_bits);
@@ -76,7 +76,7 @@ const MD5::BitsContainer MD5::addPadding(const BitsContainer &data_bits) const
    return bits_pad;
 }
 
-const MD5::BytesContainer MD5::encode(const BytesContainer &data)
+const HashFunction::BytesContainer MD5::encode(const BytesContainer &data)
 {
    BitsContainer bits(addPadding(getBitsFromData(data)));
    const uint32_t bits_len = bits.size();

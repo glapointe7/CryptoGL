@@ -6,7 +6,7 @@
 const Polybe::ClassicalType Polybe::encode(const ClassicalType &clear_text)
 {  
    ClassicalType crypted;
-   crypted.reserve(clear_text.length() << 1);
+   crypted.reserve(clear_text.length() * 2);
 
    // Construction de la grille de chiffrement.
    const Grid grid(getGrid(getKey() + alpha));
@@ -29,7 +29,7 @@ const Polybe::ClassicalType Polybe::decode(const ClassicalType &cipher_text)
 {  
    const uint32_t cipher_len = cipher_text.length();
    ClassicalType decrypted;
-   decrypted.reserve(cipher_len >> 1);
+   decrypted.reserve(cipher_len / 2);
    const Grid grid(getGrid(getKey() + alpha));
 
    for (uint32_t i = 0; i < cipher_len; i += 2)

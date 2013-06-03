@@ -34,15 +34,10 @@ void Hill::setKey(const Matrice &key)
 // Process encode / decode of the data with the matrix key K.
 
 const Hill::ClassicalType Hill::process(const ClassicalType &data, const Matrix *K)
-{
-   if(key->getMatrix().empty())
-   {
-      throw EmptyKey("The matrix key is not set.");
-   }
-   
+{  
    const uint32_t key_dim = K->getDimension();
    const uint32_t data_len = data.length();
-   ClassicalType message = "";
+   ClassicalType message;
    message.reserve(data_len + key_dim);
 
    for (uint32_t i = 0; i < data_len; i += key_dim)

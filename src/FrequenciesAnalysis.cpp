@@ -15,7 +15,7 @@ void FrequenciesAnalysis::setAlpha(const std::string &alpha)
    this->alpha = alpha;
 }
 
-void FrequenciesAnalysis::setLanguage(const Language &lang)
+void FrequenciesAnalysis::setLanguage(const Language lang)
 {
    switch(lang)
    {

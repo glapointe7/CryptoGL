@@ -1,4 +1,6 @@
-
+/*
+ Use big integers.
+ */
 #ifndef ASYMMETRICCIPHER_HPP
 #define	ASYMMETRICCIPHER_HPP
 
@@ -7,32 +9,32 @@
 #include <string>
 #include <vector>
 
-class AsymmetricCipher : public Cipher<std::vector<uint64_t>, std::vector<unsigned char> >
+class AsymmetricCipher : public Cipher<std::vector<uint64_t>, std::vector<uint8_t> >
 {
-   // Hide Warning : "hides overloaded virtual function [-Woverloaded-virtual]"
-   //using Cipher::decode;
-   
-public:
-   
+protected:
    typedef std::vector<uint64_t> UInt64Container;
-   typedef std::vector<unsigned char> BytesContainer;
-   
+   typedef std::vector<uint8_t> BytesContainer;
+
+public:
+
    virtual const UInt64Container encode(const BytesContainer &) = 0;
    virtual const BytesContainer decode(const UInt64Container &) = 0;
-   
-   const UInt64Container getPublicKey() const;
-   virtual void setPublicKey() = 0;
+
+   virtual void buildPublicKey() = 0;
    virtual void setPrivateKey(const UInt64Container &) = 0;
    
+   const UInt64Container getPublicKey() const { return public_key; }
+   const UInt64Container getPrivateKey() const { return private_key; }
+
    static void save(const std::string &filename, const std::string &data);
    static std::string load(const std::string &filename);
-   
+
    // Pour obtenir les octets sous forme d'une chaîne hexadécimale.
    static const std::string hexDigest(const BytesContainer &data);
    static const std::string dwordToString(const UInt64Container &data);
    static const std::string byteToString(const BytesContainer &data);
    static const BytesContainer stringToBytes(const std::string &data);
-   
+
 protected:
    UInt64Container public_key;
    UInt64Container private_key;

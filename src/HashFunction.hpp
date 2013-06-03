@@ -7,11 +7,16 @@
 
 class HashFunction
 {
-public:
+protected:
    typedef std::vector<uint8_t> BytesContainer;
    typedef std::vector<bool> BitsContainer;
    typedef std::vector<uint32_t> WordsContainer;
    
+   virtual const BitsContainer addPadding(const BitsContainer &) const = 0;
+   
+   static const BitsContainer getBitsFromData(const BytesContainer &data);
+   
+public:   
    virtual ~HashFunction() {}
    
    virtual const BytesContainer encode(const BytesContainer &) = 0;
@@ -21,11 +26,6 @@ public:
    static const BytesContainer getBytesFromString(const std::string &str);
    static const std::string getStringFromBytes(const BytesContainer &bytes);
    static const BytesContainer getBytesFromHexDigest(const std::string &hex_str);
-   
-protected:
-   virtual const BitsContainer addPadding(const BitsContainer &) const = 0;
-   
-   static const BitsContainer getBitsFromData(const BytesContainer &data);
 };
 
 #endif

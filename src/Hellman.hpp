@@ -8,20 +8,20 @@
 #include <vector>
 
 class Hellman : public AsymmetricCipher
-{   
-   using KeyNotSuperIncreasing = BadKey;
-   
+{      
 public:   
-   virtual const UInt64Container encode(const BytesContainer &) final;
-   virtual const BytesContainer decode(const UInt64Container &) final;
+   virtual const UInt64Container encode(const BytesContainer &clear_text) final;
+   virtual const BytesContainer decode(const UInt64Container &cipher_text) final;
    
-   virtual void setPublicKey() final;
-   virtual void setPrivateKey(const UInt64Container &) final;
+   virtual void buildPublicKey() final;
+   virtual void setPrivateKey(const UInt64Container &private_key) final;
    
    void setModulo(const uint64_t &mod);
    void setDividend(const uint64_t &div);
    
 private:
+   using KeyNotSuperIncreasing = BadKey;
+   
    uint64_t modulo;
    uint64_t dividend;
    

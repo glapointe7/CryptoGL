@@ -72,8 +72,8 @@ const Adfgvx::ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
    // par A,D,F,G,V ou X tels que A=0, D=1, F=2, G=3, V=4, X=5.
    // Exemple : Si la lettre 'K' se situe à (2,3), alors K s'encode FG.
    const KeyType key = getKey();
-   std::string first_encoding = "";
-   first_encoding.reserve((clear_text.length() + key.length()) << 1);
+   ClassicalType first_encoding;
+   first_encoding.reserve((clear_text.length() + key.length()) * 2);
    
    for (const auto c : clear_text)
    {
@@ -97,11 +97,11 @@ const Adfgvx::ClassicalType Adfgvx::decode(const ClassicalType &cipher_text)
    }
    
    const uint32_t cipher_len = cipher_text.length();
-   ClassicalType decrypted = "";
-   decrypted.reserve(cipher_len >> 1);
+   ClassicalType decrypted;
+   decrypted.reserve(cipher_len / 2);
    
    TranspositionCompleteColumns *TCol = new TranspositionCompleteColumns(getPermutationKey());
-   std::string first_decoding = TCol->decode(cipher_text);
+   ClassicalType first_decoding = TCol->decode(cipher_text);
    delete TCol;
    
    for(uint32_t i = 0; i < cipher_len; i += 2)

@@ -18,6 +18,14 @@ Collon("MARCEL") : Time elapsed: 0.0455151 seconds
 
 Playfair("MARCEL") : Time elapsed: 0.0566199 seconds
 
-Polibe("MARCEL") : Time elapsed: 0.0394981 seconds
+Polybe("MARCEL") : Time elapsed: 0.0394981 seconds
 
-Delastelle("MARCEL") : Time elapsed: 0.0937021 seconds
+Delastelle("MARCEL") : Time elapsed: 0.0624452 seconds
+
+Railfence(3) : Time elapsed: 0.0199251 seconds
+
+Morse() : Time elapsed: 0.016675 seconds
+
+Hill(2X2) : Time elapsed: 0.189544 seconds
+
+

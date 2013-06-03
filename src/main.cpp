@@ -14,6 +14,7 @@
 #include "../testing/AdfgvxTest.hpp"
 #include "../testing/DelastelleTest.hpp"
 #include "../testing/RailfenceTest.hpp"
+#include "../testing/RedefenceTest.hpp"
 #include "../testing/WolseleyTest.hpp"
 #include "../testing/SHA1Test.hpp"
 #include "../testing/HellmanTest.hpp"
@@ -44,12 +45,11 @@ int main(int argc, char **argv)
 
    /*struct timeval tim;
    gettimeofday(&tim, NULL);
-   double t1 = tim.tv_sec + (tim.tv_usec / 1000000.0);
+   const double t1 = tim.tv_sec + (tim.tv_usec / 1000000.0);
    
    //const std::vector<std::string> grid_key = {"CLOFWJ", "YMT5B4", "I7A28S", "P30QHX", "KEUL6D", "VRGZN9"};
    
-   Delastelle *A = new Delastelle("MARCEL");
-   A->setBlockLength(57);
+   Polybe *A = new Polybe("MARCEL");
    A->setAlpha(String::uppercase_digits);
    A->encodeFile(R"(../GIT_CryptoCode/testing/TestFiles/clear_text.txt)",
            R"(../GIT_CryptoCode/testing/TestFiles/cipher_text.txt)");
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
    delete A;
    
    gettimeofday(&tim, NULL);
-   double t2 = tim.tv_sec + (tim.tv_usec / 1000000.0);
+   const double t2 = tim.tv_sec + (tim.tv_usec / 1000000.0);
    std::cout << "Time elapsed: " << t2 - t1 << " seconds";*/
 
    /*const std::string pi = "141592653589793238462643383279502884197169399375105820974944"

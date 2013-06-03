@@ -40,7 +40,7 @@ const Transposition::Table Transposition::createIncompleteTable(const ClassicalT
 const Transposition::ClassicalType
 Transposition::readPermutedTable(const Table &table)
 {
-   ClassicalType data = "";
+   ClassicalType data;
    data.reserve(table.size() * getKey().size());
    for (const auto str : table)
    {
