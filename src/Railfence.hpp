@@ -2,12 +2,15 @@
 #define RAILFENCE_HPP
 
 #include "StringCipherWithPermutationKey.hpp"
+
 #include <string>
+#include <list>
 
 class RedefenceZigzag : public StringCipherWithPermutationKey
 {
 public:
    RedefenceZigzag(const KeyType &key, const KeyType &key_levels);
+   virtual ~RedefenceZigzag() {}
 
    virtual const ClassicalType encode(const ClassicalType &clear_text) final;
    virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
@@ -15,6 +18,11 @@ public:
    void setOffset(const uint32_t offset) { this->offset = offset; }
    
 private:
+   /* Encode data block with the basic railfence cipher. */
+   void addEncodedText(std::vector<ClassicalType> &rows, const ClassicalType &data, 
+           const int32_t step, const int32_t level) const;
+   const std::vector<std::list<int8_t> > getFirstDecoding(const ClassicalType &cipher_text, int32_t &last) const;
+   
    uint32_t offset = 0;
    uint32_t max_level;
    KeyType key_levels;

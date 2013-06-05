@@ -22,10 +22,12 @@ Polybe("MARCEL") : Time elapsed: 0.0394981 seconds
 
 Delastelle("MARCEL") : Time elapsed: 0.0624452 seconds
 
-Railfence(3) : Time elapsed: 0.0199251 seconds
+Railfence(25) : Time elapsed: 0.0091579 seconds
 
 Morse() : Time elapsed: 0.016675 seconds
 
 Hill(2X2) : Time elapsed: 0.189544 seconds
 
+Redefence({9,3,6,5,8,0,7,1,4,2}) : Time elapsed: 0.00943398 seconds
 
+RedefenceZigzag({9,3,6,5,8,0,7,1,4,2}, {5, 6, 3, 3, 2, 9, 3, 10}) : Time elapsed: 0.011965 seconds

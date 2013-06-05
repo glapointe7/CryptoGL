@@ -46,6 +46,9 @@ const std::string
 String::lower_ordered_alpha_numeric = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 const std::string
+String::base64_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+const std::string
 String::punctuation = "!\"'().:;?-";
 
 const std::string

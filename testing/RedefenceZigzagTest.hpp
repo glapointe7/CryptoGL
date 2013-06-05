@@ -1,0 +1,38 @@
+
+#ifndef REDEFENCEZIGZAGTEST_HPP
+#define	REDEFENCEZIGZAGTEST_HPP
+
+#include <gtest/gtest.h>
+#include "../src/Railfence.hpp"
+
+class RedefenceZigzagTest : public ::testing::Test
+{
+protected:
+   RedefenceZigzag *R;
+
+   virtual void SetUp()
+   {
+      R = new RedefenceZigzag({3,1,4,0,2,5}, {3,4,6});
+   }
+
+   virtual void TearDown()
+   {
+      delete R;
+   }
+};
+
+TEST_F(RedefenceZigzagTest, encode)
+{
+   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAM";
+
+   EXPECT_EQ("LAUSGAUNLATCNAARIQRMSTPUNPLIIREOILOTA", R->encode(clear_text));
+}
+
+TEST_F(RedefenceZigzagTest, decode)
+{
+   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAM";
+
+   EXPECT_EQ(clear_text, R->decode("LAUSGAUNLATCNAARIQRMSTPUNPLIIREOILOTA"));
+}
+
+#endif

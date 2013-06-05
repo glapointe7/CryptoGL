@@ -1,17 +1,14 @@
 #include "Railfence.hpp"
 
-#include <string>
-#include <utility>
-
 #include "exceptions/EmptyKey.hpp"
 
 RedefenceZigzag::RedefenceZigzag(const KeyType &key, const KeyType &key_levels)
 {
-   if(key.size() == 1)
+   if (key.size() == 1)
    {
       KeyType my_key;
       my_key.reserve(key[0]);
-      for(int32_t i = 0; i < key[0]; ++i)
+      for (int32_t i = 0; i < key[0]; ++i)
       {
          my_key.push_back(i);
       }
@@ -32,6 +29,20 @@ RedefenceZigzag::RedefenceZigzag(const KeyType &key, const KeyType &key_levels)
    this->key_levels = key_levels;
 }
 
+void RedefenceZigzag::addEncodedText(std::vector<ClassicalType> &rows, const ClassicalType &data,
+        const int32_t step, const int32_t level) const
+{
+   for (int32_t k = 0; k < level; ++k)
+   {
+      rows[k] += alpha[alpha.find(data[k])];
+   }
+   const int32_t mod = step - level;
+   for (int32_t k = 0; k < mod; ++k)
+   {
+      rows[level - k - 2] += alpha[alpha.find(data[level + k])];
+   }
+}
+
 const RedefenceZigzag::ClassicalType RedefenceZigzag::encode(const ClassicalType &clear_text)
 {
    const uint32_t clear_len = clear_text.length();
@@ -41,56 +52,39 @@ const RedefenceZigzag::ClassicalType RedefenceZigzag::encode(const ClassicalType
 
    std::vector<ClassicalType> rows;
    rows.resize(max_level);
-   
+
    // Add the offset to the clear_text.
    const uint32_t real_offset = offset % key_levels[0];
    ClassicalType text_with_offset(real_offset, '.');
    text_with_offset.reserve(clear_len + real_offset);
    text_with_offset += clear_text;
-
    const uint32_t text_with_offset_len = clear_len + real_offset;
-   int32_t step = (key_levels[0] - 1) * 2;
-   uint32_t j = 0;
-   for (uint32_t i = 0; i < text_with_offset_len - step; i += step)
+
+   const uint32_t key_levels_size = key_levels.size();
+   uint32_t j = 0, i = 0;
+   int32_t step = (key_levels[j] - 1) * 2;
+   while (i < text_with_offset_len - step)
    {
       // Encode in basic Railfence with level as the key.
       const ClassicalType data(text_with_offset.substr(i, step));
-      for (int32_t k = 0; k < key_levels[j]; ++k)
-      {
-         for (int32_t l = 0; l < step; ++l)
-         {
-            if (l % step == k || l % step == step - k)
-            {
-               rows[k] += alpha[alpha.find(data[l])];
-            }
-         }
-      }
-
-      j = (j + 1) % key_levels.size();
+      addEncodedText(rows, data, step, key_levels[j]);
+      j = (j + 1) % key_levels_size;
+      i += step;
       step = (key_levels[j] - 1) * 2;
    }
-   
+
    const int32_t rest = text_with_offset_len % step;
    const ClassicalType data(text_with_offset.substr(text_with_offset_len - rest));
-   if(rest < key_levels[j])
+   if (rest < key_levels[j])
    {
-      for(int32_t i = 0; i < rest; ++i)
+      for (int32_t i = 0; i < rest; ++i)
       {
          rows[i] += alpha[alpha.find(data[i])];
       }
    }
    else
    {
-      for(int32_t i = 0; i < key_levels[j]; ++i)
-      {
-         for (int32_t l = 0; l < rest; ++l)
-         {
-            if (l % rest == i || l % rest == step - i)
-            {
-               rows[i] += alpha[alpha.find(data[l])];
-            }
-         }
-      }
+      addEncodedText(rows, data, rest, key_levels[j]);
    }
 
    // Remove the offset character '.'.
@@ -107,38 +101,106 @@ const RedefenceZigzag::ClassicalType RedefenceZigzag::encode(const ClassicalType
    return crypted;
 }
 
+const std::vector<std::list<int8_t> >
+RedefenceZigzag::getFirstDecoding(const ClassicalType &cipher_text, int32_t &last) const
+{
+   const KeyType key = getKey();
+   const uint32_t key_levels_size = key_levels.size();
+   const int32_t cipher_len = cipher_text.length();
+
+   uint32_t i = 1, j = 0;
+   int32_t sum_step = (key_levels[j] - 1) * 2;
+   while (sum_step < cipher_len)
+   {
+      j = (j + 1) % key_levels_size;
+      sum_step += (key_levels[j] - 1) * 2;
+      ++i;
+   }
+
+   std::vector<std::list<int8_t> > decoding;
+   decoding.resize(max_level);
+   uint32_t sum_x = 0;
+   for (const auto level : key)
+   {
+      uint32_t x = 0;
+      if (level == 0)
+      {
+         x = i;
+      }
+      else
+      {
+         for (uint32_t k = 0; k < i - 1; ++k)
+         {
+            if (key_levels[k % key_levels_size] - 1 == level)
+            {
+               x++;
+            }
+            else if (level < key_levels[k % key_levels_size] - 1)
+            {
+               x += 2;
+            }
+         }
+
+         // If cipher_len != sum_step, then we have to consider the rest apart.
+         if (key_levels[j] - 1 >= level)
+         {
+            const int32_t step = (key_levels[j] - 1) * 2;
+            const int32_t prev_sum_step = 1 + sum_step - step;
+            if (prev_sum_step + level <= cipher_len)
+            {
+               x++;
+               if (prev_sum_step + level == cipher_len)
+               {
+                  last = level;
+               }
+            }
+            if (sum_step - level < cipher_len)
+            {
+               x++;
+               if (sum_step - level == cipher_len - 1)
+               {
+                  last = level;
+               }
+            }
+         }
+      }
+
+      const ClassicalType block(cipher_text.substr(sum_x, x));
+      decoding[level] = std::list<int8_t>(block.begin(), block.end());
+      sum_x += x;
+   }
+
+   return decoding;
+}
+
 const RedefenceZigzag::ClassicalType RedefenceZigzag::decode(const ClassicalType &cipher_text)
 {
    const uint32_t cipher_len = cipher_text.length();
-   ClassicalType decrypted(cipher_len, 'A');
+   const uint32_t key_levels_size = key_levels.size();
+   ClassicalType decrypted;
+   decrypted.reserve(cipher_len);
 
-   /*auto step = std::make_pair((key - 1) * 2, 0);
-   uint32_t k = 0;
+   int32_t last_char_level = 0;
+   std::vector<std::list<int8_t> > first_decoded(getFirstDecoding(cipher_text, last_char_level));
 
-   for (uint32_t i = 0; i < key; i++)
+   uint32_t j = 0;
+   while (!first_decoded[last_char_level].empty())
    {
-      uint32_t j = i;
-      decrypted[j] = cipher_text[k];
-      k++;
-      j += step.first;
-      while (j < cipher_len)
+      for (int32_t k = 0; k < key_levels[j] && !first_decoded[last_char_level].empty(); ++k)
       {
-         if (step.first != 0)
-         {
-            decrypted[j] = cipher_text[k];
-            k++;
-         }
-         j += step.second;
-         if (j < cipher_len && step.second != 0)
-         {
-            decrypted[j] = cipher_text[k];
-            k++;
-         }
-         j += step.first;
+         decrypted += first_decoded[k].front();
+         first_decoded[k].pop_front();
       }
-      step.first -= 2;
-      step.second += 2;
-   }*/
+      if (key_levels[j] > 1)
+      {
+         for (int32_t k = key_levels[j] - 2; k >= 1 && !first_decoded[last_char_level].empty(); --k)
+         {
+            decrypted += first_decoded[k].front();
+            first_decoded[k].pop_front();
+         }
+      }
+      j = (j + 1) % key_levels_size;
+   }
 
    return decrypted;
 }
