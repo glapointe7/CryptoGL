@@ -4,7 +4,7 @@
 #include "exceptions/EmptyKey.hpp"
 #include "exceptions/BadChar.hpp"
 
-void StringCipherWithStringKey::setKey(const KeyType &key)
+void StringCipherWithStringKey::checkKey(const KeyType &key)
 {
    if (key.empty())
    {
@@ -16,6 +16,10 @@ void StringCipherWithStringKey::setKey(const KeyType &key)
    {
       throw BadChar("Your key contains at least one character that is not in your alphabet.", c);
    }
+}
 
+void StringCipherWithStringKey::setKey(const KeyType &key)
+{
+   checkKey(key);
    this->key = key;
 }

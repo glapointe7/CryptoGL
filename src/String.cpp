@@ -78,3 +78,20 @@ void String::removeChars(std::string &text, const std::string &chars)
       return chars.find(c) != std::string::npos; 
    }), text.end());
 }
+
+void String::strReverse(char* begin, char* end)
+{
+    char aux;
+    while (end > begin)
+        aux = *end, *end-- = *begin, *begin++ = aux;
+}
+
+void String::uintToString(uint32_t value, char* str)
+{
+    char* wstr = str;
+    // Conversion. Number is reversed.
+    do *wstr++ = (char)(48 + (value % 10)); while (value /= 10);
+    *wstr='\0';
+    // Reverse string
+    strReverse(str, wstr-1);
+}

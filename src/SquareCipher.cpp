@@ -31,7 +31,7 @@ void SquareCipher::setAlpha(const ClassicalType &alpha)
 const SquareCipher::Grid
 SquareCipher::getGrid(const ClassicalType &chars) const
 {
-   const ClassicalType new_alpha(removeRepeatedLetters(chars));
+   const ClassicalType new_alpha = removeRepeatedLetters(chars);
    Grid grid;
    grid.reserve(dim);
 

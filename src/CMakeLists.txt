@@ -69,6 +69,7 @@ set(SRC
    Feistel.hpp Feistel.cpp
    BlockCipherStrategy.hpp BlockCipherStrategy.cpp
    Base64.hpp Base64.cpp
+   Nihilistes.hpp Nihilistes.cpp
 )
 
 # Create libcomponants.a with all the source files provided by SRC.

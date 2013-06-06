@@ -5,8 +5,7 @@
  * Source : http://en.wikibooks.org/wiki/Algorithm_Implementation/Miscellaneous/Base64#C.2B.2B
  */
 #include "Cipher.hpp"
-#include "String.hpp"
-
+//#include "String.hpp"
 #include <vector>
 #include <string>
 
@@ -22,7 +21,7 @@ public:
    static const std::string getStringFromBytes(const BytesContainer &bytes);
    
 private:
-   static const uint8_t pad_character;
+   static const uint8_t pad_character = '=';
    static const std::string alpha;
 };
 

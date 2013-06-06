@@ -30,6 +30,8 @@ public:
    static void upperCase(std::string &text);
    static void lowerCase(std::string &text);
    static void removeChars(std::string &text, const std::string &chars);
+   static void strReverse(char* begin, char* end);
+   static void uintToString(uint32_t value, char* str);
 };
 
 #endif

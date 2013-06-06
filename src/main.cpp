@@ -34,6 +34,7 @@
 #include "../testing/BlowfishTest.hpp"
 #include "../testing/FleissnerTest.hpp"
 #include "../testing/Base64Test.hpp"
+#include "../testing/NihilistesTest.hpp"
 
 //#include "attacks/CaesarAttack.hpp"
 //#include "attacks/TranspositionAttack.hpp"
@@ -51,7 +52,7 @@ int main(int argc, char **argv)
    
    //const std::vector<std::string> grid_key = {"CLOFWJ", "YMT5B4", "I7A28S", "P30QHX", "KEUL6D", "VRGZN9"};
    
-   RedefenceZigzag *A = new RedefenceZigzag({9,3,6,5,8,0,7,1,4,2}, {5, 6, 3, 3, 2, 9, 3, 10});
+   Polybe *A = new Polybe("MARCEL");
    A->setAlpha(String::uppercase_digits);
    A->encodeFile(R"(../GIT_CryptoCode/testing/TestFiles/clear_text.txt)",
            R"(../GIT_CryptoCode/testing/TestFiles/cipher_text.txt)");
