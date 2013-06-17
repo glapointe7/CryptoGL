@@ -92,23 +92,21 @@ uint32_t Matrix::findNonZero(const Matrice &A, const uint32_t from) const
 
 // Multiply a matrix and a column-vector. Return the column-vector solution.
 
-std::vector<uint32_t> operator *(const Matrix *K, const std::vector<uint32_t> &V)
+const std::vector<uint32_t> operator *(const Matrix *K, const std::vector<uint32_t> &V)
 {
    std::vector<uint32_t> soln(K->getDimension(), 0);
    const int32_t mod = K->getModulo();
    const std::vector<std::vector<int32_t> > mat = K->getMatrix();
-
+   
    uint32_t i = 0;
    for (const auto row : mat)
    {
       uint32_t j = 0;
       for (const auto number : row)
       {
-         soln[i] += number * V[j];
-         ++j;
+         soln[i] += number * V[j++];
       }
-      soln[i] %= mod;
-      ++i;
+      soln[i++] %= mod;
    }
 
    return soln;

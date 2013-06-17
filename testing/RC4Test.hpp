@@ -15,7 +15,7 @@ protected:
 
    virtual void SetUp()
    {
-      R = new RC4();
+      R = new RC4(RC4::getBytesFromString("Key"));
    }
 
    virtual void TearDown()
@@ -27,18 +27,14 @@ protected:
 TEST_F(RC4Test, encode)
 {
    const std::vector<uint8_t> clear_text(RC4::getBytesFromString("Plaintext"));
-   const std::vector<uint8_t> key(RC4::getBytesFromString("Key"));
    
-   R->setKey(key);
    EXPECT_EQ("BBF316E8D940AF0AD3", RC4::hexDigest(R->encode(clear_text)));
 }
 
 TEST_F(RC4Test, decode)
 {
    const std::vector<uint8_t> clear_text(RC4::getBytesFromString("Plaintext"));
-   const std::vector<uint8_t> key(RC4::getBytesFromString("Key"));
-   
-   R->setKey(key);
+
    EXPECT_EQ("Plaintext", RC4::getStringFromBytes(R->decode(RC4::getBytesFromHexDigest("BBF316E8D940AF0AD3"))));
 }
 

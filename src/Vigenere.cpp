@@ -14,7 +14,7 @@ Vigenere::process(const ClassicalType &text, const GetCharFunction &getNextChar)
    uint32_t idx = 0;
    for (const auto c : text)
    {
-      toReturn += getNextChar(alpha, c, my_key[idx]);
+      toReturn.append(getNextChar(alpha, c, my_key[idx]));
       idx = (idx + 1) % key_length;
    }
 

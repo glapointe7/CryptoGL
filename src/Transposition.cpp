@@ -44,7 +44,7 @@ Transposition::readPermutedTable(const Table &table)
    data.reserve(table.size() * getKey().size());
    for (const auto str : table)
    {
-      data += str;
+      data.append(str);
    }
 
    return data;
@@ -62,7 +62,7 @@ TranspositionCompleteRows::readPermutedTable(const Table &table)
    {
       for(const auto k : key)
       {
-         data += str[k];
+         data.push_back(str[k]);
       }
    }
 
@@ -83,7 +83,7 @@ TranspositionIncompleteRows::readPermutedTable(const Table &table)
    {
       for(const auto k : key)
       {
-         data += table[i][k];
+         data.push_back(table[i][k]);
       }
    }
    
@@ -93,7 +93,7 @@ TranspositionIncompleteRows::readPermutedTable(const Table &table)
    {
       const auto it = std::next(last_row_sorted.begin(), key[j]);
       const uint32_t pos = std::find(key.begin(), key.end(), *it) - key.begin();
-      data += table[rows - 1][pos];
+      data.push_back(table[rows - 1][pos]);
    }
 
    return data;
@@ -110,7 +110,7 @@ TranspositionCompleteColumns::createTable(const ClassicalType &data)
    Table table(rows, ClassicalType(key_len, '.'));
 
    uint32_t k = 0;
-   for (uint32_t i = 0; i < rows; i++)
+   for (uint32_t i = 0; i < rows; ++i)
    {
       for (uint32_t j = i; j < data_len; j += rows)
       {
@@ -136,7 +136,7 @@ TranspositionCompleteColumns::readPermutedTable(const Table &table)
       const uint32_t pos = std::find(key.begin(), key.end(), i) - key.begin();
       for(uint32_t j = 0; j < rows; ++j)
       {
-         data += table[j][pos];
+         data.push_back(table[j][pos]);
       }
    }
 
@@ -153,11 +153,11 @@ TranspositionIncompleteColumns::createIncompleteTable(const ClassicalType &data)
    const uint32_t data_len = data.length();
    const uint32_t rows = (data_len / key_len)+1;
    const uint32_t rest = data_len % key_len;
-   Table table(rows-1, std::string(key_len, '.'));
-   table.push_back(std::string(rest, '.'));
+   Table table(rows-1, ClassicalType(key_len, '.'));
+   table.push_back(ClassicalType(rest, '.'));
    
    uint32_t k = 0;
-   for (uint32_t i = 0; i < key_len; i++)
+   for (uint32_t i = 0; i < key_len; ++i)
    {
       const uint32_t pos = std::find(key.begin(), key.end(), i) - key.begin();
       uint32_t total = rows;
@@ -195,7 +195,7 @@ TranspositionIncompleteColumns::readPermutedTable(const std::vector<ClassicalTyp
       
       for (uint32_t j = 0; j < total; ++j)
       {
-         data += table[j][pos];
+         data.push_back(table[j][pos]);
       }
    }
 

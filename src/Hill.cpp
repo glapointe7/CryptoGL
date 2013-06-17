@@ -6,7 +6,7 @@
 #include "exceptions/MatrixKeyNotReversible.hpp"
 #include "exceptions/EmptyKey.hpp"
 
-#include "MathematicalTools.hpp"
+#include "MathematicalTools.hpp" // GCD
 
 void Hill::setKey(const Matrice &key)
 {
@@ -31,7 +31,7 @@ void Hill::setKey(const Matrice &key)
    }
 }
 
-// Process encode / decode of the data with the matrix key K.
+/* Process encode / decode of the data with the matrix key K. */
 
 const Hill::ClassicalType Hill::process(const ClassicalType &data, const Matrix *K)
 {  
@@ -39,11 +39,11 @@ const Hill::ClassicalType Hill::process(const ClassicalType &data, const Matrix 
    const uint32_t data_len = data.length();
    ClassicalType message;
    message.reserve(data_len + key_dim);
-
+   std::vector<uint32_t> pos;
+   pos.reserve(key_dim);
+   
    for (uint32_t i = 0; i < data_len; i += key_dim)
    {
-      std::vector<uint32_t> pos;
-      pos.reserve(key_dim);
       for (uint32_t j = 0; j < key_dim; ++j)
       {
          pos.push_back(alpha.find(data[i + j]));
@@ -52,8 +52,9 @@ const Hill::ClassicalType Hill::process(const ClassicalType &data, const Matrix 
 
       for (const auto x : cipher_pos)
       {
-         message += alpha[x];
+         message.push_back(alpha[x]);
       }
+      pos.clear();
    }
 
    return message;

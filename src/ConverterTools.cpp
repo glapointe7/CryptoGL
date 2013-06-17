@@ -1,4 +1,4 @@
-#include "converterTools.hpp"
+#include "ConverterTools.hpp"
 
 #include <bitset>
 #include <algorithm>
@@ -20,28 +20,28 @@ void convertMajMinToSymbol(std::string &text, const std::string symbol)
    }, symbol[1]);
 }
 
-// Convertit un string en une suite binaire.
-std::string convertBytesToBinaryString(const std::vector<unsigned char> &bytes)
+std::string convertBytesToBinaryString(const std::vector<uint8_t> &bytes)
 {
-   std::string bits = "";
+   std::string bits;
    bits.reserve(bytes.size() << 3);
 
    for (auto c : bytes)
    {
-      std::bitset<8> byte(c);
-      bits += byte.to_string();
+      const std::bitset<8> byte(c);
+      bits.append(byte.to_string());
    }
 
    return bits;
 }
 
-const std::vector<bool> convertBytesToBinary(const std::vector<unsigned char> &bytes)
+const std::vector<bool> convertBytesToBinary(const std::vector<uint8_t> &bytes)
 {
    std::vector<bool> all_bits;
+   all_bits.reserve(bytes.size() << 3);
    
    for (const auto c : bytes)
    {
-      std::bitset<8> byte(c);
+      const std::bitset<8> byte(c);
       for(char i = 7; i >= 0; --i)
       {
          all_bits.push_back(byte.test(i));
@@ -51,44 +51,38 @@ const std::vector<bool> convertBytesToBinary(const std::vector<unsigned char> &b
    return all_bits;
 }
 
-// Convertit un texte en majuscules.
-
-void uppercase(std::string &text)
-{
-   std::transform(text.begin(), text.end(), text.begin(), ::toupper);
-}
-
 /**
- * Convertit une string en base from_base vers une string en base to_base.
+ * Convert a string from base 'from_base' to a string in base 'to_base'.
  *
- * @param string number : Le nombre à convertir.
- * @param int from_base : La base de number au départ.
- * @param int to_base : La base pour laquelle number doit être converti.
+ * @param string number : The number to convert.
+ * @param int from_base : Numeric base of number before the conversion.
+ * @param int to_base : The base for which the number will be converted.
  * @return string result
  */
-std::string baseConvertString(const std::string &number, const unsigned char from_base,
-        const unsigned char to_base)
+const std::string baseConvertString(const std::string &number, const uint8_t from_base,
+        const uint8_t to_base)
 {
    const std::string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
-   std::string result = "";
-   std::vector<unsigned char> pos;
-
-   for (auto c : number)
+   std::string result;
+   
+   std::vector<uint8_t> pos;
+   pos.reserve(number.length());
+   for (const auto c : number)
    {
       pos.push_back(chars.find(c));
    }
 
-   unsigned int length = number.length();
-   unsigned int newlen = 0;
+   uint32_t length = number.length();
+   uint32_t newlen = 0;
    do
    {
-      uint_fast64_t divide = 0;
-      for (unsigned int i = 0; i < length; i++)
+      uint64_t divide = 0;
+      for (uint32_t i = 0; i < length; i++)
       { // Perform division manually (which is why this works with big numbers)
          divide = divide * from_base + pos[i];
          if (divide >= to_base)
          {
-            pos[newlen++] = static_cast<int> (divide / to_base);
+            pos[newlen++] = static_cast<uint32_t> (divide / to_base);
             divide %= to_base;
          }
          else if (newlen > 0)
@@ -97,7 +91,7 @@ std::string baseConvertString(const std::string &number, const unsigned char fro
          }
       }
       length = newlen;
-      result += chars[divide];
+      result.push_back(chars[divide]);
    } while (newlen != 0);
 
    return result;

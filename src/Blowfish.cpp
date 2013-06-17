@@ -1,13 +1,12 @@
 #include "Blowfish.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
-#include "exceptions/EmptyKey.hpp"
 
 // 18 initial sub-keys from the first decimals of PI.
 const Blowfish::UInt64Container Blowfish::P = {
-   0x243f6a88L, 0x85a308d3L, 0x13198a2eL, 0x03707344L, 0xa4093822L, 0x299f31d0L,
-   0x082efa98L, 0xec4e6c89L, 0x452821e6L, 0x38d01377L, 0xbe5466cfL, 0x34e90c6cL,
-   0xc0ac29b7L, 0xc97c50ddL, 0x3f84d5b5L, 0xb5470917L, 0x9216d5d9L, 0x8979fb1bL
+   0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344, 0xa4093822, 0x299f31d0,
+   0x082efa98, 0xec4e6c89, 0x452821e6, 0x38d01377, 0xbe5466cf, 0x34e90c6c,
+   0xc0ac29b7, 0xc97c50dd, 0x3f84d5b5, 0xb5470917, 0x9216d5d9, 0x8979fb1b
 };
 
 void Blowfish::setKey(const BytesContainer &key)
@@ -49,8 +48,7 @@ const Blowfish::UInt64Container Blowfish::getKeySchedule()
    subkeys.reserve(18);
    const uint8_t key_len = key.size();
 
-   uint8_t j = 0;
-   for (uint8_t i = 0; i < 18; ++i)
+   for (uint8_t i = 0, j = 0; i < 18; ++i)
    {
       uint64_t data = 0;
       for (uint8_t k = 0; k < 4; ++k)
@@ -111,14 +109,12 @@ Blowfish::getOutputBlock(const BytesContainer &data, const UInt64Container &subk
    // Get the 18 sub-keys of 32 bits and process the 18 Feistel rounds.
    uint64_t L = (value >> 32) & 0xFFFFFFFF;
    uint64_t R = value & 0xFFFFFFFF;
+   int8_t is_increasing = -1;
    if (lower_round - 15 < 0)
    {
-      processFeistelRounds(L, R, subkeys, lower_round, 16, 1);
+      is_increasing = 1;
    }
-   else
-   {
-      processFeistelRounds(L, R, subkeys, lower_round, 16, -1);
-   }
+   processFeistelRounds(L, R, subkeys, lower_round, 16, is_increasing);
 
    const uint64_t RL = (L << 32) | R;
 

@@ -26,7 +26,7 @@ public:
    const int32_t getModulo() const;
    void setModulo(const int32_t);
 
-   friend std::vector<uint32_t> operator *(const Matrix *K, const std::vector<uint32_t> &V);
+   friend const std::vector<uint32_t> operator *(const Matrix *K, const std::vector<uint32_t> &V);
 
    const Matrice identity() const;
    

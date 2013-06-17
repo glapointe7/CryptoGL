@@ -22,24 +22,25 @@ const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_te
    const uint32_t clear_len = full_text.length();
 
    // Separate the text in blocks of length chosen by block_len.
+   const uint32_t block_size = clear_len / block_len;
    Grid block;
+   block.reserve(block_size);
    for (uint32_t i = 0; i < clear_len; i += block_len)
    {
       block.push_back(full_text.substr(i, block_len));
    }
 
    // Fill the cipher grid.
-   const Grid grid(getGrid(getKey() + alpha));
-
-   // Vecteur contenant les coordonnées en X des block_len caractères et celles en Y.
-   //std::vector<std::pair<std::vector<uint8_t>, std::vector<uint8_t> > > coords_block;
-
+   const Grid grid = getGrid(getKey() + alpha);
+   
    // Sous chaque lettre, on note les coordonnées des lettres verticalement.
    ClassicalType crypted;
    crypted.reserve(clear_len);
    for (const auto str : block)
    {
       std::vector<uint8_t> X, Y;
+      X.reserve(block_len);
+      Y.reserve(block_len);
       for (const auto c : str)
       {
          const auto coords = getCharCoordinates(c, grid);
@@ -52,25 +53,25 @@ const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_te
          // Y coordinates.
          for (uint32_t i = 0; i < block_len; i += 2)
          {
-            crypted += grid[Y[i]][Y[i+1]];
+            crypted.push_back(grid[Y[i]][Y[i+1]]);
          }
 
          // X coordinates.
          for (uint32_t i = 0; i < block_len; i += 2)
          {
-            crypted += grid[X[i]][X[i+1]];
+            crypted.push_back(grid[X[i]][X[i+1]]);
          }
       }
       else
       {
          for (uint32_t i = 0; i < block_len - 1; i += 2)
          {
-            crypted += grid[Y[i]][Y[i+1]];
+            crypted.push_back(grid[Y[i]][Y[i+1]]);
          }
-         crypted += grid[Y[block_len-1]][X[0]];
+         crypted.push_back(grid[Y[block_len-1]][X[0]]);
          for (uint32_t i = 1; i < block_len; i += 2)
          {
-            crypted += grid[X[i]][X[i+1]];
+            crypted.push_back(grid[X[i]][X[i+1]]);
          }
       }
    }
@@ -86,6 +87,7 @@ const Delastelle::ClassicalType Delastelle::decode(const ClassicalType &cipher_t
 
    const Grid grid(getGrid(getKey() + alpha));
    std::vector<uint8_t> chars_coords;
+   chars_coords.reserve(cipher_len);
    for (const auto c : cipher_text)
    {
       const auto coords = getCharCoordinates(c, grid);
@@ -93,12 +95,12 @@ const Delastelle::ClassicalType Delastelle::decode(const ClassicalType &cipher_t
       chars_coords.push_back(coords.first);
    }
 
-
-   for (uint32_t i = 0; i < cipher_len; i += block_len << 1)
+   const uint32_t double_block_len = block_len << 1;
+   for (uint32_t i = 0; i < cipher_len; i += double_block_len)
    {
-      for (uint32_t k = 0; k < block_len; k++)
+      for (uint32_t k = 0; k < block_len; ++k)
       {
-         decrypted += grid[chars_coords[i + k]][chars_coords[i + k + block_len]];
+         decrypted.push_back(grid[chars_coords[i + k]][chars_coords[i + k + block_len]]);
       }
    }
 

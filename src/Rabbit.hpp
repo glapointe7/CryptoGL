@@ -11,19 +11,20 @@
 #include <vector>
 
 class Rabbit : public StreamCipher
-{
+{   
+public:
+   explicit Rabbit(const BytesContainer &key);
+   
+   virtual const BytesContainer encode(const BytesContainer &clear_text) final;
+   virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
+
+   void setIV(const BytesContainer &IV);
+
+private:
    using BadIVLength = BadKeyLength;
    using BadDataLength = BadKeyLength;
    
-public:
-   const BytesContainer encode(const BytesContainer &) final;
-   const BytesContainer decode(const BytesContainer &) final;
-
-   void setKey(const BytesContainer &) final;
-   void setIV(const BytesContainer &);
-
-private:
-   void keySetup() final;
+   virtual void keySetup() final;
    void IVSetup();
    void nextState();
    static uint32_t g(const uint32_t x);

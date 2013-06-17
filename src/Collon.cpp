@@ -23,28 +23,27 @@ const Collon::ClassicalType Collon::encode(const ClassicalType &clear_text)
    crypted.reserve(clear_len * 2);
 
    // Création de la grille de chiffrement avec lettres doublons effacées.
-   const Grid grid(getGrid(getKey() + alpha));
+   KeyType key_alpha = getKey();
+   key_alpha.reserve(alpha.length());
+   key_alpha.append(alpha);
+   const Grid grid = getGrid(key_alpha);
 
    // Chaque caractères situé en (x,y) est encodé par un bigramme AB tel que
    // A = (a,y) et B = (x,b).
    for (const auto c : clear_text)
    {
       const auto coords = getCharCoordinates(c, grid);
-      line1 += grid[coords.second][0];
-      line2 += grid[dim - 1][coords.first];
+      line1.push_back(grid[coords.second][0]);
+      line2.push_back(grid[dim - 1][coords.first]);
    }
 
    // On lit ensuite le texte par bloc. Par exemple pour un bloc de 3 :
    // L1 = MHD et L2 = JME => crypted = MHDJME. On recommence pour tout le texte.
-   //const uint32_t rest = clear_len % block_len;
-   //const uint32_t clear_rest = clear_len - rest;
    for (uint32_t j = 0; j < clear_len; j += block_len)
    {
-      crypted += line1.substr(j, block_len);
-      crypted += line2.substr(j, block_len);
+      crypted.append(line1.substr(j, block_len));
+      crypted.append(line2.substr(j, block_len));
    }
-   //crypted += line1.substr(clear_rest);
-   //crypted += line2.substr(clear_rest);
 
    return crypted;
 }

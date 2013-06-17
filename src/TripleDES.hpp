@@ -8,15 +8,15 @@
 class TripleDES : public SymmetricCipher
 {
 public:
-   virtual const BytesContainer encode(const BytesContainer &) final;
-   virtual const BytesContainer decode(const BytesContainer &) final;
+   TripleDES(const BytesContainer &key1, const BytesContainer &key2, const BytesContainer &key3);
+   virtual const BytesContainer encode(const BytesContainer &clear_text) final;
+   virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
 
-   virtual void setKey(const BytesContainer &key) final;
-   void setSecondKey(const BytesContainer &key2);
-   void setThirdKey(const BytesContainer &key3);
    void setOperationMode(const OperationModes mode);
    
 private:
+   static void checkKey(const BytesContainer &key);
+   
    BytesContainer key2, key3;
    OperationModes mode = OperationModes::ECB;
 };

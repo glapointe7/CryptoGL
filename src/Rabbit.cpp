@@ -5,9 +5,8 @@
 
 #include <limits>
 
-// La clé doit avoir 128 bits = 16 octets.
-
-void Rabbit::setKey(const BytesContainer &key)
+// La clé doit avoir 128 bits = 16 bytes.
+Rabbit::Rabbit(const BytesContainer &key)
 {
    if (key.size() != 16)
    {

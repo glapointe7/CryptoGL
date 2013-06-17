@@ -14,6 +14,7 @@ class SquareCipher : public StringCipherWithStringKey
 {
 public:  
    explicit SquareCipher(const KeyType &key); 
+   virtual ~SquareCipher() {}
    
    virtual const ClassicalType encode(const ClassicalType &) = 0;
    virtual const ClassicalType decode(const ClassicalType &) = 0;

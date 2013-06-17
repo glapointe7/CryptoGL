@@ -12,7 +12,7 @@ protected:
 
    virtual void SetUp()
    {
-      A = new Affine();
+      A = new Affine(17, 7);
    }
 
    virtual void TearDown()
@@ -25,7 +25,6 @@ TEST_F(AffineTest, encode)
 {
   const std::string clear_text = "DIESISTEINEGEHEIMENACHRICHT";
   
-  A->setKey(17, 7);
   EXPECT_EQ("GNXBNBSXNUXFXWXNDXUHPWKNPWS", A->encode(clear_text));
 }
 
@@ -33,7 +32,6 @@ TEST_F(AffineTest, decode)
 {
   const std::string clear_text = "DIESISTEINEGEHEIMENACHRICHT";
   
-  A->setKey(17, 7);
   EXPECT_EQ(clear_text, A->decode("GNXBNBSXNUXFXWXNDXUHPWKNPWS"));
 }
 

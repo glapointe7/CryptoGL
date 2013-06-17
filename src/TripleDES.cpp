@@ -4,36 +4,25 @@
 #include "BlockCipherOperationModes.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
-#include "exceptions/EmptyKey.hpp"
 
-void TripleDES::setKey(const BytesContainer &key)
+TripleDES::TripleDES(const BytesContainer &key1, const BytesContainer &key2, const BytesContainer &key3)
 {
-   if(key.size() != 8)
+   checkKey(key1);
+   this->key = key1;
+
+   checkKey(key2);
+   this->key2 = key2;
+
+   checkKey(key3);
+   this->key3 = key3;
+}
+
+void TripleDES::checkKey(const BytesContainer &key)
+{
+   if (key.size() != 8)
    {
       throw BadKeyLength("The key must be 8 bytes length.", key.size());
    }
-   
-   this->key = key;
-}
-
-void TripleDES::setSecondKey(const BytesContainer &key2)
-{
-   if(key2.size() != 8)
-   {
-      throw BadKeyLength("The key must be 8 bytes length.", key2.size());
-   }
-   
-   this->key2 = key2;
-}
-
-void TripleDES::setThirdKey(const BytesContainer &key3)
-{
-   if(key3.size() != 8)
-   {
-      throw BadKeyLength("The key must be 8 bytes length.", key3.size());
-   }
-   
-   this->key3 = key3;
 }
 
 void TripleDES::setOperationMode(const OperationModes mode)
@@ -42,38 +31,29 @@ void TripleDES::setOperationMode(const OperationModes mode)
 }
 
 const TripleDES::BytesContainer TripleDES::encode(const BytesContainer &clear_text)
-{  
-   DES *D = new DES(mode);
-   D->setKey(key);
-   const BytesContainer first = D->encode(clear_text);
+{
+   DES *D1 = new DES(key, mode);
+   const BytesContainer first = D1->encode(clear_text);
+   delete D1;
    
-   if(key3.empty())
-   {
-      key3 = key;
-   }
-  
-   D->setKey(key2);
-   const BytesContainer second = D->decode(first);
+   DES *D2 = new DES(key2, mode);
+   const BytesContainer second = D2->decode(first);
+   delete D2;
    
-   D->setKey(key3);
-   return D->encode(second);
+   DES *D3 = new DES(key3, mode);
+   return D3->encode(second);
 }
 
 const TripleDES::BytesContainer TripleDES::decode(const BytesContainer &cipher_text)
 {
-   DES *D = new DES(mode);
+   DES *D1 = new DES(key3, mode);
+   const BytesContainer first = D1->decode(cipher_text);
+   delete D1;
    
-   if(key3.empty())
-   {
-      key3 = key;
-   }
-   
-   D->setKey(key3);
-   const BytesContainer first = D->decode(cipher_text);
-   
-   D->setKey(key2);
-   const BytesContainer second = D->encode(first);
-   
-   D->setKey(key);
-   return D->decode(second);
+   DES *D2 = new DES(key2, mode);
+   const BytesContainer second = D2->encode(first);
+   delete D2;
+
+   DES *D3 = new DES(key, mode);
+   return D3->decode(second);
 }

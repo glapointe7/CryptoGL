@@ -13,18 +13,17 @@
 class DES : public Feistel
 {
 public:
-   DES() : Feistel(OperationModes::ECB) {}
-   explicit DES(const OperationModes mode) : Feistel(mode) {}
+   explicit DES(const BytesContainer &key) : Feistel(OperationModes::ECB) { setKey(key); }
+   explicit DES(const BytesContainer &key, const OperationModes mode) : Feistel(mode) { setKey(key); }
    
    virtual const BytesContainer encode(const BytesContainer &clear_text) final;
    virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
-
-   virtual void setKey(const BytesContainer &key) final;
    //uint8_t getParityBits();
 
 private:
    typedef std::vector<std::vector<uint8_t> > SBox;
    
+   virtual void setKey(const BytesContainer &key) final;
    virtual const UInt64Container getKeySchedule() final;
    virtual const BytesContainer getOutputBlock(const BytesContainer &data, 
            const UInt64Container &subkeys, const uint8_t lower_round) final;

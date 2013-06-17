@@ -30,75 +30,75 @@ RedefenceZigzag::RedefenceZigzag(const KeyType &key, const KeyType &key_levels)
 }
 
 void RedefenceZigzag::addEncodedText(std::vector<ClassicalType> &rows, const ClassicalType &data,
-        const int32_t step, const int32_t level) const
+        const int32_t i, const int32_t level, const int32_t mod) const
 {
-   for (int32_t k = 0; k < level; ++k)
+   // Encode upto level.
+   for (int32_t k = i; k < level; ++k)
    {
-      rows[k] += alpha[alpha.find(data[k])];
+      rows[k].push_back(alpha[alpha.find(data[k-i])]);
    }
-   const int32_t mod = step - level;
+
+   // Encode from level down to 1.
    for (int32_t k = 0; k < mod; ++k)
    {
-      rows[level - k - 2] += alpha[alpha.find(data[level + k])];
+      rows[level - k - 2].push_back(alpha[alpha.find(data[level + k-i])]);
    }
+}
+
+const RedefenceZigzag::ClassicalType 
+RedefenceZigzag::swapRowsWithPermutationKey(const std::vector<ClassicalType> &rows, const uint32_t length) const
+{
+   const KeyType key = getKey();
+   ClassicalType crypted;
+   crypted.reserve(length);
+   for (const auto key_num : key)
+   {
+      crypted.append(rows[key_num]);
+   }
+   
+   return crypted;
 }
 
 const RedefenceZigzag::ClassicalType RedefenceZigzag::encode(const ClassicalType &clear_text)
 {
    const uint32_t clear_len = clear_text.length();
-   const KeyType key = getKey();
-   ClassicalType crypted;
-   crypted.reserve(clear_len);
-
    std::vector<ClassicalType> rows;
    rows.resize(max_level);
 
-   // Add the offset to the clear_text.
-   const uint32_t real_offset = offset % key_levels[0];
-   ClassicalType text_with_offset(real_offset, '.');
-   text_with_offset.reserve(clear_len + real_offset);
-   text_with_offset += clear_text;
-   const uint32_t text_with_offset_len = clear_len + real_offset;
-
+   // Encode each block of 'step' characters in basic Railfence with level as the key. 
    const uint32_t key_levels_size = key_levels.size();
+   const int32_t max_step = (max_level - 1) << 1;
    uint32_t j = 0, i = 0;
-   int32_t step = (key_levels[j] - 1) * 2;
-   while (i < text_with_offset_len - step)
+   int32_t step = (key_levels[j] - 1) << 1;
+   
+   // Encode the first block with respect to the offset.
+   addEncodedText(rows, clear_text.substr(i, step - offset), offset, key_levels[j], key_levels[j]-2);
+   i += step - offset;
+   j = (j + 1) % key_levels_size;
+   while (i < clear_len - max_step)
    {
-      // Encode in basic Railfence with level as the key.
-      const ClassicalType data(text_with_offset.substr(i, step));
-      addEncodedText(rows, data, step, key_levels[j]);
-      j = (j + 1) % key_levels_size;
+      step = (key_levels[j] - 1) << 1;
+      addEncodedText(rows, clear_text.substr(i, step), 0, key_levels[j], key_levels[j]-2);
       i += step;
-      step = (key_levels[j] - 1) * 2;
+      j = (j + 1) % key_levels_size;
    }
 
-   const int32_t rest = text_with_offset_len % step;
-   const ClassicalType data(text_with_offset.substr(text_with_offset_len - rest));
+   step = (key_levels[j] - 1) << 1;
+   const int32_t rest = (clear_len + offset) % step;
+   const uint32_t last_iteration = clear_len - rest;
    if (rest < key_levels[j])
    {
       for (int32_t i = 0; i < rest; ++i)
       {
-         rows[i] += alpha[alpha.find(data[i])];
+         rows[i].push_back(alpha[alpha.find(clear_text[last_iteration + i])]);
       }
    }
    else
    {
-      addEncodedText(rows, data, rest, key_levels[j]);
+      addEncodedText(rows, clear_text.substr(last_iteration), 0, key_levels[j], rest - key_levels[j]);
    }
-
-   // Remove the offset character '.'.
-   for (uint32_t k = 0; k < real_offset; ++k)
-   {
-      rows[k].erase(rows[k].front());
-   }
-
-   for (const auto key_num : key)
-   {
-      crypted += rows[key_num];
-   }
-
-   return crypted;
+   
+   return swapRowsWithPermutationKey(rows, clear_len);
 }
 
 const std::vector<std::list<int8_t> >
@@ -109,11 +109,12 @@ RedefenceZigzag::getFirstDecoding(const ClassicalType &cipher_text, int32_t &las
    const int32_t cipher_len = cipher_text.length();
 
    uint32_t i = 1, j = 0;
-   int32_t sum_step = (key_levels[j] - 1) * 2;
-   while (sum_step < cipher_len)
+   int32_t sum_step = ((key_levels[j] - 1) << 1);
+   const int32_t cipher_offset_len = cipher_len + offset;
+   while (sum_step < cipher_offset_len)
    {
       j = (j + 1) % key_levels_size;
-      sum_step += (key_levels[j] - 1) * 2;
+      sum_step += (key_levels[j] - 1) << 1;
       ++i;
    }
 
@@ -123,9 +124,15 @@ RedefenceZigzag::getFirstDecoding(const ClassicalType &cipher_text, int32_t &las
    for (const auto level : key)
    {
       uint32_t x = 0;
+      
+      // Bottom of the zigzag.
       if (level == 0)
       {
          x = i;
+         if(offset > 0)
+         {
+            x = i - 1;
+         }
       }
       else
       {
@@ -137,27 +144,34 @@ RedefenceZigzag::getFirstDecoding(const ClassicalType &cipher_text, int32_t &las
             }
             else if (level < key_levels[k % key_levels_size] - 1)
             {
-               x += 2;
+               if(k == 0 && level < static_cast<int32_t>(offset))
+               {
+                  x++;
+               }
+               else
+               {
+                  x += 2;
+               }
             }
          }
 
          // If cipher_len != sum_step, then we have to consider the rest apart.
-         if (key_levels[j] - 1 >= level)
+         if (key_levels[j] > level)
          {
-            const int32_t step = (key_levels[j] - 1) * 2;
+            const int32_t step = (key_levels[j] - 1) << 1;
             const int32_t prev_sum_step = 1 + sum_step - step;
-            if (prev_sum_step + level <= cipher_len)
+            if (prev_sum_step + level <= cipher_offset_len)
             {
                x++;
-               if (prev_sum_step + level == cipher_len)
+               if (prev_sum_step + level == cipher_offset_len)
                {
                   last = level;
                }
             }
-            if (sum_step - level < cipher_len)
+            if (sum_step - level < cipher_offset_len && key_levels[j] - 1 != level)
             {
                x++;
-               if (sum_step - level == cipher_len - 1)
+               if (sum_step - level == cipher_offset_len - 1)
                {
                   last = level;
                }
@@ -184,13 +198,15 @@ const RedefenceZigzag::ClassicalType RedefenceZigzag::decode(const ClassicalType
    std::vector<std::list<int8_t> > first_decoded(getFirstDecoding(cipher_text, last_char_level));
 
    uint32_t j = 0;
+   int32_t i = offset;
    while (!first_decoded[last_char_level].empty())
    {
-      for (int32_t k = 0; k < key_levels[j] && !first_decoded[last_char_level].empty(); ++k)
+      for (int32_t k = i; k < key_levels[j] && !first_decoded[last_char_level].empty(); ++k)
       {
          decrypted += first_decoded[k].front();
          first_decoded[k].pop_front();
       }
+      i = 0;
       if (key_levels[j] > 1)
       {
          for (int32_t k = key_levels[j] - 2; k >= 1 && !first_decoded[last_char_level].empty(); --k)

@@ -27,12 +27,11 @@ const HashFunction::BitsContainer SHA1::addPadding(const BitsContainer &bits) co
    // Ajout du bit 1 à la fin du message (bits).
    bits_pad.push_back(1);
 
-   // Ajouter à la fin du message des bits = 0 jusqu'à une longueur de 448 (mod 512).
-   const uint32_t bits_pad_len = (512 + (448 - (bits_pad.size() & 0x1FF))) & 0x1FF;
+   // Ajouter à la fin du message des bits = 0 jusqu'à une longueur de 448 (mod 512). '960 = 512 + 448'
+   const uint32_t bits_pad_len = (960 - (bits_pad.size() & 0x1FF)) & 0x1FF;
    bits_pad.insert(bits_pad.end(), bits_pad_len, 0);
 
    // On ajoute les 64 bits de l'entier représentant la longueur initiale de 'bits'.
-   // Ajout en BIG ENDIAN
    for (char i = 63; i >= 0; --i)
    {
       bits_pad.push_back((bits_len >> i) & 0x1);
@@ -41,33 +40,55 @@ const HashFunction::BitsContainer SHA1::addPadding(const BitsContainer &bits) co
    return bits_pad;
 }
 
+const HashFunction::WordsContainer
+SHA1::getInput(const BitsContainer &bits, const uint32_t block_index) const
+{
+   WordsContainer words;
+   words.reserve(80);
+
+   for (uint16_t k = 0; k < 512; k += 32)
+   {
+      uint32_t word = 0;
+      for (uint8_t j = 0; j < 32; ++j)
+      {
+         word |= (bits[j + k + block_index] << (31 - j));
+      }
+      words.push_back(word);
+   }
+
+   // Extention of the 32-bits 16 blocks in 80 blocks of 32 bits.
+   for (uint8_t j = 16; j < 80; ++j)
+   {
+      words.push_back(static_cast<uint32_t>(rotateLeft(words[j - 3] ^ words[j - 8] ^ words[j - 14] ^ words[j - 16], 1, 32)));
+   }
+   
+   return words;
+}
+
+const HashFunction::BytesContainer SHA1::getOutput() const
+{
+   BytesContainer output;
+   output.reserve(20);
+   for (uint8_t j = 0; j < 5; ++j)
+   {
+      for (int8_t i = 3; i >= 0; --i)
+      {
+         output.push_back((state[j] >> (i << 3)) & 0xFF);
+      }
+   }
+   
+   return output;
+}
+
 const HashFunction::BytesContainer SHA1::encode(const BytesContainer &data)
 {
    BitsContainer bits(addPadding(getBitsFromData(data)));
    const uint32_t bits_len = bits.size();
-   WordsContainer hash;
 
    for (uint32_t i = 0; i < bits_len; i += 512)
    {
-      // Transformer un bloc de 512 bits en 16 blocs uint32 en BIG ENDIAN.
-      WordsContainer words(80, 0);
-      uint8_t n = 0;
-      for (uint16_t k = 0; k < 512; k += 32)
-      {
-         for (uint8_t j = 0; j < 32; ++j)
-         {
-            words[n] |= (bits[j + k + i] << (31 - j));
-         }
-         n++;
-      }
-
-      // Extention des 16 blocs de 32 bits en 80 blocs de 32 bits.
-      for (uint8_t j = 16; j < 80; ++j)
-      {
-         words[j] = (uint32_t) rotateLeft(words[j - 3] ^ words[j - 8] ^ words[j - 14] ^ words[j - 16], 1, 32);
-      }
-
-      hash = state;
+      WordsContainer words = getInput(bits, i);
+      WordsContainer hash(state);
       uint32_t f, k;
       for (uint8_t j = 0; j < 80; ++j)
       {
@@ -92,7 +113,7 @@ const HashFunction::BytesContainer SHA1::encode(const BytesContainer &data)
             k = 0xCA62C1D6;
          }
 
-         uint32_t tmp = rotateLeft(hash[0], 5, 32) + f + hash[4] + k + words[j];
+         const uint32_t tmp = rotateLeft(hash[0], 5, 32) + f + hash[4] + k + words[j];
          hash[4] = hash[3];
          hash[3] = hash[2];
          hash[2] = rotateLeft(hash[1], 30, 32);
@@ -106,16 +127,5 @@ const HashFunction::BytesContainer SHA1::encode(const BytesContainer &data)
       }
    }
 
-   // On concatène hash[i] pour i=0,1,2,3,4 pour avoir un bloc de 128 bits 
-   // (20 blocs de 8 bits chaque) en BIG ENDIAN.
-   BytesContainer crypted(20, 0);
-   for (uint8_t j = 0; j < 5; ++j)
-   {
-      for (uint8_t i = 0; i < 4; ++i)
-      {
-         crypted[(j << 2) + i] = (state[j] >> ((3 - i) << 3)) & 0xFF;
-      }
-   }
-
-   return crypted;
+   return getOutput();
 }

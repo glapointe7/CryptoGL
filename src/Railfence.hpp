@@ -20,7 +20,10 @@ public:
 private:
    /* Encode data block with the basic railfence cipher. */
    void addEncodedText(std::vector<ClassicalType> &rows, const ClassicalType &data, 
-           const int32_t step, const int32_t level) const;
+           const int32_t i, const int32_t level, const int32_t mod) const;
+   
+   /* Redefence : Replace each row following the permutation key. */
+   const ClassicalType swapRowsWithPermutationKey(const std::vector<ClassicalType> &rows, const uint32_t length) const;
    const std::vector<std::list<int8_t> > getFirstDecoding(const ClassicalType &cipher_text, int32_t &last) const;
    
    uint32_t offset = 0;

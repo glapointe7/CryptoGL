@@ -6,10 +6,10 @@
 
 #include <functional>
 #include <string>
-#include <sstream>
 #include <vector>
 
 #include "Tools.hpp"  // fonction split
+#include "String.hpp"
 
 // Vigenere : CIPHER = CLEAR + KEY
 
@@ -29,12 +29,14 @@ protected:
 
    static const ClassicalType clearPlusKey(const ClassicalType &alpha, const char c, const char key_pos)
    {
-      return ClassicalType(1, alpha[(alpha.find(c) + alpha.find(key_pos)) % alpha.length()]);
+      const uint32_t x = (alpha.find(c) + alpha.find(key_pos)) % alpha.length();
+      return ClassicalType(1, alpha[x]);
    }
 
    static const ClassicalType clearMinusKey(const ClassicalType &alpha, const char c, const char key_pos)
    {
-      return ClassicalType(1, alpha[(alpha.find(c) - alpha.find(key_pos) + alpha.length()) % alpha.length()]);
+      const uint32_t x = (alpha.find(c) - alpha.find(key_pos) + alpha.length()) % alpha.length();
+      return ClassicalType(1, alpha[x]);
    }
 
    static const ClassicalType keyMinusClear(const ClassicalType &alpha, const char c, const char key_pos)
@@ -45,8 +47,9 @@ protected:
 public:
    explicit Vigenere(const KeyType &key)
    : charEncode(clearPlusKey), charDecode(clearMinusKey) { setKey(key); }
+   virtual ~Vigenere() {}
 
-   virtual const ClassicalType encode(const ClassicalType &clear_text);
+   virtual const ClassicalType encode(const ClassicalType &clear_text) final;
    virtual const ClassicalType decode(const ClassicalType &cipher_text);
 };
 
@@ -115,7 +118,7 @@ public:
       const uint8_t alpha_len = alpha.length();
       char the_key = caesar_key % alpha_len;
       the_key = (the_key + alpha_len) % alpha_len;
-      const KeyType new_key = std::string(1, alpha[the_key]);
+      const KeyType new_key = KeyType(1, alpha[the_key]);
       StringCipherWithStringKey::setKey(new_key);
    }
 };
@@ -124,17 +127,25 @@ public:
 
 class VigenereMult : public Vigenere
 {
-
+private:
    static const ClassicalType clearMultKey(const ClassicalType &alpha, const char c, const char key_pos)
    {
-      std::stringstream ss;
-      ss << ((alpha.find(c) + 1) * (alpha.find(key_pos) + 1)) << " ";
-      return ss.str();
+      char buffer[5];
+      const uint32_t x = (alpha.find(c) + 1) * (alpha.find(key_pos) + 1);
+      String::uintToString(x, buffer);
+      uint8_t y = 0;
+      while(buffer[y] != '\0') 
+         ++y;
+      buffer[y] = ' '; 
+      buffer[y+1] = '\0';
+      
+      return ClassicalType(buffer);
    }
 
    static const ClassicalType keyDivideCipher(const ClassicalType &alpha, const unsigned short c, const char key_pos)
    {
-      return ClassicalType(1, alpha[(c / (alpha.find(key_pos) + 1)) - 1]);
+      const uint8_t x = (c / (alpha.find(key_pos) + 1)) - 1;
+      return ClassicalType(1, alpha[x]);
    }
 
 public:
@@ -149,15 +160,14 @@ public:
       const uint32_t key_length = my_key.length();
 
       ClassicalType toReturn;
-      const std::vector<std::string> cipher_numbers(split(cipher_text));
+      //const std::vector<ClassicalType> cipher_numbers(split(cipher_text));
+      const std::vector<ClassicalType> cipher_numbers(split(cipher_text));
       toReturn.reserve(cipher_text.length());
 
       uint32_t idx = 0;
       for (const auto number : cipher_numbers)
       {
-         uint16_t num;
-         std::istringstream(number) >> num;
-         toReturn += keyDivideCipher(alpha, num, my_key[idx]);
+         toReturn.append(keyDivideCipher(alpha, atoi(number.c_str()), my_key[idx]));
          idx = (idx + 1) % key_length;
       }
 
@@ -182,8 +192,8 @@ public:
       
       for(const auto number : grons_key)
       {
-         const int8_t x = number % alpha_len;
-         new_key += alpha[(x + alpha_len) % alpha_len];
+         const uint8_t x = ((number % alpha_len) + alpha_len) % alpha_len;
+         new_key += alpha[x];
       }
       StringCipherWithStringKey::setKey(new_key);
    }

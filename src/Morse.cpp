@@ -26,8 +26,9 @@ const Morse::ClassicalType Morse::encode(const ClassicalType &clear_text)
 
    for (const auto c : clear_text)
    {
-      crypted += morse[alpha.find(c)];
-      crypted += " ";
+      const uint32_t found = alpha.find(c);
+      crypted.append(morse[found]);
+      crypted.push_back(' ');
    }
 
    return crypted;
@@ -36,13 +37,13 @@ const Morse::ClassicalType Morse::encode(const ClassicalType &clear_text)
 const Morse::ClassicalType Morse::decode(const ClassicalType &cipher_text)
 {
    ClassicalType decrypted;
-   decrypted.reserve(cipher_text.size() / 2);
-   const std::vector<std::string> cipher_word(split(cipher_text));
+   decrypted.reserve(cipher_text.length() / 2);
+   const std::vector<ClassicalType> cipher_word(split(cipher_text));
 
    for (const auto str : cipher_word)
    {
-      const uint32_t pos = std::find(morse.begin(), morse.end(), str) - morse.begin();
-      decrypted += alpha[pos];
+      const uint32_t pos = std::distance(morse.begin(), std::find(morse.begin(), morse.end(), str));
+      decrypted.push_back(alpha[pos]);
    }
 
    return decrypted;

@@ -9,6 +9,7 @@
 
 #include "String.hpp"
 #include "Tools.hpp"
+
 #include "exceptions/EmptyAlpha.hpp"
 #include "exceptions/MultipleChar.hpp"
 
@@ -28,9 +29,9 @@ void StringCipher::encodeFile(const std::string &clear_text_file, const std::str
    const uint64_t file_size = in.tellg();
    in.seekg(0, std::ios::beg);
 
-   
+
    ClassicalType contents;
-   const uint16_t size = std::numeric_limits<uint16_t>::max()-1;
+   const uint16_t size = std::numeric_limits<uint16_t>::max() - 1;
    if (file_size > size)
    {
       const uint64_t toRepeat = file_size / size;
@@ -56,7 +57,7 @@ void StringCipher::encodeFile(const std::string &clear_text_file, const std::str
       in.read(&contents[0], file_size);
       out << this->encode(contents);
    }
-   
+
    in.close();
    out.close();
 }
@@ -118,7 +119,7 @@ const StringCipher::ClassicalType StringCipher::getAlpha() const
    return alpha;
 }
 
-// Ajoute le caractère c text.length() % mod fois à la fin de text.
+// Append the character c (text.length() % mod) times.
 
 const StringCipher::ClassicalType
 StringCipher::appendChars(const ClassicalType &data, const uint32_t to_add, const char c)

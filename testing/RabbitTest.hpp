@@ -12,7 +12,11 @@ protected:
 
    virtual void SetUp()
    {
-      R = new Rabbit();
+      const std::vector<uint8_t> key = {
+         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+      };
+      R = new Rabbit(key);
    }
 
    virtual void TearDown()
@@ -32,14 +36,8 @@ TEST_F(RabbitTest, encode)
       0x51, 0xD4, 0x0C, 0x70, 0xC3, 0xA1, 0x16, 0xF4
    };
 
-   const std::vector<uint8_t> key = {
-      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-   };
-   
-   const std::vector<uint8_t> clear_data(48, 0); 
+   const std::vector<uint8_t> clear_data(48, 0);
 
-   R->setKey(key);
    EXPECT_EQ(Rabbit::hexDigest(cipher), Rabbit::hexDigest(R->encode(clear_data)));
 }
 
@@ -54,14 +52,8 @@ TEST_F(RabbitTest, decode)
       0x51, 0xD4, 0x0C, 0x70, 0xC3, 0xA1, 0x16, 0xF4
    };
 
-   const std::vector<uint8_t> key = {
-      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-   };
-   
-   const std::vector<uint8_t> clear_data(48, 0); 
+   const std::vector<uint8_t> clear_data(48, 0);
 
-   R->setKey(key);
    EXPECT_EQ(Rabbit::hexDigest(clear_data), Rabbit::hexDigest(R->decode(cipher)));
 }
 

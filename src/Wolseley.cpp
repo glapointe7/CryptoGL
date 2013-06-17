@@ -15,13 +15,15 @@ const Wolseley::ClassicalType Wolseley::encode(const ClassicalType &clear_text)
    ClassicalType crypted;
    crypted.reserve(clear_text.length());
 
-   const std::string key_alpha(getKey() + alpha);
+   KeyType key_alpha = getKey();
+   key_alpha.reserve(alpha.length());
+   key_alpha.append(alpha);
    const ClassicalType new_alpha(removeRepeatedLetters(key_alpha));
 
    for (const auto c : clear_text)
    {
-      const std::string::size_type pos = new_alpha.find(c);
-      crypted += new_alpha[24 - pos];
+      const int8_t pos = 24 - new_alpha.find(c);
+      crypted.push_back(new_alpha[pos]);
    }
 
    return crypted;

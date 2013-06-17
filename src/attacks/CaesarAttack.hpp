@@ -2,23 +2,22 @@
 #ifndef CAESARATTACK_HPP
 #define	CAESARATTACK_HPP
 
-#include "Attack.hpp"
-#include "../String.hpp"
+#include "ClassicalAttack.hpp"
 
 #include "../Vigenere.hpp"
 
-class CaesarAttack
+class CaesarAttack : public ClassicalAttack<Caesar>
 {
 public:
-   CaesarAttack();
-   ~CaesarAttack();
+   CaesarAttack() { C = new Caesar(0); }
+   ~CaesarAttack() { delete C; }
    
-   const std::string load(const std::string &filename) const;
-   void setAlpha(const std::string &alpha);
    void setFilename(const std::string &filename);
-   virtual void attack(std::string &cipher_text) final;
+   virtual void attack(ClassicalType &cipher_text) final;
    
 private:
+   static void save(std::ofstream &out, const ClassicalType &data);
+   
    Caesar *C;
    std::string filename;
 };

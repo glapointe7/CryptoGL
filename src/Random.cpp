@@ -23,12 +23,12 @@ const std::string Random::generateString(const uint32_t length, const std::strin
       throw BadAlphaLength("The length you provided is greater than the alphabet's length.", length);
    }
    
-   std::string str = "";
+   std::string str;
    str.reserve(length);
 
    for (uint32_t i = 0; i < length; ++i)
    {
-      str += alphabet[rand() % (length - 1)];
+      str.push_back(alphabet[rand() % (length - 1)]);
    }
 
    return str;

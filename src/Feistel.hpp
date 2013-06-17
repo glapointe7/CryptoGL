@@ -18,12 +18,13 @@ class Feistel : public BlockCipher
 public:
    Feistel() : BlockCipher(OperationModes::ECB) {}
    explicit Feistel(const OperationModes mode)  : BlockCipher(mode) {}
+   virtual ~Feistel() {}
   
    virtual const BytesContainer encode(const BytesContainer &) = 0;
    virtual const BytesContainer decode(const BytesContainer &) = 0;
-   virtual void setKey(const BytesContainer &) = 0;
 
 protected:
+   virtual void setKey(const BytesContainer &) = 0;
    virtual const UInt64Container getKeySchedule() = 0;
    virtual uint64_t F(const uint64_t &data, const uint64_t &) const = 0;
    virtual const BytesContainer getOutputBlock(const BytesContainer &data, 

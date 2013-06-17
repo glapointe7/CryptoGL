@@ -2,7 +2,7 @@
 
 #include "MathematicalTools.hpp"
 #include "Tools.hpp"
-#include "converterTools.hpp"
+#include "ConverterTools.hpp"
 
 #include "exceptions/IntegersNotCoprime.hpp"
 #include "exceptions/BadModulo.hpp"

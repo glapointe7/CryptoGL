@@ -63,10 +63,10 @@ bool isSuperIncresing(const std::vector<uint64_t> &sequence)
    return true;
 }
 
-uint64_t getLegendreSymbol(const uint64_t x, const uint64_t e, const uint64_t n)
+uint64_t getLegendreSymbol(const uint64_t &x, const uint64_t &e, const uint64_t &n)
 {
    uint64_t a = 1;
-   unsigned char e_size = sizeof (e);
+   unsigned char e_size = sizeof(e);
    for (char i = e_size; i >= 0; --i)
    {
       a = (a * a) % n;
@@ -94,7 +94,8 @@ bool isPerfectSquare(const uint32_t value)
       const uint32_t t = static_cast<uint32_t> (floor(sqrt(static_cast<double> (value)) + 0.5));
       return value == t * t;
    }
-   return 0;
+   
+   return false;
 }
 
 uint8_t getByteSqrt(const uint8_t sqr)

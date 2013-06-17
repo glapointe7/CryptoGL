@@ -13,6 +13,8 @@ protected:
    typedef std::vector<uint32_t> WordsContainer;
    
    virtual const BitsContainer addPadding(const BitsContainer &) const = 0;
+   virtual const BytesContainer getOutput() const = 0;
+   virtual const WordsContainer getInput(const BitsContainer &bits, const uint32_t block_index) const = 0;
    
    static const BitsContainer getBitsFromData(const BytesContainer &data);
    

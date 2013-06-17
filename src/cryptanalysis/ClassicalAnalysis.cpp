@@ -1,21 +1,18 @@
-#include "FrequenciesAnalysis.hpp"
+#include "ClassicalAnalysis.hpp"
 
 #include <algorithm>
-#include <fstream>
 
-#include "Tools.hpp"
-
-double FrequenciesAnalysis::getIC() const
+float ClassicalAnalysis::getIC() const
 {
    return ic;
 }
 
-void FrequenciesAnalysis::setAlpha(const std::string &alpha)
+void ClassicalAnalysis::setAlpha(const ClassicalType &alpha)
 {
    this->alpha = alpha;
 }
 
-void FrequenciesAnalysis::setLanguage(const Language lang)
+void ClassicalAnalysis::setLanguage(const Language lang)
 {
    switch(lang)
    {
@@ -27,13 +24,13 @@ void FrequenciesAnalysis::setLanguage(const Language lang)
    }
 }
 
-const std::map<char, unsigned int> FrequenciesAnalysis::getCharsCount(const std::string &text) const
+const std::map<char, uint32_t> ClassicalAnalysis::getCharsCount(const ClassicalType &text) const
 {
-   std::map<char, unsigned int> chars_freq;
+   std::map<char, uint32_t> chars_freq;
 
    for (const auto c : alpha)
    {
-      const unsigned int char_count = std::count(text.begin(), text.end(), c);
+      const uint32_t char_count = std::count(text.begin(), text.end(), c);
       if (char_count > 0)
       {
          chars_freq[c] = char_count;
@@ -43,13 +40,13 @@ const std::map<char, unsigned int> FrequenciesAnalysis::getCharsCount(const std:
    return chars_freq;
 }
 
-void FrequenciesAnalysis::calculateIC(const std::string &text)
+void ClassicalAnalysis::calculateIC(const ClassicalType &text)
 {
-   const unsigned int text_len = text.length();
+   const uint32_t text_len = text.length();
    const auto chars_freq = getCharsCount(text);
 
    for (const auto pair : chars_freq)
    {
-      ic +=  static_cast<double>(pair.second * (pair.second - 1)) / (text_len * (text_len - 1));
+      ic +=  static_cast<float>(pair.second * (pair.second - 1)) / (text_len * (text_len - 1));
    }
 }

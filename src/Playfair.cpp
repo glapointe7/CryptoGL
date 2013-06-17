@@ -24,20 +24,24 @@ const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
       // R�gle 1 : Si x != a ET y != b, alors X = (x,b) et A = (a,y).
       if (X.first != A.first && A.second != X.second)
       {
-         crypted += grid[X.second][A.first];
-         crypted += grid[A.second][X.first];
+         crypted.push_back(grid[X.second][A.first]);
+         crypted.push_back(grid[A.second][X.first]);
       }
          // R�gle 2 : Si x = a ET y != b, alors X = (x+1,y) et A = (a+1,b).
       else if (X.first == A.first && X.second != A.second)
       {
-         crypted += grid[(X.second + 1) % dim][X.first];
-         crypted += grid[(A.second + 1) % dim][A.first];
+         const uint8_t x = (X.second + 1) % dim;
+         const uint8_t y = (A.second + 1) % dim;
+         crypted.push_back(grid[x][X.first]);
+         crypted.push_back(grid[y][A.first]);
       }
          // R�gle 3 : Si x != a ET y = b, alors X = (x,y+1) et A = (a,b+1).
       else if (X.first != A.first && A.second == X.second)
       {
-         crypted += grid[X.second][(X.first + 1) % dim];
-         crypted += grid[A.second][(A.first + 1) % dim];
+         const uint8_t x = (X.first + 1) % dim;
+         const uint8_t y = (A.first + 1) % dim;
+         crypted.push_back(grid[X.second][x]);
+         crypted.push_back(grid[A.second][y]);
       }
          // R�gle 4 : Si x = a ET y = b, alors X = (x,y) et A = NUL = X.
       else
@@ -71,20 +75,20 @@ const Playfair::ClassicalType Playfair::decode(const ClassicalType &cipher_text)
       // R�gle 1 : Si x != a ET y != b, alors A = (x,b) et B = (a,y).
       if (X.first != A.first && X.second != A.second)
       {
-         decrypted += grid[X.second][A.first];
-         decrypted += grid[A.second][X.first];
+         decrypted.push_back(grid[X.second][A.first]);
+         decrypted.push_back(grid[A.second][X.first]);
       }
          // R�gle 2 : Si x = a ET y != b, alors A = (x+1,y) et B = (a+1,b).
       else if (X.first == A.first && X.second != A.second)
       {
-         decrypted += grid[(X.second + dim - 1) % dim][X.first];
-         decrypted += grid[(A.second + dim - 1) % dim][A.first];
+         decrypted.push_back(grid[(X.second + dim - 1) % dim][X.first]);
+         decrypted.push_back(grid[(A.second + dim - 1) % dim][A.first]);
       }
          // R�gle 3 : Si x != a ET y = b, alors A = (x,y+1) et B = (a,b+1).
       else if (X.first != A.first && X.second == A.second)
       {
-         decrypted += grid[X.second][(X.first + dim - 1) % dim];
-         decrypted += grid[A.second][(A.first + dim - 1) % dim];
+         decrypted.push_back(grid[X.second][(X.first + dim - 1) % dim]);
+         decrypted.push_back(grid[A.second][(A.first + dim - 1) % dim]);
       }
    }
 

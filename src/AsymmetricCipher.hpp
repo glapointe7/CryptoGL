@@ -16,7 +16,8 @@ protected:
    typedef std::vector<uint8_t> BytesContainer;
 
 public:
-
+   virtual ~AsymmetricCipher() {}
+   
    virtual const UInt64Container encode(const BytesContainer &) = 0;
    virtual const BytesContainer decode(const UInt64Container &) = 0;
 

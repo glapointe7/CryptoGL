@@ -2,34 +2,19 @@
 
 #include <fstream>
 
-CaesarAttack::CaesarAttack()
-{
-   C = new Caesar(0);
-}
-
-CaesarAttack::~CaesarAttack()
-{
-   delete C;
-}
-
 void CaesarAttack::setFilename(const std::string &filename)
 {
    this->filename = filename;
 }
 
-const std::string CaesarAttack::load(const std::string &filename) const
+void CaesarAttack::save(std::ofstream &out, const ClassicalType &data)
 {
-   return C->load(filename);
+   out << data << "\n\n";
 }
 
-void CaesarAttack::setAlpha(const std::string &alpha)
+void CaesarAttack::attack(ClassicalType &cipher_text)
 {
-   C->setAlpha(alpha);
-}
-
-void CaesarAttack::attack(std::string &cipher_text)
-{
-   uint32_t alpha_len = C->getAlpha().length();
+   const uint8_t alpha_len = C->getAlpha().length();
    C->eraseBadCharacters(cipher_text);
 
    try
@@ -39,7 +24,7 @@ void CaesarAttack::attack(std::string &cipher_text)
       for (uint8_t i = 1; i < alpha_len; ++i)
       {
          C->setKey(i);
-         out << C->decode(cipher_text) << "\n\n";
+         save(out, C->decode(cipher_text));
       }
       out.close();
    }

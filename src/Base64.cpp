@@ -12,33 +12,33 @@ const std::string Base64::encode(const BytesContainer &clear_data)
 
    uint32_t temp;
    BytesContainer::const_iterator cursor = clear_data.begin();
-   for (uint32_t idx = 0; idx < clear_len / 3; idx++)
+   for (uint32_t idx = 0; idx < clear_len / 3; ++idx)
    {
       temp = (*cursor++) << 16; 
       temp += (*cursor++) << 8;
       temp += (*cursor++);
       
-      crypted += alpha[(temp & 0x00FC0000) >> 18];
-      crypted += alpha[(temp & 0x0003F000) >> 12];
-      crypted += alpha[(temp & 0x00000FC0) >> 6 ];
-      crypted += alpha[(temp & 0x0000003F)];
+      crypted.push_back(alpha[(temp & 0x00FC0000) >> 18]);
+      crypted.push_back(alpha[(temp & 0x0003F000) >> 12]);
+      crypted.push_back(alpha[(temp & 0x00000FC0) >> 6 ]);
+      crypted.push_back(alpha[(temp & 0x0000003F)]);
    }
    switch (clear_len % 3)
    {
       case 1:
          temp = (*cursor++) << 16; 
-         crypted += alpha[(temp & 0x00FC0000) >> 18];
-         crypted += alpha[(temp & 0x0003F000) >> 12];
+         crypted.push_back(alpha[(temp & 0x00FC0000) >> 18]);
+         crypted.push_back(alpha[(temp & 0x0003F000) >> 12]);
          crypted.append(2, pad_character);
          break;
          
       case 2:
          temp = (*cursor++) << 16; 
          temp += (*cursor++) << 8;
-         crypted += alpha[(temp & 0x00FC0000) >> 18];
-         crypted += alpha[(temp & 0x0003F000) >> 12];
-         crypted += alpha[(temp & 0x00000FC0) >> 6 ];
-         crypted += pad_character;
+         crypted.push_back(alpha[(temp & 0x00FC0000) >> 18]);
+         crypted.push_back(alpha[(temp & 0x0003F000) >> 12]);
+         crypted.push_back(alpha[(temp & 0x00000FC0) >> 6 ]);
+         crypted.push_back(pad_character);
          break;
    }
 

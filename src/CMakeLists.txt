@@ -16,9 +16,9 @@ set(SRC
 	SymmetricCipher.hpp SymmetricCipher.cpp
 	
    Matrix.hpp Matrix.cpp
-	converterTools.hpp converterTools.cpp
+	ConverterTools.hpp ConverterTools.cpp
    MathematicalTools.hpp MathematicalTools.cpp
-	LittleIndian.hpp
+	LittleEndian.hpp
    BlockCipherOperationModes.hpp
 	Tools.hpp Tools.cpp
 	Transposition.hpp Transposition.cpp
@@ -42,6 +42,8 @@ set(SRC
    exceptions/BadGridDimension.hpp
    exceptions/IntegersNotCoprime.hpp
    exceptions/BadModulo.hpp
+
+   cryptanalysis/ClassicalAnalysis.hpp cryptanalysis/ClassicalAnalysis.cpp
 	
 	Adfgvx.hpp Adfgvx.cpp
 	Collon.hpp Collon.cpp

@@ -23,7 +23,7 @@ public:
    void encodeFile(const std::string &clear_text_file, const std::string &cipher_text_file);
    void decodeFile(const std::string &clear_text_file, const std::string &cipher_text_file);
    
-   void eraseBadCharacters(ClassicalType &) const;
+   void eraseBadCharacters(ClassicalType &text) const;
    
    virtual void setAlpha(const ClassicalType &alpha);
    const ClassicalType getAlpha() const;

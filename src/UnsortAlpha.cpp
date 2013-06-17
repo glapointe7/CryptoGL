@@ -24,12 +24,12 @@ void UnsortAlpha::setVerticalAlpha()
    const uint32_t key_len = new_key.length();
    const uint32_t alpha_len = str.length();
 
-   for (uint32_t i = 0; i < key_len; i++)
+   for (uint32_t i = 0; i < key_len; ++i)
    {
       uint32_t j = i;
       while (j < alpha_len)
       {
-         unsort_alpha += str[j];
+         unsort_alpha.push_back(str[j]);
          j += key_len;
       }
    }
@@ -43,7 +43,7 @@ UnsortAlpha::process(const ClassicalType &text, const GetCharFunction &getNextCh
 
    for (const auto c : text)
    {
-      toReturn += getNextChar(alpha, unsort_alpha, c);
+      toReturn.push_back(getNextChar(alpha, unsort_alpha, c));
    }
 
    return toReturn;

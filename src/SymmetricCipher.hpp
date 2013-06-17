@@ -18,7 +18,6 @@ public:
 
    virtual const BytesContainer encode(const BytesContainer &) = 0;
    virtual const BytesContainer decode(const BytesContainer &) = 0;
-   virtual void setKey(const BytesContainer &) = 0;
 
    static void save(const std::string &filename, const BytesContainer &data);
    static const BytesContainer load(const std::string &filename);

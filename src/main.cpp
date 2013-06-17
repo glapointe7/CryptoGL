@@ -1,13 +1,13 @@
-/*
- * .
- */
+
 #include <gtest/gtest.h>
 
 #include "../testing/CaesarTest.hpp"
 #include "../testing/VigenereTest.hpp"
+#include "../testing/VigenereMultTest.hpp"
 #include "../testing/RozierTest.hpp"
 #include "../testing/BeaufortTest.hpp"
 #include "../testing/BeaufortGermanTest.hpp"
+#include "../testing/GronsfeldTest.hpp"
 #include "../testing/PlayfairTest.hpp"
 #include "../testing/PolybeTest.hpp"
 #include "../testing/CollonTest.hpp"
@@ -29,7 +29,7 @@
 #include "../testing/HillTest.hpp"
 #include "../testing/AffineTest.hpp"
 #include "../testing/RabbitTest.hpp"
-//#include "../testing/MD5Test.hpp"
+#include "../testing/MD5Test.hpp"
 #include "../testing/TripleDESTest.hpp"
 #include "../testing/BlowfishTest.hpp"
 #include "../testing/FleissnerTest.hpp"
@@ -52,8 +52,9 @@ int main(int argc, char **argv)
    
    //const std::vector<std::string> grid_key = {"CLOFWJ", "YMT5B4", "I7A28S", "P30QHX", "KEUL6D", "VRGZN9"};
    
-   Polybe *A = new Polybe("MARCEL");
+   Railfence *A = new Railfence(25);
    A->setAlpha(String::uppercase_digits);
+   A->setOffset(4);
    A->encodeFile(R"(../GIT_CryptoCode/testing/TestFiles/clear_text.txt)",
            R"(../GIT_CryptoCode/testing/TestFiles/cipher_text.txt)");
    //C->decodeFile(R"(../GIT_CryptoCode/testing/TestFiles/cipher_text.txt)",

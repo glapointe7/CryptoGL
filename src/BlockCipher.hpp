@@ -20,9 +20,8 @@ public:
    virtual const BytesContainer encode(const BytesContainer &) = 0;
    virtual const BytesContainer decode(const BytesContainer &) = 0;
    
-   virtual void setKey(const BytesContainer &) = 0;
-   
 protected:
+   virtual void setKey(const BytesContainer &) = 0;
    virtual const UInt64Container getKeySchedule() = 0;
    virtual const BytesContainer getOutputBlock(const BytesContainer &data, 
            const UInt64Container &subkeys, const uint8_t lower_round) = 0;

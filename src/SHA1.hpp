@@ -1,5 +1,5 @@
 /*
- * Encryptage SHA1 (http://www.itl.nist.gov/fipspubs/fip180-1.htm)
+ * Hash SHA1 (http://www.itl.nist.gov/fipspubs/fip180-1.htm)
  */
 #ifndef SHA1_HPP
 #define	SHA1_HPP
@@ -9,14 +9,21 @@
 class SHA1 : public HashFunction
 {
 public:
-   virtual const BytesContainer encode(const BytesContainer &) final;
+   virtual const BytesContainer encode(const BytesContainer &data) final;
    
 private:
-   virtual const BitsContainer addPadding(const BitsContainer &) const final;
+   virtual const BitsContainer addPadding(const BitsContainer &bits) const final;
    
-   // variables d'état initialisées en LITTLE ENDIAN.
+   /* Transform a 512-bits block in 16 BIG ENDIAN uint32 blocks. */
+   virtual const WordsContainer getInput(const BitsContainer &bits, const uint32_t block_index) const final;
+   
+   /* Concatenate hash[i] for i=0,1,2,3,4 to get a block of 128 bits 
+      (20 blocks of 8 bits each) in BIG ENDIAN. */
+   virtual const BytesContainer getOutput() const final;
+   
+   /* States initialized in LITTLE ENDIAN. */
    WordsContainer state = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xC3D2E1F0};
-   
+     
    static uint32_t F(uint32_t x, uint32_t y, uint32_t z);
    static uint32_t G(uint32_t x, uint32_t y, uint32_t z);
    static uint32_t H(uint32_t x, uint32_t y, uint32_t z);

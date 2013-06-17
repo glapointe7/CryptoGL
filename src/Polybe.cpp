@@ -7,11 +7,9 @@ const Polybe::ClassicalType Polybe::encode(const ClassicalType &clear_text)
 {  
    ClassicalType crypted;
    crypted.reserve(clear_text.length() * 2);
-   KeyType key_alpha = getKey();
-   key_alpha.append(alpha);
 
    // Construction de la grille de chiffrement.
-   const Grid grid(getGrid(key_alpha));
+   const Grid grid(getGrid(getKey() + alpha));
 
    // Obtention des coordonnées de chaque lettre dans la grille.
    // Note : on ajoute '1', car on veut rendre le cryptogramme en string.

@@ -6,11 +6,10 @@
 class RC4 : public StreamCipher
 {
 public:
+   explicit RC4(const BytesContainer &key);
    
-   virtual const BytesContainer encode(const BytesContainer &) final;
-   virtual const BytesContainer decode(const BytesContainer &) final;
-   
-   virtual void setKey(const BytesContainer &) final;
+   virtual const BytesContainer encode(const BytesContainer &clear_text) final;
+   virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
    
 private:
    virtual void keySetup() final;

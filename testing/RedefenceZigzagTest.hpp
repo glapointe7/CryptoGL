@@ -35,4 +35,20 @@ TEST_F(RedefenceZigzagTest, decode)
    EXPECT_EQ(clear_text, R->decode("LAUSGAUNLATCNAARIQRMSTPUNPLIIREOILOTA"));
 }
 
+TEST_F(RedefenceZigzagTest, encodeWithOffset)
+{
+   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAM";
+   
+   R->setOffset(2);
+   EXPECT_EQ("NATARAAULLUTCNSARIORLIEOLSTIPQUNIPMAG", R->encode(clear_text));
+}
+
+TEST_F(RedefenceZigzagTest, decodeWithOffset)
+{
+   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAM";
+
+   R->setOffset(2);
+   EXPECT_EQ(clear_text, R->decode("NATARAAULLUTCNSARIORLIEOLSTIPQUNIPMAG"));
+}
+
 #endif
