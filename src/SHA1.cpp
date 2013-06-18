@@ -3,55 +3,55 @@
 
 #include "Tools.hpp"
 
-uint32_t SHA1::F(uint32_t x, uint32_t y, uint32_t z)
+uint32_t SHA1::F(const uint32_t x, const uint32_t y, const uint32_t z)
 {
    return (x & y) | (~x & z);
 }
 
-uint32_t SHA1::G(uint32_t x, uint32_t y, uint32_t z)
+uint32_t SHA1::G(const uint32_t x, const uint32_t y, const uint32_t z)
 {
    return (x & y) | (x & z) | (y & z);
 }
 
-uint32_t SHA1::H(uint32_t x, uint32_t y, uint32_t z)
+uint32_t SHA1::H(const uint32_t x, const uint32_t y, const uint32_t z)
 {
    return x ^ y ^ z;
 }
 
-const HashFunction::BitsContainer SHA1::addPadding(const BitsContainer &bits) const
+const HashFunction::BytesContainer SHA1::appendPadding(const BytesContainer &bytes) const
 {
-   const uint64_t bits_len = bits.size();
-   BitsContainer bits_pad(bits);
-   bits_pad.reserve(bits_len + 576);
+   const uint64_t bytes_len = bytes.size();
+   BytesContainer bytes_pad(bytes);
+   bytes_pad.reserve(bytes_len + 64);
 
-   // Ajout du bit 1 à la fin du message (bits).
-   bits_pad.push_back(1);
+   // Append bit '1' at the end.
+   bytes_pad.push_back(0x80);
 
-   // Ajouter à la fin du message des bits = 0 jusqu'à une longueur de 448 (mod 512). '960 = 512 + 448'
-   const uint32_t bits_pad_len = (960 - (bits_pad.size() & 0x1FF)) & 0x1FF;
-   bits_pad.insert(bits_pad.end(), bits_pad_len, 0);
+   // Ajouter à la fin du message des bits = 0 jusqu'à une longueur de 448 (mod 512). '120 = 64 + 56'
+   const uint8_t bits_pad_len = (120 - (bytes_pad.size() & 0x3F)) & 0x3F;
+   bytes_pad.insert(bytes_pad.end(), bits_pad_len, 0);
 
    // On ajoute les 64 bits de l'entier représentant la longueur initiale de 'bits'.
-   for (char i = 63; i >= 0; --i)
+   for (int8_t i = 56; i >= 0; i -= 8)
    {
-      bits_pad.push_back((bits_len >> i) & 0x1);
+      bytes_pad.push_back(((bytes_len << 3) >> i) & 0xFF);
    }
 
-   return bits_pad;
+   return bytes_pad;
 }
 
 const HashFunction::WordsContainer
-SHA1::getInput(const BitsContainer &bits, const uint32_t block_index) const
+SHA1::getWordBlocks(const BytesContainer &bytes, const uint64_t &block_index) const
 {
    WordsContainer words;
    words.reserve(80);
 
-   for (uint16_t k = 0; k < 512; k += 32)
+   for (uint8_t k = 0; k < 64; k += 4)
    {
       uint32_t word = 0;
-      for (uint8_t j = 0; j < 32; ++j)
+      for (int8_t j = 3; j >= 0; --j)
       {
-         word |= (bits[j + k + block_index] << (31 - j));
+         word |= (bytes[3 - j + k + block_index] << (j << 3));
       }
       words.push_back(word);
    }
@@ -71,9 +71,9 @@ const HashFunction::BytesContainer SHA1::getOutput() const
    output.reserve(20);
    for (uint8_t j = 0; j < 5; ++j)
    {
-      for (int8_t i = 3; i >= 0; --i)
+      for (int8_t i = 24; i >= 0; i -= 8)
       {
-         output.push_back((state[j] >> (i << 3)) & 0xFF);
+         output.push_back((state[j] >> i) & 0xFF);
       }
    }
    
@@ -82,12 +82,12 @@ const HashFunction::BytesContainer SHA1::getOutput() const
 
 const HashFunction::BytesContainer SHA1::encode(const BytesContainer &data)
 {
-   BitsContainer bits(addPadding(getBitsFromData(data)));
-   const uint32_t bits_len = bits.size();
+   BytesContainer bits(appendPadding(data));
+   const uint64_t bits_len = bits.size();
 
-   for (uint32_t i = 0; i < bits_len; i += 512)
+   for (uint64_t i = 0; i < bits_len; i += 64)
    {
-      WordsContainer words = getInput(bits, i);
+      WordsContainer words = getWordBlocks(bits, i);
       WordsContainer hash(state);
       uint32_t f, k;
       for (uint8_t j = 0; j < 80; ++j)

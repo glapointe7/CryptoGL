@@ -14,13 +14,13 @@ public:
    virtual const BytesContainer encode(const BytesContainer &data) final;
 
 private:
-   /* Pad data_bits following the MD5 Padding algorithm. Get a multiple of 512 bits. */
-   virtual const BitsContainer addPadding(const BitsContainer &data_bits) const final;
+   /* Pad data following the MD5 Padding algorithm. Get a multiple of 512 bits. */
+   virtual const BytesContainer appendPadding(const BytesContainer &data) const final;
    
    /* Transform a 512-bits block in 16 LITTLE ENDIAN 32-bits blocks. */
-   virtual const WordsContainer getInput(const BitsContainer &bits, const uint32_t block_index) const final;
+   virtual const WordsContainer getWordBlocks(const BytesContainer &, const uint64_t &) const final;
    
-   /* 16 bytes read low order byte first from state[0] to state[3]. */
+   /* 16 bytes read in little endian from state[0] to state[3]. */
    virtual const BytesContainer getOutput() const final;
    
    static uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z);
@@ -28,12 +28,12 @@ private:
    static uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z);
    static uint32_t I(const uint32_t x, const uint32_t y, const uint32_t z);
 
-   WordsContainer state = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
+   WordsContainer state = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476};
 
-   static const BytesContainer routine;
+   static const BytesContainer left_rotation_table;
 
    /* Constants obtained from the formula k(i) = sin(i + 1) * 2^32 for i = 0,...,63. */
-   static const WordsContainer K;
+   static const WordsContainer sine_magic_numbers;
 };
 
 #endif

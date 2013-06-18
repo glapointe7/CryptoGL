@@ -25,9 +25,8 @@ protected:
 
 TEST_F(MD5Test, encode)
 {
-   const std::string clear_text = "message digest";
-   std::string hash = "f96b697d7cb7938d525a2f31aaf161d0";
-   String::upperCase(hash);
+   const std::string clear_text = "The quick brown fox jumps over the lazy dog";
+   std::string hash = "9E107D9D372BB6826BD81D3542A419D6";
 
    EXPECT_EQ(hash, MD5::hexDigest(S->encode(MD5::getBytesFromString(clear_text))));
 }

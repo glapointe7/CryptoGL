@@ -9,14 +9,11 @@ class HashFunction
 {
 protected:
    typedef std::vector<uint8_t> BytesContainer;
-   typedef std::vector<bool> BitsContainer;
    typedef std::vector<uint32_t> WordsContainer;
    
-   virtual const BitsContainer addPadding(const BitsContainer &) const = 0;
+   virtual const BytesContainer appendPadding(const BytesContainer &) const = 0;
+   virtual const WordsContainer getWordBlocks(const BytesContainer &, const uint64_t &) const = 0;
    virtual const BytesContainer getOutput() const = 0;
-   virtual const WordsContainer getInput(const BitsContainer &bits, const uint32_t block_index) const = 0;
-   
-   static const BitsContainer getBitsFromData(const BytesContainer &data);
    
 public:   
    virtual ~HashFunction() {}

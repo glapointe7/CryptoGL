@@ -6,7 +6,7 @@
 // Transforme les octets en nombres hexadécimaux sous forme d'une string.
 const std::string HashFunction::hexDigest(const BytesContainer &bytes)
 {
-   std::stringstream ss;
+   std::ostringstream ss;
    ss.setf(std::ios::hex, std::ios::basefield);
    ss << std::uppercase;
 
@@ -31,23 +31,6 @@ const std::string HashFunction::getStringFromBytes(const BytesContainer &bytes)
    return std::string(bytes.begin(), bytes.end());
 }
 
-// Retourne un vecteur de bits à partir d'un vecteur d'octets en LITTLE ENDIAN.
-const HashFunction::BitsContainer HashFunction::getBitsFromData(const BytesContainer &data)
-{
-   BitsContainer bits;
-   bits.reserve(data.size() * 8);
-   
-   for(const auto byte : data)
-   {
-      for(char i = 7; i >= 0; --i)
-      {
-         bits.push_back((byte >> i) & 0x1);
-      }
-   }
-   
-   return bits;
-}
-
 const HashFunction::BytesContainer
 HashFunction::getBytesFromHexDigest(const std::string &hex_str)
 {
@@ -58,7 +41,7 @@ HashFunction::getBytesFromHexDigest(const std::string &hex_str)
    for (uint32_t i = 0; i < hex_len; i += 2)
    {
       const std::string hexa = hex_str.substr(i, 2);
-      std::stringstream ss(hexa);
+      std::istringstream ss(hexa);
       ss.setf(std::ios::hex, std::ios::basefield);
       uint16_t x;
       ss >> x;
