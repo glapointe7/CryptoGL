@@ -29,6 +29,7 @@ private:
    static uint32_t I(const uint32_t x, const uint32_t y, const uint32_t z);
 
    WordsContainer state = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476};
+   //WordsContainer state = {0x01234567, 0x89ABCDEF, 0xFEDCBA98, 0x76543210};
 
    static const BytesContainer left_rotation_table;
 

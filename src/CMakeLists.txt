@@ -72,6 +72,10 @@ set(SRC
    BlockCipherStrategy.hpp BlockCipherStrategy.cpp
    Base64.hpp Base64.cpp
    Nihilistes.hpp Nihilistes.cpp
+   Chao.hpp Chao.cpp
+   TwoSquares.hpp TwoSquares.cpp
+   ThreeSquares.hpp ThreeSquares.cpp
+   FourSquares.hpp FourSquares.cpp
 )
 
 # Create libcomponants.a with all the source files provided by SRC.

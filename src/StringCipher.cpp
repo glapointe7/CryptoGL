@@ -99,7 +99,7 @@ void StringCipher::eraseBadCharacters(ClassicalType &text) const
    }), text.end());
 }
 
-void StringCipher::setAlpha(const ClassicalType &alpha)
+void StringCipher::checkAlpha(const ClassicalType &alpha) const
 {
    if (alpha.empty())
    {
@@ -110,7 +110,11 @@ void StringCipher::setAlpha(const ClassicalType &alpha)
    {
       throw MultipleChar("Your alphabet have to contain unique characters.");
    }
+}
 
+void StringCipher::setAlpha(const ClassicalType &alpha)
+{
+   checkAlpha(alpha);
    this->alpha = alpha;
 }
 

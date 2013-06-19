@@ -31,6 +31,7 @@ public:
 protected: 
    const ClassicalType appendChars(const ClassicalType &data, const uint32_t to_add, const char c);
    const char badAlphaFound(const ClassicalType &text) const;
+   void checkAlpha(const ClassicalType &alpha) const;
    
    ClassicalType alpha;
 };

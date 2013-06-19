@@ -4,7 +4,7 @@
 #include "exceptions/EmptyKey.hpp"
 #include "exceptions/BadChar.hpp"
 
-void StringCipherWithStringKey::checkKey(const KeyType &key)
+void StringCipherWithStringKey::checkKey(const KeyType &key) const
 {
    if (key.empty())
    {

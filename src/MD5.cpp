@@ -51,9 +51,9 @@ uint32_t MD5::I(const uint32_t x, const uint32_t y, const uint32_t z)
 
 const HashFunction::BytesContainer MD5::appendPadding(const BytesContainer &data) const
 {
-   const uint64_t bytes_len = data.size();
+   const uint64_t bytes_len = data.size() << 3;
    BytesContainer bits_pad(data);
-   bits_pad.reserve(bytes_len + 64);
+   bits_pad.reserve((bytes_len >> 3) + 64);
 
    // Append a bit '1' at the end.
    bits_pad.push_back(0x80);
@@ -62,17 +62,12 @@ const HashFunction::BytesContainer MD5::appendPadding(const BytesContainer &data
    const uint8_t bits_pad_len = (120 - (bits_pad.size() & 0x3F)) & 0x3F;
    bits_pad.insert(bits_pad.end(), bits_pad_len, 0);
 
-   // Pad with the 64-bit of the initial bits length of data in little-endian. 
-   LittleEndian8Bytes *LE = new LittleEndian8Bytes();
-   LE->transform(bytes_len << 3);
-   const uint64_t little_bits_len = LE->getValue();
-   delete LE;
-   
-   for(int8_t i = 56; i >= 0; i -= 8)
+   // Pad with the 64-bit of the initial bits length of data in little-endian.    
+   for (uint8_t i = 0; i < 64; i += 8)
    {
-      bits_pad.push_back((little_bits_len >> i) & 0xFF);
+      bits_pad.push_back((bytes_len >> i) & 0xFF);
    }
-   
+
    return bits_pad;
 }
 
@@ -80,19 +75,22 @@ const HashFunction::WordsContainer MD5::getWordBlocks(const BytesContainer &byte
 {
    WordsContainer words;
    words.reserve(16);
-   LittleEndian4Bytes *LE = new LittleEndian4Bytes();
-   
+
+   // 32-bit integers in little-endian : bytes[3]bytes[2]bytes[1]bytes[0].
    for (uint8_t k = 0; k < 64; k += 4)
    {
-      for (uint8_t j = 0; j < 4; ++j)
-      {
-         LE->add(bytes[j + k + block_index], j);
-      }
-      
-      words.push_back(LE->getValue());
-      LE->reset();
+      const uint32_t word = bytes[k + block_index]
+              | (bytes[k + block_index + 1] << 8)
+              | (bytes[k + block_index + 2] << 16)
+              | (bytes[k + block_index + 3] << 24);
+      /*const uint32_t word = bytes[k + block_index + 3]
+              | (bytes[k + block_index + 2] << 8)
+              | (bytes[k + block_index + 1] << 16)
+              | (bytes[k + block_index] << 24);*/
+
+      words.push_back(word);
    }
-   
+
    return words;
 }
 
@@ -100,15 +98,16 @@ const HashFunction::BytesContainer MD5::getOutput() const
 {
    BytesContainer output;
    output.reserve(16);
-   
+
+   // [0..7][8..15][16..23][24..31]
    for (uint8_t j = 0; j < 4; ++j)
    {
-      for(uint8_t i = 0; i < 32; i += 8)
-      {
-         output.push_back((state[j] >> i) & 0xFF);
-      }
+      output.push_back(state[j] & 0xFF);
+      output.push_back((state[j] >> 8) & 0xFF);
+      output.push_back((state[j] >> 16) & 0xFF);
+      output.push_back((state[j] >> 24) & 0xFF);
    }
-   
+
    return output;
 }
 
@@ -122,34 +121,34 @@ const HashFunction::BytesContainer MD5::encode(const BytesContainer &data)
    {
       WordsContainer words = getWordBlocks(bytes, i);
       WordsContainer hash(state);
-      uint32_t f, g;
+      uint32_t f, k;
       for (uint8_t j = 0; j < 64; ++j)
       {
          if (j < 16)
          {
             f = F(hash[1], hash[2], hash[3]);
-            g = j;
+            k = j;
          }
          else if (j < 32)
          {
             f = G(hash[1], hash[2], hash[3]);
-            g = ((5 * j) + 1) & 0xF;
+            k = ((5 * j) + 1) & 0xF;
          }
          else if (j < 48)
          {
             f = H(hash[1], hash[2], hash[3]);
-            g = ((3 * j) + 5) & 0xF;
+            k = ((3 * j) + 5) & 0xF;
          }
          else
          {
             f = I(hash[1], hash[2], hash[3]);
-            g = (7 * j) & 0xF;
+            k = (7 * j) & 0xF;
          }
 
          const uint32_t tmp = hash[3];
          hash[3] = hash[2];
          hash[2] = hash[1];
-         hash[1] += rotateLeft(hash[0] + f + words[g] + sine_magic_numbers[j], left_rotation_table[j], 32);
+         hash[1] += rotateLeft(hash[0] + f + words[k] + sine_magic_numbers[j], left_rotation_table[j], 32);
          hash[0] = tmp;
       }
 
@@ -158,6 +157,6 @@ const HashFunction::BytesContainer MD5::encode(const BytesContainer &data)
          state[j] += hash[j];
       }
    }
- 
+
    return getOutput();
 }

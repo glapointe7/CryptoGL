@@ -24,7 +24,7 @@ public:
    //void addKey(const KeyType &new_key);
 
 protected:
-   void checkKey(const KeyType &key);
+   void checkKey(const KeyType &key) const;
    
 private:   
    KeyType key;

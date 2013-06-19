@@ -35,9 +35,10 @@
 #include "../testing/FleissnerTest.hpp"
 #include "../testing/Base64Test.hpp"
 #include "../testing/NihilistesTest.hpp"
-
-//#include "attacks/CaesarAttack.hpp"
-//#include "attacks/TranspositionAttack.hpp"
+#include "../testing/ChaoTest.hpp"
+#include "../testing/TwoSquaresTest.hpp"
+#include "../testing/FourSquaresTest.hpp"
+//#include "../testing/ThreeSquaresTest.hpp"
 
 #include <sys/time.h>
 

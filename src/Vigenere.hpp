@@ -160,7 +160,6 @@ public:
       const uint32_t key_length = my_key.length();
 
       ClassicalType toReturn;
-      //const std::vector<ClassicalType> cipher_numbers(split(cipher_text));
       const std::vector<ClassicalType> cipher_numbers(split(cipher_text));
       toReturn.reserve(cipher_text.length());
 
