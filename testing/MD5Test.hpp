@@ -23,12 +23,19 @@ protected:
    }
 };
 
-TEST_F(MD5Test, encode)
+TEST_F(MD5Test, encodeNormalText)
 {
    const std::string clear_text = "The quick brown fox jumps over the lazy dog";
    std::string hash = "9E107D9D372BB6826BD81D3542A419D6";
 
    EXPECT_EQ(hash, MD5::hexDigest(S->encode(MD5::getBytesFromString(clear_text))));
+}
+
+TEST_F(MD5Test, encodeEmptyText)
+{
+   std::string hash = "D41D8CD98F00B204E9800998ECF8427E";
+
+   EXPECT_EQ(hash, MD5::hexDigest(S->encode(std::vector<uint8_t>(0))));
 }
 
 #endif

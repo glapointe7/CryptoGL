@@ -1,18 +1,14 @@
-/*
- * Source : http://tools.ietf.org/html/rfc1321
- */
-#ifndef MD5_HPP
-#define	MD5_HPP
+
+#ifndef RIPEMD160_HPP
+#define	RIPEMD160_HPP
 
 #include "HashFunction.hpp"
 
-#include <vector>
-
-class MD5 : public HashFunction
+class Ripemd160 : public HashFunction
 {
 public:
    virtual const BytesContainer encode(const BytesContainer &data) final;
-
+  
 private:
    /* Pad data following the MD5 Padding algorithm. Get a multiple of 512 bits. */
    virtual const BytesContainer appendPadding(const BytesContainer &data) const final;
@@ -27,14 +23,16 @@ private:
    static uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z);
    static uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z);
    static uint32_t I(const uint32_t x, const uint32_t y, const uint32_t z);
-
-   /* Initial values. */
-   WordsContainer state = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476};
-
-   static const BytesContainer left_rotation_table;
-
-   /* Constants obtained from the formula k(i) = sin(i + 1) * 2^32 for i = 0,...,63. */
-   static const WordsContainer sine_magic_numbers;
+   static uint32_t J(const uint32_t x, const uint32_t y, const uint32_t z);
+   
+   WordsContainer state = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0};
+   
+   static const WordsContainer magic_numbers1;
+   static const WordsContainer magic_numbers2;
+   static const BytesContainer word_selection1;
+   static const BytesContainer word_selection2;
+   static const BytesContainer left_shift1;
+   static const BytesContainer left_shift2;
 };
 
 #endif

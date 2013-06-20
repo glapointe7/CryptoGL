@@ -55,6 +55,7 @@ set(SRC
 	Hill.hpp Hill.cpp
 	MD5.hpp MD5.cpp
 	SHA1.hpp SHA1.cpp
+   Ripemd160.hpp Ripemd160.cpp
 	Morse.hpp Morse.cpp
 	Playfair.hpp Playfair.cpp
 	Polybe.hpp Polybe.cpp

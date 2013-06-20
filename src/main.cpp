@@ -38,7 +38,7 @@
 #include "../testing/ChaoTest.hpp"
 #include "../testing/TwoSquaresTest.hpp"
 #include "../testing/FourSquaresTest.hpp"
-//#include "../testing/ThreeSquaresTest.hpp"
+#include "../testing/Ripemd160Test.hpp"
 
 #include <sys/time.h>
 
