@@ -48,73 +48,18 @@ uint32_t MD5::I(const uint32_t x, const uint32_t y, const uint32_t z)
    return y ^ (x | ~z);
 }
 
-const HashFunction::BytesContainer MD5::appendPadding(const BytesContainer &data) const
-{
-   const uint64_t bytes_len = data.size() << 3;
-   BytesContainer bytes_pad(data);
-   bytes_pad.reserve((bytes_len >> 3) + 64);
-
-   // Append a bit '1' at the end.
-   bytes_pad.push_back(0x80);
-
-   // Pad with '0' bits at the end of bits_pad until the length is 448 (mod 512).
-   const uint8_t bytes_pad_len = (120 - (bytes_pad.size() & 0x3F)) & 0x3F;
-   bytes_pad.insert(bytes_pad.end(), bytes_pad_len, 0);
-
-   // Append the 64-bit of the initial bits length of data in little-endian.    
-   for (uint8_t i = 0; i < 64; i += 8)
-   {
-      bytes_pad.push_back((bytes_len >> i) & 0xFF);
-   }
-
-   return bytes_pad;
-}
-
-const HashFunction::WordsContainer MD5::getWordBlocks(const BytesContainer &bytes, const uint64_t &block_index) const
-{
-   WordsContainer words;
-   words.reserve(16);
-
-   // 32-bit integers in little-endian : bytes[3]bytes[2]bytes[1]bytes[0].
-   for (uint8_t k = 0; k < 64; k += 4)
-   {
-      const uint32_t word = bytes[k + block_index]
-              | (bytes[k + block_index + 1] << 8)
-              | (bytes[k + block_index + 2] << 16)
-              | (bytes[k + block_index + 3] << 24);
-
-      words.push_back(word);
-   }
-
-   return words;
-}
-
-const HashFunction::BytesContainer MD5::getOutput() const
-{
-   BytesContainer output;
-   output.reserve(16);
-
-   // [0..7][8..15][16..23][24..31]
-   for (uint8_t j = 0; j < 4; ++j)
-   {
-      for(uint8_t i = 0; i < 32; i += 8)
-      {
-         output.push_back((state[j] >> i) & 0xFF);
-      }
-   }
-
-   return output;
-}
-
 const HashFunction::BytesContainer MD5::encode(const BytesContainer &data)
 {
-   BytesContainer bytes(appendPadding(data));
+   BytesContainer bytes(appendPadding(data, Endianness::little_endian));
    const uint64_t bytes_len = bytes.size();
 
+   /* Initial values. */
+   WordsContainer state = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476};
+   
    // Assuming bytes_len is a multiple of 64.
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
-      WordsContainer words = getWordBlocks(bytes, i);
+      WordsContainer words = getLittleEndianWordBlocks(bytes, i);
       WordsContainer hash(state);
       uint32_t f, k;
       for (uint8_t j = 0; j < 64; ++j)
@@ -153,5 +98,5 @@ const HashFunction::BytesContainer MD5::encode(const BytesContainer &data)
       }
    }
 
-   return getOutput();
+   return getLittleEndianOutput(4, state);
 }

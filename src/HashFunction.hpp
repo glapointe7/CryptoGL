@@ -10,10 +10,22 @@ class HashFunction
 protected:
    typedef std::vector<uint8_t> BytesContainer;
    typedef std::vector<uint32_t> WordsContainer;
+   typedef std::vector<uint64_t> DWordsContainer;
    
-   virtual const BytesContainer appendPadding(const BytesContainer &) const = 0;
-   virtual const WordsContainer getWordBlocks(const BytesContainer &, const uint64_t &) const = 0;
-   virtual const BytesContainer getOutput() const = 0;
+   enum class Endianness : uint8_t
+   {
+      little_endian,
+      big_endian_32bits,
+      big_endian_64bits
+   };
+   
+   const BytesContainer appendPadding(const BytesContainer &data, const Endianness Endian) const;
+   
+   static const WordsContainer getLittleEndianWordBlocks(const BytesContainer &bytes, const uint64_t &block_index);
+   static const WordsContainer getBigEndianWordBlocks(const BytesContainer &bytes, const uint64_t &block_index);
+   
+   static const BytesContainer getLittleEndianOutput(const uint16_t max_words, const WordsContainer &hash);
+   static const BytesContainer getBigEndianOutput(const uint16_t max_words, const WordsContainer &hash);
    
 public:   
    virtual ~HashFunction() {}

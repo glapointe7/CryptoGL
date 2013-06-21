@@ -5,7 +5,7 @@
 #define	RIPEMD160TEST_HPP
 
 #include <gtest/gtest.h>
-#include "../src/Ripemd160.hpp"
+#include "../src/Ripemd.hpp"
 
 class Ripemd160Test : public ::testing::Test
 {

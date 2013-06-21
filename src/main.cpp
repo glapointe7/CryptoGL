@@ -38,7 +38,10 @@
 #include "../testing/ChaoTest.hpp"
 #include "../testing/TwoSquaresTest.hpp"
 #include "../testing/FourSquaresTest.hpp"
+#include "../testing/Ripemd128Test.hpp"
 #include "../testing/Ripemd160Test.hpp"
+#include "../testing/Ripemd256Test.hpp"
+#include "../testing/Ripemd320Test.hpp"
 
 #include <sys/time.h>
 
