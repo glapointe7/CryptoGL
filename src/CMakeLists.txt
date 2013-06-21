@@ -54,7 +54,7 @@ set(SRC
 	Hellman.hpp Hellman.cpp
 	Hill.hpp Hill.cpp
 	MD5.hpp MD5.cpp
-	SHA1.hpp SHA1.cpp
+   SHA.hpp SHA.cpp
    Ripemd.hpp Ripemd.cpp
 	Morse.hpp Morse.cpp
 	Playfair.hpp Playfair.cpp

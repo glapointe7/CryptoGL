@@ -18,6 +18,8 @@
 #include "../testing/RedefenceZigzagTest.hpp"
 #include "../testing/WolseleyTest.hpp"
 #include "../testing/SHA1Test.hpp"
+#include "../testing/SHA224Test.hpp"
+#include "../testing/SHA256Test.hpp"
 #include "../testing/HellmanTest.hpp"
 #include "../testing/TranspositionRowsTest.hpp"
 #include "../testing/TranspositionColumnsTest.hpp"
