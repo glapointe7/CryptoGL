@@ -53,7 +53,7 @@ set(SRC
 	Fleissner.hpp Fleissner.cpp
 	Hellman.hpp Hellman.cpp
 	Hill.hpp Hill.cpp
-	MD5.hpp MD5.cpp
+   MessageDigest.hpp MessageDigest.cpp
    SHA.hpp SHA.cpp
    Ripemd.hpp Ripemd.cpp
 	Morse.hpp Morse.cpp

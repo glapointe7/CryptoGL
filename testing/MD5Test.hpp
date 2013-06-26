@@ -5,7 +5,7 @@
 #define	MD5TEST_HPP
 
 #include <gtest/gtest.h>
-#include "../src/MD5.hpp"
+#include "../src/MessageDigest.hpp"
 
 class MD5Test : public ::testing::Test
 {

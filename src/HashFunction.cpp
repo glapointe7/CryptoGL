@@ -8,7 +8,7 @@ HashFunction::appendPadding(const BytesContainer &data, const Endianness Endian)
 {
    const uint64_t bytes_len = data.size() << 3;
    BytesContainer bytes_pad(data);
-   bytes_pad.reserve((bytes_len >> 3) + 64);
+   bytes_pad.reserve((bytes_len >> 3) + 128);
 
    // Append a bit '1' at the end.
    bytes_pad.push_back(0x80);

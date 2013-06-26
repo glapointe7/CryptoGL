@@ -23,7 +23,6 @@ protected:
    
    static const WordsContainer getLittleEndianWordBlocks(const BytesContainer &bytes, const uint64_t &block_index);
    static const WordsContainer getBigEndianWordBlocks(const BytesContainer &bytes, const uint64_t &block_index);
-   
    static const BytesContainer getLittleEndianOutput(const uint16_t max_words, const WordsContainer &hash);
    static const BytesContainer getBigEndianOutput(const uint16_t max_words, const WordsContainer &hash);
    
