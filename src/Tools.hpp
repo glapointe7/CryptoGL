@@ -18,8 +18,8 @@ bool isUniqueChar(const std::string &);
 
 // Manipulation des bits
 const bool getBitAtPosition(const unsigned long pos, const uint64_t &number);
-const uint64_t rotateLeft(const int64_t &value, const uint8_t shift, const uint8_t max);
-const uint64_t rotateRight(const int64_t &value, const uint8_t shift, const uint8_t max);
+const uint64_t rotateLeft(const uint64_t &value, const uint8_t shift, const uint8_t max);
+const uint64_t rotateRight(const uint64_t &value, const uint8_t shift, const uint8_t max);
 const uint64_t getBitsFromTable(const uint64_t &data, const Table &table, const uint64_t from, const uint64_t to);
 const std::vector<uint8_t> getXORedBlock(const std::vector<uint8_t> &block1, const std::vector<uint8_t> &block2);
 

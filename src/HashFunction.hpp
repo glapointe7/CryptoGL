@@ -1,4 +1,7 @@
-
+/*
+ * Template for uint64 et uint32.
+ * Duplicate code : Find a way to include little and big endian.
+ */
 #ifndef HASHFUNCTION_HPP
 #define	HASHFUNCTION_HPP
 

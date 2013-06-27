@@ -122,14 +122,14 @@ const bool getBitAtPosition(const unsigned long pos, const uint64_t &number)
    return (number & (1ull << pos)) > 0;
 }
 
-const uint64_t rotateRight(const int64_t &value, const uint8_t shift, const uint8_t max)
+const uint64_t rotateRight(const uint64_t &value, const uint8_t shift, const uint8_t max)
 {
-   return ((value >> shift) | (value << (max - shift))) & ((1ull << max) - 1);
+   return ((value >> shift) | (value << (max - shift)));
 }
 
 // bits doit être <= 64. 
 
-const uint64_t rotateLeft(const int64_t &value, const uint8_t shift, const uint8_t max)
+const uint64_t rotateLeft(const uint64_t &value, const uint8_t shift, const uint8_t max)
 {
    return ((value << shift) | (value >> (max - shift))) & ((1ull << max) - 1);
 }

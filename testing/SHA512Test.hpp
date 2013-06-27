@@ -21,6 +21,15 @@ protected:
    }
 };
 
+TEST_F(SHA512Test, encodeSimple)
+{
+   const std::string clear_text = "abc";
+   std::string hash = "DDAF35A193617ABACC417349AE20413112E6FA4E89A97EA20A9EEEE64B55D39A2"
+           "192992A274FC1A836BA3C23A3FEEBBD454D4423643CE80E2A9AC94FA54CA49F";
+
+   EXPECT_EQ(hash, SHA512::hexDigest(S->encode(SHA512::getBytesFromString(clear_text))));
+}
+
 TEST_F(SHA512Test, encodeNormalText)
 {
    const std::string clear_text = "The quick brown fox jumps over the lazy dog";
