@@ -1,43 +1,31 @@
 
 #ifndef LITTLEENDIAN_HPP
-#define LITTLEENDIAN_HPP
+#define	LITTLEENDIAN_HPP
 
-template <class T>
-class LittleEndian
+#include "Endianness.hpp"
+
+template <class UInt>
+class LittleEndian : public Endianness<UInt>
 {
 public:
-   virtual ~LittleEndian() {}
-   
-   void add(const uint8_t byte, const uint32_t offset)
+   virtual void toBytes(const UInt &word) final
    {
-      value |= byte << (8 * (offset % mod));
-   }
-   
-   /* Transform an integer (32 of 64 bits) from big endian to little endian. */
-   void transform(const T word)
-   {
-      for(uint8_t i = 0; i < mod; ++i)
+      for(uint8_t i = 0; i < this->int_size << 3; i += 8)
       {
-         value |= ((word >> (i << 3)) & 0xFF) << ((mod - i - 1) << 3);
+         this->bytes[i >> 3] = (word >> i) & 0xFF;
       }
    }
-
-   T getValue() const
+   
+   virtual void toInteger(const typename Endianness<UInt>::BytesContainer &bytes) final
    {
-      return value;
+      for(uint8_t i = 0; i < this->int_size; ++i)
+      {
+         this->value |= (static_cast<UInt>(bytes[i]) << (i << 3));
+      }
    }
-
-   void reset()
-   {
-      value = 0u;
-   }
-
-private:
-   T value = 0u;
-   const uint8_t mod = sizeof(T);
 };
 
-using LittleEndian4Bytes = LittleEndian<uint32_t>;
-using LittleEndian8Bytes = LittleEndian<uint64_t>;
+using LittleEndian32 = LittleEndian<uint32_t>;
+using LittleEndian64 = LittleEndian<uint64_t>;
 
 #endif

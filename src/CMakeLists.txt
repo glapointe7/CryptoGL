@@ -18,7 +18,9 @@ set(SRC
    Matrix.hpp Matrix.cpp
 	ConverterTools.hpp ConverterTools.cpp
    MathematicalTools.hpp MathematicalTools.cpp
-	LittleEndian.hpp
+	Endianness.hpp
+   BigEndian.hpp
+   LittleEndian.hpp
    BlockCipherOperationModes.hpp
 	Tools.hpp Tools.cpp
 	Transposition.hpp Transposition.cpp

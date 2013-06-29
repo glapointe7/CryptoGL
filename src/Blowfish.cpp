@@ -85,13 +85,11 @@ const Blowfish::UInt64Container Blowfish::getKeySchedule()
 
 uint64_t Blowfish::F(const uint64_t &data, const uint64_t &) const
 {
-   BytesContainer V;
-   V.reserve(4);
-
-   V.push_back((data >> 24) & 0xFF);
-   V.push_back((data >> 16) & 0xFF);
-   V.push_back((data >> 8) & 0xFF);
-   V.push_back(data & 0xFF);
+   const uint8_t V[] = {
+      static_cast<uint8_t>((data >> 24) & 0xFF),
+      static_cast<uint8_t>((data >> 16) & 0xFF),
+      static_cast<uint8_t>((data >> 8) & 0xFF),
+      static_cast<uint8_t>(data & 0xFF)};
 
    return (((sbox[0][V[0]] + sbox[1][V[1]]) & 0xFFFFFFFF) ^ (sbox[2][V[2]])) + (sbox[3][V[3]] & 0xFFFFFFFF);
 }

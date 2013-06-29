@@ -32,6 +32,9 @@ protected:
    
    virtual void processFeistelRounds(uint64_t &L, uint64_t &R, const UInt64Container &subkeys, 
            const uint8_t lower_round, const uint8_t rounds, const int8_t is_increasing);
+   
+private:
+    // Tu peux essayer de mettre des "paramètres" ici. S'ils ne change pas pour le même objet, il devrait être ici au lieu de toujours les passer en paramètre.  
 };
 
 #endif

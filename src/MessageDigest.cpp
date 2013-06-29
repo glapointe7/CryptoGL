@@ -2,7 +2,7 @@
 
 #include "Tools.hpp"
 
-const HashFunction::BytesContainer MD2::digits_of_pi = {
+const MessageDigest::BytesContainer MD2::digits_of_pi = {
    0x29, 0x2E, 0x43, 0xC9, 0xA2, 0xD8, 0x7C, 0x01, 0x3D, 0x36, 0x54, 0xA1, 0xEC, 0xF0, 0x06, 0x13,
    0x62, 0xA7, 0x05, 0xF3, 0xC0, 0xC7, 0x73, 0x8C, 0x98, 0x93, 0x2B, 0xD9, 0xBC, 0x4C, 0x82, 0xCA,
    0x1E, 0x9B, 0x57, 0x3C, 0xFD, 0xD4, 0xE0, 0x16, 0x67, 0x42, 0x6F, 0x18, 0x8A, 0x17, 0xE5, 0x12,
@@ -21,26 +21,26 @@ const HashFunction::BytesContainer MD2::digits_of_pi = {
    0x31, 0x44, 0x50, 0xB4, 0x8F, 0xED, 0x1F, 0x1A, 0xDB, 0x99, 0x8D, 0x33, 0x9F, 0x11, 0x83, 0x14
 };
 
-const HashFunction::BytesContainer MD4::left_rotation_table = {
+const MessageDigest::BytesContainer MD4::left_rotation_table = {
    3, 7, 11, 19, 3, 7, 11, 19, 3, 7, 11, 19, 3, 7, 11, 19,
    3, 5, 9, 13, 3, 5, 9, 13, 3, 5, 9, 13, 3, 5, 9, 13,
    3, 9, 11, 15, 3, 9, 11, 15, 3, 9, 11, 15, 3, 9, 11, 15
 };
 
-const HashFunction::BytesContainer MD4::word_indexes = {
+const MessageDigest::BytesContainer MD4::word_indexes = {
    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
    0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15,
    0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15
 };
 
-const HashFunction::BytesContainer MD5::left_rotation_table = {
+const MessageDigest::BytesContainer MD5::left_rotation_table = {
    7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
    5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
    4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
    6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21
 };
 
-const HashFunction::WordsContainer MD5::sine_magic_numbers = {
+const MessageDigest::WordsContainer MD5::sine_magic_numbers = {
    0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
    0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
    0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
@@ -59,7 +59,7 @@ const HashFunction::WordsContainer MD5::sine_magic_numbers = {
    0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391
 };
 
-const HashFunction::BytesContainer MD2::appendPadding(const BytesContainer &data) const
+const MessageDigest::BytesContainer MD2::appendPadding(const BytesContainer &data) const
 {
    const uint64_t bytes_len = data.size();
    BytesContainer bytes_pad(data);
@@ -92,7 +92,7 @@ void MD2::process(const BytesContainer &data, BytesContainer &hash, const uint64
    }
 }
 
-const HashFunction::BytesContainer MD2::encode(const BytesContainer &data)
+const MessageDigest::BytesContainer MD2::encode(const BytesContainer &data)
 {
    const BytesContainer bytes(appendPadding(data));
    BytesContainer hash(48, 0);
@@ -116,9 +116,9 @@ const HashFunction::BytesContainer MD2::encode(const BytesContainer &data)
    return BytesContainer(hash.begin(), hash.begin() + 16);
 }
 
-const HashFunction::BytesContainer MD4::encode(const BytesContainer &data)
+const MessageDigest::BytesContainer MD4::encode(const BytesContainer &data)
 {
-   BytesContainer bytes(appendPadding(data, Endianness::little_endian));
+   BytesContainer bytes(appendPadding(data));
    const uint64_t bytes_len = bytes.size();
 
    /* Initial values. */
@@ -129,7 +129,7 @@ const HashFunction::BytesContainer MD4::encode(const BytesContainer &data)
    // Assuming bytes_len is a multiple of 64.
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
-      WordsContainer words = getLittleEndianWordBlocks(bytes, i);
+      WordsContainer words = getInputBlocks(bytes, i);
       WordsContainer hash(state);
       uint32_t f, k = 0;
       for (uint8_t j = 0; j < 48; ++j)
@@ -162,12 +162,12 @@ const HashFunction::BytesContainer MD4::encode(const BytesContainer &data)
       }
    }
 
-   return getLittleEndianOutput(4, state);
+   return getOutput(4, state);
 }
 
-const HashFunction::BytesContainer MD5::encode(const BytesContainer &data)
+const MessageDigest::BytesContainer MD5::encode(const BytesContainer &data)
 {
-   BytesContainer bytes(appendPadding(data, Endianness::little_endian));
+   BytesContainer bytes(appendPadding(data));
    const uint64_t bytes_len = bytes.size();
 
    /* Initial values. */
@@ -178,7 +178,7 @@ const HashFunction::BytesContainer MD5::encode(const BytesContainer &data)
    // Assuming bytes_len is a multiple of 64.
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
-      WordsContainer words = getLittleEndianWordBlocks(bytes, i);
+      WordsContainer words = getInputBlocks(bytes, i);
       WordsContainer hash(state);
       uint32_t f, k;
       for (uint8_t j = 0; j < 64; ++j)
@@ -217,5 +217,5 @@ const HashFunction::BytesContainer MD5::encode(const BytesContainer &data)
       }
    }
 
-   return getLittleEndianOutput(4, state);
+   return getOutput(4, state);
 }

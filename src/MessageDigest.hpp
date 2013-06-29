@@ -3,12 +3,16 @@
 #define	MESSAGEDIGEST_HPP
 
 #include "HashFunction.hpp"
+#include "LittleEndian.hpp"
 
-class MessageDigest : public HashFunction
+class MessageDigest : public HashFunction<uint32_t, LittleEndian32>
 {
+protected:
+   typedef typename HashFunction<uint32_t, LittleEndian32>::BytesContainer BytesContainer;
+   typedef typename HashFunction<uint32_t, LittleEndian32>::WordsContainer WordsContainer;
+      
 public:
    virtual ~MessageDigest() {}
-   
    virtual const BytesContainer encode(const BytesContainer &data) = 0;
 };
 

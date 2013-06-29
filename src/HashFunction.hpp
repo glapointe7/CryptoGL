@@ -1,33 +1,95 @@
-/*
- * Template for uint64 et uint32.
- * Duplicate code : Find a way to include little and big endian.
- */
+
 #ifndef HASHFUNCTION_HPP
 #define	HASHFUNCTION_HPP
 
 #include <vector>
 #include <string>
+#include <sstream>
 
+template <class UInt, class Endian>
 class HashFunction
 {
 protected:
    typedef std::vector<uint8_t> BytesContainer;
+   typedef std::vector<UInt> UIntContainer;
    typedef std::vector<uint32_t> WordsContainer;
    typedef std::vector<uint64_t> DWordsContainer;
    
-   enum class Endianness : uint8_t
+   virtual const BytesContainer appendPadding(const BytesContainer &data) const
    {
-      little_endian,
-      big_endian_32bits,
-      big_endian_64bits
-   };
+      const uint64_t bytes_len = data.size() << 3;
+      Endian *E = new Endian();
+      const uint8_t UInt_bit_size = E->getIntSize() << 4;
+      const uint8_t rest = E->getIntSize() << 1;
+      BytesContainer bytes_pad(data);
+      bytes_pad.reserve((bytes_len >> 3) + (UInt_bit_size << 1));
+
+      // Append a bit '1' at the end.
+      bytes_pad.push_back(0x80);
+
+      // Pad with '0' bits at the end of bits_pad until the length is 448 (mod 512).
+      const uint8_t bytes_pad_len = ((UInt_bit_size << 1) - rest - (bytes_pad.size() & (UInt_bit_size - 1))) & (UInt_bit_size - 1);
+      bytes_pad.insert(bytes_pad.end(), bytes_pad_len + rest - 8, 0);
+
+      // Append the 64-bit of the initial bits length of data following the endianness.    
+      E->toBytes(bytes_len);
+      const BytesContainer bytes(E->getBytes());
+      bytes_pad.insert(bytes_pad.end(), bytes.begin(), bytes.end());
+      delete E;
+
+      return bytes_pad;
+   }
    
-   const BytesContainer appendPadding(const BytesContainer &data, const Endianness Endian) const;
+   static const UIntContainer getInputBlocks(const BytesContainer &bytes, const uint64_t &block_index)
+   {
+      UIntContainer words;
+      words.reserve(16);
+      
+      Endian *E = new Endian();
+      const uint8_t UInt_size = E->getIntSize();
+
+      for (uint8_t k = 0; k < UInt_size << 4; k += UInt_size)
+      {
+         E->toInteger(BytesContainer(bytes.begin() + k + block_index, bytes.begin() + k + block_index + UInt_size));
+         words.push_back(E->getValue());
+         E->resetValue();
+      }
+      delete E;
+      
+      return words;
+   }
    
-   static const WordsContainer getLittleEndianWordBlocks(const BytesContainer &bytes, const uint64_t &block_index);
-   static const WordsContainer getBigEndianWordBlocks(const BytesContainer &bytes, const uint64_t &block_index);
-   static const BytesContainer getLittleEndianOutput(const uint16_t max_words, const WordsContainer &hash);
-   static const BytesContainer getBigEndianOutput(const uint16_t max_words, const WordsContainer &hash);
+   static const BytesContainer getOutput(const uint8_t max_words, const UIntContainer &hash)
+   {
+      Endian *E = new Endian();
+      const uint8_t UInt_size = E->getIntSize();
+      BytesContainer output;
+      output.reserve(max_words << 2);
+
+      uint16_t max = max_words;
+      if(UInt_size == 8)
+      {
+         max >>= 1;
+      }
+      
+      for (uint8_t j = 0; j < max; ++j)
+      {
+         E->toBytes(hash[j]);
+         const BytesContainer bytes(E->getBytes());
+         output.insert(output.end(), bytes.begin(), bytes.end());
+      }
+      delete E;
+      
+      if (max_words % 2 && UInt_size == 8)
+      {
+         for (uint8_t i = 56; i >= 32; i -= 8)
+         {
+            output.push_back((hash[max] >> i) & 0xFF);
+         }
+      }
+
+      return output;
+   }
    
 public:   
    virtual ~HashFunction() {}
@@ -35,10 +97,50 @@ public:
    virtual const BytesContainer encode(const BytesContainer &) = 0;
    
    /* Get the hexadecimal string from a vector of bytes. */
-   static const std::string hexDigest(const BytesContainer &data);
-   static const BytesContainer getBytesFromString(const std::string &str);
-   static const std::string getStringFromBytes(const BytesContainer &bytes);
-   static const BytesContainer getBytesFromHexDigest(const std::string &hex_str);
+   static const std::string hexDigest(const BytesContainer &bytes)
+   {
+      std::ostringstream ss;
+      ss.setf(std::ios::hex, std::ios::basefield);
+      ss << std::uppercase;
+
+      for (const auto byte : bytes)
+      {
+         ss.fill('0');
+         ss.width(2);
+         ss << static_cast<uint16_t> (byte);
+      }
+
+      return ss.str();
+   }
+   
+   static const BytesContainer getBytesFromString(const std::string &str)
+   {
+      return BytesContainer(str.begin(), str.end());
+   }
+   
+   static const std::string getStringFromBytes(const BytesContainer &bytes)
+   {
+      return std::string(bytes.begin(), bytes.end());
+   }
+   
+   static const BytesContainer getBytesFromHexDigest(const std::string &hex_str)
+   {
+      const uint32_t hex_len = hex_str.length();
+      BytesContainer bytes;
+      bytes.reserve(hex_len >> 1);
+
+      for (uint32_t i = 0; i < hex_len; i += 2)
+      {
+         const std::string hexa = hex_str.substr(i, 2);
+         std::istringstream ss(hexa);
+         ss.setf(std::ios::hex, std::ios::basefield);
+         uint16_t x;
+         ss >> x;
+         bytes.push_back(static_cast<uint8_t> (x));
+      }
+
+      return bytes;
+   }
 };
 
 #endif
