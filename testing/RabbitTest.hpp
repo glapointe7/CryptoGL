@@ -4,6 +4,7 @@
 
 #include <gtest/gtest.h>
 #include "../src/Rabbit.hpp"
+#include "../src/Digest.hpp"
 
 class RabbitTest : public ::testing::Test
 {
@@ -38,7 +39,7 @@ TEST_F(RabbitTest, encode)
 
    const std::vector<uint8_t> clear_data(48, 0);
 
-   EXPECT_EQ(Rabbit::hexDigest(cipher), Rabbit::hexDigest(R->encode(clear_data)));
+   EXPECT_EQ(Digest::hexDigest(cipher), Digest::hexDigest(R->encode(clear_data)));
 }
 
 TEST_F(RabbitTest, decode)
@@ -54,7 +55,7 @@ TEST_F(RabbitTest, decode)
 
    const std::vector<uint8_t> clear_data(48, 0);
 
-   EXPECT_EQ(Rabbit::hexDigest(clear_data), Rabbit::hexDigest(R->decode(cipher)));
+   EXPECT_EQ(Digest::hexDigest(clear_data), Digest::hexDigest(R->decode(cipher)));
 }
 
 #endif

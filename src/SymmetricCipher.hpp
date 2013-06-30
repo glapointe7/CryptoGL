@@ -22,11 +22,6 @@ public:
    static void save(const std::string &filename, const BytesContainer &data);
    static const BytesContainer load(const std::string &filename);
 
-   static const std::string hexDigest(const BytesContainer &bytes);
-   static const BytesContainer getBytesFromString(const std::string &str);
-   static const BytesContainer getBytesFromHexDigest(const std::string &hex_str);
-   static const std::string getStringFromBytes(const BytesContainer &bytes);
-
 protected:   
    BytesContainer key;
 };

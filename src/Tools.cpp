@@ -134,22 +134,18 @@ const uint64_t rotateLeft(const uint64_t &value, const uint8_t shift, const uint
    return ((value << shift) | (value >> (max - shift))) & ((1ull << max) - 1);
 }
 
-// NOTE : Le premier bit correspond au MSB de data, donc 2^63 pour un 64 bits.
-
-const uint64_t getBitsFromTable(const uint64_t &data, const Table &table, const uint64_t from, const uint64_t to)
+const uint64_t getBitsFromTable(const uint64_t &data, const uint8_t *table, const uint8_t from, const uint8_t to)
 {
    uint8_t i = to;
    uint64_t output = 0;
-   for (const auto row : table)
+   
+   for (uint8_t k = 0; k < to; ++k)
    {
-      for (const auto byte : row)
+      --i;
+      // Si le bit à la position byte MSB est 1, alors on le positionne selon i MSB.
+      if ((data >> (from - table[k])) & 0x1)
       {
-         --i;
-         // Si le bit à la position byte MSB est 1, alors on le positionne selon i MSB.
-         if ((data >> (from - byte)) & 0x1)
-         {
-            output |= 1ull << i;
-         }
+         output |= 1ull << i;
       }
    }
 

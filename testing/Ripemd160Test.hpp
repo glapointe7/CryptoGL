@@ -6,6 +6,7 @@
 
 #include <gtest/gtest.h>
 #include "../src/Ripemd.hpp"
+#include "../src/Digest.hpp"
 
 class Ripemd160Test : public ::testing::Test
 {
@@ -28,14 +29,14 @@ TEST_F(Ripemd160Test, encodeNormalText)
    const std::string clear_text = "message digest";
    std::string hash = "5D0689EF49D2FAE572B881B123A85FFA21595F36";
 
-   EXPECT_EQ(hash, Ripemd160::hexDigest(S->encode(Ripemd160::getBytesFromString(clear_text))));
+   EXPECT_EQ(hash, Digest::hexDigest(S->encode(Digest::getBytesFromString(clear_text))));
 }
 
 TEST_F(Ripemd160Test, encodeEmptyText)
 {
    std::string hash = "9C1185A5C5E9FC54612808977EE8F548B2258D31";
 
-   EXPECT_EQ(hash, Ripemd160::hexDigest(S->encode(std::vector<uint8_t>(0))));
+   EXPECT_EQ(hash, Digest::hexDigest(S->encode(std::vector<uint8_t>(0))));
 }
 
 #endif

@@ -30,11 +30,7 @@ public:
    static void save(const std::string &filename, const std::string &data);
    static std::string load(const std::string &filename);
 
-   // Pour obtenir les octets sous forme d'une chaîne hexadécimale.
-   static const std::string hexDigest(const BytesContainer &data);
    static const std::string dwordToString(const UInt64Container &data);
-   static const std::string byteToString(const BytesContainer &data);
-   static const BytesContainer stringToBytes(const std::string &data);
 
 protected:
    UInt64Container public_key;

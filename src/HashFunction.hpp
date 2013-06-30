@@ -1,16 +1,23 @@
 
 #ifndef HASHFUNCTION_HPP
-#define	HASHFUNCTION_HPP
+#define HASHFUNCTION_HPP
 
 #include <vector>
 #include <string>
 #include <sstream>
+#include "Endianness.hpp"
 
 template <class UInt, class Endian>
 class HashFunction
 {
 protected:
    typedef std::vector<uint8_t> BytesContainer;
+      
+public:   
+   virtual ~HashFunction() {}
+   virtual const BytesContainer encode(const BytesContainer &) = 0;
+   
+protected:
    typedef std::vector<UInt> UIntContainer;
    typedef std::vector<uint32_t> WordsContainer;
    typedef std::vector<uint64_t> DWordsContainer;
@@ -89,57 +96,6 @@ protected:
       }
 
       return output;
-   }
-   
-public:   
-   virtual ~HashFunction() {}
-   
-   virtual const BytesContainer encode(const BytesContainer &) = 0;
-   
-   /* Get the hexadecimal string from a vector of bytes. */
-   static const std::string hexDigest(const BytesContainer &bytes)
-   {
-      std::ostringstream ss;
-      ss.setf(std::ios::hex, std::ios::basefield);
-      ss << std::uppercase;
-
-      for (const auto byte : bytes)
-      {
-         ss.fill('0');
-         ss.width(2);
-         ss << static_cast<uint16_t> (byte);
-      }
-
-      return ss.str();
-   }
-   
-   static const BytesContainer getBytesFromString(const std::string &str)
-   {
-      return BytesContainer(str.begin(), str.end());
-   }
-   
-   static const std::string getStringFromBytes(const BytesContainer &bytes)
-   {
-      return std::string(bytes.begin(), bytes.end());
-   }
-   
-   static const BytesContainer getBytesFromHexDigest(const std::string &hex_str)
-   {
-      const uint32_t hex_len = hex_str.length();
-      BytesContainer bytes;
-      bytes.reserve(hex_len >> 1);
-
-      for (uint32_t i = 0; i < hex_len; i += 2)
-      {
-         const std::string hexa = hex_str.substr(i, 2);
-         std::istringstream ss(hexa);
-         ss.setf(std::ios::hex, std::ios::basefield);
-         uint16_t x;
-         ss >> x;
-         bytes.push_back(static_cast<uint8_t> (x));
-      }
-
-      return bytes;
    }
 };
 

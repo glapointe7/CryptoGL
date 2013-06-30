@@ -16,19 +16,38 @@ public:
    virtual const BytesContainer encode(const BytesContainer &data) = 0;
 
 protected:   
-   static uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z);
-   static uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z);
-   static uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z);
-   static uint32_t I(const uint32_t x, const uint32_t y, const uint32_t z);
-   static uint32_t J(const uint32_t x, const uint32_t y, const uint32_t z);
+   inline static uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
+   {
+      return x ^ y ^ z;
+   }
    
-   static const WordsContainer magic_numbers1;
-   static const WordsContainer magic_numbers2;
-   static const WordsContainer magic_numbers_big2;
-   static const BytesContainer word_selection1;
-   static const BytesContainer word_selection2;
-   static const BytesContainer left_shift1;
-   static const BytesContainer left_shift2;
+   inline static uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
+   {
+      return (x & y) | (~x & z);
+   }
+   
+   inline static uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
+   {
+      return (x | ~y) ^ z;
+   }
+   
+   inline static uint32_t I(const uint32_t x, const uint32_t y, const uint32_t z)
+   {
+      return (x & z) | (y & ~z);
+   }
+   
+   inline static uint32_t J(const uint32_t x, const uint32_t y, const uint32_t z)
+   {
+      return x ^ (y | ~z);
+   }
+   
+   static const uint32_t magic_numbers1[5];
+   static const uint32_t magic_numbers2[4];
+   static const uint32_t magic_numbers_big2[5];
+   static const uint8_t word_selection1[80];
+   static const uint8_t word_selection2[80];
+   static const uint8_t left_shift1[80];
+   static const uint8_t left_shift2[80];
 };
 
 class Ripemd128 : public Ripemd

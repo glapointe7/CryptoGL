@@ -4,7 +4,7 @@ cmake_minimum_required (VERSION 2.8)
 set(SRC
    main.cpp
 	Cipher.hpp
-   HashFunction.hpp HashFunction.cpp
+   HashFunction.hpp
 
 	StringCipher.hpp StringCipher.cpp
 	SquareCipher.hpp SquareCipher.cpp
@@ -25,6 +25,7 @@ set(SRC
 	Tools.hpp Tools.cpp
 	Transposition.hpp Transposition.cpp
    String.hpp String.cpp
+   Digest.hpp Digest.cpp
    Random.hpp Random.cpp
 
    exceptions/Exception.hpp

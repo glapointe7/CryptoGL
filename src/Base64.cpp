@@ -1,8 +1,9 @@
 #include "Base64.hpp"
 
 #include "exceptions/BadChar.hpp"
+#include "String.hpp"
 
-const std::string Base64::alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+const std::string Base64::alpha = String::base64_alphabet;
 
 const std::string Base64::encode(const BytesContainer &clear_data)
 {

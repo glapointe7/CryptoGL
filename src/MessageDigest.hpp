@@ -22,7 +22,7 @@ public:
    virtual const BytesContainer encode(const BytesContainer &data) final;
    
 private:
-   static const BytesContainer digits_of_pi;
+   static const uint8_t digits_of_pi[256];
    BytesContainer checksum = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
    
    void process(const BytesContainer &data, BytesContainer &hash, const uint64_t &index);
@@ -35,20 +35,20 @@ public:
    virtual const BytesContainer encode(const BytesContainer &data) final;
    
 private:
-   static const BytesContainer left_rotation_table;
-   static const BytesContainer word_indexes;
+   static const uint8_t left_rotation_table[48];
+   static const uint8_t word_indexes[48];
    
-   static uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
+   inline static uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return (x & y) | (~x & z);
    }
    
-   static uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
+   inline static uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return (x & y) | (x & z) | (y & z);
    }
    
-   static uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
+   inline static uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return x ^ y ^ z;
    }
@@ -60,27 +60,27 @@ public:
    virtual const BytesContainer encode(const BytesContainer &data) final;
    
 private:
-   static const BytesContainer left_rotation_table;
+   static const uint8_t left_rotation_table[64];
 
    /* Constants obtained from the formula k(i) = sin(i + 1) * 2^32 for i = 0,...,63. */
-   static const WordsContainer sine_magic_numbers;
+   static const uint32_t sine_magic_numbers[64];
    
-   static uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
+   inline static uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return (x & y) | (~x & z);
    }
    
-   static uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
+   inline static uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return (x & z) | (y & ~z);
    }
    
-   static uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
+   inline static uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return x ^ y ^ z;
    }
    
-   static uint32_t I(const uint32_t x, const uint32_t y, const uint32_t z)
+   inline static uint32_t I(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return y ^ (x | ~z);
    }

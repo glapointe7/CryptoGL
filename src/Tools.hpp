@@ -16,11 +16,11 @@ const std::vector<uint8_t> getBytes(const std::vector<bool> &bits);
 void eraseChars(std::string &text, const std::string chars);
 bool isUniqueChar(const std::string &);
 
-// Manipulation des bits
+// Manipulation of bits
 const bool getBitAtPosition(const unsigned long pos, const uint64_t &number);
 const uint64_t rotateLeft(const uint64_t &value, const uint8_t shift, const uint8_t max);
 const uint64_t rotateRight(const uint64_t &value, const uint8_t shift, const uint8_t max);
-const uint64_t getBitsFromTable(const uint64_t &data, const Table &table, const uint64_t from, const uint64_t to);
+const uint64_t getBitsFromTable(const uint64_t &data, const uint8_t *table, const uint8_t from, const uint8_t to);
 const std::vector<uint8_t> getXORedBlock(const std::vector<uint8_t> &block1, const std::vector<uint8_t> &block2);
 
 #endif

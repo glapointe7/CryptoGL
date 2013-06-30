@@ -3,6 +3,7 @@
 
 #include <gtest/gtest.h>
 #include "../src/DES.hpp"
+#include "../src/Digest.hpp"
 
 class DESTest : public ::testing::Test
 {
@@ -24,14 +25,14 @@ TEST_F(DESTest, encode)
 {
    const std::vector<uint8_t> clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
    
-   EXPECT_EQ("85E813540F0AB405", DES::hexDigest(D->encode(clear_text)));
+   EXPECT_EQ("85E813540F0AB405", Digest::hexDigest(D->encode(clear_text)));
 }
 
 TEST_F(DESTest, decode)
 {
    const std::vector<uint8_t> clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
    
-   EXPECT_EQ(DES::hexDigest(clear_text), DES::hexDigest(D->decode(DES::getBytesFromHexDigest("85E813540F0AB405"))));
+   EXPECT_EQ(Digest::hexDigest(clear_text), Digest::hexDigest(D->decode(Digest::getBytesFromHexDigest("85E813540F0AB405"))));
 }
 
 #endif

@@ -1,6 +1,6 @@
 /*
  * Constants taken here : http://www.schneier.com/code/constants.txt
- * Blowfish is a network Feistel with 16 rounds.
+ * Blowfish is a Feistel network with 16 rounds.
  */
 #ifndef BOWFISH_HPP
 #define	BOWFISH_HPP
@@ -13,14 +13,12 @@ class Blowfish : public Feistel
 {
 public:
    explicit Blowfish(const BytesContainer &key) : Feistel(OperationModes::ECB) { setKey(key); }
-   explicit Blowfish(const BytesContainer &key, const OperationModes mode) : Feistel(mode) { setKey(key); }
+   Blowfish(const BytesContainer &key, const OperationModes mode) : Feistel(mode) { setKey(key); }
    
    virtual const BytesContainer encode(const BytesContainer &clear_text) final;
    virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
    
 private:
-   typedef std::vector<uint32_t> SBox;
-   
    virtual void setKey(const BytesContainer &key) final;
    virtual const UInt64Container getKeySchedule() final;
    virtual const BytesContainer getOutputBlock(const BytesContainer &data, 
@@ -31,7 +29,7 @@ private:
            const uint8_t lower_round, const uint8_t rounds, const int8_t is_increasing) final;
 
   // Other following constants from the decimals of PI.
-   std::vector<SBox> sbox = {
+   uint32_t sbox[4][256] = {
    {0xd1310ba6, 0x98dfb5ac, 0x2ffd72db, 0xd01adfb7, 0xb8e1afed, 0x6a267e96,
       0xba7c9045, 0xf12c7f99, 0x24a19947, 0xb3916cf7, 0x0801f2e2, 0x858efc16,
       0x636920d8, 0x71574e69, 0xa458fea3, 0xf4933d7e, 0x0d95748f, 0x728eb658,
@@ -214,7 +212,7 @@ private:
       0xb74e6132, 0xce77e25b, 0x578fdfe3, 0x3ac372e6
    }
 };
-   static const UInt64Container P;
+   static const uint32_t P[18];
 };
 
 #endif

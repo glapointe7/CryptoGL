@@ -4,6 +4,7 @@
 
 #include <gtest/gtest.h>
 #include "../src/SHA.hpp"
+#include "../src/Digest.hpp"
 
 class SHA224Test : public ::testing::Test
 {
@@ -26,14 +27,14 @@ TEST_F(SHA224Test, encodeNormalText)
    const std::string clear_text = "The quick brown fox jumps over the lazy dog";
    std::string hash = "730E109BD7A8A32B1CB9D9A09AA2325D2430587DDBC0C38BAD911525";
 
-   EXPECT_EQ(hash, SHA224::hexDigest(S->encode(SHA224::getBytesFromString(clear_text))));
+   EXPECT_EQ(hash, Digest::hexDigest(S->encode(Digest::getBytesFromString(clear_text))));
 }
 
 TEST_F(SHA224Test, encodeEmptyText)
 {
    std::string hash = "D14A028C2A3A2BC9476102BB288234C415A2B01F828EA62AC5B3E42F";
 
-   EXPECT_EQ(hash, SHA224::hexDigest(S->encode(std::vector<uint8_t>(0))));
+   EXPECT_EQ(hash, Digest::hexDigest(S->encode(std::vector<uint8_t>(0))));
 }
 
 #endif

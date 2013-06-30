@@ -21,7 +21,7 @@ public:
    virtual void toBytes(const UInt &word) = 0;
    virtual void toInteger(const BytesContainer &bytes) = 0;
    
-   /* Transform endianness of an integer (32 of 64 bits). */
+   /* Transform endianness of an integer (32 or 64 bits). */
    void transform(const UInt &word)
    {
       for(uint8_t i = 0; i < int_size; ++i)

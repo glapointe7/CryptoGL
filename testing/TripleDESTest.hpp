@@ -4,6 +4,7 @@
 
 #include <gtest/gtest.h>
 #include "../src/TripleDES.hpp"
+#include "../src/Digest.hpp"
 
 class TripleDESTest : public ::testing::Test
 {
@@ -29,7 +30,7 @@ TEST_F(TripleDESTest, encode)
    const std::string clear_text = "The qufck brown fox jump";
    
    EXPECT_EQ("A826FD8CE53B855FCCE21C8112256FE668D5C05DD9B6B900",
-           TripleDES::hexDigest(D->encode(TripleDES::getBytesFromString(clear_text))));
+           Digest::hexDigest(D->encode(Digest::getBytesFromString(clear_text))));
 }
 
 TEST_F(TripleDESTest, decode)
@@ -37,7 +38,7 @@ TEST_F(TripleDESTest, decode)
    const std::string clear_text = "The qufck brown fox jump";
    
    EXPECT_EQ(clear_text,
-           TripleDES::getStringFromBytes(D->decode(TripleDES::getBytesFromHexDigest("A826FD8CE53B855FCCE21C8112256FE668D5C05DD9B6B900"))));
+           Digest::getStringFromBytes(D->decode(Digest::getBytesFromHexDigest("A826FD8CE53B855FCCE21C8112256FE668D5C05DD9B6B900"))));
 }
 
 #endif

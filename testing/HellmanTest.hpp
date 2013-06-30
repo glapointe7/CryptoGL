@@ -3,6 +3,7 @@
 
 #include <gtest/gtest.h>
 #include "../src/Hellman.hpp"
+#include "../src/Digest.hpp"
 
 class HellmanTest : public ::testing::Test
 {
@@ -29,7 +30,7 @@ TEST_F(HellmanTest, encode)
    H->setPrivateKey({1, 2, 4, 9});
    H->setDividend(15);
    H->setModulo(17);
-   EXPECT_EQ(expected, H->encode(Hellman::stringToBytes(clear_text)));
+   EXPECT_EQ(expected, H->encode(Digest::getBytesFromString(clear_text)));
 }
 
 TEST_F(HellmanTest, decode)
@@ -41,7 +42,7 @@ TEST_F(HellmanTest, decode)
    H->setPrivateKey({1, 2, 4, 9});
    H->setDividend(15);
    H->setModulo(17);
-   EXPECT_EQ(clear_text, Hellman::byteToString(H->decode(expected)));
+   EXPECT_EQ(clear_text, Digest::getStringFromBytes(H->decode(expected)));
 }
 
 #endif

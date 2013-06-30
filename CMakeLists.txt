@@ -5,7 +5,7 @@ set (Project_Name Cryptology)
 project (${Project_Name})
 
 #set (CMAKE_CXX_COMPILER             "/usr/clang_3_3/bin/clang++")
-set (CMAKE_CXX_FLAGS                "-Wall -Werror -pedantic-errors -lgtest -pthread -std=c++11")
+set (CMAKE_CXX_FLAGS                "-Winline -Wall -Werror -pedantic-errors -lgtest -pthread -std=c++11")
 
 # Add the source files code (CPP, HPP and the CMakeLists.txt).
 add_subdirectory (src)

@@ -6,6 +6,7 @@
 
 #include <gtest/gtest.h>
 #include "../src/Blowfish.hpp"
+#include "../src/Digest.hpp"
 
 class BlowfishTest : public ::testing::Test
 {
@@ -27,14 +28,14 @@ TEST_F(BlowfishTest, encode)
 {
    const std::vector<uint8_t> clear_text = {0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
    
-   EXPECT_EQ("7D856F9A613063F2", Blowfish::hexDigest(B->encode(clear_text)));
+   EXPECT_EQ("7D856F9A613063F2", Digest::hexDigest(B->encode(clear_text)));
 }
 
 TEST_F(BlowfishTest, decode)
 {
    const std::vector<uint8_t> clear_text = {0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
    
-   EXPECT_EQ(Blowfish::hexDigest(clear_text), Blowfish::hexDigest(B->decode(Blowfish::getBytesFromHexDigest("7D856F9A613063F2"))));
+   EXPECT_EQ(Digest::hexDigest(clear_text), Digest::hexDigest(B->decode(Digest::getBytesFromHexDigest("7D856F9A613063F2"))));
 }
 
 #endif

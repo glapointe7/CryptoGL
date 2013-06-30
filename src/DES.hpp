@@ -32,14 +32,14 @@ private:
    /* Feistel function F. */
    virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
 
-   static const SBox IP;
-   static const SBox IP_inverse;
-   static const SBox E;
-   static const SBox P;
-   static const std::vector<SBox> S;
-   static const SBox PC1;
-   static const SBox PC2;
-   static const BytesContainer rot_table;
+   static const uint8_t IP[64];
+   static const uint8_t IP_inverse[64];
+   static const uint8_t E[48];
+   static const uint8_t P[32];
+   static const uint8_t S[8][4][16];
+   static const uint8_t PC1[56];
+   static const uint8_t PC2[48];
+   static const uint8_t rot_table[16];
 };
 
 #endif

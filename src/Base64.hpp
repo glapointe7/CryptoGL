@@ -5,7 +5,7 @@
  * Source : http://en.wikibooks.org/wiki/Algorithm_Implementation/Miscellaneous/Base64#C.2B.2B
  */
 #include "Cipher.hpp"
-//#include "String.hpp"
+
 #include <vector>
 #include <string>
 
