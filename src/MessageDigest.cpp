@@ -119,8 +119,11 @@ const MessageDigest::BytesContainer MD2::encode(const BytesContainer &data)
 const MessageDigest::BytesContainer MD4::encode(const BytesContainer &data)
 {
    BytesContainer bytes(appendPadding(data));
+   LittleEndian64 *E = new LittleEndian64();
+   appendLength(bytes, data.size() << 3, E);
+   delete E;
+   
    const uint64_t bytes_len = bytes.size();
-
    /* Initial values. */
    WordsContainer state = {
       0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476
@@ -168,8 +171,11 @@ const MessageDigest::BytesContainer MD4::encode(const BytesContainer &data)
 const MessageDigest::BytesContainer MD5::encode(const BytesContainer &data)
 {
    BytesContainer bytes(appendPadding(data));
+   LittleEndian64 *E = new LittleEndian64();
+   appendLength(bytes, data.size() << 3, E);
+   delete E;
+   
    const uint64_t bytes_len = bytes.size();
-
    /* Initial values. */
    WordsContainer state = {
       0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476

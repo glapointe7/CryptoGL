@@ -1,4 +1,5 @@
 #include "SHA.hpp"
+#include "Digest.hpp"
 
 const uint32_t SHA32Bits::round_constants[64] = {
    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -38,8 +39,11 @@ const SHA<uint32_t>::BytesContainer
 SHA32Bits::process(const BytesContainer &data, const uint8_t truncate_to)
 {
    BytesContainer bits(appendPadding(data));
+   BigEndian64 *E = new BigEndian64();
+   appendLength(bits, data.size() << 3, E);
+   delete E;
+   
    const uint64_t bits_len = bits.size();
-
    for (uint64_t i = 0; i < bits_len; i += 64)
    {
       WordsContainer words = getInputBlocks(bits, i);
@@ -69,8 +73,11 @@ const SHA<uint64_t>::BytesContainer
 SHA64Bits::process(const BytesContainer &data, const uint8_t truncate_to)
 {
    BytesContainer bits(appendPadding(data));
+   BigEndian64 *E = new BigEndian64();
+   appendLength(bits, data.size() << 3, E);
+   delete E;
+   
    const uint64_t bits_len = bits.size();
-
    for (uint64_t i = 0; i < bits_len; i += 128)
    {
       DWordsContainer words = getInputBlocks(bits, i);
@@ -106,9 +113,14 @@ void SHA1::extendWords(WordsContainer &words, const uint8_t max_size)
 
 const SHA<uint32_t>::BytesContainer SHA1::encode(const BytesContainer &data)
 {
-   BytesContainer bits(appendPadding(data));
+   BytesContainer bits = appendPadding(data);
+   BigEndian64 *E = new BigEndian64();
+   appendLength(bits, data.size() << 3, E);
+   delete E;
+   //const std::string x = Digest::hexDigest(bits);
+   //const uint32_t y = x.length();
+   
    const uint64_t bits_len = bits.size();
-
    for (uint64_t i = 0; i < bits_len; i += 64)
    {
       WordsContainer words = getInputBlocks(bits, i);

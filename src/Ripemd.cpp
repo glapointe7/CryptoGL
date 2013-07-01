@@ -48,8 +48,11 @@ const uint8_t Ripemd::left_shift2[80] = {
 const Ripemd::BytesContainer Ripemd128::encode(const BytesContainer &data)
 {
    BytesContainer bytes(appendPadding(data));
+   LittleEndian64 *E = new LittleEndian64();
+   appendLength(bytes, data.size() << 3, E);
+   delete E;
+   
    const uint64_t bytes_len = bytes.size();
-
    WordsContainer state = {
       0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476
    };
@@ -117,8 +120,11 @@ const Ripemd::BytesContainer Ripemd128::encode(const BytesContainer &data)
 const Ripemd::BytesContainer Ripemd160::encode(const BytesContainer &data)
 {
    BytesContainer bytes(appendPadding(data));
+   LittleEndian64 *E = new LittleEndian64();
+   appendLength(bytes, data.size() << 3, E);
+   delete E;
+   
    const uint64_t bytes_len = bytes.size();
-
    WordsContainer state = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0};
 
    // Assuming bytes_len is a multiple of 64.
@@ -194,8 +200,11 @@ const Ripemd::BytesContainer Ripemd160::encode(const BytesContainer &data)
 const Ripemd::BytesContainer Ripemd256::encode(const BytesContainer &data)
 {
    BytesContainer bytes(appendPadding(data));
+   LittleEndian64 *E = new LittleEndian64();
+   appendLength(bytes, data.size() << 3, E);
+   delete E;
+   
    const uint64_t bytes_len = bytes.size();
-
    WordsContainer state = {
       0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476,
       0x76543210, 0xFEDCBA98, 0x89ABCDEF, 0x01234567
@@ -276,8 +285,11 @@ const Ripemd::BytesContainer Ripemd256::encode(const BytesContainer &data)
 const Ripemd::BytesContainer Ripemd320::encode(const BytesContainer &data)
 {
    BytesContainer bytes(appendPadding(data));
+   LittleEndian64 *E = new LittleEndian64();
+   appendLength(bytes, data.size() << 3, E);
+   delete E;
+   
    const uint64_t bytes_len = bytes.size();
-
    WordsContainer state = {
       0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0,
       0x76543210, 0xFEDCBA98, 0x89ABCDEF, 0x01234567, 0x3C2D1E0F

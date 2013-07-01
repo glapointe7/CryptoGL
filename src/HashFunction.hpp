@@ -24,12 +24,10 @@ protected:
    
    virtual const BytesContainer appendPadding(const BytesContainer &data) const
    {
-      const uint64_t bytes_len = data.size() << 3;
-      Endian *E = new Endian();
-      const uint8_t UInt_bit_size = E->getIntSize() << 4;
-      const uint8_t rest = E->getIntSize() << 1;
+      const uint8_t UInt_bit_size = sizeof(UInt) << 4;
+      const uint8_t rest = sizeof(UInt) << 1;
       BytesContainer bytes_pad(data);
-      bytes_pad.reserve((bytes_len >> 3) + (UInt_bit_size << 1));
+      bytes_pad.reserve(data.size() + (UInt_bit_size << 1));
 
       // Append a bit '1' at the end.
       bytes_pad.push_back(0x80);
@@ -38,13 +36,16 @@ protected:
       const uint8_t bytes_pad_len = ((UInt_bit_size << 1) - rest - (bytes_pad.size() & (UInt_bit_size - 1))) & (UInt_bit_size - 1);
       bytes_pad.insert(bytes_pad.end(), bytes_pad_len + rest - 8, 0);
 
-      // Append the 64-bit of the initial bits length of data following the endianness.    
-      E->toBytes(bytes_len);
-      const BytesContainer bytes(E->getBytes());
-      bytes_pad.insert(bytes_pad.end(), bytes.begin(), bytes.end());
-      delete E;
-
       return bytes_pad;
+   }
+   
+   /* Append the initial length of the message. */
+   template<class Endian_type>
+   static void appendLength(BytesContainer &bytes, const uint64_t &length, Endian_type *E)
+   {
+      E->toBytes(length);
+      const BytesContainer bytes_pad(E->getBytes());
+      bytes.insert(bytes.end(), bytes_pad.begin(), bytes_pad.end());
    }
    
    static const UIntContainer getInputBlocks(const BytesContainer &bytes, const uint64_t &block_index)
