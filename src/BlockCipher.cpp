@@ -2,14 +2,13 @@
 #include "BlockCipher.hpp"
 
 const BlockCipher::BytesContainer
-BlockCipher::process(const BytesContainer &data, const uint8_t lower_round)
+BlockCipher::process(const BytesContainer &data, const bool to_encode)
 {
    const uint32_t data_len = data.size();
    BytesContainer toReturn;
    toReturn.reserve(data_len);
 
-   // Get all sub-keys.
-   const UInt64Container subkeys = getKeySchedule();
+   generateSubkeys();
    
    // Assuming padding is done, data_len is a multiple of 8 bytes.
    for (uint32_t n = 0; n < data_len; n += 8)
@@ -21,7 +20,7 @@ BlockCipher::process(const BytesContainer &data, const uint8_t lower_round)
       block.reserve(8);
       
       // Decode if lower_round < 0 and apply strategy design to use the correct operation mode.
-      if (lower_round < 0)
+      if (!to_encode)
       {
          block = block_strategy->getClearBlock(data_block, n >> 3);
       }
@@ -31,7 +30,7 @@ BlockCipher::process(const BytesContainer &data, const uint8_t lower_round)
       }
       
       // Get Encode / Decode blocks.
-      const BytesContainer output = getOutputBlock(block, subkeys, lower_round);
+      const BytesContainer output = getOutputBlock(block, to_encode);
       toReturn.insert(toReturn.end(), output.begin(), output.end());
    }
 

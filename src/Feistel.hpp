@@ -16,8 +16,8 @@
 class Feistel : public BlockCipher
 {
 public:
-   Feistel() : BlockCipher(OperationModes::ECB) {}
-   explicit Feistel(const OperationModes mode)  : BlockCipher(mode) {}
+   explicit Feistel(const uint8_t round) : BlockCipher(OperationModes::ECB), rounds(round) {}
+   Feistel(const OperationModes mode, const uint8_t round)  : BlockCipher(mode), rounds(round) {}
    virtual ~Feistel() {}
   
    virtual const BytesContainer encode(const BytesContainer &) = 0;
@@ -25,16 +25,17 @@ public:
 
 protected:
    virtual void setKey(const BytesContainer &) = 0;
-   virtual const UInt64Container getKeySchedule() = 0;
-   virtual uint64_t F(const uint64_t &data, const uint64_t &) const = 0;
-   virtual const BytesContainer getOutputBlock(const BytesContainer &data, 
-           const UInt64Container &subkeys, const uint8_t lower_round) = 0;
+   virtual void generateSubkeys() = 0;
+   virtual const BytesContainer getOutputBlock(const BytesContainer &data, const bool to_encode) = 0;
    
-   virtual void processFeistelRounds(uint64_t &L, uint64_t &R, const UInt64Container &subkeys, 
-           const uint8_t lower_round, const uint8_t rounds, const int8_t is_increasing);
+   virtual uint64_t F(const uint64_t &data, const uint64_t &) const = 0;
+   virtual void encodeRounds(uint64_t &L, uint64_t &R) const;
+   virtual void decodeRounds(uint64_t &L, uint64_t &R) const;
+      
+   const uint8_t rounds;
    
 private:
-    // Tu peux essayer de mettre des "paramètres" ici. S'ils ne change pas pour le même objet, il devrait être ici au lieu de toujours les passer en paramètre.  
+   void processRoundFunction(uint64_t &L, uint64_t &R, const uint8_t round) const;
 };
 
 #endif

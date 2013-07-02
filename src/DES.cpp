@@ -142,7 +142,7 @@ void DES::setKey(const BytesContainer &key)
    this->key = key;
 }
 
-const DES::UInt64Container DES::getKeySchedule()
+void DES::generateSubkeys()
 {
    uint64_t key_bits = 0;
    for (uint8_t i = 0, j = 56; i < 8; ++i, j -= 8)
@@ -161,8 +161,7 @@ const DES::UInt64Container DES::getKeySchedule()
    // On effectue une rotation à gauche de 1 ou 2 bits selon la table rot_table.
    // Ensuite, on concatène K1 et K2, puis on permute les bits selon la table PC2.
    // on effectue l'algorithme 16 fois pour générer les 16 sous-clés de 48 bits chacune.
-   UInt64Container sub_keys;
-   sub_keys.reserve(16);
+   subkeys.reserve(16);
    for (uint8_t i = 0; i < 16; ++i)
    {
       // Rotation à gauche de la partie droite et de la partie gauche.
@@ -174,10 +173,8 @@ const DES::UInt64Container DES::getKeySchedule()
       const uint64_t K = KR | (KL << 28);
 
       // On permute K (56 bits) selon la table PC2 pour obtenir la sous-clé (48 bits).
-      sub_keys.push_back(getBitsFromTable(K, PC2, 56, 48));
+      subkeys.push_back(getBitsFromTable(K, PC2, 56, 48));
    }
-
-   return sub_keys;
 }
 
 // À partir d'un bloc de 48 bits séparé en 8 blocs de 6 bits, on les substitue
@@ -225,8 +222,8 @@ uint64_t DES::F(const uint64_t &data, const uint64_t &subkey) const
    return getBitsFromTable(s_block, P, 32, 32);
 }
 
-const DES::BytesContainer
-DES::getOutputBlock(const BytesContainer &data, const UInt64Container &subkeys, const uint8_t lower_round)
+const DES::BytesContainer 
+DES::getOutputBlock(const BytesContainer &data, const bool to_encode)
 {
    uint64_t value = 0;
    for (uint8_t j = 0, i = 56; j < 8; ++j, i -= 8)
@@ -239,16 +236,15 @@ DES::getOutputBlock(const BytesContainer &data, const UInt64Container &subkeys, 
    const uint64_t ip_data = getBitsFromTable(value, IP, 64, 64);
 
    // Split the 64-bits block in 2 blocks of 32 bits L and R for the 16 Feistel rounds.
-   // Get the 16 sub-keys of 48 bits.
    uint64_t L = (ip_data >> 32) & 0xFFFFFFFF;
    uint64_t R = ip_data & 0xFFFFFFFF;
-   if (lower_round - 15 < 0)
+   if (to_encode)
    {
-      processFeistelRounds(L, R, subkeys, lower_round, 16, 1);
+      encodeRounds(L, R);
    }
    else
    {
-      processFeistelRounds(L, R, subkeys, lower_round, 16, -1);
+      decodeRounds(L, R);
    }
    // On effectue la permutation finale de R16.L16. avec la table IP_inverse.
    const uint64_t RL = (R << 32) | L;
@@ -267,10 +263,10 @@ DES::getOutputBlock(const BytesContainer &data, const UInt64Container &subkeys, 
 const DES::BytesContainer DES::encode(const BytesContainer &clear_text)
 {
    // Pad with 0x00 to get a multiple of 64 bits.
-   return process(addPadding(clear_text, 8, 0), 0);
+   return process(addPadding(clear_text, 8, 0), true);
 }
 
 const DES::BytesContainer DES::decode(const BytesContainer &cipher_text)
 {
-   return process(cipher_text, 15);
+   return process(cipher_text, false);
 }

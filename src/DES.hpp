@@ -13,8 +13,8 @@
 class DES : public Feistel
 {
 public:
-   explicit DES(const BytesContainer &key) : Feistel(OperationModes::ECB) { setKey(key); }
-   explicit DES(const BytesContainer &key, const OperationModes mode) : Feistel(mode) { setKey(key); }
+   explicit DES(const BytesContainer &key) : Feistel(OperationModes::ECB, 16) { setKey(key); }
+   DES(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16) { setKey(key); }
    
    virtual const BytesContainer encode(const BytesContainer &clear_text) final;
    virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
@@ -24,13 +24,10 @@ private:
    typedef std::vector<std::vector<uint8_t> > SBox;
    
    virtual void setKey(const BytesContainer &key) final;
-   virtual const UInt64Container getKeySchedule() final;
-   virtual const BytesContainer getOutputBlock(const BytesContainer &data, 
-           const UInt64Container &subkeys, const uint8_t lower_round) final;
-   uint64_t getSubstitution(const uint64_t &key_mixed) const;
-
-   /* Feistel function F. */
+   virtual void generateSubkeys() final;
    virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
+   virtual const BytesContainer getOutputBlock(const BytesContainer &data, const bool to_encode) final;
+   uint64_t getSubstitution(const uint64_t &key_mixed) const;
 
    static const uint8_t IP[64];
    static const uint8_t IP_inverse[64];

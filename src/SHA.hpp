@@ -18,11 +18,11 @@ protected:
    typedef typename HashFunction<UInt, BigEndian<UInt> >::UIntContainer UIntContainer;
             
 public:
-   explicit SHA(const UIntContainer &state) : IV(state) {}
    virtual ~SHA() {}
    virtual const BytesContainer encode(const BytesContainer &data) = 0;
    
 protected:   
+   explicit SHA(const UIntContainer &state) : IV(state) {}
    virtual const BytesContainer process(const BytesContainer &data, const uint8_t truncate_to) = 0;
    
    /* Extend the 16 words vector to 'max_size' words with specific operations. */
@@ -45,6 +45,16 @@ protected:
       hash[2] = hash[1];
       hash[1] = hash[0];
       hash[0] = tmp1 + tmp2;
+   }
+   
+   /* Sum in IV the hashes vector. */
+   void sumHash(const UIntContainer &hash)
+   {
+      const uint8_t hash_size = hash.size();
+      for (uint8_t j = 0; j < hash_size; ++j)
+      {
+         IV[j] += hash[j];
+      }
    }
 
    inline static UInt maj(const UInt &x, const UInt &y, const UInt &z)
@@ -75,15 +85,15 @@ protected:
 /* Abstract class for SHA algorithm that uses only 32 bits blocks to encode. */
 class SHA32Bits : public SHA<uint32_t>
 {
+public:
+   virtual ~SHA32Bits() {}
+   virtual const BytesContainer encode(const BytesContainer &) = 0;
+   
 protected:
    typedef typename SHA<uint32_t>::WordsContainer WordsContainer;
    
-   virtual const BytesContainer process(const BytesContainer &data, const uint8_t truncate_to) final;
-   
-public:
    explicit SHA32Bits(const WordsContainer &state) : SHA(state) {}
-   virtual ~SHA32Bits() {}
-   virtual const BytesContainer encode(const BytesContainer &) = 0;
+   virtual const BytesContainer process(const BytesContainer &data, const uint8_t truncate_to) final;
    
 private:
    static const uint32_t round_constants[64];
@@ -91,17 +101,17 @@ private:
 
 /* Abstract class for SHA algorithm that uses only 64 bits blocks to encode. */
 class SHA64Bits : public SHA<uint64_t>
-{
+{ 
+public:
+   virtual ~SHA64Bits() {}
+   virtual const BytesContainer encode(const BytesContainer &) = 0;
+
 protected:
    typedef typename SHA<uint64_t>::DWordsContainer DWordsContainer;
    
-   virtual const BytesContainer process(const BytesContainer &data, const uint8_t truncate_to) final;
-   
-public:
    explicit SHA64Bits(const DWordsContainer &state) : SHA(state) {}
-   virtual ~SHA64Bits() {}
-   virtual const BytesContainer encode(const BytesContainer &) = 0;
-   
+   virtual const BytesContainer process(const BytesContainer &data, const uint8_t truncate_to) final;
+  
 private:
    /* Derived from the fractional parts of the cube roots of the first eighty primes. */
    static const uint64_t first_cubic_root_primes[80];

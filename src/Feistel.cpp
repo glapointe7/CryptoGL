@@ -1,14 +1,25 @@
 #include "Feistel.hpp"
 
-void Feistel::processFeistelRounds(uint64_t &L, uint64_t &R, const UInt64Container &subkeys, 
-        const uint8_t lower_round, const uint8_t rounds, const int8_t is_increasing)
+void Feistel::processRoundFunction(uint64_t &L, uint64_t &R, const uint8_t round) const
 {
-   const int8_t upper_round = lower_round + (rounds * is_increasing);
-   for (int8_t round = lower_round; round != upper_round; round += is_increasing)
+   const uint64_t Li = R;
+   const uint64_t Ri = L ^ F(R, subkeys[round]);
+   L = Li;
+   R = Ri;
+}
+
+void Feistel::encodeRounds(uint64_t &L, uint64_t &R) const
+{
+   for (uint8_t i = 0; i < rounds; ++i)
    {
-      const uint64_t Li = R;
-      const uint64_t Ri = L ^ F(R, subkeys[round]);
-      L = Li;
-      R = Ri;
+      processRoundFunction(L, R, i);
+   }
+}
+
+void Feistel::decodeRounds(uint64_t &L, uint64_t &R) const
+{
+   for (int8_t i = rounds - 1; i >= 0; --i)
+   {
+      processRoundFunction(L, R, i);
    }
 }

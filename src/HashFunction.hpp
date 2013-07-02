@@ -39,13 +39,15 @@ protected:
       return bytes_pad;
    }
    
-   /* Append the initial length of the message. */
+   /* Append the initial length of the message after padding. */
    template<class Endian_type>
-   static void appendLength(BytesContainer &bytes, const uint64_t &length, Endian_type *E)
+   static void appendLength(BytesContainer &bytes, const uint64_t &length)
    {
+      Endian_type *E = new Endian_type();
       E->toBytes(length);
       const BytesContainer bytes_pad(E->getBytes());
       bytes.insert(bytes.end(), bytes_pad.begin(), bytes_pad.end());
+      delete E;
    }
    
    static const UIntContainer getInputBlocks(const BytesContainer &bytes, const uint64_t &block_index)

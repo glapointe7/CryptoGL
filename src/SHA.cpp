@@ -1,5 +1,4 @@
 #include "SHA.hpp"
-#include "Digest.hpp"
 
 const uint32_t SHA32Bits::round_constants[64] = {
    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -38,15 +37,13 @@ const uint64_t SHA64Bits::first_cubic_root_primes[80] = {
 const SHA<uint32_t>::BytesContainer
 SHA32Bits::process(const BytesContainer &data, const uint8_t truncate_to)
 {
-   BytesContainer bits(appendPadding(data));
-   BigEndian64 *E = new BigEndian64();
-   appendLength(bits, data.size() << 3, E);
-   delete E;
+   BytesContainer bytes = appendPadding(data);
+   appendLength<BigEndian64>(bytes, data.size() << 3);
    
-   const uint64_t bits_len = bits.size();
+   const uint64_t bits_len = bytes.size();
    for (uint64_t i = 0; i < bits_len; i += 64)
    {
-      WordsContainer words = getInputBlocks(bits, i);
+      WordsContainer words = getInputBlocks(bytes, i);
       words.resize(64);
 
       // Extention of the 32-bit 16 blocks in 64 blocks of 32 bits.
@@ -59,11 +56,7 @@ SHA32Bits::process(const BytesContainer &data, const uint8_t truncate_to)
          const uint32_t tmp2 = A(hash[0], 2, 13, 22) + maj(hash[0], hash[1], hash[2]);
          swapHash(hash, tmp1, tmp2);
       }
-
-      for (uint8_t j = 0; j < 8; ++j)
-      {
-         IV[j] += hash[j];
-      }
+      sumHash(hash);
    }
 
    return getOutput(truncate_to, IV);
@@ -72,18 +65,16 @@ SHA32Bits::process(const BytesContainer &data, const uint8_t truncate_to)
 const SHA<uint64_t>::BytesContainer
 SHA64Bits::process(const BytesContainer &data, const uint8_t truncate_to)
 {
-   BytesContainer bits(appendPadding(data));
-   BigEndian64 *E = new BigEndian64();
-   appendLength(bits, data.size() << 3, E);
-   delete E;
+   BytesContainer bytes = appendPadding(data);
+   appendLength<BigEndian64>(bytes, data.size() << 3);
    
-   const uint64_t bits_len = bits.size();
+   const uint64_t bits_len = bytes.size();
    for (uint64_t i = 0; i < bits_len; i += 128)
    {
-      DWordsContainer words = getInputBlocks(bits, i);
+      DWordsContainer words = getInputBlocks(bytes, i);
       words.resize(80);
 
-      // Extention of the 32-bit 16 blocks in 64 blocks of 32 bits.
+      // Extention of the 32-bit 16 blocks in 80 blocks of 32 bits.
       extendWords(words, 80, {1, 8, 7, 19, 61, 6});
 
       DWordsContainer hash(IV);
@@ -93,11 +84,7 @@ SHA64Bits::process(const BytesContainer &data, const uint8_t truncate_to)
          const uint64_t tmp2 = A(hash[0], 28, 34, 39) + maj(hash[0], hash[1], hash[2]);
          swapHash(hash, tmp1, tmp2);
       }
-
-      for (uint8_t j = 0; j < 8; ++j)
-      {
-         IV[j] += hash[j];
-      }
+      sumHash(hash);
    }
 
    return getOutput(truncate_to, IV);
@@ -113,17 +100,13 @@ void SHA1::extendWords(WordsContainer &words, const uint8_t max_size)
 
 const SHA<uint32_t>::BytesContainer SHA1::encode(const BytesContainer &data)
 {
-   BytesContainer bits = appendPadding(data);
-   BigEndian64 *E = new BigEndian64();
-   appendLength(bits, data.size() << 3, E);
-   delete E;
-   //const std::string x = Digest::hexDigest(bits);
-   //const uint32_t y = x.length();
+   BytesContainer bytes = appendPadding(data);
+   appendLength<BigEndian64>(bytes, data.size() << 3);
    
-   const uint64_t bits_len = bits.size();
+   const uint64_t bits_len = bytes.size();
    for (uint64_t i = 0; i < bits_len; i += 64)
    {
-      WordsContainer words = getInputBlocks(bits, i);
+      WordsContainer words = getInputBlocks(bytes, i);
       words.resize(80);
 
       // Extention of the 32-bits 16 blocks in 80 blocks of 32 bits.
@@ -161,11 +144,7 @@ const SHA<uint32_t>::BytesContainer SHA1::encode(const BytesContainer &data)
          hash[1] = hash[0];
          hash[0] = tmp;
       }
-
-      for (uint8_t j = 0; j < 5; ++j)
-      {
-         IV[j] += hash[j];
-      }
+      sumHash(hash);
    }
 
    return getOutput(5, IV);
@@ -227,14 +206,13 @@ void SHA512_t::buildIV(const BytesContainer &t)
    const BytesContainer answer = S->encode(data);
    delete S;
 
+   // Get the new IV vector.
+   BigEndian64 *BE = new BigEndian64();
    for (uint8_t j = 0; j < 64; j += 8)
    {
-      uint64_t dword = 0;
-      for (uint8_t i = 0; i < 8; ++i)
-      {
-         dword |= static_cast<uint64_t> (answer[i + j]) << ((7 - i) << 3);
-      }
-
-      IV.push_back(dword);
+      BE->toInteger(BytesContainer(answer.begin() + j, answer.begin() + j + 8));
+      IV.push_back(BE->getValue());
+      BE->resetValue();
    }
+   delete BE;
 }
