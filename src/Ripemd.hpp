@@ -5,18 +5,16 @@
 #include "HashFunction.hpp"
 #include "LittleEndian.hpp"
 
-class Ripemd : public HashFunction<uint32_t, LittleEndian32>
+class Ripemd : protected HashFunction<uint32_t, LittleEndian32>
 {
 protected:
    typedef typename HashFunction<uint32_t, LittleEndian32>::BytesContainer BytesContainer;
    typedef typename HashFunction<uint32_t, LittleEndian32>::WordsContainer WordsContainer;
    
-public:
-   virtual ~Ripemd() {}
-   virtual const BytesContainer encode(const BytesContainer &data) = 0;
-
-protected:
    explicit Ripemd(const WordsContainer &state) : IV(state) {}
+   virtual ~Ripemd() {}
+   
+   virtual const BytesContainer encode(const BytesContainer &data) = 0;
    
    inline static uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
    {
@@ -43,6 +41,8 @@ protected:
       return x ^ (y | ~z);
    }
    
+   void process128_256(const WordsContainer &words, WordsContainer &hash1, WordsContainer &hash2, const uint8_t j);
+   void process160_320(const WordsContainer &words, WordsContainer &hash1, WordsContainer &hash2, const uint8_t j);
    void swapHashWithoutRotate(WordsContainer &hash, const uint32_t tmp);
    void swapHashWithRotate(WordsContainer &hash, const uint32_t tmp);
    
@@ -58,14 +58,14 @@ protected:
    static const uint8_t left_shift2[80];
 };
 
-class Ripemd128 : public Ripemd
+class Ripemd128 : private Ripemd
 {
 public:
    Ripemd128() : Ripemd({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476}) {}
    virtual const BytesContainer encode(const BytesContainer &data) final;
 };
 
-class Ripemd160 : public Ripemd
+class Ripemd160 : private Ripemd
 {
 public:
    Ripemd160() : Ripemd({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0}) {}

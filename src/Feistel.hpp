@@ -15,15 +15,14 @@
 
 class Feistel : public BlockCipher
 {
-public:
+protected:
    explicit Feistel(const uint8_t round) : BlockCipher(OperationModes::ECB), rounds(round) {}
    Feistel(const OperationModes mode, const uint8_t round)  : BlockCipher(mode), rounds(round) {}
    virtual ~Feistel() {}
-  
+   
    virtual const BytesContainer encode(const BytesContainer &) = 0;
    virtual const BytesContainer decode(const BytesContainer &) = 0;
-
-protected:
+   
    virtual void setKey(const BytesContainer &) = 0;
    virtual void generateSubkeys() = 0;
    virtual const BytesContainer getOutputBlock(const BytesContainer &data, const bool to_encode) = 0;

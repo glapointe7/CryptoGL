@@ -7,12 +7,11 @@
 template <class ReturnType, class ParamType = ReturnType>
 class Cipher
 {
-public:
+protected:
    typedef ReturnType ReturnTypeT;
    typedef ParamType ParamTypeT;
 
    virtual ~Cipher() {}
-
    virtual const ReturnType encode(const ParamType &) = 0;
    virtual const ParamType decode(const ReturnType &) = 0;
 };

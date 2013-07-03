@@ -11,13 +11,12 @@
 /* Abstract class for all transposition cipher types. */
 class Transposition : public StringCipherWithPermutationKey
 {
-public:
-   virtual const ClassicalType encode(const ClassicalType &) = 0;
-   virtual const ClassicalType decode(const ClassicalType &) = 0;
-
 protected:
    typedef std::vector<ClassicalType> Table;
 
+   virtual const ClassicalType encode(const ClassicalType &) = 0;
+   virtual const ClassicalType decode(const ClassicalType &) = 0;
+   
    virtual const Table createTable(const ClassicalType &data);
    virtual const Table createIncompleteTable(const ClassicalType &data);
    virtual const ClassicalType readPermutedTable(const Table &table);

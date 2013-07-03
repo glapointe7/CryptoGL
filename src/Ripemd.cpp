@@ -62,50 +62,97 @@ void Ripemd::swapHashWithRotate(WordsContainer &hash, const uint32_t tmp)
    hash[1] = tmp;
 }
 
-const Ripemd::BytesContainer Ripemd128::encode(const BytesContainer &data)
+void Ripemd::process128_256(const WordsContainer &words, WordsContainer &hash1, WordsContainer &hash2, const uint8_t j)
+{
+   uint8_t k = 0;
+   uint32_t f1, f2;
+   if (j < 16)
+   {
+      f1 = F(hash1[1], hash1[2], hash1[3]);
+      f2 = I(hash2[1], hash2[2], hash2[3]);
+   }
+   else if (j < 32)
+   {
+      f1 = G(hash1[1], hash1[2], hash1[3]);
+      f2 = H(hash2[1], hash2[2], hash2[3]);
+      k = 1;
+   }
+   else if (j < 48)
+   {
+      f1 = H(hash1[1], hash1[2], hash1[3]);
+      f2 = G(hash2[1], hash2[2], hash2[3]);
+      k = 2;
+   }
+   else
+   {
+      f1 = I(hash1[1], hash1[2], hash1[3]);
+      f2 = F(hash2[1], hash2[2], hash2[3]);
+      k = 3;
+   }
+
+   uint32_t tmp = rotateLeft(hash1[0] + f1 + words[word_selection1[j]] + magic_numbers1[k], left_shift1[j], 32);
+   swapHashWithoutRotate(hash1, tmp);
+
+   tmp = rotateLeft(hash2[0] + f2 + words[word_selection2[j]] + magic_numbers2[k], left_shift2[j], 32);
+   swapHashWithoutRotate(hash2, tmp);
+}
+
+void Ripemd::process160_320(const WordsContainer &words, WordsContainer &hash1, WordsContainer &hash2, const uint8_t j)
+{
+   uint8_t k = 0;
+   uint32_t f1, f2;
+   if (j < 16)
+   {
+      f1 = F(hash1[1], hash1[2], hash1[3]);
+      f2 = J(hash2[1], hash2[2], hash2[3]);
+   }
+   else if (j < 32)
+   {
+      f1 = G(hash1[1], hash1[2], hash1[3]);
+      f2 = I(hash2[1], hash2[2], hash2[3]);
+      k = 1;
+   }
+   else if (j < 48)
+   {
+      f1 = H(hash1[1], hash1[2], hash1[3]);
+      f2 = H(hash2[1], hash2[2], hash2[3]);
+      k = 2;
+   }
+   else if (j < 64)
+   {
+      f1 = I(hash1[1], hash1[2], hash1[3]);
+      f2 = G(hash2[1], hash2[2], hash2[3]);
+      k = 3;
+   }
+   else
+   {
+      f1 = J(hash1[1], hash1[2], hash1[3]);
+      f2 = F(hash2[1], hash2[2], hash2[3]);
+      k = 4;
+   }
+
+   uint32_t tmp = rotateLeft(hash1[0] + f1 + words[word_selection1[j]] + magic_numbers1[k], left_shift1[j], 32) + hash1[4];
+   swapHashWithRotate(hash1, tmp);
+
+   tmp = rotateLeft(hash2[0] + f2 + words[word_selection2[j]] + magic_numbers_big2[k], left_shift2[j], 32) + hash2[4];
+   swapHashWithRotate(hash2, tmp);
+}
+
+const Ripemd::BytesContainer Ripemd128::encode(const BytesContainer & data)
 {
    BytesContainer bytes(appendPadding(data));
    appendLength<LittleEndian64>(bytes, data.size() << 3);
-   
+
    WordsContainer states(IV);
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
       const WordsContainer words = getInputBlocks(bytes, i);
       WordsContainer hash1(states), hash2(states);
-      uint32_t f1, f2;
-      uint8_t k = 0;
+
       for (uint8_t j = 0; j < 64; ++j)
       {
-         if (j < 16)
-         {
-            f1 = F(hash1[1], hash1[2], hash1[3]);
-            f2 = I(hash2[1], hash2[2], hash2[3]);
-         }
-         else if (j < 32)
-         {
-            f1 = G(hash1[1], hash1[2], hash1[3]);
-            f2 = H(hash2[1], hash2[2], hash2[3]);
-            k = 1;
-         }
-         else if (j < 48)
-         {
-            f1 = H(hash1[1], hash1[2], hash1[3]);
-            f2 = G(hash2[1], hash2[2], hash2[3]);
-            k = 2;
-         }
-         else
-         {
-            f1 = I(hash1[1], hash1[2], hash1[3]);
-            f2 = F(hash2[1], hash2[2], hash2[3]);
-            k = 3;
-         }
-
-         uint32_t tmp = rotateLeft(hash1[0] + f1 + words[word_selection1[j]] + magic_numbers1[k], left_shift1[j], 32);
-         swapHashWithoutRotate(hash1, tmp);
-
-         tmp = rotateLeft(hash2[0] + f2 + words[word_selection2[j]] + magic_numbers2[k], left_shift2[j], 32);
-         swapHashWithoutRotate(hash2, tmp);
+         process128_256(words, hash1, hash2, j);
       }
 
       const uint32_t tmp = states[1] + hash1[2] + hash2[3];
@@ -118,56 +165,21 @@ const Ripemd::BytesContainer Ripemd128::encode(const BytesContainer &data)
    return getOutput(4, states);
 }
 
-const Ripemd::BytesContainer Ripemd160::encode(const BytesContainer &data)
+const Ripemd::BytesContainer Ripemd160::encode(const BytesContainer & data)
 {
    BytesContainer bytes(appendPadding(data));
    appendLength<LittleEndian64>(bytes, data.size() << 3);
-   
+
    WordsContainer states(IV);
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
       const WordsContainer words = getInputBlocks(bytes, i);
       WordsContainer hash1(states), hash2(states);
-      uint32_t f1, f2;
-      uint8_t k = 0;
+      
       for (uint8_t j = 0; j < 80; ++j)
       {
-         if (j < 16)
-         {
-            f1 = F(hash1[1], hash1[2], hash1[3]);
-            f2 = J(hash2[1], hash2[2], hash2[3]);
-         }
-         else if (j < 32)
-         {
-            f1 = G(hash1[1], hash1[2], hash1[3]);
-            f2 = I(hash2[1], hash2[2], hash2[3]);
-            k = 1;
-         }
-         else if (j < 48)
-         {
-            f1 = H(hash1[1], hash1[2], hash1[3]);
-            f2 = H(hash2[1], hash2[2], hash2[3]);
-            k = 2;
-         }
-         else if (j < 64)
-         {
-            f1 = I(hash1[1], hash1[2], hash1[3]);
-            f2 = G(hash2[1], hash2[2], hash2[3]);
-            k = 3;
-         }
-         else
-         {
-            f1 = J(hash1[1], hash1[2], hash1[3]);
-            f2 = F(hash2[1], hash2[2], hash2[3]);
-            k = 4;
-         }
-
-         uint32_t tmp = rotateLeft(hash1[0] + f1 + words[word_selection1[j]] + magic_numbers1[k], left_shift1[j], 32) + hash1[4];
-         swapHashWithRotate(hash1, tmp);
-
-         tmp = rotateLeft(hash2[0] + f2 + words[word_selection2[j]] + magic_numbers_big2[k], left_shift2[j], 32) + hash2[4];
-         swapHashWithRotate(hash2, tmp);
+         process160_320(words, hash1, hash2, j);
       }
 
       const uint32_t tmp = states[1] + hash1[2] + hash2[3];
@@ -181,50 +193,21 @@ const Ripemd::BytesContainer Ripemd160::encode(const BytesContainer &data)
    return getOutput(5, states);
 }
 
-const Ripemd::BytesContainer Ripemd256::encode(const BytesContainer &data)
+const Ripemd::BytesContainer Ripemd256::encode(const BytesContainer & data)
 {
    BytesContainer bytes(appendPadding(data));
    appendLength<LittleEndian64>(bytes, data.size() << 3);
-   
+
    WordsContainer states(IV);
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
       const WordsContainer words = getInputBlocks(bytes, i);
       WordsContainer hash1(states.begin(), states.begin() + 4), hash2(states.begin() + 4, states.end());
-      uint32_t f1, f2;
-      uint8_t k = 0;
+
       for (uint8_t j = 0; j < 64; ++j)
       {
-         if (j < 16)
-         {
-            f1 = F(hash1[1], hash1[2], hash1[3]);
-            f2 = I(hash2[1], hash2[2], hash2[3]);
-         }
-         else if (j < 32)
-         {
-            f1 = G(hash1[1], hash1[2], hash1[3]);
-            f2 = H(hash2[1], hash2[2], hash2[3]);
-            k = 1;
-         }
-         else if (j < 48)
-         {
-            f1 = H(hash1[1], hash1[2], hash1[3]);
-            f2 = G(hash2[1], hash2[2], hash2[3]);
-            k = 2;
-         }
-         else
-         {
-            f1 = I(hash1[1], hash1[2], hash1[3]);
-            f2 = F(hash2[1], hash2[2], hash2[3]);
-            k = 3;
-         }
-
-         uint32_t tmp = rotateLeft(hash1[0] + f1 + words[word_selection1[j]] + magic_numbers1[k], left_shift1[j], 32);
-         swapHashWithoutRotate(hash1, tmp);
-
-         tmp = rotateLeft(hash2[0] + f2 + words[word_selection2[j]] + magic_numbers2[k], left_shift2[j], 32);
-         swapHashWithoutRotate(hash2, tmp);
+         process128_256(words, hash1, hash2, j);
 
          switch (j)
          {
@@ -249,11 +232,11 @@ const Ripemd::BytesContainer Ripemd256::encode(const BytesContainer &data)
    return getOutput(8, states);
 }
 
-const Ripemd::BytesContainer Ripemd320::encode(const BytesContainer &data)
+const Ripemd::BytesContainer Ripemd320::encode(const BytesContainer & data)
 {
    BytesContainer bytes(appendPadding(data));
    appendLength<LittleEndian64>(bytes, data.size() << 3);
-   
+
    WordsContainer states(IV);
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += 64)
@@ -261,45 +244,9 @@ const Ripemd::BytesContainer Ripemd320::encode(const BytesContainer &data)
       const WordsContainer words = getInputBlocks(bytes, i);
       WordsContainer hash1(states.begin(), states.begin() + 5), hash2(states.begin() + 5, states.end());
 
-      uint32_t f1, f2;
-      uint8_t k = 0;
       for (uint8_t j = 0; j < 80; ++j)
       {
-         if (j < 16)
-         {
-            f1 = F(hash1[1], hash1[2], hash1[3]);
-            f2 = J(hash2[1], hash2[2], hash2[3]);
-         }
-         else if (j < 32)
-         {
-            f1 = G(hash1[1], hash1[2], hash1[3]);
-            f2 = I(hash2[1], hash2[2], hash2[3]);
-            k = 1;
-         }
-         else if (j < 48)
-         {
-            f1 = H(hash1[1], hash1[2], hash1[3]);
-            f2 = H(hash2[1], hash2[2], hash2[3]);
-            k = 2;
-         }
-         else if(j < 64)
-         {
-            f1 = I(hash1[1], hash1[2], hash1[3]);
-            f2 = G(hash2[1], hash2[2], hash2[3]);
-            k = 3;
-         }
-         else
-         {
-            f1 = J(hash1[1], hash1[2], hash1[3]);
-            f2 = F(hash2[1], hash2[2], hash2[3]);
-            k = 4;
-         }
-
-         uint32_t tmp = rotateLeft(hash1[0] + f1 + words[word_selection1[j]] + magic_numbers1[k], left_shift1[j], 32) + hash1[4];
-         swapHashWithRotate(hash1, tmp);
-
-         tmp = rotateLeft(hash2[0] + f2 + words[word_selection2[j]] + magic_numbers_big2[k], left_shift2[j], 32) + hash2[4];
-         swapHashWithRotate(hash2, tmp);
+         process160_320(words, hash1, hash2, j);
 
          switch (j)
          {

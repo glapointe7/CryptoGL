@@ -12,15 +12,12 @@ class HashFunction
 {
 protected:
    typedef std::vector<uint8_t> BytesContainer;
-      
-public:   
-   virtual ~HashFunction() {}
-   virtual const BytesContainer encode(const BytesContainer &) = 0;
-   
-protected:
    typedef std::vector<UInt> UIntContainer;
    typedef std::vector<uint32_t> WordsContainer;
    typedef std::vector<uint64_t> DWordsContainer;
+   
+   virtual ~HashFunction() {}
+   virtual const BytesContainer encode(const BytesContainer &) = 0;
    
    virtual const BytesContainer appendPadding(const BytesContainer &data) const
    {

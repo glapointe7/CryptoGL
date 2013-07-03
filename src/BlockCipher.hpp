@@ -8,18 +8,17 @@
 #include "BlockCipherStrategy.hpp"
 
 class BlockCipher : public SymmetricCipher
-{  
-public:   
+{     
+protected:
+   typedef std::vector<uint32_t> UInt32Container;
+   typedef std::vector<uint64_t> UInt64Container;
+   
    explicit BlockCipher(const OperationModes mode)
       : block_strategy(BlockCipherStrategyFactory::createBlockCipherStrategy(mode)) {}
    virtual ~BlockCipher() { delete block_strategy; }
    
    virtual const BytesContainer encode(const BytesContainer &) = 0;
    virtual const BytesContainer decode(const BytesContainer &) = 0;
-   
-protected:
-   typedef std::vector<uint32_t> UInt32Container;
-   typedef std::vector<uint64_t> UInt64Container;
    
    virtual void setKey(const BytesContainer &) = 0;
    virtual void generateSubkeys() = 0;

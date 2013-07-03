@@ -13,16 +13,14 @@
 template <class UInt>
 class SHA : public HashFunction<UInt, BigEndian<UInt> >
 {
-protected:
+protected:   
    typedef typename HashFunction<UInt, BigEndian<UInt> >::BytesContainer BytesContainer;
    typedef typename HashFunction<UInt, BigEndian<UInt> >::UIntContainer UIntContainer;
-            
-public:
-   virtual ~SHA() {}
-   virtual const BytesContainer encode(const BytesContainer &data) = 0;
    
-protected:   
    explicit SHA(const UIntContainer &state) : IV(state) {}
+   virtual ~SHA() {}
+   
+   virtual const BytesContainer encode(const BytesContainer &data) = 0;
    virtual const BytesContainer process(const BytesContainer &data, const uint8_t truncate_to) = 0;
    
    /* Extend the 16 words vector to 'max_size' words with specific operations. */
