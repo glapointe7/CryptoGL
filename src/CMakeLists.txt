@@ -53,6 +53,7 @@ set(SRC
 	Delastelle.hpp Delastelle.cpp
 	DES.hpp DES.cpp
    TripleDES.hpp TripleDES.cpp
+   AES.hpp AES.cpp
 	Fleissner.hpp Fleissner.cpp
 	Hellman.hpp Hellman.cpp
 	Hill.hpp Hill.cpp

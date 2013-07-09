@@ -50,6 +50,7 @@
 #include "../testing/Ripemd160Test.hpp"
 #include "../testing/Ripemd256Test.hpp"
 #include "../testing/Ripemd320Test.hpp"
+#include "../testing/AESTest.hpp"
 
 #include <sys/time.h>
 

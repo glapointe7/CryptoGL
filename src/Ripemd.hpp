@@ -5,7 +5,7 @@
 #include "HashFunction.hpp"
 #include "LittleEndian.hpp"
 
-class Ripemd : protected HashFunction<uint32_t, LittleEndian32>
+class Ripemd : public HashFunction<uint32_t, LittleEndian32>
 {
 protected:
    typedef typename HashFunction<uint32_t, LittleEndian32>::BytesContainer BytesContainer;
@@ -58,7 +58,7 @@ protected:
    static const uint8_t left_shift2[80];
 };
 
-class Ripemd128 : private Ripemd
+class Ripemd128 : public Ripemd
 {
 public:
    Ripemd128() : Ripemd({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476}) {}

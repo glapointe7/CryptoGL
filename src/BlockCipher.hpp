@@ -25,7 +25,7 @@ protected:
    virtual const BytesContainer getOutputBlock(const BytesContainer &data, const bool to_encode) = 0;
    
    /* Process general encoding / decoding for block ciphers. */
-   const BytesContainer process(const BytesContainer &data, const bool to_encode);
+   const BytesContainer process(const BytesContainer &data, const uint8_t block_len, const bool to_encode);
    
    /* Pad 'data' with 'block_length' values given by 'fill_with'. */
    static const BytesContainer addPadding(const BytesContainer &data, const uint32_t block_length, const uint8_t fill_with);

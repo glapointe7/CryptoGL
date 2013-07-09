@@ -263,10 +263,10 @@ DES::getOutputBlock(const BytesContainer &data, const bool to_encode)
 const DES::BytesContainer DES::encode(const BytesContainer &clear_text)
 {
    // Pad with 0x00 to get a multiple of 64 bits.
-   return process(addPadding(clear_text, 8, 0), true);
+   return process(addPadding(clear_text, 8, 0), 8, true);
 }
 
 const DES::BytesContainer DES::decode(const BytesContainer &cipher_text)
 {
-   return process(cipher_text, false);
+   return process(cipher_text, 8, false);
 }
