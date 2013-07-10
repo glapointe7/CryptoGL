@@ -47,15 +47,16 @@ protected:
       delete E;
    }
    
-   static const UIntContainer getInputBlocks(const BytesContainer &bytes, const uint64_t &block_index)
+   static const UIntContainer getInputBlocks(const BytesContainer &bytes, const uint64_t &block_index, const uint8_t block_to_reserve)
    {
       UIntContainer words;
-      words.reserve(16);
+      words.reserve(block_to_reserve);
       
       Endian *E = new Endian();
       const uint8_t UInt_size = E->getIntSize();
+      const uint8_t block_size = UInt_size * block_to_reserve;
 
-      for (uint8_t k = 0; k < UInt_size << 4; k += UInt_size)
+      for (uint8_t k = 0; k < block_size; k += UInt_size)
       {
          E->toInteger(BytesContainer(bytes.begin() + k + block_index, bytes.begin() + k + block_index + UInt_size));
          words.push_back(E->getValue());
@@ -85,15 +86,14 @@ protected:
          const BytesContainer bytes(E->getBytes());
          output.insert(output.end(), bytes.begin(), bytes.end());
       }
-      delete E;
       
       if (max_words % 2 && UInt_size == 8)
       {
-         for (uint8_t i = 56; i >= 32; i -= 8)
-         {
-            output.push_back((hash[max] >> i) & 0xFF);
-         }
+         E->toBytes(hash[max]);
+         const BytesContainer bytes(E->getBytes());
+         output.insert(output.end(), bytes.begin(), bytes.begin() + 4);
       }
+      delete E;
 
       return output;
    }

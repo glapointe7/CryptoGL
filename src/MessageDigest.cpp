@@ -130,7 +130,7 @@ const MessageDigest::BytesContainer MD4::encode(const BytesContainer &data)
    // Assuming bytes_len is a multiple of 64.
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
-      WordsContainer words = getInputBlocks(bytes, i);
+      const WordsContainer words = getInputBlocks(bytes, i, 16);
       WordsContainer hash(state);
       uint32_t f, k = 0;
       for (uint8_t j = 0; j < 48; ++j)
@@ -180,7 +180,7 @@ const MessageDigest::BytesContainer MD5::encode(const BytesContainer &data)
    // Assuming bytes_len is a multiple of 64.
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
-      WordsContainer words = getInputBlocks(bytes, i);
+      const WordsContainer words = getInputBlocks(bytes, i, 16);
       WordsContainer hash(state);
       uint32_t f, k;
       for (uint8_t j = 0; j < 64; ++j)

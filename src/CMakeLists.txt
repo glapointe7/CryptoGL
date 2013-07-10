@@ -60,6 +60,7 @@ set(SRC
    MessageDigest.hpp MessageDigest.cpp
    SHA.hpp SHA.cpp
    Ripemd.hpp Ripemd.cpp
+   Tiger.hpp Tiger.cpp
 	Morse.hpp Morse.cpp
 	Playfair.hpp Playfair.cpp
 	Polybe.hpp Polybe.cpp

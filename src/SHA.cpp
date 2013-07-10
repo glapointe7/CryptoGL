@@ -43,7 +43,7 @@ SHA32Bits::process(const BytesContainer &data, const uint8_t truncate_to)
    const uint64_t bits_len = bytes.size();
    for (uint64_t i = 0; i < bits_len; i += 64)
    {
-      WordsContainer words = getInputBlocks(bytes, i);
+      WordsContainer words = getInputBlocks(bytes, i, 16);
       words.resize(64);
 
       // Extention of the 32-bit 16 blocks in 64 blocks of 32 bits.
@@ -71,7 +71,7 @@ SHA64Bits::process(const BytesContainer &data, const uint8_t truncate_to)
    const uint64_t bits_len = bytes.size();
    for (uint64_t i = 0; i < bits_len; i += 128)
    {
-      DWordsContainer words = getInputBlocks(bytes, i);
+      DWordsContainer words = getInputBlocks(bytes, i, 16);
       words.resize(80);
 
       // Extention of the 32-bit 16 blocks in 80 blocks of 32 bits.
@@ -106,7 +106,7 @@ const SHA<uint32_t>::BytesContainer SHA1::encode(const BytesContainer &data)
    const uint64_t bits_len = bytes.size();
    for (uint64_t i = 0; i < bits_len; i += 64)
    {
-      WordsContainer words = getInputBlocks(bytes, i);
+      WordsContainer words = getInputBlocks(bytes, i, 16);
       words.resize(80);
 
       // Extention of the 32-bits 16 blocks in 80 blocks of 32 bits.
