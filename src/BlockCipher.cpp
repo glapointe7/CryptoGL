@@ -2,18 +2,49 @@
 #include "BlockCipher.hpp"
 
 const BlockCipher::BytesContainer
+BlockCipher::processEncode(const BytesContainer &data, const uint8_t block_len)
+{
+   const uint32_t data_len = data.size();
+   BytesContainer toReturn;
+   toReturn.reserve(data_len);
+   
+   generateSubkeys();
+   
+   // Assuming padding is done, data_len is a multiple of 8 bytes.
+   for (uint32_t n = 0; n < data_len; n += block_len)
+   {
+      const BytesContainer data_block(data.begin() + n, data.begin() + n + block_len);
+      
+      BytesContainer block;
+      block.reserve(block_len);
+      block = block_strategy->getCipherBlock(data_block, n >> 3);
+      
+      const BytesContainer output = getOutputBlock(block, true);
+      toReturn.insert(toReturn.end(), output.begin(), output.end());
+   }
+   
+   return toReturn;
+}
+
+const BlockCipher::BytesContainer
 BlockCipher::process(const BytesContainer &data, const uint8_t block_len, const bool to_encode)
 {
    const uint32_t data_len = data.size();
    BytesContainer toReturn;
    toReturn.reserve(data_len);
 
-   generateSubkeys();
+   if(to_encode)
+   {
+      generateSubkeys();
+   }
+   else
+   {
+      generateInverseSubkeys();
+   }
    
    // Assuming padding is done, data_len is a multiple of 8 bytes.
    for (uint32_t n = 0; n < data_len; n += block_len)
    {
-      // Get 64-bits data block.
       const BytesContainer data_block(data.begin() + n, data.begin() + n + block_len);
       
       BytesContainer block;
@@ -48,4 +79,9 @@ BlockCipher::addPadding(const BytesContainer &data, const uint32_t block_length,
    }
    
    return full_data;
+}
+
+void BlockCipher::generateInverseSubkeys()
+{
+   generateSubkeys();
 }

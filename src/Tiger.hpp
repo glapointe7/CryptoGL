@@ -1,9 +1,10 @@
-
+/*
+ * Source : http://www.cs.technion.ac.il/~biham/Reports/Tiger/
+ */
 #ifndef TIGER_HPP
 #define	TIGER_HPP
 
 #include "HashFunction.hpp"
-#include "BigEndian.hpp"
 #include "LittleEndian.hpp"
 
 class Tiger : public HashFunction<uint64_t, LittleEndian64>

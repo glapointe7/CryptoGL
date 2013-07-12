@@ -13,4 +13,8 @@ uint64_t getLegendreSymbol(const uint64_t &x, const uint64_t &e, const uint64_t 
 bool isPerfectSquare(const uint32_t value);
 uint8_t getByteSqrt(const uint8_t sqr);
 
+uint16_t addShort(const uint32_t a, const uint32_t b);
+uint16_t multiplyShort(const uint16_t a, const uint16_t b);
+uint16_t inverseMultiplyShort(const uint16_t value);
+
 #endif

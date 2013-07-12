@@ -54,6 +54,7 @@ set(SRC
 	DES.hpp DES.cpp
    TripleDES.hpp TripleDES.cpp
    AES.hpp AES.cpp
+   IDEA.hpp IDEA.cpp
 	Fleissner.hpp Fleissner.cpp
 	Hellman.hpp Hellman.cpp
 	Hill.hpp Hill.cpp

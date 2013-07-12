@@ -13,7 +13,6 @@ class AES : public BlockCipher
 public:
    explicit AES(const BytesContainer &key) : BlockCipher(OperationModes::ECB) { setKey(key); }
    AES(const BytesContainer &key, const OperationModes mode) : BlockCipher(mode) { setKey(key); }
-   virtual ~AES() {}
    
    virtual const BytesContainer encode(const BytesContainer &clear_text) final;
    virtual const BytesContainer decode(const BytesContainer &cipher_text) final;

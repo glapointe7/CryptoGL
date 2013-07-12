@@ -14,12 +14,12 @@ uint32_t GCD(uint32_t a, uint32_t b)
    return GCD(b, a % b);
 }
 
-// Calcule l'inverse de a modulo n dans Z_b.
-// Theorem of Bézout : a*u + b*v = 1. v is the inverse to find.
+/* Calculate the inverse of a modulo b in Z_b.
+Theorem of Bézout : a*u + b*v = 1. v is the inverse to find. */
 
 int32_t getModInverse(int32_t a, const int32_t b)
 {
-   // If a and n are coprimes, then a^-1 exists in Z_b.
+   // If a and b are coprimes, then a^-1 exists in Z_b.
    int32_t v = 0;
    if (GCD(a, b) == 1)
    {
@@ -44,6 +44,7 @@ int32_t getModInverse(int32_t a, const int32_t b)
    return v;
 }
 
+/* Check if a sequence is a super increasing set. */
 bool isSuperIncresing(const std::vector<uint64_t> &sequence)
 {
    uint64_t sum = 0;
@@ -66,7 +67,7 @@ bool isSuperIncresing(const std::vector<uint64_t> &sequence)
 uint64_t getLegendreSymbol(const uint64_t &x, const uint64_t &e, const uint64_t &n)
 {
    uint64_t a = 1;
-   unsigned char e_size = sizeof(e);
+   unsigned char e_size = sizeof (e);
    for (char i = e_size; i >= 0; --i)
    {
       a = (a * a) % n;
@@ -94,7 +95,7 @@ bool isPerfectSquare(const uint32_t value)
       const uint32_t t = static_cast<uint32_t> (floor(sqrt(static_cast<double> (value)) + 0.5));
       return value == t * t;
    }
-   
+
    return false;
 }
 
@@ -119,4 +120,62 @@ uint8_t getByteSqrt(const uint8_t sqr)
    });
 
    return byte_squares.find(sqr)->second;
+}
+
+uint16_t addShort(const uint32_t a, const uint32_t b)
+{
+   return static_cast<uint16_t>((a + b) & 0xFFFF);
+}
+
+/* Multiply a by b modulo 2^16 + 1. */
+uint16_t multiplyShort(const uint16_t a, const uint16_t b)
+{
+   const uint32_t ab = a * b;
+   if (ab != 0)
+   {
+      const uint16_t lo = ab & 0xFFFF;
+      const uint16_t hi = (ab >> 16) & 0xFFFF;
+      return (lo - hi) + (lo < hi ? 1 : 0);
+   }
+   
+   if (a != 0)
+   {
+      return 1 - a;
+   }
+      
+   return 1 - b;
+}
+
+uint16_t inverseMultiplyShort(const uint16_t value)
+{
+   /* 0 and 1 are self-inverse */
+   if (value <= 1)
+   {
+      return value; 
+   }
+   
+   uint16_t t1 = 0x10001 / value; 
+   uint16_t y = 0x10001 % value;
+   if (y == 1)
+   {
+      return (1 - t1) & 0xFFFF;
+   }
+   
+   uint16_t x = value;
+   uint16_t t0 = 1;
+   do
+   {
+      uint16_t q = x / y;
+      x %= y;
+      t0 += q * t1;
+      if (x == 1)
+      {
+         return t0;
+      }
+      q = y / x;
+      y %= x;
+      t1 += q * t0;
+   } while (y != 1);
+   
+   return (1 - t1) & 0xFFFF;
 }
