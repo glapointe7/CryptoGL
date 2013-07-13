@@ -24,8 +24,8 @@ private:
    virtual const BytesContainer getOutputBlock(const BytesContainer &data, const bool to_encode) final;
    
    virtual uint64_t F(const uint64_t &data, const uint64_t &) const final;
-   virtual void encodeRounds(uint64_t &L, uint64_t &R) const final;
-   virtual void decodeRounds(uint64_t &L, uint64_t &R) const final;
+   virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
+   virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
 
   // Other following constants from the decimals of PI.
    uint32_t sbox[4][256] = {

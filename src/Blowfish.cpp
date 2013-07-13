@@ -21,7 +21,7 @@ void Blowfish::setKey(const BytesContainer &key)
 
 // Process the Feistel algorithm modified for the blowfish algorithm.
 
-void Blowfish::encodeRounds(uint64_t &L, uint64_t &R) const
+void Blowfish::encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
 {
    uint8_t i;
    for (i = 0; i != rounds; i += 2)
@@ -39,7 +39,7 @@ void Blowfish::encodeRounds(uint64_t &L, uint64_t &R) const
    R = temp;
 }
 
-void Blowfish::decodeRounds(uint64_t &L, uint64_t &R) const
+void Blowfish::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
 {
    for (uint8_t i = rounds + 1; i != 1; i -= 2)
    {
@@ -76,7 +76,7 @@ void Blowfish::generateSubkeys()
    uint64_t R = 0;
    for (uint8_t i = 0; i < 18; i += 2)
    {
-      encodeRounds(L, R);
+      encodeFeistelRounds(L, R, i);
       subkeys[i] = L;
       subkeys[i + 1] = R;
    }
@@ -85,7 +85,7 @@ void Blowfish::generateSubkeys()
    {
       for (uint16_t j = 0; j < 256; j += 2)
       {
-         encodeRounds(L, R);
+         encodeFeistelRounds(L, R, j);
          sbox[i][j] = L;
          sbox[i][j + 1] = R;
       }
@@ -120,11 +120,11 @@ Blowfish::getOutputBlock(const BytesContainer &data, const bool to_encode)
    uint64_t R = value & 0xFFFFFFFF;
    if (to_encode)
    {
-      encodeRounds(L, R);
+      encodeFeistelRounds(L, R, 0);
    }
    else
    {
-      decodeRounds(L, R);
+      decodeFeistelRounds(L, R, 0);
    }
 
    const uint64_t RL = (L << 32) | R;

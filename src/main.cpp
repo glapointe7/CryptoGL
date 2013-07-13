@@ -53,6 +53,7 @@
 #include "../testing/AESTest.hpp"
 #include "../testing/TigerTest.hpp"
 #include "../testing/IDEATest.hpp"
+#include "../testing/SkipjackTest.hpp"
 
 #include <sys/time.h>
 

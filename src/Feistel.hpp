@@ -28,13 +28,10 @@ protected:
    virtual const BytesContainer getOutputBlock(const BytesContainer &data, const bool to_encode) = 0;
    
    virtual uint64_t F(const uint64_t &data, const uint64_t &) const = 0;
-   virtual void encodeRounds(uint64_t &L, uint64_t &R) const;
-   virtual void decodeRounds(uint64_t &L, uint64_t &R) const;
-      
-   const uint8_t rounds;
+   virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const = 0;
+   virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const = 0;
    
-private:
-   void processRoundFunction(uint64_t &L, uint64_t &R, const uint8_t round) const;
+   const uint8_t rounds;
 };
 
 #endif

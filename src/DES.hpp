@@ -25,8 +25,12 @@ private:
    
    virtual void setKey(const BytesContainer &key) final;
    virtual void generateSubkeys() final;
-   virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
    virtual const BytesContainer getOutputBlock(const BytesContainer &data, const bool to_encode) final;
+   
+   virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
+   virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
+   virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
+   
    uint64_t getSubstitution(const uint64_t &key_mixed) const;
 
    static const uint8_t IP[64];

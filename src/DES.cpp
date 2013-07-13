@@ -222,6 +222,28 @@ uint64_t DES::F(const uint64_t &data, const uint64_t &subkey) const
    return getBitsFromTable(s_block, P, 32, 32);
 }
 
+void DES::encodeFeistelRounds(uint64_t& L, uint64_t& R, const uint8_t round) const
+{
+   for (uint8_t i = 0; i < rounds; ++i)
+   {
+      const uint64_t Li = R;
+      const uint64_t Ri = L ^ F(R, subkeys[i]);
+      L = Li;
+      R = Ri;
+   }
+}
+
+void DES::decodeFeistelRounds(uint64_t& L, uint64_t& R, const uint8_t) const
+{
+   for (int8_t i = rounds - 1; i >= 0; --i)
+   {
+      const uint64_t Li = R;
+      const uint64_t Ri = L ^ F(R, subkeys[i]);
+      L = Li;
+      R = Ri;
+   }
+}
+
 const DES::BytesContainer 
 DES::getOutputBlock(const BytesContainer &data, const bool to_encode)
 {
@@ -240,11 +262,11 @@ DES::getOutputBlock(const BytesContainer &data, const bool to_encode)
    uint64_t R = ip_data & 0xFFFFFFFF;
    if (to_encode)
    {
-      encodeRounds(L, R);
+      encodeFeistelRounds(L, R, 0);
    }
    else
    {
-      decodeRounds(L, R);
+      decodeFeistelRounds(L, R, 0);
    }
    // On effectue la permutation finale de R16.L16. avec la table IP_inverse.
    const uint64_t RL = (R << 32) | L;

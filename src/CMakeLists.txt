@@ -55,6 +55,7 @@ set(SRC
    TripleDES.hpp TripleDES.cpp
    AES.hpp AES.cpp
    IDEA.hpp IDEA.cpp
+   Skipjack.hpp Skipjack.cpp
 	Fleissner.hpp Fleissner.cpp
 	Hellman.hpp Hellman.cpp
 	Hill.hpp Hill.cpp
@@ -75,7 +76,7 @@ set(SRC
    Blowfish.hpp Blowfish.cpp
    MonoalphabeticSubstitution.hpp MonoalphabeticSubstitution.cpp
    BlockCipher.hpp BlockCipher.cpp
-   Feistel.hpp Feistel.cpp
+   Feistel.hpp
    BlockCipherStrategy.hpp BlockCipherStrategy.cpp
    Base64.hpp Base64.cpp
    Nihilistes.hpp Nihilistes.cpp
