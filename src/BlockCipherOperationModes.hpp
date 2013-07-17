@@ -10,9 +10,6 @@
  * CBC : C_i = encode(P_i ^ C_i-1) with IV = C_0.
  *       P_i = decode(C_i) ^ C_i-1 with IV = C_0.
  * 
- * PCBC: C_i = encode(P_i ^ P_i-1 ^ C_i) with IV = C_0 ^ P_0.
- *       P_i = decode(C_i) ^ P_i-1 ^ C_i with IV = C_0 ^ P_0.
- * 
  * CFB : C_i = encode(C_i-1) ^ P_i with IV = C_0.
  *       P_i = encode(C_i-1) ^ C_i ^ C_i with IV = C_0.
  * 
@@ -26,8 +23,7 @@ enum class OperationModes : uint8_t
 {
    ECB,     // electronic codebook
    CBC,     // Cipher-block chaining
-   //PCBC,    // Propagating cipher-block chaining
-   //CFB,     // Cipher feedback
+   //CFB     // Cipher feedback
    //OFB,     // Output feedback
    //CTR      // Counter
 };

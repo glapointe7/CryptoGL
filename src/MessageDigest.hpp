@@ -11,6 +11,7 @@ protected:
    typedef typename HashFunction<uint32_t, LittleEndian32>::BytesContainer BytesContainer;
    typedef typename HashFunction<uint32_t, LittleEndian32>::WordsContainer WordsContainer;
    
+   explicit MessageDigest(const uint8_t in_block_length) : HashFunction(in_block_length) {}
    virtual ~MessageDigest() {}
    virtual const BytesContainer encode(const BytesContainer &data) = 0;
 };
@@ -18,6 +19,7 @@ protected:
 class MD2 : public MessageDigest
 {
 public:
+   MD2() : MessageDigest(16) {}
    virtual const BytesContainer encode(const BytesContainer &data) final;
    
 private:
@@ -31,6 +33,7 @@ private:
 class MD4 : public MessageDigest
 {
 public:
+   MD4() : MessageDigest(64) {}
    virtual const BytesContainer encode(const BytesContainer &data) final;
    
 private:
@@ -56,6 +59,7 @@ private:
 class MD5 : public MessageDigest
 {
 public:
+   MD5() : MessageDigest(64) {}
    virtual const BytesContainer encode(const BytesContainer &data) final;
    
 private:

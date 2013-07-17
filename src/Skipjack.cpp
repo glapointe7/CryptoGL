@@ -150,10 +150,10 @@ const Skipjack::BytesContainer Skipjack::getOutputBlock(const BytesContainer &bl
 
 const Skipjack::BytesContainer Skipjack::encode(const BytesContainer &clear_text)
 {
-   return process(addPadding(clear_text, 8, 0), 8, true);
+   return processEncoding(clear_text);
 }
 
 const Skipjack::BytesContainer Skipjack::decode(const BytesContainer &cipher_text)
 {
-   return process(cipher_text, 8, false);
+   return processDecoding(cipher_text);
 }

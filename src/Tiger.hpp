@@ -13,6 +13,7 @@ protected:
    typedef typename HashFunction<uint64_t, LittleEndian64>::BytesContainer BytesContainer;
    typedef typename HashFunction<uint64_t, LittleEndian64>::DWordsContainer DWordsContainer;
    
+   Tiger() : HashFunction(64) {}
    virtual ~Tiger() {}
    virtual const BytesContainer encode(const BytesContainer &data) = 0;
    const BytesContainer appendPadding(const BytesContainer &data) const;

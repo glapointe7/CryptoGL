@@ -11,7 +11,7 @@ protected:
    typedef typename HashFunction<uint32_t, LittleEndian32>::BytesContainer BytesContainer;
    typedef typename HashFunction<uint32_t, LittleEndian32>::WordsContainer WordsContainer;
    
-   explicit Ripemd(const WordsContainer &state) : IV(state) {}
+   explicit Ripemd(const WordsContainer &state) : HashFunction(64), IV(state) {}
    virtual ~Ripemd() {}
    
    virtual const BytesContainer encode(const BytesContainer &data) = 0;

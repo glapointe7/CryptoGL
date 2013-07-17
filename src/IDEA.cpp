@@ -114,10 +114,10 @@ const IDEA::BytesContainer IDEA::getOutputBlock(const BytesContainer &block, con
 
 const IDEA::BytesContainer IDEA::encode(const BytesContainer &clear_text)
 {
-   return process(addPadding(clear_text, 8, 0), 8, true);
+   return processEncoding(clear_text);
 }
 
 const IDEA::BytesContainer IDEA::decode(const BytesContainer &cipher_text)
 {
-   return process(cipher_text, 8, false);
+   return processDecoding(cipher_text);
 }

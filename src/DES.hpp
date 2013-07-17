@@ -13,8 +13,8 @@
 class DES : public Feistel
 {
 public:
-   explicit DES(const BytesContainer &key) : Feistel(OperationModes::ECB, 16) { setKey(key); }
-   DES(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16) { setKey(key); }
+   explicit DES(const BytesContainer &key) : Feistel(OperationModes::ECB, 16, 8) { setKey(key); }
+   DES(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16, 8) { setKey(key); }
    
    virtual const BytesContainer encode(const BytesContainer &clear_text) final;
    virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
@@ -32,7 +32,7 @@ private:
    virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
    
    uint64_t getSubstitution(const uint64_t &key_mixed) const;
-
+   
    static const uint8_t IP[64];
    static const uint8_t IP_inverse[64];
    static const uint8_t E[48];

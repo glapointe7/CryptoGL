@@ -48,4 +48,15 @@ TEST_F(SHA512Test, encodeEmptyText)
    EXPECT_EQ(hash, Digest::hexDigest(S->encode(std::vector<uint8_t>(0))));
 }
 
+TEST_F(SHA512Test, encodeHMACText)
+{
+   const std::string clear_text = "Hi There";
+   const std::vector<uint8_t> key = {0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 
+      0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B};
+   std::string hash = "87AA7CDEA5EF619D4FF0B4241A1D6CB02379F4E2CE4EC2787AD0B30545E1"
+      "7CDEDAA833B7D6B8A702038B274EAEA3F4E4BE9D914EEB61F1702E696C203A126854";
+
+   EXPECT_EQ(hash, Digest::hexDigest(S->hmacEncode(key, Digest::getBytesFromString(clear_text))));
+}
+
 #endif

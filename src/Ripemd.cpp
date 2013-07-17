@@ -147,7 +147,7 @@ const Ripemd::BytesContainer Ripemd128::encode(const BytesContainer & data)
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
-      const WordsContainer words = getInputBlocks(bytes, i, 16);
+      const WordsContainer words = getInputBlocks(bytes, i);
       WordsContainer hash1(states), hash2(states);
 
       for (uint8_t j = 0; j < 64; ++j)
@@ -174,7 +174,7 @@ const Ripemd::BytesContainer Ripemd160::encode(const BytesContainer & data)
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
-      const WordsContainer words = getInputBlocks(bytes, i, 16);
+      const WordsContainer words = getInputBlocks(bytes, i);
       WordsContainer hash1(states), hash2(states);
       
       for (uint8_t j = 0; j < 80; ++j)
@@ -202,7 +202,7 @@ const Ripemd::BytesContainer Ripemd256::encode(const BytesContainer & data)
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
-      const WordsContainer words = getInputBlocks(bytes, i, 16);
+      const WordsContainer words = getInputBlocks(bytes, i);
       WordsContainer hash1(states.begin(), states.begin() + 4), hash2(states.begin() + 4, states.end());
 
       for (uint8_t j = 0; j < 64; ++j)
@@ -241,7 +241,7 @@ const Ripemd::BytesContainer Ripemd320::encode(const BytesContainer & data)
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
-      const WordsContainer words = getInputBlocks(bytes, i, 16);
+      const WordsContainer words = getInputBlocks(bytes, i);
       WordsContainer hash1(states.begin(), states.begin() + 5), hash2(states.begin() + 5, states.end());
 
       for (uint8_t j = 0; j < 80; ++j)

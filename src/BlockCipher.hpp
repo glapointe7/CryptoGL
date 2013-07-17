@@ -13,8 +13,9 @@ protected:
    typedef std::vector<uint32_t> UInt32Container;
    typedef std::vector<uint64_t> UInt64Container;
    
-   explicit BlockCipher(const OperationModes mode)
-      : block_strategy(BlockCipherStrategyFactory::createBlockCipherStrategy(mode)) {}
+   BlockCipher(const OperationModes mode, const uint8_t block_length)
+      : block_strategy(BlockCipherStrategyFactory::createBlockCipherStrategy(mode)),
+        input_block_length(block_length) {}
    virtual ~BlockCipher() { delete block_strategy; }
    
    virtual const BytesContainer encode(const BytesContainer &) = 0;
@@ -25,16 +26,18 @@ protected:
    virtual void generateInverseSubkeys();
    
    virtual const BytesContainer getOutputBlock(const BytesContainer &data, const bool to_encode) = 0;
-   //virtual const BytesContainer getDecodedOutputBlock(const BytesContainer &data);
+   //virtual const BytesContainer getDecodedBlock(const BytesContainer &data);
+   //virtual const BytesContainer getEncodedBlock(const BytesContainer &data);
    
    /* Process general encoding / decoding for block ciphers. */
-   const BytesContainer process(const BytesContainer &data, const uint8_t block_len, const bool to_encode);
-   const BytesContainer processEncode(const BytesContainer &data, const uint8_t block_len);
+   const BytesContainer processEncoding(const BytesContainer &data);
+   const BytesContainer processDecoding(const BytesContainer &data);
    
-   /* Pad 'data' with 'block_length' values given by 'fill_with'. */
-   static const BytesContainer addPadding(const BytesContainer &data, const uint32_t block_length, const uint8_t fill_with);
+   /* Pad 'data' with 'input_block_length' values given by 'fill_with'. */
+   const BytesContainer appendPadding(const BytesContainer &data, const uint8_t fill_with) const;
 
    BlockCipherStrategy *block_strategy;
+   const uint8_t input_block_length;
    UInt64Container subkeys;
 };
 

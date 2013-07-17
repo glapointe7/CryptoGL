@@ -388,10 +388,10 @@ const AES::BytesContainer AES::getOutputBlock(const BytesContainer &block, const
 
 const AES::BytesContainer AES::encode(const BytesContainer &clear_text)
 {
-   return process(addPadding(clear_text, 16, 0), 16, true);
+   return processEncoding(clear_text);
 }
 
 const AES::BytesContainer AES::decode(const BytesContainer &cipher_text)
 {
-   return process(cipher_text, 16, false);
+   return processDecoding(cipher_text);
 }

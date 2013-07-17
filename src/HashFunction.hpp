@@ -1,10 +1,12 @@
-
+/*
+ * HMAC source : http://tools.ietf.org/html/rfc2104
+ */
 #ifndef HASHFUNCTION_HPP
 #define HASHFUNCTION_HPP
 
 #include <vector>
 #include <string>
-#include <sstream>
+
 #include "Endianness.hpp"
 
 template <class UInt, class Endian>
@@ -16,9 +18,14 @@ protected:
    typedef std::vector<uint32_t> WordsContainer;
    typedef std::vector<uint64_t> DWordsContainer;
    
+   explicit HashFunction(const uint8_t in_block_length) : in_block_length(in_block_length) {}
    virtual ~HashFunction() {}
-   virtual const BytesContainer encode(const BytesContainer &) = 0;
    
+   /* Input block length in bytes for a hash function. */
+   const uint8_t in_block_length;
+   
+   virtual const BytesContainer encode(const BytesContainer &) = 0;
+     
    virtual const BytesContainer appendPadding(const BytesContainer &data) const
    {
       const uint8_t UInt_bit_size = sizeof(UInt) << 4;
@@ -47,16 +54,15 @@ protected:
       delete E;
    }
    
-   static const UIntContainer getInputBlocks(const BytesContainer &bytes, const uint64_t &block_index, const uint8_t block_to_reserve)
-   {
-      UIntContainer words;
-      words.reserve(block_to_reserve);
-      
+   const UIntContainer getInputBlocks(const BytesContainer &bytes, const uint64_t &block_index) const
+   {      
       Endian *E = new Endian();
       const uint8_t UInt_size = E->getIntSize();
-      const uint8_t block_size = UInt_size * block_to_reserve;
+      //const uint8_t block_size = UInt_size * block_to_reserve;
 
-      for (uint8_t k = 0; k < block_size; k += UInt_size)
+      UIntContainer words;
+      words.reserve(in_block_length / UInt_size);
+      for (uint8_t k = 0; k < in_block_length; k += UInt_size)
       {
          E->toInteger(BytesContainer(bytes.begin() + k + block_index, bytes.begin() + k + block_index + UInt_size));
          words.push_back(E->getValue());
@@ -96,6 +102,32 @@ protected:
       delete E;
 
       return output;
+   }
+   
+public:
+   const BytesContainer hmacEncode(const BytesContainer &hmac_key, const BytesContainer &message)
+   {
+      BytesContainer key(hmac_key);
+      if(hmac_key.size() > in_block_length)
+      {
+         key = encode(key);
+      }
+      
+      BytesContainer out_key_pad(in_block_length, 0x5C);
+      BytesContainer in_key_pad(in_block_length, 0x36);
+      
+      const uint8_t key_len = key.size();
+      for(uint8_t i = 0; i < key_len; ++i)
+      {
+         out_key_pad[i] ^= key[i];
+         in_key_pad[i] ^= key[i];
+      }
+      in_key_pad.insert(in_key_pad.end(), message.begin(), message.end());
+      
+      const BytesContainer in_key_pad_encoded = encode(in_key_pad);
+      out_key_pad.insert(out_key_pad.end(), in_key_pad_encoded.begin(), in_key_pad_encoded.end());
+      
+      return encode(out_key_pad);
    }
 };
 

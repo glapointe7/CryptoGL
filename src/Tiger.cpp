@@ -588,7 +588,7 @@ const Tiger::BytesContainer Tiger::process(const BytesContainer &data, const uin
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
-      DWordsContainer words = getInputBlocks(bytes, i, 8);
+      DWordsContainer words = getInputBlocks(bytes, i);
       DWordsContainer hash(state);
 
       const DWordsContainer saved(hash);

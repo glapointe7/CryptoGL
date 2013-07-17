@@ -7,8 +7,8 @@
 class IDEA : public BlockCipher
 {
 public:
-   explicit IDEA(const BytesContainer &key) : BlockCipher(OperationModes::ECB) { setKey(key); }
-   IDEA(const BytesContainer &key, const OperationModes mode) : BlockCipher(mode) { setKey(key); }
+   explicit IDEA(const BytesContainer &key) : BlockCipher(OperationModes::ECB, 8) { setKey(key); }
+   IDEA(const BytesContainer &key, const OperationModes mode) : BlockCipher(mode, 8) { setKey(key); }
    
    virtual const BytesContainer encode(const BytesContainer &clear_text) final;
    virtual const BytesContainer decode(const BytesContainer &cipher_text) final;

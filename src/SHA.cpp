@@ -40,26 +40,27 @@ SHA32Bits::process(const BytesContainer &data, const uint8_t truncate_to)
    BytesContainer bytes = appendPadding(data);
    appendLength<BigEndian64>(bytes, data.size() << 3);
    
+   WordsContainer states(IV);
    const uint64_t bits_len = bytes.size();
    for (uint64_t i = 0; i < bits_len; i += 64)
    {
-      WordsContainer words = getInputBlocks(bytes, i, 16);
+      WordsContainer words = getInputBlocks(bytes, i);
       words.resize(64);
 
       // Extention of the 32-bit 16 blocks in 64 blocks of 32 bits.
       extendWords(words, 64, {7, 18, 3, 19, 17, 10});
 
-      WordsContainer hash(IV);
+      WordsContainer hash(states);
       for (uint8_t j = 0; j < 64; ++j)
       {
          const uint32_t tmp1 = hash[7] + A(hash[4], 6, 11, 25) + ch(hash[4], hash[5], hash[6]) + round_constants[j] + words[j];
          const uint32_t tmp2 = A(hash[0], 2, 13, 22) + maj(hash[0], hash[1], hash[2]);
          swapHash(hash, tmp1, tmp2);
       }
-      sumHash(hash);
+      sumHash(states, hash);
    }
 
-   return getOutput(truncate_to, IV);
+   return getOutput(truncate_to, states);
 }
 
 const SHA<uint64_t>::BytesContainer
@@ -68,26 +69,27 @@ SHA64Bits::process(const BytesContainer &data, const uint8_t truncate_to)
    BytesContainer bytes = appendPadding(data);
    appendLength<BigEndian64>(bytes, data.size() << 3);
    
+   DWordsContainer states(IV);
    const uint64_t bits_len = bytes.size();
    for (uint64_t i = 0; i < bits_len; i += 128)
    {
-      DWordsContainer words = getInputBlocks(bytes, i, 16);
+      DWordsContainer words = getInputBlocks(bytes, i);
       words.resize(80);
 
       // Extention of the 32-bit 16 blocks in 80 blocks of 32 bits.
       extendWords(words, 80, {1, 8, 7, 19, 61, 6});
 
-      DWordsContainer hash(IV);
+      DWordsContainer hash(states);
       for (uint8_t j = 0; j < 80; ++j)
       {
          const uint64_t tmp1 = hash[7] + A(hash[4], 14, 18, 41) + ch(hash[4], hash[5], hash[6]) + first_cubic_root_primes[j] + words[j];
          const uint64_t tmp2 = A(hash[0], 28, 34, 39) + maj(hash[0], hash[1], hash[2]);
          swapHash(hash, tmp1, tmp2);
       }
-      sumHash(hash);
+      sumHash(states, hash);
    }
 
-   return getOutput(truncate_to, IV);
+   return getOutput(truncate_to, states);
 }
 
 void SHA1::extendWords(WordsContainer &words, const uint8_t max_size)
@@ -103,16 +105,17 @@ const SHA<uint32_t>::BytesContainer SHA1::encode(const BytesContainer &data)
    BytesContainer bytes = appendPadding(data);
    appendLength<BigEndian64>(bytes, data.size() << 3);
    
+   WordsContainer states(IV);
    const uint64_t bits_len = bytes.size();
    for (uint64_t i = 0; i < bits_len; i += 64)
    {
-      WordsContainer words = getInputBlocks(bytes, i, 16);
+      WordsContainer words = getInputBlocks(bytes, i);
       words.resize(80);
 
       // Extention of the 32-bits 16 blocks in 80 blocks of 32 bits.
       extendWords(words, 80);
 
-      WordsContainer hash(IV);
+      WordsContainer hash(states);
       uint32_t f, k;
       for (uint8_t j = 0; j < 80; ++j)
       {
@@ -144,10 +147,10 @@ const SHA<uint32_t>::BytesContainer SHA1::encode(const BytesContainer &data)
          hash[1] = hash[0];
          hash[0] = tmp;
       }
-      sumHash(hash);
+      sumHash(states, hash);
    }
 
-   return getOutput(5, IV);
+   return getOutput(5, states);
 }
 
 const SHA<uint32_t>::BytesContainer SHA224::encode(const BytesContainer &data)

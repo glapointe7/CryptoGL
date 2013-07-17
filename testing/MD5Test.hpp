@@ -39,4 +39,19 @@ TEST_F(MD5Test, encodeEmptyText)
    EXPECT_EQ(hash, Digest::hexDigest(S->encode(std::vector<uint8_t>(0))));
 }
 
+TEST_F(MD5Test, encodeHMACNormalText)
+{
+   const std::string clear_text = "The quick brown fox jumps over the lazy dog";
+   std::string hash = "80070713463E7749B90C2DC24911E275";
+
+   EXPECT_EQ(hash, Digest::hexDigest(S->hmacEncode(Digest::getBytesFromString("key"), Digest::getBytesFromString(clear_text))));
+}
+
+TEST_F(MD5Test, encodeHMACEmptyText)
+{
+   std::string hash = "74E6F7298A9C2D168935F58C001BAD88";
+
+   EXPECT_EQ(hash, Digest::hexDigest(S->hmacEncode(std::vector<uint8_t>(0), std::vector<uint8_t>(0))));
+}
+
 #endif

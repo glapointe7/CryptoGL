@@ -37,4 +37,14 @@ TEST_F(SHA224Test, encodeEmptyText)
    EXPECT_EQ(hash, Digest::hexDigest(S->encode(std::vector<uint8_t>(0))));
 }
 
+TEST_F(SHA224Test, encodeHMACText)
+{
+   const std::string clear_text = "Hi There";
+   const std::vector<uint8_t> key = {0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 
+      0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B};
+   std::string hash = "896FB1128ABBDF196832107CD49DF33F47B4B1169912BA4F53684B22";
+
+   EXPECT_EQ(hash, Digest::hexDigest(S->hmacEncode(key, Digest::getBytesFromString(clear_text))));
+}
+
 #endif

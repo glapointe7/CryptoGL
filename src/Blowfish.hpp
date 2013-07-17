@@ -12,8 +12,8 @@
 class Blowfish : public Feistel
 {
 public:
-   explicit Blowfish(const BytesContainer &key) : Feistel(OperationModes::ECB, 16) { setKey(key); }
-   Blowfish(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16) { setKey(key); }
+   explicit Blowfish(const BytesContainer &key) : Feistel(OperationModes::ECB, 16, 8) { setKey(key); }
+   Blowfish(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16, 8) { setKey(key); }
    
    virtual const BytesContainer encode(const BytesContainer &clear_text) final;
    virtual const BytesContainer decode(const BytesContainer &cipher_text) final;

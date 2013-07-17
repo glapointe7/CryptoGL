@@ -43,6 +43,22 @@ private:
    Block IV;
 };
 
+/*class BlockCipherCFBStrategy : public BlockCipherStrategy
+{
+public:
+   virtual const Block getCipherBlock(const Block &clear_block, const uint32_t block_idx) final;
+   virtual const Block getClearBlock(const Block &cipher_block, const uint32_t block_idx) final;
+   
+   void setIV(const Block &IV) { this->IV = IV; }
+   const Block getIV() const { return IV; }
+
+private:
+   const Block getPreviousCipher(const uint32_t block_idx) const;
+
+   std::vector<Block> old_cipher_block;
+   Block IV;
+};*/
+
 class BlockCipherStrategyFactory
 {
 public:
@@ -55,11 +71,13 @@ public:
          
          case OperationModes::CBC: 
             return new BlockCipherCBCStrategy();
-            //case OperationModes::CFB:  return new BlockCipherCFBStrategy();
+         
+         /*case OperationModes::CFB:  
+            return new BlockCipherCFBStrategy();*/
             //case OperationModes::OFB:  return new BlockCipherOFBStrategy();
       }
       
-      throw "You gave a bad operation mode.";
+      throw "Block Cipher : You gave a bad operation mode.";
    }
 };
 

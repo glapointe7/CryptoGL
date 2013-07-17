@@ -17,7 +17,8 @@ protected:
    typedef typename HashFunction<UInt, BigEndian<UInt> >::BytesContainer BytesContainer;
    typedef typename HashFunction<UInt, BigEndian<UInt> >::UIntContainer UIntContainer;
    
-   explicit SHA(const UIntContainer &state) : IV(state) {}
+   SHA(const UIntContainer &state, const uint8_t in_block_length) 
+      : HashFunction<UInt, BigEndian<UInt> >(in_block_length), IV(state) {}
    virtual ~SHA() {}
    
    virtual const BytesContainer encode(const BytesContainer &data) = 0;
@@ -46,12 +47,12 @@ protected:
    }
    
    /* Sum in IV the hashes vector. */
-   void sumHash(const UIntContainer &hash)
+   void sumHash(UIntContainer &states, const UIntContainer &hash)
    {
       const uint8_t hash_size = hash.size();
       for (uint8_t j = 0; j < hash_size; ++j)
       {
-         IV[j] += hash[j];
+         states[j] += hash[j];
       }
    }
 
@@ -80,34 +81,32 @@ protected:
    UIntContainer IV;
 };
 
-/* Abstract class for SHA algorithm that uses only 32 bits blocks to encode. */
+/* Abstract class for SHA algorithm that uses only 64 bits blocks to encode. */
 class SHA32Bits : public SHA<uint32_t>
 {
-public:
-   virtual ~SHA32Bits() {}
-   virtual const BytesContainer encode(const BytesContainer &) = 0;
-   
 protected:
    typedef typename SHA<uint32_t>::WordsContainer WordsContainer;
    
-   explicit SHA32Bits(const WordsContainer &state) : SHA(state) {}
+   explicit SHA32Bits(const WordsContainer &state) : SHA(state, 64) {}
+   virtual ~SHA32Bits() {}
+   
+   virtual const BytesContainer encode(const BytesContainer &) = 0;
    virtual const BytesContainer process(const BytesContainer &data, const uint8_t truncate_to) final;
    
 private:
    static const uint32_t round_constants[64];
 };
 
-/* Abstract class for SHA algorithm that uses only 64 bits blocks to encode. */
+/* Abstract class for SHA algorithm that uses only 128 bits blocks to encode. */
 class SHA64Bits : public SHA<uint64_t>
 { 
-public:
-   virtual ~SHA64Bits() {}
-   virtual const BytesContainer encode(const BytesContainer &) = 0;
-
 protected:
    typedef typename SHA<uint64_t>::DWordsContainer DWordsContainer;
    
-   explicit SHA64Bits(const DWordsContainer &state) : SHA(state) {}
+   explicit SHA64Bits(const DWordsContainer &state) : SHA(state, 128) {}
+   virtual ~SHA64Bits() {}
+   
+   virtual const BytesContainer encode(const BytesContainer &) = 0;
    virtual const BytesContainer process(const BytesContainer &data, const uint8_t truncate_to) final;
   
 private:
@@ -181,12 +180,11 @@ public:
 
 class SHA512_t : public SHA64Bits
 {
-public:
+protected:
    SHA512_t() : SHA64Bits({}) {}
    virtual ~SHA512_t() {}
    virtual const BytesContainer encode(const BytesContainer &data) = 0;
-
-protected:
+   
    void buildIV(const BytesContainer &t);
 };
 

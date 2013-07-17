@@ -2,21 +2,24 @@
 #include "BlockCipher.hpp"
 
 const BlockCipher::BytesContainer
-BlockCipher::processEncode(const BytesContainer &data, const uint8_t block_len)
+BlockCipher::processEncoding(const BytesContainer &data)
 {
-   const uint32_t data_len = data.size();
+   // Append padding to get a multiple of 'input_block_length'.
+   const BytesContainer data_padded = appendPadding(data, 0);
+   
+   const uint32_t data_len = data_padded.size();
    BytesContainer toReturn;
    toReturn.reserve(data_len);
    
    generateSubkeys();
    
    // Assuming padding is done, data_len is a multiple of 8 bytes.
-   for (uint32_t n = 0; n < data_len; n += block_len)
+   for (uint32_t n = 0; n < data_len; n += input_block_length)
    {
-      const BytesContainer data_block(data.begin() + n, data.begin() + n + block_len);
+      const BytesContainer data_block(data_padded.begin() + n, data_padded.begin() + n + input_block_length);
       
       BytesContainer block;
-      block.reserve(block_len);
+      block.reserve(input_block_length);
       block = block_strategy->getCipherBlock(data_block, n >> 3);
       
       const BytesContainer output = getOutputBlock(block, true);
@@ -27,55 +30,38 @@ BlockCipher::processEncode(const BytesContainer &data, const uint8_t block_len)
 }
 
 const BlockCipher::BytesContainer
-BlockCipher::process(const BytesContainer &data, const uint8_t block_len, const bool to_encode)
+BlockCipher::processDecoding(const BytesContainer &data)
 {
    const uint32_t data_len = data.size();
    BytesContainer toReturn;
    toReturn.reserve(data_len);
-
-   if(to_encode)
-   {
-      generateSubkeys();
-   }
-   else
-   {
-      generateInverseSubkeys();
-   }
+   
+   generateInverseSubkeys();
    
    // Assuming padding is done, data_len is a multiple of 8 bytes.
-   for (uint32_t n = 0; n < data_len; n += block_len)
+   for (uint32_t n = 0; n < data_len; n += input_block_length)
    {
-      const BytesContainer data_block(data.begin() + n, data.begin() + n + block_len);
+      const BytesContainer data_block(data.begin() + n, data.begin() + n + input_block_length);
       
       BytesContainer block;
-      block.reserve(block_len);
+      block.reserve(input_block_length);
+      block = block_strategy->getClearBlock(data_block, n >> 3);
       
-      // Decode if lower_round < 0 and apply strategy design to use the correct operation mode.
-      if (!to_encode)
-      {
-         block = block_strategy->getClearBlock(data_block, n >> 3);
-      }
-      else
-      {
-         block = block_strategy->getCipherBlock(data_block, n >> 3);
-      }
-      
-      // Get Encode / Decode blocks.
-      const BytesContainer output = getOutputBlock(block, to_encode);
+      const BytesContainer output = getOutputBlock(block, false);
       toReturn.insert(toReturn.end(), output.begin(), output.end());
    }
-
+   
    return toReturn;
 }
 
 const BlockCipher::BytesContainer 
-BlockCipher::addPadding(const BytesContainer &data, const uint32_t block_length, const uint8_t fill_with)
+BlockCipher::appendPadding(const BytesContainer &data, const uint8_t fill_with) const
 {
    BytesContainer full_data(data);
-   const uint8_t rest = data.size() % block_length;
+   const uint8_t rest = data.size() % input_block_length;
    if (rest != 0)
    {
-      full_data.insert(full_data.end(), block_length - rest, fill_with);
+      full_data.insert(full_data.end(), input_block_length - rest, fill_with);
    }
    
    return full_data;

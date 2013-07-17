@@ -16,8 +16,10 @@
 class Feistel : public BlockCipher
 {
 protected:
-   explicit Feistel(const uint8_t round) : BlockCipher(OperationModes::ECB), rounds(round) {}
-   Feistel(const OperationModes mode, const uint8_t round)  : BlockCipher(mode), rounds(round) {}
+   Feistel(const uint8_t round, const uint8_t block_length) 
+      : BlockCipher(OperationModes::ECB, block_length), rounds(round) {}
+   Feistel(const OperationModes mode, const uint8_t round, const uint8_t block_length) 
+      : BlockCipher(mode, block_length), rounds(round) {}
    virtual ~Feistel() {}
    
    virtual const BytesContainer encode(const BytesContainer &) = 0;

@@ -9,8 +9,8 @@
 class Skipjack : public Feistel
 {
 public:
-   explicit Skipjack(const BytesContainer &key) : Feistel(OperationModes::ECB, 32) { setKey(key); }
-   Skipjack(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 32) { setKey(key); }
+   explicit Skipjack(const BytesContainer &key) : Feistel(OperationModes::ECB, 32, 8) { setKey(key); }
+   Skipjack(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 32, 8) { setKey(key); }
    
    virtual const BytesContainer encode(const BytesContainer &clear_text) final;
    virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
