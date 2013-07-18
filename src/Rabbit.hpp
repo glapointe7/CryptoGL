@@ -33,10 +33,10 @@ private:
    // States : divisé en 8 states de 32 bits chacun (uint32).
    // Counters : divisé en 8 counters de 32 bits chacun (uint32).
    // counter_carry_bit : 
-   UInt32Container states = {0, 0, 0, 0, 0, 0, 0, 0};
-   UInt32Container counters = {0, 0, 0, 0, 0, 0, 0, 0};
+   uint32_t states[8];
+   uint32_t counters[8];
    
-   // Vecteur initial.
+   // Initial vector.
    BytesContainer IV;
 
    bool counter_carry_bit = 0;

@@ -19,17 +19,13 @@ RC4::RC4(const BytesContainer &key)
    }
    
    this->key = key;
-}
-
-void RC4::initialize()
-{
-   state.reserve(256);
+   
+   // Initialize 'state'.
    for(uint16_t i = 0; i < 256; ++i)
    {
-      state.push_back(i);
+      state[i] = i;
    }
 }
-
 
 void RC4::keySetup()
 {
@@ -47,7 +43,6 @@ const RC4::BytesContainer RC4::encode(const BytesContainer &clear_text)
    BytesContainer crypted;
    crypted.reserve(clear_text.size());
    
-   initialize();
    keySetup();
    
    uint8_t j = 0;

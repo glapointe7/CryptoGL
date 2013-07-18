@@ -54,6 +54,7 @@
 #include "../testing/TigerTest.hpp"
 #include "../testing/IDEATest.hpp"
 #include "../testing/SkipjackTest.hpp"
+#include "../testing/RC2Test.hpp"
 
 #include <sys/time.h>
 

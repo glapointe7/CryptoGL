@@ -13,9 +13,8 @@ public:
    
 private:
    virtual void keySetup() final;
-   void initialize();
    
-   BytesContainer state;
+   uint8_t state[255];
 };
 
 #endif

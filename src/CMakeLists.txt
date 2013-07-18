@@ -68,6 +68,7 @@ set(SRC
 	Polybe.hpp Polybe.cpp
 	Rabbit.hpp Rabbit.cpp
 	Railfence.hpp Railfence.cpp
+   RC2.hpp RC2.cpp
 	RC4.hpp RC4.cpp
 	UnsortAlpha.hpp UnsortAlpha.cpp
 	Vigenere.hpp Vigenere.cpp

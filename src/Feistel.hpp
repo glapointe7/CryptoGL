@@ -27,7 +27,7 @@ protected:
    
    virtual void setKey(const BytesContainer &) = 0;
    virtual void generateSubkeys() = 0;
-   virtual const BytesContainer getOutputBlock(const BytesContainer &data, const bool to_encode) = 0;
+   virtual const BytesContainer getOutputBlock(const BytesContainer &block, const bool to_encode) = 0;
    
    virtual uint64_t F(const uint64_t &data, const uint64_t &) const = 0;
    virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const = 0;

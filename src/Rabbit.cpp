@@ -3,9 +3,6 @@
 #include "Tools.hpp"
 #include "exceptions/BadKeyLength.hpp"
 
-#include <limits>
-
-// La clé doit avoir 128 bits = 16 bytes.
 Rabbit::Rabbit(const BytesContainer &key)
 {
    if (key.size() != 16)
@@ -45,12 +42,12 @@ uint32_t Rabbit::g(const uint32_t x)
 
 void Rabbit::nextState()
 {
-   const UInt32Container A = {0x4D34D34D, 0xD34D34D3, 0x34D34D34, 0x4D34D34D,
+   const uint32_t A[8] = {0x4D34D34D, 0xD34D34D3, 0x34D34D34, 0x4D34D34D,
       0xD34D34D3, 0x34D34D34, 0x4D34D34D, 0xD34D34D3};
 
-   UInt32Container G;
-   G.reserve(8);
-   UInt32Container old_counters(counters);
+   uint32_t old_counters[8] = {counters[0], counters[1], counters[2], counters[3],
+      counters[4], counters[5], counters[6], counters[7]
+   };
 
    // Calculate new counter values.
    counters[0] += A[0] + counter_carry_bit;
@@ -63,9 +60,10 @@ void Rabbit::nextState()
    counters[7] += A[7] + (counters[6] < old_counters[6]);
    counter_carry_bit = (counters[7] < old_counters[7]);
 
+   uint32_t G[8];
    for (uint8_t i = 0; i < 8; ++i)
    {
-      G.push_back(g(states[i] + counters[i]));
+      G[i] = g(states[i] + counters[i]);
    }
 
    // Calculate new state values.
@@ -84,9 +82,9 @@ void Rabbit::keySetup()
    // Build 4 sub-keys of 4 bytes length.
    UInt32Container subkeys;
    subkeys.reserve(4);
-   const unsigned char key_len = key.size();
+   const uint8_t key_len = key.size();
 
-   for (unsigned char i = 0; i < key_len; i += 4)
+   for (uint8_t i = 0; i < key_len; i += 4)
    {
       subkeys.push_back((key[i] << 24) | (key[i + 1] << 16) | (key[i + 2] << 8) | key[i + 3]);
    }
@@ -114,12 +112,12 @@ void Rabbit::keySetup()
 
    counter_carry_bit = 0;
 
-   for (unsigned char i = 0; i < 4; i++)
+   for (uint8_t i = 0; i < 4; i++)
    {
       nextState();
    }
 
-   for (unsigned char j = 0; j < 8; ++j)
+   for (uint8_t j = 0; j < 8; ++j)
    {
       counters[j] ^= states[(j + 4) & 0x07];
    }
@@ -128,11 +126,10 @@ void Rabbit::keySetup()
 void Rabbit::IVSetup()
 {
    // Generate 4 sub-IVs of 16 bits.
-   UInt32Container subIV;
-   subIV.reserve(4);
-   for (unsigned char i = 0; i < 8; i += 2)
+   uint32_t subIV[4];
+   for (uint8_t i = 0; i < 8; i += 2)
    {
-      subIV.push_back((IV[i] << 8) | IV[i + 1]);
+      subIV[i >> 1] = (IV[i] << 8) | IV[i + 1];
    }
 
    /* Modify counter values */
@@ -145,7 +142,7 @@ void Rabbit::IVSetup()
    counters[6] ^= subIV[2];
    counters[7] ^= subIV[3];
 
-   for (unsigned char i = 0; i < 4; i++)
+   for (uint8_t i = 0; i < 4; i++)
    {
       nextState();
    }
@@ -174,7 +171,7 @@ const Rabbit::BytesContainer Rabbit::encode(const BytesContainer &clear_text)
       nextState();
 
       /* Encrypt 16 bytes of data */
-      const UInt32Container X = {
+      const uint32_t X[4] = {
          states[0] ^ (states[5] >> 16) ^ (states[3] << 16),
          states[2] ^ (states[7] >> 16) ^ (states[5] << 16),
          states[4] ^ (states[1] >> 16) ^ (states[7] << 16),
@@ -187,7 +184,7 @@ const Rabbit::BytesContainer Rabbit::encode(const BytesContainer &clear_text)
       {
          for (uint8_t k = 0; k < 4; ++k)
          {
-            output.push_back(static_cast<uint8_t> (X[j] >> (k << 3)) & 0xFF);
+            output.push_back((X[j] >> (k << 3)) & 0xFF);
          }
       }
 

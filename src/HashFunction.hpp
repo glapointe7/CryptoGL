@@ -58,7 +58,6 @@ protected:
    {      
       Endian *E = new Endian();
       const uint8_t UInt_size = E->getIntSize();
-      //const uint8_t block_size = UInt_size * block_to_reserve;
 
       UIntContainer words;
       words.reserve(in_block_length / UInt_size);

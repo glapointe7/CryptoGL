@@ -39,4 +39,23 @@ TEST_F(Ripemd128Test, encodeEmptyText)
    EXPECT_EQ(hash, Digest::hexDigest(S->encode(std::vector<uint8_t>(0))));
 }
 
+TEST_F(Ripemd128Test, encodeHMACNormalText)
+{
+   const std::string clear_text = "message digest";
+   std::string hash = "E8503A8AEC2289D82AA0D8D445A06BDD";
+   const std::vector<uint8_t> key = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
+      0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
+
+   EXPECT_EQ(hash, Digest::hexDigest(S->hmacEncode(key, Digest::getBytesFromString(clear_text))));
+}
+
+TEST_F(Ripemd128Test, encodeHMACEmptyText)
+{
+   const std::vector<uint8_t> key = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
+      0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
+   std::string hash = "AD9DB2C1E22AF9AB5CA9DBE5A86F67DC";
+
+   EXPECT_EQ(hash, Digest::hexDigest(S->hmacEncode(key, std::vector<uint8_t>(0))));
+}
+
 #endif
