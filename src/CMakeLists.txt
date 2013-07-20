@@ -72,6 +72,7 @@ set(SRC
 	RC4.hpp RC4.cpp
    RC5.hpp RC5.cpp
    RC6.hpp RC6.cpp
+   XTEA.hpp XTEA.cpp
 	UnsortAlpha.hpp UnsortAlpha.cpp
 	Vigenere.hpp Vigenere.cpp
 	Wolseley.hpp Wolseley.cpp

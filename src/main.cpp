@@ -57,6 +57,7 @@
 #include "../testing/RC2Test.hpp"
 #include "../testing/RC5Test.hpp"
 #include "../testing/RC6Test.hpp"
+#include "../testing/XTEATest.hpp"
 
 #include <sys/time.h>
 
