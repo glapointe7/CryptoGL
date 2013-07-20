@@ -55,6 +55,7 @@
 #include "../testing/IDEATest.hpp"
 #include "../testing/SkipjackTest.hpp"
 #include "../testing/RC2Test.hpp"
+#include "../testing/RC5Test.hpp"
 
 #include <sys/time.h>
 
