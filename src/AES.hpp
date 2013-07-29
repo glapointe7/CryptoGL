@@ -2,7 +2,7 @@
  * Source : FIPS197 from NIST and http://en.wikipedia.org/wiki/Rijndael_mix_columns
  */
 #ifndef AES_HPP
-#define	AES_HPP
+#define AES_HPP
 
 #include "BlockCipher.hpp"
 
@@ -16,9 +16,9 @@ public:
    
    virtual const BytesContainer encode(const BytesContainer &clear_text) final;
    virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
+   virtual void setKey(const BytesContainer &key) final;
    
 private:      
-   virtual void setKey(const BytesContainer &key) final;
    virtual void generateSubkeys() final;
    virtual const BytesContainer getOutputBlock(const BytesContainer &block, const bool to_encode) final;
    

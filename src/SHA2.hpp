@@ -1,25 +1,27 @@
 /*
  * Source : http://csrc.nist.gov
- * Requirements : Need of big integers to support length of (2^{128} - 1).
  */
-#ifndef SHA_HPP
-#define	SHA_HPP
+#ifndef SHA2_HPP
+#define SHA2_HPP
 
 #include "HashFunction.hpp"
 #include "BigEndian.hpp"
 
 #include "Tools.hpp"
 
+#define INPUT32_BLOCK_LENGTH 64
+#define INPUT64_BLOCK_LENGTH 128
+
 template <class UInt>
-class SHA : public HashFunction<UInt, BigEndian<UInt> >
+class SHA2 : public HashFunction<UInt, BigEndian<UInt> >
 {
 protected:   
    typedef typename HashFunction<UInt, BigEndian<UInt> >::BytesContainer BytesContainer;
    typedef typename HashFunction<UInt, BigEndian<UInt> >::UIntContainer UIntContainer;
    
-   SHA(const UIntContainer &state, const uint8_t in_block_length) 
+   SHA2(const UIntContainer &state, const uint8_t in_block_length) 
       : HashFunction<UInt, BigEndian<UInt> >(in_block_length), IV(state) {}
-   virtual ~SHA() {}
+   virtual ~SHA2() {}
    
    virtual const BytesContainer encode(const BytesContainer &data) = 0;
    virtual const BytesContainer process(const BytesContainer &data, const uint8_t truncate_to) = 0;
@@ -82,12 +84,12 @@ protected:
 };
 
 /* Abstract class for SHA algorithm that uses only 64 bits blocks to encode. */
-class SHA32Bits : public SHA<uint32_t>
+class SHA32Bits : public SHA2<uint32_t>
 {
 protected:
-   typedef typename SHA<uint32_t>::WordsContainer WordsContainer;
+   typedef typename SHA2<uint32_t>::WordsContainer WordsContainer;
    
-   explicit SHA32Bits(const WordsContainer &state) : SHA(state, 64) {}
+   explicit SHA32Bits(const WordsContainer &state) : SHA2(state, INPUT32_BLOCK_LENGTH) {}
    virtual ~SHA32Bits() {}
    
    virtual const BytesContainer encode(const BytesContainer &) = 0;
@@ -98,12 +100,12 @@ private:
 };
 
 /* Abstract class for SHA algorithm that uses only 128 bits blocks to encode. */
-class SHA64Bits : public SHA<uint64_t>
+class SHA64Bits : public SHA2<uint64_t>
 { 
 protected:
-   typedef typename SHA<uint64_t>::DWordsContainer DWordsContainer;
+   typedef typename SHA2<uint64_t>::DWordsContainer DWordsContainer;
    
-   explicit SHA64Bits(const DWordsContainer &state) : SHA(state, 128) {}
+   explicit SHA64Bits(const DWordsContainer &state) : SHA2(state, INPUT64_BLOCK_LENGTH) {}
    virtual ~SHA64Bits() {}
    
    virtual const BytesContainer encode(const BytesContainer &) = 0;
@@ -112,26 +114,6 @@ protected:
 private:
    /* Derived from the fractional parts of the cube roots of the first eighty primes. */
    static const uint64_t first_cubic_root_primes[80];
-};
-
-class SHA1 : public SHA32Bits
-{
-public:
-   SHA1() : SHA32Bits({0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xC3D2E1F0}) {}
-   virtual const BytesContainer encode(const BytesContainer &data) final;
-
-private:
-   static void extendWords(WordsContainer &words, const uint8_t max_size);
-
-   inline static uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
-   {
-      return (x & y) | (x & z) | (y & z);
-   }
-
-   inline static uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
-   {
-      return x ^ y ^ z;
-   }
 };
 
 class SHA224 : public SHA32Bits

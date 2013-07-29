@@ -2,7 +2,7 @@
 #define SHA1TEST_HPP
 
 #include <gtest/gtest.h>
-#include "../src/SHA.hpp"
+#include "../src/SHA1.hpp"
 #include "../src/Digest.hpp"
 
 class SHA1Test : public ::testing::Test

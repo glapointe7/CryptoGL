@@ -9,54 +9,51 @@
 
 class BlockCipherStrategy
 {
-   using BadIVLength = BadKeyLength;
-   
 protected:
    typedef SymmetricCipher::BytesContainer Block;
+   using BadIVLength = BadKeyLength;
    
 public:
    virtual ~BlockCipherStrategy() {}
-   virtual const Block getCipherBlock(const Block &clear_block, const uint32_t block_idx) = 0;
-   virtual const Block getClearBlock(const Block &cipher_block, const uint32_t block_idx) = 0;
+   virtual const Block getCipherBlock(const Block &clear_block, const uint64_t &block_index) = 0;
+   virtual const Block getClearBlock(const Block &cipher_block, const uint64_t &block_index) = 0;
+   
+   void setIV(const Block &IV) { this->IV = IV; }
+   const Block getIV() const { return IV; }
+   
+private:
+   Block IV;
 };
 
 class BlockCipherECBStrategy : public BlockCipherStrategy
 {
 public:
-   virtual const Block getCipherBlock(const Block &clear_block, const uint32_t) final;
-   virtual const Block getClearBlock(const Block &cipher_block, const uint32_t) final;
+   virtual const Block getCipherBlock(const Block &clear_block, const uint64_t&) final;
+   virtual const Block getClearBlock(const Block &cipher_block, const uint64_t&) final;
 };
 
 class BlockCipherCBCStrategy : public BlockCipherStrategy
 {
 public:
-   virtual const Block getCipherBlock(const Block &clear_block, const uint32_t block_idx) final;
-   virtual const Block getClearBlock(const Block &cipher_block, const uint32_t block_idx) final;
+   virtual const Block getCipherBlock(const Block &clear_block, const uint64_t &block_idx) final;
+   virtual const Block getClearBlock(const Block &cipher_block, const uint64_t &block_idx) final;
    
-   void setIV(const Block &IV) { this->IV = IV; }
-   const Block getIV() const { return IV; }
-
 private:
-   const Block getPreviousCipher(const uint32_t block_idx) const;
+   const Block getPreviousCipher(const uint64_t &block_idx) const;
 
    std::vector<Block> old_cipher_block;
-   Block IV;
 };
 
 /*class BlockCipherCFBStrategy : public BlockCipherStrategy
 {
 public:
-   virtual const Block getCipherBlock(const Block &clear_block, const uint32_t block_idx) final;
-   virtual const Block getClearBlock(const Block &cipher_block, const uint32_t block_idx) final;
-   
-   void setIV(const Block &IV) { this->IV = IV; }
-   const Block getIV() const { return IV; }
+   virtual const Block getCipherBlock(const Block &clear_block, const uint64_t block_idx) final;
+   virtual const Block getClearBlock(const Block &cipher_block, const uint64_t block_idx) final;
 
 private:
-   const Block getPreviousCipher(const uint32_t block_idx) const;
+   const Block getPreviousCipher(const uint64_t block_idx) const;
 
    std::vector<Block> old_cipher_block;
-   Block IV;
 };*/
 
 class BlockCipherStrategyFactory

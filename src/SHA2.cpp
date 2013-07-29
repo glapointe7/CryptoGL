@@ -1,4 +1,4 @@
-#include "SHA.hpp"
+#include "SHA2.hpp"
 
 const uint32_t SHA32Bits::round_constants[64] = {
    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -34,7 +34,7 @@ const uint64_t SHA64Bits::first_cubic_root_primes[80] = {
    0x4CC5D4BECB3E42B6, 0x597F299CFC657E2A, 0x5FCB6FAB3AD6FAEC, 0x6C44198C4A475817
 };
 
-const SHA<uint32_t>::BytesContainer
+const SHA2<uint32_t>::BytesContainer
 SHA32Bits::process(const BytesContainer &data, const uint8_t truncate_to)
 {
    BytesContainer bytes = appendPadding(data);
@@ -63,7 +63,7 @@ SHA32Bits::process(const BytesContainer &data, const uint8_t truncate_to)
    return getOutput(truncate_to, states);
 }
 
-const SHA<uint64_t>::BytesContainer
+const SHA2<uint64_t>::BytesContainer
 SHA64Bits::process(const BytesContainer &data, const uint8_t truncate_to)
 {
    BytesContainer bytes = appendPadding(data);
@@ -92,95 +92,34 @@ SHA64Bits::process(const BytesContainer &data, const uint8_t truncate_to)
    return getOutput(truncate_to, states);
 }
 
-void SHA1::extendWords(WordsContainer &words, const uint8_t max_size)
-{
-   for (uint8_t j = 16; j < max_size; ++j)
-   {
-      words[j] = rotateLeft(words[j - 3] ^ words[j - 8] ^ words[j - 14] ^ words[j - 16], 1, 32);
-   }
-}
-
-const SHA<uint32_t>::BytesContainer SHA1::encode(const BytesContainer &data)
-{
-   BytesContainer bytes = appendPadding(data);
-   appendLength<BigEndian64>(bytes, data.size() << 3);
-   
-   WordsContainer states(IV);
-   const uint64_t bits_len = bytes.size();
-   for (uint64_t i = 0; i < bits_len; i += 64)
-   {
-      WordsContainer words = getInputBlocks(bytes, i);
-      words.resize(80);
-
-      // Extention of the 32-bits 16 blocks in 80 blocks of 32 bits.
-      extendWords(words, 80);
-
-      WordsContainer hash(states);
-      uint32_t f, k;
-      for (uint8_t j = 0; j < 80; ++j)
-      {
-         if (j < 20)
-         {
-            f = ch(hash[1], hash[2], hash[3]);
-            k = 0x5A827999;
-         }
-         else if (j < 40)
-         {
-            f = H(hash[1], hash[2], hash[3]);
-            k = 0x6ED9EBA1;
-         }
-         else if (j < 60)
-         {
-            f = G(hash[1], hash[2], hash[3]);
-            k = 0x8F1BBCDC;
-         }
-         else
-         {
-            f = H(hash[1], hash[2], hash[3]);
-            k = 0xCA62C1D6;
-         }
-
-         const uint32_t tmp = rotateLeft(hash[0], 5, 32) + f + hash[4] + k + words[j];
-         hash[4] = hash[3];
-         hash[3] = hash[2];
-         hash[2] = rotateLeft(hash[1], 30, 32);
-         hash[1] = hash[0];
-         hash[0] = tmp;
-      }
-      sumHash(states, hash);
-   }
-
-   return getOutput(5, states);
-}
-
-const SHA<uint32_t>::BytesContainer SHA224::encode(const BytesContainer &data)
+const SHA2<uint32_t>::BytesContainer SHA224::encode(const BytesContainer &data)
 {
    return process(data, 7);
 }
 
-const SHA<uint32_t>::BytesContainer SHA256::encode(const BytesContainer &data)
+const SHA2<uint32_t>::BytesContainer SHA256::encode(const BytesContainer &data)
 {
    return process(data, 8);
 }
 
-const SHA<uint64_t>::BytesContainer SHA384::encode(const BytesContainer &data)
+const SHA2<uint64_t>::BytesContainer SHA384::encode(const BytesContainer &data)
 {
    return process(data, 12);
 }
 
-const SHA<uint64_t>::BytesContainer SHA512::encode(const BytesContainer &data)
+const SHA2<uint64_t>::BytesContainer SHA512::encode(const BytesContainer &data)
 {
    return process(data, 16);
 }
 
-const SHA<uint64_t>::BytesContainer SHA512_224::encode(const BytesContainer &data)
+const SHA2<uint64_t>::BytesContainer SHA512_224::encode(const BytesContainer &data)
 {
    buildIV({0x32, 0x32, 0x34});
 
    return process(data, 7);
 }
 
-const SHA<uint64_t>::BytesContainer SHA512_256::encode(const BytesContainer &data)
+const SHA2<uint64_t>::BytesContainer SHA512_256::encode(const BytesContainer &data)
 {
    buildIV({0x32, 0x35, 0x36});
 

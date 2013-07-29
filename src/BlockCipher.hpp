@@ -9,6 +9,10 @@
 
 class BlockCipher : public SymmetricCipher
 {     
+public:
+   /* Set an IV for all modes except ECB. */
+   void setIV(const BytesContainer &IV);
+   
 protected:
    typedef std::vector<uint32_t> UInt32Container;
    typedef std::vector<uint64_t> UInt64Container;
@@ -34,7 +38,7 @@ protected:
    const BytesContainer processDecoding(const BytesContainer &data);
    
    /* Pad 'data' with 'input_block_length' values given by 'fill_with'. */
-   const BytesContainer appendPadding(const BytesContainer &data, const uint8_t fill_with) const;
+   const BytesContainer appendPadding(const BytesContainer &input, const uint8_t fill_with) const;
 
    BlockCipherStrategy *block_strategy;
    const uint8_t input_block_length;

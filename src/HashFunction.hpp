@@ -18,6 +18,8 @@ protected:
    typedef std::vector<uint32_t> WordsContainer;
    typedef std::vector<uint64_t> DWordsContainer;
    
+   /* Default constructor : input blocks of 64-bit length each. */
+   //HashFunction() : in_block_length(64) {}
    explicit HashFunction(const uint8_t in_block_length) : in_block_length(in_block_length) {}
    virtual ~HashFunction() {}
    
@@ -28,16 +30,15 @@ protected:
      
    virtual const BytesContainer appendPadding(const BytesContainer &data) const
    {
-      const uint8_t UInt_bit_size = sizeof(UInt) << 4;
       const uint8_t rest = sizeof(UInt) << 1;
       BytesContainer bytes_pad(data);
-      bytes_pad.reserve(data.size() + (UInt_bit_size << 1));
+      bytes_pad.reserve(data.size() + (in_block_length << 1));
 
       // Append a bit '1' at the end.
       bytes_pad.push_back(0x80);
 
       // Pad with '0' bits at the end of bits_pad until the length is 448 (mod 512).
-      const uint8_t bytes_pad_len = ((UInt_bit_size << 1) - rest - (bytes_pad.size() & (UInt_bit_size - 1))) & (UInt_bit_size - 1);
+      const uint8_t bytes_pad_len = ((in_block_length << 1) - rest - (bytes_pad.size() & (in_block_length - 1))) & (in_block_length - 1);
       bytes_pad.insert(bytes_pad.end(), bytes_pad_len + rest - 8, 0);
 
       return bytes_pad;

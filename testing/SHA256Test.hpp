@@ -3,7 +3,7 @@
 #define	SHA256TEST_HPP
 
 #include <gtest/gtest.h>
-#include "../src/SHA.hpp"
+#include "../src/SHA2.hpp"
 #include "../src/Digest.hpp"
 
 class SHA256Test : public ::testing::Test

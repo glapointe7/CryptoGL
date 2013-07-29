@@ -184,7 +184,7 @@ void DES::generateSubkeys()
 uint64_t DES::getSubstitution(const uint64_t &key_mixed) const
 {
    // on divise key_mixed en 8 blocs de 6 bits chacun.
-   uint64_t sboxes[8];
+   uint8_t sboxes[8];
    for (uint8_t i = 0, j = 42; i < 8; ++i, j -= 6)
    {
       sboxes[i] = (key_mixed >> j) & 0x3F;
@@ -222,14 +222,13 @@ uint64_t DES::F(const uint64_t &data, const uint64_t &subkey) const
    return getBitsFromTable(s_block, P, 32, 32);
 }
 
-void DES::encodeFeistelRounds(uint64_t& L, uint64_t& R, const uint8_t round) const
+void DES::encodeFeistelRounds(uint64_t& L, uint64_t& R, const uint8_t) const
 {
    for (uint8_t i = 0; i < rounds; ++i)
    {
-      const uint64_t Li = R;
-      const uint64_t Ri = L ^ F(R, subkeys[i]);
-      L = Li;
-      R = Ri;
+      const uint64_t tmp = L ^ F(R, subkeys[i]);
+      L = R;
+      R = tmp;
    }
 }
 
@@ -237,10 +236,9 @@ void DES::decodeFeistelRounds(uint64_t& L, uint64_t& R, const uint8_t) const
 {
    for (int8_t i = rounds - 1; i >= 0; --i)
    {
-      const uint64_t Li = R;
-      const uint64_t Ri = L ^ F(R, subkeys[i]);
-      L = Li;
-      R = Ri;
+      const uint64_t tmp = L ^ F(R, subkeys[i]);
+      L = R;
+      R = tmp;
    }
 }
 
@@ -258,7 +256,7 @@ DES::getOutputBlock(const BytesContainer &data, const bool to_encode)
    const uint64_t ip_data = getBitsFromTable(value, IP, 64, 64);
 
    // Split the 64-bits block in 2 blocks of 32 bits L and R for the 16 Feistel rounds.
-   uint64_t L = (ip_data >> 32) & 0xFFFFFFFF;
+   uint64_t L = ip_data >> 32;
    uint64_t R = ip_data & 0xFFFFFFFF;
    if (to_encode)
    {
@@ -268,7 +266,7 @@ DES::getOutputBlock(const BytesContainer &data, const bool to_encode)
    {
       decodeFeistelRounds(L, R, 0);
    }
-   // On effectue la permutation finale de R16.L16. avec la table IP_inverse.
+   // Final permutation of R16.L16. with the IP_inverse table.
    const uint64_t RL = (R << 32) | L;
    const uint64_t output = getBitsFromTable(RL, IP_inverse, 64, 64);
 
@@ -284,8 +282,6 @@ DES::getOutputBlock(const BytesContainer &data, const bool to_encode)
 
 const DES::BytesContainer DES::encode(const BytesContainer &clear_text)
 {
-   // Pad with 0x00 to get a multiple of 64 bits.
-   //return process(addPadding(clear_text, 8, 0), 8, true);
    return processEncoding(clear_text);
 }
 

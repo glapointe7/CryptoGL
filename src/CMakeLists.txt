@@ -60,9 +60,13 @@ set(SRC
 	Hellman.hpp Hellman.cpp
 	Hill.hpp Hill.cpp
    MessageDigest.hpp MessageDigest.cpp
-   SHA.hpp SHA.cpp
+   SHA2.hpp SHA2.cpp
+   SHA1.hpp SHA1.cpp
+   SpongeFunction.hpp
+   Keccak.hpp Keccak.cpp
    Ripemd.hpp Ripemd.cpp
    Tiger.hpp Tiger.cpp
+   Whirlpool.hpp Whirlpool.cpp
 	Morse.hpp Morse.cpp
 	Playfair.hpp Playfair.cpp
 	Polybe.hpp Polybe.cpp

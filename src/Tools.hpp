@@ -22,15 +22,32 @@ const uint64_t getBitsFromTable(const uint64_t &data, const uint8_t *table, cons
 const std::vector<uint8_t> getXORedBlock(const std::vector<uint8_t> &block1, const std::vector<uint8_t> &block2);
 
 template <class UInt>
-const UInt rotateLeft(const UInt &value, const uint8_t shift, const uint8_t max)
+UInt LSB(const UInt &value, const uint8_t bits_to_extract)
+{
+   return value & (1ull << bits_to_extract);
+}
+
+template <class UInt>
+UInt MSB(const UInt &value, const uint8_t bits_to_extract)
+{
+   return value >> ((sizeof(UInt) << 3) - bits_to_extract);
+}
+
+/* Rotate left 'value' of 'shift' bits with 'max' in {1,...,63}. */
+template <class UInt>
+UInt rotateLeft(const UInt &value, const uint8_t shift, const uint8_t max)
 {
    return ((value << shift) | (value >> (max - shift))) & ((1ull << max) - 1);
 }
 
+uint64_t rotateLeft64(const uint64_t &value, const uint8_t shift);
+
 template <class UInt>
-const UInt rotateRight(const UInt &value, const uint8_t shift, const uint8_t max)
+UInt rotateRight(const UInt &value, const uint8_t shift, const uint8_t max)
 {
    return ((value >> shift) | (value << (max - shift)));
 }
+
+uint64_t rotateRight64(const uint64_t &value, const uint8_t shift);
 
 #endif

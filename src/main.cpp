@@ -58,6 +58,8 @@
 #include "../testing/RC5Test.hpp"
 #include "../testing/RC6Test.hpp"
 #include "../testing/XTEATest.hpp"
+#include "../testing/KeccakTest.hpp"
+#include "../testing/WhirlpoolTest.hpp"
 
 #include <sys/time.h>
 
