@@ -9,15 +9,13 @@
 class TigerTest : public ::testing::Test
 {
 protected:
-   Tiger128 *T1;
-   Tiger160 *T2;
-   Tiger192 *T3;
+   Tiger *T1, *T2, *T3;
 
    virtual void SetUp()
    {
-      T1 = new Tiger128();
-      T2 = new Tiger160();
-      T3 = new Tiger192();
+      T1 = new Tiger(Tiger::HashSize::_128bits);
+      T2 = new Tiger(Tiger::HashSize::_160bits);
+      T3 = new Tiger(Tiger::HashSize::_192bits);
    }
 
    virtual void TearDown()

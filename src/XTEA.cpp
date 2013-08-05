@@ -18,15 +18,14 @@ void XTEA::setKey(const BytesContainer &key)
 
 void XTEA::generateSubkeys()
 {
-   BigEndian32 *LE = new BigEndian32();
+   BigEndian32 BE;
    uint32_t tmp_key[4];
    for (uint8_t i = 0; i < 16; i += 4)
    {
-      LE->toInteger(BytesContainer(key.begin() + i, key.begin() + i + 4));
-      tmp_key[i >> 2] = LE->getValue();
-      LE->resetValue();
+      BE.toInteger(BytesContainer(key.begin() + i, key.begin() + i + 4));
+      tmp_key[i >> 2] = BE.getValue();
+      BE.resetValue();
    }
-   delete LE;
 
    uint32_t sum = 0;
    subkeys.resize(64);
@@ -63,14 +62,14 @@ void XTEA::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
 
 const XTEA::BytesContainer XTEA::getOutputBlock(const BytesContainer &block, const bool to_encode)
 {
-   BigEndian32 *LE = new BigEndian32();
-   LE->toInteger(BytesContainer(block.begin(), block.begin() + 4));
-   uint64_t L = LE->getValue();
-   LE->resetValue();
+   BigEndian32 BE;
+   BE.toInteger(BytesContainer(block.begin(), block.begin() + 4));
+   uint64_t L = BE.getValue();
+   BE.resetValue();
 
-   LE->toInteger(BytesContainer(block.begin() + 4, block.end()));
-   uint64_t R = LE->getValue();
-   delete LE;
+   BE.toInteger(BytesContainer(block.begin() + 4, block.end()));
+   uint64_t R = BE.getValue();
+   BE.resetValue();
 
    if (to_encode)
    {
@@ -85,15 +84,13 @@ const XTEA::BytesContainer XTEA::getOutputBlock(const BytesContainer &block, con
    BytesContainer output;
    output.reserve(8);
    
-   BigEndian32 *LE_32 = new BigEndian32();
-   LE_32->toBytes(L);
-   BytesContainer tmp = LE_32->getBytes();
+   BE.toBytes(L);
+   BytesContainer tmp = BE.getBytes();
    output.insert(output.end(), tmp.begin(), tmp.end());
    
-   LE_32->toBytes(R);
-   tmp = LE_32->getBytes();
+   BE.toBytes(R);
+   tmp = BE.getBytes();
    output.insert(output.end(), tmp.begin(), tmp.end());
-   delete LE_32;
 
    return output;
 }

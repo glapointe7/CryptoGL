@@ -40,17 +40,17 @@ private:
    static const uint8_t left_rotation_table[48];
    static const uint8_t word_indexes[48];
    
-   inline static uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
+   static constexpr uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return (x & y) | (~x & z);
    }
    
-   inline static uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
+   static constexpr uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return (x & y) | (x & z) | (y & z);
    }
    
-   inline static uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
+   static constexpr uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return x ^ y ^ z;
    }
@@ -68,22 +68,22 @@ private:
    /* Constants obtained from the formula k(i) = sin(i + 1) * 2^32 for i = 0,...,63. */
    static const uint32_t sine_magic_numbers[64];
    
-   inline static uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
+   static constexpr uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return (x & y) | (~x & z);
    }
    
-   inline static uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
+   static constexpr uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return (x & z) | (y & ~z);
    }
    
-   inline static uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
+   static constexpr uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return x ^ y ^ z;
    }
    
-   inline static uint32_t I(const uint32_t x, const uint32_t y, const uint32_t z)
+   static constexpr uint32_t I(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return y ^ (x | ~z);
    }

@@ -6,7 +6,7 @@
 
 #include "Feistel.hpp"
 
-class RC6 : public Feistel
+class RC6 : public Feistel //<uint32_t, uint32_t>
 {
 public:
    explicit RC6(const BytesContainer &key) : Feistel(OperationModes::ECB, 20, 16) { setKey(key); }
@@ -16,8 +16,8 @@ public:
    virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
    
 private:
-   static const uint32_t P32 = 0xb7e15163;
-   static const uint32_t Q32 = 0x9e3779b9;
+   static constexpr uint32_t P32 = 0xb7e15163;
+   static constexpr uint32_t Q32 = 0x9e3779b9;
    
    virtual void setKey(const BytesContainer &key) final;
    virtual void generateSubkeys() final;

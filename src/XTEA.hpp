@@ -6,7 +6,7 @@
 
 #include "Feistel.hpp"
 
-class XTEA : public Feistel
+class XTEA : public Feistel //<uint32_t, uint32_t>
 {
 public:
    explicit XTEA(const BytesContainer &key) : Feistel(OperationModes::ECB, 32, 8) { setKey(key); }
@@ -16,7 +16,7 @@ public:
    virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
    
 private:
-   static const uint32_t delta = 0x9E3779B9;
+   static constexpr uint32_t delta = 0x9E3779B9;
    
    virtual void setKey(const BytesContainer &key) final;
    virtual void generateSubkeys() final;

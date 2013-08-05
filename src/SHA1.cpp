@@ -2,9 +2,7 @@
 
 #include "Tools.hpp"
 
-const uint32_t SHA1::IV[5] = {
-   0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xC3D2E1F0
-};
+constexpr uint32_t SHA1::IV[5];
 
 const SHA1::BytesContainer SHA1::encode(const BytesContainer &data)
 {

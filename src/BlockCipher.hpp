@@ -1,4 +1,3 @@
-
 #ifndef BLOCKCIPHER_HPP
 #define BLOCKCIPHER_HPP
 

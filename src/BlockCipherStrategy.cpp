@@ -42,6 +42,6 @@ BlockCipherCBCStrategy::getPreviousCipher(const uint64_t &block_idx) const
    {
       return getIV();
    }
-   
+
    return old_cipher_block[block_idx];
 }

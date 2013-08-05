@@ -48,35 +48,33 @@ protected:
    template<class Endian_type>
    static void appendLength(BytesContainer &bytes, const uint64_t &length)
    {
-      Endian_type *E = new Endian_type();
-      E->toBytes(length);
-      const BytesContainer bytes_pad(E->getBytes());
+      Endian_type E;
+      E.toBytes(length);
+      const BytesContainer bytes_pad(E.getBytes());
       bytes.insert(bytes.end(), bytes_pad.begin(), bytes_pad.end());
-      delete E;
    }
    
    const UIntContainer getInputBlocks(const BytesContainer &bytes, const uint64_t &block_index) const
    {      
-      Endian *E = new Endian();
-      const uint8_t UInt_size = E->getIntSize();
+      Endian E;
+      const uint8_t UInt_size = E.getIntSize();
 
       UIntContainer words;
       words.reserve(in_block_length / UInt_size);
       for (uint8_t k = 0; k < in_block_length; k += UInt_size)
       {
-         E->toInteger(BytesContainer(bytes.begin() + k + block_index, bytes.begin() + k + block_index + UInt_size));
-         words.push_back(E->getValue());
-         E->resetValue();
+         E.toInteger(BytesContainer(bytes.begin() + k + block_index, bytes.begin() + k + block_index + UInt_size));
+         words.push_back(E.getValue());
+         E.resetValue();
       }
-      delete E;
       
       return words;
    }
    
    static const BytesContainer getOutput(const uint8_t max_words, const UIntContainer &hash)
    {
-      Endian *E = new Endian();
-      const uint8_t UInt_size = E->getIntSize();
+      Endian E;
+      const uint8_t UInt_size = E.getIntSize();
       BytesContainer output;
       output.reserve(max_words << 2);
 
@@ -88,18 +86,17 @@ protected:
       
       for (uint8_t j = 0; j < max; ++j)
       {
-         E->toBytes(hash[j]);
-         const BytesContainer bytes(E->getBytes());
+         E.toBytes(hash[j]);
+         const BytesContainer bytes(E.getBytes());
          output.insert(output.end(), bytes.begin(), bytes.end());
       }
       
       if (max_words % 2 && UInt_size == 8)
       {
-         E->toBytes(hash[max]);
-         const BytesContainer bytes(E->getBytes());
+         E.toBytes(hash[max]);
+         const BytesContainer bytes(E.getBytes());
          output.insert(output.end(), bytes.begin(), bytes.begin() + 4);
       }
-      delete E;
 
       return output;
    }

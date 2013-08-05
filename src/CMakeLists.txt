@@ -67,6 +67,7 @@ set(SRC
    Ripemd.hpp Ripemd.cpp
    Tiger.hpp Tiger.cpp
    Whirlpool.hpp Whirlpool.cpp
+   Blake.hpp Blake.cpp
 	Morse.hpp Morse.cpp
 	Playfair.hpp Playfair.cpp
 	Polybe.hpp Polybe.cpp

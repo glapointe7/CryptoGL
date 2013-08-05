@@ -1,4 +1,3 @@
-
 #include "BlockCipher.hpp"
 
 void BlockCipher::setIV(const BytesContainer &IV)

@@ -4,7 +4,7 @@
 
 #include "BlockCipher.hpp"
 
-class IDEA : public BlockCipher
+class IDEA : public BlockCipher //<uint16_t, uint16_t>
 {
 public:
    explicit IDEA(const BytesContainer &key) : BlockCipher(OperationModes::ECB, 8) { setKey(key); }

@@ -26,14 +26,13 @@ void RC6::generateSubkeys()
    UInt32Container tmp_key;
    tmp_key.reserve(tmp_key_len);
 
-   LittleEndian32 *LE = new LittleEndian32();
+   LittleEndian32 LE;
    for (uint8_t i = 0; i < key_len; i += int_size)
    {
-      LE->toInteger(BytesContainer(key.begin() + i, key.begin() + i + int_size));
-      tmp_key.push_back(LE->getValue());
-      LE->resetValue();
+      LE.toInteger(BytesContainer(key.begin() + i, key.begin() + i + int_size));
+      tmp_key.push_back(LE.getValue());
+      LE.resetValue();
    }
-   delete LE;
 
    // Initialize the expanded key table.
    const uint8_t subkeys_len = (rounds + 2) << 1;
@@ -113,15 +112,14 @@ void RC6::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
 
 const RC6::BytesContainer RC6::getOutputBlock(const BytesContainer &block, const bool to_encode)
 {
-   LittleEndian32 *LE = new LittleEndian32();
+   LittleEndian32 LE;
    uint32_t registers[4];
    for(uint8_t i = 0; i < 16; i += 4)
    {
-      LE->toInteger(BytesContainer(block.begin() + i, block.begin() + i + 4));
-      registers[i >> 2] = LE->getValue();
-      LE->resetValue();
+      LE.toInteger(BytesContainer(block.begin() + i, block.begin() + i + 4));
+      registers[i >> 2] = LE.getValue();
+      LE.resetValue();
    }
-   delete LE;
 
    uint64_t L = (static_cast<uint64_t>(registers[0]) << 32) | registers[1];
    uint64_t R = (static_cast<uint64_t>(registers[2]) << 32) | registers[3];
@@ -141,14 +139,13 @@ const RC6::BytesContainer RC6::getOutputBlock(const BytesContainer &block, const
    // Convert 32-bit integers to 8-bit integers output.
    BytesContainer output;
    output.reserve(16);
-   LittleEndian32 *LE_32 = new LittleEndian32();
+
    for(uint8_t i = 0; i < 4; ++i)
    {
-      LE_32->toBytes(registers[i]);
-      const BytesContainer tmp = LE_32->getBytes();
+      LE.toBytes(registers[i]);
+      const BytesContainer tmp = LE.getBytes();
       output.insert(output.end(), tmp.begin(), tmp.end());
    }
-   delete LE_32;
 
    return output;
 }

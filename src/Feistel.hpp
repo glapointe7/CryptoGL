@@ -13,9 +13,10 @@
 
 #include "BlockCipher.hpp"
 
+//template <class SubkeyType, class UInt>
 class Feistel : public BlockCipher
 {
-protected:
+protected:   
    Feistel(const uint8_t round, const uint8_t block_length) 
       : BlockCipher(OperationModes::ECB, block_length), rounds(round) {}
    Feistel(const OperationModes mode, const uint8_t round, const uint8_t block_length) 

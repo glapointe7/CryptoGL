@@ -16,19 +16,21 @@ public:
    virtual const BytesContainer encode(const BytesContainer &data) final;
    
 private:
-   static const uint32_t IV[5];
+   static constexpr uint32_t IV[5] = {
+      0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xC3D2E1F0
+   };
    
-   inline static uint32_t ch(const uint32_t x, const uint32_t y, const uint32_t z)
+   static constexpr uint32_t ch(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return (x & y) ^ (~x & z);
    }
    
-   inline static uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
+   static constexpr uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return (x & y) | (x & z) | (y & z);
    }
 
-   inline static uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
+   static constexpr uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
    {
       return x ^ y ^ z;
    }
