@@ -31,76 +31,77 @@ void XTEA::generateSubkeys()
    subkeys.resize(64);
    for (uint8_t i = 0; i < 32; ++i)
    {
-      subkeys[i] = (sum + tmp_key[sum & 3]) & 0xFFFFFFFF;
+      subkeys[i] = sum + tmp_key[sum & 3];
       sum += delta;
-      subkeys[32 + i] = (sum + tmp_key[(sum >> 11) & 3]) & 0xFFFFFFFF;
+      subkeys[32 + i] = sum + tmp_key[(sum >> 11) & 3];
    }
 }
 
-uint64_t XTEA::F(const uint64_t &X, const uint64_t &subkey) const
+uint32_t XTEA::F(const uint32_t half_block, const uint32_t subkey) const
 {
-   return (((X << 4) ^ (X >> 5)) + X) ^ subkey;
+   return (((half_block << 4) ^ (half_block >> 5)) + half_block) ^ subkey;
 }
 
-void XTEA::encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
+void XTEA::encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
 {
    for (uint8_t i = 0; i < rounds; ++i)
    {
-      L = (L + F(R, subkeys[i])) & 0xFFFFFFFF;
-      R = (R + F(L, subkeys[i + 32])) & 0xFFFFFFFF;
+      L += F(R, subkeys[i]);
+      R += F(L, subkeys[i + 32]);
    }
 }
 
-void XTEA::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
+void XTEA::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
 {
    for (int8_t i = rounds - 1; i >= 0; --i)
    {
-      R = (R - F(L, subkeys[i + 32])) & 0xFFFFFFFF;
-      L = (L - F(R, subkeys[i])) & 0xFFFFFFFF;
+      R -= F(L, subkeys[i + 32]) ;
+      L -= F(R, subkeys[i]);
    }
 }
 
-const XTEA::BytesContainer XTEA::getOutputBlock(const BytesContainer &block, const bool to_encode)
+const XTEA::UInt32Container XTEA::getIntegersFromInputBlock(const BytesContainer &block) const
 {
+   UInt32Container int_block(2, 0);
    BigEndian32 BE;
-   BE.toInteger(BytesContainer(block.begin(), block.begin() + 4));
-   uint64_t L = BE.getValue();
-   BE.resetValue();
-
-   BE.toInteger(BytesContainer(block.begin() + 4, block.end()));
-   uint64_t R = BE.getValue();
-   BE.resetValue();
-
-   if (to_encode)
+   for(uint8_t i = 0; i < 2; ++i)
    {
-      encodeFeistelRounds(L, R, 0);
-   }
-   else
-   {
-      decodeFeistelRounds(L, R, 0);
+      BE.toInteger(BytesContainer(block.begin() + (i << 2), block.begin() + (i << 2) + 4));
+      int_block[i] = BE.getValue();
+      BE.resetValue();
    }
    
-   // Convert 32-bit integers to 8-bit integers output.
-   BytesContainer output;
-   output.reserve(8);
-   
-   BE.toBytes(L);
-   BytesContainer tmp = BE.getBytes();
-   output.insert(output.end(), tmp.begin(), tmp.end());
-   
-   BE.toBytes(R);
-   tmp = BE.getBytes();
-   output.insert(output.end(), tmp.begin(), tmp.end());
-
-   return output;
+   return int_block;
 }
 
-const XTEA::BytesContainer XTEA::encode(const BytesContainer &clear_text)
+const XTEA::UInt32Container XTEA::encodeBlock(const UInt32Container &input)
 {
-   return processEncoding(clear_text);
+   UInt32Container LR(input);
+   encodeFeistelRounds(LR[0], LR[1], 0);
+   
+   return LR;
 }
 
-const XTEA::BytesContainer XTEA::decode(const BytesContainer &cipher_text)
+const XTEA::UInt32Container XTEA::decodeBlock(const UInt32Container &input)
 {
-   return processDecoding(cipher_text);
+   UInt32Container LR(input);
+   decodeFeistelRounds(LR[0], LR[1], 0);
+   
+   return LR;
+}
+
+const XTEA::BytesContainer XTEA::getOutputBlock(const UInt32Container &int_block)
+{
+   BytesContainer output_block;
+   output_block.reserve(8);
+   
+   BigEndian32 BE;
+   for(uint8_t i = 0; i < 2; ++i)
+   {
+      BE.toBytes(int_block[i]);
+      const BytesContainer tmp = BE.getBytes();
+      output_block.insert(output_block.end(), tmp.begin(), tmp.end());
+   }
+
+   return output_block;
 }

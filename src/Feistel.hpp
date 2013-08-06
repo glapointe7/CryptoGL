@@ -1,38 +1,36 @@
 /*
- * Réseau de Feistel : DES, Blowfish sont des Feistel.
- * Précisons que la fonction F n'est PAS nécessairement inversible.
- * 
- * Soit un bloc de données de 64 bits Data. On le sépare en deux parties égales : L0 et R0.
- * L_n = R_{n-1}
- * R_n = L_{n-1} XOR F(R_{n-1}, sous-clé_n)
- * swap(L, R)
- * On répète le processus sur 16 rounds.
+ * Feistel network scheme.
  */
 #ifndef FEISTEL_HPP
 #define	FEISTEL_HPP
 
 #include "BlockCipher.hpp"
 
-//template <class SubkeyType, class UInt>
-class Feistel : public BlockCipher
+template <class FeistelType, class DataType>
+class Feistel : public BlockCipher<FeistelType, DataType>
 {
 protected:   
-   Feistel(const uint8_t round, const uint8_t block_length) 
-      : BlockCipher(OperationModes::ECB, block_length), rounds(round) {}
-   Feistel(const OperationModes mode, const uint8_t round, const uint8_t block_length) 
-      : BlockCipher(mode, block_length), rounds(round) {}
-   virtual ~Feistel() {}
+   typedef typename BlockCipher<FeistelType, DataType>::BytesContainer BytesContainer;
+   //typedef typename BlockCipher<FeistelType, DataType>::UInt32Container UInt32Container;
    
-   virtual const BytesContainer encode(const BytesContainer &) = 0;
-   virtual const BytesContainer decode(const BytesContainer &) = 0;
+   Feistel(const uint8_t round, const uint8_t block_length) 
+      : BlockCipher<FeistelType, DataType>(OperationModes::ECB, block_length), rounds(round) {}
+   
+   Feistel(const OperationModes mode, const uint8_t round, const uint8_t block_length) 
+   : BlockCipher<FeistelType, DataType>(mode, block_length), rounds(round) {}
+
+   virtual ~Feistel() {}
    
    virtual void setKey(const BytesContainer &) = 0;
    virtual void generateSubkeys() = 0;
-   virtual const BytesContainer getOutputBlock(const BytesContainer &block, const bool to_encode) = 0;
+   virtual const DataType getIntegersFromInputBlock(const BytesContainer &) const = 0;
+   virtual const DataType encodeBlock(const DataType &input) = 0;
+   virtual const DataType decodeBlock(const DataType &input) = 0;
+   virtual const BytesContainer getOutputBlock(const DataType &int_block) = 0;
    
-   virtual uint64_t F(const uint64_t &data, const uint64_t &) const = 0;
-   virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const = 0;
-   virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const = 0;
+   virtual FeistelType F(const FeistelType half_block, const FeistelType) const = 0;
+   virtual void encodeFeistelRounds(FeistelType &L, FeistelType &R, const uint8_t) const = 0;
+   virtual void decodeFeistelRounds(FeistelType &L, FeistelType &R, const uint8_t) const = 0;
    
    const uint8_t rounds;
 };

@@ -6,25 +6,26 @@
 
 #include "Feistel.hpp"
 
-class XTEA : public Feistel //<uint32_t, uint32_t>
+class XTEA : public Feistel<uint32_t, std::vector<uint32_t> >
 {
 public:
-   explicit XTEA(const BytesContainer &key) : Feistel(OperationModes::ECB, 32, 8) { setKey(key); }
-   XTEA(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 32, 8) { setKey(key); }
+   explicit XTEA(const BytesContainer &key) : Feistel<uint32_t, std::vector<uint32_t> >(OperationModes::ECB, 32, 8) { setKey(key); }
+   XTEA(const BytesContainer &key, const OperationModes mode) : Feistel<uint32_t, std::vector<uint32_t> >(mode, 32, 8) { setKey(key); }
    
-   virtual const BytesContainer encode(const BytesContainer &clear_text) final;
-   virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
+   virtual void setKey(const BytesContainer &key) final;
    
 private:
    static constexpr uint32_t delta = 0x9E3779B9;
    
-   virtual void setKey(const BytesContainer &key) final;
    virtual void generateSubkeys() final;
-   virtual const BytesContainer getOutputBlock(const BytesContainer &block, const bool to_encode) final;
+   virtual const UInt32Container getIntegersFromInputBlock(const BytesContainer &block) const final;
+   virtual const UInt32Container encodeBlock(const UInt32Container &input) final;
+   virtual const UInt32Container decodeBlock(const UInt32Container &input) final;
+   virtual const BytesContainer getOutputBlock(const UInt32Container &int_block) final;
    
-   virtual uint64_t F(const uint64_t &X, const uint64_t &subkey) const final;
-   virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
-   virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
+   virtual uint32_t F(const uint32_t half_block, const uint32_t subkey) const final;
+   virtual void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
+   virtual void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
 };
 
 #endif

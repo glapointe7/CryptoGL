@@ -16,7 +16,7 @@ void Blowfish::setKey(const BytesContainer &key)
 
 // Process the Feistel algorithm modified for the blowfish algorithm.
 
-void Blowfish::encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
+void Blowfish::encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
 {
    uint8_t i;
    for (i = 0; i != rounds; i += 2)
@@ -29,12 +29,12 @@ void Blowfish::encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) cons
    
    L ^= subkeys[i];
    R ^= subkeys[i + 1];
-   const uint64_t temp = L;
+   const uint32_t temp = L;
    L = R;
    R = temp;
 }
 
-void Blowfish::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
+void Blowfish::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
 {
    for (uint8_t i = rounds + 1; i != 1; i -= 2)
    {
@@ -46,7 +46,7 @@ void Blowfish::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) cons
    
    L ^= subkeys[1];
    R ^= subkeys[0];
-   const uint64_t temp = L;
+   const uint32_t temp = L;
    L = R;
    R = temp;
 }
@@ -58,7 +58,7 @@ void Blowfish::generateSubkeys()
 
    for (uint8_t i = 0, j = 0; i < 18; ++i)
    {
-      uint64_t data = 0;
+      uint32_t data = 0;
       for (uint8_t k = 0; k < 4; ++k)
       {
          data = (data << 8) | key[j];
@@ -67,8 +67,8 @@ void Blowfish::generateSubkeys()
       subkeys.push_back(P[i] ^ data);
    }
 
-   uint64_t L = 0;
-   uint64_t R = 0;
+   uint32_t L = 0;
+   uint32_t R = 0;
    for (uint8_t i = 0; i < 18; i += 2)
    {
       encodeFeistelRounds(L, R, i);
@@ -89,58 +89,54 @@ void Blowfish::generateSubkeys()
 
 // Feistel function F.
 
-uint64_t Blowfish::F(const uint64_t &data, const uint64_t &) const
+uint32_t Blowfish::F(const uint32_t half_block, const uint32_t) const
 {
    const uint8_t V[] = {
-      static_cast<uint8_t>((data >> 24) & 0xFF),
-      static_cast<uint8_t>((data >> 16) & 0xFF),
-      static_cast<uint8_t>((data >> 8) & 0xFF),
-      static_cast<uint8_t>(data & 0xFF)};
+      static_cast<uint8_t>((half_block >> 24) & 0xFF),
+      static_cast<uint8_t>((half_block >> 16) & 0xFF),
+      static_cast<uint8_t>((half_block >> 8) & 0xFF),
+      static_cast<uint8_t>(half_block & 0xFF)};
 
    return (((sbox[0][V[0]] + sbox[1][V[1]]) & 0xFFFFFFFF) ^ (sbox[2][V[2]])) + (sbox[3][V[3]] & 0xFFFFFFFF);
 }
 
-const Blowfish::BytesContainer
-Blowfish::getOutputBlock(const BytesContainer &data, const bool to_encode)
+const uint64_t Blowfish::getIntegersFromInputBlock(const BytesContainer &block) const
 {
    uint64_t value = 0;
    for (uint8_t j = 0, i = 56; j < 8; ++j, i -= 8)
    {
-      const uint64_t x = data[j];
+      const uint64_t x = block[j];
       value |= (x << i);
    }
+   
+   return value;
+}
 
-   // Get the 18 sub-keys of 32 bits and process the 18 Feistel rounds.
-   uint64_t L = (value >> 32) & 0xFFFFFFFF;
-   uint64_t R = value & 0xFFFFFFFF;
-   if (to_encode)
-   {
-      encodeFeistelRounds(L, R, 0);
-   }
-   else
-   {
-      decodeFeistelRounds(L, R, 0);
-   }
+const uint64_t Blowfish::encodeBlock(const uint64_t &input)
+{
+   uint32_t L = input >> 32;
+   uint32_t R = input & 0xFFFFFFFF;
+   encodeFeistelRounds(L, R, 0);
+   
+   return (static_cast<uint64_t>(L) << 32) | R;
+}
 
-   const uint64_t RL = (L << 32) | R;
+const uint64_t Blowfish::decodeBlock(const uint64_t &input)
+{
+   uint32_t L = input >> 32;
+   uint32_t R = input & 0xFFFFFFFF;
+   decodeFeistelRounds(L, R, 0);
+   
+   return (static_cast<uint64_t>(L) << 32) | R;
+}
 
-   // Transform the encoded / decoded block to 8 blocks of 8 bits.
+const Blowfish::BytesContainer Blowfish::getOutputBlock(const uint64_t &int_block)
+{
    BytesContainer output_block(8, 0);
    for (int8_t j = 7, i = 0; j >= 0; --j, i += 8)
    {
-      output_block[j] = (RL >> i) & 0xFF;
+      output_block[j] = (int_block >> i) & 0xFF;
    }
 
    return output_block;
-}
-
-const Blowfish::BytesContainer Blowfish::encode(const BytesContainer &clear_text)
-{
-   // Pad with 0x00 to get a multiple of 64 bits if needed.
-   return processEncoding(clear_text);
-}
-
-const Blowfish::BytesContainer Blowfish::decode(const BytesContainer &cipher_text)
-{
-   return processDecoding(cipher_text);
 }

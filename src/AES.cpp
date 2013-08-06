@@ -85,7 +85,7 @@ void AES::inverseShiftRows(UInt32Container &state)
    state = UInt32Container(state_transposed, state_transposed + 4);
 }
 
-void AES::mixColumns(UInt32Container &state)
+void AES::mixColumns(UInt32Container &state) const
 {
    for(uint8_t i = 0; i < 4; ++i)
    {
@@ -105,7 +105,7 @@ void AES::mixColumns(UInt32Container &state)
    }
 }
 
-void AES::inverseMixColumns(UInt32Container &state)
+void AES::inverseMixColumns(UInt32Container &state) const
 {
    for(uint8_t i = 0; i < 4; ++i)
    {
@@ -125,7 +125,7 @@ void AES::inverseMixColumns(UInt32Container &state)
    }
 }
 
-uint32_t AES::subWord(const uint32_t word)
+uint32_t AES::subWord(const uint32_t word) const
 {
    return sbox[word & 0xFF]
            | (sbox[(word >> 8) & 0xFF]) << 8
@@ -162,7 +162,7 @@ void AES::generateSubkeys()
    }
 }
 
-void AES::addRoundKey(UInt32Container &state, const uint8_t round)
+void AES::addRoundKey(UInt32Container &state, const uint8_t round) const
 {
    for (uint8_t i = 0; i < 4; ++i)
    {
@@ -170,73 +170,73 @@ void AES::addRoundKey(UInt32Container &state, const uint8_t round)
    }
 }
 
-const AES::BytesContainer AES::getOutputBlock(const BytesContainer &block, const bool to_encode)
+const AES::UInt32Container AES::getIntegersFromInputBlock(const BytesContainer &block) const
 {
-   UInt32Container state;
-   state.reserve(4);
-
+   UInt32Container int_block(4, 0);
    BigEndian32 BE;
    for (uint8_t i = 0; i < 16; i += 4)
    {
       BE.toInteger(BytesContainer(block.begin() + i, block.begin() + i + 4));
-      state.push_back(BE.getValue());
+      int_block[i >> 2] = BE.getValue();
       BE.resetValue();
    }
-
-   if (to_encode)
-   {
-      // Round 0
-      addRoundKey(state, 0);
-      
-      for (uint8_t i = 1; i < rounds; ++i)
-      {
-         subBytes(state, sbox);
-         shiftRows(state);
-         mixColumns(state);
-         addRoundKey(state, i);
-      }
-
-      // Last round : no mixColumns.
-      subBytes(state, sbox);
-      shiftRows(state);
-      addRoundKey(state, rounds);
-   }
-   else
-   {
-      addRoundKey(state, rounds);
-
-      for (uint8_t i = rounds - 1; i >= 1; --i)
-      {
-         inverseShiftRows(state);
-         subBytes(state, inverse_sbox);
-         addRoundKey(state, i);
-         inverseMixColumns(state);
-      }
-
-      inverseShiftRows(state);
-      subBytes(state, inverse_sbox);
-      addRoundKey(state, 0);
-   }
    
-   BytesContainer output;
-   output.reserve(16);
+   return int_block;
+}
 
+const AES::UInt32Container AES::encodeBlock(const UInt32Container &input)
+{
+   UInt32Container encoded_block(input);
+   addRoundKey(encoded_block, 0);
+
+   for (uint8_t i = 1; i < rounds; ++i)
+   {
+      subBytes(encoded_block, sbox);
+      shiftRows(encoded_block);
+      mixColumns(encoded_block);
+      addRoundKey(encoded_block, i);
+   }
+
+   // Last round : no mixColumns.
+   subBytes(encoded_block, sbox);
+   shiftRows(encoded_block);
+   addRoundKey(encoded_block, rounds);
+   
+   return encoded_block;
+}
+
+const AES::UInt32Container AES::decodeBlock(const UInt32Container &input)
+{
+   UInt32Container decoded_block(input);
+   addRoundKey(decoded_block, rounds);
+
+   for (uint8_t i = rounds - 1; i >= 1; --i)
+   {
+      inverseShiftRows(decoded_block);
+      subBytes(decoded_block, inverse_sbox);
+      addRoundKey(decoded_block, i);
+      inverseMixColumns(decoded_block);
+   }
+
+   inverseShiftRows(decoded_block);
+   subBytes(decoded_block, inverse_sbox);
+   addRoundKey(decoded_block, 0);
+   
+   return decoded_block;
+}
+
+const AES::BytesContainer AES::getOutputBlock(const UInt32Container &int_block)
+{
+   BytesContainer output_block;
+   output_block.reserve(16);
+
+   BigEndian32 BE;
    for(uint8_t i = 0; i < 4; ++i)
    {
-      BE.toBytes(state[i]);
+      BE.toBytes(int_block[i]);
       const BytesContainer out = BE.getBytes();
-      output.insert(output.end(), out.begin(), out.end());
+      output_block.insert(output_block.end(), out.begin(), out.end());
    }
 
-   return output;
-}
-
-const AES::BytesContainer AES::encode(const BytesContainer &clear_text)
-{
-   return processEncoding(clear_text);
-}
-
-const AES::BytesContainer AES::decode(const BytesContainer &cipher_text)
-{
-   return processDecoding(cipher_text);
+   return output_block;
 }

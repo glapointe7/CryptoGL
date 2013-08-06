@@ -6,29 +6,30 @@
 
 #include "Feistel.hpp"
 
-class Skipjack : public Feistel //<uint8_t, uint16_t>
+class Skipjack : public Feistel<uint8_t, std::vector<uint16_t> >
 {
 public:
-   explicit Skipjack(const BytesContainer &key) : Feistel(OperationModes::ECB, 32, 8) { setKey(key); }
-   Skipjack(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 32, 8) { setKey(key); }
+   explicit Skipjack(const BytesContainer &key) : Feistel<uint8_t, std::vector<uint16_t> >(OperationModes::ECB, 32, 8) { setKey(key); }
+   Skipjack(const BytesContainer &key, const OperationModes mode) : Feistel<uint8_t, std::vector<uint16_t> >(mode, 32, 8) { setKey(key); }
    
-   virtual const BytesContainer encode(const BytesContainer &clear_text) final;
-   virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
+   virtual void setKey(const BytesContainer &key) final;
    
 private:
-   virtual void setKey(const BytesContainer &key) final;
    virtual void generateSubkeys() final;
-   virtual const BytesContainer getOutputBlock(const BytesContainer &block, const bool to_encode) final;
+   virtual const UInt16Container getIntegersFromInputBlock(const BytesContainer &block) const final;
+   virtual const UInt16Container encodeBlock(const UInt16Container &input) final;
+   virtual const UInt16Container decodeBlock(const UInt16Container &input) final;
+   virtual const BytesContainer getOutputBlock(const UInt16Container &int_block) final;
    
-   virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
-   virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t round) const final;
-   virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t round) const final;
+   virtual uint8_t F(const uint8_t data, const uint8_t subkey) const final;
+   virtual void encodeFeistelRounds(uint8_t &L, uint8_t &R, const uint8_t round) const final;
+   virtual void decodeFeistelRounds(uint8_t &L, uint8_t &R, const uint8_t round) const final;
    
    /* Rules A and B and their corresponding inverses. */
-   void applyRuleA(uint16_t *input, const uint8_t round) const;
-   void applyRuleB(uint16_t *input, const uint8_t round) const;
-   void applyInverseRuleA(uint16_t *input, const uint8_t round) const;
-   void applyInverseRuleB(uint16_t *input, const uint8_t round) const;
+   void applyRuleA(UInt16Container &input, const uint8_t round) const;
+   void applyRuleB(UInt16Container &input, const uint8_t round) const;
+   void applyInverseRuleA(UInt16Container &input, const uint8_t round) const;
+   void applyInverseRuleB(UInt16Container &input, const uint8_t round) const;
    
    static constexpr uint8_t f_table[256] = {
       0xa3, 0xd7, 0x09, 0x83, 0xf8, 0x48, 0xf6, 0xf4, 0xb3, 0x21, 0x15, 0x78, 0x99, 0xb1, 0xaf, 0xf9,

@@ -13,6 +13,9 @@ class SymmetricCipher : public Cipher<std::vector<uint8_t> >
 {
 public:
    typedef std::vector<uint8_t> BytesContainer;
+   typedef std::vector<uint16_t> UInt16Container;
+   typedef std::vector<uint32_t> UInt32Container;
+   typedef std::vector<uint64_t> UInt64Container;
 
    static void save(const std::string &filename, const BytesContainer &data);
    static const BytesContainer load(const std::string &filename);

@@ -8,31 +8,32 @@
 
 #include <vector>
 
-class AES : public BlockCipher //<uint32_t, uint32_t>
+class AES : public BlockCipher<uint32_t, std::vector<uint32_t> >
 {
 public:
-   explicit AES(const BytesContainer &key) : BlockCipher(OperationModes::ECB, 16) { setKey(key); }
-   AES(const BytesContainer &key, const OperationModes mode) : BlockCipher(mode, 16) { setKey(key); }
+   explicit AES(const BytesContainer &key) : BlockCipher<uint32_t, std::vector<uint32_t> >(OperationModes::ECB, 16) { setKey(key); }
+   AES(const BytesContainer &key, const OperationModes mode) : BlockCipher<uint32_t, std::vector<uint32_t> >(mode, 16) { setKey(key); }
    
-   virtual const BytesContainer encode(const BytesContainer &clear_text) final;
-   virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
    virtual void setKey(const BytesContainer &key) final;
    
 private:      
    virtual void generateSubkeys() final;
-   virtual const BytesContainer getOutputBlock(const BytesContainer &block, const bool to_encode) final;
+   virtual const UInt32Container getIntegersFromInputBlock(const BytesContainer &block) const final;
+   virtual const UInt32Container encodeBlock(const UInt32Container &input) final;
+   virtual const UInt32Container decodeBlock(const UInt32Container &input) final;
+   virtual const BytesContainer getOutputBlock(const UInt32Container &int_block) final;
    
    static void subBytes(UInt32Container &state, const uint8_t *box);
          
-   uint32_t subWord(const uint32_t word);
-   void addRoundKey(UInt32Container &state, const uint8_t round);
+   uint32_t subWord(const uint32_t word) const;
+   void addRoundKey(UInt32Container &state, const uint8_t round) const;
    
    static void shiftRows(UInt32Container &state);
    static void inverseShiftRows(UInt32Container &state);
    
    /* Function using Galois field GF(256) and 4 functions used to calculate each of the 4 rows. */
-   void mixColumns(UInt32Container &state);
-   void inverseMixColumns(UInt32Container &state);
+   void mixColumns(UInt32Container &state) const;
+   void inverseMixColumns(UInt32Container &state) const;
    
    uint32_t rounds;
    

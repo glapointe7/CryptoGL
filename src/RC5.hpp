@@ -7,14 +7,13 @@
 
 #include "Feistel.hpp"
 
-class RC5 : public Feistel //<uint32_t, uint32_t>
+class RC5 : public Feistel<uint32_t, std::vector<uint32_t> >
 {
 public:
-   explicit RC5(const BytesContainer &key) : Feistel(OperationModes::ECB, 12, 8) { setKey(key); }
-   RC5(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 12, 8) { setKey(key); }
+   explicit RC5(const BytesContainer &key) : Feistel<uint32_t, std::vector<uint32_t> >(OperationModes::ECB, 12, 8) { setKey(key); }
+   RC5(const BytesContainer &key, const OperationModes mode) : Feistel<uint32_t, std::vector<uint32_t> >(mode, 12, 8) { setKey(key); }
    
-   virtual const BytesContainer encode(const BytesContainer &clear_text) final;
-   virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
+   virtual void setKey(const BytesContainer &key) final;
    
 private:
    //const uint8_t block_size = 64;
@@ -25,13 +24,15 @@ private:
    //static const uint64_t P64 = 0xb7e151628aed2a6b;
    //static const uint64_t Q64 = 0x9e3779b97f4a7c15;
    
-   virtual void setKey(const BytesContainer &key) final;
    virtual void generateSubkeys() final;
-   virtual const BytesContainer getOutputBlock(const BytesContainer &block, const bool to_encode) final;
+   virtual const UInt32Container getIntegersFromInputBlock(const BytesContainer &block) const final;
+   virtual const UInt32Container encodeBlock(const UInt32Container &input) final;
+   virtual const UInt32Container decodeBlock(const UInt32Container &input) final;
+   virtual const BytesContainer getOutputBlock(const UInt32Container &int_block) final;
    
-   virtual uint64_t F(const uint64_t &X, const uint64_t &Y) const final { return 0; }
-   virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
-   virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
+   virtual uint32_t F(const uint32_t half_block, const uint32_t) const final { return 0; }
+   virtual void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
+   virtual void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
 };
 
 #endif

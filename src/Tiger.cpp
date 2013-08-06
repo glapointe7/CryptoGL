@@ -3,16 +3,6 @@
 constexpr uint64_t Tiger::IV[];
 constexpr uint64_t Tiger::sbox[][256];
 
-Tiger::Tiger(const HashSize size) : HashFunction(64)
-{
-   switch(size)
-   {
-      case HashSize::_128bits: output_size = 4; break;
-      case HashSize::_160bits: output_size = 5; break;
-      case HashSize::_192bits: output_size = 6; break;
-   }
-}
-
 void Tiger::applyKeySchedule(DWordsContainer &words)
 {
    words[0] -= words[7] ^ 0xA5A5A5A5A5A5A5A5;

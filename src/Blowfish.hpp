@@ -9,25 +9,26 @@
 
 #include <vector>
 
-class Blowfish : public Feistel //<uint64_t, uint64_t>
+class Blowfish : public Feistel<uint32_t, uint64_t>
 {
 public:
    /* Default constructor : default on ECB mode of encryption. */
-   explicit Blowfish(const BytesContainer &key) : Feistel(OperationModes::ECB, 16, 8) { setKey(key); }
+   explicit Blowfish(const BytesContainer &key) : Feistel<uint32_t, uint64_t>(OperationModes::ECB, 16, 8) { setKey(key); }
    
-   Blowfish(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16, 8) { setKey(key); }
+   Blowfish(const BytesContainer &key, const OperationModes mode) : Feistel<uint32_t, uint64_t>(mode, 16, 8) { setKey(key); }
 
-   virtual const BytesContainer encode(const BytesContainer &clear_text) final;
-   virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
    virtual void setKey(const BytesContainer &key) final;
 
 private:
    virtual void generateSubkeys() final;
-   virtual const BytesContainer getOutputBlock(const BytesContainer &data, const bool to_encode) final;
+   virtual const uint64_t getIntegersFromInputBlock(const BytesContainer &block) const final;
+   virtual const uint64_t encodeBlock(const uint64_t &input) final;
+   virtual const uint64_t decodeBlock(const uint64_t &input) final;
+   virtual const BytesContainer getOutputBlock(const uint64_t &int_block) final;
 
-   virtual uint64_t F(const uint64_t &data, const uint64_t &) const final;
-   virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
-   virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
+   virtual uint32_t F(const uint32_t half_block, const uint32_t) const final;
+   virtual void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
+   virtual void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
 
    static constexpr uint32_t P[18] = {
       0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344, 0xa4093822, 0x299f31d0,

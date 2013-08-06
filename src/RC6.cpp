@@ -55,9 +55,9 @@ void RC6::generateSubkeys()
    }
 }
 
-uint64_t RC6::F(const uint64_t &X, const uint64_t&) const
+uint64_t RC6::F(const uint64_t half_block, const uint64_t) const
 {
-   return rotateLeft((X * ((X << 1) + 1)) & 0xFFFFFFFF, 5, 32);
+   return rotateLeft((half_block * ((half_block << 1) + 1)) & 0xFFFFFFFF, 5, 32);
 }
 
 void RC6::encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
@@ -110,52 +110,62 @@ void RC6::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
    R = (static_cast<uint64_t>(C) << 32) | D;
 }
 
-const RC6::BytesContainer RC6::getOutputBlock(const BytesContainer &block, const bool to_encode)
+const RC6::UInt32Container RC6::getIntegersFromInputBlock(const BytesContainer &block) const
 {
    LittleEndian32 LE;
-   uint32_t registers[4];
+   UInt32Container int_block(4, 0);
    for(uint8_t i = 0; i < 16; i += 4)
    {
       LE.toInteger(BytesContainer(block.begin() + i, block.begin() + i + 4));
-      registers[i >> 2] = LE.getValue();
+      int_block[i >> 2] = LE.getValue();
       LE.resetValue();
    }
+   
+   return int_block;
+}
 
-   uint64_t L = (static_cast<uint64_t>(registers[0]) << 32) | registers[1];
-   uint64_t R = (static_cast<uint64_t>(registers[2]) << 32) | registers[3];
-   if (to_encode)
-   {
-      encodeFeistelRounds(L, R, 0);
-   }
-   else
-   {
-      decodeFeistelRounds(L, R, 0);
-   }
-   registers[0] = L >> 32;
-   registers[1] = L & 0xFFFFFFFF;
-   registers[2] = R >> 32;
-   registers[3] = R & 0xFFFFFFFF;
+const RC6::UInt32Container RC6::encodeBlock(const UInt32Container &input)
+{
+   uint64_t L = (static_cast<uint64_t>(input[0]) << 32) | input[1];
+   uint64_t R = (static_cast<uint64_t>(input[2]) << 32) | input[3];
+   encodeFeistelRounds(L, R, 0);
+   
+   UInt32Container LR(4, 0);
+   LR[0] = L >> 32;
+   LR[1] = L & 0xFFFFFFFF;
+   LR[2] = R >> 32;
+   LR[3] = R & 0xFFFFFFFF;
+   
+   return LR;
+}
 
-   // Convert 32-bit integers to 8-bit integers output.
-   BytesContainer output;
-   output.reserve(16);
+const RC6::UInt32Container RC6::decodeBlock(const UInt32Container &input)
+{
+   uint64_t L = (static_cast<uint64_t>(input[0]) << 32) | input[1];
+   uint64_t R = (static_cast<uint64_t>(input[2]) << 32) | input[3];
+   decodeFeistelRounds(L, R, 0);
+   
+   UInt32Container LR(4, 0);
+   LR[0] = L >> 32;
+   LR[1] = L & 0xFFFFFFFF;
+   LR[2] = R >> 32;
+   LR[3] = R & 0xFFFFFFFF;
+   
+   return LR;
+}
 
+const RC6::BytesContainer RC6::getOutputBlock(const UInt32Container &int_block)
+{
+   BytesContainer output_block;
+   output_block.reserve(16);
+
+   LittleEndian32 LE;
    for(uint8_t i = 0; i < 4; ++i)
    {
-      LE.toBytes(registers[i]);
+      LE.toBytes(int_block[i]);
       const BytesContainer tmp = LE.getBytes();
-      output.insert(output.end(), tmp.begin(), tmp.end());
+      output_block.insert(output_block.end(), tmp.begin(), tmp.end());
    }
 
-   return output;
-}
-
-const RC6::BytesContainer RC6::encode(const BytesContainer &clear_text)
-{
-   return processEncoding(clear_text);
-}
-
-const RC6::BytesContainer RC6::decode(const BytesContainer &cipher_text)
-{
-   return processDecoding(cipher_text);
+   return output_block;
 }

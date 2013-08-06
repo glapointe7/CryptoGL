@@ -6,25 +6,26 @@
 
 #include "BlockCipher.hpp"
 
-class RC2 : public BlockCipher //<uint8_t, uint16_t>
+class RC2 : public BlockCipher<uint16_t, std::vector<uint16_t> >
 {
 public:
-   explicit RC2(const BytesContainer &key) : BlockCipher(OperationModes::ECB, 8) { setKey(key); }
-   RC2(const BytesContainer &key, const OperationModes mode) : BlockCipher(mode, 8) { setKey(key); }
+   explicit RC2(const BytesContainer &key) : BlockCipher<uint16_t, std::vector<uint16_t> >(OperationModes::ECB, 8) { setKey(key); }
+   RC2(const BytesContainer &key, const OperationModes mode) : BlockCipher<uint16_t, std::vector<uint16_t> >(mode, 8) { setKey(key); }
    
-   virtual const BytesContainer encode(const BytesContainer &clear_text) final;
-   virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
+   virtual void setKey(const BytesContainer &key) final;
      
 private:
-   virtual void setKey(const BytesContainer &key) final;
    virtual void generateSubkeys() final;
-   virtual const BytesContainer getOutputBlock(const BytesContainer &block, const bool to_encode) final;
+   virtual const UInt16Container getIntegersFromInputBlock(const BytesContainer &block) const final;
+   virtual const UInt16Container encodeBlock(const UInt16Container &input) final;
+   virtual const UInt16Container decodeBlock(const UInt16Container &input) final;
+   virtual const BytesContainer getOutputBlock(const UInt16Container &int_block) final;
    
-   void mixUp(uint16_t *input, const uint8_t index, const uint8_t key_index) const;
-   void mash(uint16_t *input, const uint8_t index) const;
+   void mixUp(UInt16Container &input, const uint8_t index, const uint8_t key_index) const;
+   void mash(UInt16Container &input, const uint8_t index) const;
    
-   void inverseMixUp(uint16_t *input, const uint8_t index, const uint8_t key_index) const;
-   void inverseMash(uint16_t *input, const uint8_t index) const;
+   void inverseMixUp(UInt16Container &input, const uint8_t index, const uint8_t key_index) const;
+   void inverseMash(UInt16Container &input, const uint8_t index) const;
    
    static constexpr uint8_t pi_table[256] = {
       0xd9, 0x78, 0xf9, 0xc4, 0x19, 0xdd, 0xb5, 0xed, 0x28, 0xe9, 0xfd, 0x79, 0x4a, 0xa0, 0xd8, 0x9d,

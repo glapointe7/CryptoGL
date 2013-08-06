@@ -48,95 +48,96 @@ void RC2::generateSubkeys()
    }
 }
 
-void RC2::mixUp(uint16_t *input, const uint8_t index, const uint8_t key_index) const
+void RC2::mixUp(UInt16Container &input, const uint8_t index, const uint8_t key_index) const
 {
    const uint8_t i = 4 + index;
-   input[index] += (subkeys[key_index + index] & 0xFFFF) + (input[(i - 2) & 3] & input[(i - 1) & 3]) + (input[(i - 3) & 3] & ~input[(i - 1) & 3]);
-   input[index] = rotateLeft(input[index], mixup_rotation[index], 16) & 0xFFFF;
+   input[index] += subkeys[key_index + index] + (input[(i - 2) & 3] & input[(i - 1) & 3]) + (input[(i - 3) & 3] & ~input[(i - 1) & 3]);
+   input[index] = rotateLeft(input[index], mixup_rotation[index], 16);
 }
 
-void RC2::mash(uint16_t *input, const uint8_t index) const
+void RC2::mash(UInt16Container &input, const uint8_t index) const
 {
-   input[index] += subkeys[input[(index + 3) & 3] & 0x3F] & 0xFFFF;
+   input[index] += subkeys[input[(index + 3) & 3] & 0x3F];
 }
 
-void RC2::inverseMixUp(uint16_t *input, const uint8_t index, const uint8_t key_index) const
+void RC2::inverseMixUp(UInt16Container &input, const uint8_t index, const uint8_t key_index) const
 {
    const uint8_t i = 4 + index;
-   input[index] = rotateRight(input[index], mixup_rotation[index], 16) & 0xFFFF;
-   input[index] -= (subkeys[key_index + index] & 0xFFFF) + (input[(i - 2) & 3] & input[(i - 1) & 3]) + (input[(i - 3) & 3] & ~input[(i - 1) & 3]);
+   input[index] = rotateRight(input[index], mixup_rotation[index], 16);
+   input[index] -= subkeys[key_index + index] + (input[(i - 2) & 3] & input[(i - 1) & 3]) + (input[(i - 3) & 3] & ~input[(i - 1) & 3]);
 }
 
-void RC2::inverseMash(uint16_t *input, const uint8_t index) const
+void RC2::inverseMash(UInt16Container &input, const uint8_t index) const
 {
-   input[index] -= subkeys[input[(index + 3) & 3] & 0x3F] & 0xFFFF;
+   input[index] -= subkeys[input[(index + 3) & 3] & 0x3F];
 }
 
-const RC2::BytesContainer RC2::getOutputBlock(const BytesContainer &block, const bool to_encode)
+const RC2::UInt16Container RC2::getIntegersFromInputBlock(const BytesContainer &block) const
 {
-   uint16_t input[4];
+   UInt16Container int_block(4, 0);
    for (uint8_t i = 0; i < 8; i += 2)
    {
-      input[i >> 1] = block[i] | (block[i + 1] << 8);
+      int_block[i >> 1] = block[i] | (block[i + 1] << 8);
    }
+   
+   return int_block;
+}
 
-   if (to_encode)
+const RC2::UInt16Container RC2::encodeBlock(const UInt16Container &input)
+{
+   UInt16Container encoded_block(input);
+   for (uint8_t i = 0; i < 16; ++i)
    {
-      for (uint8_t i = 0; i < 16; ++i)
+      const uint8_t key_index = i << 2;
+      for (uint8_t j = 0; j < 4; ++j)
       {
-         const uint8_t key_index = i << 2;
+         mixUp(encoded_block, j, key_index);
+      }
+
+      if (i == 4 || i == 10)
+      {
          for (uint8_t j = 0; j < 4; ++j)
          {
-            mixUp(input, j, key_index);
-         }
-
-         if (i == 4 || i == 10)
-         {
-            for (uint8_t j = 0; j < 4; ++j)
-            {
-               mash(input, j);
-            }
+            mash(encoded_block, j);
          }
       }
    }
-   else
+   
+   return encoded_block;
+}
+
+const RC2::UInt16Container RC2::decodeBlock(const UInt16Container &input)
+{
+   UInt16Container decoded_block(input);
+   for (int8_t i = 15; i >= 0; --i)
    {
-      for (int8_t i = 15; i >= 0; --i)
+      const uint8_t key_index = i << 2;
+      if (i == 4 || i == 10)
       {
-         const uint8_t key_index = i << 2;
-         if (i == 4 || i == 10)
-         {
-            for (int8_t j = 3; j >= 0; --j)
-            {
-               inverseMash(input, j);
-            }
-         }
-         
          for (int8_t j = 3; j >= 0; --j)
          {
-            inverseMixUp(input, j, key_index);
+            inverseMash(decoded_block, j);
          }
       }
-   }
 
-   // Convert from 16-bit vector to 8-bit vector.
-   BytesContainer output;
-   output.reserve(8);
+      for (int8_t j = 3; j >= 0; --j)
+      {
+         inverseMixUp(decoded_block, j, key_index);
+      }
+   }
+   
+   return decoded_block;
+}
+
+const RC2::BytesContainer RC2::getOutputBlock(const UInt16Container &int_block)
+{
+   BytesContainer output_block;
+   output_block.reserve(8);
    for (uint8_t i = 0; i < 4; ++i)
    {
-      output.push_back(input[i] & 0xFF);
-      output.push_back(input[i] >> 8);
+      output_block.push_back(int_block[i] & 0xFF);
+      output_block.push_back(int_block[i] >> 8);
    }
 
-   return output;
-}
-
-const RC2::BytesContainer RC2::encode(const BytesContainer &clear_text)
-{
-   return processEncoding(clear_text);
-}
-
-const RC2::BytesContainer RC2::decode(const BytesContainer &cipher_text)
-{
-   return processDecoding(cipher_text);
+   return output_block;
 }

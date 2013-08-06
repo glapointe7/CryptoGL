@@ -10,24 +10,24 @@
 
 #include <vector>
 
-class DES : public Feistel //<uint64_t, uint64_t>
+class DES : public Feistel<uint64_t, uint64_t>
 {
 public:
-   explicit DES(const BytesContainer &key) : Feistel(OperationModes::ECB, 16, 8) { setKey(key); }
-   DES(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16, 8) { setKey(key); }
+   explicit DES(const BytesContainer &key) : Feistel<uint64_t, uint64_t>(OperationModes::ECB, 16, 8) { setKey(key); }
+   DES(const BytesContainer &key, const OperationModes mode) : Feistel<uint64_t, uint64_t>(mode, 16, 8) { setKey(key); }
    
-   virtual const BytesContainer encode(const BytesContainer &clear_text) final;
-   virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
-   //uint8_t getParityBits();
+   virtual void setKey(const BytesContainer &key) final;
 
 private:
    typedef std::vector<std::vector<uint8_t> > SBox;
    
-   virtual void setKey(const BytesContainer &key) final;
    virtual void generateSubkeys() final;
-   virtual const BytesContainer getOutputBlock(const BytesContainer &data, const bool to_encode) final;
+   virtual const uint64_t getIntegersFromInputBlock(const BytesContainer &block) const final;
+   virtual const uint64_t encodeBlock(const uint64_t &input) final;
+   virtual const uint64_t decodeBlock(const uint64_t &input) final;
+   virtual const BytesContainer getOutputBlock(const uint64_t &int_block) final;
    
-   virtual uint64_t F(const uint64_t &data, const uint64_t &subkey) const final;
+   virtual uint64_t F(const uint64_t data, const uint64_t subkey) const final;
    virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
    virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
    
