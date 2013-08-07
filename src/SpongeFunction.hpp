@@ -96,7 +96,6 @@ protected:
 
    /* The state of the sponge construction. */
    UIntMatrix state;
-   // UIntContainer state;
    
 public:
 

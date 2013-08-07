@@ -108,19 +108,20 @@ const Keccak::BytesContainer Keccak::applySqueezingPhase()
    
    for (int16_t remaining_size = output_size; remaining_size > 0; remaining_size -= bitrate)
    {
-      LittleEndian64 *LE = new LittleEndian64();
+      LittleEndian64 LE;
       for(uint8_t x = 0; x < 5; ++x)
       {
          for(uint8_t y = 0; y < 5; ++y)
          {
-            LE->toBytes(state[x][y]);
-            const BytesContainer tmp = LE->getBytes();
+            LE.toBytes(state[y][x]);
+            const BytesContainer tmp = LE.getBytes();
             output.insert(output.end(), tmp.begin(), tmp.end());
          }
       }      
-      delete LE;
-      
-      F();
+      if(remaining_size > 0)
+      {
+         F();
+      }
    }
 
    return BytesContainer(output.begin(), output.begin() + (output_size >> 3));

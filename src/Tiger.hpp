@@ -17,7 +17,7 @@ public:
    enum class HashSize : uint8_t { _128bits = 4, _160bits = 5, _192bits = 6 };
    
    explicit Tiger(const HashSize size) : HashFunction(64), 
-           output_size(static_cast<typename std::underlying_type<HashSize>::type>(size)) {}
+           output_size(static_cast<uint8_t>(size)) {}
    virtual ~Tiger() {}
 
    virtual const BytesContainer encode(const BytesContainer &data) final;

@@ -17,7 +17,7 @@ public:
    }
    
    /* Process general encoding for block ciphers. */
-   virtual const BytesContainer encode(const BytesContainer &message) final
+   const BytesContainer encode(const BytesContainer &message)
    {
       const BytesContainer message_padded = appendPadding(message, 0);
 
@@ -44,7 +44,7 @@ public:
    }
    
    /* Process general decoding for block ciphers. */
-   virtual const BytesContainer decode(const BytesContainer &message) final
+   const BytesContainer decode(const BytesContainer &message)
    {
       const uint64_t message_len = message.size();
       BytesContainer output;

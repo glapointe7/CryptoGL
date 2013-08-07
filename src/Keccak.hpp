@@ -10,12 +10,12 @@
 
 class Keccak : public SpongeFunction<uint64_t>
 {
-protected:
-
+public:
    /* Default constructor : output size of 512 bits, with capacity of 576 bits 
       bitrate of 1024 bits and 24 rounds. */
    Keccak() : SpongeFunction() {}
-
+   
+protected:
    Keccak(const uint16_t hash_size, const uint16_t c, const uint16_t r)
    : SpongeFunction(hash_size, c, r, 24) {}
 
@@ -58,29 +58,29 @@ private:
       {27, 20, 39, 8, 14}
    };
 };
-
+// size => C => R
 class Keccak224 : public Keccak
 {
 public:
-   Keccak224() : Keccak(224, 1152, 448) {}
+   Keccak224() : Keccak(224, 448, 1152) {}
 };
 
 class Keccak256 : public Keccak
 {
 public:
-   Keccak256() : Keccak(256, 1088, 512) {}
+   Keccak256() : Keccak(256, 512, 1088) {}
 };
 
 class Keccak384 : public Keccak
 {
 public:
-   Keccak384() : Keccak(384, 832, 768) {}
+   Keccak384() : Keccak(384, 768, 832) {}
 };
 
 class Keccak512 : public Keccak
 {
 public:
-   Keccak512() : Keccak() {}
+   Keccak512() : Keccak(512, 1024, 576) {}
 };
 
 #endif
