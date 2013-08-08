@@ -27,16 +27,16 @@ public:
 
       generateSubkeys();
 
-      // Assuming padding is done, data_len is a multiple of 'input_block_length' bytes.
       for (uint64_t n = 0; n < message_padded_len; n += input_block_length)
       {
          const BytesContainer input_block(message_padded.begin() + n, message_padded.begin() + n + input_block_length);
          
-         DataType int_block = getIntegersFromInputBlock(input_block);
+         const BytesContainer cipher_block = block_strategy->getCipherBlock(input_block);
+         
+         DataType int_block = getIntegersFromInputBlock(cipher_block);
          int_block = encodeBlock(int_block);
          const BytesContainer encoded_block = getOutputBlock(int_block);
          
-         //const BytesContainer cipher_block = block_strategy->getCipherBlock(input_block, n / input_block_length);
          output.insert(output.end(), encoded_block.begin(), encoded_block.end());
       }
 
@@ -56,10 +56,12 @@ public:
       {
          const BytesContainer input_block(message.begin() + n, message.begin() + n + input_block_length);
          
-         DataType int_block = getIntegersFromInputBlock(input_block);
+         const BytesContainer clear_block = block_strategy->getClearBlock(input_block);
+         
+         DataType int_block = getIntegersFromInputBlock(clear_block);
          int_block = decodeBlock(int_block);
          const BytesContainer decoded_block = getOutputBlock(int_block);
-         //const BytesContainer clear_block = block_strategy->getClearBlock(input_block, n / input_block_length);
+         
          output.insert(output.end(), decoded_block.begin(), decoded_block.end());
       }
 

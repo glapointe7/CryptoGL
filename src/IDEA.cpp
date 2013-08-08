@@ -25,7 +25,7 @@ void IDEA::generateSubkeys()
    }
 
    // The key is rotated left of 25 bits.
-   UInt16Container::iterator it = subkeys.begin();
+   auto it = subkeys.begin();
    for (uint8_t i = 8, j = 0; i < 52; ++i)
    {
       j++;
@@ -80,12 +80,12 @@ const IDEA::UInt16Container IDEA::encodeBlock(const UInt16Container &input)
    for (uint8_t k = 0; k < 48; k += 6)
    {
       encoded_block[0] = multiplyShort(encoded_block[0], subkeys[k]);
-      encoded_block[1] = addShort(encoded_block[1], subkeys[k + 1]);
-      encoded_block[2] = addShort(encoded_block[2], subkeys[k + 2]);
+      encoded_block[1] += subkeys[k + 1];
+      encoded_block[2] += subkeys[k + 2];
       encoded_block[3] = multiplyShort(encoded_block[3], subkeys[k + 3]);
       const uint16_t t0 = multiplyShort(subkeys[k + 4], encoded_block[0] ^ encoded_block[2]);
-      const uint16_t t1 = multiplyShort(subkeys[k + 5], addShort(t0, encoded_block[1] ^ encoded_block[3]));
-      const uint16_t t2 = addShort(t0, t1);
+      const uint16_t t1 = multiplyShort(subkeys[k + 5], t0 + (encoded_block[1] ^ encoded_block[3]));
+      const uint16_t t2 = t0 + t1;
       encoded_block[0] ^= t1;
       encoded_block[3] ^= t2;
       const uint16_t a = encoded_block[1] ^ t2;
@@ -96,8 +96,8 @@ const IDEA::UInt16Container IDEA::encodeBlock(const UInt16Container &input)
    // Half last round completing the encryption / decryption.
    UInt16Container out(4, 0);
    out[0] = multiplyShort(encoded_block[0], subkeys[48]);
-   out[1] = addShort(encoded_block[2], subkeys[49]);
-   out[2] = addShort(encoded_block[1], subkeys[50]);
+   out[1] = encoded_block[2] + subkeys[49];
+   out[2] = encoded_block[1] + subkeys[50];
    out[3] = multiplyShort(encoded_block[3], subkeys[51]);
    
    return out;

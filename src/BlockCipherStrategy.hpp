@@ -15,8 +15,9 @@ protected:
    
 public:
    virtual ~BlockCipherStrategy() {}
-   virtual const Block getCipherBlock(const Block &clear_block, const uint64_t &block_index) = 0;
-   virtual const Block getClearBlock(const Block &cipher_block, const uint64_t &block_index) = 0;
+   
+   virtual const Block getCipherBlock(const Block &clear_block) = 0;
+   virtual const Block getClearBlock(const Block &cipher_block) = 0;
    
    void setIV(const Block &IV) { this->IV = IV; }
    const Block getIV() const { return IV; }
@@ -28,32 +29,32 @@ private:
 class BlockCipherECBStrategy : public BlockCipherStrategy
 {
 public:
-   virtual const Block getCipherBlock(const Block &clear_block, const uint64_t&) final;
-   virtual const Block getClearBlock(const Block &cipher_block, const uint64_t&) final;
+   virtual const Block getCipherBlock(const Block &clear_block) final;
+   virtual const Block getClearBlock(const Block &cipher_block) final;
 };
 
 class BlockCipherCBCStrategy : public BlockCipherStrategy
 {
 public:
-   virtual const Block getCipherBlock(const Block &clear_block, const uint64_t &block_idx) final;
-   virtual const Block getClearBlock(const Block &cipher_block, const uint64_t &block_idx) final;
+   BlockCipherCBCStrategy() : previous_cipher_block(getIV()) {}
+   
+   virtual const Block getCipherBlock(const Block &clear_block) final;
+   virtual const Block getClearBlock(const Block &cipher_block) final;
    
 private:
-   const Block getPreviousCipher(const uint64_t &block_idx) const;
-
-   std::vector<Block> old_cipher_block;
+   Block previous_cipher_block;
 };
 
 /*class BlockCipherCFBStrategy : public BlockCipherStrategy
 {
 public:
-   virtual const Block getCipherBlock(const Block &clear_block, const uint64_t block_idx) final;
-   virtual const Block getClearBlock(const Block &cipher_block, const uint64_t block_idx) final;
+   virtual const Block getCipherBlock(const Block &clear_block) final;
+   virtual const Block getClearBlock(const Block &cipher_block) final;
 
 private:
-   const Block getPreviousCipher(const uint64_t block_idx) const;
+   const Block getPreviousCipher() const;
 
-   std::vector<Block> old_cipher_block;
+   Block previous_cipher_block;
 };*/
 
 class BlockCipherStrategyFactory

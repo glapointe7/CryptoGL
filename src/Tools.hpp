@@ -5,9 +5,6 @@
 #include <string>
 #include <vector>
 
-typedef std::vector<std::vector<unsigned char> > Table;
-
-// Prototypes pour Tools.cpp.
 const std::string removeRepeatedLetters(const std::string &str);
 void replaceChar(std::string &text, const char letter, const char rletter);
 const std::vector<std::string> split(const std::string &text);

@@ -122,11 +122,6 @@ uint8_t getByteSqrt(const uint8_t sqr)
    return byte_squares.find(sqr)->second;
 }
 
-uint16_t addShort(const uint32_t a, const uint32_t b)
-{
-   return static_cast<uint16_t>((a + b) & 0xFFFF);
-}
-
 /* Multiply a by b modulo 2^16 + 1. */
 uint16_t multiplyShort(const uint16_t a, const uint16_t b)
 {
@@ -148,7 +143,6 @@ uint16_t multiplyShort(const uint16_t a, const uint16_t b)
 
 uint16_t inverseMultiplyShort(const uint16_t value)
 {
-   /* 0 and 1 are self-inverse */
    if (value <= 1)
    {
       return value; 
