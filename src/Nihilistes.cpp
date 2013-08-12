@@ -60,7 +60,6 @@ const Nihilistes::ClassicalType Nihilistes::decode(const ClassicalType &cipher_t
    {
       const auto pos_key = getCharCoordinates(second_key[j], grid);
       const uint8_t key_value = ((pos_key.second+1) * 10) + pos_key.first + 1;
-      //const uint8_t value = (std::stoi(cipher_text.substr(i, 2)) + 100 - key_value) % 100;
       const uint8_t value = (atoi(cipher_text.substr(i, 2).c_str()) + 100 - key_value) % 100;
       const uint8_t last_digit = value % 10;
       decrypted += grid[((value - last_digit) / 10) - 1][last_digit - 1];

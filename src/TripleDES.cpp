@@ -7,17 +7,17 @@
 
 TripleDES::TripleDES(const BytesContainer &key1, const BytesContainer &key2, const BytesContainer &key3)
 {
-   checkKey(key1);
+   setKey(key1);
    this->key = key1;
 
-   checkKey(key2);
+   setKey(key2);
    this->key2 = key2;
 
-   checkKey(key3);
+   setKey(key3);
    this->key3 = key3;
 }
 
-void TripleDES::checkKey(const BytesContainer &key)
+void TripleDES::setKey(const BytesContainer &key)
 {
    if (key.size() != 8)
    {

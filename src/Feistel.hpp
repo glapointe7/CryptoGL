@@ -11,7 +11,6 @@ class Feistel : public BlockCipher<FeistelType, DataType>
 {
 protected:   
    typedef typename BlockCipher<FeistelType, DataType>::BytesContainer BytesContainer;
-   //typedef typename BlockCipher<FeistelType, DataType>::UInt32Container UInt32Container;
    
    Feistel(const uint8_t round, const uint8_t block_length) 
       : BlockCipher<FeistelType, DataType>(OperationModes::ECB, block_length), rounds(round) {}

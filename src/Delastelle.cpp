@@ -33,7 +33,7 @@ const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_te
    // Fill the cipher grid.
    const Grid grid = getGrid(getKey() + alpha);
    
-   // Sous chaque lettre, on note les coordonnées des lettres verticalement.
+   // Under each letter, we note coordinates of letters verticaly.
    ClassicalType crypted;
    crypted.reserve(clear_len);
    for (const auto str : block)
@@ -81,9 +81,9 @@ const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_te
 
 const Delastelle::ClassicalType Delastelle::decode(const ClassicalType &cipher_text)
 {
-   const uint32_t cipher_len = cipher_text.length() * 2;
+   const uint32_t cipher_len = cipher_text.length() << 1;
    ClassicalType decrypted;
-   decrypted.reserve(cipher_len / 2);
+   decrypted.reserve(cipher_len >> 1);
 
    const Grid grid(getGrid(getKey() + alpha));
    std::vector<uint8_t> chars_coords;

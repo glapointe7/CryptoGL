@@ -3,19 +3,17 @@
 #include "Tools.hpp"
 #include "exceptions/BadKeyLength.hpp"
 
-Rabbit::Rabbit(const BytesContainer &key)
+void Rabbit::setKey(const BytesContainer &key)
 {
    if (key.size() != 16)
    {
-      throw BadKeyLength("Your key have to have 16 bytes length.", key.size());
+      throw BadKeyLength("The key must be 16 bytes length.", key.size());
    }
 
    this->key = key;
 }
 
-// IV = Initial Vector et doit être de 8 octets = 64 bits.
-// Le IV peut être nul.
-
+// The IV is not mandatory.
 void Rabbit::setIV(const BytesContainer &IV)
 {
    if (IV.size() != 8)

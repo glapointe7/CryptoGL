@@ -30,6 +30,7 @@ const Affine::ClassicalType Affine::decode(const ClassicalType &cipher_text)
    const uint8_t alpha_len = alpha.length();
    ClassicalType decrypted;
    decrypted.reserve(cipher_text.length());
+   
    const int32_t a_inv = getModInverse(a, alpha_len);
    
    for(const auto c : cipher_text)

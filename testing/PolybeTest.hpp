@@ -2,16 +2,16 @@
 #define POLYBETEST_HPP
 
 #include <gtest/gtest.h>
-#include "../src/Polybe.hpp"
+#include "../src/Polybius.hpp"
 
 class PolybeTest : public ::testing::Test
 {
 protected:
-   Polybe *P;
+   Polybius *P;
 
    virtual void SetUp()
    {
-      P = new Polybe("TESTING");
+      P = new Polybius("TESTING");
    }
 
    virtual void TearDown()

@@ -4,18 +4,14 @@
 
 #include "Cipher.hpp"
 
+#include "String.hpp"
+
 #include <string>
 
 class StringCipher : public Cipher<std::string>
 {
 public:
    typedef std::string ClassicalType; 
-      
-   static void save(const std::string &filename, const ClassicalType &data);
-   static const ClassicalType load(const std::string &filename);
-   
-   void encodeFile(const std::string &clear_text_file, const std::string &cipher_text_file);
-   void decodeFile(const std::string &clear_text_file, const std::string &cipher_text_file);
    
    void eraseBadCharacters(ClassicalType &text) const;
    
@@ -23,7 +19,7 @@ public:
    const ClassicalType getAlpha() const;
 
 protected: 
-   StringCipher();
+   StringCipher() : alpha(String::uppercase) {}
    virtual ~StringCipher() {}
 
    virtual const ClassicalType encode(const ClassicalType &) = 0;

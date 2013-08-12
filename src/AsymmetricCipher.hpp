@@ -25,9 +25,6 @@ public:
    const UInt64Container getPublicKey() const { return public_key; }
    const UInt64Container getPrivateKey() const { return private_key; }
 
-   static void save(const std::string &filename, const std::string &data);
-   static std::string load(const std::string &filename);
-
    static const std::string dwordToString(const UInt64Container &data);
 
 protected:

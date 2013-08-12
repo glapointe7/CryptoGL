@@ -16,7 +16,7 @@ public:
    virtual const ClassicalType decode(const ClassicalType &);
 
 private:
-   static const std::vector<std::string> morse;
+   static const std::vector<ClassicalType> morse;
 };
 
 #endif

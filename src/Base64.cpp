@@ -1,7 +1,8 @@
 #include "Base64.hpp"
 
-#include "exceptions/BadChar.hpp"
 #include "String.hpp"
+
+#include "exceptions/BadChar.hpp"
 
 const std::string Base64::alpha = String::base64_alphabet;
 
@@ -9,7 +10,7 @@ const std::string Base64::encode(const BytesContainer &clear_data)
 {
    const uint32_t clear_len = clear_data.size();
    std::string crypted;
-   crypted.reserve(((clear_len / 3) + (clear_len % 3 > 0)) * 4);
+   crypted.reserve(((clear_len / 3) + (clear_len % 3 > 0)) << 2);
 
    uint32_t temp;
    BytesContainer::const_iterator cursor = clear_data.begin();
@@ -51,7 +52,7 @@ const Base64::BytesContainer Base64::decode(const std::string &cipher_data)
    const uint32_t cipher_len = cipher_data.length();
    if (cipher_len % 4)
    {
-      throw "Non-Valid base64!";
+      throw Exception("The cipher must be a multiple of 4 to be a valid base64.");
    }
    uint32_t padding = 0;
    if (!cipher_data.empty())
@@ -65,12 +66,11 @@ const Base64::BytesContainer Base64::decode(const std::string &cipher_data)
    BytesContainer decrypted;
    decrypted.reserve(((cipher_len / 4) * 3) - padding);
    
-   // Holds decoded quanta.
    uint32_t temp = 0; 
-   std::string::const_iterator cursor = cipher_data.begin();
+   auto cursor = cipher_data.begin();
    while (cursor < cipher_data.end())
    {
-      for (uint32_t quantumPosition = 0; quantumPosition < 4; quantumPosition++)
+      for (uint8_t i = 0; i < 4; ++i)
       {
          temp <<= 6;
          if (*cursor >= 0x41 && *cursor <= 0x5A) // This area will need tweaking if
@@ -95,22 +95,22 @@ const Base64::BytesContainer Base64::decode(const std::string &cipher_data)
                {
                   switch (cipher_data.end() - cursor)
                   {
-                     case 1: //One pad character
-                        decrypted.push_back((temp >> 16) & 0x000000FF);
-                        decrypted.push_back((temp >> 8) & 0x000000FF);
+                     case 1: 
+                        decrypted.push_back((temp >> 16) & 0xFF);
+                        decrypted.push_back((temp >> 8) & 0xFF);
                         return decrypted;
 
-                     case 2: //Two pad characters
-                        decrypted.push_back((temp >> 10) & 0x000000FF);
+                     case 2: 
+                        decrypted.push_back((temp >> 10) & 0xFF);
                         return decrypted;
 
                      default:
-                        throw "Invalid Padding in Base 64!";
+                        throw Exception("Invalid padding in base 64.");
                   }
                }
                
                default:
-                  throw BadChar("Non-Valid Character in Base 64!", *cursor);
+                  throw BadChar("Invalid character in base 64.", *cursor);
             }
          }
          cursor++;
@@ -120,15 +120,4 @@ const Base64::BytesContainer Base64::decode(const std::string &cipher_data)
       decrypted.push_back((temp) & 0x000000FF);
    }
    return decrypted;
-}
-
-const Base64::BytesContainer
-Base64::getBytesFromString(const std::string &str)
-{
-   return BytesContainer(str.begin(), str.end());
-}
-
-const std::string Base64::getStringFromBytes(const BytesContainer &bytes)
-{
-   return std::string(bytes.begin(), bytes.end());
 }

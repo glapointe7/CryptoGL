@@ -17,14 +17,14 @@ public:
    typedef std::vector<uint32_t> UInt32Container;
    typedef std::vector<uint64_t> UInt64Container;
 
-   static void save(const std::string &filename, const BytesContainer &data);
-   static const BytesContainer load(const std::string &filename);
-
 protected:
    virtual ~SymmetricCipher() {}
 
    virtual const BytesContainer encode(const BytesContainer &) = 0;
    virtual const BytesContainer decode(const BytesContainer &) = 0;
+   
+   /* Check the key provided by the user and set it if correct. */
+   virtual void setKey(const BytesContainer &) = 0;
    
    BytesContainer key;
 };

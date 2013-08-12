@@ -19,8 +19,6 @@ public:
    virtual void setKey(const BytesContainer &key) final;
 
 private:
-   typedef std::vector<std::vector<uint8_t> > SBox;
-   
    virtual void generateSubkeys() final;
    virtual const uint64_t getIntegersFromInputBlock(const BytesContainer &block) const final;
    virtual const uint64_t encodeBlock(const uint64_t &input) final;

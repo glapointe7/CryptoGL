@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <sstream>
 
-// Vérifie s'il existe un doublons dans text.
+// Check if it exists a duplicate char in text.
 bool isUniqueChar(const std::string &text)
 {
    std::vector<bool> array(256, 0);
@@ -44,16 +44,12 @@ const std::string removeRepeatedLetters(const std::string &str)
    return result;
 }
 
-// Remplace dans "text" chaque occurence du caract�re "letter" par "rletter".
-
 void replaceChar(std::string &text, const char letter, const char rletter)
 {
    std::replace_if(text.begin(), text.end(), [letter](char c) {
       return (c == letter);
    }, rletter);
 }
-
-// S�pare une cha�ne de caract�res par l'espace et met chaque mot dans un vecteur.
 
 const std::vector<std::string> split(const std::string &text)
 {
@@ -115,8 +111,6 @@ void eraseChars(std::string &text, const std::string chars)
    }
 }
 
-// Retourne le bit à la position pos de number.
-
 const bool getBitAtPosition(const unsigned long pos, const uint64_t &number)
 {
    return (number & (1ull << pos)) > 0;
@@ -130,7 +124,6 @@ const uint64_t getBitsFromTable(const uint64_t &data, const uint8_t *table, cons
    for (uint8_t k = 0; k < to; ++k)
    {
       --i;
-      // Si le bit à la position byte MSB est 1, alors on le positionne selon i MSB.
       if ((data >> (from - table[k])) & 0x1)
       {
          output |= 1ull << i;

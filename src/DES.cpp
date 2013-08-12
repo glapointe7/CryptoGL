@@ -40,41 +40,27 @@ void DES::generateSubkeys()
    K1 = K56 & 0xFFFFFFF;
    K2 = (K56 & 0xFFFFFFF0000000) >> 28;
 
-   // On effectue une rotation à gauche de 1 ou 2 bits selon la table rot_table.
-   // Ensuite, on concatène K1 et K2, puis on permute les bits selon la table PC2.
-   // on effectue l'algorithme 16 fois pour générer les 16 sous-clés de 48 bits chacune.
    subkeys.reserve(16);
    for (uint8_t i = 0; i < 16; ++i)
    {
-      // Rotation à gauche de la partie droite et de la partie gauche.
       const uint64_t KR = rotateLeft(K1, rot_table[i], 28);
       const uint64_t KL = rotateLeft(K2, rot_table[i], 28);
       K1 = KR;
       K2 = KL;
 
       const uint64_t K = KR | (KL << 28);
-
-      // On permute K (56 bits) selon la table PC2 pour obtenir la sous-clé (48 bits).
       subkeys.push_back(getBitsFromTable(K, PC2, 56, 48));
    }
 }
 
-// À partir d'un bloc de 48 bits séparé en 8 blocs de 6 bits, on les substitue
-// à l'aide des 8 tables de substitution.
-// La sortie est 8 blocs de 4 bits concaténés (32 bits).
-
 uint64_t DES::getSubstitution(const uint64_t &key_mixed) const
 {
-   // on divise key_mixed en 8 blocs de 6 bits chacun.
    uint8_t sboxes[8];
    for (uint8_t i = 0, j = 42; i < 8; ++i, j -= 6)
    {
       sboxes[i] = (key_mixed >> j) & 0x3F;
    }
 
-   // Permutations des 6 bits selon les tables S[i] pour i=0,...,7.
-   // Soit un bloc de 6 bits (a,b,c,d,e,f).
-   // On définit row = a.f et col = b.c.d.e où . désigne la concaténation.
    uint64_t s_block = 0;
    for (uint8_t i = 0, j = 28; i < 8; ++i, j -= 4)
    {
@@ -91,16 +77,14 @@ uint64_t DES::getSubstitution(const uint64_t &key_mixed) const
 
 uint64_t DES::F(const uint64_t data, const uint64_t subkey) const
 {
-   // Expension du data de 32 bits à 48 bits avec la table E.
+   // Expension from 32 bits to 48 bits.
    const uint64_t E_block = getBitsFromTable(data, E, 32, 48);
 
-   // On effectue un XOR avec le bloc E_block et la sous-clé.
    const uint64_t key_mixed = E_block ^ subkey;
 
-   // On effectue les substitutions avec les 8 tables de S. Sortie de 32 bits.
+   // Substitutions with the 8 S-Boxes. Output of 32 bits.
    const uint64_t s_block = getSubstitution(key_mixed);
 
-   // Permutation finale avant la sortie des 32 bits avec la table P.
    return getBitsFromTable(s_block, P, 32, 32);
 }
 

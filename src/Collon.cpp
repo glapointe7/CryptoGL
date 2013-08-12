@@ -22,14 +22,13 @@ const Collon::ClassicalType Collon::encode(const ClassicalType &clear_text)
    ClassicalType crypted;
    crypted.reserve(clear_len * 2);
 
-   // Création de la grille de chiffrement avec lettres doublons effacées.
+   // Build the cipher grid without duplicated letters.
    KeyType key_alpha = getKey();
    key_alpha.reserve(alpha.length());
    key_alpha.append(alpha);
    const Grid grid = getGrid(key_alpha);
 
-   // Chaque caractères situé en (x,y) est encodé par un bigramme AB tel que
-   // A = (a,y) et B = (x,b).
+   // Each characters in (x,y) is encoded by the digram AB such that A = (a,y) et B = (x,b).
    for (const auto c : clear_text)
    {
       const auto coords = getCharCoordinates(c, grid);
@@ -37,8 +36,8 @@ const Collon::ClassicalType Collon::encode(const ClassicalType &clear_text)
       line2.push_back(grid[dim - 1][coords.first]);
    }
 
-   // On lit ensuite le texte par bloc. Par exemple pour un bloc de 3 :
-   // L1 = MHD et L2 = JME => crypted = MHDJME. On recommence pour tout le texte.
+   // The text is then read in blocks. For exemple, for a block of length 3, we have
+   // L1 = MHD et L2 = JME => crypted = MHDJME.
    for (uint32_t j = 0; j < clear_len; j += block_len)
    {
       crypted.append(line1.substr(j, block_len));
@@ -53,21 +52,18 @@ const Collon::ClassicalType Collon::decode(const ClassicalType &cipher_text)
    const uint32_t cipher_len = cipher_text.length();
    const uint32_t line_len = cipher_len / 2;
 
-   ClassicalType decrypted;
-   decrypted.reserve(line_len);
-   std::string line1, line2;
+   ClassicalType line1, line2;
    line1.reserve(line_len);
    line2.reserve(line_len);
 
    const Grid grid(getGrid(getKey() + alpha));
 
-   // Remise des bigrammes en 2 lignes de texte. Généralement, la longueur de la ligne n'est
-   // pas multiple de la longueur du bloc. Pour cela, on doit garder le reste.
+   // Put the digrams in 2 lines. Generally, the length of a line is not a multiple of
+   // the block length. For that reason, we keep the rest stored in line_rest_len.
    const uint32_t double_block_len = block_len << 1;
    const uint32_t line_rest_len = line_len % double_block_len;
    const uint32_t line_blocks_len = cipher_len - (line_rest_len << 1);
 
-   // Obtention des 2 lignes sans reste puis on ajoute le reste.
    for (uint32_t i = 0; i < line_blocks_len; i += double_block_len)
    {
       line1 += cipher_text.substr(i, block_len);
@@ -76,14 +72,16 @@ const Collon::ClassicalType Collon::decode(const ClassicalType &cipher_text)
    line1 += cipher_text.substr(line_blocks_len, line_rest_len);
    line2 += cipher_text.substr(line_blocks_len + line_rest_len, line_rest_len);
 
-   // Soient A = (x1, y1) et B = (x2, y2) les 2 lettres du bigramme à l'itération i.
-   // Soit C = (x, y) la lettre décodée. On doit avoir C = (x2, y1).
-   for (uint32_t i = 0; i < line_len; i++)
+   // Let A = (x1, y1) and B = (x2, y2) be the 2-letter digram at iteration i.
+   // Let C = (x, y) be the decoded letter. We have to get C = (x2, y1).
+   ClassicalType decrypted;
+   decrypted.reserve(line_len);
+   for (uint32_t i = 0; i < line_len; ++i)
    {
       const auto A = getCharCoordinates(line1[i], grid);
       const auto B = getCharCoordinates(line2[i], grid);
 
-      decrypted += grid[A.second][B.first];
+      decrypted.push_back(grid[A.second][B.first]);
    }
 
    return decrypted;

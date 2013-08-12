@@ -13,10 +13,12 @@
 class Rabbit : public StreamCipher
 {   
 public:
-   explicit Rabbit(const BytesContainer &key);
+   explicit Rabbit(const BytesContainer &key) { setKey(key); }
    
    virtual const BytesContainer encode(const BytesContainer &clear_text) final;
    virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
+   
+   virtual void setKey(const BytesContainer &key) final;
 
    void setIV(const BytesContainer &IV);
 

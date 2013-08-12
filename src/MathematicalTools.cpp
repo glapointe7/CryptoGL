@@ -80,7 +80,7 @@ uint64_t getLegendreSymbol(const uint64_t &x, const uint64_t &e, const uint64_t 
    return a;
 }
 
-// Tout carré parfait en base 16 se termine par 0,1,4 ou 9.
+// All perfect squares in base 16 end by the following digit : 0,1,4 or 9.
 
 bool isPerfectSquare(const uint32_t value)
 {

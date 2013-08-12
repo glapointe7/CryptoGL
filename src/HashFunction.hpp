@@ -18,8 +18,6 @@ protected:
    typedef std::vector<uint32_t> WordsContainer;
    typedef std::vector<uint64_t> DWordsContainer;
    
-   /* Default constructor : input blocks of 64-bit length each. */
-   //HashFunction() : in_block_length(64) {}
    explicit HashFunction(const uint8_t in_block_length) : in_block_length(in_block_length) {}
    virtual ~HashFunction() {}
    

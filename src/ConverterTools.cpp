@@ -4,17 +4,12 @@
 #include <algorithm>
 #include <vector>
 
-// Convertit chaque Majuscule et minuscule en un symbole quelconque du code ASCII.
-// symbol doit contenir 2 caract�res : 0 = MAJUSCULE  1 = minuscule.
-
 void convertMajMinToSymbol(std::string &text, const std::string symbol)
 {
-   // On remplace chaque caractère en majuscule par symbol[0].
    std::replace_if(text.begin(), text.end(), [](char c) {
       return (isupper(c));
    }, symbol[0]);
 
-   // On remplace chaque caractère en minuscule par symbol[1].
    std::replace_if(text.begin(), text.end(), [](char c) {
       return (islower(c));
    }, symbol[1]);

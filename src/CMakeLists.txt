@@ -26,6 +26,7 @@ set(SRC
 	Transposition.hpp Transposition.cpp
    String.hpp String.cpp
    Digest.hpp Digest.cpp
+   File.hpp
    Random.hpp Random.cpp
 
    exceptions/Exception.hpp
@@ -70,7 +71,7 @@ set(SRC
    Blake.hpp Blake.cpp
 	Morse.hpp Morse.cpp
 	Playfair.hpp Playfair.cpp
-	Polybe.hpp Polybe.cpp
+	Polybius.hpp Polybius.cpp
 	Rabbit.hpp Rabbit.cpp
 	Railfence.hpp Railfence.cpp
    RC2.hpp RC2.cpp

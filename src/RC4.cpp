@@ -5,7 +5,7 @@
 #include "exceptions/BadKeyLength.hpp"
 #include "exceptions/EmptyKey.hpp"
 
-RC4::RC4(const BytesContainer &key)
+void RC4::setKey(const BytesContainer &key)
 {
    if(key.empty())
    {
@@ -13,18 +13,12 @@ RC4::RC4(const BytesContainer &key)
    }
    
    // The key have to be <= than 32 bytes.
-   if(key.size() > 32)
+   if(key.size() > 256)
    {
       throw BadKeyLength("Your RC4 key length have to be less or equal to 32 bytes.", key.size());
    }
    
    this->key = key;
-   
-   // Initialize 'state'.
-   for(uint16_t i = 0; i < 256; ++i)
-   {
-      state[i] = i;
-   }
 }
 
 void RC4::keySetup()
@@ -42,6 +36,12 @@ const RC4::BytesContainer RC4::encode(const BytesContainer &clear_text)
 {
    BytesContainer crypted;
    crypted.reserve(clear_text.size());
+   
+   // Initialize 'state'.
+   for(uint16_t i = 0; i < 256; ++i)
+   {
+      state[i] = i;
+   }
    
    keySetup();
    

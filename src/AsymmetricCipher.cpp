@@ -1,6 +1,6 @@
 #include "AsymmetricCipher.hpp"
 
-// Transforme le vecteur d'entiers en une string d'entiers.
+// Transform a integers vector to a string of integers.
 const std::string AsymmetricCipher::dwordToString(const UInt64Container &numbers)
 {
    std::string str;

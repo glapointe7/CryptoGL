@@ -1,18 +1,14 @@
 
-#include "Polybe.hpp"
+#include "Polybius.hpp"
 
 #include <utility> 
 
-const Polybe::ClassicalType Polybe::encode(const ClassicalType &clear_text)
+const Polybius::ClassicalType Polybius::encode(const ClassicalType &clear_text)
 {  
    ClassicalType crypted;
    crypted.reserve(clear_text.length() * 2);
 
-   // Construction de la grille de chiffrement.
    const Grid grid(getGrid(getKey() + alpha));
-
-   // Obtention des coordonnées de chaque lettre dans la grille.
-   // Note : on ajoute '1', car on veut rendre le cryptogramme en string.
    for (const auto c : clear_text)
    {
       const auto pos = getCharCoordinates(c, grid);
@@ -23,9 +19,7 @@ const Polybe::ClassicalType Polybe::encode(const ClassicalType &clear_text)
    return crypted;
 }
 
-// Décode un texte encodé par le chiffre de Polybe.
-
-const Polybe::ClassicalType Polybe::decode(const ClassicalType &cipher_text)
+const Polybius::ClassicalType Polybius::decode(const ClassicalType &cipher_text)
 {  
    const uint32_t cipher_len = cipher_text.length();
    ClassicalType decrypted;
@@ -35,7 +29,7 @@ const Polybe::ClassicalType Polybe::decode(const ClassicalType &cipher_text)
    for (uint32_t i = 0; i < cipher_len; i += 2)
    {
       const auto pos = std::make_pair(cipher_text[i] - '1', cipher_text[i + 1] - '1');
-      decrypted += grid[pos.first][pos.second];
+      decrypted.push_back(grid[pos.first][pos.second]);
    }
 
    return decrypted;

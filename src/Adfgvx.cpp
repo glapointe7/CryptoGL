@@ -68,9 +68,9 @@ const Adfgvx::ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
       throw EmptyGridKey("Your grid key is not set.");
    }
    
-   // Étape 1 : On prend les coordonnées de chaque lettre et on les remplace
-   // par A,D,F,G,V ou X tels que A=0, D=1, F=2, G=3, V=4, X=5.
-   // Exemple : Si la lettre 'K' se situe à (2,3), alors K s'encode FG.
+   // Take the coordinates of each letter and replace them by A,D,F,G,V ou X such that
+   // A=0, D=1, F=2, G=3, V=4, X=5. For exemple, if 'K' has coordinates (2,3), then
+   // we encode K as FG.
    const KeyType key = getKey();
    ClassicalType first_encoding;
    first_encoding.reserve((clear_text.length() + key.length()) * 2);
@@ -83,10 +83,11 @@ const Adfgvx::ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
       first_encoding += code[coords.first];
    }
 
-   // Étape 2 : On surchiffre à l'aide d'une transposition avec la clé key.
    TranspositionCompleteColumns *TCol = new TranspositionCompleteColumns(getPermutationKey());
+   ClassicalType encoded_text = TCol->encode(first_encoding);
+   delete TCol;
    
-   return TCol->encode(first_encoding);
+   return encoded_text;
 }
 
 const Adfgvx::ClassicalType Adfgvx::decode(const ClassicalType &cipher_text)

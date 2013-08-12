@@ -16,18 +16,18 @@ const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
 
    for (uint32_t i = 0; i < clear_len; i += 2)
    {
-      // Obtenir les coordonnées (x,y) et (a,b) des lettres du bigramme dans la grille.
+      // Get the coordinates (x,y) and (a,b) of the digram's letters from the cipher grid.
       const auto X = getCharCoordinates(full_text[i], grid);
       const auto A = getCharCoordinates(full_text[i+1], grid);
 
-      // Soient X = (x,y) et A = (a,b).
-      // R�gle 1 : Si x != a ET y != b, alors X = (x,b) et A = (a,y).
+      // Let X = (x,y) and A = (a,b).
+      // Rule 1 : If x != a AND y != b, then X = (x,b) and A = (a,y).
       if (X.first != A.first && A.second != X.second)
       {
          crypted.push_back(grid[X.second][A.first]);
          crypted.push_back(grid[A.second][X.first]);
       }
-         // R�gle 2 : Si x = a ET y != b, alors X = (x+1,y) et A = (a+1,b).
+         // Rule 2 : If x = a AND y != b, then X = (x+1,y) and A = (a+1,b).
       else if (X.first == A.first && X.second != A.second)
       {
          const uint8_t x = (X.second + 1) % dim;
@@ -35,7 +35,7 @@ const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
          crypted.push_back(grid[x][X.first]);
          crypted.push_back(grid[y][A.first]);
       }
-         // R�gle 3 : Si x != a ET y = b, alors X = (x,y+1) et A = (a,b+1).
+         // Rule 3 : If x != a AND y = b, then X = (x,y+1) and A = (a,b+1).
       else if (X.first != A.first && A.second == X.second)
       {
          const uint8_t x = (X.first + 1) % dim;
@@ -43,7 +43,7 @@ const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
          crypted.push_back(grid[X.second][x]);
          crypted.push_back(grid[A.second][y]);
       }
-         // R�gle 4 : Si x = a ET y = b, alors X = (x,y) et A = NUL = X.
+         // Rule 4 : If x = a AND y = b, then X = (x,y) and A = NULL = X.
       else
       {
          full_text.insert(full_text.begin() + i + 1, 'X');
@@ -55,8 +55,6 @@ const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
    return crypted;
 }
 
-// Encode un texte clair avec la m�thode de Playfair.
-
 const Playfair::ClassicalType Playfair::decode(const ClassicalType &cipher_text)
 {  
    const uint32_t cipher_len = cipher_text.length();
@@ -67,24 +65,24 @@ const Playfair::ClassicalType Playfair::decode(const ClassicalType &cipher_text)
 
    for (uint32_t i = 0; i < cipher_len; i += 2)
    {
-      // Obtenir les coordonnées (x,y) et (a,b) des lettres du bigramme dans la grille.
+      // Get the coordinates (x,y) and (a,b) of the digram's letters from the cipher grid.
       const auto X = getCharCoordinates(cipher_text[i], grid);
       const auto A = getCharCoordinates(cipher_text[i+1], grid);
 
-      // Soient A = (x,y) et B = (a,b)
-      // R�gle 1 : Si x != a ET y != b, alors A = (x,b) et B = (a,y).
+      // Let A = (x,y) and B = (a,b)
+      // Rule 1 : If x != a AND y != b, then A = (x,b) and B = (a,y).
       if (X.first != A.first && X.second != A.second)
       {
          decrypted.push_back(grid[X.second][A.first]);
          decrypted.push_back(grid[A.second][X.first]);
       }
-         // R�gle 2 : Si x = a ET y != b, alors A = (x+1,y) et B = (a+1,b).
+         // Rule 2 : If x = a AND y != b, then A = (x+1,y) and B = (a+1,b).
       else if (X.first == A.first && X.second != A.second)
       {
          decrypted.push_back(grid[(X.second + dim - 1) % dim][X.first]);
          decrypted.push_back(grid[(A.second + dim - 1) % dim][A.first]);
       }
-         // R�gle 3 : Si x != a ET y = b, alors A = (x,y+1) et B = (a,b+1).
+         // Rule 3 : If x != a AND y = b, then A = (x,y+1) and B = (a,b+1).
       else if (X.first != A.first && X.second == A.second)
       {
          decrypted.push_back(grid[X.second][(X.first + dim - 1) % dim]);

@@ -12,7 +12,7 @@ void convertMajMinToSymbol(std::string &text, const std::string symbol);
 const std::vector<bool> convertBytesToBinary(const std::vector<uint8_t> &bytes);
 std::string convertBytesToBinaryString(const std::vector<uint8_t> &bytes);
 
-template <class Type>
+/*template <class Type>
 const Type lexical_cast(const std::string &textNumber)
 {
    std::istringstream ss(textNumber);
@@ -21,6 +21,6 @@ const Type lexical_cast(const std::string &textNumber)
    ss >> number;
 
    return number;
-}
+}*/
 
 #endif
