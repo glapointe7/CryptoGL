@@ -1,6 +1,7 @@
 #include "DES.hpp"
 
 #include "Tools.hpp"
+#include "BigEndian.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
 #include "exceptions/EmptyKey.hpp"
@@ -26,11 +27,10 @@ void DES::setKey(const BytesContainer &key)
 
 void DES::generateSubkeys()
 {
-   uint64_t key_bits = 0;
-   for (uint8_t i = 0, j = 56; i < 8; ++i, j -= 8)
-   {
-      key_bits |= (static_cast<uint64_t> (key[i]) << j);
-   }
+   BigEndian64 BE;
+   BE.toInteger(key);
+   const uint64_t key_bits = BE.getValue();
+   BE.resetValue();
 
    // We permute with the PC1 table to get a 56-bits key.
    const uint64_t K56 = getBitsFromTable(key_bits, PC1, 64, 56);
@@ -110,14 +110,10 @@ void DES::decodeFeistelRounds(uint64_t& L, uint64_t& R, const uint8_t) const
 
 const uint64_t DES::getIntegersFromInputBlock(const BytesContainer &block) const
 {
-   uint64_t int_block = 0;
-   for (uint8_t j = 0, i = 56; j < 8; ++j, i -= 8)
-   {
-      const uint64_t x = block[j];
-      int_block |= (x << i);
-   }
+   BigEndian64 BE;
+   BE.toInteger(block);
    
-   return int_block;
+   return BE.getValue();
 }
 
 const uint64_t DES::encodeBlock(const uint64_t &input)
@@ -154,11 +150,8 @@ const uint64_t DES::decodeBlock(const uint64_t &input)
 
 const DES::BytesContainer DES::getOutputBlock(const uint64_t &int_block)
 {
-   BytesContainer output_block(8, 0);
-   for (int8_t j = 7, i = 0; j >= 0; --j, i += 8)
-   {
-      output_block[j] = (int_block >> i) & 0xFF;
-   }
-
-   return output_block;
+   BigEndian64 BE;
+   BE.toBytes(int_block);
+   
+   return BE.getBytes();
 }

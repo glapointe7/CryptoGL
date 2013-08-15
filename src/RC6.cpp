@@ -40,7 +40,7 @@ void RC6::generateSubkeys()
    subkeys[0] = P32;
    for (uint8_t i = 1; i < subkeys_len; ++i)
    {
-      subkeys[i] = (subkeys[i - 1] + Q32) & 0xFFFFFFFF;
+      subkeys[i] = subkeys[i - 1] + Q32;
    }
 
    // This step mixes the secret key into the expanded key 'subkeys'.
@@ -112,12 +112,13 @@ void RC6::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
 
 const RC6::UInt32Container RC6::getIntegersFromInputBlock(const BytesContainer &block) const
 {
+   UInt32Container int_block;
+   int_block.reserve(4);
    LittleEndian32 LE;
-   UInt32Container int_block(4, 0);
    for(uint8_t i = 0; i < 16; i += 4)
    {
       LE.toInteger(BytesContainer(block.begin() + i, block.begin() + i + 4));
-      int_block[i >> 2] = LE.getValue();
+      int_block.push_back(LE.getValue());
       LE.resetValue();
    }
    

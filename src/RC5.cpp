@@ -81,12 +81,13 @@ void RC5::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
 
 const RC5::UInt32Container RC5::getIntegersFromInputBlock(const BytesContainer &block) const
 {
-   UInt32Container int_block(2, 0);
+   UInt32Container int_block;
+   int_block.reserve(2);
    LittleEndian32 LE;
-   for(uint8_t i = 0; i < 2; ++i)
+   for(uint8_t i = 0; i < 8; i += 4)
    {
-      LE.toInteger(BytesContainer(block.begin() + (i << 2), block.begin() + (i << 2) + 4));
-      int_block[i] = LE.getValue();
+      LE.toInteger(BytesContainer(block.begin() + i, block.begin() + i + 4));
+      int_block.push_back(LE.getValue());
       LE.resetValue();
    }
    

@@ -1,6 +1,4 @@
-/*
- Use big integers.
- */
+
 #ifndef ASYMMETRICCIPHER_HPP
 #define	ASYMMETRICCIPHER_HPP
 

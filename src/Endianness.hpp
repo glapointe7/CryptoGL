@@ -53,7 +53,6 @@ public:
    
    void clearBytes()
    {
-      bytes.clear();
       bytes.resize(int_size);
    }
 

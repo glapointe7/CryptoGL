@@ -42,9 +42,9 @@ void RC2::generateSubkeys()
 
    // Get the 16-bits subkeys in little-endian.
    subkeys.reserve(64);
-   for (uint8_t i = 0; i < 64; ++i)
+   for (uint8_t i = 0; i < 128; i += 2)
    {
-      subkeys.push_back(tmp_subkeys[i << 1] | (tmp_subkeys[(i << 1) + 1] << 8));
+      subkeys.push_back(tmp_subkeys[i] | (tmp_subkeys[i + 1] << 8));
    }
 }
 
@@ -74,10 +74,11 @@ void RC2::inverseMash(UInt16Container &input, const uint8_t index) const
 
 const RC2::UInt16Container RC2::getIntegersFromInputBlock(const BytesContainer &block) const
 {
-   UInt16Container int_block(4, 0);
+   UInt16Container int_block;
+   int_block.reserve(4);
    for (uint8_t i = 0; i < 8; i += 2)
    {
-      int_block[i >> 1] = block[i] | (block[i + 1] << 8);
+      int_block.push_back(block[i] | (block[i + 1] << 8));
    }
    
    return int_block;

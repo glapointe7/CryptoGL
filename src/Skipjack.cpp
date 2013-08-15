@@ -90,10 +90,11 @@ void Skipjack::applyInverseRuleB(UInt16Container &input, const uint8_t round) co
 
 const Skipjack::UInt16Container Skipjack::getIntegersFromInputBlock(const BytesContainer &block) const
 {
-   UInt16Container int_block(4, 0);
+   UInt16Container int_block;
+   int_block.reserve(4);
    for (uint8_t i = 0; i < 8; i += 2)
    {
-      int_block[i >> 1] = (block[i] << 8) | block[i + 1];
+      int_block.push_back((block[i] << 8) | block[i + 1]);
    }
    
    return int_block;
