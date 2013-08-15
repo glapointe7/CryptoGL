@@ -61,6 +61,7 @@
 #include "../testing/KeccakTest.hpp"
 #include "../testing/WhirlpoolTest.hpp"
 #include "../testing/BlakeTest.hpp"
+#include "../testing/NoekeonTest.hpp"
 
 #include <sys/time.h>
 

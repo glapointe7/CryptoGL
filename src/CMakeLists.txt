@@ -57,6 +57,7 @@ set(SRC
    AES.hpp AES.cpp
    IDEA.hpp IDEA.cpp
    Skipjack.hpp Skipjack.cpp
+   Noekeon.hpp Noekeon.cpp
 	Fleissner.hpp Fleissner.cpp
 	Hellman.hpp Hellman.cpp
 	Hill.hpp Hill.cpp
