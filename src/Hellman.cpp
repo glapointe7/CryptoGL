@@ -25,13 +25,11 @@ void Hellman::setPrivateKey(const UInt64Container &private_key)
 {
    if (!isSuperIncresing(private_key))
    {
-      throw KeyNotSuperIncreasing("Your private key have to be super increasing.");
+      throw KeyNotSuperIncreasing("Your private key has to be super increasing.");
    }
 
    this->private_key = private_key;
 }
-
-// Build the public key.
 
 void Hellman::buildPublicKey()
 {
@@ -39,18 +37,18 @@ void Hellman::buildPublicKey()
    {
       throw IntegersNotCoprime("The modulo and dividend have to be coprime.");
    }
-   
+
    if (modulo <= dividend)
    {
       throw BadModulo("Your modulo have to be greater than your dividend.");
    }
-   
+
    /*const uint64_t sum = std::accumulate(private_key.begin(), private_key.end(), 0);
    if(modulo < sum)
    {
       throw BadModulo("Your modulo have to be greater than the sum of numbers in your private key.");
    }*/
-   
+
    for (const auto number : private_key)
    {
       public_key.push_back((number * dividend) % modulo);
@@ -63,8 +61,8 @@ void Hellman::executeGlouton(std::vector<bool> &bits, const uint64_t T, const ui
 {
    uint64_t goal = T;
    const uint32_t priv_key_len = private_key.size();
-   uint32_t j = priv_key_len - 1;
    const uint32_t k = i * priv_key_len;
+   uint32_t j = priv_key_len - 1;
 
    const auto end = private_key.rend();
    for (auto it = private_key.rbegin(); it != end; ++it)
@@ -80,28 +78,28 @@ void Hellman::executeGlouton(std::vector<bool> &bits, const uint64_t T, const ui
 
 const AsymmetricCipher::UInt64Container Hellman::encode(const BytesContainer &clear_text)
 {
-   UInt64Container crypted;
-
    // To encode, we need to build the public key.
    buildPublicKey();
-   const uint32_t block_size = private_key.size();
+   const uint64_t block_size = private_key.size();
 
-   // Converts given bytes into binary vector.
-   // Then, add ones until we get a multiple of block_size.
+   // We pad with '1' until we get a multiple of block_size.
    std::vector<bool> binary(convertBytesToBinary(clear_text));
    const uint64_t rest = binary.size() % block_size;
-   if(rest != 0)
+   if (rest != 0)
    {
+      binary.reserve(binary.size() + rest);
       binary.insert(binary.end(), block_size - rest, 1);
    }
 
    // Split the binary vector into blocks of block_size bits.
-  const std::vector<std::vector<bool> > bin_blocks(getBlockBinary(binary, block_size));
+   const std::vector < std::vector<bool> > bin_blocks(getBlockBinary(binary, block_size));
 
    // Calculate Sum_{i=0}^{block_size} (block[i] * public_key[i]).
+   UInt64Container crypted;
+   crypted.reserve(block_size);
    for (const auto block : bin_blocks)
    {
-      uint32_t i = 0;
+      uint64_t i = 0;
       uint64_t sum = 0;
       for (const auto bit : block)
       {

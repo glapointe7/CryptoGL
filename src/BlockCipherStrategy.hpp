@@ -16,30 +16,31 @@ protected:
 public:
    virtual ~BlockCipherStrategy() {}
    
-   virtual const Block getCipherBlock(const Block &clear_block) = 0;
-   virtual const Block getClearBlock(const Block &cipher_block) = 0;
+   virtual const Block getCipherBlock(const Block &input_block) = 0;
+   virtual const Block getClearBlock(const Block &input_block) = 0;
    
-   void setIV(const Block &IV) { this->IV = IV; }
-   const Block getIV() const { return IV; }
+   //void setIV(const Block &IV) { this->IV = IV; }
+   //const Block getIV() const { return IV; }
    
-private:
-   Block IV;
+//private:
+  // Block IV;
 };
 
 class BlockCipherECBStrategy : public BlockCipherStrategy
 {
 public:
-   virtual const Block getCipherBlock(const Block &clear_block) final;
-   virtual const Block getClearBlock(const Block &cipher_block) final;
+   virtual const Block getCipherBlock(const Block &input_block) final;
+   virtual const Block getClearBlock(const Block &input_block) final;
 };
 
 class BlockCipherCBCStrategy : public BlockCipherStrategy
 {
 public:
-   BlockCipherCBCStrategy() : previous_cipher_block(getIV()) {}
+   BlockCipherCBCStrategy() {}
+   explicit BlockCipherCBCStrategy(const Block &IV) : previous_cipher_block(IV) {}
    
-   virtual const Block getCipherBlock(const Block &clear_block) final;
-   virtual const Block getClearBlock(const Block &cipher_block) final;
+   virtual const Block getCipherBlock(const Block &input_block) final;
+   virtual const Block getClearBlock(const Block &input_block) final;
    
 private:
    Block previous_cipher_block;
@@ -48,12 +49,13 @@ private:
 /*class BlockCipherCFBStrategy : public BlockCipherStrategy
 {
 public:
-   virtual const Block getCipherBlock(const Block &clear_block) final;
-   virtual const Block getClearBlock(const Block &cipher_block) final;
+   explicit BlockCipherCFBStrategy(const Block &IV) : previous_input_block(IV) {}
+   
+   virtual const Block getCipherBlock(const Block &input_block) final;
+   virtual const Block getClearBlock(const Block &input_block) final;
 
 private:
-   const Block getPreviousCipher() const;
-
+   Block previous_input_block;
    Block previous_cipher_block;
 };*/
 

@@ -9,17 +9,14 @@
 class KeccakTest : public ::testing::Test
 {
 protected:
-   Keccak224 *S;
-   Keccak256 *T;
-   Keccak384 *U;
-   Keccak512 *V;
+   Keccak *S, *T, *U, *V;
 
    virtual void SetUp()
    {
-      S = new Keccak224();
-      T = new Keccak256();
-      U = new Keccak384();
-      V = new Keccak512();
+      S = new Keccak(Keccak::HashSize::_224bits);
+      T = new Keccak(Keccak::HashSize::_256bits);
+      U = new Keccak(Keccak::HashSize::_384bits);
+      V = new Keccak(Keccak::HashSize::_512bits);
    }
 
    virtual void TearDown()

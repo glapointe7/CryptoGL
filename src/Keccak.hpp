@@ -15,14 +15,26 @@ public:
       bitrate of 1024 bits and 24 rounds. */
    Keccak() : SpongeFunction() {}
    
-protected:
-   Keccak(const uint16_t hash_size, const uint16_t c, const uint16_t r)
-   : SpongeFunction(hash_size, c, r, 24) {}
+   /* Predefined hash sizes for width = 1600. */
+   enum class HashSize : uint16_t {
+      _224bits = 224,
+      _256bits = 256,
+      _384bits = 384,
+      _512bits = 512
+   };
+   
+   explicit Keccak(const HashSize hash_size)
+      : SpongeFunction(static_cast<uint16_t>(hash_size), 
+           static_cast<uint16_t>(hash_size) << 1, 1600 - (static_cast<uint16_t>(hash_size) << 1), 24) {}
+   
+   //Keccak(const uint16_t hash_size, const uint16_t c, const uint16_t r)
+   //   : SpongeFunction(hash_size, c, r, 24) {}
 
    virtual ~Keccak() {}
-
+   
 private:
    typedef typename SpongeFunction<uint64_t>::BytesContainer BytesContainer;
+   typedef typename SpongeFunction<uint64_t>::UInt64Container UInt64Container;
 
    /* Keccak-f permutation function. */
    virtual void F() final;
@@ -37,7 +49,7 @@ private:
    void applyRound(const uint8_t round_index);
 
    /* Convert a block of bytes to an array of integers (state). */
-   uint64_t *convertBlockToState(const BytesContainer &block);
+   const UInt64Container convertBlockToState(const BytesContainer &block) const;
 
    /* Round constants. */
    static constexpr uint64_t round_constants[24] = {
@@ -57,30 +69,6 @@ private:
       {28, 55, 25, 21, 56},
       {27, 20, 39, 8, 14}
    };
-};
-// size => C => R
-class Keccak224 : public Keccak
-{
-public:
-   Keccak224() : Keccak(224, 448, 1152) {}
-};
-
-class Keccak256 : public Keccak
-{
-public:
-   Keccak256() : Keccak(256, 512, 1088) {}
-};
-
-class Keccak384 : public Keccak
-{
-public:
-   Keccak384() : Keccak(384, 768, 832) {}
-};
-
-class Keccak512 : public Keccak
-{
-public:
-   Keccak512() : Keccak(512, 1024, 576) {}
 };
 
 #endif

@@ -1,10 +1,10 @@
-Cryptology is a c++ library containing classical ciphers and modern ciphers and hash functions.
+Cryptology is a c++ library containing classical ciphers, modern ciphers and hash functions.
 
 Classical ciphers include the following :
 ADFGVX, Caesar, Vigenere, Rozier, Beaufort, Beaufort (German variant), Vigenere Multiplicative, Chao, Collon, Delastelle, Fleissner, 2-square, 3-square, 4-square, Hill, Morse, Monoalphabetic Substitution, Nihiliste, Playfair, Polibius, Railfence, Redefence, Transpositions, Wolseley and Affine.
 
 Block ciphers include the following :
-AES, DES, Blowfish, IDEA, Skipjack, RC2, RC5, RC6, TripleDES, XTEA
+AES, DES, Blowfish, IDEA, Skipjack, RC2, RC5, RC6, TripleDES, XTEA, Noekeon
 
 Stream ciphers include the following :
 Rabbit, RC4

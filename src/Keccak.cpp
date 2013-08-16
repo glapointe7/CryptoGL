@@ -61,19 +61,20 @@ void Keccak::F()
    }
 }
 
-uint64_t *Keccak::convertBlockToState(const BytesContainer &block)
+const Keccak::UInt64Container Keccak::convertBlockToState(const BytesContainer &block) const
 {
-   uint64_t *block_int = new uint64_t[25];
-   LittleEndian64 *LE = new LittleEndian64();
-   for(uint8_t i = 0; i < 25; ++i)
-   {
-      LE->toInteger(BytesContainer(block.begin() + (i << 3), block.begin() + (i << 3) + 8));
-      block_int[i] = LE->getValue();
-      LE->resetValue();
-   }
-   delete LE;
+   UInt64Container int_block;
+   int_block.reserve(width / lane_width);
    
-   return block_int;
+   LittleEndian64 LE;
+   for(uint8_t i = 0; i < 200; i += 8)
+   {
+      LE.toInteger(BytesContainer(block.begin() + i, block.begin() + i + 8));
+      int_block.push_back(LE.getValue());
+      LE.resetValue();
+   }
+   
+   return int_block;
 }
 
 void Keccak::applyAbsorbingPhase(const BytesContainer &padded_message)
@@ -85,9 +86,7 @@ void Keccak::applyAbsorbingPhase(const BytesContainer &padded_message)
       BytesContainer block(padded_message.begin() + i, padded_message.begin() + i + block_size);
       block.insert(block.end(), capacity >> 3, 0);
       
-      uint64_t *Pi = new uint64_t[25];
-      Pi = convertBlockToState(block);
-      
+      const UInt64Container Pi = convertBlockToState(block);      
       for(uint8_t x = 0; x < 5; ++x)
       {
          for(uint8_t y = 0; y < 5; ++y)
@@ -95,7 +94,6 @@ void Keccak::applyAbsorbingPhase(const BytesContainer &padded_message)
             state[x][y] ^= Pi[x + 5*y];
          }
       }
-      delete [] Pi;
       
       F();
    }

@@ -12,6 +12,7 @@ class SpongeFunction
 {
 protected:
    typedef std::vector<uint8_t> BytesContainer;
+   typedef std::vector<uint64_t> UInt64Container;
    typedef std::vector<UInt> UIntContainer;
    typedef std::vector<UIntContainer> UIntMatrix;
    typedef std::vector<std::vector<uint64_t> > Matrix;

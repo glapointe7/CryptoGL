@@ -11,10 +11,10 @@ class BlockCipher : public SymmetricCipher
 {     
 public:
    /* Set an IV for all modes except ECB and CTR. */
-   void setIV(const BytesContainer &IV)
+   /*void setIV(const BytesContainer &IV)
    {
       block_strategy->setIV(IV);
-   }
+   }*/
    
    /* Process general encoding for block ciphers. */
    const BytesContainer encode(const BytesContainer &message)
