@@ -63,6 +63,7 @@
 #include "../testing/BlakeTest.hpp"
 #include "../testing/NoekeonTest.hpp"
 #include "../testing/CAST128Test.hpp"
+#include "../testing/CAST256Test.hpp"
 
 #include <sys/time.h>
 

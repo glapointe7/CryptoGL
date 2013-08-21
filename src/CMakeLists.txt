@@ -82,6 +82,7 @@ set(SRC
    RC6.hpp RC6.cpp
    XTEA.hpp XTEA.cpp
    CAST128.hpp CAST128.cpp
+   CAST256.hpp CAST256.cpp
 	UnsortAlpha.hpp UnsortAlpha.cpp
 	Vigenere.hpp Vigenere.cpp
 	Wolseley.hpp Wolseley.cpp

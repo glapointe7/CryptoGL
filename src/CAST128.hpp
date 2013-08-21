@@ -18,8 +18,6 @@ public:
    CAST128(const BytesContainer &key, const OperationModes mode) : Feistel<uint32_t, uint64_t>(mode, 12, 8)
    { setKey(key); }
 
-   virtual ~CAST128() {}
-
    virtual void setKey(const BytesContainer &key) final;
 
 private:
