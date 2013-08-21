@@ -111,10 +111,10 @@ void eraseChars(std::string &text, const std::string chars)
    }
 }
 
-const bool getBitAtPosition(const unsigned long pos, const uint64_t &number)
+/*const bool getBitAtPosition(const unsigned long pos, const uint64_t &number)
 {
    return (number & (1ull << pos)) > 0;
-}
+}*/
 
 const uint64_t getBitsFromTable(const uint64_t &data, const uint8_t *table, const uint8_t from, const uint8_t to)
 {
@@ -145,14 +145,4 @@ const std::vector<uint8_t> getXORedBlock(const std::vector<uint8_t> &block1, con
    }
    
    return xored_block;
-}
-
-uint64_t rotateLeft64(const uint64_t &value, const uint8_t shift)
-{
-   return (value << shift) | (value >> (64 - shift));
-}
-
-uint64_t rotateRight64(const uint64_t &value, const uint8_t shift)
-{
-   return ((value >> shift) | (value << (64 - shift)));
 }

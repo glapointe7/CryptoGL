@@ -1,6 +1,5 @@
 #include "IDEA.hpp"
 
-#include "Tools.hpp"
 #include "MathematicalTools.hpp"
 
 #include "exceptions/BadKeyLength.hpp"

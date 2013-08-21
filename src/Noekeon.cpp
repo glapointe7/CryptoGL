@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "Tools.hpp"
+#include "Bits.hpp"
 #include "BigEndian.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
@@ -53,12 +53,12 @@ void Noekeon::applyGamma(UInt32Container &state)
 void Noekeon::applyTheta()
 {
    uint32_t temp = subkeys[0] ^ subkeys[2];
-   temp ^= rotateRight(temp, 8, 32) ^ rotateLeft(temp, 8, 32);
+   temp ^= Bits::rotateRight(temp, 8, 32) ^ Bits::rotateLeft(temp, 8, 32);
    subkeys[1] ^= temp;
    subkeys[3] ^= temp;
    
    temp = subkeys[1] ^ subkeys[3];
-   temp ^= rotateRight(temp, 8, 32) ^ rotateLeft(temp, 8, 32);
+   temp ^= Bits::rotateRight(temp, 8, 32) ^ Bits::rotateLeft(temp, 8, 32);
    subkeys[0] ^= temp;
    subkeys[2] ^= temp;
 }
@@ -66,7 +66,7 @@ void Noekeon::applyTheta()
 void Noekeon::applyTheta(UInt32Container &state) const
 {
    uint32_t temp = state[0] ^ state[2];
-   temp ^= rotateRight(temp, 8, 32) ^ rotateLeft(temp, 8, 32);
+   temp ^= Bits::rotateRight(temp, 8, 32) ^ Bits::rotateLeft(temp, 8, 32);
    state[1] ^= temp;
    state[3] ^= temp;
    
@@ -76,23 +76,23 @@ void Noekeon::applyTheta(UInt32Container &state) const
    }
    
    temp = state[1] ^ state[3];
-   temp ^= rotateRight(temp, 8, 32) ^ rotateLeft(temp, 8, 32);
+   temp ^= Bits::rotateRight(temp, 8, 32) ^ Bits::rotateLeft(temp, 8, 32);
    state[0] ^= temp;
    state[2] ^= temp;
 }
 
 void Noekeon::applyPi1(UInt32Container &state)
 {
-   state[1] = rotateLeft(state[1], 1, 32);
-   state[2] = rotateLeft(state[2], 5, 32);
-   state[3] = rotateLeft(state[3], 2, 32);
+   state[1] = Bits::rotateLeft(state[1], 1, 32);
+   state[2] = Bits::rotateLeft(state[2], 5, 32);
+   state[3] = Bits::rotateLeft(state[3], 2, 32);
 }
 
 void Noekeon::applyPi2(UInt32Container &state)
 {
-   state[1] = rotateRight(state[1], 1, 32);
-   state[2] = rotateRight(state[2], 5, 32);
-   state[3] = rotateRight(state[3], 2, 32);
+   state[1] = Bits::rotateRight(state[1], 1, 32);
+   state[2] = Bits::rotateRight(state[2], 5, 32);
+   state[3] = Bits::rotateRight(state[3], 2, 32);
 }
 
 void Noekeon::applyRound(UInt32Container &state, const uint8_t constant1, const uint8_t constant2)

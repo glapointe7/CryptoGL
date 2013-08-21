@@ -1,6 +1,6 @@
 #include "Keccak.hpp"
 
-#include "Tools.hpp"
+#include "Bits.hpp"
 #include "LittleEndian.hpp"
 
 constexpr uint64_t Keccak::round_constants[];
@@ -19,7 +19,7 @@ void Keccak::applyRound(const uint8_t round_index)
 
    for (uint8_t x = 0; x < 5; ++x)
    {
-      D[x] = C[(x + 4) % 5] ^ rotateLeft64(C[(x + 1) % 5], 1);
+      D[x] = C[(x + 4) % 5] ^ Bits::rotateLeft64(C[(x + 1) % 5], 1);
    }
    
    for (uint8_t x = 0; x < 5; ++x)
@@ -36,7 +36,7 @@ void Keccak::applyRound(const uint8_t round_index)
    {
       for (uint8_t y = 0; y < 5; ++y)
       {
-         B[y][(2 * x + 3 * y) % 5] = rotateLeft64(state[x][y], rho_offsets[x][y]);
+         B[y][(2 * x + 3 * y) % 5] = Bits::rotateLeft64(state[x][y], rho_offsets[x][y]);
       }
    }
 

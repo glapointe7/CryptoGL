@@ -1,6 +1,6 @@
 #include "SHA1.hpp"
 
-#include "Tools.hpp"
+#include "Bits.hpp"
 
 constexpr uint32_t SHA1::IV[5];
 
@@ -19,7 +19,7 @@ const SHA1::BytesContainer SHA1::encode(const BytesContainer &data)
       // Extention of the 32-bits 16 blocks in 80 blocks of 32 bits.
       for (uint8_t j = 16; j < 80; ++j)
       {
-         words[j] = rotateLeft(words[j - 3] ^ words[j - 8] ^ words[j - 14] ^ words[j - 16], 1, 32);
+         words[j] = Bits::rotateLeft(words[j - 3] ^ words[j - 8] ^ words[j - 14] ^ words[j - 16], 1, 32);
       }
 
       WordsContainer hash(states);
@@ -47,10 +47,10 @@ const SHA1::BytesContainer SHA1::encode(const BytesContainer &data)
             k = 0xCA62C1D6;
          }
 
-         const uint32_t tmp = rotateLeft(hash[0], 5, 32) + f + hash[4] + k + words[j];
+         const uint32_t tmp = Bits::rotateLeft(hash[0], 5, 32) + f + hash[4] + k + words[j];
          hash[4] = hash[3];
          hash[3] = hash[2];
-         hash[2] = rotateLeft(hash[1], 30, 32);
+         hash[2] = Bits::rotateLeft(hash[1], 30, 32);
          hash[1] = hash[0];
          hash[0] = tmp;
       }

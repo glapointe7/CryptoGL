@@ -5,7 +5,7 @@
 #include "exceptions/BadKeyLength.hpp"
 
 #include "LittleEndian.hpp"
-#include "Tools.hpp"
+#include "Bits.hpp"
 
 void RC5::setKey(const BytesContainer &key)
 {
@@ -48,8 +48,8 @@ void RC5::generateSubkeys()
    uint32_t L = 0, R = 0;
    for (uint8_t l = 0, i = 0, j = 0; l < k; ++l)
    {
-      L = subkeys[i] = rotateLeft(subkeys[i] + L + R, 3, 32);
-      R = tmp_key[j] = rotateLeft(tmp_key[j] + L + R, (L + R) & 31, 32);
+      L = subkeys[i] = Bits::rotateLeft(subkeys[i] + L + R, 3, 32);
+      R = tmp_key[j] = Bits::rotateLeft(tmp_key[j] + L + R, (L + R) & 31, 32);
       i = (i + 1) % subkeys_len;
       j = (j + 1) % tmp_key_len;
    }
@@ -62,8 +62,8 @@ void RC5::encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
    for (uint8_t i = 1; i <= rounds; ++i)
    {
       const uint8_t j = i << 1;
-      L = rotateLeft(L ^ R, R & 31, 32) + subkeys[j];
-      R = rotateLeft(R ^ L, L & 31, 32) + subkeys[j + 1];
+      L = Bits::rotateLeft(L ^ R, R & 31, 32) + subkeys[j];
+      R = Bits::rotateLeft(R ^ L, L & 31, 32) + subkeys[j + 1];
    }
 }
 
@@ -72,8 +72,8 @@ void RC5::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
    for (uint8_t i = rounds; i > 0; --i)
    {
       const uint8_t j = i << 1;
-      R = rotateRight(R - subkeys[j + 1], L & 31, 32) ^ L;
-      L = rotateRight(L - subkeys[j], R & 31, 32) ^ R;
+      R = Bits::rotateRight(R - subkeys[j + 1], L & 31, 32) ^ L;
+      L = Bits::rotateRight(L - subkeys[j], R & 31, 32) ^ R;
    }
    R -= subkeys[1];
    L -= subkeys[0];

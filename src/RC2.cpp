@@ -1,6 +1,6 @@
 #include "RC2.hpp"
 
-#include "Tools.hpp"
+#include "Bits.hpp"
 
 constexpr uint8_t RC2::pi_table[256];
 constexpr uint8_t RC2::mixup_rotation[4];
@@ -52,7 +52,7 @@ void RC2::mixUp(UInt16Container &input, const uint8_t index, const uint8_t key_i
 {
    const uint8_t i = 4 + index;
    input[index] += subkeys[key_index + index] + (input[(i - 2) & 3] & input[(i - 1) & 3]) + (input[(i - 3) & 3] & ~input[(i - 1) & 3]);
-   input[index] = rotateLeft(input[index], mixup_rotation[index], 16);
+   input[index] = Bits::rotateLeft(input[index], mixup_rotation[index], 16);
 }
 
 void RC2::mash(UInt16Container &input, const uint8_t index) const
@@ -63,7 +63,7 @@ void RC2::mash(UInt16Container &input, const uint8_t index) const
 void RC2::inverseMixUp(UInt16Container &input, const uint8_t index, const uint8_t key_index) const
 {
    const uint8_t i = 4 + index;
-   input[index] = rotateRight(input[index], mixup_rotation[index], 16);
+   input[index] = Bits::rotateRight(input[index], mixup_rotation[index], 16);
    input[index] -= subkeys[key_index + index] + (input[(i - 2) & 3] & input[(i - 1) & 3]) + (input[(i - 3) & 3] & ~input[(i - 1) & 3]);
 }
 

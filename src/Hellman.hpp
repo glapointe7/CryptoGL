@@ -26,6 +26,7 @@ private:
    uint64_t dividend;
    
    void executeGlouton(std::vector<bool> &bits, const uint64_t T, const uint32_t i) const;
+   bool isSuperIncresing(const UInt64Container &sequence);
 };
 
 #endif

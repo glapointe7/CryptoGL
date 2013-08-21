@@ -13,7 +13,7 @@ set(SRC
 
 	StreamCipher.hpp StreamCipher.cpp	
 	AsymmetricCipher.hpp AsymmetricCipher.cpp
-	SymmetricCipher.hpp SymmetricCipher.cpp
+	SymmetricCipher.hpp
 	
    Matrix.hpp Matrix.cpp
 	ConverterTools.hpp ConverterTools.cpp
@@ -27,6 +27,7 @@ set(SRC
    String.hpp String.cpp
    Digest.hpp Digest.cpp
    File.hpp
+   Bits.hpp
    Random.hpp Random.cpp
 
    exceptions/Exception.hpp
@@ -80,15 +81,16 @@ set(SRC
    RC5.hpp RC5.cpp
    RC6.hpp RC6.cpp
    XTEA.hpp XTEA.cpp
+   CAST128.hpp CAST128.cpp
 	UnsortAlpha.hpp UnsortAlpha.cpp
 	Vigenere.hpp Vigenere.cpp
 	Wolseley.hpp Wolseley.cpp
    Affine.hpp Affine.cpp
    Blowfish.hpp Blowfish.cpp
    MonoalphabeticSubstitution.hpp MonoalphabeticSubstitution.cpp
-   BlockCipher.hpp BlockCipher.cpp
+   BlockCipher.hpp
    Feistel.hpp
-   BlockCipherStrategy.hpp BlockCipherStrategy.cpp
+   BlockCipherModes.hpp BlockCipherModes.cpp
    Base64.hpp Base64.cpp
    Nihilistes.hpp Nihilistes.cpp
    Chao.hpp Chao.cpp

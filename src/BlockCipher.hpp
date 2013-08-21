@@ -4,7 +4,7 @@
 #include "SymmetricCipher.hpp"
 
 #include "BlockCipherOperationModes.hpp"
-#include "BlockCipherStrategy.hpp"
+#include "BlockCipherModes.hpp"
 
 template <class SubkeyType, class DataType>
 class BlockCipher : public SymmetricCipher
@@ -31,9 +31,9 @@ public:
       {
          const BytesContainer input_block(message_padded.begin() + n, message_padded.begin() + n + input_block_length);
          
-         const BytesContainer cipher_block = block_strategy->getCipherBlock(input_block);
+         //const BytesContainer cipher_block = block_strategy->getCipherBlock(input_block);
          
-         DataType int_block = getIntegersFromInputBlock(cipher_block);
+         DataType int_block = getIntegersFromInputBlock(input_block);
          int_block = encodeBlock(int_block);
          const BytesContainer encoded_block = getOutputBlock(int_block);
          
@@ -56,9 +56,9 @@ public:
       {
          const BytesContainer input_block(message.begin() + n, message.begin() + n + input_block_length);
          
-         const BytesContainer clear_block = block_strategy->getClearBlock(input_block);
+         //const BytesContainer clear_block = block_strategy->getClearBlock(input_block);
          
-         DataType int_block = getIntegersFromInputBlock(clear_block);
+         DataType int_block = getIntegersFromInputBlock(input_block);
          int_block = decodeBlock(int_block);
          const BytesContainer decoded_block = getOutputBlock(int_block);
          
@@ -72,7 +72,7 @@ protected:
    typedef std::vector<SubkeyType> SubkeysContainer;
    
    BlockCipher(const OperationModes mode, const uint8_t block_length)
-      : block_strategy(BlockCipherStrategyFactory::createBlockCipherStrategy(mode)),
+      : block_strategy(BlockCipherModesFactory::createBlockCipherMode(mode)),
         input_block_length(block_length) {}
    
    virtual ~BlockCipher() { delete block_strategy; }
@@ -114,7 +114,7 @@ protected:
       return padded_input;
    }
 
-   BlockCipherStrategy *block_strategy;
+   BlockCipherModes *block_strategy;
    const uint8_t input_block_length;
    SubkeysContainer subkeys;
 };

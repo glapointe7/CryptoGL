@@ -76,6 +76,21 @@ void Hellman::executeGlouton(std::vector<bool> &bits, const uint64_t T, const ui
    }
 }
 
+bool Hellman::isSuperIncresing(const std::vector<uint64_t> &sequence)
+{
+   uint64_t sum = 0;
+   for (const auto number : sequence)
+   {
+      if (number <= sum)
+      {
+         return false;
+      }
+      sum += number;
+   }
+
+   return true;
+}
+
 const AsymmetricCipher::UInt64Container Hellman::encode(const BytesContainer &clear_text)
 {
    // To encode, we need to build the public key.

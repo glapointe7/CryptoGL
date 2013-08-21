@@ -7,7 +7,7 @@
 #include "HashFunction.hpp"
 #include "BigEndian.hpp"
 
-#include "Tools.hpp"
+#include "Bits.hpp"
 
 #define INPUT32_BLOCK_LENGTH 64
 #define INPUT64_BLOCK_LENGTH 128
@@ -70,12 +70,16 @@ protected:
 
    static constexpr UInt A(const UInt &hash, const uint8_t x, const uint8_t y, const uint8_t z)
    {
-      return rotateRight(hash, x, sizeof(UInt) << 3) ^ rotateRight(hash, y, sizeof(UInt) << 3) ^ rotateRight(hash, z, sizeof(UInt) << 3);
+      return Bits::rotateRight(hash, x, sizeof(UInt) << 3) 
+              ^ Bits::rotateRight(hash, y, sizeof(UInt) << 3) 
+              ^ Bits::rotateRight(hash, z, sizeof(UInt) << 3);
    }
 
    static constexpr UInt B(const UInt &word, const uint8_t x, const uint8_t y, const uint8_t z)
    {
-      return rotateRight(word, x, sizeof(UInt) << 3) ^ rotateRight(word, y, sizeof(UInt) << 3) ^ (word >> z);
+      return Bits::rotateRight(word, x, sizeof(UInt) << 3) 
+              ^ Bits::rotateRight(word, y, sizeof(UInt) << 3) 
+              ^ (word >> z);
    }
    
    UIntContainer IV;

@@ -1,6 +1,6 @@
 
 #ifndef IDEA_HPP
-#define	IDEA_HPP
+#define IDEA_HPP
 
 #include "BlockCipher.hpp"
 

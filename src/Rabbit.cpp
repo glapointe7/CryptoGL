@@ -1,6 +1,6 @@
 #include "Rabbit.hpp"
 
-#include "Tools.hpp"
+#include "Bits.hpp"
 #include "exceptions/BadKeyLength.hpp"
 
 void Rabbit::setKey(const BytesContainer &key)
@@ -65,14 +65,14 @@ void Rabbit::nextState()
    }
 
    // Calculate new state values.
-   states[0] = G[0] + rotateLeft(G[7], 16, 32) + rotateLeft(G[6], 16, 32);
-   states[1] = G[1] + rotateLeft(G[0], 8, 32) + G[7];
-   states[2] = G[2] + rotateLeft(G[1], 16, 32) + rotateLeft(G[0], 16, 32);
-   states[3] = G[3] + rotateLeft(G[2], 8, 32) + G[1];
-   states[4] = G[4] + rotateLeft(G[3], 16, 32) + rotateLeft(G[2], 16, 32);
-   states[5] = G[5] + rotateLeft(G[4], 8, 32) + G[3];
-   states[6] = G[6] + rotateLeft(G[5], 16, 32) + rotateLeft(G[4], 16, 32);
-   states[7] = G[7] + rotateLeft(G[6], 8, 32) + G[5];
+   states[0] = G[0] + Bits::rotateLeft(G[7], 16, 32) + Bits::rotateLeft(G[6], 16, 32);
+   states[1] = G[1] + Bits::rotateLeft(G[0], 8, 32) + G[7];
+   states[2] = G[2] + Bits::rotateLeft(G[1], 16, 32) + Bits::rotateLeft(G[0], 16, 32);
+   states[3] = G[3] + Bits::rotateLeft(G[2], 8, 32) + G[1];
+   states[4] = G[4] + Bits::rotateLeft(G[3], 16, 32) + Bits::rotateLeft(G[2], 16, 32);
+   states[5] = G[5] + Bits::rotateLeft(G[4], 8, 32) + G[3];
+   states[6] = G[6] + Bits::rotateLeft(G[5], 16, 32) + Bits::rotateLeft(G[4], 16, 32);
+   states[7] = G[7] + Bits::rotateLeft(G[6], 8, 32) + G[5];
 }
 
 void Rabbit::keySetup()
@@ -99,10 +99,10 @@ void Rabbit::keySetup()
    states[7] = (subkeys[2] << 16) | (subkeys[1] >> 16);
 
    /* Generate initial counter values */
-   counters[0] = rotateLeft(subkeys[2], 16, 32);
-   counters[2] = rotateLeft(subkeys[3], 16, 32);
-   counters[4] = rotateLeft(subkeys[0], 16, 32);
-   counters[6] = rotateLeft(subkeys[1], 16, 32);
+   counters[0] = Bits::rotateLeft(subkeys[2], 16, 32);
+   counters[2] = Bits::rotateLeft(subkeys[3], 16, 32);
+   counters[4] = Bits::rotateLeft(subkeys[0], 16, 32);
+   counters[6] = Bits::rotateLeft(subkeys[1], 16, 32);
    counters[1] = (subkeys[0] & 0xFFFF0000) | (subkeys[1] & 0xFFFF);
    counters[3] = (subkeys[1] & 0xFFFF0000) | (subkeys[2] & 0xFFFF);
    counters[5] = (subkeys[2] & 0xFFFF0000) | (subkeys[3] & 0xFFFF);

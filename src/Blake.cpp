@@ -1,6 +1,6 @@
 #include "Blake.hpp"
 
-#include "Tools.hpp"
+#include "Bits.hpp"
 
 template<class UInt> constexpr uint8_t Blake<UInt>::sigma[][16];
 constexpr uint64_t Blake64Bits::C[];
@@ -60,27 +60,27 @@ const Blake<uint64_t>::BytesContainer Blake512::appendPadding(const BytesContain
 void Blake32Bits::G(uint32_t &a, uint32_t &b, uint32_t &c, uint32_t &d, const WordsContainer &block, const uint8_t r, const uint8_t i) const
 {
    a += b + (block[sigma[r % 10][i]] ^ C[sigma[r % 10][i + 1]]);
-   d = rotateRight(d ^ a, G_rotate[0], 32);
+   d = Bits::rotateRight(d ^ a, G_rotate[0], 32);
    c += d;
-   b = rotateRight(b ^ c, G_rotate[1], 32);
+   b = Bits::rotateRight(b ^ c, G_rotate[1], 32);
 
    a += b + (block[sigma[r % 10][i + 1]] ^ C[sigma[r % 10][i]]);
-   d = rotateRight(d ^ a, G_rotate[2], 32);
+   d = Bits::rotateRight(d ^ a, G_rotate[2], 32);
    c += d;
-   b = rotateRight(b ^ c, G_rotate[3], 32);
+   b = Bits::rotateRight(b ^ c, G_rotate[3], 32);
 }
 
 void Blake64Bits::G(uint64_t &a, uint64_t &b, uint64_t &c, uint64_t &d, const DWordsContainer &block, const uint8_t r, const uint8_t i) const
 {
    a += b + (block[sigma[r % 10][i]] ^ C[sigma[r % 10][i + 1]]);
-   d = rotateRight64(d ^ a, G_rotate[0]);
+   d = Bits::rotateRight64(d ^ a, G_rotate[0]);
    c += d;
-   b = rotateRight64(b ^ c, G_rotate[1]);
+   b = Bits::rotateRight64(b ^ c, G_rotate[1]);
 
    a += b + (block[sigma[r % 10][i + 1]] ^ C[sigma[r % 10][i]]);
-   d = rotateRight64(d ^ a, G_rotate[2]);
+   d = Bits::rotateRight64(d ^ a, G_rotate[2]);
    c += d;
-   b = rotateRight64(b ^ c, G_rotate[3]);
+   b = Bits::rotateRight64(b ^ c, G_rotate[3]);
 }
 
 const Blake<uint32_t>::BytesContainer Blake32Bits::encode(const BytesContainer &data)

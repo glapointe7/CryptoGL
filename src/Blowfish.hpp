@@ -15,6 +15,7 @@ public:
    /* Default constructor : default on ECB mode of encryption. */
    explicit Blowfish(const BytesContainer &key) : Feistel<uint32_t, uint64_t>(OperationModes::ECB, 16, 8) { setKey(key); }
    
+   /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
    Blowfish(const BytesContainer &key, const OperationModes mode) : Feistel<uint32_t, uint64_t>(mode, 16, 8) { setKey(key); }
 
    virtual void setKey(const BytesContainer &key) final;

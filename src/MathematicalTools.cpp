@@ -2,11 +2,11 @@
 
 #include <cmath>
 #include <map>
+
 #include "exceptions/Exception.hpp"
 
-// Return GCD(a,b).
-
-uint32_t GCD(uint32_t a, uint32_t b)
+/* Return the Greatest Common Divisor of a and b. */
+uint32_t GCD(const uint32_t a, const uint32_t b)
 {
    if (b == 0)
       return a;
@@ -44,30 +44,10 @@ int32_t getModInverse(int32_t a, const int32_t b)
    return v;
 }
 
-/* Check if a sequence is a super increasing set. */
-bool isSuperIncresing(const std::vector<uint64_t> &sequence)
-{
-   uint64_t sum = 0;
-
-   for (const auto number : sequence)
-   {
-      if (number > sum)
-      {
-         sum += number;
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   return true;
-}
-
 uint64_t getLegendreSymbol(const uint64_t &x, const uint64_t &e, const uint64_t &n)
 {
    uint64_t a = 1;
-   unsigned char e_size = sizeof (e);
+   uint8_t e_size = sizeof (e);
    for (char i = e_size; i >= 0; --i)
    {
       a = (a * a) % n;

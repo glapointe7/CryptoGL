@@ -1,6 +1,6 @@
 #include "Ripemd.hpp"
 
-#include "Tools.hpp"
+#include "Bits.hpp"
 
 #include <algorithm>
 
@@ -24,7 +24,7 @@ void Ripemd::swapHashWithRotate(WordsContainer &hash, const uint32_t tmp)
 {
    hash[0] = hash[4];
    hash[4] = hash[3];
-   hash[3] = rotateLeft(hash[2], 10, 32);
+   hash[3] = Bits::rotateLeft(hash[2], 10, 32);
    hash[2] = hash[1];
    hash[1] = tmp;
 }
@@ -57,10 +57,10 @@ void Ripemd::process128_256(const WordsContainer &words, WordsContainer &hash1, 
       k = 3;
    }
 
-   uint32_t tmp = rotateLeft(hash1[0] + f1 + words[word_selection1[j]] + magic_numbers1[k], left_shift1[j], 32);
+   uint32_t tmp = Bits::rotateLeft(hash1[0] + f1 + words[word_selection1[j]] + magic_numbers1[k], left_shift1[j], 32);
    swapHashWithoutRotate(hash1, tmp);
 
-   tmp = rotateLeft(hash2[0] + f2 + words[word_selection2[j]] + magic_numbers2[k], left_shift2[j], 32);
+   tmp = Bits::rotateLeft(hash2[0] + f2 + words[word_selection2[j]] + magic_numbers2[k], left_shift2[j], 32);
    swapHashWithoutRotate(hash2, tmp);
 }
 
@@ -98,10 +98,10 @@ void Ripemd::process160_320(const WordsContainer &words, WordsContainer &hash1, 
       k = 4;
    }
 
-   uint32_t tmp = rotateLeft(hash1[0] + f1 + words[word_selection1[j]] + magic_numbers1[k], left_shift1[j], 32) + hash1[4];
+   uint32_t tmp = Bits::rotateLeft(hash1[0] + f1 + words[word_selection1[j]] + magic_numbers1[k], left_shift1[j], 32) + hash1[4];
    swapHashWithRotate(hash1, tmp);
 
-   tmp = rotateLeft(hash2[0] + f2 + words[word_selection2[j]] + magic_numbers_big2[k], left_shift2[j], 32) + hash2[4];
+   tmp = Bits::rotateLeft(hash2[0] + f2 + words[word_selection2[j]] + magic_numbers_big2[k], left_shift2[j], 32) + hash2[4];
    swapHashWithRotate(hash2, tmp);
 }
 

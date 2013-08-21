@@ -1,6 +1,7 @@
 #include "DES.hpp"
 
 #include "Tools.hpp"
+#include "Bits.hpp"
 #include "BigEndian.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
@@ -43,8 +44,8 @@ void DES::generateSubkeys()
    subkeys.reserve(16);
    for (uint8_t i = 0; i < 16; ++i)
    {
-      const uint64_t KR = rotateLeft(K1, rot_table[i], 28);
-      const uint64_t KL = rotateLeft(K2, rot_table[i], 28);
+      const uint64_t KR = Bits::rotateLeft(K1, rot_table[i], 28);
+      const uint64_t KL = Bits::rotateLeft(K2, rot_table[i], 28);
       K1 = KR;
       K2 = KL;
 

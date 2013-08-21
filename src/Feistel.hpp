@@ -12,11 +12,17 @@ class Feistel : public BlockCipher<FeistelType, DataType>
 protected:   
    typedef typename BlockCipher<FeistelType, DataType>::BytesContainer BytesContainer;
    
-   Feistel(const uint8_t round, const uint8_t block_length) 
+   /* Default Constructor : ECB mode of encryption is the default. No IV needed. */
+   /*Feistel(const uint8_t round, const uint8_t block_length) 
       : BlockCipher<FeistelType, DataType>(OperationModes::ECB, block_length), rounds(round) {}
-   
+   */
+   /* Constructor with no IV needed : ECB and CTR modes are accepted. */
    Feistel(const OperationModes mode, const uint8_t round, const uint8_t block_length) 
    : BlockCipher<FeistelType, DataType>(mode, block_length), rounds(round) {}
+   
+   /* Constructor with an IV : CBC, CFB and OFB modes are accepted. */
+   //Feistel(const OperationModes mode, const uint8_t round, const uint8_t block_length, const BytesContainer &IV) 
+   //: BlockCipher<FeistelType, DataType>(mode, block_length, IV), rounds(round) {}
 
    virtual ~Feistel() {}
    
@@ -31,7 +37,12 @@ protected:
    virtual void encodeFeistelRounds(FeistelType &L, FeistelType &R, const uint8_t) const = 0;
    virtual void decodeFeistelRounds(FeistelType &L, FeistelType &R, const uint8_t) const = 0;
    
-   const uint8_t rounds;
+   void setNumberOfRounds(const uint8_t rounds)
+   {
+      this->rounds = rounds;
+   }
+   
+   uint8_t rounds;
 };
 
 #endif
