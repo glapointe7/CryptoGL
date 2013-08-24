@@ -10,8 +10,8 @@
 class RC5 : public Feistel<uint32_t, std::vector<uint32_t> >
 {
 public:
-   explicit RC5(const BytesContainer &key) : Feistel<uint32_t, std::vector<uint32_t> >(OperationModes::ECB, 12, 8) { setKey(key); }
-   RC5(const BytesContainer &key, const OperationModes mode) : Feistel<uint32_t, std::vector<uint32_t> >(mode, 12, 8) { setKey(key); }
+   explicit RC5(const BytesContainer &key) : Feistel(OperationModes::ECB, 12, 8) { setKey(key); }
+   RC5(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 12, 8) { setKey(key); }
    
    virtual void setKey(const BytesContainer &key) final;
    
@@ -30,7 +30,7 @@ private:
    virtual const UInt32Container decodeBlock(const UInt32Container &input) final;
    virtual const BytesContainer getOutputBlock(const UInt32Container &int_block) final;
    
-   virtual uint32_t F(const uint32_t half_block, const uint32_t) const final { return 0; }
+   virtual const uint32_t F(const uint32_t half_block, const uint8_t) const final { return 0; }
    virtual void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
    virtual void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
 };

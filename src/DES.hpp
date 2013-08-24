@@ -13,8 +13,8 @@
 class DES : public Feistel<uint64_t, uint64_t>
 {
 public:
-   explicit DES(const BytesContainer &key) : Feistel<uint64_t, uint64_t>(OperationModes::ECB, 16, 8) { setKey(key); }
-   DES(const BytesContainer &key, const OperationModes mode) : Feistel<uint64_t, uint64_t>(mode, 16, 8) { setKey(key); }
+   explicit DES(const BytesContainer &key) : Feistel(OperationModes::ECB, 16, 8) { setKey(key); }
+   DES(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16, 8) { setKey(key); }
    
    virtual void setKey(const BytesContainer &key) final;
 
@@ -25,7 +25,7 @@ private:
    virtual const uint64_t decodeBlock(const uint64_t &input) final;
    virtual const BytesContainer getOutputBlock(const uint64_t &int_block) final;
    
-   virtual uint64_t F(const uint64_t data, const uint64_t subkey) const final;
+   virtual const uint64_t F(const uint64_t data, const uint8_t round) const final;
    virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
    virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
    

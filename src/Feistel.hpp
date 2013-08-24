@@ -6,11 +6,11 @@
 
 #include "BlockCipher.hpp"
 
-template <class FeistelType, class DataType>
-class Feistel : public BlockCipher<FeistelType, DataType>
+template <class FeistelType, class DataType, class SubkeyType = FeistelType>
+class Feistel : public BlockCipher<SubkeyType, DataType>
 {
 protected:   
-   typedef typename BlockCipher<FeistelType, DataType>::BytesContainer BytesContainer;
+   typedef typename BlockCipher<SubkeyType, DataType>::BytesContainer BytesContainer;
    
    /* Default Constructor : ECB mode of encryption is the default. No IV needed. */
    /*Feistel(const uint8_t round, const uint8_t block_length) 
@@ -18,7 +18,7 @@ protected:
    */
    /* Constructor with no IV needed : ECB and CTR modes are accepted. */
    Feistel(const OperationModes mode, const uint8_t round, const uint8_t block_length) 
-   : BlockCipher<FeistelType, DataType>(mode, block_length), rounds(round) {}
+   : BlockCipher<SubkeyType, DataType>(mode, block_length), rounds(round) {}
    
    /* Constructor with an IV : CBC, CFB and OFB modes are accepted. */
    //Feistel(const OperationModes mode, const uint8_t round, const uint8_t block_length, const BytesContainer &IV) 
@@ -33,10 +33,11 @@ protected:
    virtual const DataType decodeBlock(const DataType &input) = 0;
    virtual const BytesContainer getOutputBlock(const DataType &int_block) = 0;
    
-   virtual FeistelType F(const FeistelType half_block, const FeistelType) const = 0;
+   virtual const FeistelType F(const FeistelType half_block, const uint8_t) const = 0;
    virtual void encodeFeistelRounds(FeistelType &L, FeistelType &R, const uint8_t) const = 0;
    virtual void decodeFeistelRounds(FeistelType &L, FeistelType &R, const uint8_t) const = 0;
    
+   /* When the number of rounds dependant of the key length. */
    void setNumberOfRounds(const uint8_t rounds)
    {
       this->rounds = rounds;

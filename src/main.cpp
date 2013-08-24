@@ -64,6 +64,7 @@
 #include "../testing/NoekeonTest.hpp"
 #include "../testing/CAST128Test.hpp"
 #include "../testing/CAST256Test.hpp"
+#include "../testing/TwofishTest.hpp"
 
 #include <sys/time.h>
 

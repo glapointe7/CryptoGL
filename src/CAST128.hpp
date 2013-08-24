@@ -11,12 +11,10 @@ class CAST128 : public Feistel<uint32_t, uint64_t>
 public:
 
    /* Default constructor : default on ECB mode of encryption. */
-   explicit CAST128(const BytesContainer &key) : Feistel<uint32_t, uint64_t>(OperationModes::ECB, 12, 8)
-   { setKey(key); }
+   explicit CAST128(const BytesContainer &key) : Feistel(OperationModes::ECB, 12, 8) { setKey(key); }
 
    /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
-   CAST128(const BytesContainer &key, const OperationModes mode) : Feistel<uint32_t, uint64_t>(mode, 12, 8)
-   { setKey(key); }
+   CAST128(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 12, 8) { setKey(key); }
 
    virtual void setKey(const BytesContainer &key) final;
 
@@ -27,9 +25,9 @@ private:
    virtual const uint64_t decodeBlock(const uint64_t &input) final;
    virtual const BytesContainer getOutputBlock(const uint64_t &int_block) final;
 
-   virtual uint32_t F(const uint32_t half_block, const uint32_t index) const final;
-   uint32_t F2(const uint32_t half_block, const uint32_t index) const;
-   uint32_t F3(const uint32_t half_block, const uint32_t index) const;
+   virtual const uint32_t F(const uint32_t half_block, const uint8_t index) const final;
+   uint32_t F2(const uint32_t half_block, const uint8_t index) const;
+   uint32_t F3(const uint32_t half_block, const uint8_t index) const;
    virtual void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
    virtual void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
    

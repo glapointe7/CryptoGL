@@ -55,7 +55,7 @@ void RC6::generateSubkeys()
    }
 }
 
-uint64_t RC6::F(const uint64_t half_block, const uint64_t) const
+const uint64_t RC6::F(const uint64_t half_block, const uint8_t) const
 {
    return Bits::rotateLeft((half_block * ((half_block << 1) + 1)) & 0xFFFFFFFF, 5, 32);
 }

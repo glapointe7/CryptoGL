@@ -41,9 +41,9 @@ void Blowfish::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) cons
    for (uint8_t i = rounds + 1; i != 1; i -= 2)
    {
       L ^= subkeys[i];
-      R ^= F(L, subkeys[i]);
+      R ^= F(L, i);
       R ^= subkeys[i - 1];
-      L ^= F(R, subkeys[i]);
+      L ^= F(R, i);
    }
    
    L ^= subkeys[1];
@@ -89,7 +89,7 @@ void Blowfish::generateSubkeys()
 
 // Feistel function F.
 
-uint32_t Blowfish::F(const uint32_t half_block, const uint32_t) const
+const uint32_t Blowfish::F(const uint32_t half_block, const uint8_t) const
 {
    const uint8_t V[] = {
       static_cast<uint8_t>(half_block >> 24),

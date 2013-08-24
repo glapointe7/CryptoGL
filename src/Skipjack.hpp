@@ -9,8 +9,8 @@
 class Skipjack : public Feistel<uint8_t, std::vector<uint16_t> >
 {
 public:
-   explicit Skipjack(const BytesContainer &key) : Feistel<uint8_t, std::vector<uint16_t> >(OperationModes::ECB, 32, 8) { setKey(key); }
-   Skipjack(const BytesContainer &key, const OperationModes mode) : Feistel<uint8_t, std::vector<uint16_t> >(mode, 32, 8) { setKey(key); }
+   explicit Skipjack(const BytesContainer &key) : Feistel(OperationModes::ECB, 32, 8) { setKey(key); }
+   Skipjack(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 32, 8) { setKey(key); }
    
    virtual void setKey(const BytesContainer &key) final;
    
@@ -21,7 +21,7 @@ private:
    virtual const UInt16Container decodeBlock(const UInt16Container &input) final;
    virtual const BytesContainer getOutputBlock(const UInt16Container &int_block) final;
    
-   virtual uint8_t F(const uint8_t data, const uint8_t subkey) const final;
+   virtual const uint8_t F(const uint8_t data, const uint8_t round) const final;
    virtual void encodeFeistelRounds(uint8_t &L, uint8_t &R, const uint8_t round) const final;
    virtual void decodeFeistelRounds(uint8_t &L, uint8_t &R, const uint8_t round) const final;
    

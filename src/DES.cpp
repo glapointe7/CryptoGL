@@ -76,12 +76,12 @@ uint64_t DES::getSubstitution(const uint64_t &key_mixed) const
 // Feistel function F 
 // Param : 32-bits data and a 48-bits sub-key.
 
-uint64_t DES::F(const uint64_t data, const uint64_t subkey) const
+const uint64_t DES::F(const uint64_t data, const uint8_t round) const
 {
    // Expension from 32 bits to 48 bits.
    const uint64_t E_block = getBitsFromTable(data, E, 32, 48);
 
-   const uint64_t key_mixed = E_block ^ subkey;
+   const uint64_t key_mixed = E_block ^ subkeys[round];
 
    // Substitutions with the 8 S-Boxes. Output of 32 bits.
    const uint64_t s_block = getSubstitution(key_mixed);
@@ -93,7 +93,7 @@ void DES::encodeFeistelRounds(uint64_t& L, uint64_t& R, const uint8_t) const
 {
    for (uint8_t i = 0; i < rounds; ++i)
    {
-      const uint64_t tmp = L ^ F(R, subkeys[i]);
+      const uint64_t tmp = L ^ F(R, i);
       L = R;
       R = tmp;
    }
@@ -103,7 +103,7 @@ void DES::decodeFeistelRounds(uint64_t& L, uint64_t& R, const uint8_t) const
 {
    for (int8_t i = rounds - 1; i >= 0; --i)
    {
-      const uint64_t tmp = L ^ F(R, subkeys[i]);
+      const uint64_t tmp = L ^ F(R, i);
       L = R;
       R = tmp;
    }

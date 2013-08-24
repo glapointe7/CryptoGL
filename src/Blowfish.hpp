@@ -13,10 +13,10 @@ class Blowfish : public Feistel<uint32_t, uint64_t>
 {
 public:
    /* Default constructor : default on ECB mode of encryption. */
-   explicit Blowfish(const BytesContainer &key) : Feistel<uint32_t, uint64_t>(OperationModes::ECB, 16, 8) { setKey(key); }
+   explicit Blowfish(const BytesContainer &key) : Feistel(OperationModes::ECB, 16, 8) { setKey(key); }
    
    /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
-   Blowfish(const BytesContainer &key, const OperationModes mode) : Feistel<uint32_t, uint64_t>(mode, 16, 8) { setKey(key); }
+   Blowfish(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16, 8) { setKey(key); }
 
    virtual void setKey(const BytesContainer &key) final;
 
@@ -27,7 +27,7 @@ private:
    virtual const uint64_t decodeBlock(const uint64_t &input) final;
    virtual const BytesContainer getOutputBlock(const uint64_t &int_block) final;
 
-   virtual uint32_t F(const uint32_t half_block, const uint32_t) const final;
+   virtual const uint32_t F(const uint32_t half_block, const uint8_t) const final;
    virtual void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
    virtual void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
 

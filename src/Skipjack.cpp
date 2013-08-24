@@ -19,25 +19,25 @@ void Skipjack::generateSubkeys()
    subkeys.insert(subkeys.end(), key.begin(), key.end());
 }
 
-uint8_t Skipjack::F(const uint8_t half_block, const uint8_t subkey) const
+const uint8_t Skipjack::F(const uint8_t half_block, const uint8_t round) const
 {
-   return f_table[half_block ^ subkey];
+   return f_table[half_block ^ subkeys[round]];
 }
 
 void Skipjack::encodeFeistelRounds(uint8_t& L, uint8_t& R, const uint8_t round) const
 {
-   L ^= F(R, subkeys[round % 10]);
-   R ^= F(L, subkeys[(round + 1) % 10]);
-   L ^= F(R, subkeys[(round + 2) % 10]);
-   R ^= F(L, subkeys[(round + 3) % 10]);
+   L ^= F(R, round % 10);
+   R ^= F(L, (round + 1) % 10);
+   L ^= F(R, (round + 2) % 10);
+   R ^= F(L, (round + 3) % 10);
 }
 
 void Skipjack::decodeFeistelRounds(uint8_t& L, uint8_t& R, const uint8_t round) const
 {
-   L ^= F(R, subkeys[(round + 3) % 10]);
-   R ^= F(L, subkeys[(round + 2) % 10]);
-   L ^= F(R, subkeys[(round + 1) % 10]);
-   R ^= F(L, subkeys[round % 10]);
+   L ^= F(R, (round + 3) % 10);
+   R ^= F(L, (round + 2) % 10);
+   L ^= F(R, (round + 1) % 10);
+   R ^= F(L, round % 10);
 }
 
 void Skipjack::applyRuleA(UInt16Container &input, const uint8_t round) const
