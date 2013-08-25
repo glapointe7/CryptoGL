@@ -11,18 +11,14 @@
 
 class Whirlpool : public HashFunction<uint64_t, BigEndian64>
 {
-private:
-   typedef typename HashFunction<uint64_t, BigEndian64>::BytesContainer BytesContainer;
-   typedef typename HashFunction<uint64_t, BigEndian64>::DWordsContainer DWordsContainer;
-
 public:
    Whirlpool() : HashFunction(INPUT_BLOCK_LENGTH) {}
 
    virtual const BytesContainer encode(const BytesContainer &data) final;
 
 private:
-   uint64_t applyGammaPiTheta(DWordsContainer &key, const uint8_t index) const;
-   void compress(const DWordsContainer &block, DWordsContainer &state);
+   uint64_t applyGammaPiTheta(UInt64Container &key, const uint8_t index) const;
+   void compress(const UInt64Container &block, UInt64Container &state);
 
    /* Round constants. */
    static constexpr uint64_t RC[10] = {

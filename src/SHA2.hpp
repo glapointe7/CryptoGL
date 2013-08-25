@@ -16,8 +16,8 @@ template <class UInt>
 class SHA2 : public HashFunction<UInt, BigEndian<UInt> >
 {
 protected:   
-   typedef typename HashFunction<UInt, BigEndian<UInt> >::BytesContainer BytesContainer;
    typedef typename HashFunction<UInt, BigEndian<UInt> >::UIntContainer UIntContainer;
+   typedef typename HashFunction<UInt, BigEndian<UInt> >::BytesContainer BytesContainer;
    
    SHA2(const UIntContainer &state, const uint8_t in_block_length) 
       : HashFunction<UInt, BigEndian<UInt> >(in_block_length), IV(state) {}
@@ -89,9 +89,9 @@ protected:
 class SHA32Bits : public SHA2<uint32_t>
 {
 protected:
-   typedef typename SHA2<uint32_t>::WordsContainer WordsContainer;
+   typedef typename SHA2<uint32_t>::UInt32Container UInt32Container;
    
-   explicit SHA32Bits(const WordsContainer &state) : SHA2(state, INPUT32_BLOCK_LENGTH) {}
+   explicit SHA32Bits(const UInt32Container &state) : SHA2(state, INPUT32_BLOCK_LENGTH) {}
    virtual ~SHA32Bits() {}
    
    virtual const BytesContainer encode(const BytesContainer &) = 0;
@@ -114,9 +114,9 @@ private:
 class SHA64Bits : public SHA2<uint64_t>
 { 
 protected:
-   typedef typename SHA2<uint64_t>::DWordsContainer DWordsContainer;
+   typedef typename SHA2<uint64_t>::UInt64Container UInt64Container;
    
-   explicit SHA64Bits(const DWordsContainer &state) : SHA2(state, INPUT64_BLOCK_LENGTH) {}
+   explicit SHA64Bits(const UInt64Container &state) : SHA2(state, INPUT64_BLOCK_LENGTH) {}
    virtual ~SHA64Bits() {}
    
    virtual const BytesContainer encode(const BytesContainer &) = 0;
@@ -181,12 +181,12 @@ public:
    }) {}
    virtual const BytesContainer encode(const BytesContainer &data) final;
 
-   inline const DWordsContainer getIV()
+   inline const UInt64Container getIV()
    {
       return IV;
    }
 
-   inline void setIV(const DWordsContainer &IV)
+   inline void setIV(const UInt64Container &IV)
    {
       this->IV = IV;
    }

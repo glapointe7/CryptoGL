@@ -6,7 +6,42 @@
 #include "BlockCipherOperationModes.hpp"
 #include "BlockCipherModes.hpp"
 
-template <class SubkeyType, class DataType>
+template <class BytesContainer, class DataType, unsigned int InputBlockSize, class IndianType>
+class OutputBlockGetter
+{
+public:
+   static const BytesContainer UnNom(const DataType &int_block)
+   {
+      BytesContainer output_block;
+      output_block.reserve(InputBlockSize);
+      const uint8_t nbSubBlocks = InputBlockSize / sizeof(typename DataType::value_type);
+
+      IndianType indian;
+      for(uint8_t i = 0; i < nbSubBlocks; ++i)
+      {
+         indian.toBytes(int_block[i]);
+         const BytesContainer out = indian.getBytes();
+         output_block.insert(output_block.end(), out.begin(), out.end());
+      }
+
+      return output_block;
+   }
+};
+
+template <class BytesContainer, class IndianType>
+class OutputBlockGetter<BytesContainer, uint64_t, 8, IndianType>
+{
+public:
+   static const BytesContainer UnNom(const uint64_t &int_block)
+   {
+      IndianType indian;
+      indian.toBytes(int_block);
+
+      return indian.getBytes();
+   }
+};
+
+template <class SubkeyType, class DataType, unsigned int InputBlockSize, class IndianType>
 class BlockCipher : public SymmetricCipher
 {     
 public:
@@ -27,9 +62,9 @@ public:
 
       generateSubkeys();
 
-      for (uint64_t n = 0; n < message_padded_len; n += input_block_length)
+      for (uint64_t n = 0; n < message_padded_len; n += InputBlockSize)
       {
-         const BytesContainer input_block(message_padded.begin() + n, message_padded.begin() + n + input_block_length);
+         const BytesContainer input_block(message_padded.begin() + n, message_padded.begin() + n + InputBlockSize);
          
          //const BytesContainer cipher_block = block_strategy->getCipherBlock(input_block);
          
@@ -52,9 +87,9 @@ public:
 
       generateInverseSubkeys();
 
-      for (uint64_t n = 0; n < message_len; n += input_block_length)
+      for (uint64_t n = 0; n < message_len; n += InputBlockSize)
       {
-         const BytesContainer input_block(message.begin() + n, message.begin() + n + input_block_length);
+         const BytesContainer input_block(message.begin() + n, message.begin() + n + InputBlockSize);
          
          //const BytesContainer clear_block = block_strategy->getClearBlock(input_block);
          
@@ -71,9 +106,9 @@ public:
 protected:
    typedef std::vector<SubkeyType> SubkeysContainer;
    
-   BlockCipher(const OperationModes mode, const uint8_t block_length)
+   BlockCipher(const OperationModes mode, const uint8_t round)
       : block_strategy(BlockCipherModesFactory::createBlockCipherMode(mode)),
-        input_block_length(block_length) {}
+        rounds(round) {}
    
    virtual ~BlockCipher() { delete block_strategy; }
    
@@ -93,7 +128,10 @@ protected:
    virtual const DataType decodeBlock(const DataType &input) = 0;
    
    /* Extract the bytes from the vector of integers and return the encoded / decoded block. */
-   virtual const BytesContainer getOutputBlock(const DataType &int_block) = 0;
+   const BytesContainer getOutputBlock(const DataType &int_block)
+   {      
+      return OutputBlockGetter<BytesContainer, DataType, InputBlockSize, IndianType>::UnNom(int_block);
+   }
    
    /* Generate sub-keys from the key provided by the user when decoding. */
    virtual void generateInverseSubkeys()
@@ -105,17 +143,17 @@ protected:
    const BytesContainer appendPadding(const BytesContainer &input, const uint8_t fill_with) const
    {
       BytesContainer padded_input(input);
-      const uint8_t rest = input.size() % input_block_length;
+      const uint8_t rest = input.size() % InputBlockSize;
       if (rest != 0)
       {
-         padded_input.insert(padded_input.end(), input_block_length - rest, fill_with);
+         padded_input.insert(padded_input.end(), InputBlockSize - rest, fill_with);
       }
 
       return padded_input;
    }
 
    BlockCipherModes *block_strategy;
-   const uint8_t input_block_length;
+   uint8_t rounds;
    SubkeysContainer subkeys;
 };
 

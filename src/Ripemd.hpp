@@ -10,10 +10,7 @@
 class Ripemd : public HashFunction<uint32_t, LittleEndian32>
 {
 protected:
-   typedef typename HashFunction<uint32_t, LittleEndian32>::BytesContainer BytesContainer;
-   typedef typename HashFunction<uint32_t, LittleEndian32>::WordsContainer WordsContainer;
-   
-   explicit Ripemd(const WordsContainer &state) : HashFunction(64), IV(state) {}
+   explicit Ripemd(const UInt32Container &state) : HashFunction(64), IV(state) {}
    virtual ~Ripemd() {}
    
    virtual const BytesContainer encode(const BytesContainer &data) = 0;
@@ -43,13 +40,13 @@ protected:
       return x ^ (y | ~z);
    }
    
-   void process128_256(const WordsContainer &words, WordsContainer &hash1, WordsContainer &hash2, const uint8_t j);
-   void process160_320(const WordsContainer &words, WordsContainer &hash1, WordsContainer &hash2, const uint8_t j);
-   void swapHashWithoutRotate(WordsContainer &hash, const uint32_t tmp);
-   void swapHashWithRotate(WordsContainer &hash, const uint32_t tmp);
+   void process128_256(const UInt32Container &words, UInt32Container &hash1, UInt32Container &hash2, const uint8_t j);
+   void process160_320(const UInt32Container &words, UInt32Container &hash1, UInt32Container &hash2, const uint8_t j);
+   void swapHashWithoutRotate(UInt32Container &hash, const uint32_t tmp);
+   void swapHashWithRotate(UInt32Container &hash, const uint32_t tmp);
    
    /* Initial vector. */
-   const WordsContainer IV;
+   const UInt32Container IV;
    
    static constexpr uint32_t magic_numbers1[5] = {0, 0x5A827999, 0x6ED9EBA1, 0x8F1BBCDC, 0xA953FD4E};
    

@@ -154,19 +154,3 @@ const RC6::UInt32Container RC6::decodeBlock(const UInt32Container &input)
    
    return LR;
 }
-
-const RC6::BytesContainer RC6::getOutputBlock(const UInt32Container &int_block)
-{
-   BytesContainer output_block;
-   output_block.reserve(16);
-
-   LittleEndian32 LE;
-   for(uint8_t i = 0; i < 4; ++i)
-   {
-      LE.toBytes(int_block[i]);
-      const BytesContainer tmp = LE.getBytes();
-      output_block.insert(output_block.end(), tmp.begin(), tmp.end());
-   }
-
-   return output_block;
-}

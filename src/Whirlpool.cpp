@@ -6,7 +6,7 @@ constexpr uint64_t Whirlpool::sbox[8][256];
 constexpr uint64_t Whirlpool::RC[];
 constexpr uint64_t Whirlpool::IV[];
 
-uint64_t Whirlpool::applyGammaPiTheta(DWordsContainer &key, const uint8_t index) const
+uint64_t Whirlpool::applyGammaPiTheta(UInt64Container &key, const uint8_t index) const
 {
    uint64_t tmp_key = 0;
    for (uint8_t i = 0; i < 8; ++i)
@@ -17,20 +17,20 @@ uint64_t Whirlpool::applyGammaPiTheta(DWordsContainer &key, const uint8_t index)
    return tmp_key;
 }
 
-void Whirlpool::compress(const DWordsContainer &block, DWordsContainer &state)
+void Whirlpool::compress(const UInt64Container &block, UInt64Container &state)
 {
    // The last state becomes the key.
-   DWordsContainer key(state);
+   UInt64Container key(state);
 
    // Apply K^0 to the cipher state.
-   DWordsContainer xored_block(block);
+   UInt64Container xored_block(block);
    for (uint8_t i = 0; i < 8; ++i)
    {
       xored_block[i] ^= key[i];
    }
    
-   DWordsContainer hash(8, 0);
-   DWordsContainer tmp_key(8, 0);
+   UInt64Container hash(8, 0);
+   UInt64Container tmp_key(8, 0);
    for (uint8_t i = 0; i < number_of_rounds; i += 2)
    {
       // Odd rounds.
@@ -71,11 +71,11 @@ const Whirlpool::BytesContainer Whirlpool::encode(const BytesContainer &data)
    BytesContainer padded_data = appendPadding(data);
    appendLength<BigEndian64>(padded_data, data.size() << 3);
 
-   DWordsContainer state(IV, IV + 8);
+   UInt64Container state(IV, IV + 8);
    const uint64_t padded_data_len = padded_data.size();
    for (uint64_t i = 0; i < padded_data_len; i += in_block_length)
    {
-      const DWordsContainer input_block = getInputBlocks(padded_data, i);
+      const UInt64Container input_block = getInputBlocks(padded_data, i);
       compress(input_block, state);
    }
 

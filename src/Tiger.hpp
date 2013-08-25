@@ -8,11 +8,7 @@
 #include "LittleEndian.hpp"
 
 class Tiger : public HashFunction<uint64_t, LittleEndian64>
-{
-private:
-   typedef typename HashFunction<uint64_t, LittleEndian64>::BytesContainer BytesContainer;
-   typedef typename HashFunction<uint64_t, LittleEndian64>::DWordsContainer DWordsContainer;
-      
+{   
 public:
    enum class HashSize : uint8_t { _128bits = 4, _160bits = 5, _192bits = 6 };
    
@@ -25,9 +21,9 @@ public:
 private:
    virtual const BytesContainer appendPadding(const BytesContainer &data) const final;
    
-   static void applyKeySchedule(DWordsContainer &words);
+   static void applyKeySchedule(UInt64Container &words);
    void applyRound(uint64_t &a, uint64_t &b, uint64_t &c, const uint64_t &word, const uint8_t mult) const;
-   void pass(uint64_t &a, uint64_t &b, uint64_t &c, const DWordsContainer &words, const uint8_t mult) const;
+   void pass(uint64_t &a, uint64_t &b, uint64_t &c, const UInt64Container &words, const uint8_t mult) const;
    
    uint8_t output_size;
    

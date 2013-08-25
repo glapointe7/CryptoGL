@@ -9,8 +9,6 @@
 
 class SHA1 : public HashFunction<uint32_t, BigEndian<uint32_t> >
 {
-   typedef typename HashFunction<uint32_t, BigEndian<uint32_t> >::BytesContainer BytesContainer;
-   
 public:
    SHA1() : HashFunction<uint32_t, BigEndian<uint32_t> >(INPUT_BLOCK_LENGTH) {}
    virtual const BytesContainer encode(const BytesContainer &data) final;

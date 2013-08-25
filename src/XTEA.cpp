@@ -89,19 +89,3 @@ const XTEA::UInt32Container XTEA::decodeBlock(const UInt32Container &input)
    
    return LR;
 }
-
-const XTEA::BytesContainer XTEA::getOutputBlock(const UInt32Container &int_block)
-{
-   BytesContainer output_block;
-   output_block.reserve(8);
-   
-   BigEndian32 BE;
-   for(uint8_t i = 0; i < 2; ++i)
-   {
-      BE.toBytes(int_block[i]);
-      const BytesContainer tmp = BE.getBytes();
-      output_block.insert(output_block.end(), tmp.begin(), tmp.end());
-   }
-
-   return output_block;
-}

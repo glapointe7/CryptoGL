@@ -163,19 +163,3 @@ const CAST256::UInt32Container CAST256::decodeBlock(const UInt32Container &input
    
    return beta;
 }
-
-const CAST256::BytesContainer CAST256::getOutputBlock(const UInt32Container &int_block)
-{
-   BytesContainer output_block;
-   output_block.reserve(16);
-
-   BigEndian32 BE;
-   for(uint8_t i = 0; i < 4; ++i)
-   {
-      BE.toBytes(int_block[i]);
-      const BytesContainer out = BE.getBytes();
-      output_block.insert(output_block.end(), out.begin(), out.end());
-   }
-
-   return output_block;
-}

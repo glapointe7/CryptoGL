@@ -29,8 +29,6 @@ void AES::setKey(const BytesContainer &key)
 
    switch (key_len)
    {
-      case 16: rounds = 10;
-         break;
       case 24: rounds = 12;
          break;
       case 32: rounds = 14;
@@ -223,20 +221,4 @@ const AES::UInt32Container AES::decodeBlock(const UInt32Container &input)
    addRoundKey(decoded_block, 0);
    
    return decoded_block;
-}
-
-const AES::BytesContainer AES::getOutputBlock(const UInt32Container &int_block)
-{
-   BytesContainer output_block;
-   output_block.reserve(16);
-
-   BigEndian32 BE;
-   for(uint8_t i = 0; i < 4; ++i)
-   {
-      BE.toBytes(int_block[i]);
-      const BytesContainer out = BE.getBytes();
-      output_block.insert(output_block.end(), out.begin(), out.end());
-   }
-
-   return output_block;
 }

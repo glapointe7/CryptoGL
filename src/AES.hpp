@@ -5,14 +5,15 @@
 #define AES_HPP
 
 #include "BlockCipher.hpp"
+#include "BigEndian.hpp"
 
 #include <vector>
 
-class AES : public BlockCipher<uint32_t, std::vector<uint32_t> >
+class AES : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian32>
 {
 public:
-   explicit AES(const BytesContainer &key) : BlockCipher<uint32_t, std::vector<uint32_t> >(OperationModes::ECB, 16) { setKey(key); }
-   AES(const BytesContainer &key, const OperationModes mode) : BlockCipher<uint32_t, std::vector<uint32_t> >(mode, 16) { setKey(key); }
+   explicit AES(const BytesContainer &key) : BlockCipher(OperationModes::ECB, 10) { setKey(key); }
+   AES(const BytesContainer &key, const OperationModes mode) : BlockCipher(mode, 10) { setKey(key); }
    
    virtual void setKey(const BytesContainer &key) final;
    
@@ -21,7 +22,6 @@ private:
    virtual const UInt32Container getIntegersFromInputBlock(const BytesContainer &block) const final;
    virtual const UInt32Container encodeBlock(const UInt32Container &input) final;
    virtual const UInt32Container decodeBlock(const UInt32Container &input) final;
-   virtual const BytesContainer getOutputBlock(const UInt32Container &int_block) final;
    
    static void subBytes(UInt32Container &state, const uint8_t *box);
          
@@ -35,9 +35,6 @@ private:
    void mixColumns(UInt32Container &state) const;
    void inverseMixColumns(UInt32Container &state) const;
    
-   uint32_t rounds;
-   
-   /* sbox is pre-computed multiplicative inverse in GF(2^8) used in subBytes and keyExpansion. */
    static constexpr uint8_t shift_indexes[16] = {
       0, 5, 10, 15, 4, 9, 14, 3, 8, 13, 2, 7, 12, 1, 6, 11
    };

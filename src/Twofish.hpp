@@ -5,15 +5,16 @@
 #define TWOFISH_HPP
 
 #include "Feistel.hpp"
+#include "LittleEndian.hpp"
 
-class Twofish : public Feistel<std::vector<uint32_t>, std::vector<uint32_t>, uint32_t>
+class Twofish : public Feistel<std::vector<uint32_t>, std::vector<uint32_t>, 16, LittleEndian32, uint32_t>
 {
 public:
    /* Default constructor : default on ECB mode of encryption. */
-   explicit Twofish(const BytesContainer &key) : Feistel(OperationModes::ECB, 16, 16) { setKey(key); }
+   explicit Twofish(const BytesContainer &key) : Feistel(OperationModes::ECB, 16) { setKey(key); }
    
    /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
-   Twofish(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16, 16) { setKey(key); }
+   Twofish(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16) { setKey(key); }
 
    virtual void setKey(const BytesContainer &key) final;
    
@@ -22,7 +23,6 @@ private:
    virtual const UInt32Container getIntegersFromInputBlock(const BytesContainer &block) const final;
    virtual const UInt32Container encodeBlock(const UInt32Container &input) final;
    virtual const UInt32Container decodeBlock(const UInt32Container &input) final;
-   virtual const BytesContainer getOutputBlock(const UInt32Container &int_block) final;
 
    virtual const UInt32Container F(const UInt32Container half_block, const uint8_t round) const final;
    virtual void encodeFeistelRounds(UInt32Container &L, UInt32Container &R, const uint8_t) const final;

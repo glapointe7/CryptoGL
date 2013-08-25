@@ -5,16 +5,17 @@
 #define CAST128_HPP
 
 #include "Feistel.hpp"
+#include "BigEndian.hpp"
 
-class CAST128 : public Feistel<uint32_t, uint64_t>
+class CAST128 : public Feistel<uint32_t, uint64_t, 8, BigEndian64>
 {
 public:
 
    /* Default constructor : default on ECB mode of encryption. */
-   explicit CAST128(const BytesContainer &key) : Feistel(OperationModes::ECB, 12, 8) { setKey(key); }
+   explicit CAST128(const BytesContainer &key) : Feistel(OperationModes::ECB, 12) { setKey(key); }
 
    /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
-   CAST128(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 12, 8) { setKey(key); }
+   CAST128(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 12) { setKey(key); }
 
    virtual void setKey(const BytesContainer &key) final;
 
@@ -23,7 +24,6 @@ private:
    virtual const uint64_t getIntegersFromInputBlock(const BytesContainer &block) const final;
    virtual const uint64_t encodeBlock(const uint64_t &input) final;
    virtual const uint64_t decodeBlock(const uint64_t &input) final;
-   virtual const BytesContainer getOutputBlock(const uint64_t &int_block) final;
 
    virtual const uint32_t F(const uint32_t half_block, const uint8_t index) const final;
    uint32_t F2(const uint32_t half_block, const uint8_t index) const;

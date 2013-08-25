@@ -25,6 +25,7 @@ public:
    }
 };
 
+using LittleEndian16 = LittleEndian<uint16_t>;
 using LittleEndian32 = LittleEndian<uint32_t>;
 using LittleEndian64 = LittleEndian<uint64_t>;
 

@@ -12,7 +12,7 @@ constexpr uint8_t Ripemd::word_selection2[80];
 constexpr uint8_t Ripemd::left_shift1[80];
 constexpr uint8_t Ripemd::left_shift2[80];
 
-void Ripemd::swapHashWithoutRotate(WordsContainer &hash, const uint32_t tmp)
+void Ripemd::swapHashWithoutRotate(UInt32Container &hash, const uint32_t tmp)
 {
    hash[0] = hash[3];
    hash[3] = hash[2];
@@ -20,7 +20,7 @@ void Ripemd::swapHashWithoutRotate(WordsContainer &hash, const uint32_t tmp)
    hash[1] = tmp;
 }
 
-void Ripemd::swapHashWithRotate(WordsContainer &hash, const uint32_t tmp)
+void Ripemd::swapHashWithRotate(UInt32Container &hash, const uint32_t tmp)
 {
    hash[0] = hash[4];
    hash[4] = hash[3];
@@ -29,7 +29,7 @@ void Ripemd::swapHashWithRotate(WordsContainer &hash, const uint32_t tmp)
    hash[1] = tmp;
 }
 
-void Ripemd::process128_256(const WordsContainer &words, WordsContainer &hash1, WordsContainer &hash2, const uint8_t j)
+void Ripemd::process128_256(const UInt32Container &words, UInt32Container &hash1, UInt32Container &hash2, const uint8_t j)
 {
    uint8_t k = 0;
    uint32_t f1, f2;
@@ -64,7 +64,7 @@ void Ripemd::process128_256(const WordsContainer &words, WordsContainer &hash1, 
    swapHashWithoutRotate(hash2, tmp);
 }
 
-void Ripemd::process160_320(const WordsContainer &words, WordsContainer &hash1, WordsContainer &hash2, const uint8_t j)
+void Ripemd::process160_320(const UInt32Container &words, UInt32Container &hash1, UInt32Container &hash2, const uint8_t j)
 {
    uint8_t k = 0;
    uint32_t f1, f2;
@@ -110,12 +110,12 @@ const Ripemd::BytesContainer Ripemd128::encode(const BytesContainer & data)
    BytesContainer bytes(appendPadding(data));
    appendLength<LittleEndian64>(bytes, data.size() << 3);
 
-   WordsContainer states(IV);
+   UInt32Container states(IV);
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
-      const WordsContainer words = getInputBlocks(bytes, i);
-      WordsContainer hash1(states), hash2(states);
+      const UInt32Container words = getInputBlocks(bytes, i);
+      UInt32Container hash1(states), hash2(states);
 
       for (uint8_t j = 0; j < 64; ++j)
       {
@@ -137,12 +137,12 @@ const Ripemd::BytesContainer Ripemd160::encode(const BytesContainer & data)
    BytesContainer bytes(appendPadding(data));
    appendLength<LittleEndian64>(bytes, data.size() << 3);
 
-   WordsContainer states(IV);
+   UInt32Container states(IV);
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
-      const WordsContainer words = getInputBlocks(bytes, i);
-      WordsContainer hash1(states), hash2(states);
+      const UInt32Container words = getInputBlocks(bytes, i);
+      UInt32Container hash1(states), hash2(states);
       
       for (uint8_t j = 0; j < 80; ++j)
       {
@@ -165,12 +165,12 @@ const Ripemd::BytesContainer Ripemd256::encode(const BytesContainer & data)
    BytesContainer bytes(appendPadding(data));
    appendLength<LittleEndian64>(bytes, data.size() << 3);
 
-   WordsContainer states(IV);
+   UInt32Container states(IV);
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
-      const WordsContainer words = getInputBlocks(bytes, i);
-      WordsContainer hash1(states.begin(), states.begin() + 4), hash2(states.begin() + 4, states.end());
+      const UInt32Container words = getInputBlocks(bytes, i);
+      UInt32Container hash1(states.begin(), states.begin() + 4), hash2(states.begin() + 4, states.end());
 
       for (uint8_t j = 0; j < 64; ++j)
       {
@@ -204,12 +204,12 @@ const Ripemd::BytesContainer Ripemd320::encode(const BytesContainer & data)
    BytesContainer bytes(appendPadding(data));
    appendLength<LittleEndian64>(bytes, data.size() << 3);
 
-   WordsContainer states(IV);
+   UInt32Container states(IV);
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += 64)
    {
-      const WordsContainer words = getInputBlocks(bytes, i);
-      WordsContainer hash1(states.begin(), states.begin() + 5), hash2(states.begin() + 5, states.end());
+      const UInt32Container words = getInputBlocks(bytes, i);
+      UInt32Container hash1(states.begin(), states.begin() + 5), hash2(states.begin() + 5, states.end());
 
       for (uint8_t j = 0; j < 80; ++j)
       {

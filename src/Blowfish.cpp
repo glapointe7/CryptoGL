@@ -125,11 +125,3 @@ const uint64_t Blowfish::decodeBlock(const uint64_t &input)
    
    return (static_cast<uint64_t>(L) << 32) | R;
 }
-
-const Blowfish::BytesContainer Blowfish::getOutputBlock(const uint64_t &int_block)
-{
-   BigEndian64 BE;
-   BE.toBytes(int_block);
-   
-   return BE.getBytes();
-}

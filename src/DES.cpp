@@ -148,11 +148,3 @@ const uint64_t DES::decodeBlock(const uint64_t &input)
    const uint64_t RL = (R << 32) | L;
    return getBitsFromTable(RL, IP_inverse, 64, 64);
 }
-
-const DES::BytesContainer DES::getOutputBlock(const uint64_t &int_block)
-{
-   BigEndian64 BE;
-   BE.toBytes(int_block);
-   
-   return BE.getBytes();
-}

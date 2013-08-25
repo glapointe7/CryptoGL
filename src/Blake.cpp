@@ -57,7 +57,8 @@ const Blake<uint64_t>::BytesContainer Blake512::appendPadding(const BytesContain
    return padding;
 }
 
-void Blake32Bits::G(uint32_t &a, uint32_t &b, uint32_t &c, uint32_t &d, const WordsContainer &block, const uint8_t r, const uint8_t i) const
+void Blake32Bits::G(uint32_t &a, uint32_t &b, uint32_t &c, uint32_t &d, 
+        const UInt32Container &block, const uint8_t r, const uint8_t i) const
 {
    a += b + (block[sigma[r % 10][i]] ^ C[sigma[r % 10][i + 1]]);
    d = Bits::rotateRight(d ^ a, G_rotate[0], 32);
@@ -70,7 +71,8 @@ void Blake32Bits::G(uint32_t &a, uint32_t &b, uint32_t &c, uint32_t &d, const Wo
    b = Bits::rotateRight(b ^ c, G_rotate[3], 32);
 }
 
-void Blake64Bits::G(uint64_t &a, uint64_t &b, uint64_t &c, uint64_t &d, const DWordsContainer &block, const uint8_t r, const uint8_t i) const
+void Blake64Bits::G(uint64_t &a, uint64_t &b, uint64_t &c, uint64_t &d, 
+        const UInt64Container &block, const uint8_t r, const uint8_t i) const
 {
    a += b + (block[sigma[r % 10][i]] ^ C[sigma[r % 10][i + 1]]);
    d = Bits::rotateRight64(d ^ a, G_rotate[0]);
@@ -100,12 +102,12 @@ const Blake<uint32_t>::BytesContainer Blake32Bits::encode(const BytesContainer &
       counter = 512 - ((bytes_len - data_size) << 3);
    }
    
-   WordsContainer hash(IV);
+   UInt32Container hash(IV);
    for (uint64_t i = 0; i < bytes_len; i += in_block_length)
    {
-      WordsContainer V = initialize(hash, C);
+      UInt32Container V = initialize(hash, C);
               
-      const WordsContainer input_block = getInputBlocks(bytes, i);
+      const UInt32Container input_block = getInputBlocks(bytes, i);
       
       for(uint8_t j = 0; j < number_of_rounds; ++j)
       {
@@ -142,12 +144,12 @@ const Blake<uint64_t>::BytesContainer Blake64Bits::encode(const BytesContainer &
       counter = 1024 - ((bytes_len - data_size) << 3);
    }
    
-   DWordsContainer hash(IV);
+   UInt64Container hash(IV);
    for (uint64_t i = 0; i < bytes_len; i += in_block_length)
    {
-      DWordsContainer V = initialize(hash, C);
+      UInt64Container V = initialize(hash, C);
               
-      const DWordsContainer input_block = getInputBlocks(bytes, i);
+      const UInt64Container input_block = getInputBlocks(bytes, i);
       
       for(uint8_t j = 0; j < number_of_rounds; ++j)
       {

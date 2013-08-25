@@ -87,7 +87,7 @@ const RC2::UInt16Container RC2::getIntegersFromInputBlock(const BytesContainer &
 const RC2::UInt16Container RC2::encodeBlock(const UInt16Container &input)
 {
    UInt16Container encoded_block(input);
-   for (uint8_t i = 0; i < 16; ++i)
+   for (uint8_t i = 0; i < rounds; ++i)
    {
       const uint8_t key_index = i << 2;
       for (uint8_t j = 0; j < 4; ++j)
@@ -110,7 +110,7 @@ const RC2::UInt16Container RC2::encodeBlock(const UInt16Container &input)
 const RC2::UInt16Container RC2::decodeBlock(const UInt16Container &input)
 {
    UInt16Container decoded_block(input);
-   for (int8_t i = 15; i >= 0; --i)
+   for (int8_t i = rounds - 1; i >= 0; --i)
    {
       const uint8_t key_index = i << 2;
       if (i == 4 || i == 10)
@@ -128,17 +128,4 @@ const RC2::UInt16Container RC2::decodeBlock(const UInt16Container &input)
    }
    
    return decoded_block;
-}
-
-const RC2::BytesContainer RC2::getOutputBlock(const UInt16Container &int_block)
-{
-   BytesContainer output_block;
-   output_block.reserve(8);
-   for (uint8_t i = 0; i < 4; ++i)
-   {
-      output_block.push_back(int_block[i] & 0xFF);
-      output_block.push_back(int_block[i] >> 8);
-   }
-
-   return output_block;
 }

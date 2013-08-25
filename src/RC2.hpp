@@ -2,15 +2,16 @@
  * Source : http://www.ietf.org/rfc/rfc2268.txt
  */
 #ifndef RC2_HPP
-#define	RC2_HPP
+#define RC2_HPP
 
 #include "BlockCipher.hpp"
+#include "LittleEndian.hpp"
 
-class RC2 : public BlockCipher<uint16_t, std::vector<uint16_t> >
+class RC2 : public BlockCipher<uint16_t, std::vector<uint16_t>, 8, LittleEndian16>
 {
 public:
-   explicit RC2(const BytesContainer &key) : BlockCipher<uint16_t, std::vector<uint16_t> >(OperationModes::ECB, 8) { setKey(key); }
-   RC2(const BytesContainer &key, const OperationModes mode) : BlockCipher<uint16_t, std::vector<uint16_t> >(mode, 8) { setKey(key); }
+   explicit RC2(const BytesContainer &key) : BlockCipher(OperationModes::ECB, 16) { setKey(key); }
+   RC2(const BytesContainer &key, const OperationModes mode) : BlockCipher(mode, 16) { setKey(key); }
    
    virtual void setKey(const BytesContainer &key) final;
      
@@ -19,7 +20,6 @@ private:
    virtual const UInt16Container getIntegersFromInputBlock(const BytesContainer &block) const final;
    virtual const UInt16Container encodeBlock(const UInt16Container &input) final;
    virtual const UInt16Container decodeBlock(const UInt16Container &input) final;
-   virtual const BytesContainer getOutputBlock(const UInt16Container &int_block) final;
    
    void mixUp(UInt16Container &input, const uint8_t index, const uint8_t key_index) const;
    void mash(UInt16Container &input, const uint8_t index) const;

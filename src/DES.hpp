@@ -7,14 +7,15 @@
 #define	DES_HPP
 
 #include "Feistel.hpp"
+#include "BigEndian.hpp"
 
 #include <vector>
 
-class DES : public Feistel<uint64_t, uint64_t>
+class DES : public Feistel<uint64_t, uint64_t, 8, BigEndian64>
 {
 public:
-   explicit DES(const BytesContainer &key) : Feistel(OperationModes::ECB, 16, 8) { setKey(key); }
-   DES(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16, 8) { setKey(key); }
+   explicit DES(const BytesContainer &key) : Feistel(OperationModes::ECB, 16) { setKey(key); }
+   DES(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16) { setKey(key); }
    
    virtual void setKey(const BytesContainer &key) final;
 
@@ -23,7 +24,6 @@ private:
    virtual const uint64_t getIntegersFromInputBlock(const BytesContainer &block) const final;
    virtual const uint64_t encodeBlock(const uint64_t &input) final;
    virtual const uint64_t decodeBlock(const uint64_t &input) final;
-   virtual const BytesContainer getOutputBlock(const uint64_t &int_block) final;
    
    virtual const uint64_t F(const uint64_t data, const uint8_t round) const final;
    virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;

@@ -9,17 +9,17 @@ SHA32Bits::process(const BytesContainer &data, const uint8_t truncate_to)
    BytesContainer bytes = appendPadding(data);
    appendLength<BigEndian64>(bytes, data.size() << 3);
    
-   WordsContainer states(IV);
+   UInt32Container states(IV);
    const uint64_t bits_len = bytes.size();
    for (uint64_t i = 0; i < bits_len; i += 64)
    {
-      WordsContainer words = getInputBlocks(bytes, i);
+      UInt32Container words = getInputBlocks(bytes, i);
       words.resize(64);
 
       // Extention of the 32-bit 16 blocks in 64 blocks of 32 bits.
       extendWords(words, 64, {7, 18, 3, 19, 17, 10});
 
-      WordsContainer hash(states);
+      UInt32Container hash(states);
       for (uint8_t j = 0; j < 64; ++j)
       {
          const uint32_t tmp1 = hash[7] + A(hash[4], 6, 11, 25) + ch(hash[4], hash[5], hash[6]) + round_constants[j] + words[j];
@@ -38,17 +38,17 @@ SHA64Bits::process(const BytesContainer &data, const uint8_t truncate_to)
    BytesContainer bytes = appendPadding(data);
    appendLength<BigEndian64>(bytes, data.size() << 3);
    
-   DWordsContainer states(IV);
+   UInt64Container states(IV);
    const uint64_t bits_len = bytes.size();
    for (uint64_t i = 0; i < bits_len; i += 128)
    {
-      DWordsContainer words = getInputBlocks(bytes, i);
+      UInt64Container words = getInputBlocks(bytes, i);
       words.resize(80);
 
       // Extention of the 32-bit 16 blocks in 80 blocks of 32 bits.
       extendWords(words, 80, {1, 8, 7, 19, 61, 6});
 
-      DWordsContainer hash(states);
+      UInt64Container hash(states);
       for (uint8_t j = 0; j < 80; ++j)
       {
          const uint64_t tmp1 = hash[7] + A(hash[4], 14, 18, 41) + ch(hash[4], hash[5], hash[6]) + first_cubic_root_primes[j] + words[j];
@@ -99,9 +99,9 @@ void SHA512_t::buildIV(const BytesContainer &t)
 {
    IV.reserve(8);
    SHA512 *S = new SHA512();
-   const DWordsContainer IV_512 = S->getIV();
+   const UInt64Container IV_512 = S->getIV();
 
-   DWordsContainer tmp_IV;
+   UInt64Container tmp_IV;
    tmp_IV.reserve(8);
    for (uint8_t i = 0; i < 8; ++i)
    {

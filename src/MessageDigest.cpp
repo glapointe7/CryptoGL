@@ -72,15 +72,15 @@ const MessageDigest::BytesContainer MD4::encode(const BytesContainer &data)
    
    const uint64_t bytes_len = bytes.size();
    /* Initial values. */
-   WordsContainer state = {
+   UInt32Container state = {
       0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476
    };
 
    // Assuming bytes_len is a multiple of 64.
    for (uint64_t i = 0; i < bytes_len; i += in_block_length)
    {
-      const WordsContainer words = getInputBlocks(bytes, i);
-      WordsContainer hash(state);
+      const UInt32Container words = getInputBlocks(bytes, i);
+      UInt32Container hash(state);
       uint32_t f, k = 0;
       for (uint8_t j = 0; j < 48; ++j)
       {
@@ -122,15 +122,15 @@ const MessageDigest::BytesContainer MD5::encode(const BytesContainer &data)
    
    const uint64_t bytes_len = bytes.size();
    /* Initial values. */
-   WordsContainer state = {
+   UInt32Container state = {
       0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476
    };
 
    // Assuming bytes_len is a multiple of 64.
    for (uint64_t i = 0; i < bytes_len; i += in_block_length)
    {
-      const WordsContainer words = getInputBlocks(bytes, i);
-      WordsContainer hash(state);
+      const UInt32Container words = getInputBlocks(bytes, i);
+      UInt32Container hash(state);
       uint32_t f, k;
       for (uint8_t j = 0; j < 64; ++j)
       {

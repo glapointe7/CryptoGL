@@ -5,18 +5,17 @@
 #define CAST256_HPP
 
 #include "BlockCipher.hpp"
+#include "BigEndian.hpp"
 
-class CAST256 : public BlockCipher<uint32_t, std::vector<uint32_t> >
+class CAST256 : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian32 >
 {
 public:
 
    /* Default constructor : default on ECB mode of encryption. */
-   explicit CAST256(const BytesContainer &key) : BlockCipher<uint32_t, std::vector<uint32_t> >(OperationModes::ECB, 16)
-   { setKey(key); }
+   explicit CAST256(const BytesContainer &key) : BlockCipher(OperationModes::ECB, 12) { setKey(key); }
 
    /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
-   CAST256(const BytesContainer &key, const OperationModes mode) : BlockCipher<uint32_t, std::vector<uint32_t> >(mode, 16)
-   { setKey(key); }
+   CAST256(const BytesContainer &key, const OperationModes mode) : BlockCipher(mode, 12) { setKey(key); }
 
    virtual void setKey(const BytesContainer &key) final;
 
@@ -25,7 +24,6 @@ private:
    virtual const UInt32Container getIntegersFromInputBlock(const BytesContainer &block) const final;
    virtual const UInt32Container encodeBlock(const UInt32Container &input) final;
    virtual const UInt32Container decodeBlock(const UInt32Container &input) final;
-   virtual const BytesContainer getOutputBlock(const UInt32Container &int_block) final;
    
    uint32_t F1(const uint32_t D, const uint32_t Km, const uint32_t Kr) const;
    uint32_t F2(const uint32_t D, const uint32_t Km, const uint32_t Kr) const;
@@ -43,8 +41,6 @@ private:
    UInt32Container Kr;
    UInt32Container Tm;
    UInt32Container Tr;
-   
-   static constexpr uint8_t rounds = 12;
    
    static constexpr uint32_t S[4][256] = {
       {

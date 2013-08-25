@@ -5,12 +5,13 @@
 #define SKIPJACK_HPP
 
 #include "Feistel.hpp"
+#include "BigEndian.hpp"
 
-class Skipjack : public Feistel<uint8_t, std::vector<uint16_t> >
+class Skipjack : public Feistel<uint8_t, std::vector<uint16_t>, 8, BigEndian16>
 {
 public:
-   explicit Skipjack(const BytesContainer &key) : Feistel(OperationModes::ECB, 32, 8) { setKey(key); }
-   Skipjack(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 32, 8) { setKey(key); }
+   explicit Skipjack(const BytesContainer &key) : Feistel(OperationModes::ECB, 32) { setKey(key); }
+   Skipjack(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 32) { setKey(key); }
    
    virtual void setKey(const BytesContainer &key) final;
    
@@ -19,7 +20,6 @@ private:
    virtual const UInt16Container getIntegersFromInputBlock(const BytesContainer &block) const final;
    virtual const UInt16Container encodeBlock(const UInt16Container &input) final;
    virtual const UInt16Container decodeBlock(const UInt16Container &input) final;
-   virtual const BytesContainer getOutputBlock(const UInt16Container &int_block) final;
    
    virtual const uint8_t F(const uint8_t data, const uint8_t round) const final;
    virtual void encodeFeistelRounds(uint8_t &L, uint8_t &R, const uint8_t round) const final;

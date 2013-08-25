@@ -246,19 +246,3 @@ const Twofish::UInt32Container Twofish::decodeBlock(const UInt32Container &input
    
    return decoded_block;
 }
-
-const Twofish::BytesContainer Twofish::getOutputBlock(const UInt32Container &int_block)
-{
-   BytesContainer output_block;
-   output_block.reserve(16);
-
-   LittleEndian32 LE;
-   for(uint8_t i = 0; i < 4; ++i)
-   {
-      LE.toBytes(int_block[i]);
-      const BytesContainer out = LE.getBytes();
-      output_block.insert(output_block.end(), out.begin(), out.end());
-   }
-
-   return output_block;
-}

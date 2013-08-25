@@ -9,11 +9,11 @@ const SHA1::BytesContainer SHA1::encode(const BytesContainer &data)
    BytesContainer bytes = appendPadding(data);
    appendLength<BigEndian64>(bytes, data.size() << 3);
 
-   WordsContainer states(IV, IV + 5);
+   UInt32Container states(IV, IV + 5);
    const uint64_t bits_len = bytes.size();
    for (uint64_t i = 0; i < bits_len; i += 64)
    {
-      WordsContainer words = getInputBlocks(bytes, i);
+      UInt32Container words = getInputBlocks(bytes, i);
       words.resize(80);
 
       // Extention of the 32-bits 16 blocks in 80 blocks of 32 bits.
@@ -22,7 +22,7 @@ const SHA1::BytesContainer SHA1::encode(const BytesContainer &data)
          words[j] = Bits::rotateLeft(words[j - 3] ^ words[j - 8] ^ words[j - 14] ^ words[j - 16], 1, 32);
       }
 
-      WordsContainer hash(states);
+      UInt32Container hash(states);
       uint32_t f, k;
       for (uint8_t j = 0; j < 80; ++j)
       {

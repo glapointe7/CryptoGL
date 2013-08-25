@@ -122,11 +122,11 @@ const Noekeon::UInt32Container Noekeon::getIntegersFromInputBlock(const BytesCon
 const Noekeon::UInt32Container Noekeon::encodeBlock(const UInt32Container &input)
 {
    UInt32Container state(input);
-   for(uint8_t i = 0; i < number_of_rounds; ++i)
+   for(uint8_t i = 0; i < rounds; ++i)
    {
       applyRound(state, round_constants[i], 0);
    }
-   state[0] ^= round_constants[number_of_rounds];
+   state[0] ^= round_constants[rounds];
    applyTheta(state);
    
    return state;
@@ -135,7 +135,7 @@ const Noekeon::UInt32Container Noekeon::encodeBlock(const UInt32Container &input
 const Noekeon::UInt32Container Noekeon::decodeBlock(const UInt32Container &input)
 {
    UInt32Container state(input);
-   for(uint8_t i = number_of_rounds; i > 0; --i)
+   for(uint8_t i = rounds; i > 0; --i)
    {
       applyRound(state, 0, round_constants[i]);
    }
@@ -143,20 +143,4 @@ const Noekeon::UInt32Container Noekeon::decodeBlock(const UInt32Container &input
    state[0] ^= round_constants[0];
    
    return state;
-}
-
-const Noekeon::BytesContainer Noekeon::getOutputBlock(const UInt32Container &int_block)
-{
-   BytesContainer output_block;
-   output_block.reserve(16);
-   
-   BigEndian32 BE;
-   for(uint8_t i = 0; i < 4; ++i)
-   {
-      BE.toBytes(int_block[i]);
-      const BytesContainer tmp = BE.getBytes();
-      output_block.insert(output_block.end(), tmp.begin(), tmp.end());
-   }
-
-   return output_block;
 }

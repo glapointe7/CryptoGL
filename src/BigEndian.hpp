@@ -26,6 +26,7 @@ public:
    }
 };
 
+using BigEndian16 = BigEndian<uint16_t>;
 using BigEndian32 = BigEndian<uint32_t>;
 using BigEndian64 = BigEndian<uint64_t>;
 

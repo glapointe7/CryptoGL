@@ -12,11 +12,13 @@
 template <class UInt, class Endian>
 class HashFunction
 {
-protected:
+public:
    typedef std::vector<uint8_t> BytesContainer;
+   typedef std::vector<uint32_t> UInt32Container;
+   typedef std::vector<uint64_t> UInt64Container;
+   
+protected:
    typedef std::vector<UInt> UIntContainer;
-   typedef std::vector<uint32_t> WordsContainer;
-   typedef std::vector<uint64_t> DWordsContainer;
    
    explicit HashFunction(const uint8_t in_block_length) : in_block_length(in_block_length) {}
    virtual ~HashFunction() {}

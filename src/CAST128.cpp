@@ -14,7 +14,7 @@ void CAST128::setKey(const BytesContainer &key)
    
    if(key.size() > 10)
    {
-      setNumberOfRounds(16);
+      rounds = 16;
    }
    
    // Pad the key with 0 to get 128 bits length.
@@ -206,12 +206,4 @@ const uint64_t CAST128::decodeBlock(const uint64_t &input)
    decodeFeistelRounds(L, R, 0);
    
    return (static_cast<uint64_t>(R) << 32) | L;
-}
-
-const CAST128::BytesContainer CAST128::getOutputBlock(const uint64_t &int_block)
-{
-   BigEndian64 BE;
-   BE.toBytes(int_block);
-   
-   return BE.getBytes();
 }

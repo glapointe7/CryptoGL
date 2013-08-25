@@ -129,16 +129,3 @@ const Skipjack::UInt16Container Skipjack::decodeBlock(const UInt16Container &inp
    
    return decoded_block;
 }
-
-const Skipjack::BytesContainer Skipjack::getOutputBlock(const UInt16Container &int_block)
-{
-   BytesContainer output_block;
-   output_block.reserve(8);
-   for (uint8_t i = 0; i < 4; ++i)
-   {
-      output_block.push_back(int_block[i] >> 8);
-      output_block.push_back(int_block[i] & 0xFF);
-   }
-
-   return output_block;
-}
