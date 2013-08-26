@@ -62,18 +62,6 @@ void IDEA::generateInverseSubkeys()
    decoded_subkeys[0] = inverseMultiplyShort(subkeys[48]);
 }
 
-const IDEA::UInt16Container IDEA::getIntegersFromInputBlock(const BytesContainer &block) const
-{
-   UInt16Container int_block;
-   int_block.reserve(4);
-   for (uint8_t i = 0; i < 8; i += 2)
-   {
-      int_block.push_back((block[i] << 8) | block[i + 1]);
-   }
-   
-   return int_block;
-}
-
 const IDEA::UInt16Container IDEA::encodeBlock(const UInt16Container &input)
 {
    UInt16Container encoded_block(input);

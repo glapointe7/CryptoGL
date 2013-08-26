@@ -11,13 +11,17 @@ class Skipjack : public Feistel<uint8_t, std::vector<uint16_t>, 8, BigEndian16>
 {
 public:
    explicit Skipjack(const BytesContainer &key) : Feistel(OperationModes::ECB, 32) { setKey(key); }
+   
    Skipjack(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 32) { setKey(key); }
+   
+   /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
+   Skipjack(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
+      : Feistel(mode, 32, IV) { setKey(key); }
    
    virtual void setKey(const BytesContainer &key) final;
    
 private:
    virtual void generateSubkeys() final;
-   virtual const UInt16Container getIntegersFromInputBlock(const BytesContainer &block) const final;
    virtual const UInt16Container encodeBlock(const UInt16Container &input) final;
    virtual const UInt16Container decodeBlock(const UInt16Container &input) final;
    

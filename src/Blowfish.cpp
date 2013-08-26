@@ -18,39 +18,6 @@ void Blowfish::setKey(const BytesContainer &key)
    this->key = key;
 }
 
-// Process the Feistel algorithm modified for the blowfish algorithm.
-
-void Blowfish::encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
-{
-   uint8_t i;
-   for (i = 0; i != rounds; i += 2)
-   {
-      L ^= subkeys[i];
-      R ^= F(L, subkeys[i]);
-      R ^= subkeys[i + 1];
-      L ^= F(R, subkeys[i]);
-   }
-   
-   L ^= subkeys[i];
-   R ^= subkeys[i + 1];
-   std::swap(L, R);
-}
-
-void Blowfish::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
-{
-   for (uint8_t i = rounds + 1; i != 1; i -= 2)
-   {
-      L ^= subkeys[i];
-      R ^= F(L, i);
-      R ^= subkeys[i - 1];
-      L ^= F(R, i);
-   }
-   
-   L ^= subkeys[1];
-   R ^= subkeys[0];
-   std::swap(L, R);
-}
-
 void Blowfish::generateSubkeys()
 {
    subkeys.reserve(18);
@@ -100,12 +67,35 @@ const uint32_t Blowfish::F(const uint32_t half_block, const uint8_t) const
    return ((sbox[0][V[0]] + sbox[1][V[1]])  ^ (sbox[2][V[2]])) + sbox[3][V[3]];
 }
 
-const uint64_t Blowfish::getIntegersFromInputBlock(const BytesContainer &block) const
+void Blowfish::encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
 {
-   BigEndian64 BE;
-   BE.toInteger(block);
+   uint8_t i;
+   for (i = 0; i != rounds; i += 2)
+   {
+      L ^= subkeys[i];
+      R ^= F(L, subkeys[i]);
+      R ^= subkeys[i + 1];
+      L ^= F(R, subkeys[i]);
+   }
    
-   return BE.getValue();
+   L ^= subkeys[i];
+   R ^= subkeys[i + 1];
+   std::swap(L, R);
+}
+
+void Blowfish::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
+{
+   for (uint8_t i = rounds + 1; i != 1; i -= 2)
+   {
+      L ^= subkeys[i];
+      R ^= F(L, i);
+      R ^= subkeys[i - 1];
+      L ^= F(R, i);
+   }
+   
+   L ^= subkeys[1];
+   R ^= subkeys[0];
+   std::swap(L, R);
 }
 
 const uint64_t Blowfish::encodeBlock(const uint64_t &input)

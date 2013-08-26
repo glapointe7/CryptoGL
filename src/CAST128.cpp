@@ -183,14 +183,6 @@ void CAST128::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
    R ^= F(L, 0);
 }
 
-const uint64_t CAST128::getIntegersFromInputBlock(const BytesContainer &block) const
-{
-   BigEndian64 BE;
-   BE.toInteger(block);
-   
-   return BE.getValue();
-}
-
 const uint64_t CAST128::encodeBlock(const uint64_t &input)
 {
    uint32_t L = input >> 32;

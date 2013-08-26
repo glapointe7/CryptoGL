@@ -105,20 +105,6 @@ void Noekeon::applyRound(UInt32Container &state, const uint8_t constant1, const 
    applyPi2(state);
 }
 
-const Noekeon::UInt32Container Noekeon::getIntegersFromInputBlock(const BytesContainer &block) const
-{
-   BigEndian32 BE;
-   UInt32Container int_block(4, 0);
-   for(uint8_t i = 0; i < 4; ++i)
-   {
-      BE.toInteger(BytesContainer(block.begin() + (i << 2), block.begin() + (i << 2) + 4));
-      int_block[i] = BE.getValue();
-      BE.resetValue();
-   }
-   
-   return int_block;
-}
-
 const Noekeon::UInt32Container Noekeon::encodeBlock(const UInt32Container &input)
 {
    UInt32Container state(input);

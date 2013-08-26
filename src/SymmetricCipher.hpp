@@ -2,7 +2,7 @@
  * Symmetric cipher abstract class for modern cryptology.
  */
 #ifndef SYMMETRICCIPHER_HPP
-#define	SYMMETRICCIPHER_HPP
+#define SYMMETRICCIPHER_HPP
 
 #include "Cipher.hpp"
 

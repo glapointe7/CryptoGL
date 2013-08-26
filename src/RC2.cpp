@@ -72,18 +72,6 @@ void RC2::inverseMash(UInt16Container &input, const uint8_t index) const
    input[index] -= subkeys[input[(index + 3) & 3] & 0x3F];
 }
 
-const RC2::UInt16Container RC2::getIntegersFromInputBlock(const BytesContainer &block) const
-{
-   UInt16Container int_block;
-   int_block.reserve(4);
-   for (uint8_t i = 0; i < 8; i += 2)
-   {
-      int_block.push_back(block[i] | (block[i + 1] << 8));
-   }
-   
-   return int_block;
-}
-
 const RC2::UInt16Container RC2::encodeBlock(const UInt16Container &input)
 {
    UInt16Container encoded_block(input);

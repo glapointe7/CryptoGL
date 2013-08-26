@@ -109,14 +109,6 @@ void DES::decodeFeistelRounds(uint64_t& L, uint64_t& R, const uint8_t) const
    }
 }
 
-const uint64_t DES::getIntegersFromInputBlock(const BytesContainer &block) const
-{
-   BigEndian64 BE;
-   BE.toInteger(block);
-   
-   return BE.getValue();
-}
-
 const uint64_t DES::encodeBlock(const uint64_t &input)
 {
    // Initial permutation of the 64-bits data blocks.

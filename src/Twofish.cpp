@@ -180,22 +180,6 @@ void Twofish::decodeFeistelRounds(UInt32Container &L, UInt32Container &R, const 
    }
 }
 
-const Twofish::UInt32Container Twofish::getIntegersFromInputBlock(const BytesContainer &block) const
-{
-   UInt32Container int_block;
-   int_block.reserve(4);
-
-   LittleEndian32 LE;
-   for (uint8_t i = 0; i < 16; i += 4)
-   {
-      LE.toInteger(BytesContainer(block.begin() + i, block.begin() + i + 4));
-      int_block.push_back(LE.getValue());
-      LE.resetValue();
-   }
-
-   return int_block;
-}
-
 const Twofish::UInt32Container Twofish::encodeBlock(const UInt32Container &input)
 {
    // Input whitening.

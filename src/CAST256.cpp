@@ -118,22 +118,6 @@ uint32_t CAST256::F3(const uint32_t D, const uint32_t Km, const uint32_t Kr) con
            ^ S[2][getByteFromInteger(I, 1)]) - S[3][getByteFromInteger(I, 0)];
 }
 
-const CAST256::UInt32Container CAST256::getIntegersFromInputBlock(const BytesContainer &block) const
-{
-   UInt32Container beta;
-   beta.reserve(4);
-   
-   BigEndian32 BE;
-   for(uint8_t i = 0; i < 16; i += 4)
-   {
-      BE.toInteger(BytesContainer(block.begin() + i, block.begin() + i + 4));
-      beta.push_back(BE.getValue());
-      BE.resetValue();
-   }
-   
-   return beta;
-}
-
 const CAST256::UInt32Container CAST256::encodeBlock(const UInt32Container &input)
 {
    UInt32Container beta(input);

@@ -12,16 +12,19 @@ class CAST256 : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndia
 public:
 
    /* Default constructor : default on ECB mode of encryption. */
-   explicit CAST256(const BytesContainer &key) : BlockCipher(OperationModes::ECB, 12) { setKey(key); }
+   explicit CAST256(const BytesContainer &key) : BlockCipher(OperationModes::ECB, 12, {}) { setKey(key); }
 
    /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
-   CAST256(const BytesContainer &key, const OperationModes mode) : BlockCipher(mode, 12) { setKey(key); }
+   CAST256(const BytesContainer &key, const OperationModes mode) : BlockCipher(mode, 12, {}) { setKey(key); }
+   
+   /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
+   CAST256(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
+      : BlockCipher(mode, 12, IV) { setKey(key); }
 
    virtual void setKey(const BytesContainer &key) final;
 
 private:
    virtual void generateSubkeys() final;
-   virtual const UInt32Container getIntegersFromInputBlock(const BytesContainer &block) const final;
    virtual const UInt32Container encodeBlock(const UInt32Container &input) final;
    virtual const UInt32Container decodeBlock(const UInt32Container &input) final;
    

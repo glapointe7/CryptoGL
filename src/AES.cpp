@@ -168,20 +168,6 @@ void AES::addRoundKey(UInt32Container &state, const uint8_t round) const
    }
 }
 
-const AES::UInt32Container AES::getIntegersFromInputBlock(const BytesContainer &block) const
-{
-   UInt32Container int_block(4, 0);
-   BigEndian32 BE;
-   for (uint8_t i = 0; i < 16; i += 4)
-   {
-      BE.toInteger(BytesContainer(block.begin() + i, block.begin() + i + 4));
-      int_block[i >> 2] = BE.getValue();
-      BE.resetValue();
-   }
-   
-   return int_block;
-}
-
 const AES::UInt32Container AES::encodeBlock(const UInt32Container &input)
 {
    UInt32Container encoded_block(input);

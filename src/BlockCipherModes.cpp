@@ -7,12 +7,12 @@
  */
 const BlockCipherModes::Block BlockCipherECBMode::getCipherBlock(const Block &input_block)
 {
-   return input_block;
+   return encode(input_block);
 }
 
 const BlockCipherModes::Block BlockCipherECBMode::getClearBlock(const Block &input_block)
 {
-   return input_block;
+   return decode(input_block);
 }
 
 /*
@@ -20,33 +20,37 @@ const BlockCipherModes::Block BlockCipherECBMode::getClearBlock(const Block &inp
  */
 const BlockCipherModes::Block BlockCipherCBCMode::getCipherBlock(const Block &input_block)
 {
-   const Block new_cipher_block = getXORedBlock(input_block, previous_cipher_block);
+   const Block new_cipher_block = encode(getXORedBlock(input_block, previous_cipher_block));
    previous_cipher_block = new_cipher_block;  
    
    return new_cipher_block;
 }
 
-const BlockCipherModes::Block  BlockCipherCBCMode::getClearBlock(const Block &input_block)
+const BlockCipherModes::Block BlockCipherCBCMode::getClearBlock(const Block &input_block)
 {
-   return getXORedBlock(input_block, previous_cipher_block);
+   const Block clear_block = getXORedBlock(decode(input_block), previous_cipher_block);
+   previous_cipher_block = input_block;
+   
+   return clear_block;
 }
 
 /*
  * CFB Mode of encryption.
  */
-/*const BlockCipherModes::Block BlockCipherCBCMode::getCipherBlock(const Block &input_block)
-{
-   Block new_input_block(previous_input_block);
-   new_input_block.reserve(previous_input_block.size() + previous_cipher_block.size());
-   new_input_block.insert(new_input_block.end(), previous_cipher_block.begin(), previous_cipher_block.end());
+const BlockCipherModes::Block BlockCipherCFBMode::getCipherBlock(const Block &input_block)
+{   
+   const Block output = encode(next_input_block);
+   const Block cipher = getXORedBlock(input_block, output);
+   next_input_block = cipher;
    
-   const Block output_block = block->processEncodeBlock(previous_input_block);
-   previous_cipher_block = getXORedBlock(input_block, output_block);
-   
-   return previous_cipher_block;
+   return cipher;
 }
 
-const BlockCipherModes::Block  BlockCipherCBCMode::getClearBlock(const Block &input_block)
+const BlockCipherModes::Block  BlockCipherCFBMode::getClearBlock(const Block &input_block)
 {
-   return getCipherBlock(input_block);
-}*/
+   const Block output = encode(next_input_block);
+   const Block clear = getXORedBlock(input_block, output);
+   next_input_block = input_block;
+   
+   return clear;
+}

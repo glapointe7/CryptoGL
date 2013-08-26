@@ -10,15 +10,19 @@
 class Noekeon : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian32>
 {
 public:
-   explicit Noekeon(const BytesContainer &key) : BlockCipher(OperationModes::ECB, 16) { setKey(key); }
-   Noekeon(const BytesContainer &key, const OperationModes mode) : BlockCipher(mode, 16) { setKey(key); }
+   explicit Noekeon(const BytesContainer &key) : BlockCipher(OperationModes::ECB, 16, {}) { setKey(key); }
+   
+   Noekeon(const BytesContainer &key, const OperationModes mode) : BlockCipher(mode, 16, {}) { setKey(key); }
+   
+   /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
+   Noekeon(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
+      : BlockCipher(mode, 16, IV) { setKey(key); }
    
    virtual void setKey(const BytesContainer &key) final;
    
 private:
    virtual void generateSubkeys() final;
    virtual void generateInverseSubkeys() final;
-   virtual const UInt32Container getIntegersFromInputBlock(const BytesContainer &block) const final;
    virtual const UInt32Container encodeBlock(const UInt32Container &input) final;
    virtual const UInt32Container decodeBlock(const UInt32Container &input) final;
    
