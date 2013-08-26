@@ -22,6 +22,10 @@ public:
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    Blowfish(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
       : Feistel(mode, 16, IV) { setKey(key); }
+   
+   /* Constructor with a vector of IV only for the mode CTR. */
+   Blowfish(const BytesContainer &key, const IVContainer &IV) 
+      : Feistel(16, IV) { setKey(key); }
 
    virtual void setKey(const BytesContainer &key) final;
 

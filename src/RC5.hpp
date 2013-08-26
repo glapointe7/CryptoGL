@@ -11,13 +11,19 @@
 class RC5 : public Feistel<uint32_t, std::vector<uint32_t>, 8, LittleEndian32 >
 {
 public:
-   explicit RC5(const BytesContainer &key) : Feistel(OperationModes::ECB, 12) { setKey(key); }
+   explicit RC5(const BytesContainer &key) 
+      : Feistel(OperationModes::ECB, 12) { setKey(key); }
    
-   RC5(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 12) { setKey(key); }
+   RC5(const BytesContainer &key, const OperationModes mode) 
+      : Feistel(mode, 12) { setKey(key); }
    
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    RC5(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
       : Feistel(mode, 12, IV) { setKey(key); }
+   
+   /* Constructor with a vector of IV only for the mode CTR. */
+   RC5(const BytesContainer &key, const IVContainer &IV) 
+      : Feistel(12, IV) { setKey(key); }
    
    virtual void setKey(const BytesContainer &key) final;
    

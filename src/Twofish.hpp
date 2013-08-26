@@ -11,14 +11,20 @@ class Twofish : public Feistel<std::vector<uint32_t>, std::vector<uint32_t>, 16,
 {
 public:
    /* Default constructor : default on ECB mode of encryption with no IV. */
-   explicit Twofish(const BytesContainer &key) : Feistel(OperationModes::ECB, 16) { setKey(key); }
+   explicit Twofish(const BytesContainer &key) 
+      : Feistel(OperationModes::ECB, 16) { setKey(key); }
    
    /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
-   Twofish(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16) { setKey(key); }
+   Twofish(const BytesContainer &key, const OperationModes mode) 
+      : Feistel(mode, 16) { setKey(key); }
    
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    Twofish(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
       : Feistel(mode, 16, IV) { setKey(key); }
+   
+   /* Constructor with a vector of IV only for the mode CTR. */
+   Twofish(const BytesContainer &key, const IVContainer &IV) 
+      : Feistel(16, IV) { setKey(key); }
 
    virtual void setKey(const BytesContainer &key) final;
    

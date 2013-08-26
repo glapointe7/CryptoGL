@@ -120,11 +120,18 @@ protected:
    
    BlockCipher(const OperationModes mode, const uint8_t round, const BytesContainer &IV)
       : block_strategy(
-        BlockCipherModesFactory::createBlockCipherMode(
+        BlockCipherModesFactory<BytesContainer>::createBlockCipherMode(
           mode,
           IV,
           std::bind(&THIS::processEncodeBlock, this, std::placeholders::_1),
           std::bind(&THIS::processDecodeBlock, this, std::placeholders::_1))),
+        rounds(round) {}
+   
+   BlockCipher(const uint8_t round, const IVContainer &IV)
+      : block_strategy(
+        BlockCipherModesFactory<IVContainer>::createBlockCipherMode(
+          IV,
+          std::bind(&THIS::processEncodeBlock, this, std::placeholders::_1))),
         rounds(round) {}
    
    virtual ~BlockCipher() { delete block_strategy; }

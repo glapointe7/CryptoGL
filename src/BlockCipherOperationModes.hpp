@@ -24,7 +24,7 @@ enum class OperationModes : uint8_t
    ECB,     // electronic codebook
    CBC,     // Cipher-block chaining
    CFB,     // Cipher feedback
-   //OFB,     // Output feedback
+   OFB,     // Output feedback
    //CTR      // Counter
 };
 

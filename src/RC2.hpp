@@ -10,13 +10,19 @@
 class RC2 : public BlockCipher<uint16_t, std::vector<uint16_t>, 8, LittleEndian16>
 {
 public:
-   explicit RC2(const BytesContainer &key) : BlockCipher(OperationModes::ECB, 16, {}) { setKey(key); }
+   explicit RC2(const BytesContainer &key) 
+      : BlockCipher(OperationModes::ECB, 16, {}) { setKey(key); }
    
-   RC2(const BytesContainer &key, const OperationModes mode) : BlockCipher(mode, 16, {}) { setKey(key); }
+   RC2(const BytesContainer &key, const OperationModes mode) 
+      : BlockCipher(mode, 16, {}) { setKey(key); }
    
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    RC2(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
       : BlockCipher(mode, 16, IV) { setKey(key); }
+   
+   /* Constructor with a vector of IV only for the mode CTR. */
+   RC2(const BytesContainer &key, const IVContainer &IV) 
+      : BlockCipher(16, IV) { setKey(key); }
    
    virtual void setKey(const BytesContainer &key) final;
      

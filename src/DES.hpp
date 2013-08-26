@@ -14,13 +14,19 @@
 class DES : public Feistel<uint64_t, uint64_t, 8, BigEndian64>
 {
 public:
-   explicit DES(const BytesContainer &key) : Feistel(OperationModes::ECB, 16) { setKey(key); }
+   explicit DES(const BytesContainer &key) 
+      : Feistel(OperationModes::ECB, 16) { setKey(key); }
    
-   DES(const BytesContainer &key, const OperationModes mode) : Feistel(mode, 16) { setKey(key); }
+   DES(const BytesContainer &key, const OperationModes mode) 
+      : Feistel(mode, 16) { setKey(key); }
    
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    DES(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
       : Feistel(mode, 16, IV) { setKey(key); }
+   
+   /* Constructor with a vector of IV only for the mode CTR. */
+   DES(const BytesContainer &key, const IVContainer &IV) 
+      : Feistel(16, IV) { setKey(key); }
    
    virtual void setKey(const BytesContainer &key) final;
 

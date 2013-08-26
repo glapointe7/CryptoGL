@@ -26,21 +26,21 @@ public:
 class BlockCipherECBMode : public BlockCipherModes
 {
 public:
-   BlockCipherECBMode(GetOutputBlockFunction encode, GetOutputBlockFunction decode)
+   BlockCipherECBMode(const GetOutputBlockFunction &encode, const GetOutputBlockFunction &decode)
       : encode(encode), decode(decode) {}
    
    virtual const Block getCipherBlock(const Block &input_block) final;
    virtual const Block getClearBlock(const Block &input_block) final;
    
 private:
-   GetOutputBlockFunction encode;
-   GetOutputBlockFunction decode;
+   const GetOutputBlockFunction encode;
+   const GetOutputBlockFunction decode;
 };
 
 class BlockCipherCBCMode : public BlockCipherModes
 {
 public:
-   BlockCipherCBCMode(const Block &IV, GetOutputBlockFunction encode, GetOutputBlockFunction decode) 
+   BlockCipherCBCMode(const Block &IV, const GetOutputBlockFunction &encode, const GetOutputBlockFunction &decode) 
       : previous_cipher_block(IV), encode(encode), decode(decode) {}
    
    virtual const Block getCipherBlock(const Block &input_block) final;
@@ -48,30 +48,60 @@ public:
    
 private:
    Block previous_cipher_block;
-   GetOutputBlockFunction encode;
-   GetOutputBlockFunction decode;
+   const GetOutputBlockFunction encode;
+   const GetOutputBlockFunction decode;
 };
 
 class BlockCipherCFBMode : public BlockCipherModes
 {
 public:   
-   BlockCipherCFBMode(const Block &IV, GetOutputBlockFunction encode)
-   : next_input_block(IV), encode(encode) {}
+   BlockCipherCFBMode(const Block &IV, const GetOutputBlockFunction &encode)
+      : next_input_block(IV), encode(encode) {}
    
    virtual const Block getCipherBlock(const Block &input_block) final;
    virtual const Block getClearBlock(const Block &input_block) final;
 
 private:
    Block next_input_block;
-   GetOutputBlockFunction encode;
+   const GetOutputBlockFunction encode;
 };
 
+class BlockCipherOFBMode : public BlockCipherModes
+{
+public:   
+   BlockCipherOFBMode(const Block &IV, const GetOutputBlockFunction &encode)
+      : next_input_block(IV), encode(encode) {}
+   
+   virtual const Block getCipherBlock(const Block &input_block) final;
+   virtual const Block getClearBlock(const Block &input_block) final;
+
+private:
+   Block next_input_block;
+   const GetOutputBlockFunction encode;
+};
+
+class BlockCipherCTRMode : public BlockCipherModes
+{
+public:   
+   explicit BlockCipherCTRMode(const SymmetricCipher::IVContainer &IV, const GetOutputBlockFunction &encode)
+      : IV(IV), encode(encode) {}
+   
+   virtual const Block getCipherBlock(const Block &input_block) final;
+   virtual const Block getClearBlock(const Block &input_block) final;
+
+private:
+   uint64_t block_index = 0;
+   const SymmetricCipher::IVContainer IV;
+   const GetOutputBlockFunction encode;
+};
+
+template <class Block>
 class BlockCipherModesFactory
 {
 public:
    static BlockCipherModes* createBlockCipherMode(
       const OperationModes mode,
-      const SymmetricCipher::BytesContainer &IV,
+      const Block &IV,
       BlockCipherCFBMode::GetOutputBlockFunction encode,
       BlockCipherCFBMode::GetOutputBlockFunction decode)
    {
@@ -85,9 +115,23 @@ public:
          
          case OperationModes::CFB:  
             return new BlockCipherCFBMode(IV, encode);
-            //case OperationModes::OFB:  return new BlockCipherOFBMode();
+            
+         case OperationModes::OFB:  
+            return new BlockCipherOFBMode(IV, encode);
       }
-      throw Exception("Accepted Modes are : ECB, CBC, CFB, OFB and CTR.");
+      throw Exception("Accepted Modes are : ECB, CBC, CFB and OFB.");
+   }
+};
+
+template<>
+class BlockCipherModesFactory<SymmetricCipher::IVContainer>
+{
+public:
+   static BlockCipherModes* createBlockCipherMode(
+      const SymmetricCipher::IVContainer &IV,
+      BlockCipherCFBMode::GetOutputBlockFunction encode)
+   { 
+      return new BlockCipherCTRMode(IV, encode);
    }
 };
 

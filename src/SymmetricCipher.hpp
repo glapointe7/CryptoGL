@@ -16,6 +16,7 @@ public:
    typedef std::vector<uint16_t> UInt16Container;
    typedef std::vector<uint32_t> UInt32Container;
    typedef std::vector<uint64_t> UInt64Container;
+   typedef std::vector<BytesContainer> IVContainer;
 
 protected:
    virtual ~SymmetricCipher() {}

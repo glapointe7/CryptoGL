@@ -14,11 +14,16 @@ class AES : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian32>
 public:
    explicit AES(const BytesContainer &key) : BlockCipher(OperationModes::ECB, 10, {}) { setKey(key); }
    
-   AES(const BytesContainer &key, const OperationModes mode) : BlockCipher(mode, 10, {}) { setKey(key); }
+   AES(const BytesContainer &key, const OperationModes mode) 
+      : BlockCipher(mode, 10, {}) { setKey(key); }
    
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    AES(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
       : BlockCipher(mode, 10, IV) { setKey(key); }
+   
+   /* Constructor with a vector of IV only for the mode CTR. */
+   AES(const BytesContainer &key, const IVContainer &IV) 
+      : BlockCipher(10, IV) { setKey(key); }
    
    virtual void setKey(const BytesContainer &key) final;
    

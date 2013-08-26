@@ -6,6 +6,8 @@ ADFGVX, Caesar, Vigenere, Rozier, Beaufort, Beaufort (German variant), Vigenere 
 Block ciphers include the following :
 AES, DES, Blowfish, IDEA, Skipjack, RC2, RC5, RC6, TripleDES, XTEA, Noekeon, CAST-128, CAST-256, Twofish
 
+For each block cipher, the ECB, CBC, CFB and OFB modes of operation are implemented.
+
 Stream ciphers include the following :
 Rabbit, RC4
 
@@ -24,7 +26,7 @@ Also, at least one test is done for each cipher and hash function. The tests are
 - Add more block ciphers and stream ciphers.
 - Add algorithm to generate random strings, bytes and bits following the NIST standard.
 - Add RSA cipher.
-- Add CBC, CFB, OFB and CTR modes for block cipher.
+- Add CTR modes for block cipher.
 - Add more tests for each crypto.
 **********************
 
