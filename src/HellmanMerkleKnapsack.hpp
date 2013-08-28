@@ -12,7 +12,7 @@
 class HellmanMerkleKnapsack : public AsymmetricCipher
 {
 public:
-   /* The private key (W, r, mod) need to be given where W is the super incresing sequence and r (mod mod). */
+   /* The private key (W, div, mod) need to be given where W is the super incresing sequence and div (mod mod). */
    HellmanMerkleKnapsack(const BigIntVector &sequence, const BigInteger &div, const BigInteger &mod);
    
    virtual const BigIntVector encode(const BytesContainer &message) final;

@@ -1,4 +1,4 @@
-Cryptology is a c++ library containing classical ciphers, modern ciphers and hash functions.
+Cryptology is a c++ library containing classical ciphers, symmetric ciphers, asymmetric ciphers, hash functions and some tools.
 
 Classical ciphers include the following :
 ADFGVX, Caesar, Vigenere, Rozier, Beaufort, Beaufort (German variant), Vigenere Multiplicative, Chao, Collon, Delastelle, Fleissner, 2-square, 3-square, 4-square, Hill, Morse, Monoalphabetic Substitution, Nihiliste, Playfair, Polibius, Railfence, Redefence, Transpositions, Wolseley and Affine.
@@ -11,6 +11,9 @@ For each block cipher, the ECB, CBC, CFB, OFB and CTR modes of operation are imp
 Stream ciphers include the following :
 Rabbit, RC4
 
+Asymmetric ciphers include the following (using a BigInteger library created by Matt McCutchen : https://mattmccutchen.net/bigint/):
+Hellman-Merkle Knapsack cryptosystem
+
 Hash functions include the following :
 Blake (224, 256, 384, 512), Keccak (0, 224, 256, 384, 512), SHA-1, SHA-2 (224, 256, 384, 512, 512/224, 512/256), MD2, MD4, MD5, RipeMD (128, 160, 256, 320), Whirlpool, Tiger (128, 160, 192). HMAC is supported for all of them except Keccak which it's not needed.
 
@@ -22,7 +25,7 @@ Also, at least one test is done for each cipher and hash function. The tests are
 *****MORE TO COME*****
 - Add more block ciphers and stream ciphers.
 - Add algorithm to generate random strings, bytes and bits following the NIST standard.
-- Add Asymmetric ciphers : RSA, Hellman & Merkle knapsack and Diffie-Hellman.
+- Add Asymmetric ciphers : RSA and Diffie-Hellman.
 **********************
 
 1. Procedure to install GoogleTest (gtest) on your computer ( http://code.google.com/p/tonatiuh/wiki/InstallingGoogleTestForLinux ):
