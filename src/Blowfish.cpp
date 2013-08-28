@@ -38,7 +38,7 @@ void Blowfish::generateSubkeys()
    uint32_t R = 0;
    for (uint8_t i = 0; i < 18; i += 2)
    {
-      encodeFeistelRounds(L, R, i);
+      encodeFeistelRounds(L, R, 0);
       subkeys[i] = L;
       subkeys[i + 1] = R;
    }
@@ -47,14 +47,12 @@ void Blowfish::generateSubkeys()
    {
       for (uint16_t j = 0; j < 256; j += 2)
       {
-         encodeFeistelRounds(L, R, j);
+         encodeFeistelRounds(L, R, 0);
          sbox[i][j] = L;
          sbox[i][j + 1] = R;
       }
    }
 }
-
-// Feistel function F.
 
 const uint32_t Blowfish::F(const uint32_t half_block, const uint8_t) const
 {
@@ -69,8 +67,7 @@ const uint32_t Blowfish::F(const uint32_t half_block, const uint8_t) const
 
 void Blowfish::encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
 {
-   uint8_t i;
-   for (i = 0; i != rounds; i += 2)
+   for (uint8_t i = 0; i != rounds; i += 2)
    {
       L ^= subkeys[i];
       R ^= F(L, subkeys[i]);
@@ -78,8 +75,8 @@ void Blowfish::encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) cons
       L ^= F(R, subkeys[i]);
    }
    
-   L ^= subkeys[i];
-   R ^= subkeys[i + 1];
+   L ^= subkeys[rounds];
+   R ^= subkeys[rounds + 1];
    std::swap(L, R);
 }
 

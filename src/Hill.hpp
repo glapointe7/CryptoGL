@@ -1,29 +1,29 @@
 
 #ifndef HILL_HPP
-#define	HILL_HPP
+#define HILL_HPP
 
 #include "StringCipher.hpp"
-#include "Matrix.hpp"
+#include "SquareMatrix.hpp"
 
 #include <vector>
 
 class Hill : public StringCipher
-{
-   typedef std::vector<std::vector<int32_t> > Matrice;
-   
+{   
 public:
-   explicit Hill(const Matrice &key) { this->key = new Matrix(); setKey(key); }
+   typedef SquareMatrix::Matrix Matrix;
+   
+   explicit Hill(const Matrix &key) { this->key = new SquareMatrix(); setKey(key); }
    ~Hill() { delete key; }
    
    virtual const ClassicalType encode(const ClassicalType &clear_text) final;
    virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
    
-   void setKey(const Matrice &key);
+   void setKey(const Matrix &key);
    
 private:
-   const ClassicalType process(const ClassicalType &data, const Matrix *K);
+   const ClassicalType process(const ClassicalType &data, const SquareMatrix *K);
    
-   Matrix *key;
+   SquareMatrix *key;
 };
 
 #endif

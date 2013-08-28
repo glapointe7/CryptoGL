@@ -88,7 +88,7 @@ public:
       for (uint64_t n = 0; n < message_padded_len; n += InputBlockSize)
       {
          const BytesContainer input_block(message_padded.begin() + n, message_padded.begin() + n + InputBlockSize);
-         const BytesContainer encoded_block = block_strategy->getCipherBlock(input_block);
+         const BytesContainer encoded_block = block_mode->getCipherBlock(input_block);
          output.insert(output.end(), encoded_block.begin(), encoded_block.end());
       }
 
@@ -107,7 +107,7 @@ public:
       for (uint64_t n = 0; n < message_len; n += InputBlockSize)
       {
          const BytesContainer input_block(message.begin() + n, message.begin() + n + InputBlockSize);
-         const BytesContainer decoded_block = block_strategy->getClearBlock(input_block);
+         const BytesContainer decoded_block = block_mode->getClearBlock(input_block);
          output.insert(output.end(), decoded_block.begin(), decoded_block.end());
       }
 
@@ -118,8 +118,10 @@ protected:
    typedef std::vector<SubkeyType> SubkeysContainer;
    typedef BlockCipher<SubkeyType, DataType, InputBlockSize, EndianType> THIS;
    
+   /* Default constructor : Only for ECB, CBC, CFB and OFB modes. An IV is needed for 
+    * CBC, CFB and OFB modes. For the ECB mode, IV is empty. */
    BlockCipher(const OperationModes mode, const uint8_t round, const BytesContainer &IV)
-      : block_strategy(
+      : block_mode(
         BlockCipherModesFactory<BytesContainer>::createBlockCipherMode(
           mode,
           IV,
@@ -127,14 +129,15 @@ protected:
           std::bind(&THIS::processDecodeBlock, this, std::placeholders::_1))),
         rounds(round) {}
    
+   /* Constructor for the CTR mode : Take a vector of IVs. */
    BlockCipher(const uint8_t round, const IVContainer &IV)
-      : block_strategy(
+      : block_mode(
         BlockCipherModesFactory<IVContainer>::createBlockCipherMode(
           IV,
           std::bind(&THIS::processEncodeBlock, this, std::placeholders::_1))),
         rounds(round) {}
    
-   virtual ~BlockCipher() { delete block_strategy; }
+   virtual ~BlockCipher() { delete block_mode; }
    
    /* Check the key provided by the user and set it if correct. */
    virtual void setKey(const BytesContainer &) = 0;
@@ -179,11 +182,12 @@ protected:
       return padded_input;
    }
 
-   BlockCipherModes *block_strategy;
+   BlockCipherModes *block_mode;
    uint8_t rounds;
    SubkeysContainer subkeys;
    
 private:
+   /* Encode an input block of bytes and return the output block. */
    const BytesContainer processEncodeBlock(const BytesContainer &block)
    {
       DataType int_block = getIntegersFromInputBlock(block);
@@ -192,6 +196,7 @@ private:
       return getOutputBlock(int_block);
    }
    
+   /* Decode an input block of bytes and return the output block. */
    const BytesContainer processDecodeBlock(const BytesContainer &block)
    {
       DataType int_block = getIntegersFromInputBlock(block);

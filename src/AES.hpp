@@ -12,7 +12,8 @@
 class AES : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian32>
 {
 public:
-   explicit AES(const BytesContainer &key) : BlockCipher(OperationModes::ECB, 10, {}) { setKey(key); }
+   explicit AES(const BytesContainer &key) 
+      : BlockCipher(OperationModes::ECB, 10, {}) { setKey(key); }
    
    AES(const BytesContainer &key, const OperationModes mode) 
       : BlockCipher(mode, 10, {}) { setKey(key); }

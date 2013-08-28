@@ -13,8 +13,6 @@ void String::toLowerCase(std::string &text)
    std::transform(text.begin(), text.end(), text.begin(), tolower);
 }
 
-// Remove all characters in text specified by chars.
-
 void String::removeChars(std::string &text, const std::string &chars)
 {
    text.erase(std::remove_if(text.begin(), text.end(), [chars] (const char c) {
@@ -22,8 +20,7 @@ void String::removeChars(std::string &text, const std::string &chars)
    }), text.end());
 }
 
-/* Reverse a string. */
-void String::strReverse(char* begin, char* end)
+void String::reverse(char* begin, char* end)
 {
    char aux;
    while (end > begin)
@@ -54,5 +51,5 @@ void String::uintToString(uint32_t value, char *str)
    } while (value /= 10);
    *wstr = '\0';
    // Reverse string
-   strReverse(str, wstr - 1);
+   reverse(str, wstr - 1);
 }

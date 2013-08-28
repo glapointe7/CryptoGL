@@ -24,7 +24,6 @@
 #include "../testing/SHA512Test.hpp"
 #include "../testing/SHA512_224Test.hpp"
 #include "../testing/SHA512_256Test.hpp"
-#include "../testing/HellmanTest.hpp"
 #include "../testing/TranspositionRowsTest.hpp"
 #include "../testing/TranspositionColumnsTest.hpp"
 #include "../testing/TranspositionDoubleTest.hpp"
@@ -65,6 +64,7 @@
 #include "../testing/CAST128Test.hpp"
 #include "../testing/CAST256Test.hpp"
 #include "../testing/TwofishTest.hpp"
+#include "../testing/HellmanMerkleKnapsackTest.hpp"
 
 #include <sys/time.h>
 

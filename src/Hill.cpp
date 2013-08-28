@@ -8,7 +8,7 @@
 
 #include "MathematicalTools.hpp" // GCD
 
-void Hill::setKey(const Matrice &key)
+void Hill::setKey(const Matrix &key)
 {
    try
    {
@@ -33,7 +33,7 @@ void Hill::setKey(const Matrice &key)
 
 /* Process encode / decode of the data with the matrix key K. */
 
-const Hill::ClassicalType Hill::process(const ClassicalType &data, const Matrix *K)
+const Hill::ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix *K)
 {  
    const uint32_t key_dim = K->getDimension();
    const uint32_t data_len = data.length();

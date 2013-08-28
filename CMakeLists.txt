@@ -21,11 +21,14 @@ include_directories(${GTEST_INCLUDE_DIRS})
 # Target the project name to be built.
 add_executable(${Project_Name} src/main.cpp)
 
-# Link the gtest librairies.
+# Link the gtest librairy to the project.
 target_link_libraries(${Project_Name} ${GTEST_BOTH_LIBRARIES})
 
-# Link the SRC librairies of the project.
-target_link_libraries (${Project_Name} componants)
+# Link the src librairy to the project.
+target_link_libraries (${Project_Name} cryptoGL)
+
+# Link the big_integers librairy to the project.
+target_link_libraries (${Project_Name} big_integers)
 
 add_test(AllTestsInCryptology ${Project_Name})
 

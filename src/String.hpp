@@ -32,11 +32,11 @@ namespace String
    /* Lowercase the text. */
    void toLowerCase(std::string &text);
 
-   // Remove all characters in text specified by chars.
+   /* Remove all characters in text specified by chars. */
    void removeChars(std::string &text, const std::string &chars);
 
    /* Reverse a string. */
-   void strReverse(char* begin, char* end);
+   void reverse(char* begin, char* end);
 
    /* Get the length of a string. */
    uint32_t strLength(const char *str);

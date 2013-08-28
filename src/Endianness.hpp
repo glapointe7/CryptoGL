@@ -21,7 +21,7 @@ protected:
    const uint8_t int_size = sizeof(UInt);
    
 public:   
-   /* Transform endianness of an integer (32 or 64 bits). */
+   /* Transform endianness of an integer (16, 32 or 64 bits). */
    void transform(const UInt &word)
    {
       for(uint8_t i = 0; i < int_size; ++i)

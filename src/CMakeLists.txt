@@ -15,7 +15,7 @@ set(SRC
 	AsymmetricCipher.hpp AsymmetricCipher.cpp
 	SymmetricCipher.hpp
 	
-   Matrix.hpp Matrix.cpp
+   SquareMatrix.hpp SquareMatrix.cpp
 	ConverterTools.hpp ConverterTools.cpp
    MathematicalTools.hpp MathematicalTools.cpp
 	Endianness.hpp
@@ -25,7 +25,7 @@ set(SRC
 	Tools.hpp Tools.cpp
 	Transposition.hpp Transposition.cpp
    String.hpp String.cpp
-   Digest.hpp Digest.cpp
+   Digest.hpp
    File.hpp
    Bits.hpp
    Random.hpp Random.cpp
@@ -60,7 +60,6 @@ set(SRC
    Skipjack.hpp Skipjack.cpp
    Noekeon.hpp Noekeon.cpp
 	Fleissner.hpp Fleissner.cpp
-	Hellman.hpp Hellman.cpp
 	Hill.hpp Hill.cpp
    MessageDigest.hpp MessageDigest.cpp
    SHA2.hpp SHA2.cpp
@@ -76,6 +75,7 @@ set(SRC
 	Polybius.hpp Polybius.cpp
 	Rabbit.hpp Rabbit.cpp
 	Railfence.hpp Railfence.cpp
+
    RC2.hpp RC2.cpp
 	RC4.hpp RC4.cpp
    RC5.hpp RC5.cpp
@@ -84,6 +84,7 @@ set(SRC
    CAST128.hpp CAST128.cpp
    CAST256.hpp CAST256.cpp
    Twofish.hpp Twofish.cpp 
+
 	UnsortAlpha.hpp UnsortAlpha.cpp
 	Vigenere.hpp Vigenere.cpp
 	Wolseley.hpp Wolseley.cpp
@@ -99,9 +100,14 @@ set(SRC
    TwoSquares.hpp TwoSquares.cpp
    ThreeSquares.hpp ThreeSquares.cpp
    FourSquares.hpp FourSquares.cpp
+
+   HellmanMerkleKnapsack.hpp HellmanMerkleKnapsack.cpp
 )
 
+# Add the source files code (CPP, HPP and the CMakeLists.txt) of 'big_numbers' directory.
+add_subdirectory (big_integers)
+
 # Create libcomponants.a with all the source files provided by SRC.
-add_library(componants ${SRC})
+add_library(cryptoGL ${SRC})
 
 

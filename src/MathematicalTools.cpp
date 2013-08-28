@@ -3,8 +3,6 @@
 #include <cmath>
 #include <map>
 
-#include "exceptions/Exception.hpp"
-
 /* Return the Greatest Common Divisor of a and b. */
 uint32_t GCD(const uint32_t a, const uint32_t b)
 {

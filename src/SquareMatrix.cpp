@@ -1,5 +1,5 @@
 
-#include "Matrix.hpp"
+#include "SquareMatrix.hpp"
 
 // Exceptions
 #include "exceptions/EmptyMatrix.hpp"
@@ -11,7 +11,7 @@
 
 // Exceptions : Matrix have to be square and not empty.
 
-void Matrix::setMatrix(const Matrice &M)
+void SquareMatrix::setMatrix(const Matrix &M)
 {
    if (M.empty())
    {
@@ -27,34 +27,29 @@ void Matrix::setMatrix(const Matrice &M)
    setDimension(M.size());
 }
 
-const Matrix::Matrice Matrix::getMatrix() const
+const SquareMatrix::Matrix SquareMatrix::getMatrix() const
 {
    return M;
 }
 
-const uint32_t Matrix::getDimension() const
-{
-   return dim;
-}
-
-void Matrix::setDimension(const uint32_t dim)
+void SquareMatrix::setDimension(const uint32_t dim)
 {
    this->dim = dim;
 }
 
-const int32_t Matrix::getModulo() const
+const int32_t SquareMatrix::getModulo() const
 {
    return n;
 }
 
-void Matrix::setModulo(const int32_t n)
+void SquareMatrix::setModulo(const int32_t n)
 {
    this->n = n;
 }
 
 // Get a specific value of the current matrix.
 
-const int32_t Matrix::get(const uint32_t row, const uint32_t col) const
+const int32_t SquareMatrix::get(const uint32_t row, const uint32_t col) const
 {
    if (row < dim && col < dim)
    {
@@ -66,7 +61,7 @@ const int32_t Matrix::get(const uint32_t row, const uint32_t col) const
 
 // Set value to M(row,col).
 
-void Matrix::set(const uint32_t row, const uint32_t col, const int32_t value)
+void SquareMatrix::set(const uint32_t row, const uint32_t col, const int32_t value)
 {
    if (row < dim && col < dim)
    {
@@ -79,7 +74,7 @@ void Matrix::set(const uint32_t row, const uint32_t col, const int32_t value)
 // Find the first pivot A(n,n) != 0 if it exists.
 // Otherwise, return dim + 1.
 
-uint32_t Matrix::findNonZero(const Matrice &A, const uint32_t from) const
+uint32_t SquareMatrix::findNonZero(const Matrix &A, const uint32_t from) const
 {
    uint32_t pos = from;
    while ((A[pos][from] == 0 || GCD(A[pos][from], n) != 1) && pos != dim)
@@ -92,8 +87,8 @@ uint32_t Matrix::findNonZero(const Matrice &A, const uint32_t from) const
 
 // Multiply a matrix and a column-vector. Return the column-vector solution.
 
-const std::vector<uint32_t> operator *(const Matrix *K, const std::vector<uint32_t> &V)
-{
+const std::vector<uint32_t> operator *(const SquareMatrix *K, const std::vector<uint32_t> &V)
+{   
    std::vector<uint32_t> soln(K->getDimension(), 0);
    const int32_t mod = K->getModulo();
    const std::vector<std::vector<int32_t> > mat = K->getMatrix();
@@ -114,9 +109,9 @@ const std::vector<uint32_t> operator *(const Matrix *K, const std::vector<uint32
 
 // Initialize to the identity matrix.
 
-void Matrix::setIdentity()
+void SquareMatrix::setIdentity()
 {
-   M = Matrice(dim, std::vector<int32_t>(dim, 0));
+   M = Matrix(dim, std::vector<int32_t>(dim, 0));
    for (uint32_t i = 0; i < dim; ++i)
    {
       M[i][i] = 1;
@@ -125,9 +120,9 @@ void Matrix::setIdentity()
 
 // Return the matrix Identity.
 
-const Matrix::Matrice Matrix::identity() const
+const SquareMatrix::Matrix SquareMatrix::identity() const
 {
-   Matrice Mat = Matrice(dim, std::vector<int32_t>(dim, 0));
+   Matrix Mat = Matrix(dim, std::vector<int32_t>(dim, 0));
    for (uint32_t i = 0; i < dim; ++i)
    {
       Mat[i][i] = 1;
@@ -138,7 +133,7 @@ const Matrix::Matrice Matrix::identity() const
 
 // Return diagonal product.
 
-int32_t Matrix::getDiagonalProduct(const Matrice &A) const
+int32_t SquareMatrix::getDiagonalProduct(const Matrix &A) const
 {
    int32_t prod = 1;
    for (uint32_t i = 0; i < dim; ++i)
@@ -151,7 +146,7 @@ int32_t Matrix::getDiagonalProduct(const Matrice &A) const
 
 // Check if the matrix mat is square.
 
-bool Matrix::isSquare(const Matrice &mat)
+bool SquareMatrix::isSquare(const Matrix &mat)
 {
    const uint32_t A_size = mat.size();
    for (const auto V : mat)
@@ -165,7 +160,7 @@ bool Matrix::isSquare(const Matrice &mat)
    return true;
 }
 
-void Matrix::triangularize(Matrice &A, Matrice &I, const uint32_t k, const uint32_t lower_i, const uint32_t upper_i) const
+void SquareMatrix::triangularize(Matrix &A, Matrix &I, const uint32_t k, const uint32_t lower_i, const uint32_t upper_i) const
 {
    // Swap null pivot with a non null one.
    if (A[k][k] == 0 || GCD(A[k][k], n) != 1)
@@ -190,7 +185,7 @@ void Matrix::triangularize(Matrice &A, Matrice &I, const uint32_t k, const uint3
 
 // Return the determinant of the current matrix.
 
-int32_t Matrix::det() const
+int32_t SquareMatrix::det() const
 {
    int32_t determinant = 0;
 
@@ -210,7 +205,7 @@ int32_t Matrix::det() const
 
       default:
       {
-         Matrice A = M;
+         Matrix A = M;
          int8_t swapping = 1;
 
          for (uint32_t k = 0; k < dim - 1; ++k)
@@ -250,11 +245,11 @@ int32_t Matrix::det() const
 
 // Return A^-1 using the Gauss-Jordan method.
 
-const Matrix* Matrix::inverse() const
+const SquareMatrix* SquareMatrix::inverse() const
 {
-   Matrix *result = new Matrix();
+   SquareMatrix *result = new SquareMatrix();
    result->setModulo(n);
-   Matrice A;
+   Matrix A;
 
    // Determinant of A is positive and is in the set {0,...,mod_A-1}
    const int32_t deter = det();
@@ -288,7 +283,7 @@ const Matrix* Matrix::inverse() const
          default:
          {
             A = M;
-            Matrice I = identity();
+            Matrix I = identity();
 
             // Triangular inferior.
             for (uint32_t k = 0; k < dim - 1; ++k)
