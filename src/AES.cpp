@@ -139,7 +139,7 @@ void AES::generateSubkeys()
    subkeys.reserve(max_round);
    for (uint8_t i = 0; i < Nk; ++i)
    {
-      subkeys.push_back(BigEndian::toInteger(BytesContainer(key.begin() + (i << 2), key.begin() + ((i + 1) << 2))));
+      subkeys.push_back(BigEndian32::toInteger(BytesContainer(key.begin() + (i << 2), key.begin() + ((i + 1) << 2))));
    }
 
    for (uint8_t i = Nk; i < max_round; ++i)

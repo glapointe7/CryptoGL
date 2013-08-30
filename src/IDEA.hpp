@@ -5,7 +5,7 @@
 #include "BlockCipher.hpp"
 #include "BigEndian.hpp"
 
-class IDEA : public BlockCipher<uint16_t, std::vector<uint16_t>, 8, BigEndian>
+class IDEA : public BlockCipher<uint16_t, std::vector<uint16_t>, 8, BigEndian16>
 {
 public:
    explicit IDEA(const BytesContainer &key) 

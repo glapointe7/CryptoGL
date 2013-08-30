@@ -11,7 +11,7 @@
 
 #include <vector>
 
-class DES : public Feistel<uint64_t, uint64_t, 8, BigEndian>
+class DES : public Feistel<uint64_t, uint64_t, 8, BigEndian64>
 {
 public:
    explicit DES(const BytesContainer &key) 

@@ -89,7 +89,7 @@ const Blake<uint32_t>::BytesContainer Blake32Bits::encode(const BytesContainer &
 {
    const uint64_t data_size = data.size();
    BytesContainer bytes = appendPadding(data);
-   appendLength<BigEndian>(bytes, data_size << 3);
+   appendLength<BigEndian64>(bytes, data_size << 3);
    
    const uint64_t bytes_len = bytes.size();
    const uint64_t rest = data_size % in_block_length;
@@ -131,7 +131,7 @@ const Blake<uint64_t>::BytesContainer Blake64Bits::encode(const BytesContainer &
 {
    const uint64_t data_size = data.size();
    BytesContainer bytes = appendPadding(data);
-   appendLength<BigEndian>(bytes, data_size << 3);
+   appendLength<BigEndian64>(bytes, data_size << 3);
    
    const uint64_t bytes_len = bytes.size();
    const uint64_t rest = data_size % in_block_length;

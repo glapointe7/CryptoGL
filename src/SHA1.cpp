@@ -7,7 +7,7 @@ constexpr uint32_t SHA1::IV[5];
 const SHA1::BytesContainer SHA1::encode(const BytesContainer &data)
 {
    BytesContainer bytes = appendPadding(data);
-   appendLength<BigEndian>(bytes, data.size() << 3);
+   appendLength<BigEndian64>(bytes, data.size() << 3);
 
    UInt32Container states(IV, IV + 5);
    const uint64_t bits_len = bytes.size();

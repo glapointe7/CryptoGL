@@ -7,7 +7,7 @@ const SHA2<uint32_t>::BytesContainer
 SHA32Bits::process(const BytesContainer &data, const uint8_t truncate_to)
 {
    BytesContainer bytes = appendPadding(data);
-   appendLength<BigEndian>(bytes, data.size() << 3);
+   appendLength<BigEndian64>(bytes, data.size() << 3);
    
    UInt32Container states(IV);
    const uint64_t bits_len = bytes.size();
@@ -36,7 +36,7 @@ const SHA2<uint64_t>::BytesContainer
 SHA64Bits::process(const BytesContainer &data, const uint8_t truncate_to)
 {
    BytesContainer bytes = appendPadding(data);
-   appendLength<BigEndian>(bytes, data.size() << 3);
+   appendLength<BigEndian64>(bytes, data.size() << 3);
    
    UInt64Container states(IV);
    const uint64_t bits_len = bytes.size();
@@ -120,7 +120,6 @@ void SHA512_t::buildIV(const BytesContainer &t)
    // Get the new IV vector.
    for (uint8_t j = 0; j < 64; j += 8)
    {
-      IV.push_back(BigEndian::toInteger(BytesContainer(answer.begin() + j, answer.begin() + j + 8)));
+      IV.push_back(BigEndian64::toInteger(BytesContainer(answer.begin() + j, answer.begin() + j + 8)));
    }
-   delete BE;
 }

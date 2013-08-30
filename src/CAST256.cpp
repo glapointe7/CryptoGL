@@ -79,7 +79,7 @@ void CAST256::generateSubkeys()
    kappa.reserve(8);
    for(uint8_t i = 0; i < 32; i += 4)
    {
-      kappa.push_back(BigEndian::toInteger(BytesContainer(key.begin() + i, key.begin() + i + 4)));
+      kappa.push_back(BigEndian32::toInteger(BytesContainer(key.begin() + i, key.begin() + i + 4)));
    }
    
    for(uint8_t i = 0; i < rounds; ++i)

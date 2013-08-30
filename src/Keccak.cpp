@@ -68,7 +68,7 @@ const Keccak::UInt64Container Keccak::convertBlockToState(const BytesContainer &
    
    for(uint8_t i = 0; i < 200; i += 8)
    {
-      int_block.push_back(LittleEndian::toInteger(BytesContainer(block.begin() + i, block.begin() + i + 8)));
+      int_block.push_back(LittleEndian64::toInteger(BytesContainer(block.begin() + i, block.begin() + i + 8)));
    }
    
    return int_block;
@@ -107,7 +107,7 @@ const Keccak::BytesContainer Keccak::applySqueezingPhase()
       {
          for(uint8_t y = 0; y < 5; ++y)
          {
-            const BytesContainer tmp = LittleEndian::toBytesVector(state[y][x]);
+            const BytesContainer tmp = LittleEndian64::toBytesVector(state[y][x]);
             output.insert(output.end(), tmp.begin(), tmp.end());
          }
       }      

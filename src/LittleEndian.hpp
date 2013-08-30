@@ -4,40 +4,63 @@
 
 #include <vector>
 
+typedef std::vector<uint8_t> BytesVector;
+
+template <class UInt>
 class LittleEndian
 {
 public:
-   typedef std::vector<uint8_t> BytesVector;
+   static const BytesVector toBytesVector(const UInt &value)
+   {
+      BytesVector bytes;
+      bytes.reserve(sizeof(UInt));
+      for(uint8_t i = 0; i < sizeof(UInt) << 3; i += 8)
+      {
+         bytes.push_back((value >> i) & 0xFF);
+      }
+      
+      return bytes;
+   }
+   
+   static const UInt toInteger(const BytesVector &bytes)
+   {
+      UInt value = 0;
+      for(uint8_t i = 0; i < sizeof(UInt); ++i)
+      {
+         value |= (static_cast<UInt>(bytes[i]) << (i << 3));
+      }
+
+      return value; 
+   }
+};
+
+template <>
+class LittleEndian<uint16_t>
+{
+public:
    static const BytesVector toBytesVector(const uint16_t value)
    {
-      return {value & 0xFF, 
-              value >> 8};
-   }
-   
-   static const BytesVector toBytesVector(const uint32_t value)
-   {
-      return {value & 0xFF, 
-              (value >> 8) & 0xFF, 
-              (value >> 16) & 0xFF, 
-              value >> 24};
-   }
-   
-   static const BytesVector toBytesVector(const uint64_t &value)
-   {
-      return {value & 0xFF, 
-              (value >> 8) & 0xFF, 
-              (value >> 16) & 0xFF, 
-              (value >> 24) & 0xFF, 
-              (value >> 32) & 0xFF, 
-              (value >> 40) & 0xFF, 
-              (value >> 48) & 0xFF, 
-              value >> 56};
+      return {static_cast<uint8_t>(value & 0xFF), 
+              static_cast<uint8_t>(value >> 8)};
    }
    
    static const uint16_t toInteger(const BytesVector &bytes)
    {
       return bytes[0] 
               | (bytes[1] << 8);
+   }
+};
+
+template <>
+class LittleEndian<uint32_t>
+{
+public:
+   static const BytesVector toBytesVector(const uint32_t value)
+   {
+      return {static_cast<uint8_t>(value & 0xFF), 
+              static_cast<uint8_t>((value >> 8) & 0xFF), 
+              static_cast<uint8_t>((value >> 16) & 0xFF), 
+              static_cast<uint8_t>(value >> 24)};
    }
    
    static const uint32_t toInteger(const BytesVector &bytes)
@@ -47,13 +70,30 @@ public:
               | (bytes[2] << 16) 
               | (bytes[3] << 24);
    }
+};
+
+template <>
+class LittleEndian<uint64_t>
+{
+public:
+   static const BytesVector toBytesVector(const uint64_t &value)
+   {
+      return {static_cast<uint8_t>(value & 0xFF), 
+              static_cast<uint8_t>((value >> 8) & 0xFF), 
+              static_cast<uint8_t>((value >> 16) & 0xFF), 
+              static_cast<uint8_t>((value >> 24) & 0xFF), 
+              static_cast<uint8_t>((value >> 32) & 0xFF), 
+              static_cast<uint8_t>((value >> 40) & 0xFF), 
+              static_cast<uint8_t>((value >> 48) & 0xFF), 
+              static_cast<uint8_t>(value >> 56)};
+   }
    
    static const uint64_t toInteger(const BytesVector &bytes)
    {
-      return  bytes[0]
-              | (bytes[1] << 8)
-              | (bytes[2] << 16)
-              | (bytes[3] << 24)
+      return  static_cast<uint64_t>(bytes[0])
+              | (static_cast<uint64_t>(bytes[1]) << 8)
+              | (static_cast<uint64_t>(bytes[2]) << 16)
+              | (static_cast<uint64_t>(bytes[3]) << 24)
               | (static_cast<uint64_t>(bytes[4]) << 32)
               | (static_cast<uint64_t>(bytes[5]) << 40)
               | (static_cast<uint64_t>(bytes[6]) << 48)
@@ -61,31 +101,8 @@ public:
    }
 };
 
-
-/*
-template <class UInt>
-class LittleEndian : public Endianness<UInt>
-{
-public:
-   virtual void toBytes(const UInt &word) final
-   {
-      for(uint8_t i = 0; i < this->int_size << 3; i += 8)
-      {
-         this->bytes[i >> 3] = (word >> i) & 0xFF;
-      }
-   }
-   
-   virtual void toInteger(const typename Endianness<UInt>::BytesContainer &bytes) final
-   {
-      for(uint8_t i = 0; i < this->int_size; ++i)
-      {
-         this->value |= (static_cast<UInt>(bytes[i]) << (i << 3));
-      }
-   }
-};
-
 using LittleEndian16 = LittleEndian<uint16_t>;
 using LittleEndian32 = LittleEndian<uint32_t>;
-using LittleEndian64 = LittleEndian<uint64_t>;*/
+using LittleEndian64 = LittleEndian<uint64_t>;
 
 #endif

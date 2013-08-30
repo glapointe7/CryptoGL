@@ -7,7 +7,7 @@
 #include "Feistel.hpp"
 #include "BigEndian.hpp"
 
-class Skipjack : public Feistel<uint8_t, std::vector<uint16_t>, 8, BigEndian>
+class Skipjack : public Feistel<uint8_t, std::vector<uint16_t>, 8, BigEndian16>
 {
 public:
    explicit Skipjack(const BytesContainer &key) 

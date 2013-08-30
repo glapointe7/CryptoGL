@@ -18,7 +18,6 @@ set(SRC
    SquareMatrix.hpp SquareMatrix.cpp
 	ConverterTools.hpp ConverterTools.cpp
    MathematicalTools.hpp MathematicalTools.cpp
-	Endianness.hpp
    BigEndian.hpp
    LittleEndian.hpp
    BlockCipherOperationModes.hpp

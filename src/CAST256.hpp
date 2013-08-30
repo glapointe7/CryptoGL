@@ -7,7 +7,7 @@
 #include "BlockCipher.hpp"
 #include "BigEndian.hpp"
 
-class CAST256 : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian>
+class CAST256 : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian32>
 {
 public:
 

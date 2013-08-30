@@ -5,7 +5,7 @@
 #include "HashFunction.hpp"
 #include "LittleEndian.hpp"
 
-class MessageDigest : public HashFunction<uint32_t, LittleEndian>
+class MessageDigest : public HashFunction<uint32_t, LittleEndian32>
 {
 protected:
    explicit MessageDigest(const uint8_t in_block_length) : HashFunction(in_block_length) {}

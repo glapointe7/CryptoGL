@@ -43,7 +43,7 @@ void MD2::process(const BytesContainer &data, BytesContainer &hash, const uint64
 
 const MessageDigest::BytesContainer MD2::encode(const BytesContainer &data)
 {
-   const BytesContainer bytes(appendPadding(data));
+   const BytesContainer bytes = appendPadding(data);
    BytesContainer hash(48, 0);
 
    const uint64_t bytes_len = bytes.size();
@@ -68,7 +68,7 @@ const MessageDigest::BytesContainer MD2::encode(const BytesContainer &data)
 const MessageDigest::BytesContainer MD4::encode(const BytesContainer &data)
 {
    BytesContainer bytes = appendPadding(data);
-   appendLength<LittleEndian>(bytes, data.size() << 3);
+   appendLength<LittleEndian64>(bytes, data.size() << 3);
    
    const uint64_t bytes_len = bytes.size();
    /* Initial values. */
@@ -118,7 +118,7 @@ const MessageDigest::BytesContainer MD4::encode(const BytesContainer &data)
 const MessageDigest::BytesContainer MD5::encode(const BytesContainer &data)
 {
    BytesContainer bytes = appendPadding(data);
-   appendLength<LittleEndian>(bytes, data.size() << 3);
+   appendLength<LittleEndian64>(bytes, data.size() << 3);
    
    const uint64_t bytes_len = bytes.size();
    /* Initial values. */

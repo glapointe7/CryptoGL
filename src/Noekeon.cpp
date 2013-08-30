@@ -25,7 +25,7 @@ void Noekeon::generateSubkeys()
    subkeys.resize(4);
    for(uint8_t i = 0; i < 4; ++i)
    {
-      subkeys[i] = BigEndian::toInteger(BytesContainer(key.begin() + (i << 2), key.begin() + (i << 2) + 4));
+      subkeys[i] = BigEndian32::toInteger(BytesContainer(key.begin() + (i << 2), key.begin() + (i << 2) + 4));
    }
 }
 

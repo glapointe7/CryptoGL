@@ -10,7 +10,7 @@
 
 #include <vector>
 
-class Blowfish : public Feistel<uint32_t, uint64_t, 8, BigEndian>
+class Blowfish : public Feistel<uint32_t, uint64_t, 8, BigEndian64>
 {
 public:
    /* Default constructor : default on ECB mode of encryption. */

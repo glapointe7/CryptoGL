@@ -81,13 +81,13 @@ protected:
       
       for (uint8_t j = 0; j < max; ++j)
       {
-         const BytesContainer bytes = Endian::toBytes(hash[j]);
+         const BytesContainer bytes = Endian::toBytesVector(hash[j]);
          output.insert(output.end(), bytes.begin(), bytes.end());
       }
       
       if (max_words % 2 && UInt_size == 8)
       {
-         const BytesContainer bytes = Endian::toBytes(hash[max]);
+         const BytesContainer bytes = Endian::toBytesVector(hash[max]);
          output.insert(output.end(), bytes.begin(), bytes.begin() + 4);
       }
 

@@ -28,7 +28,7 @@ void RC5::generateSubkeys()
 
    for (uint8_t i = 0; i < key_len; i += int_size)
    {
-      tmp_key.push_back(LittleEndian::toInteger(BytesContainer(key.begin() + i, key.begin() + i + int_size)));
+      tmp_key.push_back(LittleEndian32::toInteger(BytesContainer(key.begin() + i, key.begin() + i + int_size)));
    }
 
    // Initialize the expanded key table.

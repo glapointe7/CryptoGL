@@ -18,7 +18,8 @@ void RC2::setKey(const BytesContainer &key)
 
 void RC2::generateSubkeys()
 {
-   uint8_t tmp_subkeys[128];
+   BytesContainer tmp_subkeys;
+   tmp_subkeys.reserve(128);
    const uint8_t key_len = key.size();
    for (uint8_t i = 0; i < key_len; ++i)
    {
@@ -44,7 +45,7 @@ void RC2::generateSubkeys()
    subkeys.reserve(64);
    for (uint8_t i = 0; i < 128; i += 2)
    {
-      subkeys.push_back(tmp_subkeys[i] | (tmp_subkeys[i + 1] << 8));
+      subkeys.push_back(LittleEndian32::toInteger(BytesContainer(tmp_subkeys.begin() + i, tmp_subkeys.begin() + i + 2)));
    }
 }
 

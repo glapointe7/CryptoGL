@@ -108,7 +108,7 @@ void Ripemd::process160_320(const UInt32Container &words, UInt32Container &hash1
 const Ripemd::BytesContainer Ripemd128::encode(const BytesContainer & data)
 {
    BytesContainer bytes = appendPadding(data);
-   appendLength<LittleEndian>(bytes, data.size() << 3);
+   appendLength<LittleEndian64>(bytes, data.size() << 3);
 
    UInt32Container states(IV);
    const uint64_t bytes_len = bytes.size();
@@ -135,7 +135,7 @@ const Ripemd::BytesContainer Ripemd128::encode(const BytesContainer & data)
 const Ripemd::BytesContainer Ripemd160::encode(const BytesContainer & data)
 {
    BytesContainer bytes = appendPadding(data);
-   appendLength<LittleEndian>(bytes, data.size() << 3);
+   appendLength<LittleEndian64>(bytes, data.size() << 3);
 
    UInt32Container states(IV);
    const uint64_t bytes_len = bytes.size();
@@ -163,7 +163,7 @@ const Ripemd::BytesContainer Ripemd160::encode(const BytesContainer & data)
 const Ripemd::BytesContainer Ripemd256::encode(const BytesContainer & data)
 {
    BytesContainer bytes = appendPadding(data);
-   appendLength<LittleEndian>(bytes, data.size() << 3);
+   appendLength<LittleEndian64>(bytes, data.size() << 3);
 
    UInt32Container states(IV);
    const uint64_t bytes_len = bytes.size();
@@ -202,7 +202,7 @@ const Ripemd::BytesContainer Ripemd256::encode(const BytesContainer & data)
 const Ripemd::BytesContainer Ripemd320::encode(const BytesContainer & data)
 {
    BytesContainer bytes = appendPadding(data);
-   appendLength<LittleEndian>(bytes, data.size() << 3);
+   appendLength<LittleEndian64>(bytes, data.size() << 3);
 
    UInt32Container states(IV);
    const uint64_t bytes_len = bytes.size();

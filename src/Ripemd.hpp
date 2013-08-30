@@ -7,7 +7,7 @@
 #include "HashFunction.hpp"
 #include "LittleEndian.hpp"
 
-class Ripemd : public HashFunction<uint32_t, LittleEndian>
+class Ripemd : public HashFunction<uint32_t, LittleEndian32>
 {
 protected:
    explicit Ripemd(const UInt32Container &state) : HashFunction(64), IV(state) {}

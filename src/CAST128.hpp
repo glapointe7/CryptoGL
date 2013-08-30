@@ -7,7 +7,7 @@
 #include "Feistel.hpp"
 #include "BigEndian.hpp"
 
-class CAST128 : public Feistel<uint32_t, uint64_t, 8, BigEndian>
+class CAST128 : public Feistel<uint32_t, uint64_t, 8, BigEndian64>
 {
 public:
 

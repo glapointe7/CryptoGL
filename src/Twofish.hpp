@@ -7,7 +7,7 @@
 #include "Feistel.hpp"
 #include "LittleEndian.hpp"
 
-class Twofish : public Feistel<std::vector<uint32_t>, std::vector<uint32_t>, 16, LittleEndian, uint32_t>
+class Twofish : public Feistel<std::vector<uint32_t>, std::vector<uint32_t>, 16, LittleEndian32, uint32_t>
 {
 public:
    /* Default constructor : default on ECB mode of encryption with no IV. */

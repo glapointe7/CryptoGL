@@ -47,7 +47,7 @@ uint32_t Twofish::h(const uint32_t X, const BytesContainer &L) const
 {
    // Split X into 4 bytes in little endian.
    const uint8_t k = L.size() >> 2;
-   BytesContainer y = LittleEndian::toBytesVector(X);
+   BytesContainer y = LittleEndian32::toBytesVector(X);
    if(k == 4)
    {
       constexpr uint8_t k4[4] = {1, 0, 0, 1};
@@ -82,7 +82,7 @@ uint32_t Twofish::h(const uint32_t X, const BytesContainer &L) const
       }
    }
    
-   return LittleEndian::toInteger(z);
+   return LittleEndian32::toInteger(z);
 }
 
 void Twofish::generateSubkeys()

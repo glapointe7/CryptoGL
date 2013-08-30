@@ -7,7 +7,7 @@
 #include "BlockCipher.hpp"
 #include "LittleEndian.hpp"
 
-class RC2 : public BlockCipher<uint16_t, std::vector<uint16_t>, 8, LittleEndian>
+class RC2 : public BlockCipher<uint16_t, std::vector<uint16_t>, 8, LittleEndian16>
 {
 public:
    explicit RC2(const BytesContainer &key) 

@@ -63,7 +63,7 @@ const Tiger::BytesContainer Tiger::appendPadding(const BytesContainer &data) con
 const Tiger::BytesContainer Tiger::encode(const BytesContainer &data)
 {
    BytesContainer bytes = appendPadding(data);
-   appendLength<LittleEndian>(bytes, data.size() << 3);
+   appendLength<LittleEndian64>(bytes, data.size() << 3);
 
    UInt64Container state(IV, IV + 3);
    const uint64_t bytes_len = bytes.size();
