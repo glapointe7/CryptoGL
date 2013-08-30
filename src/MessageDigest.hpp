@@ -1,6 +1,6 @@
 
 #ifndef MESSAGEDIGEST_HPP
-#define	MESSAGEDIGEST_HPP
+#define MESSAGEDIGEST_HPP
 
 #include "HashFunction.hpp"
 #include "LittleEndian.hpp"
@@ -10,14 +10,14 @@ class MessageDigest : public HashFunction<uint32_t, LittleEndian32>
 protected:
    explicit MessageDigest(const uint8_t in_block_length) : HashFunction(in_block_length) {}
    virtual ~MessageDigest() {}
-   virtual const BytesContainer encode(const BytesContainer &data) = 0;
+   virtual const BytesVector encode(const BytesVector &data) = 0;
 };
 
 class MD2 : public MessageDigest
 {
 public:
    MD2() : MessageDigest(16) {}
-   virtual const BytesContainer encode(const BytesContainer &data) final;
+   virtual const BytesVector encode(const BytesVector &data) final;
    
 private:
    static constexpr uint8_t digits_of_pi[256] = {
@@ -38,17 +38,17 @@ private:
       0xF2, 0xEF, 0xB7, 0x0E, 0x66, 0x58, 0xD0, 0xE4, 0xA6, 0x77, 0x72, 0xF8, 0xEB, 0x75, 0x4B, 0x0A,
       0x31, 0x44, 0x50, 0xB4, 0x8F, 0xED, 0x1F, 0x1A, 0xDB, 0x99, 0x8D, 0x33, 0x9F, 0x11, 0x83, 0x14
    };
-   BytesContainer checksum = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+   BytesVector checksum = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
    
-   void process(const BytesContainer &data, BytesContainer &hash, const uint64_t &index);
-   const BytesContainer appendPadding(const BytesContainer &data) const;
+   void process(const BytesVector &data, BytesVector &hash, const uint64_t &index);
+   const BytesVector appendPadding(const BytesVector &data) const;
 };
 
 class MD4 : public MessageDigest
 {
 public:
    MD4() : MessageDigest(64) {}
-   virtual const BytesContainer encode(const BytesContainer &data) final;
+   virtual const BytesVector encode(const BytesVector &data) final;
    
 private:
    static constexpr uint8_t left_rotation_table[48] = {
@@ -83,7 +83,7 @@ class MD5 : public MessageDigest
 {
 public:
    MD5() : MessageDigest(64) {}
-   virtual const BytesContainer encode(const BytesContainer &data) final;
+   virtual const BytesVector encode(const BytesVector &data) final;
    
 private:
    static constexpr uint8_t left_rotation_table[64] = {

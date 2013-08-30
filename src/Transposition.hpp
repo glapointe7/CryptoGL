@@ -1,6 +1,6 @@
 
 #ifndef TRANSPOSITION_HPP
-#define	TRANSPOSITION_HPP
+#define TRANSPOSITION_HPP
 
 #include "StringCipherWithPermutationKey.hpp"
 

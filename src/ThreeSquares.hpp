@@ -1,6 +1,6 @@
 
 #ifndef THREESQUARES_HPP
-#define	THREESQUARES_HPP
+#define THREESQUARES_HPP
 
 #include "SquareCipher.hpp"
 

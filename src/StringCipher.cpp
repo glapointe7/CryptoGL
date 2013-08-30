@@ -34,14 +34,14 @@ void StringCipher::setAlpha(const ClassicalType &alpha)
    this->alpha = alpha;
 }
 
-const StringCipher::ClassicalType StringCipher::getAlpha() const
+const ClassicalType StringCipher::getAlpha() const
 {
    return alpha;
 }
 
 // Append the character c (text.length() % mod) times.
 
-const StringCipher::ClassicalType
+const ClassicalType
 StringCipher::appendChars(const ClassicalType &data, const uint32_t to_add, const char c)
 {
    ClassicalType full_text(data);

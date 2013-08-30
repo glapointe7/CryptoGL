@@ -16,7 +16,7 @@ constexpr uint8_t DES::S[8][4][16];
 constexpr uint8_t DES::PC1[];
 constexpr uint8_t DES::PC2[];
 
-void DES::setKey(const BytesContainer &key)
+void DES::setKey(const BytesVector &key)
 {
    if (key.size() != 8)
    {

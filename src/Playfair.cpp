@@ -5,7 +5,7 @@
 
 #include <utility>
 
-const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
+const ClassicalType Playfair::encode(const ClassicalType &clear_text)
 {  
    ClassicalType full_text(appendChars(clear_text, 2, 'X'));
    uint32_t clear_len = full_text.length();
@@ -55,7 +55,7 @@ const Playfair::ClassicalType Playfair::encode(const ClassicalType &clear_text)
    return crypted;
 }
 
-const Playfair::ClassicalType Playfair::decode(const ClassicalType &cipher_text)
+const ClassicalType Playfair::decode(const ClassicalType &cipher_text)
 {  
    const uint32_t cipher_len = cipher_text.length();
    ClassicalType decrypted;

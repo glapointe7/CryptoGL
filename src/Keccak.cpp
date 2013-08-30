@@ -61,29 +61,29 @@ void Keccak::F()
    }
 }
 
-const Keccak::UInt64Container Keccak::convertBlockToState(const BytesContainer &block) const
+const UInt64Vector Keccak::convertBlockToState(const BytesVector &block) const
 {
-   UInt64Container int_block;
+   UInt64Vector int_block;
    int_block.reserve(width / lane_width);
    
    for(uint8_t i = 0; i < 200; i += 8)
    {
-      int_block.push_back(LittleEndian64::toInteger(BytesContainer(block.begin() + i, block.begin() + i + 8)));
+      int_block.push_back(LittleEndian64::toInteger(BytesVector(block.begin() + i, block.begin() + i + 8)));
    }
    
    return int_block;
 }
 
-void Keccak::applyAbsorbingPhase(const BytesContainer &padded_message)
+void Keccak::applyAbsorbingPhase(const BytesVector &padded_message)
 {   
    // If bitrate = 1024, then we iterate on blocks of 128 bytes + 72 bytes of 0.
    const uint64_t pad_len = padded_message.size();
    for (uint64_t i = 0; i < pad_len; i += block_size)
    {
-      BytesContainer block(padded_message.begin() + i, padded_message.begin() + i + block_size);
+      BytesVector block(padded_message.begin() + i, padded_message.begin() + i + block_size);
       block.insert(block.end(), capacity >> 3, 0);
       
-      const UInt64Container Pi = convertBlockToState(block);      
+      const UInt64Vector Pi = convertBlockToState(block);      
       for(uint8_t x = 0; x < 5; ++x)
       {
          for(uint8_t y = 0; y < 5; ++y)
@@ -96,9 +96,9 @@ void Keccak::applyAbsorbingPhase(const BytesContainer &padded_message)
    }
 }
 
-const Keccak::BytesContainer Keccak::applySqueezingPhase()
+const BytesVector Keccak::applySqueezingPhase()
 {
-   BytesContainer output;
+   BytesVector output;
    output.reserve(block_size);
    
    for (int16_t remaining_size = output_size; remaining_size > 0; remaining_size -= bitrate)
@@ -107,7 +107,7 @@ const Keccak::BytesContainer Keccak::applySqueezingPhase()
       {
          for(uint8_t y = 0; y < 5; ++y)
          {
-            const BytesContainer tmp = LittleEndian64::toBytesVector(state[y][x]);
+            const BytesVector tmp = LittleEndian64::toBytesVector(state[y][x]);
             output.insert(output.end(), tmp.begin(), tmp.end());
          }
       }      
@@ -117,5 +117,5 @@ const Keccak::BytesContainer Keccak::applySqueezingPhase()
       }
    }
 
-   return BytesContainer(output.begin(), output.begin() + (output_size >> 3));
+   return BytesVector(output.begin(), output.begin() + (output_size >> 3));
 }

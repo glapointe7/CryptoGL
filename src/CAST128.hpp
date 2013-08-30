@@ -12,22 +12,22 @@ class CAST128 : public Feistel<uint32_t, uint64_t, 8, BigEndian64>
 public:
 
    /* Default constructor : default on ECB mode of encryption. */
-   explicit CAST128(const BytesContainer &key) 
+   explicit CAST128(const BytesVector &key) 
       : Feistel(OperationModes::ECB, 12) { setKey(key); }
 
    /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
-   CAST128(const BytesContainer &key, const OperationModes mode) 
+   CAST128(const BytesVector &key, const OperationModes mode) 
       : Feistel(mode, 12) { setKey(key); }
    
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
-   CAST128(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
+   CAST128(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : Feistel(mode, 12, IV) { setKey(key); }
    
    /* Constructor with a vector of IV only for the mode CTR. */
-   CAST128(const BytesContainer &key, const IVContainer &IV) 
+   CAST128(const BytesVector &key, const IV_Vector &IV) 
       : Feistel(12, IV) { setKey(key); }
 
-   virtual void setKey(const BytesContainer &key) final;
+   virtual void setKey(const BytesVector &key) final;
 
 private:
    virtual void generateSubkeys() final;
@@ -40,11 +40,11 @@ private:
    virtual void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
    virtual void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
    
-   void setTempKeyZ(UInt32Container &Z, const UInt32Container &X) const;
-   void setTempKeyX(UInt32Container &tmp, const UInt32Container &Z) const;
-   void setSubKeysBlock(const UInt32Container &tmp, const uint8_t *index);
+   void setTempKeyZ(UInt32Vector &Z, const UInt32Vector &X) const;
+   void setTempKeyX(UInt32Vector &tmp, const UInt32Vector &Z) const;
+   void setSubKeysBlock(const UInt32Vector &tmp, const uint8_t *index);
    
-   inline static uint8_t getByteFromInteger(const UInt32Container &bytes, const uint8_t index)
+   inline static uint8_t getByteFromInteger(const UInt32Vector &bytes, const uint8_t index)
    {
       return (bytes[index >> 2] >> ((3-(index & 3)) << 3)) & 0xFF;
    }

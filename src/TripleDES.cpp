@@ -5,7 +5,7 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
-TripleDES::TripleDES(const BytesContainer &key1, const BytesContainer &key2, const BytesContainer &key3)
+TripleDES::TripleDES(const BytesVector &key1, const BytesVector &key2, const BytesVector &key3)
 {
    setKey(key1);
    this->key = key1;
@@ -17,7 +17,7 @@ TripleDES::TripleDES(const BytesContainer &key1, const BytesContainer &key2, con
    this->key3 = key3;
 }
 
-void TripleDES::setKey(const BytesContainer &key)
+void TripleDES::setKey(const BytesVector &key)
 {
    if (key.size() != 8)
    {
@@ -30,28 +30,28 @@ void TripleDES::setOperationMode(const OperationModes mode)
    this->mode = mode;
 }
 
-const TripleDES::BytesContainer TripleDES::encode(const BytesContainer &clear_text)
+const BytesVector TripleDES::encode(const BytesVector &clear_text)
 {
    DES *D1 = new DES(key, mode);
-   const BytesContainer first = D1->encode(clear_text);
+   const BytesVector first = D1->encode(clear_text);
    delete D1;
    
    DES *D2 = new DES(key2, mode);
-   const BytesContainer second = D2->decode(first);
+   const BytesVector second = D2->decode(first);
    delete D2;
    
    DES *D3 = new DES(key3, mode);
    return D3->encode(second);
 }
 
-const TripleDES::BytesContainer TripleDES::decode(const BytesContainer &cipher_text)
+const BytesVector TripleDES::decode(const BytesVector &cipher_text)
 {
    DES *D1 = new DES(key3, mode);
-   const BytesContainer first = D1->decode(cipher_text);
+   const BytesVector first = D1->decode(cipher_text);
    delete D1;
    
    DES *D2 = new DES(key2, mode);
-   const BytesContainer second = D2->encode(first);
+   const BytesVector second = D2->encode(first);
    delete D2;
 
    DES *D3 = new DES(key, mode);

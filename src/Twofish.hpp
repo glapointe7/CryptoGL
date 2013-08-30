@@ -7,45 +7,45 @@
 #include "Feistel.hpp"
 #include "LittleEndian.hpp"
 
-class Twofish : public Feistel<std::vector<uint32_t>, std::vector<uint32_t>, 16, LittleEndian32, uint32_t>
+class Twofish : public Feistel<UInt32Vector, UInt32Vector, 16, LittleEndian32, uint32_t>
 {
 public:
    /* Default constructor : default on ECB mode of encryption with no IV. */
-   explicit Twofish(const BytesContainer &key) 
+   explicit Twofish(const BytesVector &key) 
       : Feistel(OperationModes::ECB, 16) { setKey(key); }
    
    /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
-   Twofish(const BytesContainer &key, const OperationModes mode) 
+   Twofish(const BytesVector &key, const OperationModes mode) 
       : Feistel(mode, 16) { setKey(key); }
    
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
-   Twofish(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
+   Twofish(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : Feistel(mode, 16, IV) { setKey(key); }
    
    /* Constructor with a vector of IV only for the mode CTR. */
-   Twofish(const BytesContainer &key, const IVContainer &IV) 
+   Twofish(const BytesVector &key, const IV_Vector &IV) 
       : Feistel(16, IV) { setKey(key); }
 
-   virtual void setKey(const BytesContainer &key) final;
+   virtual void setKey(const BytesVector &key) final;
    
 private:
    virtual void generateSubkeys() final;
-   virtual const UInt32Container encodeBlock(const UInt32Container &input) final;
-   virtual const UInt32Container decodeBlock(const UInt32Container &input) final;
+   virtual const UInt32Vector encodeBlock(const UInt32Vector &input) final;
+   virtual const UInt32Vector decodeBlock(const UInt32Vector &input) final;
 
-   virtual const UInt32Container F(const UInt32Container half_block, const uint8_t round) const final;
-   virtual void encodeFeistelRounds(UInt32Container &L, UInt32Container &R, const uint8_t) const final;
-   virtual void decodeFeistelRounds(UInt32Container &L, UInt32Container &R, const uint8_t) const final;
+   virtual const UInt32Vector F(const UInt32Vector half_block, const uint8_t round) const final;
+   virtual void encodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_t) const final;
+   virtual void decodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_t) const final;
 
    /* computes ab mod p */
    static uint8_t GFMultiply(const uint8_t a, uint8_t b, const uint16_t p);
-   uint32_t h(const uint32_t X, const BytesContainer &L) const;
+   uint32_t h(const uint32_t X, const BytesVector &L) const;
    
    /* g(X) = h(X, S) from the spec. */
    uint32_t g(const uint32_t X) const;
    
    /* The 4 key-dependant S-Boxes s_i. */
-   BytesContainer s;
+   BytesVector s;
         
    /* 4x4 MDS matrix. */
    static constexpr uint8_t MDS[4][4] = {

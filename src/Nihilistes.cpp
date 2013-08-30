@@ -12,7 +12,7 @@ Nihilistes::Nihilistes(const KeyType &key, const KeyType &second_key)
    this->second_key = second_key;
 }
 
-const Nihilistes::ClassicalType Nihilistes::encode(const ClassicalType &clear_text)
+const ClassicalType Nihilistes::encode(const ClassicalType &clear_text)
 {
    const uint32_t clear_len = clear_text.length();
    const KeyType key = getKey();
@@ -46,7 +46,7 @@ const Nihilistes::ClassicalType Nihilistes::encode(const ClassicalType &clear_te
    return crypted;
 }
 
-const Nihilistes::ClassicalType Nihilistes::decode(const ClassicalType &cipher_text)
+const ClassicalType Nihilistes::decode(const ClassicalType &cipher_text)
 {
    const uint32_t cipher_len = cipher_text.length();
    const KeyType key = getKey();

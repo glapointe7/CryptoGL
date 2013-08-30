@@ -1,6 +1,6 @@
 
 #ifndef TWOSQUARES_HPP
-#define	TWOSQUARES_HPP
+#define TWOSQUARES_HPP
 
 #include "SquareCipher.hpp"
 

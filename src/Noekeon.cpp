@@ -9,7 +9,7 @@
 
 constexpr uint32_t Noekeon::round_constants[];
 
-void Noekeon::setKey(const BytesContainer &key)
+void Noekeon::setKey(const BytesVector &key)
 {
    const uint8_t key_len = key.size();
    if (key_len != 16)
@@ -25,7 +25,7 @@ void Noekeon::generateSubkeys()
    subkeys.resize(4);
    for(uint8_t i = 0; i < 4; ++i)
    {
-      subkeys[i] = BigEndian32::toInteger(BytesContainer(key.begin() + (i << 2), key.begin() + (i << 2) + 4));
+      subkeys[i] = BigEndian32::toInteger(BytesVector(key.begin() + (i << 2), key.begin() + (i << 2) + 4));
    }
 }
 
@@ -35,7 +35,7 @@ void Noekeon::generateInverseSubkeys()
    applyTheta();
 }
 
-void Noekeon::applyGamma(UInt32Container &state)
+void Noekeon::applyGamma(UInt32Vector &state)
 {
    state[1] ^= ~(state[3] | state[2]);
    state[0] ^= state[2] & state[1];
@@ -60,7 +60,7 @@ void Noekeon::applyTheta()
    subkeys[2] ^= temp;
 }
 
-void Noekeon::applyTheta(UInt32Container &state) const
+void Noekeon::applyTheta(UInt32Vector &state) const
 {
    uint32_t temp = state[0] ^ state[2];
    temp ^= Bits::rotateRight(temp, 8, 32) ^ Bits::rotateLeft(temp, 8, 32);
@@ -78,21 +78,21 @@ void Noekeon::applyTheta(UInt32Container &state) const
    state[2] ^= temp;
 }
 
-void Noekeon::applyPi1(UInt32Container &state)
+void Noekeon::applyPi1(UInt32Vector &state)
 {
    state[1] = Bits::rotateLeft(state[1], 1, 32);
    state[2] = Bits::rotateLeft(state[2], 5, 32);
    state[3] = Bits::rotateLeft(state[3], 2, 32);
 }
 
-void Noekeon::applyPi2(UInt32Container &state)
+void Noekeon::applyPi2(UInt32Vector &state)
 {
    state[1] = Bits::rotateRight(state[1], 1, 32);
    state[2] = Bits::rotateRight(state[2], 5, 32);
    state[3] = Bits::rotateRight(state[3], 2, 32);
 }
 
-void Noekeon::applyRound(UInt32Container &state, const uint8_t constant1, const uint8_t constant2)
+void Noekeon::applyRound(UInt32Vector &state, const uint8_t constant1, const uint8_t constant2)
 {
    state[0] ^= constant1;
    applyTheta(state);
@@ -102,9 +102,9 @@ void Noekeon::applyRound(UInt32Container &state, const uint8_t constant1, const 
    applyPi2(state);
 }
 
-const Noekeon::UInt32Container Noekeon::encodeBlock(const UInt32Container &input)
+const UInt32Vector Noekeon::encodeBlock(const UInt32Vector &input)
 {
-   UInt32Container state(input);
+   UInt32Vector state(input);
    for(uint8_t i = 0; i < rounds; ++i)
    {
       applyRound(state, round_constants[i], 0);
@@ -115,9 +115,9 @@ const Noekeon::UInt32Container Noekeon::encodeBlock(const UInt32Container &input
    return state;
 }
 
-const Noekeon::UInt32Container Noekeon::decodeBlock(const UInt32Container &input)
+const UInt32Vector Noekeon::decodeBlock(const UInt32Vector &input)
 {
-   UInt32Container state(input);
+   UInt32Vector state(input);
    for(uint8_t i = rounds; i > 0; --i)
    {
       applyRound(state, 0, round_constants[i]);

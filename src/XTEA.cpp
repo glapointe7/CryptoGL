@@ -4,7 +4,7 @@
 
 #include "BigEndian.hpp"
 
-void XTEA::setKey(const BytesContainer &key)
+void XTEA::setKey(const BytesVector &key)
 {
    const uint8_t key_len = key.size();
    if (key_len != 16)
@@ -20,7 +20,7 @@ void XTEA::generateSubkeys()
    uint32_t tmp_key[4];
    for (uint8_t i = 0; i < 16; i += 4)
    {
-      tmp_key[i >> 2] = BigEndian32::toInteger(BytesContainer(key.begin() + i, key.begin() + i + 4));
+      tmp_key[i >> 2] = BigEndian32::toInteger(BytesVector(key.begin() + i, key.begin() + i + 4));
    }
 
    uint32_t sum = 0;

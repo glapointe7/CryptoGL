@@ -4,7 +4,7 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
-void IDEA::setKey(const BytesContainer &key)
+void IDEA::setKey(const BytesVector &key)
 {
    const uint8_t key_len = key.size();
    if (key_len != 16)
@@ -62,9 +62,9 @@ void IDEA::generateInverseSubkeys()
    decoded_subkeys[0] = inverseMultiplyShort(subkeys[48]);
 }
 
-const IDEA::UInt16Container IDEA::encodeBlock(const UInt16Container &input)
+const UInt16Vector IDEA::encodeBlock(const UInt16Vector &input)
 {
-   UInt16Container encoded_block(input);
+   UInt16Vector encoded_block(input);
    for (uint8_t k = 0; k < 48; k += 6)
    {
       encoded_block[0] = multiplyShort(encoded_block[0], subkeys[k]);
@@ -82,7 +82,7 @@ const IDEA::UInt16Container IDEA::encodeBlock(const UInt16Container &input)
    }
 
    // Half last round completing the encryption / decryption.
-   UInt16Container out(4, 0);
+   UInt16Vector out(4, 0);
    out[0] = multiplyShort(encoded_block[0], subkeys[48]);
    out[1] = encoded_block[2] + subkeys[49];
    out[2] = encoded_block[1] + subkeys[50];
@@ -91,7 +91,7 @@ const IDEA::UInt16Container IDEA::encodeBlock(const UInt16Container &input)
    return out;
 }
 
-const IDEA::UInt16Container IDEA::decodeBlock(const UInt16Container &input)
+const UInt16Vector IDEA::decodeBlock(const UInt16Vector &input)
 {
    subkeys = decoded_subkeys;
    

@@ -9,7 +9,7 @@ void Affine::setKey(const int32_t a, const int32_t b)
 }
 
 // Encode with the formula : y = (ax + b) (mod alpha_len).
-const Affine::ClassicalType Affine::encode(const ClassicalType &clear_text)
+const ClassicalType Affine::encode(const ClassicalType &clear_text)
 {
    const uint32_t alpha_len = alpha.length();
    ClassicalType crypted;
@@ -25,7 +25,7 @@ const Affine::ClassicalType Affine::encode(const ClassicalType &clear_text)
 }
 
 // Decode with the formula : y = a^-1(y - b) (mod alpha_len).
-const Affine::ClassicalType Affine::decode(const ClassicalType &cipher_text)
+const ClassicalType Affine::decode(const ClassicalType &cipher_text)
 {
    const int32_t alpha_len = alpha.length();
    ClassicalType decrypted;

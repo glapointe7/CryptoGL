@@ -67,42 +67,6 @@ const std::vector<std::string> split(const std::string &text)
    return split_text;
 }
 
-/*const std::vector<std::vector<bool> > getBlockBinary(const std::vector<bool> &bytes, const uint32_t block_size)
-{
-   const uint32_t bytes_size = bytes.size();
-   std::vector<std::vector<bool> > blocks_bits;
-   blocks_bits.reserve(bytes_size / block_size);
-
-   for (uint32_t i = 0; i < bytes_size; i += block_size)
-   {
-      const std::vector<bool> block(bytes.begin() + i, bytes.begin() + i + block_size);
-      blocks_bits.push_back(block);
-   }
-
-   return blocks_bits;
-}
-
-const std::vector<uint8_t> getBytes(const std::vector<bool> &bits)
-{
-   const uint32_t bits_size = bits.size();
-   std::vector<uint8_t> bytes;
-   bytes.reserve(bits_size >> 3);
-
-   for (uint32_t i = 0; i < bits_size; i += 8)
-   {
-      uint8_t k = 0;
-      uint8_t ascii = 0;
-      for (char j = 7; j >= 0; --j)
-      {
-         ascii += bits[i + k] << j;
-         k++;
-      }
-      bytes.push_back(ascii);
-   }
-
-   return bytes;
-}*/
-
 const uint64_t getBitsFromTable(const uint64_t &data, const uint8_t *table, const uint8_t from, const uint8_t to)
 {
    uint8_t i = to;

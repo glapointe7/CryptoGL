@@ -1,7 +1,6 @@
 #include "MonoalphabeticSubstitution.hpp"
 
-const MonoalphabeticSubstitution::ClassicalType 
-MonoalphabeticSubstitution::encode(const ClassicalType &clear_text)
+const ClassicalType MonoalphabeticSubstitution::encode(const ClassicalType &clear_text)
 {
    const KeyType key = getKey();
    ClassicalType crypted;
@@ -15,8 +14,7 @@ MonoalphabeticSubstitution::encode(const ClassicalType &clear_text)
    return crypted;
 }
 
-const MonoalphabeticSubstitution::ClassicalType 
-MonoalphabeticSubstitution::decode(const ClassicalType &cipher_text)
+const ClassicalType MonoalphabeticSubstitution::decode(const ClassicalType &cipher_text)
 {
    const KeyType key = getKey();
    ClassicalType decrypted;

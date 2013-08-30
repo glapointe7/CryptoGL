@@ -9,41 +9,41 @@
 
 #include <vector>
 
-class AES : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian32>
+class AES : public BlockCipher<uint32_t, UInt32Vector, 16, BigEndian32>
 {
 public:
-   explicit AES(const BytesContainer &key) 
+   explicit AES(const BytesVector &key) 
       : BlockCipher(OperationModes::ECB, 10, {}) { setKey(key); }
    
-   AES(const BytesContainer &key, const OperationModes mode) 
+   AES(const BytesVector &key, const OperationModes mode) 
       : BlockCipher(mode, 10, {}) { setKey(key); }
    
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
-   AES(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
+   AES(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : BlockCipher(mode, 10, IV) { setKey(key); }
    
    /* Constructor with a vector of IV only for the mode CTR. */
-   AES(const BytesContainer &key, const IVContainer &IV) 
+   AES(const BytesVector &key, const IV_Vector &IV) 
       : BlockCipher(10, IV) { setKey(key); }
    
-   virtual void setKey(const BytesContainer &key) final;
+   virtual void setKey(const BytesVector &key) final;
    
 private:      
    virtual void generateSubkeys() final;
-   virtual const UInt32Container encodeBlock(const UInt32Container &input) final;
-   virtual const UInt32Container decodeBlock(const UInt32Container &input) final;
+   virtual const UInt32Vector encodeBlock(const UInt32Vector &input) final;
+   virtual const UInt32Vector decodeBlock(const UInt32Vector &input) final;
    
-   static void subBytes(UInt32Container &state, const uint8_t *box);
+   static void subBytes(UInt32Vector &state, const uint8_t *box);
          
    uint32_t subWord(const uint32_t word) const;
-   void addRoundKey(UInt32Container &state, const uint8_t round) const;
+   void addRoundKey(UInt32Vector &state, const uint8_t round) const;
    
-   static void shiftRows(UInt32Container &state);
-   static void inverseShiftRows(UInt32Container &state);
+   static void shiftRows(UInt32Vector &state);
+   static void inverseShiftRows(UInt32Vector &state);
    
    /* Function using Galois field GF(256) and 4 functions used to calculate each of the 4 rows. */
-   void mixColumns(UInt32Container &state) const;
-   void inverseMixColumns(UInt32Container &state) const;
+   void mixColumns(UInt32Vector &state) const;
+   void inverseMixColumns(UInt32Vector &state) const;
    
    static constexpr uint8_t shift_indexes[16] = {
       0, 5, 10, 15, 4, 9, 14, 3, 8, 13, 2, 7, 12, 1, 6, 11

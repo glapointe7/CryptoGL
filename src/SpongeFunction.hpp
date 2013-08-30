@@ -5,17 +5,15 @@
 #define SPONGEFUNCTION_HPP
 
 #include <vector>
-#include <stdint.h>
+
+#include "Types.hpp"
 
 template <class UInt>
 class SpongeFunction
 {
 protected:
-   typedef std::vector<uint8_t> BytesContainer;
-   typedef std::vector<uint64_t> UInt64Container;
    typedef std::vector<UInt> UIntContainer;
    typedef std::vector<UIntContainer> UIntMatrix;
-   typedef std::vector<std::vector<uint64_t> > Matrix;
 
    /* Default constructor : b = 1600 => r = 1024 et c = 576. */
    SpongeFunction()
@@ -28,18 +26,18 @@ protected:
 
    virtual ~SpongeFunction() {}
 
-   virtual void applyAbsorbingPhase(const BytesContainer &padded_message) = 0;
-   virtual const BytesContainer applySqueezingPhase() = 0;
+   virtual void applyAbsorbingPhase(const BytesVector &padded_message) = 0;
+   virtual const BytesVector applySqueezingPhase() = 0;
    virtual void F() = 0;
 
    /* Apply Pad10* rule from the specs. 1 bit upto block_size bits are appended. */
-   const BytesContainer applyPad10Star(const BytesContainer &message) const
+   const BytesVector applyPad10Star(const BytesVector &message) const
    {
       const uint64_t message_len = message.size();
       const uint8_t block_size = bitrate >> 3;
 
       /* Append '1' bit to the message. */
-      BytesContainer padding(message);
+      BytesVector padding(message);
       padding.reserve(message_len + block_size);
       padding.push_back(0x01);
 
@@ -54,10 +52,10 @@ protected:
    }
 
    /* Apply padding Pad10*1 rule from the specs. 2 bits upto block_size + 1 bits are appended. */
-   const BytesContainer applyPad10Star1(const BytesContainer &message) const
+   const BytesVector applyPad10Star1(const BytesVector &message) const
    {
       const uint8_t block_size = bitrate >> 3;
-      BytesContainer padding(message);
+      BytesVector padding(message);
       padding.reserve(message.size() + block_size + 1);
 
       if(!((message.size() + 1) % block_size))
@@ -101,7 +99,7 @@ protected:
 public:
 
    /* General encoding using the sponge construction. */
-   virtual const BytesContainer encode(const BytesContainer &data) final
+   virtual const BytesVector encode(const BytesVector &data) final
    {
       state.resize(5);
       for(uint8_t x = 0; x < 5; ++x)
@@ -109,7 +107,7 @@ public:
          state[x].resize(5);
       }
  
-      const BytesContainer padded_message = applyPad10Star1(data);
+      const BytesVector padded_message = applyPad10Star1(data);
       
       applyAbsorbingPhase(padded_message);
 

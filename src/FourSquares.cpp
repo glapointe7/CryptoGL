@@ -7,7 +7,7 @@ FourSquares::FourSquares(const KeyType &key1, const KeyType &key2)
    this->key2 = key2;
 }
 
-const FourSquares::ClassicalType FourSquares::encode(const ClassicalType &clear_text)
+const ClassicalType FourSquares::encode(const ClassicalType &clear_text)
 {  
    const ClassicalType full_text(appendChars(clear_text, 2, 'X'));
    const uint32_t clear_len = full_text.length();
@@ -31,7 +31,7 @@ const FourSquares::ClassicalType FourSquares::encode(const ClassicalType &clear_
    return crypted;
 }
 
-const FourSquares::ClassicalType FourSquares::decode(const ClassicalType &cipher_text)
+const ClassicalType FourSquares::decode(const ClassicalType &cipher_text)
 {  
    const uint32_t cipher_len = cipher_text.length();
    ClassicalType decrypted;

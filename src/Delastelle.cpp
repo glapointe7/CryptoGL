@@ -16,7 +16,7 @@ void Delastelle::setBlockLength(const uint32_t block_len)
    this->block_len = block_len;
 }
 
-const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_text)
+const ClassicalType Delastelle::encode(const ClassicalType &clear_text)
 {
    const ClassicalType full_text(appendChars(clear_text, block_len, 'X'));
    const uint32_t clear_len = full_text.length();
@@ -79,7 +79,7 @@ const Delastelle::ClassicalType Delastelle::encode(const ClassicalType &clear_te
    return crypted;
 }
 
-const Delastelle::ClassicalType Delastelle::decode(const ClassicalType &cipher_text)
+const ClassicalType Delastelle::decode(const ClassicalType &cipher_text)
 {
    const uint32_t cipher_len = cipher_text.length() << 1;
    ClassicalType decrypted;

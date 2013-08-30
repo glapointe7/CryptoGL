@@ -6,14 +6,14 @@
 
 const std::string Base64::alpha = String::base64_alphabet;
 
-const std::string Base64::encode(const BytesContainer &clear_data)
+const std::string Base64::encode(const BytesVector &clear_data)
 {
    const uint32_t clear_len = clear_data.size();
    std::string crypted;
    crypted.reserve(((clear_len / 3) + (clear_len % 3 > 0)) << 2);
 
    uint32_t temp;
-   BytesContainer::const_iterator cursor = clear_data.begin();
+   BytesVector::const_iterator cursor = clear_data.begin();
    for (uint32_t idx = 0; idx < clear_len / 3; ++idx)
    {
       temp = (*cursor++) << 16; 
@@ -47,7 +47,7 @@ const std::string Base64::encode(const BytesContainer &clear_data)
    return crypted;
 }
 
-const Base64::BytesContainer Base64::decode(const std::string &cipher_data)
+const BytesVector Base64::decode(const std::string &cipher_data)
 {
    const uint32_t cipher_len = cipher_data.length();
    if (cipher_len % 4)
@@ -63,7 +63,7 @@ const Base64::BytesContainer Base64::decode(const std::string &cipher_data)
          padding++;
    }
    // Setup a vector to hold the result.
-   BytesContainer decrypted;
+   BytesVector decrypted;
    decrypted.reserve(((cipher_len / 4) * 3) - padding);
    
    uint32_t temp = 0; 

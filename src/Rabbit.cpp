@@ -3,7 +3,7 @@
 #include "Bits.hpp"
 #include "exceptions/BadKeyLength.hpp"
 
-void Rabbit::setKey(const BytesContainer &key)
+void Rabbit::setKey(const BytesVector &key)
 {
    if (key.size() != 16)
    {
@@ -14,7 +14,7 @@ void Rabbit::setKey(const BytesContainer &key)
 }
 
 // The IV is not mandatory.
-void Rabbit::setIV(const BytesContainer &IV)
+void Rabbit::setIV(const BytesVector &IV)
 {
    if (IV.size() != 8)
    {
@@ -78,7 +78,7 @@ void Rabbit::nextState()
 void Rabbit::keySetup()
 {
    // Build 4 sub-keys of 4 bytes length.
-   UInt32Container subkeys;
+   UInt32Vector subkeys;
    subkeys.reserve(4);
    const uint8_t key_len = key.size();
 
@@ -146,7 +146,7 @@ void Rabbit::IVSetup()
    }
 }
 
-const Rabbit::BytesContainer Rabbit::encode(const BytesContainer &clear_text)
+const BytesVector Rabbit::encode(const BytesVector &clear_text)
 {
    // Clear_text have to be a multiple of 16 bytes.
    const uint32_t clear_len = clear_text.size();
@@ -161,7 +161,7 @@ const Rabbit::BytesContainer Rabbit::encode(const BytesContainer &clear_text)
       IVSetup();
    }
 
-   BytesContainer crypted;
+   BytesVector crypted;
    crypted.reserve(clear_len);
 
    for (uint32_t i = 0; i < clear_len; i += 16)
@@ -176,7 +176,7 @@ const Rabbit::BytesContainer Rabbit::encode(const BytesContainer &clear_text)
          states[6] ^ (states[3] >> 16) ^ (states[1] << 16)
       };
 
-      BytesContainer output;
+      BytesVector output;
       output.reserve(16);
       for (uint8_t j = 0; j < 4; ++j)
       {
@@ -195,7 +195,7 @@ const Rabbit::BytesContainer Rabbit::encode(const BytesContainer &clear_text)
    return crypted;
 }
 
-const Rabbit::BytesContainer Rabbit::decode(const BytesContainer &cipher_text)
+const BytesVector Rabbit::decode(const BytesVector &cipher_text)
 {
    return encode(cipher_text);
 }

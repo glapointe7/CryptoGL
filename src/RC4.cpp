@@ -5,7 +5,7 @@
 #include "exceptions/BadKeyLength.hpp"
 #include "exceptions/EmptyKey.hpp"
 
-void RC4::setKey(const BytesContainer &key)
+void RC4::setKey(const BytesVector &key)
 {
    if(key.empty())
    {
@@ -32,9 +32,9 @@ void RC4::keySetup()
    }
 }
 
-const RC4::BytesContainer RC4::encode(const BytesContainer &clear_text)
+const BytesVector RC4::encode(const BytesVector &clear_text)
 {
-   BytesContainer crypted;
+   BytesVector crypted;
    crypted.reserve(clear_text.size());
    
    // Initialize 'state'.
@@ -58,7 +58,7 @@ const RC4::BytesContainer RC4::encode(const BytesContainer &clear_text)
    return crypted;
 }
 
-const RC4::BytesContainer RC4::decode(const BytesContainer &cipher_text)
+const BytesVector RC4::decode(const BytesVector &cipher_text)
 {
    return encode(cipher_text);
 }

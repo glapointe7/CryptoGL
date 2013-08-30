@@ -1,6 +1,6 @@
 
 #ifndef TRIPLEDES_HPP
-#define	TRIPLEDES_HPP
+#define TRIPLEDES_HPP
 
 #include "SymmetricCipher.hpp"
 #include "BlockCipherOperationModes.hpp"
@@ -8,19 +8,19 @@
 class TripleDES : public SymmetricCipher
 {
 public:
-   TripleDES(const BytesContainer &key1, const BytesContainer &key2, const BytesContainer &key3);
+   TripleDES(const BytesVector &key1, const BytesVector &key2, const BytesVector &key3);
    
-   virtual const BytesContainer encode(const BytesContainer &clear_text) final;
-   virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
+   virtual const BytesVector encode(const BytesVector &clear_text) final;
+   virtual const BytesVector decode(const BytesVector &cipher_text) final;
    
-   virtual void setKey(const BytesContainer &key) final;
+   virtual void setKey(const BytesVector &key) final;
 
    void setOperationMode(const OperationModes mode);
    
 private:
-   //static void checkKey(const BytesContainer &key);
+   //static void checkKey(const BytesVector &key);
    
-   BytesContainer key2, key3;
+   BytesVector key2, key3;
    OperationModes mode = OperationModes::ECB;
 };
 

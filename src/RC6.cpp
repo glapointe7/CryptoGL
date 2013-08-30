@@ -7,7 +7,7 @@
 #include "Bits.hpp"
 #include "LittleEndian.hpp"
 
-void RC6::setKey(const BytesContainer &key)
+void RC6::setKey(const BytesVector &key)
 {
    const uint8_t key_len = key.size();
    if (key_len != 16 && key_len != 24 && key_len != 32)
@@ -23,12 +23,12 @@ void RC6::generateSubkeys()
    const uint8_t int_size = 4;
    const uint8_t key_len = key.size();
    const uint8_t tmp_key_len = (key_len + int_size - 1) / int_size;
-   UInt32Container tmp_key;
+   UInt32Vector tmp_key;
    tmp_key.reserve(tmp_key_len);
 
    for (uint8_t i = 0; i < key_len; i += int_size)
    {
-      tmp_key.push_back(LittleEndian32::toInteger(BytesContainer(key.begin() + i, key.begin() + i + int_size)));
+      tmp_key.push_back(LittleEndian32::toInteger(BytesVector(key.begin() + i, key.begin() + i + int_size)));
    }
 
    // Initialize the expanded key table.
@@ -107,13 +107,13 @@ void RC6::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
    R = (static_cast<uint64_t>(C) << 32) | D;
 }
 
-const RC6::UInt32Container RC6::encodeBlock(const UInt32Container &input)
+const UInt32Vector RC6::encodeBlock(const UInt32Vector &input)
 {
    uint64_t L = (static_cast<uint64_t>(input[0]) << 32) | input[1];
    uint64_t R = (static_cast<uint64_t>(input[2]) << 32) | input[3];
    encodeFeistelRounds(L, R, 0);
    
-   UInt32Container LR(4, 0);
+   UInt32Vector LR(4, 0);
    LR[0] = L >> 32;
    LR[1] = L & 0xFFFFFFFF;
    LR[2] = R >> 32;
@@ -122,13 +122,13 @@ const RC6::UInt32Container RC6::encodeBlock(const UInt32Container &input)
    return LR;
 }
 
-const RC6::UInt32Container RC6::decodeBlock(const UInt32Container &input)
+const UInt32Vector RC6::decodeBlock(const UInt32Vector &input)
 {
    uint64_t L = (static_cast<uint64_t>(input[0]) << 32) | input[1];
    uint64_t R = (static_cast<uint64_t>(input[2]) << 32) | input[3];
    decodeFeistelRounds(L, R, 0);
    
-   UInt32Container LR(4, 0);
+   UInt32Vector LR(4, 0);
    LR[0] = L >> 32;
    LR[1] = L & 0xFFFFFFFF;
    LR[2] = R >> 32;

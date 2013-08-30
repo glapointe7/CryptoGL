@@ -1,6 +1,6 @@
 
 #ifndef CHAO_HPP
-#define	CHAO_HPP
+#define CHAO_HPP
 
 #include "StringCipher.hpp"
 

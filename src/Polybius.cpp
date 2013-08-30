@@ -3,7 +3,7 @@
 
 #include <utility> 
 
-const Polybius::ClassicalType Polybius::encode(const ClassicalType &clear_text)
+const ClassicalType Polybius::encode(const ClassicalType &clear_text)
 {  
    ClassicalType crypted;
    crypted.reserve(clear_text.length() * 2);
@@ -19,7 +19,7 @@ const Polybius::ClassicalType Polybius::encode(const ClassicalType &clear_text)
    return crypted;
 }
 
-const Polybius::ClassicalType Polybius::decode(const ClassicalType &cipher_text)
+const ClassicalType Polybius::decode(const ClassicalType &cipher_text)
 {  
    const uint32_t cipher_len = cipher_text.length();
    ClassicalType decrypted;

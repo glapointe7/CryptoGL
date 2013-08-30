@@ -12,7 +12,7 @@
 class StringCipherWithStringKey : public StringCipher
 {
 public:
-   typedef std::string KeyType;
+   typedef ClassicalType KeyType;
 
    const KeyType getKey() const { return key; }
    virtual void setKey(const KeyType &key);

@@ -1,6 +1,6 @@
 
 #ifndef BLAKE_HPP
-#define	BLAKE_HPP
+#define BLAKE_HPP
 
 #include "HashFunction.hpp"
 #include "BigEndian.hpp"
@@ -10,7 +10,6 @@ class Blake : public HashFunction<UInt, BigEndian<UInt>>
 {   
 protected:
    typedef typename HashFunction<UInt, BigEndian<UInt>>::UIntContainer UIntContainer;
-   typedef typename HashFunction<UInt, BigEndian<UInt>>::BytesContainer BytesContainer;
    
    /* Default constructor : no salt provided. */
    Blake(const UIntContainer &state, const uint8_t in_block_length) 
@@ -22,7 +21,7 @@ protected:
    
    virtual ~Blake() {}
    
-   virtual const BytesContainer encode(const BytesContainer &data) = 0;
+   virtual const BytesVector encode(const BytesVector &data) = 0;
    virtual void G(UInt &a, UInt &b, UInt &c, UInt &d, const UIntContainer &block, const uint8_t r, const uint8_t i) const = 0;
    
    const UIntContainer initialize(const UIntContainer &h, const UInt *C)
@@ -73,15 +72,15 @@ protected:
 class Blake32Bits : public Blake<uint32_t>
 {
 protected:
-   Blake32Bits(const UInt32Container &state, const uint8_t output_size) : Blake(state, 64), output_size(output_size) {}
+   Blake32Bits(const UInt32Vector &state, const uint8_t output_size) : Blake(state, 64), output_size(output_size) {}
    virtual ~Blake32Bits() {}
    
 public:
-   virtual const BytesContainer encode(const BytesContainer &data) final;
+   virtual const BytesVector encode(const BytesVector &data) final;
    
 private:
    virtual void G(uint32_t &a, uint32_t &b, uint32_t &c, uint32_t &d, 
-           const UInt32Container &block, const uint8_t r, const uint8_t i) const final;
+           const UInt32Vector &block, const uint8_t r, const uint8_t i) const final;
    
    static constexpr uint32_t C[16] = {
       0x243F6A88, 0x85A308D3, 0x13198A2E, 0x03707344,
@@ -101,15 +100,15 @@ private:
 class Blake64Bits : public Blake<uint64_t>
 {
 protected:
-   Blake64Bits(const UInt64Container &state, const uint8_t output_size) : Blake(state, 128), output_size(output_size) {}
+   Blake64Bits(const UInt64Vector &state, const uint8_t output_size) : Blake(state, 128), output_size(output_size) {}
    virtual ~Blake64Bits() {}
    
 public:
-   virtual const BytesContainer encode(const BytesContainer &data) final;
+   virtual const BytesVector encode(const BytesVector &data) final;
    
 private:
    virtual void G(uint64_t &a, uint64_t &b, uint64_t &c, uint64_t &d, 
-           const UInt64Container &block, const uint8_t r, const uint8_t i) const final;
+           const UInt64Vector &block, const uint8_t r, const uint8_t i) const final;
    
    static constexpr uint64_t C[16] = {
       0x243F6A8885A308D3, 0x13198A2E03707344,
@@ -144,7 +143,7 @@ public:
 		0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19}, 8) {}
       
 private:
-   virtual const BytesContainer appendPadding(const BytesContainer &message) const final;
+   virtual const BytesVector appendPadding(const BytesVector &message) const final;
 };
 
 class Blake384 : public Blake64Bits
@@ -161,7 +160,7 @@ public:
 		0x510E527FADE682D1, 0x9B05688C2B3E6C1F, 0x1F83D9ABFB41BD6B, 0x5BE0CD19137E2179}, 16) {}
       
 private:
-   virtual const BytesContainer appendPadding(const BytesContainer &message) const final;
+   virtual const BytesVector appendPadding(const BytesVector &message) const final;
 };
 
 #endif

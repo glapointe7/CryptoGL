@@ -35,7 +35,7 @@ void Chao::rightShiftAlphabet(const int8_t ch, const uint8_t index)
    right_alpha.insert(right_alpha.begin() + nadir, tmp);
 }
 
-const Chao::ClassicalType Chao::encode(const ClassicalType &clear_text)
+const ClassicalType Chao::encode(const ClassicalType &clear_text)
 {
    ClassicalType crypted;
    crypted.reserve(clear_text.length());
@@ -52,7 +52,7 @@ const Chao::ClassicalType Chao::encode(const ClassicalType &clear_text)
    return crypted;
 }
 
-const Chao::ClassicalType Chao::decode(const ClassicalType &cipher_text)
+const ClassicalType Chao::decode(const ClassicalType &cipher_text)
 {
    ClassicalType decrypted;
    decrypted.reserve(cipher_text.length());

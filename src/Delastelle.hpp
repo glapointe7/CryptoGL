@@ -1,6 +1,6 @@
 
 #ifndef DELASTELLE_HPP
-#define	DELASTELLE_HPP
+#define DELASTELLE_HPP
 
 #include "SquareCipher.hpp"
 #include <string>

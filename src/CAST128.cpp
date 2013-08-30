@@ -5,7 +5,7 @@
 
 constexpr uint32_t CAST128::S[][256];
 
-void CAST128::setKey(const BytesContainer &key)
+void CAST128::setKey(const BytesVector &key)
 {
    if (key.size() < 5 || key.size() > 16)
    {
@@ -18,7 +18,7 @@ void CAST128::setKey(const BytesContainer &key)
    }
    
    // Pad the key with 0 to get 128 bits length.
-   BytesContainer key_padded(key);
+   BytesVector key_padded(key);
    if(key.size() < 16)
    {
       key_padded.reserve(16);
@@ -28,7 +28,7 @@ void CAST128::setKey(const BytesContainer &key)
    this->key = key_padded;
 }
 
-void CAST128::setTempKeyZ(UInt32Container &Z, const UInt32Container &X) const
+void CAST128::setTempKeyZ(UInt32Vector &Z, const UInt32Vector &X) const
 {
    Z[0] = X[0] ^ S[4][getByteFromInteger(X, 0xD)] ^ S[5][getByteFromInteger(X, 0xF)]
            ^ S[6][getByteFromInteger(X, 0xC)] ^ S[7][getByteFromInteger(X, 0xE)]
@@ -47,7 +47,7 @@ void CAST128::setTempKeyZ(UInt32Container &Z, const UInt32Container &X) const
            ^ S[5][getByteFromInteger(X, 0xB)];
 }
 
-void CAST128::setTempKeyX(UInt32Container &X, const UInt32Container &Z) const
+void CAST128::setTempKeyX(UInt32Vector &X, const UInt32Vector &Z) const
 {
    X[0] = Z[2] ^ S[4][getByteFromInteger(Z, 5)] ^ S[5][getByteFromInteger(Z, 7)]
            ^ S[6][getByteFromInteger(Z, 4)] ^ S[7][getByteFromInteger(Z, 6)]
@@ -66,7 +66,7 @@ void CAST128::setTempKeyX(UInt32Container &X, const UInt32Container &Z) const
            ^ S[5][getByteFromInteger(Z, 3)];
 }
 
-void CAST128::setSubKeysBlock(const UInt32Container &tmp, const uint8_t *index)
+void CAST128::setSubKeysBlock(const UInt32Vector &tmp, const uint8_t *index)
 {
    for(uint8_t i = 0; i < 4; ++i)
    {
@@ -80,11 +80,11 @@ void CAST128::setSubKeysBlock(const UInt32Container &tmp, const uint8_t *index)
 void CAST128::generateSubkeys()
 {
    subkeys.reserve(32);
-   UInt32Container X(4, 0);
+   UInt32Vector X(4, 0);
    
    for(uint8_t i = 0; i < 16; i += 4)
    {
-      X[i >> 2] = BigEndian32::toInteger(BytesContainer(key.begin() + i, key.begin() + i + 4));
+      X[i >> 2] = BigEndian32::toInteger(BytesVector(key.begin() + i, key.begin() + i + 4));
    }
    
    constexpr uint8_t indexes[4][20] = {
@@ -94,7 +94,7 @@ void CAST128::generateSubkeys()
       {8, 9, 7, 6, 3, 10, 11, 5, 4, 7, 12, 13, 3, 2, 8, 14, 15, 1, 0, 13}
    };
    
-   UInt32Container Z(4, 0);
+   UInt32Vector Z(4, 0);
    for(uint8_t i = 0; i < 4; ++i)
    {
       setTempKeyZ(Z, X);

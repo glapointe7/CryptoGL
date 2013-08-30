@@ -7,17 +7,14 @@
 #include <vector>
 #include <string>
 
+#include "Types.hpp"
+
 #include "BigEndian.hpp"
 #include "LittleEndian.hpp"
 
 template <class UInt, class Endian>
 class HashFunction
 {
-public:
-   typedef std::vector<uint8_t> BytesContainer;
-   typedef std::vector<uint32_t> UInt32Container;
-   typedef std::vector<uint64_t> UInt64Container;
-   
 protected:
    typedef std::vector<UInt> UIntContainer;
    
@@ -27,12 +24,12 @@ protected:
    /* Input block length in bytes for a hash function. */
    const uint8_t in_block_length;
    
-   virtual const BytesContainer encode(const BytesContainer &) = 0;
+   virtual const BytesVector encode(const BytesVector &) = 0;
      
-   virtual const BytesContainer appendPadding(const BytesContainer &data) const
+   virtual const BytesVector appendPadding(const BytesVector &data) const
    {
       const uint8_t rest = sizeof(UInt) << 1;
-      BytesContainer bytes_pad(data);
+      BytesVector bytes_pad(data);
       bytes_pad.reserve(data.size() + (in_block_length << 1));
 
       // Append a bit '1' at the end.
@@ -47,13 +44,13 @@ protected:
    
    /* Append the initial length of the message after padding. */
    template<class Endian_type>
-   static void appendLength(BytesContainer &bytes, const uint64_t &length)
+   static void appendLength(BytesVector &bytes, const uint64_t &length)
    {
-      const BytesContainer bytes_pad = Endian_type::toBytesVector(length);
+      const BytesVector bytes_pad = Endian_type::toBytesVector(length);
       bytes.insert(bytes.end(), bytes_pad.begin(), bytes_pad.end());
    }
    
-   const UIntContainer getInputBlocks(const BytesContainer &bytes, const uint64_t &block_index) const
+   const UIntContainer getInputBlocks(const BytesVector &bytes, const uint64_t &block_index) const
    {      
       const uint8_t UInt_size = sizeof(UInt);
 
@@ -61,16 +58,16 @@ protected:
       words.reserve(in_block_length / UInt_size);
       for (uint8_t k = 0; k < in_block_length; k += UInt_size)
       {
-         words.push_back(Endian::toInteger(BytesContainer(bytes.begin() + k + block_index, bytes.begin() + k + block_index + UInt_size)));
+         words.push_back(Endian::toInteger(BytesVector(bytes.begin() + k + block_index, bytes.begin() + k + block_index + UInt_size)));
       }
       
       return words;
    }
    
-   static const BytesContainer getOutput(const uint8_t max_words, const UIntContainer &hash)
+   static const BytesVector getOutput(const uint8_t max_words, const UIntContainer &hash)
    {
       const uint8_t UInt_size = sizeof(UInt);
-      BytesContainer output;
+      BytesVector output;
       output.reserve(max_words << 2);
 
       uint16_t max = max_words;
@@ -81,13 +78,13 @@ protected:
       
       for (uint8_t j = 0; j < max; ++j)
       {
-         const BytesContainer bytes = Endian::toBytesVector(hash[j]);
+         const BytesVector bytes = Endian::toBytesVector(hash[j]);
          output.insert(output.end(), bytes.begin(), bytes.end());
       }
       
       if (max_words % 2 && UInt_size == 8)
       {
-         const BytesContainer bytes = Endian::toBytesVector(hash[max]);
+         const BytesVector bytes = Endian::toBytesVector(hash[max]);
          output.insert(output.end(), bytes.begin(), bytes.begin() + 4);
       }
 
@@ -95,16 +92,16 @@ protected:
    }
    
 public:
-   const BytesContainer hmacEncode(const BytesContainer &hmac_key, const BytesContainer &message)
+   const BytesVector hmacEncode(const BytesVector &hmac_key, const BytesVector &message)
    {
-      BytesContainer key(hmac_key);
+      BytesVector key(hmac_key);
       if(hmac_key.size() > in_block_length)
       {
          key = encode(key);
       }
       
-      BytesContainer out_key_pad(in_block_length, 0x5C);
-      BytesContainer in_key_pad(in_block_length, 0x36);
+      BytesVector out_key_pad(in_block_length, 0x5C);
+      BytesVector in_key_pad(in_block_length, 0x36);
       
       const uint8_t key_len = key.size();
       for(uint8_t i = 0; i < key_len; ++i)
@@ -114,7 +111,7 @@ public:
       }
       in_key_pad.insert(in_key_pad.end(), message.begin(), message.end());
       
-      const BytesContainer in_key_pad_encoded = encode(in_key_pad);
+      const BytesVector in_key_pad_encoded = encode(in_key_pad);
       out_key_pad.insert(out_key_pad.end(), in_key_pad_encoded.begin(), in_key_pad_encoded.end());
       
       return encode(out_key_pad);

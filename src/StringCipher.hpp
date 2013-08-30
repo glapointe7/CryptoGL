@@ -8,11 +8,9 @@
 
 #include <string>
 
-class StringCipher : public Cipher<std::string>
+class StringCipher : public Cipher<ClassicalType>
 {
 public:
-   typedef std::string ClassicalType; 
-   
    void eraseBadCharacters(ClassicalType &text) const;
    
    virtual void setAlpha(const ClassicalType &alpha);

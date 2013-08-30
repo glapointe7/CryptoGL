@@ -3,7 +3,7 @@
 constexpr uint64_t Tiger::IV[];
 constexpr uint64_t Tiger::sbox[][256];
 
-void Tiger::applyKeySchedule(UInt64Container &words)
+void Tiger::applyKeySchedule(UInt64Vector &words)
 {
    words[0] -= words[7] ^ 0xA5A5A5A5A5A5A5A5;
    words[1] ^= words[0];
@@ -33,7 +33,7 @@ void Tiger::applyRound(uint64_t &a, uint64_t &b, uint64_t &c, const uint64_t &wo
    b *= mult;
 }
 
-void Tiger::pass(uint64_t &a, uint64_t &b, uint64_t &c, const UInt64Container &words, const uint8_t mult) const
+void Tiger::pass(uint64_t &a, uint64_t &b, uint64_t &c, const UInt64Vector &words, const uint8_t mult) const
 {
    applyRound(a, b, c, words[0], mult);
    applyRound(b, c, a, words[1], mult);
@@ -45,9 +45,9 @@ void Tiger::pass(uint64_t &a, uint64_t &b, uint64_t &c, const UInt64Container &w
    applyRound(b, c, a, words[7], mult);
 }
 
-const Tiger::BytesContainer Tiger::appendPadding(const BytesContainer &data) const
+const BytesVector Tiger::appendPadding(const BytesVector &data) const
 {
-   BytesContainer bytes_pad(data);
+   BytesVector bytes_pad(data);
    bytes_pad.reserve(data.size() + 128);
 
    // Append a bit '1' at the end => 00000001.
@@ -60,19 +60,19 @@ const Tiger::BytesContainer Tiger::appendPadding(const BytesContainer &data) con
    return bytes_pad;
 }
 
-const Tiger::BytesContainer Tiger::encode(const BytesContainer &data)
+const BytesVector Tiger::encode(const BytesVector &data)
 {
-   BytesContainer bytes = appendPadding(data);
+   BytesVector bytes = appendPadding(data);
    appendLength<LittleEndian64>(bytes, data.size() << 3);
 
-   UInt64Container state(IV, IV + 3);
+   UInt64Vector state(IV, IV + 3);
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += in_block_length)
    {
-      UInt64Container words = getInputBlocks(bytes, i);
-      UInt64Container hash(state);
+      UInt64Vector words = getInputBlocks(bytes, i);
+      UInt64Vector hash(state);
 
-      const UInt64Container saved(hash);
+      const UInt64Vector saved(hash);
       pass(hash[0], hash[1], hash[2], words, 5);
       applyKeySchedule(words);
       pass(hash[2], hash[0], hash[1], words, 7);

@@ -12,44 +12,44 @@ class CAST256 : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndia
 public:
 
    /* Default constructor : default on ECB mode of encryption. */
-   explicit CAST256(const BytesContainer &key) 
+   explicit CAST256(const BytesVector &key) 
       : BlockCipher(OperationModes::ECB, 12, {}) { setKey(key); }
 
    /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
-   CAST256(const BytesContainer &key, const OperationModes mode) 
+   CAST256(const BytesVector &key, const OperationModes mode) 
       : BlockCipher(mode, 12, {}) { setKey(key); }
    
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
-   CAST256(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
+   CAST256(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : BlockCipher(mode, 12, IV) { setKey(key); }
    
    /* Constructor with a vector of IV only for the mode CTR. */
-   CAST256(const BytesContainer &key, const IVContainer &IV) 
+   CAST256(const BytesVector &key, const IV_Vector &IV) 
       : BlockCipher(12, IV) { setKey(key); }
 
-   virtual void setKey(const BytesContainer &key) final;
+   virtual void setKey(const BytesVector &key) final;
 
 private:
    virtual void generateSubkeys() final;
-   virtual const UInt32Container encodeBlock(const UInt32Container &input) final;
-   virtual const UInt32Container decodeBlock(const UInt32Container &input) final;
+   virtual const UInt32Vector encodeBlock(const UInt32Vector &input) final;
+   virtual const UInt32Vector decodeBlock(const UInt32Vector &input) final;
    
    uint32_t F1(const uint32_t D, const uint32_t Km, const uint32_t Kr) const;
    uint32_t F2(const uint32_t D, const uint32_t Km, const uint32_t Kr) const;
    uint32_t F3(const uint32_t D, const uint32_t Km, const uint32_t Kr) const;
 
-   void applyForwardQuadRound(UInt32Container &beta, const uint8_t round) const;
-   void applyReverseQuadRound(UInt32Container &beta, const uint8_t round) const;
-   void applyForwardOctave(UInt32Container &kappa, const uint8_t round) const;
+   void applyForwardQuadRound(UInt32Vector &beta, const uint8_t round) const;
+   void applyReverseQuadRound(UInt32Vector &beta, const uint8_t round) const;
+   void applyForwardOctave(UInt32Vector &kappa, const uint8_t round) const;
    
    static constexpr uint8_t getByteFromInteger(const uint32_t bytes, const uint8_t index)
    {
       return (bytes >> (index << 3)) & 0xFF;
    }
    
-   UInt32Container Kr;
-   UInt32Container Tm;
-   UInt32Container Tr;
+   UInt32Vector Kr;
+   UInt32Vector Tm;
+   UInt32Vector Tr;
    
    static constexpr uint32_t S[4][256] = {
       {

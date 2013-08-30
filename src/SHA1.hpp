@@ -1,6 +1,6 @@
 
 #ifndef SHA1_HPP
-#define	SHA1_HPP
+#define SHA1_HPP
 
 #include "HashFunction.hpp"
 #include "BigEndian.hpp"
@@ -11,7 +11,7 @@ class SHA1 : public HashFunction<uint32_t, BigEndian32>
 {
 public:
    SHA1() : HashFunction<uint32_t, BigEndian32>(INPUT_BLOCK_LENGTH) {}
-   virtual const BytesContainer encode(const BytesContainer &data) final;
+   virtual const BytesVector encode(const BytesVector &data) final;
    
 private:
    static constexpr uint32_t IV[5] = {

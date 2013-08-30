@@ -4,6 +4,8 @@
 #ifndef CIPHER_H
 #define CIPHER_H
 
+#include "Types.hpp"
+
 template <class ReturnType, class ParamType = ReturnType>
 class Cipher
 {

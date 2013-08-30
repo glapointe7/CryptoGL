@@ -82,7 +82,7 @@ uint8_t HellmanMerkleKnapsack::makePlainByte(const BigInteger &value)
    return byte;
 }
 
-const HellmanMerkleKnapsack::BigIntVector HellmanMerkleKnapsack::encode(const BytesContainer &message)
+const BigIntVector HellmanMerkleKnapsack::encode(const BytesVector &message)
 {
    const uint64_t message_len = message.size();
    BigIntVector crypted;
@@ -101,9 +101,9 @@ const HellmanMerkleKnapsack::BigIntVector HellmanMerkleKnapsack::encode(const By
    return crypted;
 }
 
-const HellmanMerkleKnapsack::BytesContainer HellmanMerkleKnapsack::decode(const BigIntVector &cipher)
+const BytesVector HellmanMerkleKnapsack::decode(const BigIntVector &cipher)
 {
-   BytesContainer decrypted;
+   BytesVector decrypted;
    decrypted.reserve(cipher.size());
    
    const BigInteger inverse_div = Maths::getModInverse(div, mod);

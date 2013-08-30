@@ -35,7 +35,7 @@ void UnsortAlpha::setVerticalAlpha()
    }
 }
 
-const UnsortAlpha::ClassicalType 
+const ClassicalType 
 UnsortAlpha::process(const ClassicalType &text, const GetCharFunction &getNextChar)
 {
    ClassicalType toReturn;
@@ -49,12 +49,12 @@ UnsortAlpha::process(const ClassicalType &text, const GetCharFunction &getNextCh
    return toReturn;
 }
 
-const UnsortAlpha::ClassicalType UnsortAlpha::encode(const ClassicalType &clear_text)
+const ClassicalType UnsortAlpha::encode(const ClassicalType &clear_text)
 {
    return process(clear_text, charEncode);
 }
 
-const UnsortAlpha::ClassicalType UnsortAlpha::decode(const ClassicalType &cipher_text)
+const ClassicalType UnsortAlpha::decode(const ClassicalType &cipher_text)
 {
    return process(cipher_text, charDecode);
 }

@@ -1,8 +1,8 @@
 /*
- * All string ciphers that uses a grid.
+ * All string ciphers that uses a square grid.
  */
 #ifndef SQUARECIPHER_HPP
-#define	SQUARECIPHER_HPP
+#define SQUARECIPHER_HPP
 
 #include "StringCipherWithStringKey.hpp"
 

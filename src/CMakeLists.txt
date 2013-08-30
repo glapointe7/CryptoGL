@@ -28,6 +28,7 @@ set(SRC
    File.hpp
    Bits.hpp
    RandomBitGen.hpp RandomBitGen.cpp
+   Types.hpp
 
    exceptions/Exception.hpp
    exceptions/BadAlpha.hpp

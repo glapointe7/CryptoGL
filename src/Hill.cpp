@@ -8,7 +8,7 @@
 
 #include "MathematicalTools.hpp" 
 
-void Hill::setKey(const Matrix &key)
+void Hill::setKey(const Int32Matrix &key)
 {
    try
    {
@@ -32,7 +32,7 @@ void Hill::setKey(const Matrix &key)
 
 /* Process encode / decode of the data with the matrix key K. */
 
-const Hill::ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix *K)
+const ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix *K)
 {  
    const uint32_t key_dim = K->getDimension();
    const uint32_t data_len = data.length();
@@ -59,14 +59,14 @@ const Hill::ClassicalType Hill::process(const ClassicalType &data, const SquareM
    return message;
 }
 
-const Hill::ClassicalType Hill::encode(const ClassicalType &clear_text)
+const ClassicalType Hill::encode(const ClassicalType &clear_text)
 {
    const ClassicalType full_text(appendChars(clear_text, key->getDimension(), 'X'));
    
    return process(full_text, key);
 }
 
-const Hill::ClassicalType Hill::decode(const ClassicalType &cipher_text)
+const ClassicalType Hill::decode(const ClassicalType &cipher_text)
 {
    return process(cipher_text, key->inverse());
 }

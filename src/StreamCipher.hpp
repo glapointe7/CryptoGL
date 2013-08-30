@@ -9,10 +9,10 @@ class StreamCipher : public SymmetricCipher
 protected:   
    virtual ~StreamCipher() {}
 
-   virtual const BytesContainer encode(const BytesContainer &) = 0;
-   virtual const BytesContainer decode(const BytesContainer &) = 0;
+   virtual const BytesVector encode(const BytesVector &) = 0;
+   virtual const BytesVector decode(const BytesVector &) = 0;
    
-   virtual void setKey(const BytesContainer &) = 0;
+   virtual void setKey(const BytesVector &) = 0;
    
    virtual void keySetup() = 0;
 };

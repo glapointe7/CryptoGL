@@ -1,6 +1,6 @@
 
 #ifndef AFFINE_HPP
-#define	AFFINE_HPP
+#define AFFINE_HPP
 
 #include "StringCipher.hpp"
 

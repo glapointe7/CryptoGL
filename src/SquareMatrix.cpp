@@ -11,7 +11,7 @@
 
 // Exceptions : Matrix have to be square and not empty.
 
-void SquareMatrix::setMatrix(const Matrix &M)
+void SquareMatrix::setMatrix(const Int32Matrix &M)
 {
    if (M.empty())
    {
@@ -27,7 +27,7 @@ void SquareMatrix::setMatrix(const Matrix &M)
    setDimension(M.size());
 }
 
-const SquareMatrix::Matrix SquareMatrix::getMatrix() const
+const Int32Matrix SquareMatrix::getMatrix() const
 {
    return M;
 }
@@ -74,7 +74,7 @@ void SquareMatrix::set(const uint32_t row, const uint32_t col, const int32_t val
 // Find the first pivot A(n,n) != 0 if it exists.
 // Otherwise, return dim + 1.
 
-uint32_t SquareMatrix::findNonZero(const Matrix &A, const uint32_t from) const
+uint32_t SquareMatrix::findNonZero(const Int32Matrix &A, const uint32_t from) const
 {
    uint32_t pos = from;
    while ((A[pos][from] == 0 || Maths::gcd(A[pos][from], n) != 1) && pos != dim)
@@ -87,11 +87,11 @@ uint32_t SquareMatrix::findNonZero(const Matrix &A, const uint32_t from) const
 
 // Multiply a matrix and a column-vector. Return the column-vector solution.
 
-const std::vector<uint32_t> operator *(const SquareMatrix *K, const std::vector<uint32_t> &V)
+const UInt32Vector operator *(const SquareMatrix *K, const UInt32Vector &V)
 {   
-   std::vector<uint32_t> soln(K->getDimension(), 0);
+   UInt32Vector soln(K->getDimension(), 0);
    const int32_t mod = K->getModulo();
-   const std::vector<std::vector<int32_t> > mat = K->getMatrix();
+   const Int32Matrix mat = K->getMatrix();
    
    uint32_t i = 0;
    for (const auto row : mat)
@@ -111,7 +111,7 @@ const std::vector<uint32_t> operator *(const SquareMatrix *K, const std::vector<
 
 void SquareMatrix::setIdentity()
 {
-   M = Matrix(dim, std::vector<int32_t>(dim, 0));
+   M = Int32Matrix(dim, std::vector<int32_t>(dim, 0));
    for (uint32_t i = 0; i < dim; ++i)
    {
       M[i][i] = 1;
@@ -120,9 +120,9 @@ void SquareMatrix::setIdentity()
 
 // Return the matrix Identity.
 
-const SquareMatrix::Matrix SquareMatrix::identity() const
+const Int32Matrix SquareMatrix::identity() const
 {
-   Matrix Mat = Matrix(dim, std::vector<int32_t>(dim, 0));
+   Int32Matrix Mat = Int32Matrix(dim, Int32Vector(dim, 0));
    for (uint32_t i = 0; i < dim; ++i)
    {
       Mat[i][i] = 1;
@@ -133,7 +133,7 @@ const SquareMatrix::Matrix SquareMatrix::identity() const
 
 // Return diagonal product.
 
-int32_t SquareMatrix::getDiagonalProduct(const Matrix &A) const
+int32_t SquareMatrix::getDiagonalProduct(const Int32Matrix &A) const
 {
    int32_t prod = 1;
    for (uint32_t i = 0; i < dim; ++i)
@@ -146,7 +146,7 @@ int32_t SquareMatrix::getDiagonalProduct(const Matrix &A) const
 
 // Check if the matrix mat is square.
 
-bool SquareMatrix::isSquare(const Matrix &mat)
+bool SquareMatrix::isSquare(const Int32Matrix &mat)
 {
    const uint32_t A_size = mat.size();
    for (const auto V : mat)
@@ -160,7 +160,7 @@ bool SquareMatrix::isSquare(const Matrix &mat)
    return true;
 }
 
-void SquareMatrix::triangularize(Matrix &A, Matrix &I, const uint32_t k, const uint32_t lower_i, const uint32_t upper_i) const
+void SquareMatrix::triangularize(Int32Matrix &A, Int32Matrix &I, const uint32_t k, const uint32_t lower_i, const uint32_t upper_i) const
 {
    // Swap null pivot with a non null one.
    if (A[k][k] == 0 || !Maths::areCoprimes(A[k][k], n))
@@ -205,7 +205,7 @@ int32_t SquareMatrix::det() const
 
       default:
       {
-         Matrix A = M;
+         Int32Matrix A = M;
          int8_t swapping = 1;
 
          for (uint32_t k = 0; k < dim - 1; ++k)
@@ -249,7 +249,7 @@ const SquareMatrix* SquareMatrix::inverse() const
 {
    SquareMatrix *result = new SquareMatrix();
    result->setModulo(n);
-   Matrix A;
+   Int32Matrix A;
 
    // Determinant of A is positive and is in the set {0,...,mod_A-1}
    const int32_t deter = det();
@@ -283,7 +283,7 @@ const SquareMatrix* SquareMatrix::inverse() const
          default:
          {
             A = M;
-            Matrix I = identity();
+            Int32Matrix I = identity();
 
             // Triangular inferior.
             for (uint32_t k = 0; k < dim - 1; ++k)

@@ -5,7 +5,7 @@
 constexpr uint8_t RC2::pi_table[256];
 constexpr uint8_t RC2::mixup_rotation[4];
 
-void RC2::setKey(const BytesContainer &key)
+void RC2::setKey(const BytesVector &key)
 {
    const uint8_t key_len = key.size();
    if (key_len > 16 || key_len < 1)
@@ -18,7 +18,7 @@ void RC2::setKey(const BytesContainer &key)
 
 void RC2::generateSubkeys()
 {
-   BytesContainer tmp_subkeys;
+   BytesVector tmp_subkeys;
    tmp_subkeys.reserve(128);
    const uint8_t key_len = key.size();
    for (uint8_t i = 0; i < key_len; ++i)
@@ -45,37 +45,37 @@ void RC2::generateSubkeys()
    subkeys.reserve(64);
    for (uint8_t i = 0; i < 128; i += 2)
    {
-      subkeys.push_back(LittleEndian32::toInteger(BytesContainer(tmp_subkeys.begin() + i, tmp_subkeys.begin() + i + 2)));
+      subkeys.push_back(LittleEndian32::toInteger(BytesVector(tmp_subkeys.begin() + i, tmp_subkeys.begin() + i + 2)));
    }
 }
 
-void RC2::mixUp(UInt16Container &input, const uint8_t index, const uint8_t key_index) const
+void RC2::mixUp(UInt16Vector &input, const uint8_t index, const uint8_t key_index) const
 {
    const uint8_t i = 4 + index;
    input[index] += subkeys[key_index + index] + (input[(i - 2) & 3] & input[(i - 1) & 3]) + (input[(i - 3) & 3] & ~input[(i - 1) & 3]);
    input[index] = Bits::rotateLeft(input[index], mixup_rotation[index], 16);
 }
 
-void RC2::mash(UInt16Container &input, const uint8_t index) const
+void RC2::mash(UInt16Vector &input, const uint8_t index) const
 {
    input[index] += subkeys[input[(index + 3) & 3] & 0x3F];
 }
 
-void RC2::inverseMixUp(UInt16Container &input, const uint8_t index, const uint8_t key_index) const
+void RC2::inverseMixUp(UInt16Vector &input, const uint8_t index, const uint8_t key_index) const
 {
    const uint8_t i = 4 + index;
    input[index] = Bits::rotateRight(input[index], mixup_rotation[index], 16);
    input[index] -= subkeys[key_index + index] + (input[(i - 2) & 3] & input[(i - 1) & 3]) + (input[(i - 3) & 3] & ~input[(i - 1) & 3]);
 }
 
-void RC2::inverseMash(UInt16Container &input, const uint8_t index) const
+void RC2::inverseMash(UInt16Vector &input, const uint8_t index) const
 {
    input[index] -= subkeys[input[(index + 3) & 3] & 0x3F];
 }
 
-const RC2::UInt16Container RC2::encodeBlock(const UInt16Container &input)
+const UInt16Vector RC2::encodeBlock(const UInt16Vector &input)
 {
-   UInt16Container encoded_block(input);
+   UInt16Vector encoded_block(input);
    for (uint8_t i = 0; i < rounds; ++i)
    {
       const uint8_t key_index = i << 2;
@@ -96,9 +96,9 @@ const RC2::UInt16Container RC2::encodeBlock(const UInt16Container &input)
    return encoded_block;
 }
 
-const RC2::UInt16Container RC2::decodeBlock(const UInt16Container &input)
+const UInt16Vector RC2::decodeBlock(const UInt16Vector &input)
 {
-   UInt16Container decoded_block(input);
+   UInt16Vector decoded_block(input);
    for (int8_t i = rounds - 1; i >= 0; --i)
    {
       const uint8_t key_index = i << 2;

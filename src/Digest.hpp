@@ -11,13 +11,12 @@
 
 #include "big_integers/BigIntegerUtils.hh"
 #include "big_integers/BigInteger.hh"
+#include "Types.hpp"
 
 namespace Digest
-{
-   typedef std::vector<uint8_t> BytesContainer;
-   
+{   
    /* Get the hexadecimal string from a vector of bytes. */
-   const std::string hexDigest(const BytesContainer &bytes)
+   const std::string hexDigest(const BytesVector &bytes)
    {
       std::ostringstream ss;
       ss.setf(std::ios::hex, std::ios::basefield);
@@ -33,20 +32,20 @@ namespace Digest
       return ss.str();
    }
    
-   const BytesContainer getBytesFromString(const std::string &str)
+   const BytesVector getBytesFromString(const std::string &str)
    {
-      return BytesContainer(str.begin(), str.end());
+      return BytesVector(str.begin(), str.end());
    }
    
-   const std::string getStringFromBytes(const BytesContainer &bytes)
+   const std::string getStringFromBytes(const BytesVector &bytes)
    {
       return std::string(bytes.begin(), bytes.end());
    }
    
-   const BytesContainer getBytesFromHexDigest(const std::string &hex_str)
+   const BytesVector getBytesFromHexDigest(const std::string &hex_str)
    {
       const uint32_t hex_len = hex_str.length();
-      BytesContainer bytes;
+      BytesVector bytes;
       bytes.reserve(hex_len >> 1);
 
       for (uint32_t i = 0; i < hex_len; i += 2)

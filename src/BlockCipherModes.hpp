@@ -2,7 +2,7 @@
 #ifndef BLOCKCIPHERMODES_HPP
 #define BLOCKCIPHERMODES_HPP
 
-#include "SymmetricCipher.hpp"
+#include "Types.hpp"
 #include "BlockCipherOperationModes.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
@@ -12,7 +12,7 @@
 class BlockCipherModes
 {
 protected:
-   typedef SymmetricCipher::BytesContainer Block;
+   typedef BytesVector Block;
    using BadIVLength = BadKeyLength;
    
 public:   
@@ -83,7 +83,7 @@ private:
 class BlockCipherCTRMode : public BlockCipherModes
 {
 public:   
-   explicit BlockCipherCTRMode(const SymmetricCipher::IVContainer &IV, const GetOutputBlockFunction &encode)
+   explicit BlockCipherCTRMode(const IV_Vector &IV, const GetOutputBlockFunction &encode)
       : IV(IV), encode(encode) {}
    
    virtual const Block getCipherBlock(const Block &input_block) final;
@@ -91,7 +91,7 @@ public:
 
 private:
    uint64_t block_index = 0;
-   const SymmetricCipher::IVContainer IV;
+   const IV_Vector IV;
    const GetOutputBlockFunction encode;
 };
 
@@ -124,11 +124,11 @@ public:
 };
 
 template<>
-class BlockCipherModesFactory<SymmetricCipher::IVContainer>
+class BlockCipherModesFactory<IV_Vector>
 {
 public:
    static BlockCipherModes* createBlockCipherMode(
-      const SymmetricCipher::IVContainer &IV,
+      const IV_Vector &IV,
       BlockCipherCFBMode::GetOutputBlockFunction encode)
    { 
       return new BlockCipherCTRMode(IV, encode);

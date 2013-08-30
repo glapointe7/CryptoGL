@@ -7,40 +7,40 @@
 #include "BlockCipher.hpp"
 #include "BigEndian.hpp"
 
-class Noekeon : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian32>
+class Noekeon : public BlockCipher<uint32_t, UInt32Vector, 16, BigEndian32>
 {
 public:
-   explicit Noekeon(const BytesContainer &key) 
+   explicit Noekeon(const BytesVector &key) 
       : BlockCipher(OperationModes::ECB, 16, {}) { setKey(key); }
    
-   Noekeon(const BytesContainer &key, const OperationModes mode) 
+   Noekeon(const BytesVector &key, const OperationModes mode) 
       : BlockCipher(mode, 16, {}) { setKey(key); }
    
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
-   Noekeon(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
+   Noekeon(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : BlockCipher(mode, 16, IV) { setKey(key); }
    
    /* Constructor with a vector of IV only for the mode CTR. */
-   Noekeon(const BytesContainer &key, const IVContainer &IV) 
+   Noekeon(const BytesVector &key, const IV_Vector &IV) 
       : BlockCipher(16, IV) { setKey(key); }
    
-   virtual void setKey(const BytesContainer &key) final;
+   virtual void setKey(const BytesVector &key) final;
    
 private:
    virtual void generateSubkeys() final;
    virtual void generateInverseSubkeys() final;
-   virtual const UInt32Container encodeBlock(const UInt32Container &input) final;
-   virtual const UInt32Container decodeBlock(const UInt32Container &input) final;
+   virtual const UInt32Vector encodeBlock(const UInt32Vector &input) final;
+   virtual const UInt32Vector decodeBlock(const UInt32Vector &input) final;
    
-   static void applyGamma(UInt32Container &state);
-   void applyTheta(UInt32Container &state) const;
+   static void applyGamma(UInt32Vector &state);
+   void applyTheta(UInt32Vector &state) const;
    
    /* Apply theta on the subkeys with null vector for decoding. */
    void applyTheta();
    
-   static void applyPi1(UInt32Container &state);
-   static void applyPi2(UInt32Container &state);
-   void applyRound(UInt32Container &state, const uint8_t constant1, const uint8_t constant2);
+   static void applyPi1(UInt32Vector &state);
+   static void applyPi2(UInt32Vector &state);
+   void applyRound(UInt32Vector &state, const uint8_t constant1, const uint8_t constant2);
    
    static constexpr uint32_t round_constants[17] = {
       0x00000080, 0x0000001b, 0x00000036, 0x0000006c,

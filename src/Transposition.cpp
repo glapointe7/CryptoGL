@@ -37,8 +37,7 @@ const Transposition::Table Transposition::createIncompleteTable(const ClassicalT
    return table;
 }
 
-const Transposition::ClassicalType
-Transposition::readPermutedTable(const Table &table)
+const ClassicalType Transposition::readPermutedTable(const Table &table)
 {
    ClassicalType data;
    data.reserve(table.size() * getKey().size());
@@ -51,8 +50,7 @@ Transposition::readPermutedTable(const Table &table)
 }
 
 // Rows complete encode / decode
-const Transposition::ClassicalType
-TranspositionCompleteRows::readPermutedTable(const Table &table)
+const ClassicalType TranspositionCompleteRows::readPermutedTable(const Table &table)
 {
    const KeyType key = getKey();
    ClassicalType data;
@@ -70,8 +68,7 @@ TranspositionCompleteRows::readPermutedTable(const Table &table)
 }
 
 // Rows incomplete encode / decode
-const Transposition::ClassicalType
-TranspositionIncompleteRows::readPermutedTable(const Table &table)
+const ClassicalType TranspositionIncompleteRows::readPermutedTable(const Table &table)
 {
    const KeyType key = getKey();
    const uint32_t key_len = key.size();
@@ -123,8 +120,7 @@ TranspositionCompleteColumns::createTable(const ClassicalType &data)
    return table;
 }
 
-const Transposition::ClassicalType
-TranspositionCompleteColumns::readPermutedTable(const Table &table)
+const ClassicalType TranspositionCompleteColumns::readPermutedTable(const Table &table)
 {
    const uint32_t key_len = getKey().size();
    const uint32_t rows = table.size();
@@ -174,7 +170,7 @@ TranspositionIncompleteColumns::createIncompleteTable(const ClassicalType &data)
    return table;
 }
 
-const Transposition::ClassicalType
+const ClassicalType
 TranspositionIncompleteColumns::readPermutedTable(const std::vector<ClassicalType> &table)
 {
    const KeyType key = getKey();

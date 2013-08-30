@@ -8,10 +8,10 @@ constexpr uint8_t MD4::word_indexes[48];
 constexpr uint8_t MD5::left_rotation_table[64];
 constexpr uint32_t MD5::sine_magic_numbers[64];
 
-const MessageDigest::BytesContainer MD2::appendPadding(const BytesContainer &data) const
+const BytesVector MD2::appendPadding(const BytesVector &data) const
 {
    const uint64_t bytes_len = data.size();
-   BytesContainer bytes_pad(data);
+   BytesVector bytes_pad(data);
 
    // Pad with the value 'bytes_to_pad' at the end of bits_pad until the length is multiple of 16.
    uint8_t bytes_to_pad = 16 - (bytes_pad.size() & 0xF);
@@ -21,7 +21,7 @@ const MessageDigest::BytesContainer MD2::appendPadding(const BytesContainer &dat
    return bytes_pad;
 }
 
-void MD2::process(const BytesContainer &data, BytesContainer &hash, const uint64_t &index)
+void MD2::process(const BytesVector &data, BytesVector &hash, const uint64_t &index)
 {
    for (uint8_t j = 0; j < 16; ++j)
    {
@@ -41,10 +41,10 @@ void MD2::process(const BytesContainer &data, BytesContainer &hash, const uint64
    }
 }
 
-const MessageDigest::BytesContainer MD2::encode(const BytesContainer &data)
+const BytesVector MD2::encode(const BytesVector &data)
 {
-   const BytesContainer bytes = appendPadding(data);
-   BytesContainer hash(48, 0);
+   const BytesVector bytes = appendPadding(data);
+   BytesVector hash(48, 0);
 
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += in_block_length)
@@ -62,25 +62,25 @@ const MessageDigest::BytesContainer MD2::encode(const BytesContainer &data)
    // Last update of checksum.
    process(checksum, hash, 0);
 
-   return BytesContainer(hash.begin(), hash.begin() + 16);
+   return BytesVector(hash.begin(), hash.begin() + 16);
 }
 
-const MessageDigest::BytesContainer MD4::encode(const BytesContainer &data)
+const BytesVector MD4::encode(const BytesVector &data)
 {
-   BytesContainer bytes = appendPadding(data);
+   BytesVector bytes = appendPadding(data);
    appendLength<LittleEndian64>(bytes, data.size() << 3);
    
    const uint64_t bytes_len = bytes.size();
    /* Initial values. */
-   UInt32Container state = {
+   UInt32Vector state = {
       0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476
    };
 
    // Assuming bytes_len is a multiple of 64.
    for (uint64_t i = 0; i < bytes_len; i += in_block_length)
    {
-      const UInt32Container words = getInputBlocks(bytes, i);
-      UInt32Container hash(state);
+      const UInt32Vector words = getInputBlocks(bytes, i);
+      UInt32Vector hash(state);
       uint32_t f, k = 0;
       for (uint8_t j = 0; j < 48; ++j)
       {
@@ -115,22 +115,22 @@ const MessageDigest::BytesContainer MD4::encode(const BytesContainer &data)
    return getOutput(4, state);
 }
 
-const MessageDigest::BytesContainer MD5::encode(const BytesContainer &data)
+const BytesVector MD5::encode(const BytesVector &data)
 {
-   BytesContainer bytes = appendPadding(data);
+   BytesVector bytes = appendPadding(data);
    appendLength<LittleEndian64>(bytes, data.size() << 3);
    
    const uint64_t bytes_len = bytes.size();
    /* Initial values. */
-   UInt32Container state = {
+   UInt32Vector state = {
       0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476
    };
 
    // Assuming bytes_len is a multiple of 64.
    for (uint64_t i = 0; i < bytes_len; i += in_block_length)
    {
-      const UInt32Container words = getInputBlocks(bytes, i);
-      UInt32Container hash(state);
+      const UInt32Vector words = getInputBlocks(bytes, i);
+      UInt32Vector hash(state);
       uint32_t f, k;
       for (uint8_t j = 0; j < 64; ++j)
       {

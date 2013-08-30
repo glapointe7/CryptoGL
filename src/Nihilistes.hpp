@@ -1,6 +1,6 @@
 
 #ifndef NIHILISTES_HPP
-#define	NIHILISTES_HPP
+#define NIHILISTES_HPP
 
 #include "SquareCipher.hpp"
 

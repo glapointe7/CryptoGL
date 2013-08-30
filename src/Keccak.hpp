@@ -33,23 +33,20 @@ public:
    virtual ~Keccak() {}
    
 private:
-   typedef typename SpongeFunction<uint64_t>::BytesContainer BytesContainer;
-   typedef typename SpongeFunction<uint64_t>::UInt64Container UInt64Container;
-
    /* Keccak-f permutation function. */
    virtual void F() final;
 
    /* Apply the absorbing phase from the sponge construction using the padded input message.*/
-   virtual void applyAbsorbingPhase(const BytesContainer &padded_message) final;
+   virtual void applyAbsorbingPhase(const BytesVector &padded_message) final;
 
    /* Apply the squeezing phase from the sponge construction and return the final output hash. */
-   virtual const BytesContainer applySqueezingPhase() final;
+   virtual const BytesVector applySqueezingPhase() final;
 
    /* Apply theta, rho, pi, chi and iota steps from the specs. */
    void applyRound(const uint8_t round_index);
 
    /* Convert a block of bytes to an array of integers (state). */
-   const UInt64Container convertBlockToState(const BytesContainer &block) const;
+   const UInt64Vector convertBlockToState(const BytesVector &block) const;
 
    /* Round constants. */
    static constexpr uint64_t round_constants[24] = {

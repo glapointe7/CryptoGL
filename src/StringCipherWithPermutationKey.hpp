@@ -1,6 +1,6 @@
 
 #ifndef STRINGCIPHERWITHPERMUTATIONKEY_HPP
-#define	STRINGCIPHERWITHPERMUTATIONKEY_HPP
+#define STRINGCIPHERWITHPERMUTATIONKEY_HPP
 
 #include "StringCipher.hpp"
 
@@ -11,7 +11,7 @@
 class StringCipherWithPermutationKey : public StringCipher
 {   
 public:
-   typedef std::vector<int32_t> KeyType;
+   typedef Int32Vector KeyType;
 
    const KeyType getKey() const { return key; }
    void setKey(const KeyType &key);

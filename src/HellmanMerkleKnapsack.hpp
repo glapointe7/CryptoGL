@@ -15,8 +15,8 @@ public:
    /* The private key (W, div, mod) need to be given where W is the super incresing sequence and div (mod mod). */
    HellmanMerkleKnapsack(const BigIntVector &sequence, const BigInteger &div, const BigInteger &mod);
    
-   virtual const BigIntVector encode(const BytesContainer &message) final;
-   virtual const BytesContainer decode(const BigIntVector &cipher) final;
+   virtual const BigIntVector encode(const BytesVector &message) final;
+   virtual const BytesVector decode(const BigIntVector &cipher) final;
    
 private:
    virtual void makePublicKey() final;

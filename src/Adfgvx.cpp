@@ -61,7 +61,7 @@ const std::vector<int32_t> Adfgvx::getPermutationKey() const
    return perm_key;
 }
 
-const Adfgvx::ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
+const ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
 {
    if(grid_key.empty())
    {
@@ -90,7 +90,7 @@ const Adfgvx::ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
    return encoded_text;
 }
 
-const Adfgvx::ClassicalType Adfgvx::decode(const ClassicalType &cipher_text)
+const ClassicalType Adfgvx::decode(const ClassicalType &cipher_text)
 {
    if(grid_key.empty())
    {

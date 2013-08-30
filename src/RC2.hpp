@@ -7,35 +7,35 @@
 #include "BlockCipher.hpp"
 #include "LittleEndian.hpp"
 
-class RC2 : public BlockCipher<uint16_t, std::vector<uint16_t>, 8, LittleEndian16>
+class RC2 : public BlockCipher<uint16_t, UInt16Vector, 8, LittleEndian16>
 {
 public:
-   explicit RC2(const BytesContainer &key) 
+   explicit RC2(const BytesVector &key) 
       : BlockCipher(OperationModes::ECB, 16, {}) { setKey(key); }
    
-   RC2(const BytesContainer &key, const OperationModes mode) 
+   RC2(const BytesVector &key, const OperationModes mode) 
       : BlockCipher(mode, 16, {}) { setKey(key); }
    
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
-   RC2(const BytesContainer &key, const OperationModes mode, const BytesContainer &IV) 
+   RC2(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : BlockCipher(mode, 16, IV) { setKey(key); }
    
    /* Constructor with a vector of IV only for the mode CTR. */
-   RC2(const BytesContainer &key, const IVContainer &IV) 
+   RC2(const BytesVector &key, const IV_Vector &IV) 
       : BlockCipher(16, IV) { setKey(key); }
    
-   virtual void setKey(const BytesContainer &key) final;
+   virtual void setKey(const BytesVector &key) final;
      
 private:
    virtual void generateSubkeys() final;
-   virtual const UInt16Container encodeBlock(const UInt16Container &input) final;
-   virtual const UInt16Container decodeBlock(const UInt16Container &input) final;
+   virtual const UInt16Vector encodeBlock(const UInt16Vector &input) final;
+   virtual const UInt16Vector decodeBlock(const UInt16Vector &input) final;
    
-   void mixUp(UInt16Container &input, const uint8_t index, const uint8_t key_index) const;
-   void mash(UInt16Container &input, const uint8_t index) const;
+   void mixUp(UInt16Vector &input, const uint8_t index, const uint8_t key_index) const;
+   void mash(UInt16Vector &input, const uint8_t index) const;
    
-   void inverseMixUp(UInt16Container &input, const uint8_t index, const uint8_t key_index) const;
-   void inverseMash(UInt16Container &input, const uint8_t index) const;
+   void inverseMixUp(UInt16Vector &input, const uint8_t index, const uint8_t key_index) const;
+   void inverseMash(UInt16Vector &input, const uint8_t index) const;
    
    static constexpr uint8_t pi_table[256] = {
       0xd9, 0x78, 0xf9, 0xc4, 0x19, 0xdd, 0xb5, 0xed, 0x28, 0xe9, 0xfd, 0x79, 0x4a, 0xa0, 0xd8, 0x9d,

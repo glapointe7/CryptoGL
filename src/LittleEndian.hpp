@@ -4,7 +4,7 @@
 
 #include <vector>
 
-typedef std::vector<uint8_t> BytesVector;
+#include "Types.hpp"
 
 template <class UInt>
 class LittleEndian
@@ -46,8 +46,7 @@ public:
    
    static const uint16_t toInteger(const BytesVector &bytes)
    {
-      return bytes[0] 
-              | (bytes[1] << 8);
+      return bytes[0] | (bytes[1] << 8);
    }
 };
 

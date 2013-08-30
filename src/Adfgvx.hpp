@@ -1,6 +1,6 @@
 
 #ifndef ADFGVX_HPP
-#define	ADFGVX_HPP
+#define ADFGVX_HPP
 
 #include "SquareCipher.hpp"
 #include <vector>
@@ -18,12 +18,12 @@ public:
 
 private:
    static uint8_t is6X6(const Grid &grid);
-   const std::vector<int32_t> getPermutationKey() const;
+   const Int32Vector getPermutationKey() const;
    
    // 6X6 grid key.
    Grid grid_key;
 
-   static const std::string code;
+   static const ClassicalType code;
 };
 
 #endif

@@ -13,14 +13,14 @@
 class Rabbit : public StreamCipher
 {   
 public:
-   explicit Rabbit(const BytesContainer &key) { setKey(key); }
+   explicit Rabbit(const BytesVector &key) { setKey(key); }
    
-   virtual const BytesContainer encode(const BytesContainer &clear_text) final;
-   virtual const BytesContainer decode(const BytesContainer &cipher_text) final;
+   virtual const BytesVector encode(const BytesVector &clear_text) final;
+   virtual const BytesVector decode(const BytesVector &cipher_text) final;
    
-   virtual void setKey(const BytesContainer &key) final;
+   virtual void setKey(const BytesVector &key) final;
 
-   void setIV(const BytesContainer &IV);
+   void setIV(const BytesVector &IV);
 
 private:
    using BadIVLength = BadKeyLength;
@@ -39,7 +39,7 @@ private:
    uint32_t counters[8];
    
    // Initial vector.
-   BytesContainer IV;
+   BytesVector IV;
 
    bool counter_carry_bit = 0;
 };

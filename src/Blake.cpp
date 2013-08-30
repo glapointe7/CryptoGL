@@ -8,10 +8,10 @@ constexpr uint32_t Blake32Bits::C[];
 constexpr uint8_t Blake32Bits::G_rotate[];
 constexpr uint8_t Blake64Bits::G_rotate[];
 
-const Blake<uint32_t>::BytesContainer Blake256::appendPadding(const BytesContainer &message) const
+const BytesVector Blake256::appendPadding(const BytesVector &message) const
 {
    const uint64_t initial_length = message.size();
-   BytesContainer padding(message);
+   BytesVector padding(message);
    padding.reserve(initial_length + (in_block_length << 1));
    
    // If initial_length + 1 is congruant to 56 (mod 64).
@@ -31,10 +31,10 @@ const Blake<uint32_t>::BytesContainer Blake256::appendPadding(const BytesContain
    return padding;
 }
 
-const Blake<uint64_t>::BytesContainer Blake512::appendPadding(const BytesContainer &message) const
+const BytesVector Blake512::appendPadding(const BytesVector &message) const
 {
    const uint64_t initial_length = message.size();
-   BytesContainer padding(message);
+   BytesVector padding(message);
    padding.reserve(initial_length + (in_block_length << 1));
 
    // If initial_length + 1 is congruant to 112 (mod 128).
@@ -58,7 +58,7 @@ const Blake<uint64_t>::BytesContainer Blake512::appendPadding(const BytesContain
 }
 
 void Blake32Bits::G(uint32_t &a, uint32_t &b, uint32_t &c, uint32_t &d, 
-        const UInt32Container &block, const uint8_t r, const uint8_t i) const
+        const UInt32Vector &block, const uint8_t r, const uint8_t i) const
 {
    a += b + (block[sigma[r % 10][i]] ^ C[sigma[r % 10][i + 1]]);
    d = Bits::rotateRight(d ^ a, G_rotate[0], 32);
@@ -72,7 +72,7 @@ void Blake32Bits::G(uint32_t &a, uint32_t &b, uint32_t &c, uint32_t &d,
 }
 
 void Blake64Bits::G(uint64_t &a, uint64_t &b, uint64_t &c, uint64_t &d, 
-        const UInt64Container &block, const uint8_t r, const uint8_t i) const
+        const UInt64Vector &block, const uint8_t r, const uint8_t i) const
 {
    a += b + (block[sigma[r % 10][i]] ^ C[sigma[r % 10][i + 1]]);
    d = Bits::rotateRight64(d ^ a, G_rotate[0]);
@@ -85,10 +85,10 @@ void Blake64Bits::G(uint64_t &a, uint64_t &b, uint64_t &c, uint64_t &d,
    b = Bits::rotateRight64(b ^ c, G_rotate[3]);
 }
 
-const Blake<uint32_t>::BytesContainer Blake32Bits::encode(const BytesContainer &data)
+const BytesVector Blake32Bits::encode(const BytesVector &data)
 {
    const uint64_t data_size = data.size();
-   BytesContainer bytes = appendPadding(data);
+   BytesVector bytes = appendPadding(data);
    appendLength<BigEndian64>(bytes, data_size << 3);
    
    const uint64_t bytes_len = bytes.size();
@@ -102,12 +102,12 @@ const Blake<uint32_t>::BytesContainer Blake32Bits::encode(const BytesContainer &
       counter = 512 - ((bytes_len - data_size) << 3);
    }
    
-   UInt32Container hash(IV);
+   UInt32Vector hash(IV);
    for (uint64_t i = 0; i < bytes_len; i += in_block_length)
    {
-      UInt32Container V = initialize(hash, C);
+      UInt32Vector V = initialize(hash, C);
               
-      const UInt32Container input_block = getInputBlocks(bytes, i);
+      const UInt32Vector input_block = getInputBlocks(bytes, i);
       
       for(uint8_t j = 0; j < number_of_rounds; ++j)
       {
@@ -127,10 +127,10 @@ const Blake<uint32_t>::BytesContainer Blake32Bits::encode(const BytesContainer &
    return getOutput(output_size, hash);
 }
 
-const Blake<uint64_t>::BytesContainer Blake64Bits::encode(const BytesContainer &data)
+const BytesVector Blake64Bits::encode(const BytesVector &data)
 {
    const uint64_t data_size = data.size();
-   BytesContainer bytes = appendPadding(data);
+   BytesVector bytes = appendPadding(data);
    appendLength<BigEndian64>(bytes, data_size << 3);
    
    const uint64_t bytes_len = bytes.size();
@@ -144,12 +144,12 @@ const Blake<uint64_t>::BytesContainer Blake64Bits::encode(const BytesContainer &
       counter = 1024 - ((bytes_len - data_size) << 3);
    }
    
-   UInt64Container hash(IV);
+   UInt64Vector hash(IV);
    for (uint64_t i = 0; i < bytes_len; i += in_block_length)
    {
-      UInt64Container V = initialize(hash, C);
+      UInt64Vector V = initialize(hash, C);
               
-      const UInt64Container input_block = getInputBlocks(bytes, i);
+      const UInt64Vector input_block = getInputBlocks(bytes, i);
       
       for(uint8_t j = 0; j < number_of_rounds; ++j)
       {

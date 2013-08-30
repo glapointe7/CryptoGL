@@ -12,7 +12,7 @@ constexpr uint8_t Twofish::RS[][8];
 constexpr uint8_t Twofish::MDS[][4];
 constexpr uint8_t Twofish::Q[][256];
 
-void Twofish::setKey(const BytesContainer &key)
+void Twofish::setKey(const BytesVector &key)
 {
    if (key.size() != 16 && key.size() != 24 && key.size() != 32)
    {
@@ -43,11 +43,11 @@ uint8_t Twofish::GFMultiply(const uint8_t a, uint8_t b, const uint16_t p)
    return prod;
 }
 
-uint32_t Twofish::h(const uint32_t X, const BytesContainer &L) const
+uint32_t Twofish::h(const uint32_t X, const BytesVector &L) const
 {
    // Split X into 4 bytes in little endian.
    const uint8_t k = L.size() >> 2;
-   BytesContainer y = LittleEndian32::toBytesVector(X);
+   BytesVector y = LittleEndian32::toBytesVector(X);
    if(k == 4)
    {
       constexpr uint8_t k4[4] = {1, 0, 0, 1};
@@ -73,7 +73,7 @@ uint32_t Twofish::h(const uint32_t X, const BytesContainer &L) const
    }
    
    // v(x) = x^8 + x^6 + x^5 + x^3 + 1 over GF(2). (101101001)_2 = 0x169.
-   BytesContainer z(4, 0);
+   BytesVector z(4, 0);
    for(uint8_t i = 0; i < 4; ++i)
    {
       for(uint8_t j = 0; j < 4; ++j)
@@ -90,10 +90,10 @@ void Twofish::generateSubkeys()
    subkeys.reserve(40);
    const uint8_t k = key.size() >> 3;
    const uint8_t k4 = k << 2;
-   BytesContainer Me, Mo;
+   BytesVector Me, Mo;
    Me.reserve(k4);
    Mo.reserve(k4);
-   std::vector<BytesContainer> S(k, BytesContainer(4, 0));
+   std::vector<BytesVector> S(k, BytesVector(4, 0));
 
    for (uint8_t i = 0; i < k; ++i)
    {  
@@ -136,7 +136,7 @@ uint32_t Twofish::g(const uint32_t X) const
    return h(X, s);
 }
 
-const Twofish::UInt32Container Twofish::F(const UInt32Container half_block, const uint8_t round) const
+const UInt32Vector Twofish::F(const UInt32Vector half_block, const uint8_t round) const
 {
    const uint32_t T0 = g(half_block[0]);
    const uint32_t T1 = g(Bits::rotateLeft(half_block[1], 8, 32));
@@ -144,11 +144,11 @@ const Twofish::UInt32Container Twofish::F(const UInt32Container half_block, cons
    return {T0 + T1 + subkeys[2*round + 8], T0 + 2*T1 + subkeys[2*round + 9]};
 }
 
-void Twofish::encodeFeistelRounds(UInt32Container &L, UInt32Container &R, const uint8_t) const
+void Twofish::encodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_t) const
 {
    for(uint8_t i = 0; i < rounds; ++i)
    {
-      const UInt32Container F_result = F(R, i);
+      const UInt32Vector F_result = F(R, i);
       L[0] = Bits::rotateRight(L[0] ^ F_result[0], 1, 32);
       L[1] = Bits::rotateLeft(L[1], 1, 32) ^ F_result[1];
       std::swap(R[0], L[0]);
@@ -160,7 +160,7 @@ void Twofish::encodeFeistelRounds(UInt32Container &L, UInt32Container &R, const 
    std::swap(R[1], L[1]);
 }
 
-void Twofish::decodeFeistelRounds(UInt32Container &L, UInt32Container &R, const uint8_t) const
+void Twofish::decodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_t) const
 {
    std::swap(R[0], L[0]);
    std::swap(R[1], L[1]);
@@ -169,23 +169,23 @@ void Twofish::decodeFeistelRounds(UInt32Container &L, UInt32Container &R, const 
    {
       std::swap(R[0], L[0]);
       std::swap(R[1], L[1]);
-      const UInt32Container F_result = F(R, i);
+      const UInt32Vector F_result = F(R, i);
       L[0] = Bits::rotateLeft(L[0], 1, 32) ^ F_result[0];
       L[1] = Bits::rotateRight(L[1] ^ F_result[1], 1, 32);
    }
 }
 
-const Twofish::UInt32Container Twofish::encodeBlock(const UInt32Container &input)
+const UInt32Vector Twofish::encodeBlock(const UInt32Vector &input)
 {
    // Input whitening.
-   UInt32Container encoded_block(input);
+   UInt32Vector encoded_block(input);
    for(uint8_t i = 0; i < 4; ++i)
    {
       encoded_block[i] ^= subkeys[i];
    }
    
-   UInt32Container R = {encoded_block[0], encoded_block[1]};
-   UInt32Container L = {encoded_block[2], encoded_block[3]};
+   UInt32Vector R = {encoded_block[0], encoded_block[1]};
+   UInt32Vector L = {encoded_block[2], encoded_block[3]};
    encodeFeistelRounds(L, R, 0);
    encoded_block[0] = R[0];
    encoded_block[1] = R[1];
@@ -201,17 +201,17 @@ const Twofish::UInt32Container Twofish::encodeBlock(const UInt32Container &input
    return encoded_block;
 }
 
-const Twofish::UInt32Container Twofish::decodeBlock(const UInt32Container &input)
+const UInt32Vector Twofish::decodeBlock(const UInt32Vector &input)
 {
    // Input whitening.
-   UInt32Container decoded_block(input);
+   UInt32Vector decoded_block(input);
    for(uint8_t i = 0; i < 4; ++i)
    {
       decoded_block[i] ^= subkeys[i + 4];
    }
    
-   UInt32Container R = {decoded_block[0], decoded_block[1]};
-   UInt32Container L = {decoded_block[2], decoded_block[3]};
+   UInt32Vector R = {decoded_block[0], decoded_block[1]};
+   UInt32Vector L = {decoded_block[2], decoded_block[3]};
    decodeFeistelRounds(L, R, 0);
    decoded_block[0] = R[0];
    decoded_block[1] = R[1];

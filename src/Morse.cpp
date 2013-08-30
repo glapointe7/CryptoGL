@@ -6,7 +6,7 @@
 #include "Tools.hpp"
 #include "String.hpp"
 
-const std::vector<Morse::ClassicalType> Morse::morse = {
+const std::vector<ClassicalType> Morse::morse = {
    ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..",
    ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.",
    "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", "-----",
@@ -19,7 +19,7 @@ Morse::Morse()
    setAlpha(String::uppercase_digits);
 }
 
-const Morse::ClassicalType Morse::encode(const ClassicalType &clear_text)
+const ClassicalType Morse::encode(const ClassicalType &clear_text)
 {
    ClassicalType crypted;
    crypted.reserve(6 * clear_text.length()); 
@@ -34,7 +34,7 @@ const Morse::ClassicalType Morse::encode(const ClassicalType &clear_text)
    return crypted;
 }
 
-const Morse::ClassicalType Morse::decode(const ClassicalType &cipher_text)
+const ClassicalType Morse::decode(const ClassicalType &cipher_text)
 {
    ClassicalType decrypted;
    decrypted.reserve(cipher_text.length() / 2);

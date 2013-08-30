@@ -8,7 +8,7 @@
 
 constexpr uint32_t Blowfish::P[];
 
-void Blowfish::setKey(const BytesContainer &key)
+void Blowfish::setKey(const BytesVector &key)
 {
    if (key.size() < 6 || key.size() > 56)
    {
