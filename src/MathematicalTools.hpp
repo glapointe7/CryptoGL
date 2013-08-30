@@ -1,14 +1,16 @@
 
 #ifndef MATHEMATICALTOOLS_HPP
-#define	MATHEMATICALTOOLS_HPP
+#define MATHEMATICALTOOLS_HPP
 
 #include <vector>
 #include <stdint.h>
+#include <algorithm>
 
 #include "exceptions/Exception.hpp"
 
 namespace Maths
-{
+{     
+   /* Return the Greatest Common Divisor of x and y. */
    template <class UIntType>
    const UIntType gcd(const UIntType &x, const UIntType &y)
    {
@@ -20,7 +22,7 @@ namespace Maths
       return gcd(y, x % y);
    }
    
-   /* Check if two numbers are coprimes. */
+   /* Check if x and y are coprimes. */
    template <class UIntType>
    bool areCoprimes(const UIntType &x, const UIntType &y)
    {
@@ -53,14 +55,43 @@ namespace Maths
 
       return v;
    }
+   
+   /* Calculate the square root of a big integer. */
+   template <class UIntType>
+   const UIntType sqrt (const UIntType &n)
+   {
+     UIntType x = n;
+     UIntType y = n;
+     y += 1;
+     y >>= 1;
+     while (y < x)
+       {
+         x = y;
+         y += n / x;
+         y >>= 1;
+       }
+     return x;
+   }
+   
+   /* Test the primality of x. */
+   template <class UIntType>
+   bool isPrime(const UIntType &x)
+   {
+      if (x < 2) return false;
+      if (x < 4) return true;
+      if (x % 2 == 0) return false;
+
+      const UIntType upper_bound = Maths::sqrt(x) + 1;
+      for (UIntType i = 3; i <= upper_bound; i += 2)
+      {
+         if (x % i == 0) return false;
+      }
+
+      return true;
+   }
 }
 
-// Fonctions mathématiques.
-uint32_t GCD(const uint32_t a, const uint32_t b);
-
-int32_t getModInverse(int32_t a, const int32_t n);
-
-uint64_t getLegendreSymbol(const uint64_t &x, const uint64_t &e, const uint64_t &n);
+//uint64_t getLegendreSymbol(const uint64_t &x, const uint64_t &e, const uint64_t &n);
 
 bool isPerfectSquare(const uint32_t value);
 

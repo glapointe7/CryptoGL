@@ -77,7 +77,7 @@ void SquareMatrix::set(const uint32_t row, const uint32_t col, const int32_t val
 uint32_t SquareMatrix::findNonZero(const Matrix &A, const uint32_t from) const
 {
    uint32_t pos = from;
-   while ((A[pos][from] == 0 || GCD(A[pos][from], n) != 1) && pos != dim)
+   while ((A[pos][from] == 0 || Maths::gcd(A[pos][from], n) != 1) && pos != dim)
    {
       pos++;
    }
@@ -163,14 +163,14 @@ bool SquareMatrix::isSquare(const Matrix &mat)
 void SquareMatrix::triangularize(Matrix &A, Matrix &I, const uint32_t k, const uint32_t lower_i, const uint32_t upper_i) const
 {
    // Swap null pivot with a non null one.
-   if (A[k][k] == 0 || GCD(A[k][k], n) != 1)
+   if (A[k][k] == 0 || !Maths::areCoprimes(A[k][k], n))
    {
       const uint32_t pivot = findNonZero(A, k);
       std::swap(A[pivot], A[k]);
       std::swap(I[pivot], I[k]);
    }
 
-   const int32_t inv = getModInverse(A[k][k], n);
+   const int32_t inv = Maths::getModInverse(A[k][k], n);
    for (uint32_t i = lower_i; i < upper_i; ++i)
    {
       // For rows : Li = Li + lq*Ln.
@@ -213,7 +213,7 @@ int32_t SquareMatrix::det() const
             // Swap the zero pivot with a non zero one.
             // If no one is found, then the column k below A(k,k) is zero.
             // Thus, det(M) = 0.
-            if (A[k][k] == 0 || GCD(A[k][k], n) != 1)
+            if (A[k][k] == 0 || !Maths::areCoprimes(A[k][k], n))
             {
                const uint32_t pivot = findNonZero(A, k);
                if (pivot == dim)
@@ -225,7 +225,7 @@ int32_t SquareMatrix::det() const
             }
 
             // Li = Li + q*Ln.
-            const int32_t inv = getModInverse(A[k][k], n);
+            const int32_t inv = Maths::getModInverse(A[k][k], n);
             for (uint32_t i = k + 1; i < dim; ++i)
             {
                const int32_t q = (inv * (n - A[i][k])) % n;
@@ -255,14 +255,14 @@ const SquareMatrix* SquareMatrix::inverse() const
    const int32_t deter = det();
 
    // We make sure that GCD(det(result), mod) = 1 => result is reversible in the Z_mod group.
-   if (GCD(deter, n) == 1)
+   if (Maths::areCoprimes(deter, n))
    {
       switch (dim)
       {
          case 1:
          {
             A = {
-               {(getModInverse(deter, n) + n) % n}
+               {(Maths::getModInverse(deter, n) + n) % n}
             };
             result->setMatrix(A);
             break;
@@ -270,7 +270,7 @@ const SquareMatrix* SquareMatrix::inverse() const
 
          case 2:
          {
-            const int32_t det_inv = getModInverse(deter, n);
+            const int32_t det_inv = Maths::getModInverse(deter, n);
             // Transform to a positive matrix.
             A = {
                {(((det_inv * M[1][1]) % n) + n) % n, (((det_inv * -M[0][1]) % n) + n) % n},
@@ -300,7 +300,7 @@ const SquareMatrix* SquareMatrix::inverse() const
             // Now we transform A to the identity matrix.
             for (uint32_t k = 0; k < dim; ++k)
             {
-               const int32_t inv = getModInverse(A[k][k], n);
+               const int32_t inv = Maths::getModInverse(A[k][k], n);
                for (uint32_t i = 0; i < dim; ++i)
                {
                   I[k][i] = (I[k][i] * inv) % n;

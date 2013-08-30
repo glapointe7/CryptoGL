@@ -7,7 +7,8 @@
 #include <vector>
 #include <string>
 
-#include "Endianness.hpp"
+#include "BigEndian.hpp"
+#include "LittleEndian.hpp"
 
 template <class UInt, class Endian>
 class HashFunction
@@ -57,7 +58,7 @@ protected:
    const UIntContainer getInputBlocks(const BytesContainer &bytes, const uint64_t &block_index) const
    {      
       Endian E;
-      const uint8_t UInt_size = E.getIntSize();
+      const uint8_t UInt_size = sizeof(UInt);
 
       UIntContainer words;
       words.reserve(in_block_length / UInt_size);
@@ -74,7 +75,7 @@ protected:
    static const BytesContainer getOutput(const uint8_t max_words, const UIntContainer &hash)
    {
       Endian E;
-      const uint8_t UInt_size = E.getIntSize();
+      const uint8_t UInt_size = sizeof(UInt);
       BytesContainer output;
       output.reserve(max_words << 2);
 

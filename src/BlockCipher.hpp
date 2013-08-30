@@ -5,7 +5,8 @@
 
 #include "BlockCipherOperationModes.hpp"
 #include "BlockCipherModes.hpp"
-#include "Endianness.hpp"
+#include "BigEndian.hpp"
+#include "LittleEndian.hpp"
 
 #include <functional>
 

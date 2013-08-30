@@ -3,46 +3,7 @@
 #include <cmath>
 #include <map>
 
-/* Return the Greatest Common Divisor of a and b. */
-uint32_t GCD(const uint32_t a, const uint32_t b)
-{
-   if (b == 0)
-      return a;
-
-   return GCD(b, a % b);
-}
-
-/* Calculate the inverse of a modulo b in Z_b.
-Theorem of Bézout : a*u + b*v = 1. v is the inverse to find. */
-
-int32_t getModInverse(int32_t a, const int32_t b)
-{
-   // If a and b are coprimes, then a^-1 exists in Z_b.
-   int32_t v = 0;
-   if (GCD(a, b) == 1)
-   {
-      int32_t i = b, u = 1;
-      while (a > 0)
-      {
-         int32_t q = i / a, x = a;
-         a = i % x;
-         i = x;
-         x = u;
-         u = v - q * x;
-         v = x;
-      }
-      v %= b;
-      v = (v + b) % b;
-   }
-   else
-   {
-      throw Exception("The inverse of 'a' doesn't exist in Z_b. To exist, 'a' and 'b' must be coprimes.");
-   }
-
-   return v;
-}
-
-uint64_t getLegendreSymbol(const uint64_t &x, const uint64_t &e, const uint64_t &n)
+/*uint64_t getLegendreSymbol(const uint64_t &x, const uint64_t &e, const uint64_t &n)
 {
    uint64_t a = 1;
    uint8_t e_size = sizeof (e);
@@ -56,7 +17,7 @@ uint64_t getLegendreSymbol(const uint64_t &x, const uint64_t &e, const uint64_t 
    }
 
    return a;
-}
+}*/
 
 // All perfect squares in base 16 end by the following digit : 0,1,4 or 9.
 

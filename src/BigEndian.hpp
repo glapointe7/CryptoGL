@@ -1,6 +1,6 @@
 
 #ifndef BIGENDIAN_HPP
-#define	BIGENDIAN_HPP
+#define BIGENDIAN_HPP
 
 #include "Endianness.hpp"
 

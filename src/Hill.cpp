@@ -6,7 +6,7 @@
 #include "exceptions/MatrixKeyNotReversible.hpp"
 #include "exceptions/EmptyKey.hpp"
 
-#include "MathematicalTools.hpp" // GCD
+#include "MathematicalTools.hpp" 
 
 void Hill::setKey(const Matrix &key)
 {
@@ -24,8 +24,7 @@ void Hill::setKey(const Matrix &key)
       throw MNS.what();
    }
 
-   // The key must be reversible.
-   if (GCD(this->key->det(), this->key->getModulo()) != 1)
+   if (!Maths::areCoprimes(this->key->det(), this->key->getModulo()))
    {
       throw MatrixKeyNotReversible("Your matrix key should be reversible to be able to decode the message.");
    }
