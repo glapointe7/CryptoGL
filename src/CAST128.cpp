@@ -82,12 +82,9 @@ void CAST128::generateSubkeys()
    subkeys.reserve(32);
    UInt32Container X(4, 0);
    
-   BigEndian32 BE;
    for(uint8_t i = 0; i < 16; i += 4)
    {
-      BE.toInteger(BytesContainer(key.begin() + i, key.begin() + i + 4));
-      X[i >> 2] = BE.getValue();
-      BE.resetValue();
+      X[i >> 2] = BigEndian::toInteger(BytesContainer(key.begin() + i, key.begin() + i + 4));
    }
    
    constexpr uint8_t indexes[4][20] = {

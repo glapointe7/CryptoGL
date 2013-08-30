@@ -7,7 +7,7 @@
 #include "Feistel.hpp"
 #include "BigEndian.hpp"
 
-class XTEA : public Feistel<uint32_t, uint64_t, 8, BigEndian64>
+class XTEA : public Feistel<uint32_t, uint64_t, 8, BigEndian>
 {
 public:
    explicit XTEA(const BytesContainer &key) 

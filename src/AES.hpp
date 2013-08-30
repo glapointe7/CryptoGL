@@ -9,7 +9,7 @@
 
 #include <vector>
 
-class AES : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian32>
+class AES : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian>
 {
 public:
    explicit AES(const BytesContainer &key) 

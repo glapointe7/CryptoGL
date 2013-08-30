@@ -7,7 +7,7 @@
 
 #define INPUT_BLOCK_LENGTH 64
 
-class SHA1 : public HashFunction<uint32_t, BigEndian<uint32_t> >
+class SHA1 : public HashFunction<uint32_t, BigEndian>
 {
 public:
    SHA1() : HashFunction<uint32_t, BigEndian<uint32_t> >(INPUT_BLOCK_LENGTH) {}

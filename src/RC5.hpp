@@ -8,7 +8,7 @@
 #include "Feistel.hpp"
 #include "LittleEndian.hpp"
 
-class RC5 : public Feistel<uint32_t, std::vector<uint32_t>, 8, LittleEndian32 >
+class RC5 : public Feistel<uint32_t, std::vector<uint32_t>, 8, LittleEndian>
 {
 public:
    explicit RC5(const BytesContainer &key) 

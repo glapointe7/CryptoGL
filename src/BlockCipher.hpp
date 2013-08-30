@@ -20,11 +20,9 @@ public:
       output_block.reserve(InputBlockSize);
       const uint8_t nbSubBlocks = InputBlockSize / sizeof(typename DataType::value_type);
 
-      EndianType endian;
       for(uint8_t i = 0; i < nbSubBlocks; ++i)
       {
-         endian.toBytes(int_block[i]);
-         const BytesContainer out = endian.getBytes();
+         const BytesContainer out = EndianType::toBytesVector(int_block[i]);
          output_block.insert(output_block.end(), out.begin(), out.end());
       }
 
@@ -38,12 +36,9 @@ public:
       const uint8_t nbSubBlocks = InputBlockSize / value_size;
       int_block.reserve(nbSubBlocks);
       
-      EndianType endian;
       for(uint8_t i = 0; i < InputBlockSize; i += value_size)
       {
-         endian.toInteger(BytesContainer(block.begin() + i, block.begin() + i + value_size));
-         int_block.push_back(endian.getValue());
-         endian.resetValue();
+         int_block.push_back(EndianType::toInteger(BytesContainer(block.begin() + i, block.begin() + i + value_size)));
       }
 
       return int_block;
@@ -56,18 +51,12 @@ class InputOutputBlockGetter<BytesContainer, uint64_t, 8, EndianType>
 public:
    static const BytesContainer outputBlock(const uint64_t &int_block)
    {
-      EndianType endian;
-      endian.toBytes(int_block);
-
-      return endian.getBytes();
+      return EndianType::toBytesVector(int_block);
    }
    
    static const uint64_t inputBlock(const BytesContainer &block)
    {
-      EndianType endian;
-      endian.toInteger(block);
-
-      return endian.getValue();
+      return EndianType::toInteger(block);
    }
 };
 

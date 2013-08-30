@@ -10,7 +10,6 @@
 
 constexpr uint8_t Twofish::RS[][8];
 constexpr uint8_t Twofish::MDS[][4];
-//constexpr uint8_t Twofish::t[][4][16];
 constexpr uint8_t Twofish::Q[][256];
 
 void Twofish::setKey(const BytesContainer &key)
@@ -47,11 +46,8 @@ uint8_t Twofish::GFMultiply(const uint8_t a, uint8_t b, const uint16_t p)
 uint32_t Twofish::h(const uint32_t X, const BytesContainer &L) const
 {
    // Split X into 4 bytes in little endian.
-   LittleEndian32 LE;
-   LE.toBytes(X);
-   
    const uint8_t k = L.size() >> 2;
-   BytesContainer y(LE.getBytes());
+   BytesContainer y = LittleEndian::toBytesVector(X);
    if(k == 4)
    {
       constexpr uint8_t k4[4] = {1, 0, 0, 1};
@@ -85,9 +81,8 @@ uint32_t Twofish::h(const uint32_t X, const BytesContainer &L) const
          z[i] ^= GFMultiply(MDS[i][j], y[j], 0x169);
       }
    }
-   LE.toInteger(z);
    
-   return LE.getValue();
+   return LittleEndian::toInteger(z);
 }
 
 void Twofish::generateSubkeys()

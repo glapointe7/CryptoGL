@@ -2,9 +2,68 @@
 #ifndef BIGENDIAN_HPP
 #define BIGENDIAN_HPP
 
-#include "Endianness.hpp"
+#include <vector>
 
-template <class UInt>
+class BigEndian
+{
+public:
+   typedef std::vector<uint8_t> BytesVector;
+   static const BytesVector toBytesVector(const uint16_t value)
+   {
+      return {value >> 8, 
+              value & 0xFF};
+   }
+   
+   static const BytesVector toBytesVector(const uint32_t value)
+   {
+      return {value >> 24, 
+              (value >> 16) & 0xFF, 
+              (value >> 8) & 0xFF, 
+              value & 0xFF};
+   }
+   
+   static const BytesVector toBytesVector(const uint64_t &value)
+   {
+      return {value >> 56, 
+              (value >> 48) & 0xFF, 
+              (value >> 40) & 0xFF, 
+              (value >> 32) & 0xFF, 
+              (value >> 24) & 0xFF, 
+              (value >> 16) & 0xFF, 
+              (value >> 8) & 0xFF, 
+              value & 0xFF};
+   }
+   
+   static const uint16_t toInteger(const BytesVector &bytes)
+   {
+      return (bytes[0] << 8) 
+              | bytes[1];
+   }
+   
+   static const uint32_t toInteger(const BytesVector &bytes)
+   {
+      return (bytes[0] << 24) 
+              | (bytes[1] << 16) 
+              | (bytes[2] << 8) 
+              | bytes[3];
+   }
+   
+   static const uint64_t toInteger(const BytesVector &bytes)
+   {
+      return (static_cast<uint64_t>(bytes[0]) << 56) 
+              | (static_cast<uint64_t>(bytes[1]) << 48) 
+              | (static_cast<uint64_t>(bytes[2]) << 40) 
+              | (static_cast<uint64_t>(bytes[3]) << 32)
+              | (bytes[4] << 24)
+              | (bytes[5] << 16)
+              | (bytes[6] << 8)
+              | bytes[7];
+   }
+};
+
+
+
+/*template <class UInt>
 class BigEndian : public Endianness<UInt>
 {
 public:   
@@ -28,6 +87,6 @@ public:
 
 using BigEndian16 = BigEndian<uint16_t>;
 using BigEndian32 = BigEndian<uint32_t>;
-using BigEndian64 = BigEndian<uint64_t>;
+using BigEndian64 = BigEndian<uint64_t>;*/
 
 #endif

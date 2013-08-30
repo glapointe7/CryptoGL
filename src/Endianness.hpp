@@ -13,8 +13,8 @@ protected:
    Endianness() { bytes.resize(sizeof(UInt)); value = 0u; }
    virtual ~Endianness() {}
    
-   virtual void toBytes(const UInt &word) = 0;
-   virtual void toInteger(const BytesContainer &bytes) = 0;
+   //virtual void toBytes(const UInt &word) = 0;
+   //virtual void toInteger(const BytesContainer &bytes) = 0;
 
    UInt value = 0u;
    BytesContainer bytes;

@@ -28,10 +28,7 @@ void DES::setKey(const BytesContainer &key)
 
 void DES::generateSubkeys()
 {
-   BigEndian64 BE;
-   BE.toInteger(key);
-   const uint64_t key_bits = BE.getValue();
-   BE.resetValue();
+   const uint64_t key_bits = BigEndian::toInteger(key);
 
    // We permute with the PC1 table to get a 56-bits key.
    const uint64_t K56 = getBitsFromTable(key_bits, PC1, 64, 56);

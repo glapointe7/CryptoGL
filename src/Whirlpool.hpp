@@ -9,7 +9,7 @@
 
 #define INPUT_BLOCK_LENGTH 64
 
-class Whirlpool : public HashFunction<uint64_t, BigEndian64>
+class Whirlpool : public HashFunction<uint64_t, BigEndian>
 {
 public:
    Whirlpool() : HashFunction(INPUT_BLOCK_LENGTH) {}

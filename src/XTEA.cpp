@@ -17,13 +17,10 @@ void XTEA::setKey(const BytesContainer &key)
 
 void XTEA::generateSubkeys()
 {
-   BigEndian32 BE;
    uint32_t tmp_key[4];
    for (uint8_t i = 0; i < 16; i += 4)
    {
-      BE.toInteger(BytesContainer(key.begin() + i, key.begin() + i + 4));
-      tmp_key[i >> 2] = BE.getValue();
-      BE.resetValue();
+      tmp_key[i >> 2] = BigEndian::toInteger(BytesContainer(key.begin() + i, key.begin() + i + 4));
    }
 
    uint32_t sum = 0;

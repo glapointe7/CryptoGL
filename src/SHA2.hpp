@@ -13,14 +13,14 @@
 #define INPUT64_BLOCK_LENGTH 128
 
 template <class UInt>
-class SHA2 : public HashFunction<UInt, BigEndian<UInt> >
+class SHA2 : public HashFunction<UInt, BigEndian>
 {
 protected:   
-   typedef typename HashFunction<UInt, BigEndian<UInt> >::UIntContainer UIntContainer;
-   typedef typename HashFunction<UInt, BigEndian<UInt> >::BytesContainer BytesContainer;
+   typedef typename HashFunction<UInt, BigEndian>::UIntContainer UIntContainer;
+   typedef typename HashFunction<UInt, BigEndian>::BytesContainer BytesContainer;
    
    SHA2(const UIntContainer &state, const uint8_t in_block_length) 
-      : HashFunction<UInt, BigEndian<UInt> >(in_block_length), IV(state) {}
+      : HashFunction<UInt, BigEndian>(in_block_length), IV(state) {}
    virtual ~SHA2() {}
    
    virtual const BytesContainer encode(const BytesContainer &data) = 0;

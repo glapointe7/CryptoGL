@@ -6,19 +6,19 @@
 #include "BigEndian.hpp"
 
 template <class UInt>
-class Blake : public HashFunction<UInt, BigEndian<UInt> >
+class Blake : public HashFunction<UInt, BigEndian>
 {   
 protected:
-   typedef typename HashFunction<UInt, BigEndian<UInt> >::UIntContainer UIntContainer;
-   typedef typename HashFunction<UInt, BigEndian<UInt> >::BytesContainer BytesContainer;
+   typedef typename HashFunction<UInt, BigEndian>::UIntContainer UIntContainer;
+   typedef typename HashFunction<UInt, BigEndian>::BytesContainer BytesContainer;
    
    /* Default constructor : no salt provided. */
    Blake(const UIntContainer &state, const uint8_t in_block_length) 
-      : HashFunction<UInt, BigEndian<UInt> >(in_block_length), IV(state), salt({0, 0, 0, 0}) {}
+      : HashFunction<UInt, BigEndian>(in_block_length), IV(state), salt({0, 0, 0, 0}) {}
    
       /* Constructor with a salt provided. */
    Blake(const UIntContainer &state, const UIntContainer &salt, const uint8_t in_block_length) 
-      : HashFunction<UInt, BigEndian<UInt> >(in_block_length), IV(state), salt(salt) {}
+      : HashFunction<UInt, BigEndian>(in_block_length), IV(state), salt(salt) {}
    
    virtual ~Blake() {}
    

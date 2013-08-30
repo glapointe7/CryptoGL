@@ -7,7 +7,7 @@
 #include "BlockCipher.hpp"
 #include "BigEndian.hpp"
 
-class Noekeon : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian32>
+class Noekeon : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian>
 {
 public:
    explicit Noekeon(const BytesContainer &key) 

@@ -7,7 +7,7 @@
 #include "HashFunction.hpp"
 #include "LittleEndian.hpp"
 
-class Tiger : public HashFunction<uint64_t, LittleEndian64>
+class Tiger : public HashFunction<uint64_t, LittleEndian>
 {   
 public:
    enum class HashSize : uint8_t { _128bits = 4, _160bits = 5, _192bits = 6 };

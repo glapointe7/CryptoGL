@@ -49,24 +49,19 @@ protected:
    template<class Endian_type>
    static void appendLength(BytesContainer &bytes, const uint64_t &length)
    {
-      Endian_type E;
-      E.toBytes(length);
-      const BytesContainer bytes_pad(E.getBytes());
+      const BytesContainer bytes_pad = Endian_type::toBytesVector(length);
       bytes.insert(bytes.end(), bytes_pad.begin(), bytes_pad.end());
    }
    
    const UIntContainer getInputBlocks(const BytesContainer &bytes, const uint64_t &block_index) const
    {      
-      Endian E;
       const uint8_t UInt_size = sizeof(UInt);
 
       UIntContainer words;
       words.reserve(in_block_length / UInt_size);
       for (uint8_t k = 0; k < in_block_length; k += UInt_size)
       {
-         E.toInteger(BytesContainer(bytes.begin() + k + block_index, bytes.begin() + k + block_index + UInt_size));
-         words.push_back(E.getValue());
-         E.resetValue();
+         words.push_back(Endian::toInteger(BytesContainer(bytes.begin() + k + block_index, bytes.begin() + k + block_index + UInt_size)));
       }
       
       return words;
@@ -74,7 +69,6 @@ protected:
    
    static const BytesContainer getOutput(const uint8_t max_words, const UIntContainer &hash)
    {
-      Endian E;
       const uint8_t UInt_size = sizeof(UInt);
       BytesContainer output;
       output.reserve(max_words << 2);
@@ -87,15 +81,13 @@ protected:
       
       for (uint8_t j = 0; j < max; ++j)
       {
-         E.toBytes(hash[j]);
-         const BytesContainer bytes(E.getBytes());
+         const BytesContainer bytes = Endian::toBytes(hash[j]);
          output.insert(output.end(), bytes.begin(), bytes.end());
       }
       
       if (max_words % 2 && UInt_size == 8)
       {
-         E.toBytes(hash[max]);
-         const BytesContainer bytes(E.getBytes());
+         const BytesContainer bytes = Endian::toBytes(hash[max]);
          output.insert(output.end(), bytes.begin(), bytes.begin() + 4);
       }
 

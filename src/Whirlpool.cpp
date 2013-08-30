@@ -69,7 +69,7 @@ void Whirlpool::compress(const UInt64Container &block, UInt64Container &state)
 const Whirlpool::BytesContainer Whirlpool::encode(const BytesContainer &data)
 {
    BytesContainer padded_data = appendPadding(data);
-   appendLength<BigEndian64>(padded_data, data.size() << 3);
+   appendLength<BigEndian>(padded_data, data.size() << 3);
 
    UInt64Container state(IV, IV + 8);
    const uint64_t padded_data_len = padded_data.size();

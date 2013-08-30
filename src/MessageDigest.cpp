@@ -67,8 +67,8 @@ const MessageDigest::BytesContainer MD2::encode(const BytesContainer &data)
 
 const MessageDigest::BytesContainer MD4::encode(const BytesContainer &data)
 {
-   BytesContainer bytes(appendPadding(data));
-   appendLength<LittleEndian64>(bytes, data.size() << 3);
+   BytesContainer bytes = appendPadding(data);
+   appendLength<LittleEndian>(bytes, data.size() << 3);
    
    const uint64_t bytes_len = bytes.size();
    /* Initial values. */
@@ -117,8 +117,8 @@ const MessageDigest::BytesContainer MD4::encode(const BytesContainer &data)
 
 const MessageDigest::BytesContainer MD5::encode(const BytesContainer &data)
 {
-   BytesContainer bytes(appendPadding(data));
-   appendLength<LittleEndian64>(bytes, data.size() << 3);
+   BytesContainer bytes = appendPadding(data);
+   appendLength<LittleEndian>(bytes, data.size() << 3);
    
    const uint64_t bytes_len = bytes.size();
    /* Initial values. */
