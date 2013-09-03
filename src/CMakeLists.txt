@@ -27,7 +27,6 @@ set(SRC
    Digest.hpp
    File.hpp
    Bits.hpp
-   RandomBitGen.hpp RandomBitGen.cpp
    Types.hpp
 
    exceptions/Exception.hpp
@@ -62,6 +61,7 @@ set(SRC
 	Fleissner.hpp Fleissner.cpp
 	Hill.hpp Hill.cpp
    MessageDigest.hpp MessageDigest.cpp
+   MD2.hpp MD2.cpp
    SHA2.hpp SHA2.cpp
    SHA1.hpp SHA1.cpp
    SpongeFunction.hpp

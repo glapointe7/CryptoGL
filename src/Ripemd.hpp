@@ -10,10 +10,12 @@
 class Ripemd : public HashFunction<uint32_t, LittleEndian32>
 {
 protected:
-   explicit Ripemd(const UInt32Vector &state) : HashFunction(64), IV(state) {}
+   Ripemd(const UInt32Vector &IV, const uint8_t rounds, const uint8_t output_size) 
+      : HashFunction(64, output_size), IV(IV), rounds(rounds) {}
    virtual ~Ripemd() {}
    
    virtual const BytesVector encode(const BytesVector &data) = 0;
+   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) = 0;
    
    static constexpr uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
    {
@@ -40,13 +42,13 @@ protected:
       return x ^ (y | ~z);
    }
    
-   void process128_256(const UInt32Vector &words, UInt32Vector &hash1, UInt32Vector &hash2, const uint8_t j);
-   void process160_320(const UInt32Vector &words, UInt32Vector &hash1, UInt32Vector &hash2, const uint8_t j);
-   void swapHashWithoutRotate(UInt32Vector &hash, const uint32_t tmp);
-   void swapHashWithRotate(UInt32Vector &hash, const uint32_t tmp);
+   void process128_256(const UInt32Vector &words, UInt32Vector &hash, const uint8_t j);
+   void process160_320(const UInt32Vector &words, UInt32Vector &hash, const uint8_t j);
    
    /* Initial vector. */
    const UInt32Vector IV;
+   
+   const uint8_t rounds;
    
    static constexpr uint32_t magic_numbers1[5] = {0, 0x5A827999, 0x6ED9EBA1, 0x8F1BBCDC, 0xA953FD4E};
    
@@ -90,30 +92,42 @@ protected:
 class Ripemd128 : public Ripemd
 {
 public:
-   Ripemd128() : Ripemd({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476}) {}
+   Ripemd128() : Ripemd({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476}, 64, 16) {}
    virtual const BytesVector encode(const BytesVector &data) final;
+   
+private:
+   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
 };
 
 class Ripemd160 : public Ripemd
 {
 public:
-   Ripemd160() : Ripemd({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0}) {}
+   Ripemd160() : Ripemd({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0}, 80, 20) {}
    virtual const BytesVector encode(const BytesVector &data) final;
+   
+private:
+   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
 };
 
 class Ripemd256 : public Ripemd
 {
 public:
    Ripemd256() : Ripemd({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476,
-      0x76543210, 0xFEDCBA98, 0x89ABCDEF, 0x01234567}) {}
+      0x76543210, 0xFEDCBA98, 0x89ABCDEF, 0x01234567}, 64, 32) {}
    virtual const BytesVector encode(const BytesVector &data) final;
+   
+private:
+   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
 };
 
 class Ripemd320 : public Ripemd
 {
 public:
    Ripemd320() : Ripemd({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0,
-      0x76543210, 0xFEDCBA98, 0x89ABCDEF, 0x01234567, 0x3C2D1E0F}) {}
+      0x76543210, 0xFEDCBA98, 0x89ABCDEF, 0x01234567, 0x3C2D1E0F}, 80, 40) {}
    virtual const BytesVector encode(const BytesVector &data) final;
+   
+private:
+   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
 };
 #endif

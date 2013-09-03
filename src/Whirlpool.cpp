@@ -17,7 +17,7 @@ uint64_t Whirlpool::applyGammaPiTheta(UInt64Vector &key, const uint8_t index) co
    return tmp_key;
 }
 
-void Whirlpool::compress(const UInt64Vector &block, UInt64Vector &state)
+void Whirlpool::compress(UInt64Vector &block, UInt64Vector &state)
 {
    // The last state becomes the key.
    UInt64Vector key(state);
@@ -31,7 +31,7 @@ void Whirlpool::compress(const UInt64Vector &block, UInt64Vector &state)
    
    UInt64Vector hash(8, 0);
    UInt64Vector tmp_key(8, 0);
-   for (uint8_t i = 0; i < number_of_rounds; i += 2)
+   for (uint8_t i = 0; i < rounds; i += 2)
    {
       // Odd rounds.
       for (uint8_t j = 0; j < 8; ++j)
@@ -73,11 +73,11 @@ const BytesVector Whirlpool::encode(const BytesVector &data)
 
    UInt64Vector state(IV, IV + 8);
    const uint64_t padded_data_len = padded_data.size();
-   for (uint64_t i = 0; i < padded_data_len; i += in_block_length)
+   for (uint64_t i = 0; i < padded_data_len; i += block_size)
    {
-      const UInt64Vector input_block = getInputBlocks(padded_data, i);
-      compress(input_block, state);
+      UInt64Vector int_block = getInputBlocks(padded_data, i);
+      compress(int_block, state);
    }
 
-   return getOutput(16, state);
+   return getOutput(state);
 }

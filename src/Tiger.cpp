@@ -60,6 +60,24 @@ const BytesVector Tiger::appendPadding(const BytesVector &data) const
    return bytes_pad;
 }
 
+void Tiger::compress(UInt64Vector &int_block, UInt64Vector &state)
+{
+   UInt64Vector hash(state);
+   const UInt64Vector saved(hash);
+   
+   pass(hash[0], hash[1], hash[2], int_block, 5);
+   applyKeySchedule(int_block);
+   pass(hash[2], hash[0], hash[1], int_block, 7);
+   applyKeySchedule(int_block);
+   pass(hash[1], hash[2], hash[0], int_block, 9);
+
+   hash[0] ^= saved[0];
+   hash[1] -= saved[1];
+   hash[2] += saved[2];
+   
+   state = hash;
+}
+
 const BytesVector Tiger::encode(const BytesVector &data)
 {
    BytesVector bytes = appendPadding(data);
@@ -67,24 +85,11 @@ const BytesVector Tiger::encode(const BytesVector &data)
 
    UInt64Vector state(IV, IV + 3);
    const uint64_t bytes_len = bytes.size();
-   for (uint64_t i = 0; i < bytes_len; i += in_block_length)
+   for (uint64_t i = 0; i < bytes_len; i += block_size)
    {
-      UInt64Vector words = getInputBlocks(bytes, i);
-      UInt64Vector hash(state);
-
-      const UInt64Vector saved(hash);
-      pass(hash[0], hash[1], hash[2], words, 5);
-      applyKeySchedule(words);
-      pass(hash[2], hash[0], hash[1], words, 7);
-      applyKeySchedule(words);
-      pass(hash[1], hash[2], hash[0], words, 9);
-      
-      hash[0] ^= saved[0];
-      hash[1] -= saved[1];
-      hash[2] += saved[2];
-      
-      state = hash;
+      UInt64Vector int_block = getInputBlocks(bytes, i);
+      compress(int_block, state);
    }
    
-   return getOutput(output_size, state);
+   return getOutput(state);
 }

@@ -35,6 +35,21 @@ public:
 };
 
 template <>
+class LittleEndian<uint8_t>
+{
+public:
+   static const BytesVector toBytesVector(const uint8_t value)
+   {
+      return {value};
+   }
+   
+   static const uint8_t toInteger(const BytesVector &bytes)
+   {
+      return bytes[0];
+   }
+};
+
+template <>
 class LittleEndian<uint16_t>
 {
 public:
@@ -100,6 +115,7 @@ public:
    }
 };
 
+using LittleEndian8 = LittleEndian<uint8_t>;
 using LittleEndian16 = LittleEndian<uint16_t>;
 using LittleEndian32 = LittleEndian<uint32_t>;
 using LittleEndian64 = LittleEndian<uint64_t>;

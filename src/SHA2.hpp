@@ -9,33 +9,32 @@
 
 #include "Bits.hpp"
 
-#define INPUT32_BLOCK_LENGTH 64
-#define INPUT64_BLOCK_LENGTH 128
-
-template <class UInt>
-class SHA2 : public HashFunction<UInt, BigEndian<UInt>>
+template <class DataType, uint8_t InputBlockSize>
+class SHA2 : public HashFunction<DataType, BigEndian<DataType>>
 {
 protected:   
-   typedef typename HashFunction<UInt, BigEndian<UInt>>::UIntContainer UIntContainer;
+   typedef typename HashFunction<DataType, BigEndian<DataType>>::DataTypeVector DataTypeVector;
    
-   SHA2(const UIntContainer &state, const uint8_t in_block_length) 
-      : HashFunction<UInt, BigEndian<UInt>>(in_block_length), IV(state) {}
+   SHA2(const DataTypeVector &IV, const uint8_t rounds, const uint8_t output_size) 
+      : HashFunction<DataType, BigEndian<DataType>>(InputBlockSize, output_size), 
+           IV(IV), rounds(rounds) {}
    virtual ~SHA2() {}
    
    virtual const BytesVector encode(const BytesVector &data) = 0;
-   virtual const BytesVector process(const BytesVector &data, const uint8_t truncate_to) = 0;
+   virtual void compress(DataTypeVector &int_block, DataTypeVector &state) = 0;
+   //virtual const BytesVector processEncode(const BytesVector &data, const uint8_t truncate_to) = 0;
    
    /* Extend the 16 words vector to 'max_size' words with specific operations. */
-   static void extendWords(UIntContainer &words, const uint8_t max_size, const BytesVector &to_shift)
+   void extendWords(DataTypeVector &words, const BytesVector &to_shift) const
    {
-      for (uint8_t j = 16; j < max_size; ++j)
+      for (uint8_t j = 16; j < rounds; ++j)
       {
          words[j] = words[j - 16] + B(words[j - 15], to_shift[0], to_shift[1], to_shift[2])
                  + words[j - 7] + B(words[j - 2], to_shift[3], to_shift[4], to_shift[5]);
       }
    }
    
-   void swapHash(UIntContainer &hash, const UInt &tmp1, const UInt &tmp2)
+   static void swapHash(DataTypeVector &hash, const DataType &tmp1, const DataType &tmp2)
    {
       hash[7] = hash[6];
       hash[6] = hash[5];
@@ -47,8 +46,8 @@ protected:
       hash[0] = tmp1 + tmp2;
    }
    
-   /* Sum in IV the hashes vector. */
-   void sumHash(UIntContainer &states, const UIntContainer &hash)
+   /* Sum in current state the hashes vector. */
+   static void finalize(DataTypeVector &states, const DataTypeVector &hash)
    {
       const uint8_t hash_size = hash.size();
       for (uint8_t j = 0; j < hash_size; ++j)
@@ -57,44 +56,48 @@ protected:
       }
    }
 
-   static constexpr UInt maj(const UInt &x, const UInt &y, const UInt &z)
+   static constexpr DataType maj(const DataType &x, const DataType &y, const DataType &z)
    {
       return (x & y) ^ (x & z) ^ (y & z);
    }
 
-   static constexpr UInt ch(const UInt &x, const UInt &y, const UInt &z)
+   static constexpr DataType ch(const DataType &x, const DataType &y, const DataType &z)
    {
       return (x & y) ^ (~x & z);
    }
 
-   static constexpr UInt A(const UInt &hash, const uint8_t x, const uint8_t y, const uint8_t z)
+   static constexpr DataType A(const DataType &hash, const uint8_t x, const uint8_t y, const uint8_t z)
    {
-      return Bits::rotateRight(hash, x, sizeof(UInt) << 3) 
-              ^ Bits::rotateRight(hash, y, sizeof(UInt) << 3) 
-              ^ Bits::rotateRight(hash, z, sizeof(UInt) << 3);
+      return Bits::rotateRight(hash, x, sizeof(DataType) << 3) 
+              ^ Bits::rotateRight(hash, y, sizeof(DataType) << 3) 
+              ^ Bits::rotateRight(hash, z, sizeof(DataType) << 3);
    }
 
-   static constexpr UInt B(const UInt &word, const uint8_t x, const uint8_t y, const uint8_t z)
+   static constexpr DataType B(const DataType &word, const uint8_t x, const uint8_t y, const uint8_t z)
    {
-      return Bits::rotateRight(word, x, sizeof(UInt) << 3) 
-              ^ Bits::rotateRight(word, y, sizeof(UInt) << 3) 
+      return Bits::rotateRight(word, x, sizeof(DataType) << 3) 
+              ^ Bits::rotateRight(word, y, sizeof(DataType) << 3) 
               ^ (word >> z);
    }
    
-   UIntContainer IV;
+   DataTypeVector IV;
+   const uint8_t rounds;
 };
 
 /* Abstract class for SHA algorithm that uses only 64 bits blocks to encode. */
-class SHA32Bits : public SHA2<uint32_t>
+class SHA32Bits : public SHA2<uint32_t, 64>
 {
+public:
+   virtual const BytesVector encode(const BytesVector &data) final;
+   
 protected:
-   explicit SHA32Bits(const UInt32Vector &state) : SHA2(state, INPUT32_BLOCK_LENGTH) {}
+   SHA32Bits(const UInt32Vector &IV, const uint8_t output_size) 
+      : SHA2(IV, 64, output_size) {}
    virtual ~SHA32Bits() {}
-   
-   virtual const BytesVector encode(const BytesVector &) = 0;
-   virtual const BytesVector process(const BytesVector &data, const uint8_t truncate_to) final;
-   
+      
 private:
+   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
+   
    static constexpr uint32_t round_constants[64] = {
       0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
       0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -108,16 +111,19 @@ private:
 };
 
 /* Abstract class for SHA algorithm that uses only 128 bits blocks to encode. */
-class SHA64Bits : public SHA2<uint64_t>
-{ 
-protected:   
-   explicit SHA64Bits(const UInt64Vector &state) : SHA2(state, INPUT64_BLOCK_LENGTH) {}
-   virtual ~SHA64Bits() {}
+class SHA64Bits : public SHA2<uint64_t, 128>
+{
+public:
+   virtual const BytesVector encode(const BytesVector &data) final;
    
-   virtual const BytesVector encode(const BytesVector &) = 0;
-   virtual const BytesVector process(const BytesVector &data, const uint8_t truncate_to) final;
-  
+protected:   
+   SHA64Bits(const UInt64Vector &IV, const uint8_t output_size) 
+      : SHA2(IV, 80, output_size) {}
+   virtual ~SHA64Bits() {}
+     
 private:
+   virtual void compress(UInt64Vector &int_block, UInt64Vector &state) final;
+   
    /* Derived from the fractional parts of the cube roots of the first eighty primes. */
    static constexpr uint64_t first_cubic_root_primes[80] = {
       0x428A2F98D728AE22, 0x7137449123EF65CD, 0xB5C0FBCFEC4D3B2F, 0xE9B5DBA58189DBBC,
@@ -146,15 +152,17 @@ private:
 class SHA224 : public SHA32Bits
 {
 public:
-   SHA224() : SHA32Bits({0xc1059ed8, 0x367cd507, 0x3070dd17, 0xf70e5939, 0xffc00b31, 0x68581511, 0x64f98fa7, 0xbefa4fa4}) {}
-   virtual const BytesVector encode(const BytesVector &data) final;
+   SHA224() 
+      : SHA32Bits({0xc1059ed8, 0x367cd507, 0x3070dd17, 0xf70e5939, 
+              0xffc00b31, 0x68581511, 0x64f98fa7, 0xbefa4fa4}, 28) {}
 };
 
 class SHA256 : public SHA32Bits
 {
 public:
-   SHA256() : SHA32Bits({0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19}) {}
-   virtual const BytesVector encode(const BytesVector &data) final;
+   SHA256() 
+      : SHA32Bits({0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 
+              0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19}, 32) {}
 };
 
 class SHA384 : public SHA64Bits
@@ -162,9 +170,7 @@ class SHA384 : public SHA64Bits
 public:
    SHA384() : SHA64Bits({
       0xcbbb9d5dc1059ed8, 0x629a292a367cd507, 0x9159015a3070dd17, 0x152fecd8f70e5939,
-      0x67332667ffc00b31, 0x8eb44a8768581511, 0xdb0c2e0d64f98fa7, 0x47b5481dbefa4fa4
-   }) {}
-   virtual const BytesVector encode(const BytesVector &data) final;
+      0x67332667ffc00b31, 0x8eb44a8768581511, 0xdb0c2e0d64f98fa7, 0x47b5481dbefa4fa4}, 48) {}
 };
 
 class SHA512 : public SHA64Bits
@@ -172,16 +178,14 @@ class SHA512 : public SHA64Bits
 public:
    SHA512() : SHA64Bits({
       0x6A09E667F3BCC908, 0xBB67AE8584CAA73B, 0x3C6EF372FE94F82B, 0xA54FF53A5F1D36F1,
-      0x510E527FADE682D1, 0x9B05688C2B3E6C1F, 0x1F83D9ABFB41BD6B, 0x5BE0CD19137E2179
-   }) {}
-   virtual const BytesVector encode(const BytesVector &data) final;
+      0x510E527FADE682D1, 0x9B05688C2B3E6C1F, 0x1F83D9ABFB41BD6B, 0x5BE0CD19137E2179}, 64) {}
 
-   inline const UInt64Vector getIV()
+   const UInt64Vector getIV() const
    {
       return IV;
    }
 
-   inline void setIV(const UInt64Vector &IV)
+   void setIV(const UInt64Vector &IV)
    {
       this->IV = IV;
    }
@@ -190,9 +194,8 @@ public:
 class SHA512_t : public SHA64Bits
 {
 protected:
-   SHA512_t() : SHA64Bits({}) {}
+   explicit SHA512_t(const uint8_t output_size) : SHA64Bits({}, output_size) {}
    virtual ~SHA512_t() {}
-   virtual const BytesVector encode(const BytesVector &data) = 0;
    
    void buildIV(const BytesVector &t);
 };
@@ -200,13 +203,13 @@ protected:
 class SHA512_224 : public SHA512_t
 {
 public:
-   virtual const BytesVector encode(const BytesVector &data) final;
+   SHA512_224() : SHA512_t(28) { buildIV({0x32, 0x32, 0x34}); }
 };
 
 class SHA512_256 : public SHA512_t
 {
 public:
-   virtual const BytesVector encode(const BytesVector &data) final;
+   SHA512_256() : SHA512_t(32) { buildIV({0x32, 0x35, 0x36}); }
 };
 
 #endif

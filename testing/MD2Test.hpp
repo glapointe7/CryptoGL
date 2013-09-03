@@ -1,9 +1,9 @@
 
 #ifndef MD2TEST_HPP
-#define	MD2TEST_HPP
+#define MD2TEST_HPP
 
 #include <gtest/gtest.h>
-#include "../src/MessageDigest.hpp"
+#include "../src/MD2.hpp"
 #include "../src/Digest.hpp"
 
 class MD2Test : public ::testing::Test

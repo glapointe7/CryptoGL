@@ -5,7 +5,6 @@
 #include "Cipher.hpp"
 
 #include <vector>
-#include <stdint.h>
 
 #include "big_integers/BigIntegerLibrary.hh"
 

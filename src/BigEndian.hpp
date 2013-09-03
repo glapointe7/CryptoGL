@@ -35,6 +35,21 @@ public:
 };
 
 template <>
+class BigEndian<uint8_t>
+{
+public:
+   static const BytesVector toBytesVector(const uint8_t value)
+   {
+      return {value};
+   }
+   
+   static const uint8_t toInteger(const BytesVector &bytes)
+   {
+      return bytes[0];
+   }
+};
+
+template <>
 class BigEndian<uint16_t>
 {
 public:
@@ -100,6 +115,7 @@ public:
    }
 };
 
+using BigEndian8 = BigEndian<uint8_t>;
 using BigEndian16 = BigEndian<uint16_t>;
 using BigEndian32 = BigEndian<uint32_t>;
 using BigEndian64 = BigEndian<uint64_t>;

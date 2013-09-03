@@ -10,10 +10,12 @@
 class SHA1 : public HashFunction<uint32_t, BigEndian32>
 {
 public:
-   SHA1() : HashFunction<uint32_t, BigEndian32>(INPUT_BLOCK_LENGTH) {}
+   SHA1() : HashFunction<uint32_t, BigEndian32>(INPUT_BLOCK_LENGTH, 20) {}
    virtual const BytesVector encode(const BytesVector &data) final;
    
 private:
+   void compress(UInt32Vector &int_block, UInt32Vector &state);
+   
    static constexpr uint32_t IV[5] = {
       0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xC3D2E1F0
    };
@@ -32,6 +34,8 @@ private:
    {
       return x ^ y ^ z;
    }
+   
+   static constexpr uint8_t rounds = 80;
 };
 
 #endif

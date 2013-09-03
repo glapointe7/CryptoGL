@@ -10,10 +10,9 @@
 class Tiger : public HashFunction<uint64_t, LittleEndian64>
 {   
 public:
-   enum class HashSize : uint8_t { _128bits = 4, _160bits = 5, _192bits = 6 };
+   enum class HashSize : uint8_t { _128bits = 16, _160bits = 20, _192bits = 24 };
    
-   explicit Tiger(const HashSize size) : HashFunction(64), 
-           output_size(static_cast<uint8_t>(size)) {}
+   explicit Tiger(const HashSize size) : HashFunction(64, static_cast<uint8_t>(size)) {}
    virtual ~Tiger() {}
 
    virtual const BytesVector encode(const BytesVector &data) final;
@@ -25,7 +24,7 @@ private:
    void applyRound(uint64_t &a, uint64_t &b, uint64_t &c, const uint64_t &word, const uint8_t mult) const;
    void pass(uint64_t &a, uint64_t &b, uint64_t &c, const UInt64Vector &words, const uint8_t mult) const;
    
-   uint8_t output_size;
+   void compress(UInt64Vector &int_block, UInt64Vector &state);
    
    static constexpr uint64_t IV[3] = {
       0x0123456789ABCDEF, 0xFEDCBA9876543210, 0xF096A5B4C3B2E187
