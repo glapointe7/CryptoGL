@@ -15,13 +15,13 @@ protected:
    
    /* Default constructor : no salt provided. */
    Blake(const DataTypeVector &IV, const uint8_t rounds, const uint8_t output_size) 
-      : HashFunction<DataType, BigEndian<DataType>>(InputBlockSize, output_size), 
-           IV(IV), salt({0, 0, 0, 0}), rounds(rounds) {}
+      : HashFunction<DataType, BigEndian<DataType>>(InputBlockSize, output_size, IV), 
+           salt({0, 0, 0, 0}), rounds(rounds) {}
    
       /* Constructor with a salt provided. */
    Blake(const DataTypeVector &IV, const DataTypeVector &salt, const uint8_t rounds, const uint8_t output_size) 
-      : HashFunction<DataType, BigEndian<DataType>>(InputBlockSize, output_size), 
-           IV(IV), salt(salt), rounds(rounds) {}
+      : HashFunction<DataType, BigEndian<DataType>>(InputBlockSize, output_size, IV), 
+           salt(salt), rounds(rounds) {}
    
    virtual ~Blake() {}
    
@@ -72,7 +72,6 @@ protected:
       }
    }
    
-   const DataTypeVector IV;
    const DataTypeVector salt;
    uint64_t counter;
    const uint8_t rounds;
@@ -94,8 +93,8 @@ protected:
 class Blake32Bits : public Blake<uint32_t, 64>
 {
 protected:
-   Blake32Bits(const UInt32Vector &state, const uint8_t output_size) 
-      : Blake(state, 14, output_size) {}
+   Blake32Bits(const UInt32Vector &IV, const uint8_t output_size) 
+      : Blake(IV, 14, output_size) {}
    virtual ~Blake32Bits() {}
    
 public:
@@ -120,8 +119,8 @@ private:
 class Blake64Bits : public Blake<uint64_t, 128>
 {
 protected:
-   Blake64Bits(const UInt64Vector &state, const uint8_t output_size) 
-      : Blake(state, 16, output_size) {}
+   Blake64Bits(const UInt64Vector &IV, const uint8_t output_size) 
+      : Blake(IV, 16, output_size) {}
    virtual ~Blake64Bits() {}
    
 public:

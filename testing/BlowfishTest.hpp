@@ -2,7 +2,7 @@
  * Test vectors taken here : http://www.schneier.com/code/vectors.txt
  */
 #ifndef BLOWFISHTEST_HPP
-#define	BLOWFISHTEST_HPP
+#define BLOWFISHTEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Blowfish.hpp"

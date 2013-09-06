@@ -7,6 +7,7 @@
 #include "BlockCipherModes.hpp"
 #include "BigEndian.hpp"
 #include "LittleEndian.hpp"
+#include "Padding.hpp"
 
 #include <functional>
 
@@ -67,7 +68,7 @@ public:
    /* Process general encoding for block ciphers. */
    const BytesVector encode(const BytesVector &message)
    {
-      const BytesVector message_padded = appendPadding(message, 0);
+      const BytesVector message_padded = Padding::zeros(message, InputBlockSize);
 
       const uint64_t message_padded_len = message_padded.size();
       BytesVector output;
@@ -159,19 +160,6 @@ protected:
       generateSubkeys();
    }
    
-   /* Pad 'data' with 'input_block_length' values given by 'fill_with'. */
-   const BytesVector appendPadding(const BytesVector &input, const uint8_t fill_with) const
-   {
-      BytesVector padded_input(input);
-      const uint8_t rest = input.size() % InputBlockSize;
-      if (rest != 0)
-      {
-         padded_input.insert(padded_input.end(), InputBlockSize - rest, fill_with);
-      }
-
-      return padded_input;
-   }
-
    BlockCipherModes *block_mode;
    uint8_t rounds;
    SubkeysContainer subkeys;

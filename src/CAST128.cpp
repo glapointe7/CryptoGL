@@ -107,21 +107,21 @@ void CAST128::generateSubkeys()
 
 const uint32_t CAST128::F(const uint32_t half_block, const uint8_t index) const
 {
-   const uint32_t I = Bits::rotateLeft(subkeys[index] + half_block, subkeys[index + 16] & 0x1F, 32);
+   const uint32_t I = Bits::rotateLeft(subkeys[index] + half_block, subkeys[index + 16] & 0x1F);
    return ((S[0][getByteFromInteger(I, 3)] ^ S[1][getByteFromInteger(I, 2)])
            - S[2][getByteFromInteger(I, 1)]) + S[3][getByteFromInteger(I, 0)];
 }
 
 uint32_t CAST128::F2(const uint32_t half_block, const uint8_t index) const
 {
-   const uint32_t I = Bits::rotateLeft(subkeys[index] ^ half_block, subkeys[index + 16] & 0x1F, 32);
+   const uint32_t I = Bits::rotateLeft(subkeys[index] ^ half_block, subkeys[index + 16] & 0x1F);
    return ((S[0][getByteFromInteger(I, 3)] - S[1][getByteFromInteger(I, 2)])
            + S[2][getByteFromInteger(I, 1)]) ^ S[3][getByteFromInteger(I, 0)];
 }
 
 uint32_t CAST128::F3(const uint32_t half_block, const uint8_t index) const
 {
-   const uint32_t I = Bits::rotateLeft(subkeys[index] - half_block, subkeys[index + 16] & 0x1F, 32);
+   const uint32_t I = Bits::rotateLeft(subkeys[index] - half_block, subkeys[index + 16] & 0x1F);
    return ((S[0][getByteFromInteger(I, 3)] + S[1][getByteFromInteger(I, 2)])
            ^ S[2][getByteFromInteger(I, 1)]) - S[3][getByteFromInteger(I, 0)];
 }

@@ -93,7 +93,7 @@ void Twofish::generateSubkeys()
    BytesVector Me, Mo;
    Me.reserve(k4);
    Mo.reserve(k4);
-   std::vector<BytesVector> S(k, BytesVector(4, 0));
+   BytesMatrix S(k, BytesVector(4, 0));
 
    for (uint8_t i = 0; i < k; ++i)
    {  
@@ -125,9 +125,9 @@ void Twofish::generateSubkeys()
    for(uint8_t i = 0; i < 20; ++i)
    {
       const uint32_t A = h(i * rho2, Me);
-      const uint32_t B = Bits::rotateLeft(h(rho2*i + rho, Mo), 8, 32);
+      const uint32_t B = Bits::rotateLeft(h(rho2*i + rho, Mo), 8);
       subkeys.push_back(A + B);
-      subkeys.push_back(Bits::rotateLeft(A + 2*B, 9, 32));
+      subkeys.push_back(Bits::rotateLeft(A + 2*B, 9));
    }
 }
 
@@ -139,7 +139,7 @@ uint32_t Twofish::g(const uint32_t X) const
 const UInt32Vector Twofish::F(const UInt32Vector half_block, const uint8_t round) const
 {
    const uint32_t T0 = g(half_block[0]);
-   const uint32_t T1 = g(Bits::rotateLeft(half_block[1], 8, 32));
+   const uint32_t T1 = g(Bits::rotateLeft(half_block[1], 8));
    
    return {T0 + T1 + subkeys[2*round + 8], T0 + 2*T1 + subkeys[2*round + 9]};
 }
@@ -149,8 +149,8 @@ void Twofish::encodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_
    for(uint8_t i = 0; i < rounds; ++i)
    {
       const UInt32Vector F_result = F(R, i);
-      L[0] = Bits::rotateRight(L[0] ^ F_result[0], 1, 32);
-      L[1] = Bits::rotateLeft(L[1], 1, 32) ^ F_result[1];
+      L[0] = Bits::rotateRight(L[0] ^ F_result[0], 1);
+      L[1] = Bits::rotateLeft(L[1], 1) ^ F_result[1];
       std::swap(R[0], L[0]);
       std::swap(R[1], L[1]);
    }
@@ -170,8 +170,8 @@ void Twofish::decodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_
       std::swap(R[0], L[0]);
       std::swap(R[1], L[1]);
       const UInt32Vector F_result = F(R, i);
-      L[0] = Bits::rotateLeft(L[0], 1, 32) ^ F_result[0];
-      L[1] = Bits::rotateRight(L[1] ^ F_result[1], 1, 32);
+      L[0] = Bits::rotateLeft(L[0], 1) ^ F_result[0];
+      L[1] = Bits::rotateRight(L[1] ^ F_result[1], 1);
    }
 }
 

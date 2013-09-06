@@ -10,13 +10,13 @@
 class MessageDigest : public HashFunction<uint32_t, LittleEndian32>
 {
 protected:
-   explicit MessageDigest(const uint8_t rounds) : HashFunction(64, 16), rounds(rounds) {}
+   explicit MessageDigest(const uint8_t rounds) 
+      : HashFunction(64, 16, {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476}), rounds(rounds) {}
    virtual ~MessageDigest() {}
    
    virtual const BytesVector encode(const BytesVector &data) = 0;
    virtual void compress(UInt32Vector &int_block, UInt32Vector &state) = 0;
-   
-   static constexpr uint32_t IV[4] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476};
+ 
    const uint8_t rounds;
 };
 

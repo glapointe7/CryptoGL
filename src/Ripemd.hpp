@@ -11,7 +11,7 @@ class Ripemd : public HashFunction<uint32_t, LittleEndian32>
 {
 protected:
    Ripemd(const UInt32Vector &IV, const uint8_t rounds, const uint8_t output_size) 
-      : HashFunction(64, output_size), IV(IV), rounds(rounds) {}
+      : HashFunction(64, output_size, IV), rounds(rounds) {}
    virtual ~Ripemd() {}
    
    virtual const BytesVector encode(const BytesVector &data) = 0;
@@ -44,9 +44,6 @@ protected:
    
    void process128_256(const UInt32Vector &words, UInt32Vector &hash, const uint8_t j);
    void process160_320(const UInt32Vector &words, UInt32Vector &hash, const uint8_t j);
-   
-   /* Initial vector. */
-   const UInt32Vector IV;
    
    const uint8_t rounds;
    

@@ -2,7 +2,6 @@
 
 #include "Bits.hpp"
 
-constexpr uint32_t MessageDigest::IV[];
 constexpr uint8_t MD4::left_rotation_table[];
 constexpr uint8_t MD4::word_indexes[];
 constexpr uint8_t MD5::left_rotation_table[];
@@ -85,10 +84,10 @@ void MD5::compress(UInt32Vector &int_block, UInt32Vector &state)
 const BytesVector MD4::encode(const BytesVector &data)
 {
    BytesVector bytes = appendPadding(data);
-   appendLength<LittleEndian64>(bytes, data.size() << 3);
+   bytes = appendLength<LittleEndian64>(bytes, data.size() << 3);
    
    const uint64_t bytes_len = bytes.size();
-   UInt32Vector state(IV, IV + 4);
+   UInt32Vector state(IV);
 
    // Assuming bytes_len is a multiple of 64.
    for (uint64_t i = 0; i < bytes_len; i += block_size)
@@ -103,10 +102,10 @@ const BytesVector MD4::encode(const BytesVector &data)
 const BytesVector MD5::encode(const BytesVector &data)
 {
    BytesVector bytes = appendPadding(data);
-   appendLength<LittleEndian64>(bytes, data.size() << 3);
+   bytes = appendLength<LittleEndian64>(bytes, data.size() << 3);
    
    const uint64_t bytes_len = bytes.size();
-   UInt32Vector state(IV, IV + 4);
+   UInt32Vector state(IV);
 
    // Assuming bytes_len is a multiple of 64.
    for (uint64_t i = 0; i < bytes_len; i += block_size)

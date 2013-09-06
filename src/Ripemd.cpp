@@ -194,7 +194,7 @@ void Ripemd320::compress(UInt32Vector &int_block, UInt32Vector &state)
 const BytesVector Ripemd128::encode(const BytesVector &data)
 {
    BytesVector bytes = appendPadding(data);
-   appendLength<LittleEndian64>(bytes, data.size() << 3);
+   bytes = appendLength<LittleEndian64>(bytes, data.size() << 3);
 
    UInt32Vector states(IV);
    const uint64_t bytes_len = bytes.size();
@@ -210,7 +210,7 @@ const BytesVector Ripemd128::encode(const BytesVector &data)
 const BytesVector Ripemd160::encode(const BytesVector & data)
 {
    BytesVector bytes = appendPadding(data);
-   appendLength<LittleEndian64>(bytes, data.size() << 3);
+   bytes = appendLength<LittleEndian64>(bytes, data.size() << 3);
 
    UInt32Vector states(IV);
    const uint64_t bytes_len = bytes.size();
@@ -226,7 +226,7 @@ const BytesVector Ripemd160::encode(const BytesVector & data)
 const BytesVector Ripemd256::encode(const BytesVector & data)
 {
    BytesVector bytes = appendPadding(data);
-   appendLength<LittleEndian64>(bytes, data.size() << 3);
+   bytes = appendLength<LittleEndian64>(bytes, data.size() << 3);
 
    UInt32Vector states(IV);
    const uint64_t bytes_len = bytes.size();
@@ -242,7 +242,7 @@ const BytesVector Ripemd256::encode(const BytesVector & data)
 const BytesVector Ripemd320::encode(const BytesVector & data)
 {
    BytesVector bytes = appendPadding(data);
-   appendLength<LittleEndian64>(bytes, data.size() << 3);
+   bytes = appendLength<LittleEndian64>(bytes, data.size() << 3);
 
    UInt32Vector states(IV);
    const uint64_t bytes_len = bytes.size();

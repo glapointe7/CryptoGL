@@ -2,6 +2,9 @@
 #ifndef BITS_HPP
 #define BITS_HPP
 
+#include "Types.hpp"
+
+
 namespace Bits
 {
    /* Extract the Least Signifiant Bits from value. */
@@ -20,7 +23,7 @@ namespace Bits
 
    /* Rotate left 'value' of 'shift' bits with 'max' in {1,...,63}. */
    template <class UInt>
-   constexpr UInt rotateLeft(const UInt &value, const uint8_t shift, const uint8_t max)
+   constexpr UInt rotateLeft(const UInt &value, const uint8_t shift, const uint8_t max = 32)
    {
       return ((value << shift) | (value >> (max - shift))) & ((1ull << max) - 1);
    }
@@ -33,7 +36,7 @@ namespace Bits
 
    /* Rotate left 'value' of 'shift' bits with 'max' in {1,...,63}. */
    template <class UInt>
-   constexpr UInt rotateRight(const UInt &value, const uint8_t shift, const uint8_t max)
+   constexpr UInt rotateRight(const UInt &value, const uint8_t shift, const uint8_t max = 32)
    {
       return ((value >> shift) | (value << (max - shift)));
    }
@@ -43,6 +46,9 @@ namespace Bits
    {
       return ((value >> shift) | (value << (64 - shift)));
    }
+   
+   /* Rotate left 'shift' bits of a 16-byte vector. */
+   const BytesVector rotateLeft128(const BytesVector &bytes, const uint8_t shift);
    
    /* Test a bit at a 'pos' in 'value'. */
    template <class UInt>
@@ -57,6 +63,8 @@ namespace Bits
    {
       return value | (1ull << pos);
    }
+   
+   
 }
 
 #endif

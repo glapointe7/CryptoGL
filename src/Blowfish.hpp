@@ -2,8 +2,8 @@
  * Constants taken here : http://www.schneier.com/code/constants.txt
  * Blowfish is a Feistel network with 16 rounds.
  */
-#ifndef BOWFISH_HPP
-#define BOWFISH_HPP
+#ifndef BLOWFISH_HPP
+#define BLOWFISH_HPP
 
 #include "Feistel.hpp"
 #include "BigEndian.hpp"
@@ -228,7 +228,6 @@ private:
          0xb74e6132, 0xce77e25b, 0x578fdfe3, 0x3ac372e6
       }
    };
-
 };
 
 #endif

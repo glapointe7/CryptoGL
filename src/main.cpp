@@ -65,8 +65,9 @@
 #include "../testing/CAST256Test.hpp"
 #include "../testing/TwofishTest.hpp"
 #include "../testing/HellmanMerkleKnapsackTest.hpp"
+#include "../testing/CamelliaTest.hpp"
 
-#include <sys/time.h>
+//#include <sys/time.h>
 
 int main(int argc, char **argv)
 {

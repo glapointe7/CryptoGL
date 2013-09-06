@@ -96,21 +96,21 @@ void CAST256::generateSubkeys()
 
 uint32_t CAST256::F1(const uint32_t D, const uint32_t Km, const uint32_t Kr) const
 {
-   const uint32_t I = Bits::rotateLeft(Km + D, Kr, 32);
+   const uint32_t I = Bits::rotateLeft(Km + D, Kr);
    return ((S[0][getByteFromInteger(I, 3)] ^ S[1][getByteFromInteger(I, 2)])
            - S[2][getByteFromInteger(I, 1)]) + S[3][getByteFromInteger(I, 0)];
 }
 
 uint32_t CAST256::F2(const uint32_t D, const uint32_t Km, const uint32_t Kr) const
 {
-   const uint32_t I = Bits::rotateLeft(Km ^ D, Kr, 32);
+   const uint32_t I = Bits::rotateLeft(Km ^ D, Kr);
    return ((S[0][getByteFromInteger(I, 3)] - S[1][getByteFromInteger(I, 2)])
            + S[2][getByteFromInteger(I, 1)]) ^ S[3][getByteFromInteger(I, 0)];
 }
 
 uint32_t CAST256::F3(const uint32_t D, const uint32_t Km, const uint32_t Kr) const
 {
-   const uint32_t I = Bits::rotateLeft(Km - D, Kr, 32);
+   const uint32_t I = Bits::rotateLeft(Km - D, Kr);
    return ((S[0][getByteFromInteger(I, 3)] + S[1][getByteFromInteger(I, 2)])
            ^ S[2][getByteFromInteger(I, 1)]) - S[3][getByteFromInteger(I, 0)];
 }

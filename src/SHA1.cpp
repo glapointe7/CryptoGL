@@ -2,8 +2,6 @@
 
 #include "Bits.hpp"
 
-constexpr uint32_t SHA1::IV[5];
-
 void SHA1::compress(UInt32Vector &int_block, UInt32Vector &state)
 {
    int_block.resize(rounds);
@@ -56,9 +54,9 @@ void SHA1::compress(UInt32Vector &int_block, UInt32Vector &state)
 const BytesVector SHA1::encode(const BytesVector &data)
 {
    BytesVector bytes = appendPadding(data);
-   appendLength<BigEndian64>(bytes, data.size() << 3);
+   bytes = appendLength<BigEndian64>(bytes, data.size() << 3);
 
-   UInt32Vector states(IV, IV + 5);
+   UInt32Vector states(IV);
    const uint64_t bits_len = bytes.size();
    for (uint64_t i = 0; i < bits_len; i += block_size)
    {

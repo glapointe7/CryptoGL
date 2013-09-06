@@ -1,6 +1,5 @@
 #include "Tiger.hpp"
 
-constexpr uint64_t Tiger::IV[];
 constexpr uint64_t Tiger::sbox[][256];
 
 void Tiger::applyKeySchedule(UInt64Vector &words)
@@ -81,9 +80,9 @@ void Tiger::compress(UInt64Vector &int_block, UInt64Vector &state)
 const BytesVector Tiger::encode(const BytesVector &data)
 {
    BytesVector bytes = appendPadding(data);
-   appendLength<LittleEndian64>(bytes, data.size() << 3);
+   bytes = appendLength<LittleEndian64>(bytes, data.size() << 3);
 
-   UInt64Vector state(IV, IV + 3);
+   UInt64Vector state(IV);
    const uint64_t bytes_len = bytes.size();
    for (uint64_t i = 0; i < bytes_len; i += block_size)
    {

@@ -42,7 +42,7 @@ void SHA64Bits::compress(UInt64Vector &int_block, UInt64Vector &state)
 const BytesVector SHA32Bits::encode(const BytesVector &data)
 {
    BytesVector bytes = appendPadding(data);
-   appendLength<BigEndian64>(bytes, data.size() << 3);
+   bytes = appendLength<BigEndian64>(bytes, data.size() << 3);
    
    UInt32Vector states(IV);
    const uint64_t bits_len = bytes.size();
@@ -58,7 +58,7 @@ const BytesVector SHA32Bits::encode(const BytesVector &data)
 const BytesVector SHA64Bits::encode(const BytesVector &data)
 {
    BytesVector bytes = appendPadding(data);
-   appendLength<BigEndian64>(bytes, data.size() << 3);
+   bytes = appendLength<BigEndian64>(bytes, data.size() << 3);
    
    UInt64Vector states(IV);
    const uint64_t bits_len = bytes.size();
@@ -73,7 +73,6 @@ const BytesVector SHA64Bits::encode(const BytesVector &data)
 
 void SHA512_t::buildIV(const BytesVector &t)
 {
-   IV.reserve(8);
    SHA512 *S = new SHA512();
    const UInt64Vector IV_512 = S->getIV();
 
@@ -94,6 +93,8 @@ void SHA512_t::buildIV(const BytesVector &t)
    delete S;
 
    // Get the new IV vector.
+   IV.clear();
+   IV.reserve(8);
    for (uint8_t j = 0; j < 64; j += 8)
    {
       IV.push_back(BigEndian64::toInteger(BytesVector(answer.begin() + j, answer.begin() + j + 8)));

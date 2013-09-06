@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Types.hpp"
+#include "Padding.hpp"
 
 template <class UInt>
 class SpongeFunction
@@ -29,48 +30,6 @@ protected:
    virtual void applyAbsorbingPhase(const BytesVector &padded_message) = 0;
    virtual const BytesVector applySqueezingPhase() = 0;
    virtual void F() = 0;
-
-   /* Apply Pad10* rule from the specs. 1 bit upto block_size bits are appended. */
-   const BytesVector applyPad10Star(const BytesVector &message) const
-   {
-      const uint64_t message_len = message.size();
-      const uint8_t block_size = bitrate >> 3;
-
-      /* Append '1' bit to the message. */
-      BytesVector padding(message);
-      padding.reserve(message_len + block_size);
-      padding.push_back(0x01);
-
-      /* Append enough '0' bits such that the length will be a multiple of 'block_size'. */
-      const uint8_t bytes_to_append = block_size - ((message_len + 1) % block_size);
-      if (bytes_to_append != block_size)
-      {
-         padding.insert(padding.end(), bytes_to_append, 0);
-      }
-
-      return padding;
-   }
-
-   /* Apply padding Pad10*1 rule from the specs. 2 bits upto block_size + 1 bits are appended. */
-   const BytesVector applyPad10Star1(const BytesVector &message) const
-   {
-      const uint8_t block_size = bitrate >> 3;
-      BytesVector padding(message);
-      padding.reserve(message.size() + block_size + 1);
-
-      if(!((message.size() + 1) % block_size))
-      {
-         padding.push_back(0x81);
-      }
-      else
-      {
-         padding.push_back(0x01);
-         padding.insert(padding.end(), block_size - (padding.size() % block_size), 0);
-         padding.back() = 0x80;
-      }
-
-      return padding;
-   }
 
    /* Bitrate (or r in the spec.) : default = 1024. */
    const uint16_t bitrate;
@@ -107,7 +66,7 @@ public:
          state[x].resize(5);
       }
  
-      const BytesVector padded_message = applyPad10Star1(data);
+      const BytesVector padded_message = Padding::_10Star1(data, bitrate >> 3);
       
       applyAbsorbingPhase(padded_message);
 

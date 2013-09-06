@@ -16,8 +16,8 @@ protected:
    typedef typename HashFunction<DataType, BigEndian<DataType>>::DataTypeVector DataTypeVector;
    
    SHA2(const DataTypeVector &IV, const uint8_t rounds, const uint8_t output_size) 
-      : HashFunction<DataType, BigEndian<DataType>>(InputBlockSize, output_size), 
-           IV(IV), rounds(rounds) {}
+      : HashFunction<DataType, BigEndian<DataType>>(InputBlockSize, output_size, IV), 
+           rounds(rounds) {}
    virtual ~SHA2() {}
    
    virtual const BytesVector encode(const BytesVector &data) = 0;
@@ -80,7 +80,6 @@ protected:
               ^ (word >> z);
    }
    
-   DataTypeVector IV;
    const uint8_t rounds;
 };
 
@@ -179,7 +178,7 @@ public:
    SHA512() : SHA64Bits({
       0x6A09E667F3BCC908, 0xBB67AE8584CAA73B, 0x3C6EF372FE94F82B, 0xA54FF53A5F1D36F1,
       0x510E527FADE682D1, 0x9B05688C2B3E6C1F, 0x1F83D9ABFB41BD6B, 0x5BE0CD19137E2179}, 64) {}
-
+   
    const UInt64Vector getIV() const
    {
       return IV;

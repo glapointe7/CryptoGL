@@ -12,7 +12,7 @@
 class Whirlpool : public HashFunction<uint64_t, BigEndian64>
 {
 public:
-   Whirlpool() : HashFunction(INPUT_BLOCK_LENGTH, 64) {}
+   Whirlpool() : HashFunction(INPUT_BLOCK_LENGTH, 64, {0, 0, 0, 0, 0, 0, 0, 0}) {}
 
    virtual const BytesVector encode(const BytesVector &data) final;
 
@@ -35,8 +35,6 @@ private:
    };
 
    static constexpr uint8_t rounds = 10;
-
-   static constexpr uint64_t IV[8] = {0, 0, 0, 0, 0, 0, 0, 0};
    
    /* The 64-bit lookup tables. */
    static constexpr uint64_t sbox[8][256] = {

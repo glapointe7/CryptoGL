@@ -18,8 +18,8 @@ class HashFunction
 protected:
    typedef std::vector<DataType> DataTypeVector;
    
-   HashFunction(const uint8_t block_size, const uint8_t output_size) 
-      : block_size(block_size), output_size(output_size) {}
+   HashFunction(const uint8_t block_size, const uint8_t output_size, const DataTypeVector &IV) 
+      : block_size(block_size), output_size(output_size), IV(IV) {}
    
    virtual ~HashFunction() {}
    
@@ -33,15 +33,56 @@ protected:
    //const uint8_t rounds;
    
    /* Initial vector. */
-   // const DataTypeVector IV;
+   DataTypeVector IV;
    
    /* Salt */
    // const DataTypeVector salt;
    
    virtual const BytesVector encode(const BytesVector &) = 0;
    
+   /* Initialize by padding the message and appending the length of the message to complete padding. */
+   /*virtual const BytesVector initialize(const BytesVector &message)
+   {
+      BytesVector padded_message = appendPadding(message);
+      padded_message = Length<BigEndian64>::append(padded_message, message.size() << 3);
+      
+      return padded_message;
+   }
+   
+   virtual void finalize(DataTypeVector &hash)
+   {
+   
+   }
+   
+   const BytesVector encode(const BytesVector &message)
+   {
+      const BytesVector padded_message = initialize(message);
+      const uint64_t padded_message_size = padded_message.size();
+      
+      DataTypeVector hash(IV);
+      for (uint64_t i = 0; i < padded_message_size; i += block_size)
+      {              
+         DataTypeVector int_block = getInputBlocks(padded_message, i);    
+         compress(int_block, hash);
+      }
+      finalize(hash);
+
+      return getOutput(hash);
+   }*/
+   
+   /* Process the main algorithm of the hash function. */
    virtual void compress(DataTypeVector &int_block, DataTypeVector &state) = 0;
-     
+   
+   template <class EndianLengthType>
+   static const BytesVector appendLength(const BytesVector &bytes, const uint64_t length)
+   {
+      const BytesVector bytes_pad = EndianLengthType::toBytesVector(length);
+      BytesVector padded_bytes(bytes);
+      padded_bytes.insert(padded_bytes.end(), bytes_pad.begin(), bytes_pad.end());
+      
+      return padded_bytes;
+   }
+   
    virtual const BytesVector appendPadding(const BytesVector &data) const
    {
       const uint8_t rest = sizeof(DataType) << 1;
@@ -56,14 +97,6 @@ protected:
       bytes_pad.insert(bytes_pad.end(), bytes_pad_len + rest - 8, 0);
 
       return bytes_pad;
-   }
-   
-   /* Append the initial length of the message after padding. */
-   template<class Endian_type>
-   static void appendLength(BytesVector &bytes, const uint64_t &length)
-   {
-      const BytesVector bytes_pad = Endian_type::toBytesVector(length);
-      bytes.insert(bytes.end(), bytes_pad.begin(), bytes_pad.end());
    }
    
    /* Transform the input bytes to input block of integers. */

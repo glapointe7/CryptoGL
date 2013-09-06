@@ -2,7 +2,7 @@
  * Source : http://tools.ietf.org/html/rfc2144
  */
 #ifndef CAST128TEST_HPP
-#define	CAST128TEST_HPP
+#define CAST128TEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/CAST128.hpp"

@@ -147,7 +147,7 @@ void AES::generateSubkeys()
       uint32_t tmp = subkeys[i - 1];
       if (!(i % Nk))
       {
-         tmp = subWord(static_cast<uint32_t> (Bits::rotateLeft(tmp, 8, 32))) ^ round_constants[(i / Nk) - 1];
+         tmp = subWord(Bits::rotateLeft(tmp, 8)) ^ round_constants[(i / Nk) - 1];
       }
       else if (Nk > 6 && i % Nk == 4)
       {

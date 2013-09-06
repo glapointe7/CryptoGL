@@ -25,8 +25,8 @@ const BytesVector Blake256::appendPadding(const BytesVector &message) const
       padding.push_back(0x80);
       
       const uint8_t zeros = (120 - (padding.size() & 0x3F)) & 0x3F;
-      padding.insert(padding.end(), zeros - 1, 0);
-      padding.push_back(0x01);
+      padding.insert(padding.end(), zeros, 0);
+      padding.back() = 0x01;
    }
 
    return padding;
@@ -126,7 +126,7 @@ const BytesVector Blake32Bits::encode(const BytesVector &data)
 {
    const uint64_t data_size = data.size();
    BytesVector bytes = appendPadding(data);
-   appendLength<BigEndian64>(bytes, data_size << 3);
+   bytes = appendLength<BigEndian64>(bytes, data_size << 3);
    
    const uint64_t bytes_len = bytes.size();
    setCounter(data_size, bytes_len);
@@ -145,7 +145,7 @@ const BytesVector Blake64Bits::encode(const BytesVector &data)
 {
    const uint64_t data_size = data.size();
    BytesVector bytes = appendPadding(data);
-   appendLength<BigEndian64>(bytes, data_size << 3);
+   bytes = appendLength<BigEndian64>(bytes, data_size << 3);
    
    const uint64_t bytes_len = bytes.size();
    setCounter(data_size, bytes_len);
