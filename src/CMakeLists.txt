@@ -89,6 +89,7 @@ set(SRC
    CAST256.hpp CAST256.cpp
    Twofish.hpp Twofish.cpp
    Camellia.hpp Camellia.cpp
+   Mysty1.hpp Mysty1.cpp
 
 # Stream ciphers section
    StreamCipher.hpp

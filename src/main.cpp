@@ -66,6 +66,7 @@
 #include "../testing/TwofishTest.hpp"
 #include "../testing/HellmanMerkleKnapsackTest.hpp"
 #include "../testing/CamelliaTest.hpp"
+#include "../testing/Mysty1Test.hpp"
 
 //#include <sys/time.h>
 
