@@ -64,7 +64,7 @@ namespace Bits
       return value | (1ull << pos);
    }
    
-   
+   uint32_t bytesSwap(const uint32_t value);
 }
 
 #endif

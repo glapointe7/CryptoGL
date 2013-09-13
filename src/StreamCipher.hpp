@@ -1,6 +1,6 @@
 
 #ifndef STREAMCIPHER_HPP
-#define	STREAMCIPHER_HPP
+#define STREAMCIPHER_HPP
 
 #include "SymmetricCipher.hpp"
 
@@ -13,7 +13,6 @@ protected:
    virtual const BytesVector decode(const BytesVector &) = 0;
    
    virtual void setKey(const BytesVector &) = 0;
-   
    virtual void keySetup() = 0;
 };
 

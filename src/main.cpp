@@ -67,6 +67,7 @@
 #include "../testing/HellmanMerkleKnapsackTest.hpp"
 #include "../testing/CamelliaTest.hpp"
 #include "../testing/Mysty1Test.hpp"
+#include "../testing/SEALTest.hpp"
 
 //#include <sys/time.h>
 

@@ -24,4 +24,6 @@ public:
    }
 };
 
+using BadIVLength = BadKeyLength;
+
 #endif

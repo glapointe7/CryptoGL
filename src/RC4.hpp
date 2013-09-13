@@ -1,5 +1,5 @@
 #ifndef RC4_HPP
-#define	RC4_HPP
+#define RC4_HPP
 
 #include "StreamCipher.hpp"
 
@@ -16,7 +16,7 @@ public:
 private:
    virtual void keySetup() final;
    
-   uint8_t state[255];
+   uint8_t subkeys[255];
 };
 
 #endif

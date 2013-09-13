@@ -138,6 +138,11 @@ protected:
    }
    
 public:
+   void setIV(const DataTypeVector &IV)
+   {
+      this->IV = IV;
+   }
+   
    const BytesVector hmacEncode(const BytesVector &hmac_key, const BytesVector &message)
    {
       BytesVector key(hmac_key);

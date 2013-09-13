@@ -73,15 +73,15 @@ set(SRC
 
 # Block ciphers section
    BlockCipher.hpp
-   Feistel.hpp
-   Blowfish.hpp Blowfish.cpp
-   DES.hpp DES.cpp
    TripleDES.hpp TripleDES.cpp
    AES.hpp AES.cpp
    IDEA.hpp IDEA.cpp
-   Skipjack.hpp Skipjack.cpp
    Noekeon.hpp Noekeon.cpp
    RC2.hpp RC2.cpp
+   Feistel.hpp
+   Skipjack.hpp Skipjack.cpp
+   Blowfish.hpp Blowfish.cpp
+   DES.hpp DES.cpp
    RC5.hpp RC5.cpp
    RC6.hpp RC6.cpp
    XTEA.hpp XTEA.cpp
@@ -110,6 +110,10 @@ set(SRC
 # Sponge functions section
    SpongeFunction.hpp
    Keccak.hpp Keccak.cpp
+
+# Pseudo-random functions familly
+   PseudoRandomFunction.hpp
+   SEAL.hpp SEAL.cpp
 
 # Asymmetric ciphers section
    AsymmetricCipher.hpp AsymmetricCipher.cpp

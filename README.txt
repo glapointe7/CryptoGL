@@ -1,5 +1,5 @@
-CryptoGL is a c++ library containing classical ciphers, symmetric ciphers, asymmetric ciphers, hash functions and some other tools.
-CryptoGL has been compiled with g++ 4.7 and clang++ 3.3. 
+CryptoGL is a c++ library containing classical ciphers, symmetric ciphers, asymmetric ciphers, hash functions and some other tools. The UML directory contains the UML class diagrams of this library.
+CryptoGL has been compiled successfully with g++ 4.7 and clang++ 3.3 and uses some features of C++11. 
 
 Classical ciphers include the following :
 ADFGVX, Caesar, Vigenere, Rozier, Beaufort, Beaufort (German variant), Vigenere Multiplicative, Chao, Collon, Delastelle, Fleissner, 2-square, 3-square, 4-square, Hill, Morse, Monoalphabetic Substitution, Nihiliste, Playfair, Polibius, Railfence, Redefence, Transpositions, Wolseley and Affine.
@@ -9,8 +9,8 @@ AES, DES, Blowfish, IDEA, Skipjack, RC2, RC5, RC6, TripleDES, XTEA, Noekeon, CAS
 
 For each block cipher, the ECB, CBC, CFB, OFB and CTR modes of operation are implemented following the specifications of NIST.
 
-Stream ciphers include the following :
-Rabbit, RC4
+Stream ciphers and Pseudo-random functions familly include the following :
+Rabbit, RC4, SEAL
 
 Asymmetric ciphers include the following (using a BigInteger library created by Matt McCutchen : https://mattmccutchen.net/bigint/):
 Hellman-Merkle Knapsack cryptosystem
@@ -20,6 +20,7 @@ Blake (224, 256, 384, 512), SHA-1, SHA-2 (224, 256, 384, 512, 512/224, 512/256),
 
 Sponge construction functions include the following :
 Keccak (0, 224, 256, 384, 512)
+
 
 Other tools :
 Base64, square matrices over the modular integers (Z_n), Big and little endian conversion, various mathematical, padding and bits manipulation tools.

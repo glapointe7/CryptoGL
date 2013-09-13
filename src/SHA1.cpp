@@ -2,6 +2,8 @@
 
 #include "Bits.hpp"
 
+constexpr uint32_t SHA1::k[4];
+
 void SHA1::compress(UInt32Vector &int_block, UInt32Vector &state)
 {
    int_block.resize(rounds);
@@ -13,31 +15,18 @@ void SHA1::compress(UInt32Vector &int_block, UInt32Vector &state)
    }
 
    UInt32Vector hash(state);
-   uint32_t f, k;
    for (uint8_t j = 0; j < rounds; ++j)
    {
-      if (j < 20)
+      const uint8_t index = j / 20;
+      uint32_t f;
+      switch(index)
       {
-         f = ch(hash[1], hash[2], hash[3]);
-         k = 0x5A827999;
+         case 0: f = ch(hash[1], hash[2], hash[3]); break;
+         case 1: f = H(hash[1], hash[2], hash[3]); break;
+         case 2: f = G(hash[1], hash[2], hash[3]); break;
+         case 3: f = H(hash[1], hash[2], hash[3]); break;
       }
-      else if (j < 40)
-      {
-         f = H(hash[1], hash[2], hash[3]);
-         k = 0x6ED9EBA1;
-      }
-      else if (j < 60)
-      {
-         f = G(hash[1], hash[2], hash[3]);
-         k = 0x8F1BBCDC;
-      }
-      else
-      {
-         f = H(hash[1], hash[2], hash[3]);
-         k = 0xCA62C1D6;
-      }
-
-      const uint32_t tmp = Bits::rotateLeft(hash[0], 5, 32) + f + hash[4] + k + int_block[j];
+      const uint32_t tmp = Bits::rotateLeft(hash[0], 5, 32) + f + hash[4] + k[index] + int_block[j];
       hash[4] = hash[3];
       hash[3] = hash[2];
       hash[2] = Bits::rotateLeft(hash[1], 30, 32);

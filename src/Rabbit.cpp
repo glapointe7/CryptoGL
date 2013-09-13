@@ -2,12 +2,14 @@
 
 #include "Bits.hpp"
 #include "exceptions/BadKeyLength.hpp"
+#include "BigEndian.hpp"
+#include "LittleEndian.hpp"
 
 void Rabbit::setKey(const BytesVector &key)
 {
    if (key.size() != 16)
    {
-      throw BadKeyLength("The key must be 16 bytes length.", key.size());
+      throw BadKeyLength("Your key has to be 16 bytes length.", key.size());
    }
 
    this->key = key;
@@ -18,7 +20,7 @@ void Rabbit::setIV(const BytesVector &IV)
 {
    if (IV.size() != 8)
    {
-      throw BadIVLength("Your IV size have to be 8 bytes length.", IV.size());
+      throw BadIVLength("Your IV has to be 8 bytes length.", IV.size());
    }
 
    this->IV = IV;
@@ -40,22 +42,20 @@ uint32_t Rabbit::g(const uint32_t x)
 
 void Rabbit::nextState()
 {
-   const uint32_t A[8] = {0x4D34D34D, 0xD34D34D3, 0x34D34D34, 0x4D34D34D,
-      0xD34D34D3, 0x34D34D34, 0x4D34D34D, 0xD34D34D3};
+   constexpr uint32_t A[8] = {0x4D34D34D, 0xD34D34D3, 0x34D34D34, 0x4D34D34D,
+      0xD34D34D3, 0x34D34D34, 0x4D34D34D, 0xD34D34D3
+   };
 
-   uint32_t old_counters[8] = {counters[0], counters[1], counters[2], counters[3],
+   const uint32_t old_counters[8] = {counters[0], counters[1], counters[2], counters[3],
       counters[4], counters[5], counters[6], counters[7]
    };
 
    // Calculate new counter values.
    counters[0] += A[0] + counter_carry_bit;
-   counters[1] += A[1] + (counters[0] < old_counters[0]);
-   counters[2] += A[2] + (counters[1] < old_counters[1]);
-   counters[3] += A[3] + (counters[2] < old_counters[2]);
-   counters[4] += A[4] + (counters[3] < old_counters[3]);
-   counters[5] += A[5] + (counters[4] < old_counters[4]);
-   counters[6] += A[6] + (counters[5] < old_counters[5]);
-   counters[7] += A[7] + (counters[6] < old_counters[6]);
+   for(uint8_t i = 1; i < 8; ++i)
+   {
+      counters[i] += A[i] + (counters[i-1] < old_counters[i-1]);
+   }
    counter_carry_bit = (counters[7] < old_counters[7]);
 
    uint32_t G[8];
@@ -65,14 +65,11 @@ void Rabbit::nextState()
    }
 
    // Calculate new state values.
-   states[0] = G[0] + Bits::rotateLeft(G[7], 16) + Bits::rotateLeft(G[6], 16);
-   states[1] = G[1] + Bits::rotateLeft(G[0], 8) + G[7];
-   states[2] = G[2] + Bits::rotateLeft(G[1], 16) + Bits::rotateLeft(G[0], 16);
-   states[3] = G[3] + Bits::rotateLeft(G[2], 8) + G[1];
-   states[4] = G[4] + Bits::rotateLeft(G[3], 16) + Bits::rotateLeft(G[2], 16);
-   states[5] = G[5] + Bits::rotateLeft(G[4], 8) + G[3];
-   states[6] = G[6] + Bits::rotateLeft(G[5], 16) + Bits::rotateLeft(G[4], 16);
-   states[7] = G[7] + Bits::rotateLeft(G[6], 8) + G[5];
+   for(uint8_t i = 0; i < 8; i += 2)
+   {
+      states[i] = G[i] + Bits::rotateLeft(G[(i+7) & 7], 16) + Bits::rotateLeft(G[(i+6) & 7], 16);
+      states[i + 1] = G[i + 1] + Bits::rotateLeft(G[i], 8) + G[(i+7) & 7];
+   }
 }
 
 void Rabbit::keySetup()
@@ -80,13 +77,10 @@ void Rabbit::keySetup()
    // Build 4 sub-keys of 4 bytes length.
    UInt32Vector subkeys;
    subkeys.reserve(4);
-   const uint8_t key_len = key.size();
-
-   for (uint8_t i = 0; i < key_len; i += 4)
+   for (uint8_t i = 0; i < 16; i += 4)
    {
-      subkeys.push_back((key[i] << 24) | (key[i + 1] << 16) | (key[i + 2] << 8) | key[i + 3]);
+      subkeys.push_back(BigEndian32::toInteger(BytesVector(key.begin() + i, key.begin() + i + 4)));
    }
-
 
    /* Generate initial state variables */
    states[0] = subkeys[0];
@@ -123,22 +117,19 @@ void Rabbit::keySetup()
 
 void Rabbit::IVSetup()
 {
-   // Generate 4 sub-IVs of 16 bits.
-   uint32_t subIV[4];
+   // Generate 4 sub-IVs of 16 bits big-endian.
+   UInt16Vector subIV;
+   subIV.reserve(4);
    for (uint8_t i = 0; i < 8; i += 2)
    {
-      subIV[i >> 1] = (IV[i] << 8) | IV[i + 1];
+      subIV.push_back(BigEndian16::toInteger(BytesVector(IV.begin() + i, IV.begin() + i + 2)));
    }
 
    /* Modify counter values */
-   counters[0] ^= subIV[0];
-   counters[1] ^= subIV[1];
-   counters[2] ^= subIV[2];
-   counters[3] ^= subIV[3];
-   counters[4] ^= subIV[0];
-   counters[5] ^= subIV[1];
-   counters[6] ^= subIV[2];
-   counters[7] ^= subIV[3];
+   for(uint8_t i = 0; i < 8; ++i)
+   {
+      counters[i] ^= subIV[i & 3];
+   }
 
    for (uint8_t i = 0; i < 4; i++)
    {
@@ -149,10 +140,10 @@ void Rabbit::IVSetup()
 const BytesVector Rabbit::encode(const BytesVector &clear_text)
 {
    // Clear_text have to be a multiple of 16 bytes.
-   const uint32_t clear_len = clear_text.size();
+   const uint64_t clear_len = clear_text.size();
    if (clear_len & 0xF)
    {
-      throw BadDataLength("Your data provided have to be a multiple of 16 bytes.", clear_len);
+      throw BadDataLength("The size of the message has to be a multiple of 16 bytes.", clear_len);
    }
 
    keySetup();
@@ -164,7 +155,7 @@ const BytesVector Rabbit::encode(const BytesVector &clear_text)
    BytesVector crypted;
    crypted.reserve(clear_len);
 
-   for (uint32_t i = 0; i < clear_len; i += 16)
+   for (uint64_t i = 0; i < clear_len; i += 16)
    {
       nextState();
 
@@ -180,10 +171,8 @@ const BytesVector Rabbit::encode(const BytesVector &clear_text)
       output.reserve(16);
       for (uint8_t j = 0; j < 4; ++j)
       {
-         for (uint8_t k = 0; k < 4; ++k)
-         {
-            output.push_back((X[j] >> (k << 3)) & 0xFF);
-         }
+         const BytesVector tmp = LittleEndian32::toBytesVector(X[j]);
+         output.insert(output.end(), tmp.begin(), tmp.end());
       }
 
       for (uint8_t j = 0; j < 16; ++j)

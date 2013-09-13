@@ -13,3 +13,13 @@ const BytesVector Bits::rotateLeft128(const BytesVector &bytes, const uint8_t sh
 
    return rotated_bytes;
 }
+
+uint32_t Bits::bytesSwap(const uint32_t value)
+{
+   uint32_t retval = value & 0xFF;
+   retval = (retval << 8) | ((value >> 8) & 0xFF);
+   retval = (retval << 8) | ((value >> 16) & 0xFF);
+   retval = (retval << 8) | ((value >> 24) & 0xFF);
+
+   return retval;
+}
