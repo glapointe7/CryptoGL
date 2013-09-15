@@ -10,16 +10,16 @@
 class XTEA : public Feistel<uint32_t, uint64_t, 8, BigEndian64>
 {
 public:
-   explicit XTEA(const BytesVector &key) 
-      : Feistel(OperationModes::ECB, 32) { setKey(key); }
-   
-   XTEA(const BytesVector &key, const OperationModes mode) 
-      : Feistel(mode, 32) { setKey(key); }
-   
-  /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
+   /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    XTEA(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : Feistel(mode, 32, IV) { setKey(key); }
+      
+   explicit XTEA(const BytesVector &key) 
+      : XTEA(key, OperationModes::ECB, {}) {}
    
+   XTEA(const BytesVector &key, const OperationModes mode) 
+      : XTEA(key, mode, {}) {}
+      
    /* Constructor with a vector of IV only for the mode CTR. */
    XTEA(const BytesVector &key, const IV_Vector &IV) 
       : Feistel(32, IV) { setKey(key); }

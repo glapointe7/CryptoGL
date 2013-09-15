@@ -9,16 +9,18 @@
 class Mysty1 : public Feistel<uint32_t, uint64_t, 8, BigEndian64, uint16_t>
 {
 public:
-   /* Default constructor : default on ECB mode of encryption. */
-   explicit Mysty1(const BytesVector &key) : Feistel(OperationModes::ECB, 8) { setKey(key); }
-   
-   /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
-   Mysty1(const BytesVector &key, const OperationModes mode) : Feistel(mode, 8) { setKey(key); }
-   
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    Mysty1(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : Feistel(mode, 8, IV) { setKey(key); }
+      
+   /* Default constructor : default on ECB mode of encryption. */
+   explicit Mysty1(const BytesVector &key) 
+      : Mysty1(key, OperationModes::ECB, {}) {}
    
+   /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
+   Mysty1(const BytesVector &key, const OperationModes mode) 
+      : Mysty1(key, mode, {}) {}
+      
    /* Constructor with a vector of IV only for the mode CTR. */
    Mysty1(const BytesVector &key, const IV_Vector &IV) 
       : Feistel(8, IV) { setKey(key); }

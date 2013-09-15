@@ -72,7 +72,7 @@ void Rabbit::nextState()
    }
 }
 
-void Rabbit::keySetup()
+void Rabbit::generateSubkeys()
 {
    // Build 4 sub-keys of 4 bytes length.
    UInt32Vector subkeys;
@@ -146,7 +146,7 @@ const BytesVector Rabbit::encode(const BytesVector &clear_text)
       throw BadDataLength("The size of the message has to be a multiple of 16 bytes.", clear_len);
    }
 
-   keySetup();
+   generateSubkeys();
    if (!IV.empty())
    {
       IVSetup();

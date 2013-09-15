@@ -18,38 +18,52 @@ void RC4::setKey(const BytesVector &key)
    }
    
    this->key = key;
+   generateSubkeys();
 }
 
-void RC4::keySetup()
-{   
+void RC4::generateSubkeys()
+{
    for(uint16_t i = 0; i < 256; ++i)
    {
       subkeys[i] = i;
    }
    
-   uint8_t j;
-   const uint8_t key_len = key.size();
+   uint8_t j = 0;
+   const uint16_t key_len = key.size();
    for(uint16_t i = 0; i < 256; ++i)
    {
-      j = (key[i % key_len] + subkeys[i] + j) & 0xFF;
+      j += key[i % key_len] + subkeys[i];
       std::swap(subkeys[i], subkeys[j]);
    }
 }
 
-const BytesVector RC4::encode(const BytesVector &clear_text)
+const BytesVector RC4::generate()
 {
-   BytesVector crypted;
-   crypted.reserve(clear_text.size());
-      
-   keySetup();
+   BytesVector keystream;
+   keystream.reserve(output_size);
    
-   uint8_t j, k;
-   for(const auto byte : clear_text)
+   uint8_t i = 0, j = 0;
+   for(uint64_t k = 0; k < output_size; ++k)
    {
-      j = (j + 1) & 0xFF;
-      k = (subkeys[j] + k) & 0xFF;
-      std::swap(subkeys[j], subkeys[k]);
-      crypted.push_back(byte ^ subkeys[(subkeys[j] + subkeys[k]) & 0xFF]);
+      i++;
+      j += subkeys[i];
+      std::swap(subkeys[i], subkeys[j]);
+      keystream.push_back(subkeys[(subkeys[i] + subkeys[j]) & 0xFF]);
+   }
+   
+   return keystream;
+}
+
+const BytesVector RC4::encode(const BytesVector &clear_text)
+{         
+   BytesVector crypted;
+   output_size = clear_text.size();
+   crypted.reserve(output_size);
+   
+   const BytesVector keystream = generate();
+   for(uint64_t i = 0; i < output_size; ++i)
+   {
+      crypted.push_back(clear_text[i] ^ keystream[i]);
    }
    
    return crypted;

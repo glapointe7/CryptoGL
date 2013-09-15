@@ -10,16 +10,16 @@
 class Noekeon : public BlockCipher<uint32_t, UInt32Vector, 16, BigEndian32>
 {
 public:
-   explicit Noekeon(const BytesVector &key) 
-      : BlockCipher(OperationModes::ECB, 16, {}) { setKey(key); }
-   
-   Noekeon(const BytesVector &key, const OperationModes mode) 
-      : BlockCipher(mode, 16, {}) { setKey(key); }
-   
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    Noekeon(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : BlockCipher(mode, 16, IV) { setKey(key); }
+      
+   explicit Noekeon(const BytesVector &key) 
+      : Noekeon(key, OperationModes::ECB, {}) {}
    
+   Noekeon(const BytesVector &key, const OperationModes mode) 
+      : Noekeon(key, mode, {}) {}
+      
    /* Constructor with a vector of IV only for the mode CTR. */
    Noekeon(const BytesVector &key, const IV_Vector &IV) 
       : BlockCipher(16, IV) { setKey(key); }

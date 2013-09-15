@@ -11,6 +11,7 @@ namespace Bits
    template <class UInt>
    constexpr UInt LSB(const UInt &value, const uint8_t bits_to_extract)
    {
+      static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
       return value & (static_cast<UInt>(1) << bits_to_extract);
    }
 
@@ -18,6 +19,7 @@ namespace Bits
    template <class UInt>
    constexpr UInt MSB(const UInt &value, const uint8_t bits_to_extract)
    {
+      static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
       return value >> ((sizeof (UInt) << 3) - bits_to_extract);
    }
 
@@ -25,6 +27,7 @@ namespace Bits
    template <class UInt>
    constexpr UInt rotateLeft(const UInt &value, const uint8_t shift, const uint8_t max = 32)
    {
+      static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
       return ((value << shift) | (value >> (max - shift))) & ((1ull << max) - 1);
    }
 
@@ -38,6 +41,7 @@ namespace Bits
    template <class UInt>
    constexpr UInt rotateRight(const UInt &value, const uint8_t shift, const uint8_t max = 32)
    {
+      static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
       return ((value >> shift) | (value << (max - shift)));
    }
 
@@ -54,6 +58,7 @@ namespace Bits
    template <class UInt>
    constexpr bool getBitAtPosition(const uint8_t pos, const UInt value)
    {
+      static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
       return (value & (1ull << pos)) > 0;
    }
    
@@ -61,6 +66,7 @@ namespace Bits
    template <class UInt>
    constexpr UInt setBitAtPosition(const uint8_t pos, const UInt value)
    {
+      static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
       return value | (1ull << pos);
    }
    

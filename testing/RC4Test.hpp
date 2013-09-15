@@ -27,14 +27,14 @@ protected:
 
 TEST_F(RC4Test, encode)
 {
-   const std::vector<uint8_t> clear_text(Digest::getBytesFromString("Plaintext"));
+   const BytesVector clear_text(Digest::getBytesFromString("Plaintext"));
    
    EXPECT_EQ("BBF316E8D940AF0AD3", Digest::hexDigest(R->encode(clear_text)));
 }
 
 TEST_F(RC4Test, decode)
 {
-   const std::vector<uint8_t> clear_text(Digest::getBytesFromString("Plaintext"));
+   const BytesVector clear_text(Digest::getBytesFromString("Plaintext"));
 
    EXPECT_EQ("Plaintext", Digest::getStringFromBytes(R->decode(Digest::getBytesFromHexDigest("BBF316E8D940AF0AD3"))));
 }

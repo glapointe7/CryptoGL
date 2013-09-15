@@ -8,16 +8,16 @@
 class IDEA : public BlockCipher<uint16_t, UInt16Vector, 8, BigEndian16>
 {
 public:
-   explicit IDEA(const BytesVector &key) 
-      : BlockCipher(OperationModes::ECB, 8, {}) { setKey(key); }
-   
-   IDEA(const BytesVector &key, const OperationModes mode) 
-      : BlockCipher(mode, 8, {}) { setKey(key); }
-   
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    IDEA(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : BlockCipher(mode, 8, IV) { setKey(key); }
+      
+   explicit IDEA(const BytesVector &key) 
+      : IDEA(key, OperationModes::ECB, {}) {}
    
+   IDEA(const BytesVector &key, const OperationModes mode) 
+      : IDEA(key, mode, {}) {}
+      
    /* Constructor with a vector of IV only for the mode CTR. */
    IDEA(const BytesVector &key, const IV_Vector &IV) 
       : BlockCipher(8, IV) { setKey(key); }

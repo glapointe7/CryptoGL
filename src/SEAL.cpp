@@ -1,8 +1,12 @@
+
+#include "Types.hpp"
+
 #include "SEAL.hpp"
 
 #include "SHA1.hpp"
 #include "Bits.hpp"
 #include "BigEndian.hpp"
+#include "Tools.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
 
@@ -14,6 +18,7 @@ void SEAL::setKey(const BytesVector &key)
    }
 
    this->key = key;
+   generateSubkeys();
 }
 
 uint32_t SEAL::gamma(const uint32_t index, uint32_t &previous_index)
@@ -66,11 +71,11 @@ void SEAL::generateSubkeys()
    }
 }
 
-void SEAL::initialize(const uint32_t value, const uint8_t index, UInt32Vector &A, UInt32Vector &registers)
+void SEAL::initialize(const uint8_t index, UInt32Vector &A, UInt32Vector &registers) const
 {
    for(uint8_t i = 0; i < 4; ++i)
    {
-      A[i] = Bits::rotateRight(value, (i << 3)) ^ R[4*index + i];
+      A[i] = Bits::rotateRight(seed, (i << 3)) ^ R[4*index + i];
    }
    
    uint16_t P;
@@ -97,20 +102,18 @@ void SEAL::initialize(const uint32_t value, const uint8_t index, UInt32Vector &A
    }
 }
 
-const UInt32Vector SEAL::generate(const uint32_t value)
+const UInt32Vector SEAL::generate()
 {
-   UInt32Vector out;
-   out.reserve(output_size >> 2);
-   
-   generateSubkeys();
-   
+   UInt32Vector keystream;
+   keystream.reserve(output_size);
+      
    UInt32Vector A(4, 0);
    UInt32Vector registers(A);
    uint16_t P, Q;
    const uint8_t number_of_Kb = output_size / 1024;
    for(uint8_t l = 0; l < number_of_Kb; ++l)
    {
-      initialize(value, l, A, registers);
+      initialize(l, A, registers);
       for(uint8_t i = 0; i < 64; ++i)
       {
          P = A[0] & 0x7FC;
@@ -150,11 +153,11 @@ const UInt32Vector SEAL::generate(const uint32_t value)
          A[0] += T[Q / 4];
          A[3] = Bits::rotateRight(A[3], 9);
          
-         const uint8_t j = 4 * i;
-         out.push_back(A[1] + S[j]);
-         out.push_back(A[2] ^ S[j + 1]);
-         out.push_back(A[3] + S[j + 2]);
-         out.push_back(A[0] ^ S[j + 3]);
+         const uint8_t j = 4 * i;         
+         keystream.push_back(A[1] + S[j]);
+         keystream.push_back(A[2] ^ S[j + 1]);
+         keystream.push_back(A[3] + S[j + 2]);
+         keystream.push_back(A[0] ^ S[j + 3]);
          
          if(i & 1)
          {
@@ -173,5 +176,36 @@ const UInt32Vector SEAL::generate(const uint32_t value)
       }
    }
 
-   return out;
+   return keystream;
+}
+
+const BytesVector SEAL::encode(const BytesVector &message)
+{
+   constexpr uint16_t pos_max = 1024;
+   uint16_t current_pos = pos_max;
+   
+   seed = 0;
+   output_size = message.size();
+   
+   UInt32Vector keystream;
+   BytesVector output;
+   output.reserve(output_size);
+   for(uint16_t i = 0; i < output_size; ++i)
+   {
+      if(current_pos >= pos_max)
+      {
+         keystream = generate();
+         seed++;
+         current_pos = 0;
+      }
+      output.push_back(message[i] ^ keystream[current_pos]);
+      current_pos++;
+   }
+   
+   return output;
+}
+
+const BytesVector SEAL::decode(const BytesVector &message)
+{
+   return encode(message);
 }

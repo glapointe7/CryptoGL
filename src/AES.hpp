@@ -12,16 +12,16 @@
 class AES : public BlockCipher<uint32_t, UInt32Vector, 16, BigEndian32>
 {
 public:
-   explicit AES(const BytesVector &key) 
-      : BlockCipher(OperationModes::ECB, 10, {}) { setKey(key); }
-   
-   AES(const BytesVector &key, const OperationModes mode) 
-      : BlockCipher(mode, 10, {}) { setKey(key); }
-   
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    AES(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : BlockCipher(mode, 10, IV) { setKey(key); }
+      
+   explicit AES(const BytesVector &key) 
+      : AES(key, OperationModes::ECB, {}) {}
    
+   AES(const BytesVector &key, const OperationModes mode) 
+      : AES(key, mode, {}) {}
+      
    /* Constructor with a vector of IV only for the mode CTR. */
    AES(const BytesVector &key, const IV_Vector &IV) 
       : BlockCipher(10, IV) { setKey(key); }

@@ -10,19 +10,18 @@
 class CAST128 : public Feistel<uint32_t, uint64_t, 8, BigEndian64>
 {
 public:
-
-   /* Default constructor : default on ECB mode of encryption. */
-   explicit CAST128(const BytesVector &key) 
-      : Feistel(OperationModes::ECB, 12) { setKey(key); }
-
-   /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
-   CAST128(const BytesVector &key, const OperationModes mode) 
-      : Feistel(mode, 12) { setKey(key); }
-   
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    CAST128(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : Feistel(mode, 12, IV) { setKey(key); }
-   
+      
+   /* Default constructor : default on ECB mode of encryption. */
+   explicit CAST128(const BytesVector &key) 
+      : CAST128(key, OperationModes::ECB, {}) {}
+
+   /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
+   CAST128(const BytesVector &key, const OperationModes mode) 
+      : CAST128(key, mode, {}) {}
+      
    /* Constructor with a vector of IV only for the mode CTR. */
    CAST128(const BytesVector &key, const IV_Vector &IV) 
       : Feistel(12, IV) { setKey(key); }

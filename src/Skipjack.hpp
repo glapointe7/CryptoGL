@@ -10,16 +10,16 @@
 class Skipjack : public Feistel<uint8_t, UInt16Vector, 8, BigEndian16>
 {
 public:
-   explicit Skipjack(const BytesVector &key) 
-      : Feistel(OperationModes::ECB, 32) { setKey(key); }
-   
-   Skipjack(const BytesVector &key, const OperationModes mode) 
-      : Feistel(mode, 32) { setKey(key); }
-   
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    Skipjack(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : Feistel(mode, 32, IV) { setKey(key); }
+      
+   explicit Skipjack(const BytesVector &key) 
+      : Skipjack(key, OperationModes::ECB, {}) {}
    
+   Skipjack(const BytesVector &key, const OperationModes mode) 
+      : Skipjack(key, mode, {}) {}
+      
    /* Constructor with a vector of IV only for the mode CTR. */
    Skipjack(const BytesVector &key, const IV_Vector &IV) 
       : Feistel(32, IV) { setKey(key); }

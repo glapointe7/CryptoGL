@@ -56,7 +56,7 @@ void Blowfish::generateSubkeys()
 
 const uint32_t Blowfish::F(const uint32_t half_block, const uint8_t) const
 {
-   const uint8_t V[] = {
+   const uint8_t V[] {
       static_cast<uint8_t>(half_block >> 24),
       static_cast<uint8_t>(half_block >> 16),
       static_cast<uint8_t>(half_block >> 8),

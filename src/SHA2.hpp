@@ -58,16 +58,19 @@ protected:
 
    static constexpr DataType maj(const DataType &x, const DataType &y, const DataType &z)
    {
+      static_assert(std::is_integral<DataType>::value, "Type 'DataType' must be an integral type.");
       return (x & y) ^ (x & z) ^ (y & z);
    }
 
    static constexpr DataType ch(const DataType &x, const DataType &y, const DataType &z)
    {
+      static_assert(std::is_integral<DataType>::value, "Type 'DataType' must be an integral type.");
       return (x & y) ^ (~x & z);
    }
 
    static constexpr DataType A(const DataType &hash, const uint8_t x, const uint8_t y, const uint8_t z)
    {
+      static_assert(std::is_integral<DataType>::value, "Type 'DataType' must be an integral type.");
       return Bits::rotateRight(hash, x, sizeof(DataType) << 3) 
               ^ Bits::rotateRight(hash, y, sizeof(DataType) << 3) 
               ^ Bits::rotateRight(hash, z, sizeof(DataType) << 3);
@@ -75,6 +78,7 @@ protected:
 
    static constexpr DataType B(const DataType &word, const uint8_t x, const uint8_t y, const uint8_t z)
    {
+      static_assert(std::is_integral<DataType>::value, "Type 'DataType' must be an integral type.");
       return Bits::rotateRight(word, x, sizeof(DataType) << 3) 
               ^ Bits::rotateRight(word, y, sizeof(DataType) << 3) 
               ^ (word >> z);

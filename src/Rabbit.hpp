@@ -25,7 +25,7 @@ public:
 private:
    using BadDataLength = BadKeyLength;
    
-   virtual void keySetup() final;
+   virtual void generateSubkeys() final;
    void IVSetup();
    void nextState();
    static uint32_t g(const uint32_t x);

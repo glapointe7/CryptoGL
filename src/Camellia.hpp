@@ -9,16 +9,18 @@
 class Camellia : public Feistel<uint64_t, UInt64Vector, 16, BigEndian64>
 {
 public:
-   /* Default constructor : default on ECB mode of encryption. */
-   explicit Camellia(const BytesVector &key) : Feistel(OperationModes::ECB, 24) { setKey(key); }
-   
-   /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
-   Camellia(const BytesVector &key, const OperationModes mode) : Feistel(mode, 24) { setKey(key); }
-   
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    Camellia(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : Feistel(mode, 24, IV) { setKey(key); }
+      
+   /* Default constructor : default on ECB mode of encryption. */
+   explicit Camellia(const BytesVector &key) 
+      : Camellia(key, OperationModes::ECB, {}) {}
    
+   /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
+   Camellia(const BytesVector &key, const OperationModes mode) 
+      : Camellia(key, mode, {}) {}
+      
    /* Constructor with a vector of IV only for the mode CTR. */
    Camellia(const BytesVector &key, const IV_Vector &IV) 
       : Feistel(24, IV) { setKey(key); }

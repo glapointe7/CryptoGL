@@ -13,8 +13,8 @@
 
 template <class BytesVector, class DataType, uint8_t InputBlockSize, class EndianType>
 class InputOutputBlockGetter
-{
-public:
+{ 
+public:   
    static const BytesVector outputBlock(const DataType &int_block)
    {
       BytesVector output_block;
@@ -64,6 +64,8 @@ public:
 template <class SubkeyType, class DataType, uint8_t InputBlockSize, class EndianType>
 class BlockCipher : public SymmetricCipher
 {   
+static_assert(!(InputBlockSize & 7), "InputBlockSize has to be a multiple of 8.");
+
 public:   
    /* Process general encoding for block ciphers. */
    const BytesVector encode(const BytesVector &message)
