@@ -96,6 +96,11 @@ set(SRC
    RC4.hpp RC4.cpp
    Rabbit.hpp Rabbit.cpp
 
+# Pseudo-random functions familly
+   PseudoRandomFunction.hpp
+   SEAL.hpp SEAL.cpp
+   Isaac.hpp Isaac.cpp
+
 # Hash functions section
    HashFunction.hpp
    MessageDigest.hpp MessageDigest.cpp
@@ -110,10 +115,6 @@ set(SRC
 # Sponge functions section
    SpongeFunction.hpp
    Keccak.hpp Keccak.cpp
-
-# Pseudo-random functions familly
-   PseudoRandomFunction.hpp
-   SEAL.hpp SEAL.cpp
 
 # Asymmetric ciphers section
    AsymmetricCipher.hpp AsymmetricCipher.cpp
