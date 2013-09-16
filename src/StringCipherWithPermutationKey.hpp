@@ -11,7 +11,7 @@
 class StringCipherWithPermutationKey : public StringCipher
 {   
 public:
-   typedef Int32Vector KeyType;
+   using KeyType = Int32Vector;
 
    const KeyType getKey() const { return key; }
    void setKey(const KeyType &key);

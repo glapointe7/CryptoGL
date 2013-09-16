@@ -12,13 +12,13 @@
 class StringCipherWithStringKey : public StringCipher
 {
 public:
-   typedef ClassicalType KeyType;
+   using KeyType = ClassicalType;
 
-   const KeyType getKey() const { return key; }
+   const KeyType getKey() const noexcept { return key; }
    virtual void setKey(const KeyType &key);
 
 protected:
-   StringCipherWithStringKey() : key("") {}
+   StringCipherWithStringKey() {}
    virtual ~StringCipherWithStringKey() {}
    
    void checkKey(const KeyType &key) const;

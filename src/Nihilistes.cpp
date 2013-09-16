@@ -37,9 +37,7 @@ const ClassicalType Nihilistes::encode(const ClassicalType &clear_text)
       
       // Convert integer to string in a faster way (2x faster with 138 Ko of text).
       // append method is faster than calling the constructor.
-      char str[2];
-      String::uintToString(final_value, str);
-      crypted.append(str);
+      crypted.append(String::uintToString(final_value));
       i = (i + 1) % second_key_len;
    }
    

@@ -1,6 +1,6 @@
 
 #ifndef BADALPHA_HPP
-#define	BADALPHA_HPP
+#define BADALPHA_HPP
 
 #include "Exception.hpp"
 
@@ -8,7 +8,7 @@ class BadAlpha : public Exception
 {
 public:
    BadAlpha() {}
-   BadAlpha(const std::string &text) : Exception(text) {}
+   explicit BadAlpha(const ErrorType &text) : Exception(text) {}
    virtual ~BadAlpha() {};
 };
 

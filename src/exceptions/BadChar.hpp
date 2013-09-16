@@ -1,6 +1,6 @@
 
 #ifndef BADCHAR_HPP
-#define	BADCHAR_HPP
+#define BADCHAR_HPP
 
 #include "BadAlpha.hpp"
 
@@ -10,8 +10,16 @@ public:
 
    BadChar() {}
 
-   BadChar(const std::string &text, const char c)
-      : BadAlpha(text + " The bad character is : '" + c + "'.") {}
+   BadChar(const ErrorType &message, const char c)
+   {
+      ErrorType str(message);
+      str.reserve(message.length() + 28);
+      str.append(" The bad character is : '");
+      str.push_back(c);
+      str.append("'.");
+      
+      BadAlpha(ErrorType(str));
+   }
 };
 
 #endif

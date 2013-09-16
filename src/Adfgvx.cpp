@@ -11,7 +11,7 @@
 #include <utility>
 #include <algorithm>
 
-const std::string Adfgvx::code = "ADFGVX";
+const ClassicalType Adfgvx::code = "ADFGVX";
 
 Adfgvx::Adfgvx(const KeyType &key)
    : SquareCipher(key)
@@ -23,7 +23,7 @@ void Adfgvx::setGridKey(const Grid &grid)
 {
    if(grid.empty())
    {
-      throw EmptyGridKey("Your grid key is empty.");
+      throw EmptyGridKey();
    }
    
    const uint8_t dimension = is6X6(grid);
@@ -44,13 +44,13 @@ void Adfgvx::setGridKey(const Grid &grid)
    this->grid_key = grid;
 }
 
-const std::vector<int32_t> Adfgvx::getPermutationKey() const
+const Int32Vector Adfgvx::getPermutationKey() const
 {
    const KeyType key = getKey();
    KeyType sorted_key(key);
    std::sort(sorted_key.begin(), sorted_key.end());
    
-   std::vector<int32_t> perm_key;
+   Int32Vector perm_key;
    perm_key.reserve(key.length());
    
    for(const auto c : key)
@@ -78,7 +78,6 @@ const ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
    for (const auto c : clear_text)
    {
       const auto coords = getCharCoordinates(c, grid_key);
-
       first_encoding += code[coords.second];
       first_encoding += code[coords.first];
    }

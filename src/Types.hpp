@@ -7,19 +7,19 @@
 #include <stdint.h>
 
 /* For the string ciphers. */
-typedef std::string ClassicalType;
+using ClassicalType = std::string;
 
-typedef std::vector<uint8_t> BytesVector;
-typedef std::vector<uint16_t> UInt16Vector;
-typedef std::vector<uint32_t> UInt32Vector;
-typedef std::vector<uint64_t> UInt64Vector;
+using BytesVector = std::vector<uint8_t>;
+using UInt16Vector = std::vector<uint16_t>;
+using UInt32Vector = std::vector<uint32_t>;
+using UInt64Vector = std::vector<uint64_t>;
 
-typedef std::vector<int32_t> Int32Vector;
+using Int32Vector = std::vector<int32_t>;
 
-typedef std::vector<BytesVector> BytesMatrix;
-typedef std::vector<std::vector<int32_t> > Int32Matrix;
-typedef std::vector<UInt64Vector> UInt64Matrix;
+using BytesMatrix = std::vector<BytesVector>;
+using Int32Matrix = std::vector<std::vector<int32_t>>;
+using UInt64Matrix = std::vector<UInt64Vector>;
 
-typedef BytesMatrix IV_Vector;
+using IV_Vector = BytesMatrix;
 
 #endif

@@ -12,11 +12,11 @@
 class BlockCipherModes
 {
 protected:
-   typedef BytesVector Block;
+   using Block = BytesVector;
    using BadIVLength = BadKeyLength;
    
 public:   
-   typedef typename std::function<const Block(const Block &)> GetOutputBlockFunction;
+   using GetOutputBlockFunction = std::function<const Block(const Block &)>;
    virtual ~BlockCipherModes() {}
    
    virtual const Block getCipherBlock(const Block &input_block) = 0;

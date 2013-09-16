@@ -8,7 +8,7 @@
 
 #include "big_integers/BigIntegerLibrary.hh"
 
-typedef std::vector<BigInteger> BigIntVector;
+using BigIntVector = std::vector<BigInteger>;
 
 class AsymmetricCipher : public Cipher<BigIntVector, BytesVector>
 {   

@@ -13,7 +13,7 @@ template <class DataType, uint8_t InputBlockSize>
 class SHA2 : public HashFunction<DataType, BigEndian<DataType>>
 {
 protected:   
-   typedef typename HashFunction<DataType, BigEndian<DataType>>::DataTypeVector DataTypeVector;
+   using DataTypeVector = typename HashFunction<DataType, BigEndian<DataType>>::DataTypeVector;
    
    SHA2(const DataTypeVector &IV, const uint8_t rounds, const uint8_t output_size) 
       : HashFunction<DataType, BigEndian<DataType>>(InputBlockSize, output_size, IV), 

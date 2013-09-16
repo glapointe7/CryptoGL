@@ -10,6 +10,8 @@ template <class UInt>
 class LittleEndian
 {
 public:
+   static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
+   
    static const BytesVector toBytesVector(const UInt &value)
    {
       BytesVector bytes;

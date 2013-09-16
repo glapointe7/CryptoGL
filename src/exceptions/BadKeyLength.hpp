@@ -1,10 +1,10 @@
 
 #ifndef BADKEYLENGTH_HPP
-#define	BADKEYLENGTH_HPP
+#define BADKEYLENGTH_HPP
 
 #include "BadKey.hpp"
 
-#include <sstream>
+#include "../String.hpp"
 
 class BadKeyLength : public BadKey
 {
@@ -12,15 +12,16 @@ public:
 
    BadKeyLength() {}
 
-   BadKeyLength(const std::string &text, const uint32_t len)
+   BadKeyLength(const ErrorType &message, const uint32_t len)
    {
-      std::stringstream ss;
-      ss << text
-              << " Your key length is : "
-              << len
-              << "byte(s).";
+      const ErrorType number = String::uintToString(len);
+      ErrorType str(message);
+      str.reserve(message.length() + 27 + number.length());
+      str.append("Your key length is : ");
+      str.append(number);
+      str.append(" byte(s).");
 
-      BadKey(ss.str());
+      BadKey(ErrorType(str));
    }
 };
 

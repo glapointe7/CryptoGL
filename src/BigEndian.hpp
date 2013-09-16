@@ -10,6 +10,8 @@ template <class UInt>
 class BigEndian
 {
 public:
+   static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
+   
    static const UInt toInteger(const BytesVector &bytes)
    {
       UInt value = 0;

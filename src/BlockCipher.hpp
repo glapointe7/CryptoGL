@@ -108,8 +108,8 @@ public:
    }
    
 protected:
-   typedef std::vector<SubkeyType> SubkeysContainer;
-   typedef BlockCipher<SubkeyType, DataType, InputBlockSize, EndianType> THIS;
+   using SubkeysContainer = std::vector<SubkeyType>;
+   using THIS = BlockCipher<SubkeyType, DataType, InputBlockSize, EndianType>;
    
    /* Default constructor : Only for ECB, CBC, CFB and OFB modes. An IV is needed for 
     * CBC, CFB and OFB modes. For the ECB mode, IV is empty. */

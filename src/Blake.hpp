@@ -11,7 +11,7 @@ template <class DataType, uint8_t InputBlockSize>
 class Blake : public HashFunction<DataType, BigEndian<DataType>>
 {
 protected:
-   typedef typename HashFunction<DataType, BigEndian<DataType>>::DataTypeVector DataTypeVector;
+   using DataTypeVector = typename HashFunction<DataType, BigEndian<DataType>>::DataTypeVector;
    
    /* Default constructor : no salt provided. */
    Blake(const DataTypeVector &IV, const uint8_t rounds, const uint8_t output_size) 

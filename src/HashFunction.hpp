@@ -16,7 +16,7 @@ template <class DataType, class EndianType>
 class HashFunction
 {
 protected:
-   typedef std::vector<DataType> DataTypeVector;
+   using DataTypeVector = std::vector<DataType>;
    
    HashFunction(const uint8_t block_size, const uint8_t output_size, const DataTypeVector &IV) 
       : block_size(block_size), output_size(output_size), IV(IV) {}

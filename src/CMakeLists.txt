@@ -21,25 +21,6 @@ set(SRC
    Types.hpp
    Padding.hpp Padding.cpp
 
-# exception handlers section
-   exceptions/Exception.hpp
-   exceptions/BadAlpha.hpp
-   exceptions/BadAlphaLength.hpp
-   exceptions/BadKey.hpp
-   exceptions/BadKeyLength.hpp
-   exceptions/BadChar.hpp
-   exceptions/EmptyAlpha.hpp
-   exceptions/EmptyKey.hpp
-   exceptions/MatrixKeyNotReversible.hpp
-   exceptions/BadMatrix.hpp
-   exceptions/EmptyMatrix.hpp
-   exceptions/MatrixNotSquare.hpp
-   exceptions/MatrixOutOfRange.hpp
-   exceptions/EmptyGridKey.hpp
-   exceptions/BadGridDimension.hpp
-   exceptions/IntegersNotCoprime.hpp
-   exceptions/BadModulo.hpp
-
 # Cryptanalysis section
    cryptanalysis/ClassicalAnalysis.hpp cryptanalysis/ClassicalAnalysis.cpp
 	
@@ -120,6 +101,9 @@ set(SRC
    AsymmetricCipher.hpp AsymmetricCipher.cpp
    HellmanMerkleKnapsack.hpp HellmanMerkleKnapsack.cpp
 )
+
+# exception handlers section
+include_directories (exceptions)
 
 # Add the source files code (CPP, HPP and the CMakeLists.txt) of 'big_numbers' directory.
 add_subdirectory (big_integers)

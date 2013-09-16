@@ -13,8 +13,8 @@ template <class UInt>
 class SpongeFunction
 {
 protected:
-   typedef std::vector<UInt> UIntContainer;
-   typedef std::vector<UIntContainer> UIntMatrix;
+   using UIntContainer = std::vector<UInt>;
+   using UIntMatrix = std::vector<UIntContainer>;
 
    /* Default constructor : b = 1600 => r = 1024 et c = 576. */
    SpongeFunction()

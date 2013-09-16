@@ -9,14 +9,16 @@
 class Exception
 {
 public:
+   using ErrorType = std::string;
+   
    Exception() {}
-   Exception(const std::string &text) : message(text) {}
+   explicit Exception(const ErrorType &message) : message(message) {}
    virtual ~Exception() {};
    
-   const std::string what() const noexcept { return message; };
+   const ErrorType what() const noexcept { return message; };
    
 protected:
-   std::string message = "";
+   ErrorType message = "";
 };
 
 #endif

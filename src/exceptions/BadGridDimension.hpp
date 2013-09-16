@@ -1,23 +1,24 @@
 
 #ifndef BADGRIDDIMENSION_HPP
-#define	BADGRIDDIMENSION_HPP
+#define BADGRIDDIMENSION_HPP
 
 #include "Exception.hpp"
 
-#include <sstream>
+# include "../String.hpp"
 
 class BadGridDimension : public Exception
 {
 public:
    BadGridDimension() {}
-   BadGridDimension(const std::string &text, const uint8_t dim) 
+   BadGridDimension(const ErrorType &message, const uint8_t dim) 
    {
-      std::stringstream ss;
-      ss << text
-              << " At least one of the row / col of your grid is of dimension : "
-              << dim;
+      const ErrorType number = String::uintToString(dim);
+      ErrorType str(message);
+      str.reserve(message.length() + 63 + number.length());
+      str.append(" At least one of the row / col of your grid is of dimension : ");
+      str.append(number);
 
-      Exception(ss.str());
+      Exception(ErrorType(str));
    }
 };
 

@@ -13,8 +13,8 @@
 class SquareCipher : public StringCipherWithStringKey
 {
 protected:
-   typedef std::pair<uint8_t, uint8_t> Coordinates;
-   typedef std::vector<ClassicalType> Grid;
+   using Coordinates = std::pair<uint8_t, uint8_t>;
+   using Grid = std::vector<ClassicalType>;
    
    explicit SquareCipher(const KeyType &key); 
    virtual ~SquareCipher() {}

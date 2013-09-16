@@ -1,7 +1,6 @@
 #include "String.hpp"
 
 #include <algorithm>
-#include <map>
 
 void String::toUpperCase(std::string &text)
 {
@@ -20,36 +19,15 @@ void String::removeChars(std::string &text, const std::string &chars)
    }), text.end());
 }
 
-void String::reverse(char* begin, char* end)
+const std::string String::uintToString(uint64_t value)
 {
-   char aux;
-   while (end > begin)
-      aux = *end, *end-- = *begin, *begin++ = aux;
-}
-
-uint32_t String::strLength(const char *str)
-{
-   uint32_t i = 0;
-   while (*str != '\0')
-   {
-      str++;
-      ++i;
-   }
-
-   return i;
-}
-
-/* Convert integer to string in base 2 to 10. */
-void String::uintToString(uint32_t value, char *str)
-{
-   //const uint8_t base = 10;
-   char* wstr = str;
-   // Conversion : Number is reversed.
+   std::string str;
+   str.reserve(20);
    do
    {
-      *wstr++ = static_cast<char> (48 + (value % 10));
-   } while (value /= 10);
-   *wstr = '\0';
-   // Reverse string
-   reverse(str, wstr - 1);
+      str.push_back(static_cast<int8_t>(48 + (value % 10)));
+   }while(value /= 10);
+   std::reverse(str.begin(), str.end());
+   
+   return str;
 }

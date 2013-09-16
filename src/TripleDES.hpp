@@ -17,9 +17,7 @@ public:
 
    void setOperationMode(const OperationModes mode);
    
-private:
-   //static void checkKey(const BytesVector &key);
-   
+private:   
    BytesVector key2, key3;
    OperationModes mode = OperationModes::ECB;
 };

@@ -35,14 +35,8 @@ namespace String
    /* Remove all characters in text specified by chars. */
    void removeChars(std::string &text, const std::string &chars);
 
-   /* Reverse a string. */
-   void reverse(char* begin, char* end);
-
-   /* Get the length of a string. */
-   uint32_t strLength(const char *str);
-
    /* Convert integer to string in base 10. */
-   void uintToString(uint32_t value, char *str);
+   const std::string uintToString(uint64_t value);
 }
 
 #endif

@@ -1,6 +1,6 @@
 
 #ifndef EMPTYALPHA_HPP
-#define	EMPTYALPHA_HPP
+#define EMPTYALPHA_HPP
 
 #include "BadAlpha.hpp"
 
@@ -8,7 +8,7 @@ class EmptyAlpha : public BadAlpha
 {
 public:
    EmptyAlpha() {}
-   EmptyAlpha(const std::string &text) : BadAlpha(text) {}
+   explicit EmptyAlpha(const ErrorType &message) : BadAlpha(message) {}
 };
 
 #endif

@@ -16,7 +16,7 @@ void Collon::setBlockLength(const uint32_t block_len)
 const ClassicalType Collon::encode(const ClassicalType &clear_text)
 {
    const uint32_t clear_len = clear_text.length();
-   std::string line1, line2;
+   ClassicalType line1, line2;
    line1.reserve(clear_len);
    line2.reserve(clear_len);
    ClassicalType crypted;
