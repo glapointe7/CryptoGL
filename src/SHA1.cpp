@@ -22,9 +22,9 @@ void SHA1::compress(UInt32Vector &int_block, UInt32Vector &state)
       switch(index)
       {
          case 0: f = ch(hash[1], hash[2], hash[3]); break;
-         case 1: f = H(hash[1], hash[2], hash[3]); break;
-         case 2: f = G(hash[1], hash[2], hash[3]); break;
+         case 1:
          case 3: f = H(hash[1], hash[2], hash[3]); break;
+         case 2: f = G(hash[1], hash[2], hash[3]); break;
       }
       const uint32_t tmp = Bits::rotateLeft(hash[0], 5, 32) + f + hash[4] + k[index] + int_block[j];
       hash[4] = hash[3];
@@ -38,20 +38,4 @@ void SHA1::compress(UInt32Vector &int_block, UInt32Vector &state)
    {
       state[j] += hash[j];
    }
-}
-
-const BytesVector SHA1::encode(const BytesVector &data)
-{
-   BytesVector bytes = appendPadding(data);
-   bytes = appendLength<BigEndian64>(bytes, data.size() << 3);
-
-   UInt32Vector states(IV);
-   const uint64_t bits_len = bytes.size();
-   for (uint64_t i = 0; i < bits_len; i += block_size)
-   {
-      UInt32Vector int_block = getInputBlocks(bytes, i);
-      compress(int_block, states);
-   }
-
-   return getOutput(states);
 }

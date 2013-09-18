@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-constexpr uint64_t Whirlpool::sbox[8][256];
+constexpr uint64_t Whirlpool::sbox[][256];
 constexpr uint64_t Whirlpool::RC[];
 
 uint64_t Whirlpool::applyGammaPiTheta(UInt64Vector &key, const uint8_t index) const
@@ -63,20 +63,4 @@ void Whirlpool::compress(UInt64Vector &block, UInt64Vector &state)
    {
       state[j] ^= xored_block[j] ^ block[j];
    }
-}
-
-const BytesVector Whirlpool::encode(const BytesVector &data)
-{
-   BytesVector bytes = appendPadding(data);
-   bytes = appendLength<BigEndian64>(bytes, data.size() << 3);
-
-   UInt64Vector state(IV);
-   const uint64_t padded_data_len = bytes.size();
-   for (uint64_t i = 0; i < padded_data_len; i += block_size)
-   {
-      UInt64Vector int_block = getInputBlocks(bytes, i);
-      compress(int_block, state);
-   }
-
-   return getOutput(state);
 }

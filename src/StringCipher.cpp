@@ -8,13 +8,6 @@
 #include "exceptions/EmptyAlpha.hpp"
 #include "exceptions/MultipleChar.hpp"
 
-void StringCipher::eraseBadCharacters(ClassicalType &text) const
-{
-   text.erase(std::remove_if(text.begin(), text.end(), [this](char c) {
-      return alpha.find(c) == std::string::npos;
-   }), text.end());
-}
-
 void StringCipher::checkAlpha(const ClassicalType &alpha) const
 {
    if (alpha.empty())
@@ -22,7 +15,7 @@ void StringCipher::checkAlpha(const ClassicalType &alpha) const
       throw EmptyAlpha("Your alphabet is empty.");
    }
 
-   if (!isUniqueChar(alpha))
+   if (!String::containsUniqueChars(alpha))
    {
       throw MultipleChar("Your alphabet have to contain unique characters.");
    }

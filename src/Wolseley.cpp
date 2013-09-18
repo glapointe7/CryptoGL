@@ -1,7 +1,6 @@
 
 #include "Wolseley.hpp"
 
-#include "Tools.hpp"
 #include "String.hpp"
 
 Wolseley::Wolseley(const KeyType &key)
@@ -18,7 +17,7 @@ const ClassicalType Wolseley::encode(const ClassicalType &clear_text)
    KeyType key_alpha = getKey();
    key_alpha.reserve(alpha.length());
    key_alpha.append(alpha);
-   const ClassicalType new_alpha(removeRepeatedLetters(key_alpha));
+   const ClassicalType new_alpha(String::makeUniqueChars(key_alpha));
 
    for (const auto c : clear_text)
    {

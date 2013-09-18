@@ -16,7 +16,7 @@ Asymmetric ciphers include the following (using a BigInteger library created by 
 Hellman-Merkle Knapsack cryptosystem
 
 Hash functions include the following :
-Blake (224, 256, 384, 512), SHA-1, SHA-2 (224, 256, 384, 512, 512/224, 512/256), MD2, MD4, MD5, RipeMD (128, 160, 256, 320), Whirlpool, Tiger (128, 160, 192). HMAC is supported for all of them except Keccak which it's not needed.
+Blake (224, 256, 384, 512), SHA-1, SHA-2 (224, 256, 384, 512, 512/224, 512/256), MD2, MD4, MD5, RipeMD (128, 160, 256, 320), Whirlpool, Tiger and tiger2 (128, 160, 192). HMAC is supported for all of them except Keccak which it's not needed.
 
 Sponge construction functions include the following :
 Keccak (0, 224, 256, 384, 512)

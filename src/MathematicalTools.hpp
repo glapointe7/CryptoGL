@@ -9,7 +9,8 @@
 #include "exceptions/Exception.hpp"
 
 namespace Maths
-{     
+{
+
    /* Return the Greatest Common Divisor of x and y. */
    template <class UIntType>
    const UIntType gcd(const UIntType &x, const UIntType &y)
@@ -21,20 +22,20 @@ namespace Maths
 
       return gcd(y, x % y);
    }
-   
+
    /* Check if x and y are coprimes. */
    template <class UIntType>
    bool areCoprimes(const UIntType &x, const UIntType &y)
    {
       return gcd(x, y) == 1;
    }
-   
+
    /* Calculate the inverse of a modulo b in Z_b.
       Theorem of Bézout : a*u + b*v = 1. v is the inverse to find. */
    template <class IntType>
    const IntType getModInverse(IntType a, const IntType &b)
    {
-      if(gcd(a, b) != 1)
+      if (gcd(a, b) != 1)
       {
          throw Exception("The inverse of 'a' doesn't exist in Z_b. To exist, 'a' and 'b' must be coprimes.");
       }
@@ -55,24 +56,25 @@ namespace Maths
 
       return v;
    }
-   
+
    /* Calculate the square root of a big integer. */
    template <class UIntType>
-   const UIntType sqrt (const UIntType &n)
+   const UIntType integerSqrt(const UIntType &n)
    {
-     UIntType x = n;
-     UIntType y = n;
-     y += 1;
-     y >>= 1;
-     while (y < x)
-       {
+      UIntType x = n;
+      UIntType y = n;
+      y += 1;
+      y >>= 1;
+      while (y < x)
+      {
          x = y;
          y += n / x;
          y >>= 1;
-       }
-     return x;
+      }
+
+      return x;
    }
-   
+
    /* Test the primality of x. */
    template <class UIntType>
    bool isPrime(const UIntType &x)
@@ -81,7 +83,7 @@ namespace Maths
       if (x < 4) return true;
       if (x % 2 == 0) return false;
 
-      const UIntType upper_bound = Maths::sqrt(x) + 1;
+      const UIntType upper_bound = Maths::integerSqrt(x) + 1;
       for (UIntType i = 3; i <= upper_bound; i += 2)
       {
          if (x % i == 0) return false;
@@ -89,11 +91,12 @@ namespace Maths
 
       return true;
    }
+
+   /* Check if 'value' is a perfect square. */
+   bool isPerfectSquare(const uint32_t value);
 }
 
 //uint64_t getLegendreSymbol(const uint64_t &x, const uint64_t &e, const uint64_t &n);
-
-bool isPerfectSquare(const uint32_t value);
 
 uint8_t getByteSqrt(const uint8_t sqr);
 

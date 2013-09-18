@@ -5,13 +5,17 @@
 #include <string>
 #include <vector>
 
-const std::string removeRepeatedLetters(const std::string &str);
-void replaceChar(std::string &text, const char letter, const char rletter);
-const std::vector<std::string> split(const std::string &text);
-bool isUniqueChar(const std::string &);
+#include "Types.hpp"
 
-// Manipulation of bits
-const uint64_t getBitsFromTable(const uint64_t &data, const uint8_t *table, const uint8_t from, const uint8_t to);
-const std::vector<uint8_t> getXORedBlock(const std::vector<uint8_t> &block1, const std::vector<uint8_t> &block2);
+namespace Tools
+{
+   const std::vector<std::string> split(const std::string &text);
+   void convertMajMinToSymbol(std::string &text, const std::string symbol);
+
+   const uint64_t getBitsFromTable(const uint64_t &data, const uint8_t *table, const uint8_t from, const uint8_t to);
+   const BytesVector getXORedBlock(const BytesVector &block1, const BytesVector &block2);
+
+   const std::string baseXtoBaseY(const std::string &number, const uint8_t from_base, const uint8_t to_base);
+}
 
 #endif

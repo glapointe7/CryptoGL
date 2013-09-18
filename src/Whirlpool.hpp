@@ -4,21 +4,17 @@
 #ifndef WHIRLPOOL_HPP
 #define WHIRLPOOL_HPP
 
-#include "HashFunction.hpp"
+#include "MerkleDamgardFunction.hpp"
 #include "BigEndian.hpp"
 
-#define INPUT_BLOCK_LENGTH 64
-
-class Whirlpool : public HashFunction<uint64_t, BigEndian64>
+class Whirlpool : public MerkleDamgardFunction<uint64_t, BigEndian64, BigEndian64, 64>
 {
 public:
-   Whirlpool() : HashFunction(INPUT_BLOCK_LENGTH, 64, {0, 0, 0, 0, 0, 0, 0, 0}) {}
-
-   virtual const BytesVector encode(const BytesVector &data) final;
+   Whirlpool() : MerkleDamgardFunction({0, 0, 0, 0, 0, 0, 0, 0}, 10, 64) {}
 
 private:
    uint64_t applyGammaPiTheta(UInt64Vector &key, const uint8_t index) const;
-   void compress(UInt64Vector &block, UInt64Vector &state);
+   virtual void compress(UInt64Vector &block, UInt64Vector &state) final;
 
    /* Round constants. */
    static constexpr uint64_t RC[10] = {
@@ -33,8 +29,6 @@ private:
       0xfbee7c66dd17479e,
       0xca2dbf07ad5a8333
    };
-
-   static constexpr uint8_t rounds = 10;
    
    /* The 64-bit lookup tables. */
    static constexpr uint64_t sbox[8][256] = {

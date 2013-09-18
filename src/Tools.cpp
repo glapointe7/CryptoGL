@@ -4,54 +4,7 @@
 #include <algorithm>
 #include <sstream>
 
-// Check if it exists a duplicate char in text.
-bool isUniqueChar(const std::string &text)
-{
-   std::vector<bool> array(256, 0);
-
-   for (const auto c : text)
-   {
-      if (array[c] == true)
-      {
-         return false;
-      }
-      else
-      {
-         array[c] = true;
-      }
-   }
-
-   return true;
-}
-
-const std::string removeRepeatedLetters(const std::string &str)
-{
-   uint32_t str_len = str.length();
-   std::string result(str);
-
-   for (uint32_t i = 0; i < str_len; ++i)
-   {
-      for (uint32_t j = i + 1; j < str_len; ++j)
-      {
-         if (result[i] == result[j])
-         {
-            result.erase(j, 1);
-            str_len--;
-         }
-      }
-   }
-
-   return result;
-}
-
-void replaceChar(std::string &text, const char letter, const char rletter)
-{
-   std::replace_if(text.begin(), text.end(), [letter](char c) {
-      return (c == letter);
-   }, rletter);
-}
-
-const std::vector<std::string> split(const std::string &text)
+const std::vector<std::string> Tools::split(const std::string &text)
 {
    std::istringstream iss(text);
    std::vector<std::string> split_text;
@@ -67,7 +20,7 @@ const std::vector<std::string> split(const std::string &text)
    return split_text;
 }
 
-const uint64_t getBitsFromTable(const uint64_t &data, const uint8_t *table, const uint8_t from, const uint8_t to)
+const uint64_t Tools::getBitsFromTable(const uint64_t &data, const uint8_t *table, const uint8_t from, const uint8_t to)
 {
    uint8_t i = to;
    uint64_t output = 0;
@@ -84,10 +37,10 @@ const uint64_t getBitsFromTable(const uint64_t &data, const uint8_t *table, cons
    return output;
 }
 
-const std::vector<uint8_t> getXORedBlock(const std::vector<uint8_t> &block1, const std::vector<uint8_t> &block2)
+const BytesVector Tools::getXORedBlock(const BytesVector &block1, const BytesVector &block2)
 {
    const uint64_t size = block1.size();
-   std::vector<uint8_t> xored_block;
+   BytesVector xored_block;
    xored_block.reserve(size);
    
    for(uint64_t i = 0; i < size; ++i)
@@ -96,4 +49,60 @@ const std::vector<uint8_t> getXORedBlock(const std::vector<uint8_t> &block1, con
    }
    
    return xored_block;
+}
+
+void Tools::convertMajMinToSymbol(std::string &text, const std::string symbol)
+{
+   std::replace_if(text.begin(), text.end(), [](char c) {
+      return (isupper(c));
+   }, symbol[0]);
+
+   std::replace_if(text.begin(), text.end(), [](char c) {
+      return (islower(c));
+   }, symbol[1]);
+}
+
+/**
+ * Convert a string from base 'from_base' to a string in base 'to_base'.
+ *
+ * @param string number : The number to convert.
+ * @param int from_base : Numeric base of number before the conversion.
+ * @param int to_base : The base for which the number will be converted.
+ * @return string result
+ */
+const std::string Tools::baseXtoBaseY(const std::string &number, const uint8_t from_base, const uint8_t to_base)
+{
+   const std::string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
+   std::string result;
+   
+   BytesVector pos;
+   pos.reserve(number.length());
+   for (const auto c : number)
+   {
+      pos.push_back(chars.find(c));
+   }
+
+   uint32_t length = number.length();
+   uint32_t newlen = 0;
+   do
+   {
+      uint64_t divide = 0;
+      for (uint32_t i = 0; i < length; i++)
+      { // Perform division manually (which is why this works with big numbers)
+         divide = divide * from_base + pos[i];
+         if (divide >= to_base)
+         {
+            pos[newlen++] = static_cast<uint32_t> (divide / to_base);
+            divide %= to_base;
+         }
+         else if (newlen > 0)
+         {
+            pos[newlen++] = 0;
+         }
+      }
+      length = newlen;
+      result.push_back(chars[divide]);
+   } while (newlen != 0);
+
+   return result;
 }

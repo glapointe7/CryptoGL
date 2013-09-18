@@ -14,39 +14,38 @@ constexpr uint8_t Ripemd::left_shift2[];
 
 void Ripemd::process128_256(const UInt32Vector &words, UInt32Vector &hash, const uint8_t j)
 {
-   uint8_t k = 0;
+   const uint8_t index = j >> 4;
    uint32_t f1, f2;
-   if (j < 16)
+   switch(index)
    {
-      f1 = F(hash[1], hash[2], hash[3]);
-      f2 = I(hash[5], hash[6], hash[7]);
-   }
-   else if (j < 32)
-   {
-      f1 = G(hash[1], hash[2], hash[3]);
-      f2 = H(hash[5], hash[6], hash[7]);
-      k = 1;
-   }
-   else if (j < 48)
-   {
-      f1 = H(hash[1], hash[2], hash[3]);
-      f2 = G(hash[5], hash[6], hash[7]);
-      k = 2;
-   }
-   else
-   {
-      f1 = I(hash[1], hash[2], hash[3]);
-      f2 = F(hash[5], hash[6], hash[7]);
-      k = 3;
+      case 0:
+         f1 = F(hash[1], hash[2], hash[3]);
+         f2 = I(hash[5], hash[6], hash[7]);
+         break;
+         
+      case 1:
+         f1 = G(hash[1], hash[2], hash[3]);
+         f2 = H(hash[5], hash[6], hash[7]);
+         break;
+         
+      case 2:
+         f1 = H(hash[1], hash[2], hash[3]);
+         f2 = G(hash[5], hash[6], hash[7]);
+         break;
+         
+      case 3:
+         f1 = I(hash[1], hash[2], hash[3]);
+         f2 = F(hash[5], hash[6], hash[7]);
+         break;
    }
 
-   uint32_t tmp = Bits::rotateLeft(hash[0] + f1 + words[word_selection1[j]] + magic_numbers1[k], left_shift1[j], 32);
+   uint32_t tmp = Bits::rotateLeft(hash[0] + f1 + words[word_selection1[j]] + magic_numbers1[index], left_shift1[j], 32);
    hash[0] = hash[3];
    hash[3] = hash[2];
    hash[2] = hash[1];
    hash[1] = tmp;
 
-   tmp = Bits::rotateLeft(hash[4] + f2 + words[word_selection2[j]] + magic_numbers2[k], left_shift2[j], 32);
+   tmp = Bits::rotateLeft(hash[4] + f2 + words[word_selection2[j]] + magic_numbers2[index], left_shift2[j], 32);
    hash[4] = hash[7];
    hash[7] = hash[6];
    hash[6] = hash[5];
@@ -55,46 +54,44 @@ void Ripemd::process128_256(const UInt32Vector &words, UInt32Vector &hash, const
 
 void Ripemd::process160_320(const UInt32Vector &words, UInt32Vector &hash, const uint8_t j)
 {
-   uint8_t k = 0;
+   const uint8_t index = j >> 4;
    uint32_t f1, f2;
-   if (j < 16)
+   switch(index)
    {
-      f1 = F(hash[1], hash[2], hash[3]);
-      f2 = J(hash[6], hash[7], hash[8]);
+      case 0:
+         f1 = F(hash[1], hash[2], hash[3]);
+         f2 = J(hash[6], hash[7], hash[8]);
+         break;
+         
+      case 1:
+         f1 = G(hash[1], hash[2], hash[3]);
+         f2 = I(hash[6], hash[7], hash[8]);
+         break;
+         
+      case 2:
+         f1 = H(hash[1], hash[2], hash[3]);
+         f2 = H(hash[6], hash[7], hash[8]);
+         break;
+         
+      case 3:
+         f1 = I(hash[1], hash[2], hash[3]);
+         f2 = G(hash[6], hash[7], hash[8]);
+         break;
+         
+      case 4:
+         f1 = J(hash[1], hash[2], hash[3]);
+         f2 = F(hash[6], hash[7], hash[8]);
+         break;
    }
-   else if (j < 32)
-   {
-      f1 = G(hash[1], hash[2], hash[3]);
-      f2 = I(hash[6], hash[7], hash[8]);
-      k = 1;
-   }
-   else if (j < 48)
-   {
-      f1 = H(hash[1], hash[2], hash[3]);
-      f2 = H(hash[6], hash[7], hash[8]);
-      k = 2;
-   }
-   else if (j < 64)
-   {
-      f1 = I(hash[1], hash[2], hash[3]);
-      f2 = G(hash[6], hash[7], hash[8]);
-      k = 3;
-   }
-   else
-   {
-      f1 = J(hash[1], hash[2], hash[3]);
-      f2 = F(hash[6], hash[7], hash[8]);
-      k = 4;
-   }
-
-   uint32_t tmp = Bits::rotateLeft(hash[0] + f1 + words[word_selection1[j]] + magic_numbers1[k], left_shift1[j], 32) + hash[4];
+   
+   uint32_t tmp = Bits::rotateLeft(hash[0] + f1 + words[word_selection1[j]] + magic_numbers1[index], left_shift1[j], 32) + hash[4];
    hash[0] = hash[4];
    hash[4] = hash[3];
    hash[3] = Bits::rotateLeft(hash[2], 10, 32);
    hash[2] = hash[1];
    hash[1] = tmp;
 
-   tmp = Bits::rotateLeft(hash[5] + f2 + words[word_selection2[j]] + magic_numbers_big2[k], left_shift2[j], 32) + hash[9];
+   tmp = Bits::rotateLeft(hash[5] + f2 + words[word_selection2[j]] + magic_numbers_big2[index], left_shift2[j], 32) + hash[9];
    hash[5] = hash[9];
    hash[9] = hash[8];
    hash[8] = Bits::rotateLeft(hash[7], 10, 32);
@@ -189,68 +186,4 @@ void Ripemd320::compress(UInt32Vector &int_block, UInt32Vector &state)
    {
       state[j] += hash[j];
    }
-}
-
-const BytesVector Ripemd128::encode(const BytesVector &data)
-{
-   BytesVector bytes = appendPadding(data);
-   bytes = appendLength<LittleEndian64>(bytes, data.size() << 3);
-
-   UInt32Vector states(IV);
-   const uint64_t bytes_len = bytes.size();
-   for (uint64_t i = 0; i < bytes_len; i += block_size)
-   {
-      UInt32Vector int_block = getInputBlocks(bytes, i);
-      compress(int_block, states);
-   }
-
-   return getOutput(states);
-}
-
-const BytesVector Ripemd160::encode(const BytesVector & data)
-{
-   BytesVector bytes = appendPadding(data);
-   bytes = appendLength<LittleEndian64>(bytes, data.size() << 3);
-
-   UInt32Vector states(IV);
-   const uint64_t bytes_len = bytes.size();
-   for (uint64_t i = 0; i < bytes_len; i += block_size)
-   {
-      UInt32Vector int_block = getInputBlocks(bytes, i);
-      compress(int_block, states);
-   }
-
-   return getOutput(states);
-}
-
-const BytesVector Ripemd256::encode(const BytesVector & data)
-{
-   BytesVector bytes = appendPadding(data);
-   bytes = appendLength<LittleEndian64>(bytes, data.size() << 3);
-
-   UInt32Vector states(IV);
-   const uint64_t bytes_len = bytes.size();
-   for (uint64_t i = 0; i < bytes_len; i += block_size)
-   {
-      UInt32Vector int_block = getInputBlocks(bytes, i);
-      compress(int_block, states);
-   }
-
-   return getOutput(states);
-}
-
-const BytesVector Ripemd320::encode(const BytesVector & data)
-{
-   BytesVector bytes = appendPadding(data);
-   bytes = appendLength<LittleEndian64>(bytes, data.size() << 3);
-
-   UInt32Vector states(IV);
-   const uint64_t bytes_len = bytes.size();
-   for (uint64_t i = 0; i < bytes_len; i += block_size)
-   {
-      UInt32Vector int_block = getInputBlocks(bytes, i);
-      compress(int_block, states);
-   }
-
-   return getOutput(states);
 }

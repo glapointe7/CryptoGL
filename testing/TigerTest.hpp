@@ -1,6 +1,6 @@
 
 #ifndef TIGERTEST_HPP
-#define	TIGERTEST_HPP
+#define TIGERTEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Tiger.hpp"
@@ -9,13 +9,14 @@
 class TigerTest : public ::testing::Test
 {
 protected:
-   Tiger *T1, *T2, *T3;
+   Tiger *T1, *T2, *T3, *Tiger2;
 
    virtual void SetUp()
    {
       T1 = new Tiger(Tiger::HashSize::_128bits);
       T2 = new Tiger(Tiger::HashSize::_160bits);
       T3 = new Tiger(Tiger::HashSize::_192bits);
+      Tiger2 = new Tiger(Tiger::HashSize::_192bits, Tiger::Version::tiger2);
    }
 
    virtual void TearDown()
@@ -23,6 +24,7 @@ protected:
       delete T1;
       delete T2;
       delete T3;
+      delete Tiger2;
    }
 };
 
@@ -69,6 +71,21 @@ TEST_F(TigerTest, encodeEmptyTiger192)
    std::string hash = "3293AC630C13F0245F92BBB1766E16167A4E58492DDE73F3";
 
    EXPECT_EQ(hash, Digest::hexDigest(T3->encode(std::vector<uint8_t>(0))));
+}
+
+TEST_F(TigerTest, encodeNormalTiger2_192)
+{
+   const std::string clear_text = "The quick brown fox jumps over the lazy dog";
+   std::string hash = "976ABFF8062A2E9DCEA3A1ACE966ED9C19CB85558B4976D8";
+
+   EXPECT_EQ(hash, Digest::hexDigest(Tiger2->encode(Digest::getBytesFromString(clear_text))));
+}
+
+TEST_F(TigerTest, encodeEmptyTiger2_192)
+{
+   std::string hash = "4441BE75F6018773C206C22745374B924AA8313FEF919F41";
+
+   EXPECT_EQ(hash, Digest::hexDigest(Tiger2->encode(std::vector<uint8_t>(0))));
 }
 
 TEST_F(TigerTest, encodeHMACNormalText)

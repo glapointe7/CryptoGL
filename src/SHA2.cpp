@@ -39,38 +39,6 @@ void SHA64Bits::compress(UInt64Vector &int_block, UInt64Vector &state)
    finalize(state, hash);
 }
 
-const BytesVector SHA32Bits::encode(const BytesVector &data)
-{
-   BytesVector bytes = appendPadding(data);
-   bytes = appendLength<BigEndian64>(bytes, data.size() << 3);
-   
-   UInt32Vector states(IV);
-   const uint64_t bits_len = bytes.size();
-   for (uint64_t i = 0; i < bits_len; i += block_size)
-   {
-      UInt32Vector int_block = getInputBlocks(bytes, i);
-      compress(int_block, states);
-   }
-
-   return getOutput(states);
-}
-
-const BytesVector SHA64Bits::encode(const BytesVector &data)
-{
-   BytesVector bytes = appendPadding(data);
-   bytes = appendLength<BigEndian64>(bytes, data.size() << 3);
-   
-   UInt64Vector states(IV);
-   const uint64_t bits_len = bytes.size();
-   for (uint64_t i = 0; i < bits_len; i += block_size)
-   {
-      UInt64Vector int_block = getInputBlocks(bytes, i);
-      compress(int_block, states);
-   }
-
-   return getOutput(states);
-}
-
 void SHA512_t::buildIV(const BytesVector &t)
 {
    SHA512 *S = new SHA512();

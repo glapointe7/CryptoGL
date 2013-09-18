@@ -1,5 +1,5 @@
 /*
- * Source : 
+ * Source : https://131002.net/blake/blake.pdf
  */
 #ifndef BLAKE_HPP
 #define BLAKE_HPP
@@ -10,26 +10,50 @@
 template <class DataType, uint8_t InputBlockSize>
 class Blake : public HashFunction<DataType, BigEndian<DataType>>
 {
-protected:
-   using DataTypeVector = typename HashFunction<DataType, BigEndian<DataType>>::DataTypeVector;
+static_assert(!(InputBlockSize & 0x3F), "'InputBlockSize' has to be a multiple of 64.");   
    
+private:
+   using HashFunctionType = HashFunction<DataType, BigEndian<DataType>>;
+   using DataTypeVector = typename HashFunctionType::DataTypeVector;
+   
+   const DataTypeVector salt;
+   uint64_t counter;
+   
+public:   
+   virtual const BytesVector encode(const BytesVector &data) final
+   {
+      const uint64_t data_size = data.size();
+      BytesVector bytes = this->pad(data);
+      bytes = this->template appendLength<BigEndian64>(bytes, data_size << 3);
+
+      const uint64_t bytes_len = bytes.size();
+      setCounter(data_size, bytes_len);
+
+      DataTypeVector hash(this->IV);
+      for (uint64_t i = 0; i < bytes_len; i += InputBlockSize)
+      {              
+         DataTypeVector int_block = this->getInputBlocks(bytes, i);    
+         compress(int_block, hash);
+      }
+
+      return this->getOutput(hash);
+   }
+   
+protected:
+   /* Constructor with a salt provided. */
+   Blake(const DataTypeVector &IV, const DataTypeVector &salt, const uint8_t rounds, const uint8_t output_size) 
+      : HashFunctionType(InputBlockSize, output_size, IV), 
+           salt(salt), rounds(rounds) {}
+      
    /* Default constructor : no salt provided. */
    Blake(const DataTypeVector &IV, const uint8_t rounds, const uint8_t output_size) 
-      : HashFunction<DataType, BigEndian<DataType>>(InputBlockSize, output_size, IV), 
-           salt({0, 0, 0, 0}), rounds(rounds) {}
-   
-      /* Constructor with a salt provided. */
-   Blake(const DataTypeVector &IV, const DataTypeVector &salt, const uint8_t rounds, const uint8_t output_size) 
-      : HashFunction<DataType, BigEndian<DataType>>(InputBlockSize, output_size, IV), 
-           salt(salt), rounds(rounds) {}
+      : Blake(IV, {0, 0, 0, 0}, rounds, output_size) {}
    
    virtual ~Blake() {}
    
    virtual void G(DataType &a, DataType &b, DataType &c, DataType &d, 
            const DataTypeVector &block, const uint8_t r, const uint8_t i) const = 0;
-   
-   virtual const BytesVector encode(const BytesVector &data) = 0;
-   
+      
    virtual void compress(DataTypeVector &int_block, DataTypeVector &hash) = 0;
    
    const DataTypeVector initialize(const DataTypeVector &h, const DataType *C)
@@ -72,8 +96,6 @@ protected:
       }
    }
    
-   const DataTypeVector salt;
-   uint64_t counter;
    const uint8_t rounds;
    
    static constexpr uint8_t sigma[10][16] = {
@@ -97,9 +119,6 @@ protected:
       : Blake(IV, 14, output_size) {}
    virtual ~Blake32Bits() {}
    
-public:
-   virtual const BytesVector encode(const BytesVector &data) final;
-   
 private:
    virtual void G(uint32_t &a, uint32_t &b, uint32_t &c, uint32_t &d, 
            const UInt32Vector &block, const uint8_t r, const uint8_t i) const final;
@@ -122,9 +141,6 @@ protected:
    Blake64Bits(const UInt64Vector &IV, const uint8_t output_size) 
       : Blake(IV, 16, output_size) {}
    virtual ~Blake64Bits() {}
-   
-public:
-   virtual const BytesVector encode(const BytesVector &data) final;
    
 private:
    virtual void G(uint64_t &a, uint64_t &b, uint64_t &c, uint64_t &d, 
@@ -160,7 +176,7 @@ public:
 		0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19}, 32) {}
       
 private:
-   virtual const BytesVector appendPadding(const BytesVector &message) const final;
+   virtual const BytesVector pad(const BytesVector &message) const final;
 };
 
 class Blake384 : public Blake64Bits
@@ -177,7 +193,7 @@ public:
 		0x510E527FADE682D1, 0x9B05688C2B3E6C1F, 0x1F83D9ABFB41BD6B, 0x5BE0CD19137E2179}, 64) {}
       
 private:
-   virtual const BytesVector appendPadding(const BytesVector &message) const final;
+   virtual const BytesVector pad(const BytesVector &message) const final;
 };
 
 #endif

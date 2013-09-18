@@ -2,7 +2,7 @@
  * Source : http://keccak.noekeon.org/Keccak-implementation-3.2.pdf
  */
 #ifndef KECCAK_HPP
-#define	KECCAK_HPP
+#define KECCAK_HPP
 
 #include "SpongeFunction.hpp"
 

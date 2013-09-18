@@ -15,7 +15,7 @@ SquareCipher::SquareCipher(const KeyType &key) : dim(5)
 
 void SquareCipher::setAlpha(const ClassicalType &alpha)
 {
-   if (!isPerfectSquare(alpha.length()))
+   if (!Maths::isPerfectSquare(alpha.length()))
    {
       throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha.length());
    }
@@ -31,7 +31,7 @@ void SquareCipher::setAlpha(const ClassicalType &alpha)
 const SquareCipher::Grid
 SquareCipher::getGrid(const ClassicalType &chars) const
 {
-   const ClassicalType new_alpha = removeRepeatedLetters(chars);
+   const ClassicalType new_alpha = String::makeUniqueChars(chars);
    Grid grid;
    grid.reserve(dim);
 

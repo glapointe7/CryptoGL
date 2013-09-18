@@ -38,7 +38,7 @@ const ClassicalType Morse::decode(const ClassicalType &cipher_text)
 {
    ClassicalType decrypted;
    decrypted.reserve(cipher_text.length() / 2);
-   const std::vector<ClassicalType> cipher_word(split(cipher_text));
+   const std::vector<ClassicalType> cipher_word = Tools::split(cipher_text);
 
    for (const auto str : cipher_word)
    {

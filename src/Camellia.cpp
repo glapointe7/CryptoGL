@@ -58,7 +58,7 @@ void Camellia::generateSubkeys()
          break;
    }
    
-   BytesVector K = getXORedBlock(Kl, Kr);
+   BytesVector K = Tools::getXORedBlock(Kl, Kr);
    uint64_t K1 = BigEndian64::toInteger(BytesVector(K.begin(), K.begin() + 8));
    uint64_t K2 = BigEndian64::toInteger(BytesVector(K.begin() + 8, K.end()));
    K2 ^= F(K1 ^ key_sigma[0], 0);
@@ -133,7 +133,7 @@ void Camellia::generateSubkeys()
    }
    else
    {
-      K = getXORedBlock(Ka, Kr);
+      K = Tools::getXORedBlock(Ka, Kr);
       K1 = BigEndian64::toInteger(BytesVector(K.begin(), K.begin() + 8));
       K2 = BigEndian64::toInteger(BytesVector(K.begin() + 8, K.end()));
       K2 ^= F(K1 ^ key_sigma[4], 4);

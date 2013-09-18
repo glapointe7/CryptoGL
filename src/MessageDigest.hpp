@@ -1,30 +1,27 @@
 /*
- * Source : 
+ * Source : http://www.ietf.org/rfc/rfc1321.txt
  */
 #ifndef MESSAGEDIGEST_HPP
 #define MESSAGEDIGEST_HPP
 
-#include "HashFunction.hpp"
+#include "MerkleDamgardFunction.hpp"
 #include "LittleEndian.hpp"
 
-class MessageDigest : public HashFunction<uint32_t, LittleEndian32>
-{
+class MessageDigest : public MerkleDamgardFunction<uint32_t, LittleEndian32, LittleEndian64, 64>
+{   
 protected:
    explicit MessageDigest(const uint8_t rounds) 
-      : HashFunction(64, 16, {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476}), rounds(rounds) {}
+      : MerkleDamgardFunction({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476}, rounds, 16) {}
+
    virtual ~MessageDigest() {}
    
-   virtual const BytesVector encode(const BytesVector &data) = 0;
    virtual void compress(UInt32Vector &int_block, UInt32Vector &state) = 0;
- 
-   const uint8_t rounds;
 };
 
 class MD4 : public MessageDigest
 {
 public:
    MD4() : MessageDigest(48) {}
-   virtual const BytesVector encode(const BytesVector &data) final;
    
 private:
    virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
@@ -40,6 +37,8 @@ private:
       0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15,
       0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15
    };
+   
+   static constexpr uint32_t k[3] = {0, 0x5A827999, 0x6ED9EBA1};
    
    static constexpr uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
    {
@@ -61,7 +60,6 @@ class MD5 : public MessageDigest
 {
 public:
    MD5() : MessageDigest(64) {}
-   virtual const BytesVector encode(const BytesVector &data) final;
    
 private:
    virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;

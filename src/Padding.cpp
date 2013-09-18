@@ -42,7 +42,8 @@ const BytesVector Padding::_10Star(const BytesVector &data, const uint8_t block_
    return padding;
 }
 
-const BytesVector Padding::_10Star1(const BytesVector &data, const uint8_t block_size)
+const BytesVector Padding::_10Star1(const BytesVector &data, const uint8_t block_size, 
+        const uint8_t first_byte, const uint8_t last_byte)
 {
    BytesVector padding(data);
    padding.reserve(data.size() + block_size + 1);
@@ -53,9 +54,9 @@ const BytesVector Padding::_10Star1(const BytesVector &data, const uint8_t block
    }
    else
    {
-      padding.push_back(0x01);
+      padding.push_back(first_byte);
       padding.insert(padding.end(), block_size - (padding.size() % block_size), 0);
-      padding.back() = 0x80;
+      padding.back() = last_byte;
    }
 
    return padding;

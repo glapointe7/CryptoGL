@@ -2,30 +2,32 @@
  * Source : http://www.cs.technion.ac.il/~biham/Reports/Tiger/
  */
 #ifndef TIGER_HPP
-#define	TIGER_HPP
+#define TIGER_HPP
 
-#include "HashFunction.hpp"
+#include "MerkleDamgardFunction.hpp"
 #include "LittleEndian.hpp"
 
-class Tiger : public HashFunction<uint64_t, LittleEndian64>
+class Tiger : public MerkleDamgardFunction<uint64_t, LittleEndian64, LittleEndian64, 64>
 {   
 public:
    enum class HashSize : uint8_t { _128bits = 16, _160bits = 20, _192bits = 24 };
+   enum class Version : uint8_t { tiger = 0x01, tiger2 = 0x80 };
    
-   explicit Tiger(const HashSize size) 
-      : HashFunction(64, static_cast<uint8_t>(size), {0x0123456789ABCDEF, 0xFEDCBA9876543210, 0xF096A5B4C3B2E187}) {}
-   virtual ~Tiger() {}
-
-   virtual const BytesVector encode(const BytesVector &data) final;
+   Tiger(const HashSize output_size, const Version version)
+      : MerkleDamgardFunction({0x0123456789ABCDEF, 0xFEDCBA9876543210, 0xF096A5B4C3B2E187}, 24,
+           static_cast<uint8_t>(output_size)) { first_byte_padding = static_cast<uint8_t>(version); }
+   
+   explicit Tiger(const HashSize output_size) 
+      : Tiger(output_size, Version::tiger) {}
       
-private:
-   virtual const BytesVector appendPadding(const BytesVector &data) const final;
-   
+   virtual ~Tiger() {}
+      
+private:   
    static void applyKeySchedule(UInt64Vector &words);
    void applyRound(uint64_t &a, uint64_t &b, uint64_t &c, const uint64_t &word, const uint8_t mult) const;
    void pass(uint64_t &a, uint64_t &b, uint64_t &c, const UInt64Vector &words, const uint8_t mult) const;
    
-   void compress(UInt64Vector &int_block, UInt64Vector &state);
+   virtual void compress(UInt64Vector &int_block, UInt64Vector &state) final;
    
    static constexpr uint64_t sbox[4][256] = {
       {0x02AAB17CF7E90C5E, 0xAC424B03E243A8EC,

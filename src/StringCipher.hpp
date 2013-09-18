@@ -11,8 +11,6 @@
 class StringCipher : public Cipher<ClassicalType>
 {
 public:
-   void eraseBadCharacters(ClassicalType &text) const;
-   
    virtual void setAlpha(const ClassicalType &alpha);
    const ClassicalType getAlpha() const;
 

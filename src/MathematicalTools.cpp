@@ -21,7 +21,7 @@
 
 // All perfect squares in base 16 end by the following digit : 0,1,4 or 9.
 
-bool isPerfectSquare(const uint32_t value)
+bool Maths::isPerfectSquare(const uint32_t value)
 {
    const uint32_t h = value & 0xF;
    if (h > 9)

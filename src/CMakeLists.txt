@@ -8,7 +8,6 @@ set(SRC
    BlockCipherModes.hpp BlockCipherModes.cpp
    Base64.hpp Base64.cpp
    SquareMatrix.hpp SquareMatrix.cpp
-	ConverterTools.hpp ConverterTools.cpp
    MathematicalTools.hpp MathematicalTools.cpp
    BigEndian.hpp
    LittleEndian.hpp
@@ -83,6 +82,7 @@ set(SRC
    Isaac.hpp Isaac.cpp
 
 # Hash functions section
+   MerkleDamgardFunction.hpp
    HashFunction.hpp
    MessageDigest.hpp MessageDigest.cpp
    MD2.hpp MD2.cpp

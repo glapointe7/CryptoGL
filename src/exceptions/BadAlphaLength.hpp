@@ -9,18 +9,10 @@
 class BadAlphaLength : public BadAlpha
 {
 public:
-   BadAlphaLength() {}
-   BadAlphaLength(const ErrorType &message) : BadAlpha(message) {}
-   BadAlphaLength(const ErrorType &message, const uint32_t len) 
-   {
-      const ErrorType number = String::uintToString(len);
-      ErrorType str(message);
-      str.reserve(message.length() + 27 + number.length());
-      str.append(" Your alphabet length is : ");
-      str.append(number);
-
-      BadAlphaLength(ErrorType(str));
-   }
+   BadAlphaLength() { }
+   explicit BadAlphaLength(const ErrorType &message) : BadAlpha(message) { }
+   BadAlphaLength(const ErrorType &message, const uint32_t len)
+      : BadAlpha(message + " Your alphabet length is : " + String::uintToString(len)) { }
 };
 
 #endif

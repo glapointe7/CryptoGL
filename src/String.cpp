@@ -1,6 +1,7 @@
 #include "String.hpp"
 
 #include <algorithm>
+#include <vector>
 
 void String::toUpperCase(std::string &text)
 {
@@ -17,6 +18,46 @@ void String::removeChars(std::string &text, const std::string &chars)
    text.erase(std::remove_if(text.begin(), text.end(), [chars] (const char c) {
       return chars.find(c) != std::string::npos;
    }), text.end());
+}
+
+const std::string String::makeUniqueChars(const std::string &str)
+{
+   uint32_t str_len = str.length();
+   std::string result(str);
+
+   for (uint32_t i = 0; i < str_len; ++i)
+   {
+      for (uint32_t j = i + 1; j < str_len; ++j)
+      {
+         if (result[i] == result[j])
+         {
+            result.erase(j, 1);
+            str_len--;
+         }
+      }
+   }
+
+   return result;
+}
+
+// Check if it exists a duplicate char in text.
+bool String::containsUniqueChars(const std::string &str)
+{
+   std::vector<bool> array(256, 0);
+
+   for (const auto c : str)
+   {
+      if (array[c] == true)
+      {
+         return false;
+      }
+      else
+      {
+         array[c] = true;
+      }
+   }
+
+   return true;
 }
 
 const std::string String::uintToString(uint64_t value)

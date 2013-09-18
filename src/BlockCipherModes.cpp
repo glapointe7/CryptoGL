@@ -20,7 +20,7 @@ const BlockCipherModes::Block BlockCipherECBMode::getClearBlock(const Block &inp
  */
 const BlockCipherModes::Block BlockCipherCBCMode::getCipherBlock(const Block &input_block)
 {
-   const Block new_cipher_block = encode(getXORedBlock(input_block, previous_cipher_block));
+   const Block new_cipher_block = encode(Tools::getXORedBlock(input_block, previous_cipher_block));
    previous_cipher_block = new_cipher_block;  
    
    return new_cipher_block;
@@ -28,7 +28,7 @@ const BlockCipherModes::Block BlockCipherCBCMode::getCipherBlock(const Block &in
 
 const BlockCipherModes::Block BlockCipherCBCMode::getClearBlock(const Block &input_block)
 {
-   const Block clear_block = getXORedBlock(decode(input_block), previous_cipher_block);
+   const Block clear_block = Tools::getXORedBlock(decode(input_block), previous_cipher_block);
    previous_cipher_block = input_block;
    
    return clear_block;
@@ -40,7 +40,7 @@ const BlockCipherModes::Block BlockCipherCBCMode::getClearBlock(const Block &inp
 const BlockCipherModes::Block BlockCipherCFBMode::getCipherBlock(const Block &input_block)
 {   
    const Block output = encode(next_input_block);
-   const Block cipher = getXORedBlock(input_block, output);
+   const Block cipher = Tools::getXORedBlock(input_block, output);
    next_input_block = cipher;
    
    return cipher;
@@ -49,7 +49,7 @@ const BlockCipherModes::Block BlockCipherCFBMode::getCipherBlock(const Block &in
 const BlockCipherModes::Block  BlockCipherCFBMode::getClearBlock(const Block &input_block)
 {
    const Block output = encode(next_input_block);
-   const Block clear = getXORedBlock(input_block, output);
+   const Block clear = Tools::getXORedBlock(input_block, output);
    next_input_block = input_block;
    
    return clear;
@@ -61,7 +61,7 @@ const BlockCipherModes::Block  BlockCipherCFBMode::getClearBlock(const Block &in
 const BlockCipherModes::Block BlockCipherOFBMode::getCipherBlock(const Block &input_block)
 {   
    const Block output = encode(next_input_block);
-   const Block cipher = getXORedBlock(input_block, output);
+   const Block cipher = Tools::getXORedBlock(input_block, output);
    next_input_block = output;
    
    return cipher;
@@ -80,7 +80,7 @@ const BlockCipherModes::Block BlockCipherCTRMode::getCipherBlock(const Block &in
    const Block output = encode(IV[block_index]);
    block_index++;
    
-   return getXORedBlock(input_block, output);
+   return Tools::getXORedBlock(input_block, output);
 }
 
 const BlockCipherModes::Block  BlockCipherCTRMode::getClearBlock(const Block &input_block)

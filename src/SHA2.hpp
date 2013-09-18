@@ -4,30 +4,30 @@
 #ifndef SHA2_HPP
 #define SHA2_HPP
 
-#include "HashFunction.hpp"
+#include "MerkleDamgardFunction.hpp"
 #include "BigEndian.hpp"
 
 #include "Bits.hpp"
 
-template <class DataType, uint8_t InputBlockSize>
-class SHA2 : public HashFunction<DataType, BigEndian<DataType>>
+template <typename DataType, uint8_t InputBlockSize>
+class SHA2 : public MerkleDamgardFunction<DataType, BigEndian<DataType>, BigEndian64, InputBlockSize>
 {
-protected:   
-   using DataTypeVector = typename HashFunction<DataType, BigEndian<DataType>>::DataTypeVector;
+private:
+   using MerkleDamgardFunctionType = MerkleDamgardFunction<DataType, BigEndian<DataType>, BigEndian64, InputBlockSize>;
+   using DataTypeVector = typename MerkleDamgardFunctionType::DataTypeVector;
    
+protected:      
    SHA2(const DataTypeVector &IV, const uint8_t rounds, const uint8_t output_size) 
-      : HashFunction<DataType, BigEndian<DataType>>(InputBlockSize, output_size, IV), 
-           rounds(rounds) {}
+      : MerkleDamgardFunctionType(IV, rounds, output_size) {}
+
    virtual ~SHA2() {}
    
-   virtual const BytesVector encode(const BytesVector &data) = 0;
    virtual void compress(DataTypeVector &int_block, DataTypeVector &state) = 0;
-   //virtual const BytesVector processEncode(const BytesVector &data, const uint8_t truncate_to) = 0;
-   
-   /* Extend the 16 words vector to 'max_size' words with specific operations. */
+      
+   /* Extend the 16 words vector to 'rounds' words with specific operations. */
    void extendWords(DataTypeVector &words, const BytesVector &to_shift) const
    {
-      for (uint8_t j = 16; j < rounds; ++j)
+      for (uint8_t j = 16; j < this->rounds; ++j)
       {
          words[j] = words[j - 16] + B(words[j - 15], to_shift[0], to_shift[1], to_shift[2])
                  + words[j - 7] + B(words[j - 2], to_shift[3], to_shift[4], to_shift[5]);
@@ -58,19 +58,16 @@ protected:
 
    static constexpr DataType maj(const DataType &x, const DataType &y, const DataType &z)
    {
-      static_assert(std::is_integral<DataType>::value, "Type 'DataType' must be an integral type.");
       return (x & y) ^ (x & z) ^ (y & z);
    }
 
    static constexpr DataType ch(const DataType &x, const DataType &y, const DataType &z)
    {
-      static_assert(std::is_integral<DataType>::value, "Type 'DataType' must be an integral type.");
       return (x & y) ^ (~x & z);
    }
 
    static constexpr DataType A(const DataType &hash, const uint8_t x, const uint8_t y, const uint8_t z)
    {
-      static_assert(std::is_integral<DataType>::value, "Type 'DataType' must be an integral type.");
       return Bits::rotateRight(hash, x, sizeof(DataType) << 3) 
               ^ Bits::rotateRight(hash, y, sizeof(DataType) << 3) 
               ^ Bits::rotateRight(hash, z, sizeof(DataType) << 3);
@@ -78,29 +75,21 @@ protected:
 
    static constexpr DataType B(const DataType &word, const uint8_t x, const uint8_t y, const uint8_t z)
    {
-      static_assert(std::is_integral<DataType>::value, "Type 'DataType' must be an integral type.");
       return Bits::rotateRight(word, x, sizeof(DataType) << 3) 
               ^ Bits::rotateRight(word, y, sizeof(DataType) << 3) 
               ^ (word >> z);
    }
-   
-   const uint8_t rounds;
 };
 
 /* Abstract class for SHA algorithm that uses only 64 bits blocks to encode. */
 class SHA32Bits : public SHA2<uint32_t, 64>
 {
-public:
-   virtual const BytesVector encode(const BytesVector &data) final;
-   
 protected:
    SHA32Bits(const UInt32Vector &IV, const uint8_t output_size) 
-      : SHA2(IV, 64, output_size) {}
+      : SHA2<uint32_t, 64>(IV, 64, output_size) {}
    virtual ~SHA32Bits() {}
       
 private:
-   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
-   
    static constexpr uint32_t round_constants[64] = {
       0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
       0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -111,23 +100,20 @@ private:
       0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
       0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
    };
+   
+   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
 };
 
 /* Abstract class for SHA algorithm that uses only 128 bits blocks to encode. */
 class SHA64Bits : public SHA2<uint64_t, 128>
 {
-public:
-   virtual const BytesVector encode(const BytesVector &data) final;
-   
 protected:   
    SHA64Bits(const UInt64Vector &IV, const uint8_t output_size) 
-      : SHA2(IV, 80, output_size) {}
+      : SHA2<uint64_t, 128>(IV, 80, output_size) {}
    virtual ~SHA64Bits() {}
      
 private:
-   virtual void compress(UInt64Vector &int_block, UInt64Vector &state) final;
-   
-   /* Derived from the fractional parts of the cube roots of the first eighty primes. */
+    /* Derived from the fractional parts of the cube roots of the first eighty primes. */
    static constexpr uint64_t first_cubic_root_primes[80] = {
       0x428A2F98D728AE22, 0x7137449123EF65CD, 0xB5C0FBCFEC4D3B2F, 0xE9B5DBA58189DBBC,
       0x3956C25BF348B538, 0x59F111F1B605D019, 0x923F82A4AF194F9B, 0xAB1C5ED5DA6D8118,
@@ -150,6 +136,7 @@ private:
       0x28DB77F523047D84, 0x32CAAB7B40C72493, 0x3C9EBE0A15C9BEBC, 0x431D67C49C100D4C,
       0x4CC5D4BECB3E42B6, 0x597F299CFC657E2A, 0x5FCB6FAB3AD6FAEC, 0x6C44198C4A475817
    };
+   virtual void compress(UInt64Vector &int_block, UInt64Vector &state) final;
 };
 
 class SHA224 : public SHA32Bits
@@ -200,6 +187,7 @@ protected:
    explicit SHA512_t(const uint8_t output_size) : SHA64Bits({}, output_size) {}
    virtual ~SHA512_t() {}
    
+   /* Make a new IV for SHA512 and use it to generate a trucated output. */
    void buildIV(const BytesVector &t);
 };
 

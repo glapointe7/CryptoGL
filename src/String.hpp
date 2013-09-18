@@ -34,6 +34,12 @@ namespace String
 
    /* Remove all characters in text specified by chars. */
    void removeChars(std::string &text, const std::string &chars);
+   
+   /* Remove all chars that are not uniques in 'str'. */
+   const std::string makeUniqueChars(const std::string &str);
+   
+   /* Check if 'str' contains unique chars. */
+   bool containsUniqueChars(const std::string &str);
 
    /* Convert integer to string in base 10. */
    const std::string uintToString(uint64_t value);

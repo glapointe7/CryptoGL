@@ -3,11 +3,9 @@
 #define DIGEST_HPP
 
 #include <vector>
-#include <iostream>
 #include <string>
 #include <sstream>
 #include <algorithm>
-#include <iterator>
 
 #include "big_integers/BigIntegerUtils.hh"
 #include "big_integers/BigInteger.hh"
@@ -34,7 +32,7 @@ namespace Digest
    template<>
    const std::string hexDigest(const BytesVector &bytes)
    {
-      const int8_t hex_digits[] = "0123456789ABCDEF";
+      const std::string hex_digits = "0123456789ABCDEF";
       std::string hex_digest;
       hex_digest.reserve(bytes.size() << 1);
       
@@ -64,12 +62,8 @@ namespace Digest
 
       for (uint64_t i = 0; i < hex_len; i += 2)
       {
-         const std::string hexa = hex_str.substr(i, 2);
-         std::istringstream ss(hexa);
-         ss.setf(std::ios::hex, std::ios::basefield);
-         uint16_t x;
-         ss >> x;
-         bytes.push_back(static_cast<uint8_t> (x));
+         const std::string hexa = {hex_str[i], hex_str[i+1]};
+         bytes.push_back(strtoul(hexa.c_str(), nullptr, 16));
       }
 
       return bytes;
@@ -85,7 +79,7 @@ namespace Digest
       std::string str;
       for (const auto big_value : V)
       {
-         str += getStringFromBigInteger(big_value);
+         str.append(getStringFromBigInteger(big_value));
          str.push_back(' ');
       }
       str.pop_back();

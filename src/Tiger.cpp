@@ -44,21 +44,6 @@ void Tiger::pass(uint64_t &a, uint64_t &b, uint64_t &c, const UInt64Vector &word
    applyRound(b, c, a, words[7], mult);
 }
 
-const BytesVector Tiger::appendPadding(const BytesVector &data) const
-{
-   BytesVector bytes_pad(data);
-   bytes_pad.reserve(data.size() + 128);
-
-   // Append a bit '1' at the end => 00000001.
-   bytes_pad.push_back(0x01);
-
-   // Pad with '0' bytes at the end of bits_pad until the length is 56 (mod 64).
-   const uint8_t bytes_pad_len = (120 - (bytes_pad.size() & 0x3F)) & 0x3F;
-   bytes_pad.insert(bytes_pad.end(), bytes_pad_len, 0);
-
-   return bytes_pad;
-}
-
 void Tiger::compress(UInt64Vector &int_block, UInt64Vector &state)
 {
    UInt64Vector hash(state);
@@ -75,20 +60,4 @@ void Tiger::compress(UInt64Vector &int_block, UInt64Vector &state)
    hash[2] += saved[2];
    
    state = hash;
-}
-
-const BytesVector Tiger::encode(const BytesVector &data)
-{
-   BytesVector bytes = appendPadding(data);
-   bytes = appendLength<LittleEndian64>(bytes, data.size() << 3);
-
-   UInt64Vector state(IV);
-   const uint64_t bytes_len = bytes.size();
-   for (uint64_t i = 0; i < bytes_len; i += block_size)
-   {
-      UInt64Vector int_block = getInputBlocks(bytes, i);
-      compress(int_block, state);
-   }
-   
-   return getOutput(state);
 }

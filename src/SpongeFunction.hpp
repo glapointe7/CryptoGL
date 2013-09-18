@@ -9,21 +9,20 @@
 #include "Types.hpp"
 #include "Padding.hpp"
 
-template <class UInt>
+template <typename DataType>
 class SpongeFunction
 {
 protected:
-   using UIntContainer = std::vector<UInt>;
-   using UIntMatrix = std::vector<UIntContainer>;
-
-   /* Default constructor : b = 1600 => r = 1024 et c = 576. */
-   SpongeFunction()
-   : bitrate(1024), capacity(576), width(1600), lane_width(64), block_size(128), output_size(512), rounds(24) {}
+   using DataTypeVector = std::vector<DataType>;
+   using DataTypeMatrix = std::vector<DataTypeVector>;
 
    /* Constructor with output size, capacity and bitrate given as parameters. */
    SpongeFunction(const uint16_t hash_size, const uint16_t c, const uint16_t r, const uint8_t round)
-   : bitrate(r), capacity(c), width(r + c), lane_width((r + c) / 25), 
-     block_size(200 * r / (r + c)), output_size(hash_size), rounds(round) {}
+      : bitrate(r), capacity(c), width(r + c), lane_width((r + c) / 25), 
+         block_size(200 * r / (r + c)), output_size(hash_size), rounds(round) {}
+   
+   /* Default constructor : b = 1600 => r = 1024 et c = 576. */
+   SpongeFunction() : SpongeFunction(512, 576, 1024, 24) {}
 
    virtual ~SpongeFunction() {}
 
@@ -53,7 +52,7 @@ protected:
    const uint8_t rounds;
 
    /* The state of the sponge construction. */
-   UIntMatrix state;
+   DataTypeMatrix state;
    
 public:
 
