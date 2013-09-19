@@ -39,7 +39,7 @@ void SHA64Bits::compress(UInt64Vector &int_block, UInt64Vector &state)
    finalize(state, hash);
 }
 
-void SHA512_t::buildIV(const BytesVector &t)
+void SHA512_t::makeNewIV(const BytesVector &code)
 {
    SHA512 *S = new SHA512();
    const UInt64Vector IV_512 = S->getIV();
@@ -56,15 +56,34 @@ void SHA512_t::buildIV(const BytesVector &t)
    // Encode the string 'SHA-512/224' or 'SHA-512/256'.
    BytesVector data = {0x53, 0x48, 0x41, 0x2D, 0x35, 0x31, 0x32, 0x2F};
    data.reserve(11);
-   data.insert(data.end(), t.begin(), t.end());
+   data.insert(data.end(), code.begin(), code.end());
    const BytesVector answer = S->encode(data);
    delete S;
 
    // Get the new IV vector.
-   IV.clear();
-   IV.reserve(8);
+   //IV.clear();
+   UInt64Vector new_IV;
+   new_IV.reserve(8);
    for (uint8_t j = 0; j < 64; j += 8)
    {
-      IV.push_back(BigEndian64::toInteger(BytesVector(answer.begin() + j, answer.begin() + j + 8)));
+      new_IV.push_back(BigEndian64::toInteger(BytesVector(answer.begin() + j, answer.begin() + j + 8)));
    }
+   setIV(new_IV);
+}
+
+const BytesVector SHA512_224::getOutput(const UInt64Vector &hash) const
+{
+   BytesVector output;
+   output.reserve(output_size);
+      
+   for (uint8_t j = 0; j < 3; ++j)
+   {
+      const BytesVector bytes = BigEndian64::toBytesVector(hash[j]);
+      output.insert(output.end(), bytes.begin(), bytes.end());
+   }
+
+   const BytesVector bytes = BigEndian64::toBytesVector(hash[3]);
+   output.insert(output.end(), bytes.begin(), bytes.begin() + 4);
+
+   return output;
 }

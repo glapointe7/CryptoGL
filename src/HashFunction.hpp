@@ -12,35 +12,38 @@
 #include "BigEndian.hpp"
 #include "LittleEndian.hpp"
 
+/* 
+ * DataType : An unsigned integer for the IV and integer input block.
+ * EndianType : An endian class type : BigEndian<DataType> or LittleEndian<DataType>.
+ */
 template <typename DataType, class EndianType>
 class HashFunction
-{
+{      
+static_assert(std::is_integral<DataType>::value, "Type 'DataType' must be an integral type.");
+   
 protected:
    using DataTypeVector = std::vector<DataType>;
    
    HashFunction(const uint8_t input_block_size, const uint8_t output_size, const DataTypeVector &IV) 
-      : output_size(output_size), IV(IV), input_block_size(input_block_size) {}
+      : output_size(output_size), input_block_size(input_block_size), IV(IV) {}
    
    virtual ~HashFunction() {}
+   
+   /* Hash the initial message. */
+   virtual const BytesVector encode(const BytesVector &message) = 0;
+   
+   /* Take a block of data and an initial state and return the hashed block (not final) in 'state'. */
+   virtual void compress(DataTypeVector &int_block, DataTypeVector &state) = 0;
    
    /* Output hash size in bytes. */
    const uint8_t output_size;
    
    /* Number of rounds. */
    //const uint8_t rounds;
-   
-   /* Initial vector. */
-   DataTypeVector IV;
-   
+      
    /* Size of the input block to be hashed. */
    const uint8_t input_block_size;
-   
-   /* Hash the initial message. */
-   virtual const BytesVector encode(const BytesVector &) = 0;
-   
-   /* Process the main algorithm of the hash function. */
-   virtual void compress(DataTypeVector &int_block, DataTypeVector &state) = 0;
-   
+      
    /* Append length in bits of the initial message to the padded message. */
    template <class EndianLengthType>
    static const BytesVector appendLength(const BytesVector &bytes, const uint64_t length)
@@ -75,18 +78,18 @@ protected:
    {      
       const uint8_t DataType_size = sizeof(DataType);
 
-      DataTypeVector words;
-      words.reserve(input_block_size / DataType_size);
+      DataTypeVector int_block;
+      int_block.reserve(input_block_size / DataType_size);
       for (uint8_t k = 0; k < input_block_size; k += DataType_size)
       {
-         words.push_back(EndianType::toInteger(BytesVector(bytes.begin() + k + block_index, bytes.begin() + k + block_index + DataType_size)));
+         int_block.push_back(EndianType::toInteger(BytesVector(bytes.begin() + k + block_index, bytes.begin() + k + block_index + DataType_size)));
       }
       
-      return words;
+      return int_block;
    }
    
    /* Get the output hash with a specific size. */
-   const BytesVector getOutput(const DataTypeVector &hash) const
+   virtual const BytesVector getOutput(const DataTypeVector &hash) const
    {
       BytesVector output;
       output.reserve(output_size);
@@ -98,17 +101,16 @@ protected:
          const BytesVector bytes = EndianType::toBytesVector(hash[j]);
          output.insert(output.end(), bytes.begin(), bytes.end());
       }
-      
-      if (output_size & (DataType_size - 1))
-      {
-         const BytesVector bytes = EndianType::toBytesVector(hash[out_data_size]);
-         output.insert(output.end(), bytes.begin(), bytes.begin() + 4);
-      }
 
       return output;
    }
+      
+public:   
+   const DataTypeVector getIV() const
+   {
+      return IV;
+   }
    
-public:
    void setIV(const DataTypeVector &IV)
    {
       this->IV = IV;
@@ -138,6 +140,10 @@ public:
       
       return encode(out_key_pad);
    }
+   
+private:
+   /* Initial vector. */
+   DataTypeVector IV;
 };
 
 #endif

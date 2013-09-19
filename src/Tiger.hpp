@@ -29,6 +29,8 @@ private:
    
    virtual void compress(UInt64Vector &int_block, UInt64Vector &state) final;
    
+   virtual const BytesVector getOutput(const UInt64Vector &hash) const final; 
+   
    static constexpr uint64_t sbox[4][256] = {
       {0x02AAB17CF7E90C5E, 0xAC424B03E243A8EC,
       0x72CD5BE30DD5FCD3, 0x6D019B93F6F97F3A,

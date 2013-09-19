@@ -90,6 +90,8 @@ protected:
    virtual ~SHA32Bits() {}
       
 private:
+   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
+   
    static constexpr uint32_t round_constants[64] = {
       0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
       0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -100,8 +102,6 @@ private:
       0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
       0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
    };
-   
-   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
 };
 
 /* Abstract class for SHA algorithm that uses only 128 bits blocks to encode. */
@@ -113,6 +113,8 @@ protected:
    virtual ~SHA64Bits() {}
      
 private:
+   virtual void compress(UInt64Vector &int_block, UInt64Vector &state) final;
+   
     /* Derived from the fractional parts of the cube roots of the first eighty primes. */
    static constexpr uint64_t first_cubic_root_primes[80] = {
       0x428A2F98D728AE22, 0x7137449123EF65CD, 0xB5C0FBCFEC4D3B2F, 0xE9B5DBA58189DBBC,
@@ -136,7 +138,6 @@ private:
       0x28DB77F523047D84, 0x32CAAB7B40C72493, 0x3C9EBE0A15C9BEBC, 0x431D67C49C100D4C,
       0x4CC5D4BECB3E42B6, 0x597F299CFC657E2A, 0x5FCB6FAB3AD6FAEC, 0x6C44198C4A475817
    };
-   virtual void compress(UInt64Vector &int_block, UInt64Vector &state) final;
 };
 
 class SHA224 : public SHA32Bits
@@ -169,38 +170,32 @@ public:
    SHA512() : SHA64Bits({
       0x6A09E667F3BCC908, 0xBB67AE8584CAA73B, 0x3C6EF372FE94F82B, 0xA54FF53A5F1D36F1,
       0x510E527FADE682D1, 0x9B05688C2B3E6C1F, 0x1F83D9ABFB41BD6B, 0x5BE0CD19137E2179}, 64) {}
-   
-   const UInt64Vector getIV() const
-   {
-      return IV;
-   }
-
-   void setIV(const UInt64Vector &IV)
-   {
-      this->IV = IV;
-   }
 };
 
 class SHA512_t : public SHA64Bits
 {
 protected:
-   explicit SHA512_t(const uint8_t output_size) : SHA64Bits({}, output_size) {}
+   SHA512_t(const uint8_t output_size, const BytesVector &code) 
+      : SHA64Bits({}, output_size) { makeNewIV(code); }
    virtual ~SHA512_t() {}
    
    /* Make a new IV for SHA512 and use it to generate a trucated output. */
-   void buildIV(const BytesVector &t);
+   void makeNewIV(const BytesVector &code);
 };
 
 class SHA512_224 : public SHA512_t
 {
 public:
-   SHA512_224() : SHA512_t(28) { buildIV({0x32, 0x32, 0x34}); }
+   SHA512_224() : SHA512_t(28, {0x32, 0x32, 0x34}) {}  // code = "224"
+   
+private:
+   virtual const BytesVector getOutput(const UInt64Vector &hash) const final;
 };
 
 class SHA512_256 : public SHA512_t
 {
 public:
-   SHA512_256() : SHA512_t(32) { buildIV({0x32, 0x35, 0x36}); }
+   SHA512_256() : SHA512_t(32, {0x32, 0x35, 0x36}) {}  // code = "256"
 };
 
 #endif

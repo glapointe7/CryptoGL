@@ -41,7 +41,7 @@ const BytesVector MD2::encode(const BytesVector &data)
    const BytesVector bytes = Padding::remainingValue(data, 16);
    const uint64_t bytes_len = bytes.size();
    
-   BytesVector hash(IV);
+   BytesVector hash(getIV());
    for (uint64_t i = 0; i < bytes_len; i += input_block_size)
    {
       BytesVector int_block = getInputBlocks(bytes, i);

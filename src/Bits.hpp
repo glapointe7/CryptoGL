@@ -30,7 +30,7 @@ namespace Bits
       static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
       return ((value << shift) | (value >> (max - shift))) & ((1ull << max) - 1);
    }
-
+   
    /* Rotate left 'value' of 'shift' bits of a 64-bit value. */
    constexpr uint64_t rotateLeft64(const uint64_t &value, const uint8_t shift)
    {
@@ -44,7 +44,7 @@ namespace Bits
       static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
       return ((value >> shift) | (value << (max - shift)));
    }
-
+   
    /* Rotate right 'value' of 'shift' bits of a 64-bit value. */
    constexpr uint64_t rotateRight64(const uint64_t &value, const uint8_t shift)
    {
