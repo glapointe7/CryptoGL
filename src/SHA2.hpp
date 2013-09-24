@@ -46,16 +46,6 @@ protected:
       hash[0] = tmp1 + tmp2;
    }
    
-   /* Sum in current state the hashes vector. */
-   static void finalize(DataTypeVector &states, const DataTypeVector &hash)
-   {
-      const uint8_t hash_size = hash.size();
-      for (uint8_t j = 0; j < hash_size; ++j)
-      {
-         states[j] += hash[j];
-      }
-   }
-
    static constexpr DataType maj(const DataType &x, const DataType &y, const DataType &z)
    {
       return (x & y) ^ (x & z) ^ (y & z);

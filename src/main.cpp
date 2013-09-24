@@ -68,6 +68,7 @@
 #include "../testing/CamelliaTest.hpp"
 #include "../testing/Mysty1Test.hpp"
 #include "../testing/SEALTest.hpp"
+#include "../testing/HC256Test.hpp"
 
 //#include <sys/time.h>
 

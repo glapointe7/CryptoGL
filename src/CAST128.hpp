@@ -43,7 +43,7 @@ private:
    void setTempKeyX(UInt32Vector &tmp, const UInt32Vector &Z) const;
    void setSubKeysBlock(const UInt32Vector &tmp, const uint8_t *index);
    
-   inline static uint8_t getByteFromInteger(const UInt32Vector &bytes, const uint8_t index)
+   static uint8_t getByteFromInteger(const UInt32Vector &bytes, const uint8_t index)
    {
       return (bytes[index >> 2] >> ((3-(index & 3)) << 3)) & 0xFF;
    }

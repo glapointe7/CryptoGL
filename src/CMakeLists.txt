@@ -75,6 +75,7 @@ set(SRC
    StreamCipher.hpp
    RC4.hpp RC4.cpp
    Rabbit.hpp Rabbit.cpp
+   HC256.hpp HC256.cpp
 
 # Pseudo-random functions familly
    PseudoRandomFunction.hpp

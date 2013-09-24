@@ -29,10 +29,7 @@ void MD4::compress(UInt32Vector &int_block, UInt32Vector &state)
       hash[0] = tmp;
    }
 
-   for (uint8_t j = 0; j < 4; ++j)
-   {
-      state[j] += hash[j];
-   }
+   applyDaviesMayerFunction(hash, state);
 }
 
 void MD5::compress(UInt32Vector &int_block, UInt32Vector &state)
@@ -57,8 +54,5 @@ void MD5::compress(UInt32Vector &int_block, UInt32Vector &state)
       hash[0] = tmp;
    }
 
-   for (uint8_t j = 0; j < 4; ++j)
-   {
-      state[j] += hash[j];
-   }
+   applyDaviesMayerFunction(hash, state);
 }

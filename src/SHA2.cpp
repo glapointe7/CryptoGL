@@ -18,7 +18,7 @@ void SHA32Bits::compress(UInt32Vector &int_block, UInt32Vector &state)
       swapHash(hash, tmp1, tmp2);
    }
    
-   finalize(state, hash);
+   applyDaviesMayerFunction(hash, state);
 }
 
 void SHA64Bits::compress(UInt64Vector &int_block, UInt64Vector &state)
@@ -36,7 +36,7 @@ void SHA64Bits::compress(UInt64Vector &int_block, UInt64Vector &state)
       swapHash(hash, tmp1, tmp2);
    }
    
-   finalize(state, hash);
+   applyDaviesMayerFunction(hash, state);
 }
 
 void SHA512_t::makeNewIV(const BytesVector &code)

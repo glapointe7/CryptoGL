@@ -1,3 +1,4 @@
+
 #ifndef BLOCKCIPHER_HPP
 #define BLOCKCIPHER_HPP
 
@@ -143,7 +144,18 @@ protected:
    
    /* Encode the input block provided as a vector of integers. */
    virtual const DataType decodeBlock(const DataType &input) = 0;
+      
+   /* Generate sub-keys from the key provided by the user when decoding. */
+   virtual void generateInverseSubkeys()
+   {
+      generateSubkeys();
+   }
    
+   BlockCipherModes *block_mode;
+   uint8_t rounds;
+   SubkeysContainer subkeys;
+   
+private:
    /* Extract a vector of integers from the block of bytes. */
    const DataType getIntegersFromInputBlock(const BytesVector &block) const
    {
@@ -156,17 +168,6 @@ protected:
       return InputOutputBlockGetter<BytesVector, DataType, InputBlockSize, EndianType>::outputBlock(int_block);
    }
    
-   /* Generate sub-keys from the key provided by the user when decoding. */
-   virtual void generateInverseSubkeys()
-   {
-      generateSubkeys();
-   }
-   
-   BlockCipherModes *block_mode;
-   uint8_t rounds;
-   SubkeysContainer subkeys;
-   
-private:
    /* Encode an input block of bytes and return the output block. */
    const BytesVector processEncodeBlock(const BytesVector &block)
    {

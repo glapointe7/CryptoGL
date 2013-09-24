@@ -154,10 +154,7 @@ void Ripemd256::compress(UInt32Vector &int_block, UInt32Vector &state)
       }
    }
 
-   for (uint8_t j = 0; j < 8; ++j)
-   {
-      state[j] += hash[j];
-   }
+   applyDaviesMayerFunction(hash, state);
 }
 
 void Ripemd320::compress(UInt32Vector &int_block, UInt32Vector &state)
@@ -182,8 +179,5 @@ void Ripemd320::compress(UInt32Vector &int_block, UInt32Vector &state)
       }
    }
 
-   for (uint8_t j = 0; j < 10; ++j)
-   {
-      state[j] += hash[j];
-   }
+   applyDaviesMayerFunction(hash, state);
 }

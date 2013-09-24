@@ -10,7 +10,7 @@ AES, DES, Blowfish, IDEA, Skipjack, RC2, RC5, RC6, TripleDES, XTEA, Noekeon, CAS
 For each block cipher, the ECB, CBC, CFB, OFB and CTR modes of operation are implemented following the specifications of NIST.
 
 Stream ciphers and/or Pseudo-random functions familly include the following :
-Rabbit, RC4, SEAL, ISAAC
+Rabbit, RC4, SEAL, ISAAC, HC-256
 
 Asymmetric ciphers include the following (using a BigInteger library created by Matt McCutchen : https://mattmccutchen.net/bigint/):
 Hellman-Merkle Knapsack cryptosystem

@@ -6,12 +6,12 @@
 
 #include "Types.hpp"
 
-template <class UInt>
+template <typename UInt>
 class BigEndian
 {
-public:
-   static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
-   
+static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
+
+public:   
    static const UInt toInteger(const BytesVector &bytes)
    {
       UInt value = 0;

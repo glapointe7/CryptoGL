@@ -50,6 +50,16 @@ protected:
    
    /* Process the main algorithm of the hash function. */
    virtual void compress(DataTypeVector &int_block, DataTypeVector &state) = 0;
+   
+   /* Finalize the block to get the final hashed block. */
+   static void applyDaviesMayerFunction(DataTypeVector &hash, DataTypeVector &state)
+   {
+      const uint8_t hash_size = hash.size();
+      for (uint8_t j = 0; j < hash_size; ++j)
+      {
+         state[j] += hash[j];
+      }
+   }
       
    /* Number of rounds in the compression function. */
    const uint8_t rounds;

@@ -2,13 +2,13 @@
 
 #include "Bits.hpp"
 
-constexpr uint32_t SHA1::k[4];
+constexpr uint32_t SHA1::k[];
 
 void SHA1::compress(UInt32Vector &int_block, UInt32Vector &state)
 {
    int_block.resize(rounds);
 
-   // Extention of the 32-bits 16 blocks in 80 blocks of 32 bits.
+   // Extention of the 16 32-bit blocks in 80 blocks of 32 bits.
    for (uint8_t j = 16; j < rounds; ++j)
    {
       int_block[j] = Bits::rotateLeft(int_block[j - 3] ^ int_block[j - 8] ^ int_block[j - 14] ^ int_block[j - 16], 1, 32);
@@ -34,8 +34,5 @@ void SHA1::compress(UInt32Vector &int_block, UInt32Vector &state)
       hash[0] = tmp;
    }
    
-   for (uint8_t j = 0; j < 5; ++j)
-   {
-      state[j] += hash[j];
-   }
+   applyDaviesMayerFunction(hash, state);
 }
