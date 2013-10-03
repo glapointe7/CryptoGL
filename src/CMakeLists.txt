@@ -58,7 +58,7 @@ set(SRC
    IDEA.hpp IDEA.cpp
    Noekeon.hpp Noekeon.cpp
    RC2.hpp RC2.cpp
-   Serpent.hpp Serpent.cpp
+   #Serpent.hpp Serpent.cpp
    Feistel.hpp
    Skipjack.hpp Skipjack.cpp
    Blowfish.hpp Blowfish.cpp
@@ -80,7 +80,7 @@ set(SRC
    HC256.hpp HC256.cpp
    SEAL.hpp SEAL.cpp
    Isaac.hpp Isaac.cpp
-   Scream.hpp Scream.cpp
+   #Scream.hpp Scream.cpp
    Salsa20.hpp Salsa20.cpp
 
 # Hash functions section
