@@ -11,7 +11,6 @@ set(SRC
    MathematicalTools.hpp MathematicalTools.cpp
    BigEndian.hpp
    LittleEndian.hpp
-   BlockCipherOperationModes.hpp
 	Tools.hpp Tools.cpp
    String.hpp String.cpp
    Digest.hpp
@@ -19,6 +18,7 @@ set(SRC
    Bits.hpp Bits.cpp
    Types.hpp
    Padding.hpp Padding.cpp
+   FunctionComposition.hpp
 
 # Cryptanalysis section
    cryptanalysis/ClassicalAnalysis.hpp cryptanalysis/ClassicalAnalysis.cpp
@@ -58,6 +58,7 @@ set(SRC
    IDEA.hpp IDEA.cpp
    Noekeon.hpp Noekeon.cpp
    RC2.hpp RC2.cpp
+   Serpent.hpp Serpent.cpp
    Feistel.hpp
    Skipjack.hpp Skipjack.cpp
    Blowfish.hpp Blowfish.cpp
@@ -71,16 +72,16 @@ set(SRC
    Camellia.hpp Camellia.cpp
    Mysty1.hpp Mysty1.cpp
 
-# Stream ciphers section
+# Stream ciphers and Pseudo-random functions familly section
    StreamCipher.hpp
+   PseudoRandomFunction.hpp
    RC4.hpp RC4.cpp
    Rabbit.hpp Rabbit.cpp
    HC256.hpp HC256.cpp
-
-# Pseudo-random functions familly
-   PseudoRandomFunction.hpp
    SEAL.hpp SEAL.cpp
    Isaac.hpp Isaac.cpp
+   Scream.hpp Scream.cpp
+   Salsa20.hpp Salsa20.cpp
 
 # Hash functions section
    MerkleDamgardFunction.hpp

@@ -122,8 +122,3 @@ const BytesVector HC256::encode(const BytesVector &message)
    
    return output;
 }
-
-const BytesVector HC256::decode(const BytesVector &message)
-{
-   return encode(message);
-}

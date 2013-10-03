@@ -69,6 +69,9 @@
 #include "../testing/Mysty1Test.hpp"
 #include "../testing/SEALTest.hpp"
 #include "../testing/HC256Test.hpp"
+//#include "../testing/ScreamTest.hpp"
+//#include "../testing/SerpentTest.hpp"
+#include "../testing/Salsa20Test.hpp"
 
 //#include <sys/time.h>
 

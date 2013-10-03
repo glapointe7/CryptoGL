@@ -3,7 +3,7 @@
 #define TRIPLEDES_HPP
 
 #include "SymmetricCipher.hpp"
-#include "BlockCipherOperationModes.hpp"
+#include "BlockCipherModes.hpp"
 
 class TripleDES : public SymmetricCipher
 {

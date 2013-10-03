@@ -4,7 +4,6 @@
 
 #include "SymmetricCipher.hpp"
 
-#include "BlockCipherOperationModes.hpp"
 #include "BlockCipherModes.hpp"
 #include "BigEndian.hpp"
 #include "LittleEndian.hpp"
@@ -114,22 +113,22 @@ protected:
    
    /* Default constructor : Only for ECB, CBC, CFB and OFB modes. An IV is needed for 
     * CBC, CFB and OFB modes. For the ECB mode, IV is empty. */
-   BlockCipher(const OperationModes mode, const uint8_t round, const BytesVector &IV)
+   BlockCipher(const OperationModes mode, const uint8_t rounds, const BytesVector &IV)
       : block_mode(
         BlockCipherModesFactory<BytesVector>::createBlockCipherMode(
           mode,
           IV,
           std::bind(&THIS::processEncodeBlock, this, std::placeholders::_1),
           std::bind(&THIS::processDecodeBlock, this, std::placeholders::_1))),
-        rounds(round) {}
+        rounds(rounds) {}
    
    /* Constructor for the CTR mode : Take a vector of IVs. */
-   BlockCipher(const uint8_t round, const IV_Vector &IV)
+   BlockCipher(const uint8_t rounds, const IV_Vector &IV)
       : block_mode(
         BlockCipherModesFactory<IV_Vector>::createBlockCipherMode(
           IV,
           std::bind(&THIS::processEncodeBlock, this, std::placeholders::_1))),
-        rounds(round) {}
+        rounds(rounds) {}
    
    virtual ~BlockCipher() { delete block_mode; }
    

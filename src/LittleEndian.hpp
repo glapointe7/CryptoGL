@@ -12,7 +12,7 @@ class LittleEndian
 static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
 
 public:   
-   static const BytesVector toBytesVector(const UInt &value)
+   static BytesVector toBytesVector(const UInt &value)
    {
       BytesVector bytes;
       bytes.reserve(sizeof(UInt));
@@ -40,7 +40,7 @@ template <>
 class LittleEndian<uint8_t>
 {
 public:
-   static const BytesVector toBytesVector(const uint8_t value)
+   static BytesVector toBytesVector(const uint8_t value)
    {
       return {value};
    }
@@ -55,7 +55,7 @@ template <>
 class LittleEndian<uint16_t>
 {
 public:
-   static const BytesVector toBytesVector(const uint16_t value)
+   static BytesVector toBytesVector(const uint16_t value)
    {
       return {static_cast<uint8_t>(value & 0xFF), 
               static_cast<uint8_t>(value >> 8)};
@@ -71,7 +71,7 @@ template <>
 class LittleEndian<uint32_t>
 {
 public:
-   static const BytesVector toBytesVector(const uint32_t value)
+   static BytesVector toBytesVector(const uint32_t value)
    {
       return {static_cast<uint8_t>(value & 0xFF), 
               static_cast<uint8_t>((value >> 8) & 0xFF), 
@@ -92,7 +92,7 @@ template <>
 class LittleEndian<uint64_t>
 {
 public:
-   static const BytesVector toBytesVector(const uint64_t &value)
+   static BytesVector toBytesVector(const uint64_t &value)
    {
       return {static_cast<uint8_t>(value & 0xFF), 
               static_cast<uint8_t>((value >> 8) & 0xFF), 

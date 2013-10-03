@@ -3,17 +3,43 @@
 #define BLOCKCIPHERMODES_HPP
 
 #include "Types.hpp"
-#include "BlockCipherOperationModes.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
 
 #include <functional>
 
+/* MODES OF OPERATION
+ * 
+ * ECB : C_i = encode(P_i).
+ *       P_i = decode(C_i).
+ *
+ * CBC : C_i = encode(P_i ^ C_i-1) with IV = C_0.
+ *       P_i = decode(C_i) ^ C_i-1 with IV = C_0.
+ * 
+ * CFB : C_i = encode(C_i-1) ^ P_i with IV = C_0.
+ *       P_i = encode(C_i-1) ^ C_i ^ C_i with IV = C_0.
+ * 
+ * OFB : C_i = P_i ^ O_i with IV = I_0 and O_i = encode(I_i) and I_i = O_i-1.
+ *       P_i = C_i ^ O_i with IV = I_0.and O_i = encode(I_i) and I_i = O_i-1.
+ */
+
+// Modes of operation to encode / decode a block cipher.
+// Default to ECB mode.
+enum class OperationModes : uint8_t
+{
+   ECB,     // electronic codebook
+   CBC,     // Cipher-block chaining
+   CFB,     // Cipher feedback
+   OFB,     // Output feedback
+   //CTR      // Counter
+};
+
+
+
 class BlockCipherModes
 {
 protected:
    using Block = BytesVector;
-   using BadIVLength = BadKeyLength;
    
 public:   
    using GetOutputBlockFunction = std::function<const Block(const Block &)>;
@@ -102,8 +128,8 @@ public:
    static BlockCipherModes* createBlockCipherMode(
       const OperationModes mode,
       const Block &IV,
-      BlockCipherCFBMode::GetOutputBlockFunction encode,
-      BlockCipherCFBMode::GetOutputBlockFunction decode)
+      const BlockCipherCFBMode::GetOutputBlockFunction &encode,
+      const BlockCipherCFBMode::GetOutputBlockFunction &decode)
    {
       switch (mode)
       {
@@ -129,7 +155,7 @@ class BlockCipherModesFactory<IV_Vector>
 public:
    static BlockCipherModes* createBlockCipherMode(
       const IV_Vector &IV,
-      BlockCipherCFBMode::GetOutputBlockFunction encode)
+      const BlockCipherCFBMode::GetOutputBlockFunction &encode)
    { 
       return new BlockCipherCTRMode(IV, encode);
    }

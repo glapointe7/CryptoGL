@@ -16,7 +16,6 @@ public:
       : RC4(key, 0) {}
    
    virtual const BytesVector encode(const BytesVector &clear_text) final;
-   virtual const BytesVector decode(const BytesVector &cipher_text) final;
    
    virtual const BytesVector generate();
    

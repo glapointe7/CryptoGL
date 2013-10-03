@@ -18,7 +18,6 @@ public:
    explicit SEAL(const BytesVector &key) { setKey(key); }
            
    virtual const BytesVector encode(const BytesVector &message) final;
-   virtual const BytesVector decode(const BytesVector &message) final;
    
    virtual const UInt32Vector generate() final;
    

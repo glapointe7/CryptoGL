@@ -204,8 +204,3 @@ const BytesVector SEAL::encode(const BytesVector &message)
    
    return output;
 }
-
-const BytesVector SEAL::decode(const BytesVector &message)
-{
-   return encode(message);
-}

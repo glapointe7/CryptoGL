@@ -14,7 +14,6 @@ public:
    HC256(const BytesVector &key, const BytesVector &IV) { setKey(key); setIV(IV); }
    
    virtual const BytesVector encode(const BytesVector &message) final;
-   virtual const BytesVector decode(const BytesVector &message) final;
    
    virtual void setKey(const BytesVector &key) final;
    void setIV(const BytesVector &IV);

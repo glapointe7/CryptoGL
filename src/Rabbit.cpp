@@ -183,8 +183,3 @@ const BytesVector Rabbit::encode(const BytesVector &clear_text)
 
    return crypted;
 }
-
-const BytesVector Rabbit::decode(const BytesVector &cipher_text)
-{
-   return encode(cipher_text);
-}

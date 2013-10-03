@@ -17,7 +17,9 @@ using UInt64Vector = std::vector<uint64_t>;
 using Int32Vector = std::vector<int32_t>;
 
 using BytesMatrix = std::vector<BytesVector>;
-using Int32Matrix = std::vector<std::vector<int32_t>>;
+using UInt16Matrix = std::vector<UInt16Vector>;
+using Int32Matrix = std::vector<Int32Vector>;
+using UInt32Matrix = std::vector<UInt32Vector>;
 using UInt64Matrix = std::vector<UInt64Vector>;
 
 using IV_Vector = BytesMatrix;

@@ -23,7 +23,7 @@ public:
       return value; 
    }
    
-   static const BytesVector toBytesVector(const UInt &value)
+   static BytesVector toBytesVector(const UInt &value)
    {
       BytesVector bytes;
       bytes.reserve(sizeof(UInt));
@@ -40,7 +40,7 @@ template <>
 class BigEndian<uint8_t>
 {
 public:
-   static const BytesVector toBytesVector(const uint8_t value)
+   static BytesVector toBytesVector(const uint8_t value)
    {
       return {value};
    }
@@ -55,7 +55,7 @@ template <>
 class BigEndian<uint16_t>
 {
 public:
-   static const BytesVector toBytesVector(const uint16_t value)
+   static BytesVector toBytesVector(const uint16_t value)
    {
       return {static_cast<uint8_t>(value >> 8), 
               static_cast<uint8_t>(value & 0xFF)};
@@ -71,7 +71,7 @@ template <>
 class BigEndian<uint32_t>
 {
 public:
-   static const BytesVector toBytesVector(const uint32_t value)
+   static BytesVector toBytesVector(const uint32_t value)
    {
       return {static_cast<uint8_t>(value >> 24), 
               static_cast<uint8_t>((value >> 16) & 0xFF), 
@@ -92,7 +92,7 @@ template <>
 class BigEndian<uint64_t>
 {
 public:
-   static const BytesVector toBytesVector(const uint64_t &value)
+   static BytesVector toBytesVector(const uint64_t &value)
    {
       return {static_cast<uint8_t>(value >> 56), 
               static_cast<uint8_t>((value >> 48) & 0xFF), 

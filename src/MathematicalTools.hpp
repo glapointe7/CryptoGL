@@ -10,7 +10,6 @@
 
 namespace Maths
 {
-
    /* Return the Greatest Common Divisor of x and y. */
    template <class UIntType>
    const UIntType gcd(const UIntType &x, const UIntType &y)
@@ -94,6 +93,9 @@ namespace Maths
 
    /* Check if 'value' is a perfect square. */
    bool isPerfectSquare(const uint32_t value);
+   
+   /* Multiply a by b in the Galois Field GF(2^8) with the polynom p. */
+   uint8_t GFMultiply(const uint8_t a, uint8_t b, const uint16_t p);
 }
 
 //uint64_t getLegendreSymbol(const uint64_t &x, const uint64_t &e, const uint64_t &n);

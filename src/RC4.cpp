@@ -68,8 +68,3 @@ const BytesVector RC4::encode(const BytesVector &clear_text)
    
    return crypted;
 }
-
-const BytesVector RC4::decode(const BytesVector &cipher_text)
-{
-   return encode(cipher_text);
-}

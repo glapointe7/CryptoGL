@@ -38,6 +38,27 @@ bool Maths::isPerfectSquare(const uint32_t value)
    return false;
 }
 
+uint8_t Maths::GFMultiply(const uint8_t a, uint8_t b, const uint16_t p)
+{
+   uint16_t A = a;
+   uint8_t prod = 0;
+   while(b > 0)
+   {
+      if(b & 1)
+      {
+         prod ^= A;
+      }
+      A <<= 1;
+      b >>= 1;
+      if(A & 0x100)
+      {
+         A ^= p;
+      }
+   }
+   
+   return prod;
+}
+
 uint8_t getByteSqrt(const uint8_t sqr)
 {
    const std::map<uint8_t, uint8_t> byte_squares({
