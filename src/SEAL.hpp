@@ -4,29 +4,28 @@
 #ifndef SEAL_HPP
 #define SEAL_HPP
 
-#include "PseudoRandomFunction.hpp"
 #include "StreamCipher.hpp"
 
-class SEAL : public PseudoRandomFunction<uint32_t, UInt32Vector>, public StreamCipher
+class SEAL : public StreamCipher<uint32_t>
 {
 public:
    /* Constructor (Pseudo-random): receives the 160-bit key, a seed and the output size desired in bytes. */
    SEAL(const BytesVector &key, const uint32_t seed, const uint16_t output_size)
-           : PseudoRandomFunction(seed), output_size(output_size) { setKey(key); }
+           : output_size(output_size), seed(seed) { setKey(key); }
    
    /* Constructor (Stream cipher): receives the 160-bit key for encryption. */
    explicit SEAL(const BytesVector &key) { setKey(key); }
            
    virtual const BytesVector encode(const BytesVector &message) final;
    
-   virtual const UInt32Vector generate() final;
+   virtual UInt32Vector generateKeystream() final;
    
    virtual void setKey(const BytesVector &key) final;
    
 private:
    /* Initialise the vectors A and registers from a given value and an index. */
    void initialize(const uint8_t index, UInt32Vector &A, UInt32Vector &registers) const;
-   virtual void generateSubkeys() final;
+   virtual void keySetup() final;
    
    /* */
    uint32_t gamma(const uint32_t current_index, uint32_t &previous_index);
@@ -41,6 +40,8 @@ private:
    UInt32Vector H;
    
    uint16_t output_size;
+   
+   uint32_t seed;
 };
 
 #endif

@@ -3,25 +3,19 @@
 #include <algorithm>
 
 #include "exceptions/BadKeyLength.hpp"
-#include "exceptions/EmptyKey.hpp"
 
 void RC4::setKey(const BytesVector &key)
 {
-   if(key.empty())
+   if(key.size() > 256 || key.size() == 0)
    {
-      throw EmptyKey("Your key is empty or not set.");
-   }
-   
-   if(key.size() > 256)
-   {
-      throw BadKeyLength("Your key has to be less or equal to 32 bytes length.", key.size());
+      throw BadKeyLength("Your key has to be less or equal to 32 bytes length and not empty.", key.size());
    }
    
    this->key = key;
-   generateSubkeys();
+   keySetup();
 }
 
-void RC4::generateSubkeys()
+void RC4::keySetup()
 {
    for(uint16_t i = 0; i < 256; ++i)
    {
@@ -37,7 +31,7 @@ void RC4::generateSubkeys()
    }
 }
 
-const BytesVector RC4::generate()
+BytesVector RC4::generateKeystream()
 {
    BytesVector keystream;
    keystream.reserve(output_size);
@@ -60,7 +54,7 @@ const BytesVector RC4::encode(const BytesVector &clear_text)
    output_size = clear_text.size();
    crypted.reserve(output_size);
    
-   const BytesVector keystream = generate();
+   const BytesVector keystream = generateKeystream();
    for(uint64_t i = 0; i < output_size; ++i)
    {
       crypted.push_back(clear_text[i] ^ keystream[i]);

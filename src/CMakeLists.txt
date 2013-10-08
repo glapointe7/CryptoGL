@@ -74,6 +74,7 @@ set(SRC
 
 # Stream ciphers and Pseudo-random functions familly section
    StreamCipher.hpp
+   SynchronousStreamCipher.hpp
    PseudoRandomFunction.hpp
    RC4.hpp RC4.cpp
    Rabbit.hpp Rabbit.cpp

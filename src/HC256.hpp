@@ -4,25 +4,25 @@
 #ifndef HC256_HPP
 #define HC256_HPP
 
-#include "StreamCipher.hpp"
+#include "SynchronousStreamCipher.hpp"
 
 #include "Bits.hpp"
 
-class HC256 : public StreamCipher
+class HC256 : public SynchronousStreamCipher<uint32_t>
 {
 public:
-   HC256(const BytesVector &key, const BytesVector &IV) { setKey(key); setIV(IV); }
+   HC256(const BytesVector &key, const BytesVector &IV)
+      : SynchronousStreamCipher(2048) { setIV(IV); setKey(key); }
    
-   virtual const BytesVector encode(const BytesVector &message) final;
+   /* Generate 2048 bytes of keystream. */
+   virtual UInt32Vector generateKeystream() final;
    
    virtual void setKey(const BytesVector &key) final;
    void setIV(const BytesVector &IV);
       
 private:
-   virtual void generateSubkeys() final;
-   
-   uint32_t generateKeystream(const uint64_t &index);
-      
+   virtual void keySetup() final;
+         
    static uint32_t g(const uint32_t x, const uint32_t y, const UInt32Vector &K);
    static uint32_t h(const uint32_t x, const UInt32Vector &K);
    static uint32_t updateSubkeys(UInt32Vector &K, const UInt32Vector &S, const uint16_t index);

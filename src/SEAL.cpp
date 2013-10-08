@@ -14,11 +14,11 @@ void SEAL::setKey(const BytesVector &key)
 {
    if (key.size() != 20)
    {
-      throw BadKeyLength("Your key have to have 20 bytes length.", key.size());
+      throw BadKeyLength("Your key has to have 20 bytes length.", key.size());
    }
 
    this->key = key;
-   generateSubkeys();
+   keySetup();
 }
 
 uint32_t SEAL::gamma(const uint32_t index, uint32_t &previous_index)
@@ -41,7 +41,7 @@ uint32_t SEAL::gamma(const uint32_t index, uint32_t &previous_index)
    return H[index % 5];
 }
 
-void SEAL::generateSubkeys()
+void SEAL::keySetup()
 {
    // The key is the new IV for SHA-1.
    IV.reserve(5);
@@ -102,7 +102,7 @@ void SEAL::initialize(const uint8_t index, UInt32Vector &A, UInt32Vector &regist
    }
 }
 
-const UInt32Vector SEAL::generate()
+UInt32Vector SEAL::generateKeystream()
 {
    UInt32Vector keystream;
    keystream.reserve(output_size);
@@ -180,26 +180,21 @@ const UInt32Vector SEAL::generate()
 }
 
 const BytesVector SEAL::encode(const BytesVector &message)
-{
-   constexpr uint16_t pos_max = 1024;
-   uint16_t current_pos = pos_max;
-   
+{   
    seed = 0;
    output_size = message.size();
    
-   UInt32Vector keystream;
    BytesVector output;
    output.reserve(output_size);
-   for(uint16_t i = 0; i < output_size; ++i)
+   
+   for(uint16_t j = 0; j < output_size; j += 1024)
    {
-      if(current_pos >= pos_max)
+      for(uint16_t i = 0; i < 1024; ++i)
       {
-         keystream = generate();
-         seed++;
-         current_pos = 0;
+         UInt32Vector keystream = generateKeystream();
+         output.push_back(message[i+j] ^ keystream[i]);
       }
-      output.push_back(message[i] ^ keystream[current_pos]);
-      current_pos++;
+      seed++;
    }
    
    return output;

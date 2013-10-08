@@ -4,6 +4,7 @@
 
 #include "SymmetricCipher.hpp"
 
+template <class KeystreamType>
 class StreamCipher : public SymmetricCipher
 {
 public:
@@ -12,13 +13,19 @@ public:
       return encode(cipher_message);
    }
    
-protected:   
+protected:
+   using KeystreamVectorType = std::vector<KeystreamType>;
+   
    virtual ~StreamCipher() {}
 
    virtual const BytesVector encode(const BytesVector &) = 0;
-      
+   
+   virtual KeystreamVectorType generateKeystream() = 0;
+   
+   /* Set the key and check if the key has a correct length. */
    virtual void setKey(const BytesVector &) = 0;
-   virtual void generateSubkeys() = 0;
+   
+   virtual void keySetup() = 0;
 };
 
 #endif

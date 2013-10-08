@@ -1,6 +1,6 @@
 #include "Padding.hpp"
 
-const BytesVector Padding::zeros(const BytesVector &data, const uint8_t block_size)
+BytesVector Padding::zeros(const BytesVector &data, const uint8_t block_size)
 {
    BytesVector padded_input(data);
    const uint8_t remaining = data.size() % block_size;
@@ -12,7 +12,7 @@ const BytesVector Padding::zeros(const BytesVector &data, const uint8_t block_si
    return padded_input;
 }
 
-const BytesVector Padding::remainingValue(const BytesVector &data, const uint8_t block_size)
+BytesVector Padding::remainingValue(const BytesVector &data, const uint8_t block_size)
 {
    BytesVector padded_bytes(data);
 
@@ -23,7 +23,7 @@ const BytesVector Padding::remainingValue(const BytesVector &data, const uint8_t
    return padded_bytes;
 }
 
-const BytesVector Padding::_10Star(const BytesVector &data, const uint8_t block_size)
+BytesVector Padding::_10Star(const BytesVector &data, const uint8_t block_size)
 {
    const uint64_t message_len = data.size();
 
@@ -42,7 +42,7 @@ const BytesVector Padding::_10Star(const BytesVector &data, const uint8_t block_
    return padding;
 }
 
-const BytesVector Padding::_10Star1(const BytesVector &data, const uint8_t block_size, 
+BytesVector Padding::_10Star1(const BytesVector &data, const uint8_t block_size, 
         const uint8_t first_byte, const uint8_t last_byte)
 {
    BytesVector padding(data);

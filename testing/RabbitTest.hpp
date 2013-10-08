@@ -1,6 +1,6 @@
 
 #ifndef RABBITTEST_HPP
-#define	RABBITTEST_HPP
+#define RABBITTEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Rabbit.hpp"
@@ -13,11 +13,7 @@ protected:
 
    virtual void SetUp()
    {
-      const std::vector<uint8_t> key = {
-         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-      };
-      R = new Rabbit(key);
+      R = new Rabbit(BytesVector(16, 0));
    }
 
    virtual void TearDown()
@@ -28,7 +24,7 @@ protected:
 
 TEST_F(RabbitTest, encode)
 {
-   const std::vector<uint8_t> cipher = {
+   const BytesVector cipher = {
       0x02, 0xF7, 0x4A, 0x1C, 0x26, 0x45, 0x6B, 0xF5,
       0xEC, 0xD6, 0xA5, 0x36, 0xF0, 0x54, 0x57, 0xB1,
       0xA7, 0x8A, 0xC6, 0x89, 0x47, 0x6C, 0x69, 0x7B,
@@ -37,9 +33,7 @@ TEST_F(RabbitTest, encode)
       0x51, 0xD4, 0x0C, 0x70, 0xC3, 0xA1, 0x16, 0xF4
    };
 
-   const std::vector<uint8_t> clear_data(48, 0);
-
-   EXPECT_EQ(Digest::hexDigest(cipher), Digest::hexDigest(R->encode(clear_data)));
+   EXPECT_EQ(Digest::hexDigest(cipher), Digest::hexDigest(R->encode(BytesVector(48, 0))));
 }
 
 TEST_F(RabbitTest, decode)
@@ -53,9 +47,7 @@ TEST_F(RabbitTest, decode)
       0x51, 0xD4, 0x0C, 0x70, 0xC3, 0xA1, 0x16, 0xF4
    };
 
-   const std::vector<uint8_t> clear_data(48, 0);
-
-   EXPECT_EQ(Digest::hexDigest(clear_data), Digest::hexDigest(R->decode(cipher)));
+   EXPECT_EQ(Digest::hexDigest(BytesVector(48, 0)), Digest::hexDigest(R->decode(cipher)));
 }
 
 #endif

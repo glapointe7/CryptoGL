@@ -1,25 +1,29 @@
-
+/*
+ * Source : http://cr.yp.to/snuffle/spec.pdf
+ */
 #ifndef SALSA20_HPP
 #define SALSA20_HPP
 
 #include "StreamCipher.hpp"
-#include "PseudoRandomFunction.hpp"
 
-class Salsa20 : public StreamCipher, public PseudoRandomFunction<BytesVector, UInt32Vector>
+class Salsa20 : public StreamCipher<uint32_t>
 {
 public:
    Salsa20(const BytesVector &key, const BytesVector &IV) { setIV(IV); setKey(key); }
    
    virtual const BytesVector encode(const BytesVector &message) final;
-   virtual void setKey(const BytesVector &key) final;
    
    /* Generate 64 bytes of keystream. */
-   virtual const UInt32Vector generate() final;
+   virtual UInt32Vector generateKeystream() final;
    
-private:
    void setIV(const BytesVector &IV);
+   virtual void setKey(const BytesVector &key) final;
+      
+private:
    
-   virtual void generateSubkeys() final;
+   
+   virtual void keySetup() final;
+   void IVSetup();
       
    static UInt32Vector quarterRound(const UInt32Vector &Y);
    static UInt32Vector rowRound(const UInt32Vector &Y);

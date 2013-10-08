@@ -81,7 +81,7 @@ UInt32Vector Salsa20::doubleRound(const UInt32Vector &Y)
    return composer(rowRound, columnRound)(Y);
 }
 
-void Salsa20::generateSubkeys()
+void Salsa20::keySetup()
 {
    subkeys.clear();
    subkeys.reserve(64);
@@ -91,7 +91,7 @@ void Salsa20::generateSubkeys()
       subkeys.insert(subkeys.end(), std::begin(sigma[0]), std::end(sigma[0]));
       subkeys.insert(subkeys.end(), key.begin(), key.begin() + 16);
       subkeys.insert(subkeys.end(), std::begin(sigma[1]), std::end(sigma[1]));
-      subkeys.insert(subkeys.end(), IV.begin(), IV.end());
+      IVSetup();
       subkeys.insert(subkeys.end(), counter_bytes.begin(), counter_bytes.end());
       subkeys.insert(subkeys.end(), std::begin(sigma[2]), std::end(sigma[2]));
       subkeys.insert(subkeys.end(), key.begin() + 16, key.end());
@@ -102,7 +102,7 @@ void Salsa20::generateSubkeys()
       subkeys.insert(subkeys.end(), std::begin(tau[0]), std::end(tau[0]));
       subkeys.insert(subkeys.end(), key.begin(), key.end());
       subkeys.insert(subkeys.end(), std::begin(tau[1]), std::end(tau[1]));
-      subkeys.insert(subkeys.end(), IV.begin(), IV.end());
+      IVSetup();
       subkeys.insert(subkeys.end(), counter_bytes.begin(), counter_bytes.end());
       subkeys.insert(subkeys.end(), std::begin(tau[2]), std::end(tau[2]));
       subkeys.insert(subkeys.end(), key.begin(), key.end());
@@ -110,12 +110,17 @@ void Salsa20::generateSubkeys()
    }
 }
 
-const UInt32Vector Salsa20::generate()
+void Salsa20::IVSetup()
+{
+   subkeys.insert(subkeys.end(), IV.begin(), IV.end());
+}
+
+UInt32Vector Salsa20::generateKeystream()
 {  
    UInt32Vector x;
    x.reserve(16);
    
-   generateSubkeys();
+   keySetup();
    for(uint8_t i = 0; i < 64; i += 4)
    {
       x.push_back(LittleEndian32::toInteger(BytesVector(subkeys.begin() + i, subkeys.begin() + i + 4)));
@@ -143,7 +148,7 @@ const BytesVector Salsa20::encode(const BytesVector &message)
    
    for(uint64_t j = 0; j < output_size; j += 64)
    {
-      const UInt32Vector keystream = generate();
+      const UInt32Vector keystream = generateKeystream();
       for(uint8_t i = 0; i < 64; i += 4)
       {
          const BytesVector key_bytes = BigEndian32::toBytesVector(keystream[i >> 2]);

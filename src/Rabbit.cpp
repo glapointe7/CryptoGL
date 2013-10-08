@@ -5,6 +5,8 @@
 #include "BigEndian.hpp"
 #include "LittleEndian.hpp"
 
+constexpr uint32_t Rabbit::A[];
+
 void Rabbit::setKey(const BytesVector &key)
 {
    if (key.size() != 16)
@@ -13,17 +15,22 @@ void Rabbit::setKey(const BytesVector &key)
    }
 
    this->key = key;
+   keySetup();
 }
 
-// The IV is not mandatory.
 void Rabbit::setIV(const BytesVector &IV)
 {
-   if (IV.size() != 8)
+   if (IV.size() != 8 && IV.size() != 0)
    {
       throw BadIVLength("Your IV has to be 8 bytes length.", IV.size());
    }
 
    this->IV = IV;
+   
+   if (!IV.empty())
+   {
+      IVSetup();
+   }
 }
 
 uint32_t Rabbit::g(const uint32_t x)
@@ -34,18 +41,13 @@ uint32_t Rabbit::g(const uint32_t x)
 
    // Calculate high and low result of squaring.
    const uint32_t h = ((((a * a) >> 17) + (a * b)) >> 15) + (b * b);
-   const uint32_t l = x * x;
 
    // Return high XOR low. 
-   return h ^ l;
+   return h ^ (x * x);
 }
 
 void Rabbit::nextState()
 {
-   constexpr uint32_t A[8] = {0x4D34D34D, 0xD34D34D3, 0x34D34D34, 0x4D34D34D,
-      0xD34D34D3, 0x34D34D34, 0x4D34D34D, 0xD34D34D3
-   };
-
    const uint32_t old_counters[8] = {counters[0], counters[1], counters[2], counters[3],
       counters[4], counters[5], counters[6], counters[7]
    };
@@ -72,7 +74,7 @@ void Rabbit::nextState()
    }
 }
 
-void Rabbit::generateSubkeys()
+void Rabbit::keySetup()
 {
    // Build 4 sub-keys of 4 bytes length.
    UInt32Vector subkeys;
@@ -111,7 +113,7 @@ void Rabbit::generateSubkeys()
 
    for (uint8_t j = 0; j < 8; ++j)
    {
-      counters[j] ^= states[(j + 4) & 0x07];
+      counters[j] ^= states[(j + 4) & 7];
    }
 }
 
@@ -137,49 +139,34 @@ void Rabbit::IVSetup()
    }
 }
 
+UInt32Vector Rabbit::generateKeystream()
+{
+   nextState();
+
+   return {states[0] ^ (states[5] >> 16) ^ (states[3] << 16),
+      states[2] ^ (states[7] >> 16) ^ (states[5] << 16),
+      states[4] ^ (states[1] >> 16) ^ (states[7] << 16),
+      states[6] ^ (states[3] >> 16) ^ (states[1] << 16)};
+}
+
 const BytesVector Rabbit::encode(const BytesVector &clear_text)
 {
-   // Clear_text have to be a multiple of 16 bytes.
    const uint64_t clear_len = clear_text.size();
-   if (clear_len & 0xF)
-   {
-      throw BadDataLength("The size of the message has to be a multiple of 16 bytes.", clear_len);
-   }
-
-   generateSubkeys();
-   if (!IV.empty())
-   {
-      IVSetup();
-   }
-
-   BytesVector crypted;
-   crypted.reserve(clear_len);
-
+   BytesVector output;
+   output.reserve(clear_len);
+   
    for (uint64_t i = 0; i < clear_len; i += 16)
    {
-      nextState();
-
-      /* Encrypt 16 bytes of data */
-      const uint32_t X[4] = {
-         states[0] ^ (states[5] >> 16) ^ (states[3] << 16),
-         states[2] ^ (states[7] >> 16) ^ (states[5] << 16),
-         states[4] ^ (states[1] >> 16) ^ (states[7] << 16),
-         states[6] ^ (states[3] >> 16) ^ (states[1] << 16)
-      };
-
-      BytesVector output;
-      output.reserve(16);
-      for (uint8_t j = 0; j < 4; ++j)
+      const UInt32Vector keystream = generateKeystream();
+      for (uint8_t j = 0; j < 16; j += 4)
       {
-         const BytesVector tmp = LittleEndian32::toBytesVector(X[j]);
-         output.insert(output.end(), tmp.begin(), tmp.end());
-      }
-
-      for (uint8_t j = 0; j < 16; ++j)
-      {
-         crypted.push_back(output[j] ^ clear_text[i + j]);
+         const BytesVector tmp = LittleEndian32::toBytesVector(keystream[j >> 2]);
+         for(uint8_t k = 0; k < 4; ++k)
+         {
+            output.push_back(tmp[k] ^ clear_text[i + j + k]);
+         }
       }
    }
 
-   return crypted;
+   return output;
 }

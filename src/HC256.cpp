@@ -13,6 +13,7 @@ void HC256::setKey(const BytesVector &key)
    }
    
    this->key = key;
+   keySetup();
 }
 
 void HC256::setIV(const BytesVector &IV)
@@ -23,7 +24,6 @@ void HC256::setIV(const BytesVector &IV)
    }
    
    this->IV = IV;
-   generateSubkeys();
 }
 
 uint32_t HC256::g(const uint32_t x, const uint32_t y, const UInt32Vector &K)
@@ -38,7 +38,7 @@ uint32_t HC256::h(const uint32_t x, const UInt32Vector &K)
    return K[X[0]] + K[256 + X[1]] + K[512 + X[2]] + K[768 + X[3]];
 }
 
-void HC256::generateSubkeys()
+void HC256::keySetup()
 {
    P.reserve(1024);
    Q.reserve(1024);
@@ -88,37 +88,23 @@ uint32_t HC256::updateSubkeys(UInt32Vector &K, const UInt32Vector &S, const uint
    return h(K[(index - 12) & 0x3FF], S) ^ K[index];
 }
 
-uint32_t HC256::generateKeystream(const uint64_t &index)
+UInt32Vector HC256::generateKeystream()
 {
-   uint32_t keystream;
-   uint16_t j = index & 0x3FF;
-   if((index & 0x7FF) < 1024)
-   {
-      keystream = updateSubkeys(P, Q, j);
-   }
-   else
-   {
-      keystream = updateSubkeys(Q, P, j);
-   }
+   UInt32Vector keystream;
+   keystream.reserve(2048);
    
-   return keystream;
-}
-
-const BytesVector HC256::encode(const BytesVector &message)
-{
-   const uint64_t output_size = message.size();
-   BytesVector output;
-   output.reserve(output_size);
-   
-   for(uint64_t i = 0; i < output_size; i += 4)
+   for(uint16_t index = 0; index < 2048; ++index)
    {
-      const uint32_t keystream = generateKeystream(i >> 2);
-      const BytesVector key_bytes = BigEndian32::toBytesVector(keystream);
-      for(uint8_t j = 0; j < 4; ++j)
+      uint16_t j = index & 0x3FF;
+      if(index < 1024)
       {
-         output.push_back(message[i + j] ^ key_bytes[j]);
+         keystream.push_back(updateSubkeys(P, Q, j));
+      }
+      else
+      {
+         keystream.push_back(updateSubkeys(Q, P, j));
       }
    }
    
-   return output;
+   return keystream;
 }

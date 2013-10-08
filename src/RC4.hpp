@@ -2,9 +2,8 @@
 #define RC4_HPP
 
 #include "StreamCipher.hpp"
-#include "PseudoRandomFunction.hpp"
 
-class RC4 : public StreamCipher, PseudoRandomFunction<uint8_t, BytesVector>
+class RC4 : public StreamCipher<uint8_t>
 {
 public:
    /* Constructor for the pseudo-random generator (usage of generate). */
@@ -17,12 +16,12 @@ public:
    
    virtual const BytesVector encode(const BytesVector &clear_text) final;
    
-   virtual const BytesVector generate();
+   virtual BytesVector generateKeystream() final;
    
    virtual void setKey(const BytesVector &key) final;
    
 private:
-   virtual void generateSubkeys() final;
+   virtual void keySetup() final;
    
    uint8_t subkeys[256];
    uint64_t output_size;
