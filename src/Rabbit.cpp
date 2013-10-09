@@ -3,7 +3,6 @@
 #include "Bits.hpp"
 #include "exceptions/BadKeyLength.hpp"
 #include "BigEndian.hpp"
-#include "LittleEndian.hpp"
 
 constexpr uint32_t Rabbit::A[];
 
@@ -147,26 +146,4 @@ UInt32Vector Rabbit::generateKeystream()
       states[2] ^ (states[7] >> 16) ^ (states[5] << 16),
       states[4] ^ (states[1] >> 16) ^ (states[7] << 16),
       states[6] ^ (states[3] >> 16) ^ (states[1] << 16)};
-}
-
-const BytesVector Rabbit::encode(const BytesVector &clear_text)
-{
-   const uint64_t clear_len = clear_text.size();
-   BytesVector output;
-   output.reserve(clear_len);
-   
-   for (uint64_t i = 0; i < clear_len; i += 16)
-   {
-      const UInt32Vector keystream = generateKeystream();
-      for (uint8_t j = 0; j < 16; j += 4)
-      {
-         const BytesVector tmp = LittleEndian32::toBytesVector(keystream[j >> 2]);
-         for(uint8_t k = 0; k < 4; ++k)
-         {
-            output.push_back(tmp[k] ^ clear_text[i + j + k]);
-         }
-      }
-   }
-
-   return output;
 }

@@ -10,20 +10,20 @@ AES, DES, Blowfish, IDEA, Skipjack, RC2, RC5, RC6, TripleDES, XTEA, Noekeon, CAS
 For each block cipher, the ECB, CBC, CFB, OFB and CTR modes of operation are implemented following the specifications of NIST.
 
 Stream ciphers and/or Pseudo-random functions familly include the following :
-Rabbit, RC4, SEAL, ISAAC, HC-256, Salsa20
+Rabbit, RC4, SEAL, ISAAC, HC-256, Salsa20, Scream
 
 Asymmetric ciphers include the following (using a BigInteger library created by Matt McCutchen : https://mattmccutchen.net/bigint/):
 Hellman-Merkle Knapsack cryptosystem
 
 Hash functions include the following :
-Blake (224, 256, 384, 512), SHA-1, SHA-2 (224, 256, 384, 512, 512/224, 512/256), MD2, MD4, MD5, RipeMD (128, 160, 256, 320), Whirlpool, Tiger and tiger2 (128, 160, 192). HMAC is supported for all of them except Keccak which it's not needed.
+Blake (224, 256, 384, 512), SHA-1, SHA-2 (224, 256, 384, 512, 512/224, 512/256), MD2, MD4, MD5, RipeMD (128, 160, 256, 320), Whirlpool, Tiger and tiger2 (128, 160, 192). HMAC is supported for all of them.
 
 Sponge construction functions include the following :
 Keccak (0, 224, 256, 384, 512)
 
 
 Other tools :
-Base64, square matrices over the modular integers (Z_n), Big and little endian conversion, various mathematical, padding and bits manipulation tools.
+Base64, square matrices over the modular integers (Z_n), Functions composition, Big and little endian conversion, various mathematical, padding and bits manipulation tools.
 
 Also, at least one test is done for each cipher and hash function. The tests are done with GoogleTest functionalities.
 

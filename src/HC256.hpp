@@ -8,7 +8,7 @@
 
 #include "Bits.hpp"
 
-class HC256 : public SynchronousStreamCipher<uint32_t>
+class HC256 : public SynchronousStreamCipher<UInt32Vector, BigEndian32>
 {
 public:
    HC256(const BytesVector &key, const BytesVector &IV)

@@ -4,14 +4,15 @@
 #ifndef SALSA20_HPP
 #define SALSA20_HPP
 
-#include "StreamCipher.hpp"
+#include "SynchronousStreamCipher.hpp"
 
-class Salsa20 : public StreamCipher<uint32_t>
+#include "BigEndian.hpp"
+
+class Salsa20 : public SynchronousStreamCipher<UInt32Vector, BigEndian32>
 {
 public:
-   Salsa20(const BytesVector &key, const BytesVector &IV) { setIV(IV); setKey(key); }
-   
-   virtual const BytesVector encode(const BytesVector &message) final;
+   Salsa20(const BytesVector &key, const BytesVector &IV)
+      : SynchronousStreamCipher(64) { setIV(IV); setKey(key); }
    
    /* Generate 64 bytes of keystream. */
    virtual UInt32Vector generateKeystream() final;

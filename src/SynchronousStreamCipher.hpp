@@ -6,7 +6,7 @@
 
 #include "BigEndian.hpp"
 
-template <class KeystreamType>
+template <class KeystreamType, class EndianType>
 class SynchronousStreamCipher : public StreamCipher<KeystreamType>
 {
 public:
@@ -16,13 +16,13 @@ public:
       BytesVector output;
       output.reserve(output_size);
 
-      const uint8_t type_size = sizeof(KeystreamType);
+      const uint8_t type_size = sizeof(typename KeystreamType::value_type);
       for(uint64_t i = 0; i < output_size; i += keystream_size)
       {
          const UInt32Vector keystream = generateKeystream();
          for(uint16_t j = 0; j < keystream_size; j += type_size)
          {
-            const BytesVector key_bytes = BigEndian<KeystreamType>::toBytesVector(keystream[j / type_size]);
+            const BytesVector key_bytes = EndianType::toBytesVector(keystream[j / type_size]);
             for(uint8_t k = 0; k < type_size; ++k)
             {
                const uint64_t current_len = i+j+k;
@@ -39,14 +39,12 @@ public:
    }
    
 protected:   
-   using KeystreamVectorType = typename StreamCipher<KeystreamType>::KeystreamVectorType;
-   
    explicit SynchronousStreamCipher(const uint64_t &keystream_size) 
       : keystream_size(keystream_size) {}
       
    virtual ~SynchronousStreamCipher() {}
    
-   virtual KeystreamVectorType generateKeystream() = 0;
+   virtual KeystreamType generateKeystream() = 0;
    
    /* Set the key and check if the key has a correct length. */
    virtual void setKey(const BytesVector &) = 0;

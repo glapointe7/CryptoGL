@@ -14,13 +14,11 @@ public:
    }
    
 protected:
-   using KeystreamVectorType = std::vector<KeystreamType>;
-   
    virtual ~StreamCipher() {}
 
    virtual const BytesVector encode(const BytesVector &) = 0;
    
-   virtual KeystreamVectorType generateKeystream() = 0;
+   virtual KeystreamType generateKeystream() = 0;
    
    /* Set the key and check if the key has a correct length. */
    virtual void setKey(const BytesVector &) = 0;

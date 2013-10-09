@@ -121,6 +121,7 @@ UInt32Vector Salsa20::generateKeystream()
    x.reserve(16);
    
    keySetup();
+   counter++;
    for(uint8_t i = 0; i < 64; i += 4)
    {
       x.push_back(LittleEndian32::toInteger(BytesVector(subkeys.begin() + i, subkeys.begin() + i + 4)));
@@ -138,27 +139,4 @@ UInt32Vector Salsa20::generateKeystream()
    }
    
    return result;
-}
-
-const BytesVector Salsa20::encode(const BytesVector &message)
-{
-   const uint64_t output_size = message.size();
-   BytesVector output;
-   output.reserve(output_size);
-   
-   for(uint64_t j = 0; j < output_size; j += 64)
-   {
-      const UInt32Vector keystream = generateKeystream();
-      for(uint8_t i = 0; i < 64; i += 4)
-      {
-         const BytesVector key_bytes = BigEndian32::toBytesVector(keystream[i >> 2]);
-         for(uint8_t k = 0; k < 4; ++k)
-         {
-            output.push_back(message[i + j + k] ^ key_bytes[k]);
-         }
-      }
-      counter++;      	
-   }
-   
-   return output;
 }

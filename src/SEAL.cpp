@@ -114,6 +114,7 @@ UInt32Vector SEAL::generateKeystream()
    for(uint8_t l = 0; l < number_of_Kb; ++l)
    {
       initialize(l, A, registers);
+      
       for(uint8_t i = 0; i < 64; ++i)
       {
          P = A[0] & 0x7FC;
@@ -181,9 +182,8 @@ UInt32Vector SEAL::generateKeystream()
 
 const BytesVector SEAL::encode(const BytesVector &message)
 {   
-   seed = 0;
    output_size = message.size();
-   
+   seed = 0;
    BytesVector output;
    output.reserve(output_size);
    

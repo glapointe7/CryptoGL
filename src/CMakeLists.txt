@@ -81,7 +81,7 @@ set(SRC
    HC256.hpp HC256.cpp
    SEAL.hpp SEAL.cpp
    Isaac.hpp Isaac.cpp
-   #Scream.hpp Scream.cpp
+   Scream.hpp Scream.cpp
    Salsa20.hpp Salsa20.cpp
 
 # Hash functions section

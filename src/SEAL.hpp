@@ -6,7 +6,7 @@
 
 #include "StreamCipher.hpp"
 
-class SEAL : public StreamCipher<uint32_t>
+class SEAL : public StreamCipher<UInt32Vector>
 {
 public:
    /* Constructor (Pseudo-random): receives the 160-bit key, a seed and the output size desired in bytes. */

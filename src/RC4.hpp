@@ -3,7 +3,7 @@
 
 #include "StreamCipher.hpp"
 
-class RC4 : public StreamCipher<uint8_t>
+class RC4 : public StreamCipher<BytesVector>
 {
 public:
    /* Constructor for the pseudo-random generator (usage of generate). */
