@@ -63,19 +63,19 @@ void SEAL::keySetup()
       S.push_back(gamma(i + 0x1000, previous_index));
    }
    
-   R.reserve(4 * (output_size / 1024));
    const uint16_t upper_bound = 4 * (output_size / 1024);
+   R.reserve(upper_bound);
    for(uint16_t i = 0; i < upper_bound; ++i)
    {
       R.push_back(gamma(i + 0x2000, previous_index));
    }
 }
 
-void SEAL::initialize(const uint8_t index, UInt32Vector &A, UInt32Vector &registers) const
+void SEAL::initialize()
 {
    for(uint8_t i = 0; i < 4; ++i)
    {
-      A[i] = Bits::rotateRight(seed, (i << 3)) ^ R[4*index + i];
+      state[i] = Bits::rotateRight(seed, (i << 3)) ^ R[4*counter + i];
    }
    
    uint16_t P;
@@ -83,119 +83,107 @@ void SEAL::initialize(const uint8_t index, UInt32Vector &A, UInt32Vector &regist
    {
       for(uint8_t j = 0; j < 4; ++j)
       {
-         P = A[j] & 0x7FC;
-         A[(j+1) & 3] += T[P / 4];
-         A[j] = Bits::rotateRight(A[j], 9);
+         P = state[j] & 0x7FC;
+         state[(j+1) & 3] += T[P / 4];
+         state[j] = Bits::rotateRight(state[j], 9);
       }
    }
    
-   registers[0] = A[3];
-   registers[1] = A[1];
-   registers[2] = A[0];
-   registers[3] = A[2];
+   state[4] = state[3];
+   state[5] = state[1];
+   state[6] = state[0];
+   state[7] = state[2];
    
    for(uint8_t j = 0; j < 4; ++j)
    {
-      P = A[j] & 0x7FC;
-      A[(j+1) & 3] += T[P / 4];
-      A[j] = Bits::rotateRight(A[j], 9);
+      P = state[j] & 0x7FC;
+      state[(j+1) & 3] += T[P / 4];
+      state[j] = Bits::rotateRight(state[j], 9);
    }
 }
 
 UInt32Vector SEAL::generateKeystream()
 {
    UInt32Vector keystream;
-   keystream.reserve(output_size);
+   keystream.reserve(1024);
       
-   UInt32Vector A(4, 0);
-   UInt32Vector registers(A);
    uint16_t P, Q;
-   const uint8_t number_of_Kb = output_size / 1024;
-   for(uint8_t l = 0; l < number_of_Kb; ++l)
+   initialize();
+   counter++;
+   for(uint8_t i = 0; i < 64; ++i)
    {
-      initialize(l, A, registers);
-      
-      for(uint8_t i = 0; i < 64; ++i)
+      P = state[0] & 0x7FC;
+      state[1] += T[P / 4];
+      state[0] = Bits::rotateRight(state[0], 9);
+      state[1] ^= state[0];
+
+      Q = state[1] & 0x7FC;
+      state[2] ^= T[Q / 4];
+      state[1] = Bits::rotateRight(state[1], 9);
+      state[2] += state[1];
+
+      P = (P + state[2]) & 0x7FC;
+      state[3] += T[P / 4];
+      state[2] = Bits::rotateRight(state[2], 9);
+      state[3] ^= state[2];
+
+      Q = (Q + state[3]) & 0x7FC;
+      state[0] ^= T[Q / 4];
+      state[3] = Bits::rotateRight(state[3], 9);
+      state[0] += state[3];
+
+
+      P = (P + state[0]) & 0x7FC;
+      state[1] ^= T[P / 4];
+      state[0] = Bits::rotateRight(state[0], 9);
+
+      Q = (Q + state[1]) & 0x7FC;
+      state[2] += T[Q / 4];
+      state[1] = Bits::rotateRight(state[1], 9);
+
+      P = (P + state[2]) & 0x7FC;
+      state[3] ^= T[P / 4];
+      state[2] = Bits::rotateRight(state[2], 9);
+
+      Q = (Q + state[3]) & 0x7FC;
+      state[0] += T[Q / 4];
+      state[3] = Bits::rotateRight(state[3], 9);
+
+      const uint8_t j = 4 * i;         
+      keystream.push_back(state[1] + S[j]);
+      keystream.push_back(state[2] ^ S[j + 1]);
+      keystream.push_back(state[3] + S[j + 2]);
+      keystream.push_back(state[0] ^ S[j + 3]);
+
+      if(i & 1)
       {
-         P = A[0] & 0x7FC;
-         A[1] += T[P / 4];
-         A[0] = Bits::rotateRight(A[0], 9);
-         A[1] ^= A[0];
-         
-         Q = A[1] & 0x7FC;
-         A[2] ^= T[Q / 4];
-         A[1] = Bits::rotateRight(A[1], 9);
-         A[2] += A[1];
-         
-         P = (P + A[2]) & 0x7FC;
-         A[3] += T[P / 4];
-         A[2] = Bits::rotateRight(A[2], 9);
-         A[3] ^= A[2];
-         
-         Q = (Q + A[3]) & 0x7FC;
-         A[0] ^= T[Q / 4];
-         A[3] = Bits::rotateRight(A[3], 9);
-         A[0] += A[3];
-         
-         
-         P = (P + A[0]) & 0x7FC;
-         A[1] ^= T[P / 4];
-         A[0] = Bits::rotateRight(A[0], 9);
-         
-         Q = (Q + A[1]) & 0x7FC;
-         A[2] += T[Q / 4];
-         A[1] = Bits::rotateRight(A[1], 9);
-         
-         P = (P + A[2]) & 0x7FC;
-         A[3] ^= T[P / 4];
-         A[2] = Bits::rotateRight(A[2], 9);
-         
-         Q = (Q + A[3]) & 0x7FC;
-         A[0] += T[Q / 4];
-         A[3] = Bits::rotateRight(A[3], 9);
-         
-         const uint8_t j = 4 * i;         
-         keystream.push_back(A[1] + S[j]);
-         keystream.push_back(A[2] ^ S[j + 1]);
-         keystream.push_back(A[3] + S[j + 2]);
-         keystream.push_back(A[0] ^ S[j + 3]);
-         
-         if(i & 1)
-         {
-            A[0] += registers[2];
-            A[1] += registers[3];
-            A[2] ^= registers[2];
-            A[3] ^= registers[3];
-         }
-         else
-         {
-            A[0] += registers[0];
-            A[1] += registers[1];
-            A[2] ^= registers[0];
-            A[3] ^= registers[1];
-         }
+         state[0] += state[6];
+         state[1] += state[7];
+         state[2] ^= state[6];
+         state[3] ^= state[7];
+      }
+      else
+      {
+         state[0] += state[4];
+         state[1] += state[5];
+         state[2] ^= state[4];
+         state[3] ^= state[5];
       }
    }
 
    return keystream;
 }
 
-const BytesVector SEAL::encode(const BytesVector &message)
-{   
-   output_size = message.size();
-   seed = 0;
-   BytesVector output;
-   output.reserve(output_size);
-   
-   for(uint16_t j = 0; j < output_size; j += 1024)
+const UInt32Vector SEAL::generate()
+{
+   UInt32Vector random_numbers;
+   random_numbers.reserve(output_size);
+   const uint8_t number_of_Kb = output_size / 1024;
+   while(counter < number_of_Kb)
    {
-      for(uint16_t i = 0; i < 1024; ++i)
-      {
-         UInt32Vector keystream = generateKeystream();
-         output.push_back(message[i+j] ^ keystream[i]);
-      }
-      seed++;
+      const UInt32Vector keystream = generateKeystream();
+      random_numbers.insert(random_numbers.end(), keystream.begin(), keystream.end());
    }
    
-   return output;
+   return random_numbers;
 }

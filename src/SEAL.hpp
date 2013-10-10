@@ -4,30 +4,31 @@
 #ifndef SEAL_HPP
 #define SEAL_HPP
 
-#include "StreamCipher.hpp"
+#include "SynchronousStreamCipher.hpp"
+#include "PseudoRandomFunction.hpp"
 
-class SEAL : public StreamCipher<UInt32Vector>
+class SEAL : public SynchronousStreamCipher<UInt32Vector, BigEndian32>, 
+        PseudoRandomFunction<uint32_t, UInt32Vector>
 {
-public:
+public:   
    /* Constructor (Pseudo-random): receives the 160-bit key, a seed and the output size desired in bytes. */
    SEAL(const BytesVector &key, const uint32_t seed, const uint16_t output_size)
-           : output_size(output_size), seed(seed) { setKey(key); }
+           : SynchronousStreamCipher(1024), PseudoRandomFunction(seed), output_size(output_size) { setKey(key); }
    
-   /* Constructor (Stream cipher): receives the 160-bit key for encryption. */
-   explicit SEAL(const BytesVector &key) { setKey(key); }
-           
-   virtual const BytesVector encode(const BytesVector &message) final;
-   
-   virtual UInt32Vector generateKeystream() final;
+   virtual const UInt32Vector generate() final;
    
    virtual void setKey(const BytesVector &key) final;
    
 private:
+   /* Only used by the encode function. */
+   virtual UInt32Vector generateKeystream() final;
+   
    /* Initialise the vectors A and registers from a given value and an index. */
-   void initialize(const uint8_t index, UInt32Vector &A, UInt32Vector &registers) const;
+   void initialize();
+   
    virtual void keySetup() final;
    
-   /* */
+   /* Define an IV with SHA-1 and return the hash truncated. */
    uint32_t gamma(const uint32_t current_index, uint32_t &previous_index);
    
    /* Subkeys tables : T is 2048 bytes, S is 1024 bytes and R is 16 * (L / 1024) bytes. */
@@ -39,9 +40,12 @@ private:
    /* The hash from SHA-1. */
    UInt32Vector H;
    
-   uint16_t output_size;
+   /* States to update. */
+   UInt32Vector state{0,0,0,0,0,0,0,0};
    
-   uint32_t seed;
+   uint64_t output_size;
+   
+   uint8_t counter = 0;
 };
 
 #endif

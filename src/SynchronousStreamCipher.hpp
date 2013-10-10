@@ -20,7 +20,7 @@ public:
       for(uint64_t i = 0; i < output_size; i += keystream_size)
       {
          const UInt32Vector keystream = generateKeystream();
-         for(uint16_t j = 0; j < keystream_size; j += type_size)
+         for(uint64_t j = 0; j < keystream_size; j += type_size)
          {
             const BytesVector key_bytes = EndianType::toBytesVector(keystream[j / type_size]);
             for(uint8_t k = 0; k < type_size; ++k)
