@@ -1,5 +1,5 @@
 /*
- * Algorithme : http://tools.ietf.org/html/rfc4503#appendix-A.1
+ * Source : http://tools.ietf.org/html/rfc4503#appendix-A.1
  */
 #ifndef RABBIT_HPP
 #define RABBIT_HPP
@@ -11,12 +11,11 @@
 
 #include <vector>
 
-class Rabbit : public SynchronousStreamCipher<UInt32Vector, LittleEndian32>
+class Rabbit : public SynchronousStreamCipher<UInt32Vector, LittleEndian32, 16>
 {   
 public:
    /* Constructor with an IV. */
-   Rabbit(const BytesVector &key, const BytesVector &IV) 
-      : SynchronousStreamCipher(16) { setIV(IV); setKey(key); }
+   Rabbit(const BytesVector &key, const BytesVector &IV) { setIV(IV); setKey(key); }
    
    /* Constructor without IV. */
    explicit Rabbit(const BytesVector &key) 

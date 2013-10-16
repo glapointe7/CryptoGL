@@ -8,11 +8,7 @@
 
 class Scream : public StreamCipher<BytesVector>
 {
-public:
-   Scream(const BytesVector &key, const BytesVector &IV) { setKey(key); setIV(IV); }
-   
-   virtual ~Scream() {}
-   
+public:   
    virtual const BytesVector encode(const BytesVector &message) final;
    
    /* Generate vectors of 16-byte keystream from IV and key. */
@@ -22,8 +18,12 @@ public:
    void setIV(const BytesVector &IV);
       
 protected:   
+   Scream(const BytesVector &key, const BytesVector &IV) { setKey(key); setIV(IV); }
+   
+   virtual ~Scream() {}
+   
    /* Construction of the S1(x) from the 'sbox' table following the specs. */
-   virtual void makeS1();
+   virtual void makeS1() = 0;
    
    /* Construction of S2(x) from the 'sbox' table following the specs. */
    void makeS2();
@@ -72,6 +72,26 @@ protected:
       0xE1, 0xF8, 0x98, 0x11, 0x69, 0xD9, 0x8E, 0x94, 0x9B, 0x1E, 0x87, 0xE9, 0xCE, 0x55, 0x28, 0xDF,
       0x8C, 0xA1, 0x89, 0x0D, 0xBF, 0xE6, 0x42, 0x68, 0x41, 0x99, 0x2D, 0x0F, 0xB0, 0x54, 0xBB, 0x16
    };
+};
+
+class Scream_S : public Scream
+{
+public:
+   Scream_S(const BytesVector &key, const BytesVector &IV)
+      : Scream(key, IV) {}
+   
+private:
+   virtual void makeS1() final;
+};
+
+class Scream_0 : public Scream
+{
+public:
+   Scream_0(const BytesVector &key, const BytesVector &IV)
+      : Scream(key, IV) {}
+   
+private:
+   virtual void makeS1() final;
 };
 
 #endif

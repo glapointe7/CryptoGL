@@ -7,13 +7,13 @@
 #include "SynchronousStreamCipher.hpp"
 #include "PseudoRandomFunction.hpp"
 
-class SEAL : public SynchronousStreamCipher<UInt32Vector, BigEndian32>, 
+class SEAL : public SynchronousStreamCipher<UInt32Vector, BigEndian32, 1024>, 
         PseudoRandomFunction<uint32_t, UInt32Vector>
 {
 public:   
    /* Constructor (Pseudo-random): receives the 160-bit key, a seed and the output size desired in bytes. */
    SEAL(const BytesVector &key, const uint32_t seed, const uint16_t output_size)
-           : SynchronousStreamCipher(1024), PseudoRandomFunction(seed), output_size(output_size) { setKey(key); }
+           : PseudoRandomFunction(seed), output_size(output_size) { setKey(key); }
    
    virtual const UInt32Vector generate() final;
    

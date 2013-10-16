@@ -58,7 +58,6 @@ set(SRC
    IDEA.hpp IDEA.cpp
    Noekeon.hpp Noekeon.cpp
    RC2.hpp RC2.cpp
-   #Serpent.hpp Serpent.cpp
    Feistel.hpp
    Skipjack.hpp Skipjack.cpp
    Blowfish.hpp Blowfish.cpp
@@ -83,6 +82,7 @@ set(SRC
    Isaac.hpp Isaac.cpp
    Scream.hpp Scream.cpp
    Salsa20.hpp Salsa20.cpp
+   Snow3G.hpp Snow3G.cpp
 
 # Hash functions section
    MerkleDamgardFunction.hpp

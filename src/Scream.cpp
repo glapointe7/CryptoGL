@@ -29,16 +29,20 @@ void Scream::setIV(const BytesVector &IV)
       throw BadIVLength("Your IV has to be 128 bits length.", IV.size());
    }
    this->IV = IV;
-   keySetup();
 }
 
-void Scream::makeS1()
+void Scream_S::makeS1()
 {
    S1.reserve(256);
    for(uint16_t x = 0; x < 256; ++x)
    {
       S1.push_back(composeSBox(16, 16, x));
    }
+}
+
+void Scream_0::makeS1()
+{
+   S1 = BytesVector(std::begin(sbox), std::end(sbox));
 }
 
 void Scream::makeS2()
@@ -159,6 +163,8 @@ BytesVector Scream::generateKeystream()
 {
    BytesVector keystream;
    keystream.reserve(256);
+   
+   keySetup();
    
    for(uint8_t i = 0; i < 16; ++i)
    {

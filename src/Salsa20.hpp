@@ -8,11 +8,10 @@
 
 #include "BigEndian.hpp"
 
-class Salsa20 : public SynchronousStreamCipher<UInt32Vector, BigEndian32>
+class Salsa20 : public SynchronousStreamCipher<UInt32Vector, BigEndian32, 64>
 {
 public:
-   Salsa20(const BytesVector &key, const BytesVector &IV)
-      : SynchronousStreamCipher(64) { setIV(IV); setKey(key); }
+   Salsa20(const BytesVector &key, const BytesVector &IV) { setIV(IV); setKey(key); }
    
    /* Generate 64 bytes of keystream. */
    virtual UInt32Vector generateKeystream() final;

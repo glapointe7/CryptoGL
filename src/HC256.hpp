@@ -8,11 +8,10 @@
 
 #include "Bits.hpp"
 
-class HC256 : public SynchronousStreamCipher<UInt32Vector, BigEndian32>
+class HC256 : public SynchronousStreamCipher<UInt32Vector, BigEndian32, 2048>
 {
 public:
-   HC256(const BytesVector &key, const BytesVector &IV)
-      : SynchronousStreamCipher(2048) { setIV(IV); setKey(key); }
+   HC256(const BytesVector &key, const BytesVector &IV) { setIV(IV); setKey(key); }
    
    /* Generate 2048 bytes of keystream. */
    virtual UInt32Vector generateKeystream() final;
