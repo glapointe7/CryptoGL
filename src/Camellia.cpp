@@ -6,11 +6,11 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
-constexpr uint64_t Camellia::key_sigma[];
-constexpr uint32_t Camellia::SP1110[256];
-constexpr uint32_t Camellia::SP0222[256];
-constexpr uint32_t Camellia::SP3033[256];
-constexpr uint32_t Camellia::SP4404[256];
+constexpr std::array<uint64_t, 6> Camellia::key_sigma;
+constexpr std::array<uint32_t, 256> Camellia::SP1110;
+constexpr std::array<uint32_t, 256> Camellia::SP0222;
+constexpr std::array<uint32_t, 256> Camellia::SP3033;
+constexpr std::array<uint32_t, 256> Camellia::SP4404;
 
 void Camellia::setKey(const BytesVector &key)
 {
@@ -225,7 +225,7 @@ const uint64_t Camellia::F(const uint64_t half_block, const uint8_t) const
    return (static_cast<uint64_t>(D) << 32) | U;
 }
 
-uint64_t Camellia::FL(const uint64_t &half_block, const uint64_t &subkey) const
+uint64_t Camellia::FL(const uint64_t &half_block, const uint64_t &subkey)
 {
    uint32_t Xl = half_block >> 32;
    uint32_t Xr = half_block & 0xFFFFFFFF;
@@ -238,7 +238,7 @@ uint64_t Camellia::FL(const uint64_t &half_block, const uint64_t &subkey) const
    return (static_cast<uint64_t>(Xl) << 32) | Xr;
 }
 
-uint64_t Camellia::FLInverse(const uint64_t &half_block, const uint64_t &subkey) const
+uint64_t Camellia::FLInverse(const uint64_t &half_block, const uint64_t &subkey)
 {
    uint32_t Xl = half_block >> 32;
    uint32_t Xr = half_block & 0xFFFFFFFF;

@@ -1,7 +1,7 @@
 #include "Mysty1.hpp"
 
-constexpr uint8_t Mysty1::S7[];
-constexpr uint16_t Mysty1::S9[];
+constexpr std::array<uint8_t, 128> Mysty1::S7;
+constexpr std::array<uint16_t, 512> Mysty1::S9;
 
 void Mysty1::setKey(const BytesVector &key)
 {
@@ -13,7 +13,7 @@ void Mysty1::setKey(const BytesVector &key)
    this->key = key;
 }
 
-uint16_t Mysty1::FI(const uint16_t in, const uint16_t K) const
+uint16_t Mysty1::FI(const uint16_t in, const uint16_t K)
 {
    uint16_t d9 = in >> 7;
    uint8_t d7 = in & 0x7F;

@@ -7,6 +7,8 @@
 #include "MerkleDamgardFunction.hpp"
 #include "BigEndian.hpp"
 
+#include <array>
+
 class SHA1 : public MerkleDamgardFunction<uint32_t, BigEndian32, BigEndian64, 64>
 {
 public:
@@ -34,7 +36,7 @@ private:
    //static constexpr uint8_t rounds = 80;
    
    /* Magic constants for the 80 rounds processing. */
-   static constexpr uint32_t k[4] = {0x5A827999, 0x6ED9EBA1, 0x8F1BBCDC, 0xCA62C1D6};
+   static constexpr std::array<uint32_t, 4> k = {{0x5A827999, 0x6ED9EBA1, 0x8F1BBCDC, 0xCA62C1D6}};
 };
 
 #endif

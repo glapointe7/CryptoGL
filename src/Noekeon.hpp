@@ -7,6 +7,8 @@
 #include "BlockCipher.hpp"
 #include "BigEndian.hpp"
 
+#include <array>
+
 class Noekeon : public BlockCipher<uint32_t, UInt32Vector, 16, BigEndian32>
 {
 public:
@@ -42,12 +44,12 @@ private:
    static void applyPi2(UInt32Vector &state);
    void applyRound(UInt32Vector &state, const uint8_t constant1, const uint8_t constant2);
    
-   static constexpr uint32_t round_constants[17] = {
-      0x00000080, 0x0000001b, 0x00000036, 0x0000006c,
+   static constexpr std::array<uint32_t, 17> round_constants = {
+      {0x00000080, 0x0000001b, 0x00000036, 0x0000006c,
       0x000000d8, 0x000000ab, 0x0000004d, 0x0000009a,
       0x0000002f, 0x0000005e, 0x000000bc, 0x00000063,
       0x000000c6, 0x00000097, 0x00000035, 0x0000006a,
-      0x000000d4
+      0x000000d4}
    };
 };
 

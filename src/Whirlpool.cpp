@@ -2,10 +2,10 @@
 
 #include <algorithm>
 
-constexpr uint64_t Whirlpool::sbox[][256];
-constexpr uint64_t Whirlpool::RC[];
+constexpr std::array<std::array<uint64_t, 256>, 8> Whirlpool::sbox;
+constexpr std::array<uint64_t, 10> Whirlpool::RC;
 
-uint64_t Whirlpool::applyGammaPiTheta(UInt64Vector &key, const uint8_t index) const
+uint64_t Whirlpool::applyGammaPiTheta(UInt64Vector &key, const uint8_t index)
 {
    uint64_t tmp_key = 0;
    for (uint8_t i = 0; i < 8; ++i)

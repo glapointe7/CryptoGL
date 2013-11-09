@@ -8,6 +8,8 @@
 
 #include "BigEndian.hpp"
 
+#include <array>
+
 class Salsa20 : public SynchronousStreamCipher<UInt32Vector, BigEndian32, 64>
 {
 public:
@@ -34,13 +36,13 @@ private:
    BytesVector subkeys;
    uint64_t counter = 0;
    
-   static constexpr uint8_t sigma[4][4] = {
-      {101, 120, 112, 97}, {110, 100, 32, 51}, {50, 45, 98, 121}, {116, 101, 32, 107}
-   };
+   static constexpr std::array<std::array<uint8_t, 4>, 4> sigma = {{
+      {{101, 120, 112, 97}}, {{110, 100, 32, 51}}, {{50, 45, 98, 121}}, {{116, 101, 32, 107}}
+   }};
    
-   static constexpr uint8_t tau[4][4] = {
-      {101, 120, 112, 97}, {110, 100, 32, 49}, {54, 45, 98, 121}, {116, 101, 32, 107}
-   };
+   static constexpr std::array<std::array<uint8_t, 4>, 4> tau = {{
+      {{101, 120, 112, 97}}, {{110, 100, 32, 49}}, {{54, 45, 98, 121}}, {{116, 101, 32, 107}}
+   }};
 };
 
 #endif

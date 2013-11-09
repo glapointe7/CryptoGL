@@ -2,7 +2,7 @@
 
 #include "Bits.hpp"
 
-constexpr uint32_t SHA1::k[];
+constexpr std::array<uint32_t, 4> SHA1::k;
 
 void SHA1::compress(UInt32Vector &int_block, UInt32Vector &state)
 {

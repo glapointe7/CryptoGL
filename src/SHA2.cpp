@@ -1,14 +1,14 @@
 #include "SHA2.hpp"
 
-constexpr uint32_t SHA32Bits::round_constants[];
-constexpr uint64_t SHA64Bits::first_cubic_root_primes[];
+constexpr std::array<uint32_t, 64> SHA32Bits::round_constants;
+constexpr std::array<uint64_t, 80> SHA64Bits::first_cubic_root_primes;
 
 void SHA32Bits::compress(UInt32Vector &int_block, UInt32Vector &state)
 {
    int_block.resize(rounds);
 
    // Extention of the 32-bit 16 blocks in 64 blocks of 32 bits.
-   extendWords(int_block, {7, 18, 3, 19, 17, 10});
+   extendWords(int_block, {{7, 18, 3, 19, 17, 10}});
 
    UInt32Vector hash(state);
    for (uint8_t j = 0; j < rounds; ++j)
@@ -26,7 +26,7 @@ void SHA64Bits::compress(UInt64Vector &int_block, UInt64Vector &state)
    int_block.resize(rounds);
 
    // Extention of the 32-bit 16 blocks in 80 blocks of 32 bits.
-   extendWords(int_block, {1, 8, 7, 19, 61, 6});
+   extendWords(int_block, {{1, 8, 7, 19, 61, 6}});
 
    UInt64Vector hash(state);
    for (uint8_t j = 0; j < rounds; ++j)
@@ -61,14 +61,7 @@ void SHA512_t::makeNewIV(const BytesVector &code)
    delete S;
 
    // Get the new IV vector.
-   //IV.clear();
-   UInt64Vector new_IV;
-   new_IV.reserve(8);
-   for (uint8_t j = 0; j < 64; j += 8)
-   {
-      new_IV.push_back(BigEndian64::toInteger(BytesVector(answer.begin() + j, answer.begin() + j + 8)));
-   }
-   setIV(new_IV);
+   setIV(BigEndian64::toIntegersVector(answer));
 }
 
 const BytesVector SHA512_224::getOutput(const UInt64Vector &hash) const

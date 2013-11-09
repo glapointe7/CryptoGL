@@ -2,9 +2,9 @@
 
 #include "Padding.hpp"
 
-constexpr uint8_t MD2::digits_of_pi[];
+constexpr std::array<uint8_t, 256> MD2::digits_of_pi;
 
-void MD2::process(const BytesVector &data, BytesVector &hash)
+void MD2::process(const BytesVector &data, BytesVector &hash) const
 {
    for (uint8_t j = 0; j < input_block_size; ++j)
    {

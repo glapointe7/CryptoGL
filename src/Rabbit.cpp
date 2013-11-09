@@ -4,7 +4,7 @@
 #include "exceptions/BadKeyLength.hpp"
 #include "BigEndian.hpp"
 
-constexpr uint32_t Rabbit::A[];
+constexpr std::array<uint32_t, 8> Rabbit::A;
 
 void Rabbit::setKey(const BytesVector &key)
 {
@@ -76,12 +76,7 @@ void Rabbit::nextState()
 void Rabbit::keySetup()
 {
    // Build 4 sub-keys of 4 bytes length.
-   UInt32Vector subkeys;
-   subkeys.reserve(4);
-   for (uint8_t i = 0; i < 16; i += 4)
-   {
-      subkeys.push_back(BigEndian32::toInteger(BytesVector(key.begin() + i, key.begin() + i + 4)));
-   }
+   const UInt32Vector subkeys = BigEndian32::toIntegersVector(key);
 
    /* Generate initial state variables */
    states[0] = subkeys[0];
@@ -119,12 +114,7 @@ void Rabbit::keySetup()
 void Rabbit::IVSetup()
 {
    // Generate 4 sub-IVs of 16 bits big-endian.
-   UInt16Vector subIV;
-   subIV.reserve(4);
-   for (uint8_t i = 0; i < 8; i += 2)
-   {
-      subIV.push_back(BigEndian16::toInteger(BytesVector(IV.begin() + i, IV.begin() + i + 2)));
-   }
+   const UInt16Vector subIV = BigEndian16::toIntegersVector(IV);
 
    /* Modify counter values */
    for(uint8_t i = 0; i < 8; ++i)

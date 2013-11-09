@@ -7,14 +7,14 @@
 #include "exceptions/BadKeyLength.hpp"
 #include "exceptions/EmptyKey.hpp"
 
-constexpr uint8_t DES::rot_table[];
-constexpr uint8_t DES::IP[];
-constexpr uint8_t DES::IP_inverse[];
-constexpr uint8_t DES::E[];
-constexpr uint8_t DES::P[];
-constexpr uint8_t DES::S[8][4][16];
-constexpr uint8_t DES::PC1[];
-constexpr uint8_t DES::PC2[];
+constexpr std::array<uint8_t, 16> DES::rot_table;
+constexpr std::array<uint8_t, 64> DES::IP;
+constexpr std::array<uint8_t, 64> DES::IP_inverse;
+constexpr std::array<uint8_t, 48> DES::E;
+constexpr std::array<uint8_t, 32> DES::P;
+constexpr std::array<std::array<std::array<uint8_t, 16>, 4>, 8> DES::S;
+constexpr std::array<uint8_t, 56> DES::PC1;
+constexpr std::array<uint8_t, 48> DES::PC2;
 
 void DES::setKey(const BytesVector &key)
 {
@@ -31,7 +31,7 @@ void DES::generateSubkeys()
    const uint64_t key_bits = BigEndian64::toInteger(key);
 
    // We permute with the PC1 table to get a 56-bits key.
-   const uint64_t K56 = Tools::getBitsFromTable(key_bits, PC1, 64, 56);
+   const uint64_t K56 = Tools::getBitsFromTable<56>(key_bits, PC1, 64);
 
    // Split the 56-bits key in 2 28-bits sub-keys.
    uint64_t K1, K2;
@@ -47,13 +47,13 @@ void DES::generateSubkeys()
       K2 = KL;
 
       const uint64_t K = KR | (KL << 28);
-      subkeys.push_back(Tools::getBitsFromTable(K, PC2, 56, 48));
+      subkeys.push_back(Tools::getBitsFromTable<48>(K, PC2, 56));
    }
 }
 
-uint64_t DES::getSubstitution(const uint64_t &key_mixed) const
+uint64_t DES::getSubstitution(const uint64_t &key_mixed)
 {
-   uint8_t sboxes[8];
+   std::array<uint8_t, 8> sboxes;
    for (uint8_t i = 0, j = 42; i < 8; ++i, j -= 6)
    {
       sboxes[i] = (key_mixed >> j) & 0x3F;
@@ -76,14 +76,14 @@ uint64_t DES::getSubstitution(const uint64_t &key_mixed) const
 const uint64_t DES::F(const uint64_t data, const uint8_t round) const
 {
    // Expension from 32 bits to 48 bits.
-   const uint64_t E_block = Tools::getBitsFromTable(data, E, 32, 48);
+   const uint64_t E_block = Tools::getBitsFromTable<48>(data, E, 32);
 
    const uint64_t key_mixed = E_block ^ subkeys[round];
 
    // Substitutions with the 8 S-Boxes. Output of 32 bits.
    const uint64_t s_block = getSubstitution(key_mixed);
 
-   return Tools::getBitsFromTable(s_block, P, 32, 32);
+   return Tools::getBitsFromTable<32>(s_block, P, 32);
 }
 
 void DES::encodeFeistelRounds(uint64_t& L, uint64_t& R, const uint8_t) const
@@ -110,7 +110,7 @@ const uint64_t DES::encodeBlock(const uint64_t &input)
 {
    // Initial permutation of the 64-bits data blocks.
    uint64_t value = input;
-   const uint64_t ip_data = Tools::getBitsFromTable(value, IP, 64, 64);
+   const uint64_t ip_data = Tools::getBitsFromTable<64>(value, IP, 64);
 
    // Split the 64-bits block in 2 blocks of 32 bits L and R for the 16 Feistel rounds.
    uint64_t L = ip_data >> 32;
@@ -119,14 +119,14 @@ const uint64_t DES::encodeBlock(const uint64_t &input)
    
    // Final permutation of R16.L16. with the IP_inverse table.
    const uint64_t RL = (R << 32) | L;
-   return Tools::getBitsFromTable(RL, IP_inverse, 64, 64);
+   return Tools::getBitsFromTable<64>(RL, IP_inverse, 64);
 }
 
 const uint64_t DES::decodeBlock(const uint64_t &input)
 {
    // Initial permutation of the 64-bits data blocks.
    uint64_t value = input;
-   const uint64_t ip_data = Tools::getBitsFromTable(value, IP, 64, 64);
+   const uint64_t ip_data = Tools::getBitsFromTable<64>(value, IP, 64);
 
    // Split the 64-bits block in 2 blocks of 32 bits L and R for the 16 Feistel rounds.
    uint64_t L = ip_data >> 32;
@@ -135,5 +135,5 @@ const uint64_t DES::decodeBlock(const uint64_t &input)
    
    // Final permutation of R16.L16. with the IP_inverse table.
    const uint64_t RL = (R << 32) | L;
-   return Tools::getBitsFromTable(RL, IP_inverse, 64, 64);
+   return Tools::getBitsFromTable<64>(RL, IP_inverse, 64);
 }

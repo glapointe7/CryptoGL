@@ -3,6 +3,8 @@
 
 #include "StreamCipher.hpp"
 
+#include <array>
+
 class RC4 : public StreamCipher<BytesVector>
 {
 public:
@@ -23,7 +25,7 @@ public:
 private:
    virtual void keySetup() final;
    
-   uint8_t subkeys[256];
+   std::array<uint8_t, 256> subkeys;
    uint64_t output_size;
 };
 

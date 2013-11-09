@@ -10,7 +10,10 @@
 class Delastelle : public SquareCipher
 {
 public:
-   explicit Delastelle(const KeyType &key) : SquareCipher(key) {}
+   Delastelle(const KeyType &key, const uint32_t block_length)
+      : SquareCipher(key), block_len(block_length) {}
+   
+   explicit Delastelle(const KeyType &key) : Delastelle(key, 5) {}
    
    virtual const ClassicalType encode(const ClassicalType &clear_text) final;
    virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
@@ -20,7 +23,7 @@ public:
 private:
    using ZeroBlockLength = Exception;
    
-   uint32_t block_len = 5;
+   uint32_t block_len;
 };
 
 #endif

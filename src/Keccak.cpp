@@ -3,8 +3,8 @@
 #include "Bits.hpp"
 #include "LittleEndian.hpp"
 
-constexpr uint64_t Keccak::round_constants[];
-constexpr uint8_t Keccak::rho_offsets[][5];
+constexpr std::array<uint64_t, 24> Keccak::round_constants;
+constexpr std::array<std::array<uint8_t, 5>, 5> Keccak::rho_offsets;
 
 void Keccak::applyRound(const uint8_t round_index)
 {
@@ -61,7 +61,7 @@ void Keccak::F()
    }
 }
 
-const UInt64Vector Keccak::convertBlockToState(const BytesVector &block) const
+UInt64Vector Keccak::convertBlockToState(const BytesVector &block) const
 {
    UInt64Vector int_block;
    int_block.reserve(width / lane_width);

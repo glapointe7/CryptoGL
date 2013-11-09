@@ -32,13 +32,13 @@ void Hill::setKey(const Int32Matrix &key)
 
 /* Process encode / decode of the data with the matrix key K. */
 
-const ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix *K)
+ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix *K)
 {  
    const uint32_t key_dim = K->getDimension();
    const uint32_t data_len = data.length();
    ClassicalType message;
    message.reserve(data_len + key_dim);
-   std::vector<uint32_t> pos;
+   UInt32Vector pos;
    pos.reserve(key_dim);
    
    for (uint32_t i = 0; i < data_len; i += key_dim)
@@ -47,7 +47,7 @@ const ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix 
       {
          pos.push_back(alpha.find(data[i + j]));
       }
-      const std::vector<uint32_t> cipher_pos(K * pos);
+      const UInt32Vector cipher_pos(K * pos);
 
       for (const auto x : cipher_pos)
       {

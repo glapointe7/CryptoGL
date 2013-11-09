@@ -10,8 +10,8 @@
 
 #include <algorithm>
 
-constexpr uint8_t Scream::pi[];
-constexpr uint8_t Scream::sbox[];
+constexpr std::array<uint8_t, 16> Scream::pi;
+constexpr std::array<uint8_t, 256> Scream::sbox;
 
 void Scream::setKey(const BytesVector &key)
 {
@@ -42,7 +42,7 @@ void Scream_S::makeS1()
 
 void Scream_0::makeS1()
 {
-   S1 = BytesVector(std::begin(sbox), std::end(sbox));
+   S1 = BytesVector(sbox.begin(), sbox.end());
 }
 
 void Scream::makeS2()
@@ -75,7 +75,7 @@ void Scream::makeT1()
    }
 }
 
-uint8_t Scream::composeSBox(const uint8_t n, const uint8_t max, const uint8_t x)
+uint8_t Scream::composeSBox(const uint8_t n, const uint8_t max, const uint8_t x) const
 {
    if(n > 1)
    {
@@ -87,11 +87,11 @@ uint8_t Scream::composeSBox(const uint8_t n, const uint8_t max, const uint8_t x)
 
 BytesVector Scream::F(const BytesVector &X)
 {
-   UInt32Vector u = {T0[X[0]] ^ T1[X[13]], T0[X[4]] ^ T1[X[1]],
-                    T0[X[8]] ^ T1[X[5]], T0[X[12]] ^ T1[X[9]]};
+   std::array<uint32_t, 4> u = {{T0[X[0]] ^ T1[X[13]], T0[X[4]] ^ T1[X[1]],
+                    T0[X[8]] ^ T1[X[5]], T0[X[12]] ^ T1[X[9]]}};
    
-   UInt16Vector bytes23 = {static_cast<uint16_t>(u[0]), static_cast<uint16_t>(u[1]),
-                      static_cast<uint16_t>(u[2]), static_cast<uint16_t>(u[3])};
+   std::array<uint16_t, 4> bytes23 = {{static_cast<uint16_t>(u[0]), static_cast<uint16_t>(u[1]),
+                      static_cast<uint16_t>(u[2]), static_cast<uint16_t>(u[3])}};
    for(uint8_t i = 0; i < 4; ++i)
    {
       const uint8_t j = i << 2;
@@ -101,10 +101,10 @@ BytesVector Scream::F(const BytesVector &X)
    }
    
    // Second half-round.
-   UInt32Vector x = {T0[u[2] >> 24] ^ T1[(u[1] >> 16) & 0xFF], 
+   std::array<uint32_t, 4> x = {{T0[u[2] >> 24] ^ T1[(u[1] >> 16) & 0xFF], 
                     T0[u[3] >> 24] ^ T1[(u[2] >> 16) & 0xFF],
                     T0[u[0] >> 24] ^ T1[(u[3] >> 16) & 0xFF], 
-                    T0[u[1] >> 24] ^ T1[(u[0] >> 16) & 0xFF]};
+                    T0[u[1] >> 24] ^ T1[(u[0] >> 16) & 0xFF]}};
    
    BytesVector out;
    out.reserve(16);
@@ -147,7 +147,7 @@ void Scream::keySetup()
    makeT1();
    
    BytesVector A = key;
-   const BytesVector B = F(Tools::XORVectors(A, BytesVector(std::begin(pi), std::end(pi))));
+   const BytesVector B = F(Tools::XORVectors(A, BytesVector(pi.begin(), pi.end())));
    subkeys.reserve(16);
 
    for(uint8_t i = 0; i < 16; ++i)

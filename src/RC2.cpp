@@ -2,8 +2,8 @@
 
 #include "Bits.hpp"
 
-constexpr uint8_t RC2::pi_table[256];
-constexpr uint8_t RC2::mixup_rotation[4];
+constexpr std::array<uint8_t, 256> RC2::pi_table;
+constexpr std::array<uint8_t, 4> RC2::mixup_rotation;
 
 void RC2::setKey(const BytesVector &key)
 {

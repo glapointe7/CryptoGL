@@ -18,7 +18,7 @@ public:
 
 private:
    static uint8_t is6X6(const Grid &grid);
-   const Int32Vector getPermutationKey() const;
+   Int32Vector getPermutationKey() const;
    
    // 6X6 grid key.
    Grid grid_key;

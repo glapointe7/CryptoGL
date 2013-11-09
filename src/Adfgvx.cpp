@@ -44,9 +44,9 @@ void Adfgvx::setGridKey(const Grid &grid)
    this->grid_key = grid;
 }
 
-const Int32Vector Adfgvx::getPermutationKey() const
+Int32Vector Adfgvx::getPermutationKey() const
 {
-   const KeyType key = getKey();
+   KeyType key = getKey();
    KeyType sorted_key(key);
    std::sort(sorted_key.begin(), sorted_key.end());
    

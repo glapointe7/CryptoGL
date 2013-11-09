@@ -72,6 +72,9 @@
 #include "../testing/ScreamTest.hpp"
 #include "../testing/Salsa20Test.hpp"
 #include "../testing/Snow3GTest.hpp"
+#include "../testing/LRCTest.hpp"
+#include "../testing/Adler32Test.hpp"
+//#include "../testing/SerpentTest.hpp"
 
 //#include <sys/time.h>
 

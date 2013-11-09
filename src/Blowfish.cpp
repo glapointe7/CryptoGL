@@ -6,7 +6,7 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
-constexpr uint32_t Blowfish::P[];
+constexpr std::array<uint32_t, 18> Blowfish::P;
 
 void Blowfish::setKey(const BytesVector &key)
 {

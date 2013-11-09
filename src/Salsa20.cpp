@@ -6,8 +6,8 @@
 #include "exceptions/BadKeyLength.hpp"
 #include "BigEndian.hpp"
 
-constexpr uint8_t Salsa20::sigma[][4];
-constexpr uint8_t Salsa20::tau[][4];
+constexpr std::array<std::array<uint8_t, 4>, 4> Salsa20::sigma;
+constexpr std::array<std::array<uint8_t, 4>, 4> Salsa20::tau;
 
 void Salsa20::setKey(const BytesVector &key)
 {
@@ -117,16 +117,9 @@ void Salsa20::IVSetup()
 
 UInt32Vector Salsa20::generateKeystream()
 {  
-   UInt32Vector x;
-   x.reserve(16);
-   
    keySetup();
    counter++;
-   for(uint8_t i = 0; i < 64; i += 4)
-   {
-      x.push_back(LittleEndian32::toInteger(BytesVector(subkeys.begin() + i, subkeys.begin() + i + 4)));
-   }
-   
+   const UInt32Vector x = LittleEndian32::toIntegersVector(subkeys);
    const UInt32Vector z = compose<10>(doubleRound)(x);
    
    UInt32Vector result;

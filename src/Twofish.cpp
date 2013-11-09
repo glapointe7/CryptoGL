@@ -5,12 +5,13 @@
 #include "LittleEndian.hpp"
 #include "BigEndian.hpp"
 #include "Bits.hpp"
+#include "MathematicalTools.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
 
-constexpr uint8_t Twofish::RS[][8];
-constexpr uint8_t Twofish::MDS[][4];
-constexpr uint8_t Twofish::Q[][256];
+constexpr std::array<std::array<uint8_t, 8>, 4> Twofish::RS;
+constexpr std::array<std::array<uint8_t, 4>, 4> Twofish::MDS;
+constexpr std::array<std::array<uint8_t, 256>, 4> Twofish::Q;
 
 void Twofish::setKey(const BytesVector &key)
 {
@@ -22,35 +23,14 @@ void Twofish::setKey(const BytesVector &key)
    this->key = key;
 }
 
-uint8_t Twofish::GFMultiply(const uint8_t a, uint8_t b, const uint16_t p)
-{
-   uint16_t A = a;
-   uint8_t prod = 0;
-   while(b > 0)
-   {
-      if(b & 1)
-      {
-         prod ^= A;
-      }
-      A <<= 1;
-      b >>= 1;
-      if(A & 0x100)
-      {
-         A ^= p;
-      }
-   }
-   
-   return prod;
-}
-
-uint32_t Twofish::h(const uint32_t X, const BytesVector &L) const
+uint32_t Twofish::h(const uint32_t X, const BytesVector &L)
 {
    // Split X into 4 bytes in little endian.
    const uint8_t k = L.size() >> 2;
    BytesVector y = LittleEndian32::toBytesVector(X);
    if(k == 4)
    {
-      constexpr uint8_t k4[4] = {1, 0, 0, 1};
+      constexpr std::array<uint8_t, 4> k4 = {{1, 0, 0, 1}};
       for(uint8_t i = 0; i < 4; ++i)
       {
          y[i] = Q[k4[i]][y[i]] ^ L[12 + i];
@@ -59,14 +39,14 @@ uint32_t Twofish::h(const uint32_t X, const BytesVector &L) const
          
    if(k >= 3)
    {
-      constexpr uint8_t k3[4] = {1, 1, 0, 0};
+      constexpr std::array<uint8_t, 4> k3 = {{1, 1, 0, 0}};
       for(uint8_t i = 0; i < 4; ++i)
       {
          y[i] = Q[k3[i]][y[i]] ^ L[8 + i];
       }
    }
          
-   constexpr uint8_t k2[12] = {1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1};
+   constexpr std::array<uint8_t, 12> k2 = {{1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1}};
    for(uint8_t i = 0; i < 4; ++i)
    {
       y[i] = Q[k2[i]][Q[k2[4 + i]][Q[k2[8 + i]][y[i]] ^ L[4 + i]] ^ L[i]];
@@ -78,7 +58,7 @@ uint32_t Twofish::h(const uint32_t X, const BytesVector &L) const
    {
       for(uint8_t j = 0; j < 4; ++j)
       {
-         z[i] ^= GFMultiply(MDS[i][j], y[j], 0x169);
+         z[i] ^= Maths::GFMultiply(MDS[i][j], y[j], 0x169);
       }
    }
    
@@ -107,7 +87,7 @@ void Twofish::generateSubkeys()
       {
          for(uint8_t l = 0; l < 8; ++l)
          {
-            S[i][j] ^= GFMultiply(RS[j][l], key[x + l], 0x14D);
+            S[i][j] ^= Maths::GFMultiply(RS[j][l], key[x + l], 0x14D);
          }
       }
    }

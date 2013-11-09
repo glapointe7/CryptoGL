@@ -7,6 +7,8 @@
 #include "MerkleDamgardFunction.hpp"
 #include "LittleEndian.hpp"
 
+#include <array>
+
 class MessageDigest : public MerkleDamgardFunction<uint32_t, LittleEndian32, LittleEndian64, 64>
 {   
 protected:
@@ -26,19 +28,19 @@ public:
 private:
    virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
    
-   static constexpr uint8_t left_rotation_table[48] = {
-      3, 7, 11, 19, 3, 7, 11, 19, 3, 7, 11, 19, 3, 7, 11, 19,
+   static constexpr std::array<uint8_t, 48> left_rotation_table = {
+      {3, 7, 11, 19, 3, 7, 11, 19, 3, 7, 11, 19, 3, 7, 11, 19,
       3, 5, 9, 13, 3, 5, 9, 13, 3, 5, 9, 13, 3, 5, 9, 13,
-      3, 9, 11, 15, 3, 9, 11, 15, 3, 9, 11, 15, 3, 9, 11, 15
+      3, 9, 11, 15, 3, 9, 11, 15, 3, 9, 11, 15, 3, 9, 11, 15}
    };
    
-   static constexpr uint8_t word_indexes[48] = {
-      0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+   static constexpr std::array<uint8_t, 48> word_indexes = {
+      {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
       0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15,
-      0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15
+      0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15}
    };
    
-   static constexpr uint32_t k[3] = {0, 0x5A827999, 0x6ED9EBA1};
+   static constexpr std::array<uint32_t, 3> k = {{0, 0x5A827999, 0x6ED9EBA1}};
    
    static constexpr uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
    {
@@ -64,16 +66,16 @@ public:
 private:
    virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
    
-   static constexpr uint8_t left_rotation_table[64] = {
-      7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
+   static constexpr std::array<uint8_t, 64> left_rotation_table = {
+      {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
       5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
       4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
-      6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21
+      6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21}
    };
 
    /* Constants obtained from the formula k(i) = sin(i + 1) * 2^32 for i = 0,...,63. */
-   static constexpr uint32_t sine_magic_numbers[64] = {
-      0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
+   static constexpr std::array<uint32_t, 64> sine_magic_numbers = {
+      {0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
       0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
       0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
       0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821,
@@ -88,7 +90,7 @@ private:
       0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039,
       0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1,
       0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
-      0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391
+      0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391}
    };
    
    static constexpr uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)

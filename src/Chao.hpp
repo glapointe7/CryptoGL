@@ -15,7 +15,7 @@ public:
 private:
    ClassicalType left_alpha;
    ClassicalType right_alpha;
-   static const uint8_t nadir;
+   static constexpr uint8_t nadir = 13;
   
    void leftShiftAlphabet(const int8_t ch, const uint8_t index);
    void rightShiftAlphabet(const int8_t ch, const uint8_t index);

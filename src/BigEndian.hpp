@@ -10,6 +10,7 @@ template <typename UInt>
 class BigEndian
 {
 static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
+using UIntVector = std::vector<UInt>;
 
 public:   
    static const UInt toInteger(const BytesVector &bytes)
@@ -34,8 +35,37 @@ public:
       
       return bytes;
    }
-};
+   
+   static UIntVector toIntegersVector(const BytesVector &V)
+   {
+      const uint8_t BlockSize = V.size();
+      const uint8_t type_size = sizeof(UInt);
+      UIntVector result;
+      result.reserve(BlockSize / type_size);
+      for(uint8_t i = 0; i < BlockSize; i += type_size)
+      {
+         result.push_back(toInteger(BytesVector(V.begin() + i, V.begin() + i + type_size)));
+      }
 
+      return result;
+   }
+   
+   static BytesVector toBytesVector(const UIntVector &V)
+   {
+      const uint8_t BlockSize = V.size();
+      const uint8_t type_size = sizeof(UInt);
+      BytesVector result;
+      result.reserve(BlockSize * type_size);
+      for(uint8_t i = 0; i < BlockSize; ++i)
+      {
+         const BytesVector tmp = toBytesVector(V[i]);
+         result.insert(result.end(), tmp.begin(), tmp.end());
+      }
+
+      return result;
+   }
+};
+/*
 template <>
 class BigEndian<uint8_t>
 {
@@ -86,6 +116,19 @@ public:
               | (bytes[2] << 8) 
               | bytes[3];
    }
+   
+   static UInt32Vector loadVector(const BytesVector &V)
+   {
+      const uint8_t BlockSize = V.size();
+      UInt32Vector result;
+      result.reserve(BlockSize >> 2);
+      for(uint8_t i = 0; i < BlockSize; i += 4)
+      {
+         result.push_back(toInteger(BytesVector(V.begin() + i, V.begin() + i + 4)));
+      }
+
+      return result;
+   }
 };
 
 template <>
@@ -115,7 +158,7 @@ public:
               | (static_cast<uint64_t>(bytes[6]) << 8)
               | static_cast<uint64_t>(bytes[7]);
    }
-};
+};*/
 
 using BigEndian8 = BigEndian<uint8_t>;
 using BigEndian16 = BigEndian<uint16_t>;

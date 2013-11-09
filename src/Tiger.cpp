@@ -1,6 +1,6 @@
 #include "Tiger.hpp"
 
-constexpr uint64_t Tiger::sbox[][256];
+constexpr std::array<std::array<uint64_t, 256>, 4> Tiger::sbox;
 
 void Tiger::applyKeySchedule(UInt64Vector &words)
 {
@@ -22,7 +22,7 @@ void Tiger::applyKeySchedule(UInt64Vector &words)
    words[7] -= words[6] ^ 0x0123456789ABCDEF;
 }
 
-void Tiger::applyRound(uint64_t &a, uint64_t &b, uint64_t &c, const uint64_t &word, const uint8_t mult) const
+void Tiger::applyRound(uint64_t &a, uint64_t &b, uint64_t &c, const uint64_t &word, const uint8_t mult)
 {
    c ^= word;
    a -= sbox[0][c & 0xFF] ^ sbox[1][(c >> 16) & 0xFF] ^
@@ -32,7 +32,7 @@ void Tiger::applyRound(uint64_t &a, uint64_t &b, uint64_t &c, const uint64_t &wo
    b *= mult;
 }
 
-void Tiger::pass(uint64_t &a, uint64_t &b, uint64_t &c, const UInt64Vector &words, const uint8_t mult) const
+void Tiger::pass(uint64_t &a, uint64_t &b, uint64_t &c, const UInt64Vector &words, const uint8_t mult)
 {
    applyRound(a, b, c, words[0], mult);
    applyRound(b, c, a, words[1], mult);

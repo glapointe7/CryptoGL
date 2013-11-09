@@ -5,7 +5,7 @@
 #include "StringCipher.hpp"
 
 #include <string>
-#include <vector>
+#include <array>
 
 class Morse : public StringCipher
 {
@@ -16,7 +16,7 @@ public:
    virtual const ClassicalType decode(const ClassicalType &);
 
 private:
-   static const std::vector<ClassicalType> morse;
+   static const std::array<ClassicalType, 36> morse;
 };
 
 #endif

@@ -7,6 +7,8 @@
 #include "BlockCipher.hpp"
 #include "BigEndian.hpp"
 
+#include <array>
+
 class CAST256 : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian32>
 {
 public:
@@ -33,9 +35,9 @@ private:
    virtual const UInt32Vector encodeBlock(const UInt32Vector &input) final;
    virtual const UInt32Vector decodeBlock(const UInt32Vector &input) final;
    
-   uint32_t F1(const uint32_t D, const uint32_t Km, const uint32_t Kr) const;
-   uint32_t F2(const uint32_t D, const uint32_t Km, const uint32_t Kr) const;
-   uint32_t F3(const uint32_t D, const uint32_t Km, const uint32_t Kr) const;
+   static uint32_t F1(const uint32_t D, const uint32_t Km, const uint32_t Kr);
+   static uint32_t F2(const uint32_t D, const uint32_t Km, const uint32_t Kr);
+   static uint32_t F3(const uint32_t D, const uint32_t Km, const uint32_t Kr);
 
    void applyForwardQuadRound(UInt32Vector &beta, const uint8_t round) const;
    void applyReverseQuadRound(UInt32Vector &beta, const uint8_t round) const;
@@ -50,9 +52,9 @@ private:
    UInt32Vector Tm;
    UInt32Vector Tr;
    
-   static constexpr uint32_t S[4][256] = {
+   static constexpr std::array<std::array<uint32_t, 256>, 4> S = {{
       {
-         0x30fb40d4, 0x9fa0ff0b, 0x6beccd2f, 0x3f258c7a, 0x1e213f2f, 0x9C004dd3,
+         {0x30fb40d4, 0x9fa0ff0b, 0x6beccd2f, 0x3f258c7a, 0x1e213f2f, 0x9C004dd3,
          0x6003e540, 0xcf9fc949, 0xbfd4af27, 0x88bbbdb5, 0xe2034090, 0x98d09675,
          0x6e63a0e0, 0x15c361d2, 0xc2e7661d, 0x22d4ff8e, 0x28683b6f, 0xc07fd059,
          0xff2379c8, 0x775f50e2, 0x43c340d3, 0xdf2f8656, 0x887ca41a, 0xa2d2bd2d,
@@ -94,10 +96,10 @@ private:
          0xd1231959, 0x381b7298, 0xf5d2f4db, 0xab838653, 0x6e2f1e23, 0x83719c9e,
          0xbd91e046, 0x9a56456e, 0xdc39200c, 0x20c8c571, 0x962bda1c, 0xe1e696ff,
          0xb141ab08, 0x7cca89b9, 0x1a69e783, 0x02cc4843, 0xa2f7c579, 0x429ef47d,
-         0x427b169c, 0x5ac9f049, 0xdd8f0f00, 0x5c8165bf
+         0x427b169c, 0x5ac9f049, 0xdd8f0f00, 0x5c8165bf}
       },
       {
-         0x1f201094, 0xef0ba75b, 0x69e3cf7e, 0x393f4380, 0xfe61cf7a, 0xeec5207a,
+         {0x1f201094, 0xef0ba75b, 0x69e3cf7e, 0x393f4380, 0xfe61cf7a, 0xeec5207a,
          0x55889c94, 0x72fc0651, 0xada7ef79, 0x4e1d7235, 0xd55a63ce, 0xde0436ba,
          0x99c430ef, 0x5f0c0794, 0x18dcdb7d, 0xa1d6eff3, 0xa0b52f7b, 0x59e83605,
          0xee15b094, 0xe9ffd909, 0xdc440086, 0xef944459, 0xba83ccb3, 0xe0c3cdfb,
@@ -139,10 +141,10 @@ private:
          0xdcb1c647, 0xac4c56ea, 0x3ebd81b3, 0x230eabb0, 0x6438bc87, 0xf0b5b1fa,
          0x8f5ea2b3, 0xfc184642, 0x0a036b7a, 0x4fb089bd, 0x649da589, 0xa345415e,
          0x5c038323, 0x3e5d3bb9, 0x43d79572, 0x7e6dd07c, 0x06dfdf1e, 0x6c6cc4ef,
-         0x7160a539, 0x73bfbe70, 0x83877605, 0x4523ecf1
+         0x7160a539, 0x73bfbe70, 0x83877605, 0x4523ecf1}
       },
       {
-         0x8defc240, 0x25fa5d9f, 0xeb903dbf, 0xe810c907, 0x47607fff, 0x369fe44b,
+         {0x8defc240, 0x25fa5d9f, 0xeb903dbf, 0xe810c907, 0x47607fff, 0x369fe44b,
          0x8c1fc644, 0xaececa90, 0xbeb1f9bf, 0xeefbcaea, 0xe8cf1950, 0x51df07ae,
          0x920e8806, 0xf0ad0548, 0xe13c8d83, 0x927010d5, 0x11107d9f, 0x07647db9,
          0xb2e3e4d4, 0x3d4f285e, 0xb9afa820, 0xfade82e0, 0xa067268b, 0x8272792e,
@@ -184,10 +186,10 @@ private:
          0x8ab41738, 0x20e1be24, 0xaf96da0f, 0x68458425, 0x99833be5, 0x600d457d,
          0x282f9350, 0x8334b362, 0xd91d1120, 0x2b6d8da0, 0x642b1e31, 0x9c305a00,
          0x52bce688, 0x1b03588a, 0xf7baefd5, 0x4142ed9c, 0xa4315c11, 0x83323ec5,
-         0xdfef4636, 0xa133c501, 0xe9d3531c, 0xee353783
+         0xdfef4636, 0xa133c501, 0xe9d3531c, 0xee353783}
       },
       {
-         0x9db30420, 0x1fb6e9de, 0xa7be7bef, 0xd273a298, 0x4a4f7bdb, 0x64ad8c57,
+         {0x9db30420, 0x1fb6e9de, 0xa7be7bef, 0xd273a298, 0x4a4f7bdb, 0x64ad8c57,
          0x85510443, 0xfa020ed1, 0x7e287aff, 0xe60fb663, 0x095f35a1, 0x79ebf120,
          0xfd059d43, 0x6497b7b1, 0xf3641f63, 0x241e4adf, 0x28147f5f, 0x4fa2b8cd,
          0xc9430040, 0x0cc32220, 0xfdd30b30, 0xc0a5374f, 0x1d2d00d9, 0x24147b15,
@@ -229,9 +231,9 @@ private:
          0xdf7e052f, 0xdb25701c, 0x1b5e51ee, 0xf65324e6, 0x6afce36c, 0x0316cc04,
          0x8644213e, 0xb7dc59d0, 0x7965291f, 0xccd6fd43, 0x41823979, 0x932bcdf6,
          0xb657c34d, 0x4edfd282, 0x7ae5290c, 0x3cb9536b, 0x851e20fe, 0x9833557e,
-         0x13ecf0b0, 0xd3ffb372, 0x3f85c5c1, 0x0aef7ed2
+         0x13ecf0b0, 0xd3ffb372, 0x3f85c5c1, 0x0aef7ed2}
       }
-   };
+   }};
 };
 
 #endif

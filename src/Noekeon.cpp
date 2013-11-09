@@ -7,7 +7,7 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
-constexpr uint32_t Noekeon::round_constants[];
+constexpr std::array<uint32_t, 17> Noekeon::round_constants;
 
 void Noekeon::setKey(const BytesVector &key)
 {
@@ -22,11 +22,7 @@ void Noekeon::setKey(const BytesVector &key)
 
 void Noekeon::generateSubkeys()
 {
-   subkeys.reserve(4);
-   for(uint8_t i = 0; i < 16; i += 4)
-   {
-      subkeys.push_back(BigEndian32::toInteger(BytesVector(key.begin() + i, key.begin() + i + 4)));
-   }
+   subkeys = BigEndian32::toIntegersVector(key);
 }
 
 void Noekeon::generateInverseSubkeys()

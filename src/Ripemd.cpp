@@ -4,13 +4,13 @@
 
 #include <algorithm>
 
-constexpr uint32_t Ripemd::magic_numbers1[];
-constexpr uint32_t Ripemd::magic_numbers_big2[];
-constexpr uint32_t Ripemd::magic_numbers2[];
-constexpr uint8_t Ripemd::word_selection1[];
-constexpr uint8_t Ripemd::word_selection2[];
-constexpr uint8_t Ripemd::left_shift1[];
-constexpr uint8_t Ripemd::left_shift2[];
+constexpr std::array<uint32_t, 5> Ripemd::magic_numbers1;
+constexpr std::array<uint32_t, 5> Ripemd::magic_numbers_big2;
+constexpr std::array<uint32_t, 4> Ripemd::magic_numbers2;
+constexpr std::array<uint8_t, 80> Ripemd::word_selection1;
+constexpr std::array<uint8_t, 80> Ripemd::word_selection2;
+constexpr std::array<uint8_t, 80> Ripemd::left_shift1;
+constexpr std::array<uint8_t, 80> Ripemd::left_shift2;
 
 void Ripemd::process128_256(const UInt32Vector &words, UInt32Vector &hash, const uint8_t j)
 {

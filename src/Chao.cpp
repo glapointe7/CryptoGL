@@ -4,8 +4,6 @@
 
 #include <algorithm>
 
-const uint8_t Chao::nadir = 13;
-
 Chao::Chao(const ClassicalType &left_alpha, const ClassicalType &right_alpha)
 {
    checkAlpha(left_alpha);

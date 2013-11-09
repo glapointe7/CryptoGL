@@ -20,23 +20,6 @@ const std::vector<std::string> Tools::split(const std::string &text)
    return split_text;
 }
 
-const uint64_t Tools::getBitsFromTable(const uint64_t &data, const uint8_t *table, const uint8_t from, const uint8_t to)
-{
-   uint8_t i = to;
-   uint64_t output = 0;
-   
-   for (uint8_t k = 0; k < to; ++k)
-   {
-      --i;
-      if ((data >> (from - table[k])) & 0x1)
-      {
-         output |= 1ull << i;
-      }
-   }
-
-   return output;
-}
-
 const BytesVector Tools::getXORedBlock(const BytesVector &block1, const BytesVector &block2)
 {
    const uint64_t size = block1.size();

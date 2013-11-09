@@ -2,8 +2,8 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
-constexpr uint8_t Snow3G::SR[];
-constexpr uint8_t Snow3G::SQ[];
+constexpr std::array<uint8_t, 256> Snow3G::SQ;
+constexpr std::array<uint8_t, 256> Snow3G::SR;
 
 void Snow3G::setKey(const BytesVector &key)
 {
@@ -73,7 +73,7 @@ void Snow3G::keystreamMode()
    shiftStages(getv());
 }
 
-uint32_t Snow3G::S(const uint32_t w, const uint8_t *sbox, const uint8_t c)
+uint32_t Snow3G::S(const uint32_t w, const std::array<uint8_t, 256> &sbox, const uint8_t c)
 {
    const uint8_t SBox[4] {sbox[w >> 24], sbox[(w >> 16) & 0xFF], sbox[(w >> 8) & 0xFF], sbox[w & 0xFF]};
    BytesVector r;
@@ -86,12 +86,12 @@ uint32_t Snow3G::S(const uint32_t w, const uint8_t *sbox, const uint8_t c)
    return BigEndian32::toInteger(r);
 }
 
-uint32_t Snow3G::S1(const uint32_t w) const
+uint32_t Snow3G::S1(const uint32_t w)
 {
    return S(w, SR, 0x1B);
 }
 
-uint32_t Snow3G::S2(const uint32_t w) const
+uint32_t Snow3G::S2(const uint32_t w)
 {
    return S(w, SQ, 0x69);
 }

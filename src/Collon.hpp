@@ -6,21 +6,25 @@
 
 #include <string>
 
-#include "exceptions/Exception.hpp"
+//#include "exceptions/Exception.hpp"
 
 class Collon : public SquareCipher
 {
 public:
-   explicit Collon(const KeyType &key) : SquareCipher(key) {}
+   Collon(const KeyType &key, const uint32_t block_length)
+      : SquareCipher(key), block_len(block_length) {}
+   
+   explicit Collon(const KeyType &key) 
+      : Collon(key, 5) {}
    
    virtual const ClassicalType encode(const ClassicalType &clear_text) final;
    virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
 
-   void setBlockLength(const uint32_t block_len);
+   //void setBlockLength(const uint32_t block_len);
 
 private:
-   using ZeroBlockLength = Exception;
+   //using ZeroBlockLength = Exception;
    
-   uint32_t block_len = 5;
+   const uint32_t block_len;
 };
 #endif

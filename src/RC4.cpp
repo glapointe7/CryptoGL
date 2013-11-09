@@ -17,13 +17,10 @@ void RC4::setKey(const BytesVector &key)
 
 void RC4::keySetup()
 {
-   for(uint16_t i = 0; i < 256; ++i)
-   {
-      subkeys[i] = i;
-   }
+   std::iota(subkeys.begin(), subkeys.end(), 0);
    
-   uint8_t j = 0;
    const uint16_t key_len = key.size();
+   uint8_t j = 0;
    for(uint16_t i = 0; i < 256; ++i)
    {
       j += key[i % key_len] + subkeys[i];

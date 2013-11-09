@@ -2,11 +2,11 @@
 
 #include "Bits.hpp"
 
-constexpr uint8_t MD4::left_rotation_table[];
-constexpr uint8_t MD4::word_indexes[];
-constexpr uint32_t MD4::k[];
-constexpr uint8_t MD5::left_rotation_table[];
-constexpr uint32_t MD5::sine_magic_numbers[];
+constexpr std::array<uint8_t, 48> MD4::left_rotation_table;
+constexpr std::array<uint8_t, 48> MD4::word_indexes;
+constexpr std::array<uint32_t, 3> MD4::k;
+constexpr std::array<uint8_t, 64> MD5::left_rotation_table;
+constexpr std::array<uint32_t, 64> MD5::sine_magic_numbers;
 
 void MD4::compress(UInt32Vector &int_block, UInt32Vector &state)
 {

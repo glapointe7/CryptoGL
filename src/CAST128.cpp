@@ -3,7 +3,7 @@
 #include "BigEndian.hpp"
 #include "Bits.hpp"
 
-constexpr uint32_t CAST128::S[][256];
+constexpr std::array<std::array<uint32_t, 256>, 8> CAST128::S;
 
 void CAST128::setKey(const BytesVector &key)
 {
@@ -28,7 +28,7 @@ void CAST128::setKey(const BytesVector &key)
    this->key = key_padded;
 }
 
-void CAST128::setTempKeyZ(UInt32Vector &Z, const UInt32Vector &X) const
+void CAST128::setTempKeyZ(UInt32Vector &Z, const UInt32Vector &X)
 {
    Z[0] = X[0] ^ S[4][getByteFromInteger(X, 0xD)] ^ S[5][getByteFromInteger(X, 0xF)]
            ^ S[6][getByteFromInteger(X, 0xC)] ^ S[7][getByteFromInteger(X, 0xE)]
@@ -47,7 +47,7 @@ void CAST128::setTempKeyZ(UInt32Vector &Z, const UInt32Vector &X) const
            ^ S[5][getByteFromInteger(X, 0xB)];
 }
 
-void CAST128::setTempKeyX(UInt32Vector &X, const UInt32Vector &Z) const
+void CAST128::setTempKeyX(UInt32Vector &X, const UInt32Vector &Z)
 {
    X[0] = Z[2] ^ S[4][getByteFromInteger(Z, 5)] ^ S[5][getByteFromInteger(Z, 7)]
            ^ S[6][getByteFromInteger(Z, 4)] ^ S[7][getByteFromInteger(Z, 6)]

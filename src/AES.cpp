@@ -6,18 +6,18 @@
 
 #include <algorithm>
 
-constexpr uint8_t AES::shift_indexes[];
-constexpr uint8_t AES::inverse_shift_indexes[];
-constexpr uint32_t AES::round_constants[];
-constexpr uint8_t AES::sbox[];
-constexpr uint8_t AES::inverse_sbox[];
+constexpr std::array<uint8_t, 16> AES::shift_indexes;
+constexpr std::array<uint8_t, 16> AES::inverse_shift_indexes;
+constexpr std::array<uint32_t, 15> AES::round_constants;
+constexpr std::array<uint8_t, 256> AES::sbox;
+constexpr std::array<uint8_t, 256> AES::inverse_sbox;
 
-constexpr uint8_t AES::table_2[];
-constexpr uint8_t AES::table_3[];
-constexpr uint8_t AES::table_9[];
-constexpr uint8_t AES::table_11[];
-constexpr uint8_t AES::table_13[];
-constexpr uint8_t AES::table_14[256];
+constexpr std::array<uint8_t, 256> AES::table_2;
+constexpr std::array<uint8_t, 256> AES::table_3;
+constexpr std::array<uint8_t, 256> AES::table_9;
+constexpr std::array<uint8_t, 256> AES::table_11;
+constexpr std::array<uint8_t, 256> AES::table_13;
+constexpr std::array<uint8_t, 256> AES::table_14;
 
 void AES::setKey(const BytesVector &key)
 {
@@ -37,7 +37,7 @@ void AES::setKey(const BytesVector &key)
    this->key = key;
 }
 
-void AES::subBytes(UInt32Vector &state, const uint8_t *box)
+void AES::subBytes(UInt32Vector &state, const std::array<uint8_t, 256> &box)
 {
    for (uint8_t i = 0; i < 4; ++i)
    {
@@ -83,7 +83,7 @@ void AES::inverseShiftRows(UInt32Vector &state)
    state = UInt32Vector(state_transposed, state_transposed + 4);
 }
 
-void AES::mixColumns(UInt32Vector &state) const
+void AES::mixColumns(UInt32Vector &state)
 {
    for(uint8_t i = 0; i < 4; ++i)
    {
@@ -103,7 +103,7 @@ void AES::mixColumns(UInt32Vector &state) const
    }
 }
 
-void AES::inverseMixColumns(UInt32Vector &state) const
+void AES::inverseMixColumns(UInt32Vector &state)
 {
    for(uint8_t i = 0; i < 4; ++i)
    {
@@ -123,7 +123,7 @@ void AES::inverseMixColumns(UInt32Vector &state) const
    }
 }
 
-uint32_t AES::subWord(const uint32_t word) const
+uint32_t AES::subWord(const uint32_t word)
 {
    return sbox[word & 0xFF]
            | (sbox[(word >> 8) & 0xFF]) << 8

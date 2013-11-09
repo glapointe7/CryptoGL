@@ -44,11 +44,7 @@ uint32_t SEAL::gamma(const uint32_t index, uint32_t &previous_index)
 void SEAL::keySetup()
 {
    // The key is the new IV for SHA-1.
-   IV.reserve(5);
-   for(uint8_t i = 0; i < 20; i += 4)
-   {
-      IV.push_back(BigEndian32::toInteger(BytesVector(key.begin() + i, key.begin() + i + 4)));
-   }
+   IV = BigEndian32::toIntegersVector(key);
    uint32_t previous_index = 0xFFFFFFFF;
    
    T.reserve(512);

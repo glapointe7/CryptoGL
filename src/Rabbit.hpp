@@ -10,6 +10,7 @@
 #include "LittleEndian.hpp"
 
 #include <vector>
+#include <array>
 
 class Rabbit : public SynchronousStreamCipher<UInt32Vector, LittleEndian32, 16>
 {   
@@ -34,16 +35,16 @@ private:
    void nextState();
    static uint32_t g(const uint32_t x);
    
-   uint32_t states[8];
-   uint32_t counters[8];
+   std::array<uint32_t, 8> states;
+   std::array<uint32_t, 8> counters;
    
    BytesVector IV;
 
    bool counter_carry_bit = 0;
    
-   static constexpr uint32_t A[8] = {
-      0x4D34D34D, 0xD34D34D3, 0x34D34D34, 0x4D34D34D,
-      0xD34D34D3, 0x34D34D34, 0x4D34D34D, 0xD34D34D3
+   static constexpr std::array<uint32_t, 8> A = {
+      {0x4D34D34D, 0xD34D34D3, 0x34D34D34, 0x4D34D34D,
+      0xD34D34D3, 0x34D34D34, 0x4D34D34D, 0xD34D34D3}
    };
 };
 

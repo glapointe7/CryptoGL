@@ -6,6 +6,8 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
+#include <iomanip> 
+#include <iterator>
 
 #include "big_integers/BigIntegerUtils.hh"
 #include "big_integers/BigInteger.hh"
@@ -92,7 +94,7 @@ namespace Digest
       std::istringstream iss(str);
       std::vector<std::string> tokens;
       std::copy(std::istream_iterator<std::string>(iss), std::istream_iterator<std::string>(),
-              std::back_inserter<std::vector<std::string> >(tokens));
+              std::back_inserter<std::vector<std::string>>(tokens));
 
       std::vector<BigInteger> V;
       V.reserve(tokens.size());

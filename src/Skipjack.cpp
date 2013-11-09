@@ -1,6 +1,6 @@
 #include "Skipjack.hpp"
 
-constexpr uint8_t Skipjack::f_table[256];
+constexpr std::array<uint8_t, 256> Skipjack::f_table;
 
 void Skipjack::setKey(const BytesVector &key)
 {
@@ -15,8 +15,7 @@ void Skipjack::setKey(const BytesVector &key)
 
 void Skipjack::generateSubkeys()
 {
-   subkeys.reserve(10);
-   subkeys.insert(subkeys.end(), key.begin(), key.end());
+   subkeys = key;
 }
 
 const uint8_t Skipjack::F(const uint8_t half_block, const uint8_t round) const

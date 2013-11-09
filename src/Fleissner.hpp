@@ -12,8 +12,8 @@
 
 class Fleissner : public StringCipher
 {  
-   typedef std::pair<uint32_t, uint32_t> Cell;
-   typedef std::vector<Cell> Coordinates;
+   using Cell = std::pair<uint32_t, uint32_t>;
+   using Coordinates = std::vector<Cell>;
    using KeyCellNotUnique = BadKey;
    
 public:

@@ -17,12 +17,7 @@ void XTEA::setKey(const BytesVector &key)
 
 void XTEA::generateSubkeys()
 {
-   uint32_t tmp_key[4];
-   for (uint8_t i = 0; i < 16; i += 4)
-   {
-      tmp_key[i >> 2] = BigEndian32::toInteger(BytesVector(key.begin() + i, key.begin() + i + 4));
-   }
-
+   const UInt32Vector tmp_key = BigEndian32::toIntegersVector(key);
    uint32_t sum = 0;
    subkeys.resize(64);
    for (uint8_t i = 0; i < 32; ++i)

@@ -58,6 +58,7 @@ set(SRC
    IDEA.hpp IDEA.cpp
    Noekeon.hpp Noekeon.cpp
    RC2.hpp RC2.cpp
+   Serpent.hpp Serpent.cpp
    Feistel.hpp
    Skipjack.hpp Skipjack.cpp
    Blowfish.hpp Blowfish.cpp
@@ -99,6 +100,11 @@ set(SRC
 # Sponge functions section
    SpongeFunction.hpp
    Keccak.hpp Keccak.cpp
+
+# Checksum functions
+   Checksum.hpp
+   LRC.hpp LRC.cpp
+   Adler32.hpp Adler32.cpp
 
 # Asymmetric ciphers section
    AsymmetricCipher.hpp AsymmetricCipher.cpp

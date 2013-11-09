@@ -1,6 +1,6 @@
 #include "Isaac.hpp"
 
-constexpr uint8_t Isaac::shift[];
+constexpr std::array<uint8_t, 8> Isaac::shift;
 
 uint32_t Isaac::applyRound(const uint32_t accum_shifted, const uint16_t index)
 {
@@ -30,7 +30,7 @@ const UInt32Vector Isaac::generate()
    return result;
 }
 
-void Isaac::shuffle(uint32_t *tmp) const
+void Isaac::shuffle(std::array<uint32_t, 8> &tmp)
 {     
    for(uint8_t i = 0; i < 8; i += 2)
    {
@@ -46,8 +46,8 @@ void Isaac::shuffle(uint32_t *tmp) const
 
 void Isaac::initialize()
 {
-   uint32_t tmp[8] = {0x9e3779b9, 0x9e3779b9, 0x9e3779b9, 0x9e3779b9, 
-      0x9e3779b9, 0x9e3779b9, 0x9e3779b9, 0x9e3779b9
+   std::array<uint32_t, 8> tmp = {{0x9e3779b9, 0x9e3779b9, 0x9e3779b9, 0x9e3779b9, 
+      0x9e3779b9, 0x9e3779b9, 0x9e3779b9, 0x9e3779b9}
    };
    
    for(uint8_t i = 0; i < 4; ++i)
@@ -77,7 +77,7 @@ void Isaac::initialize()
    keystream = generate();
 }
 
-void Isaac::randFill(uint32_t *tmp, const UInt32Vector &rnd)
+void Isaac::randFill(std::array<uint32_t, 8> &tmp, const UInt32Vector &rnd)
 {
    for(uint16_t i = 0; i < 256; i += 8)
    {

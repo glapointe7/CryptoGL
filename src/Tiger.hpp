@@ -7,6 +7,8 @@
 #include "MerkleDamgardFunction.hpp"
 #include "LittleEndian.hpp"
 
+#include <array>
+
 class Tiger : public MerkleDamgardFunction<uint64_t, LittleEndian64, LittleEndian64, 64>
 {   
 public:
@@ -24,15 +26,16 @@ public:
       
 private:   
    static void applyKeySchedule(UInt64Vector &words);
-   void applyRound(uint64_t &a, uint64_t &b, uint64_t &c, const uint64_t &word, const uint8_t mult) const;
-   void pass(uint64_t &a, uint64_t &b, uint64_t &c, const UInt64Vector &words, const uint8_t mult) const;
+   static void applyRound(uint64_t &a, uint64_t &b, uint64_t &c, const uint64_t &word, const uint8_t mult);
+   static void pass(uint64_t &a, uint64_t &b, uint64_t &c, const UInt64Vector &words, const uint8_t mult);
    
    virtual void compress(UInt64Vector &int_block, UInt64Vector &state) final;
    
    virtual const BytesVector getOutput(const UInt64Vector &hash) const final; 
    
-   static constexpr uint64_t sbox[4][256] = {
-      {0x02AAB17CF7E90C5E, 0xAC424B03E243A8EC,
+   static constexpr std::array<std::array<uint64_t, 256>, 4> sbox = {{
+      {
+         {0x02AAB17CF7E90C5E, 0xAC424B03E243A8EC,
       0x72CD5BE30DD5FCD3, 0x6D019B93F6F97F3A,
       0xCD9978FFD21F9193, 0x7573A1C9708029E2,
       0xB164326B922A83C3, 0x46883EEE04915870,
@@ -159,9 +162,11 @@ private:
       0x1F1A412891BC038E, 0xD6E2E71D82E56648,
       0x74036C3A497732B7, 0x89B67ED96361F5AB,
       0xFFED95D8F1EA02A2, 0xE72B3BD61464D43D,
-      0xA6300F170BDC4820, 0xEBC18760ED78A77A},
+      0xA6300F170BDC4820, 0xEBC18760ED78A77A}
+      },
 
-   {0xE6A6BE5A05A12138, 0xB5A122A5B4F87C98,
+   {
+      {0xE6A6BE5A05A12138, 0xB5A122A5B4F87C98,
       0x563C6089140B6990, 0x4C46CB2E391F5DD5,
       0xD932ADDBC9B79434, 0x08EA70E42015AFF5,
       0xD765A6673E478CF1, 0xC4FB757EAB278D99,
@@ -288,9 +293,11 @@ private:
       0x5DC9645506E55444, 0x50DE418F317DE40A,
       0x388CB31A69DDE259, 0x2DB4A83455820A86,
       0x9010A91E84711AE9, 0x4DF7F0B7B1498371,
-      0xD62A2EABC0977179, 0x22FAC097AA8D5C0E},
+      0xD62A2EABC0977179, 0x22FAC097AA8D5C0E}
+      },
 
-   {0xF49FCC2FF1DAF39B, 0x487FD5C66FF29281,
+   {
+      {0xF49FCC2FF1DAF39B, 0x487FD5C66FF29281,
       0xE8A30667FCDCA83F, 0x2C9B4BE3D2FCCE63,
       0xDA3FF74B93FBBBC2, 0x2FA165D2FE70BA66,
       0xA103E279970E93D4, 0xBECDEC77B0E45E71,
@@ -417,9 +424,11 @@ private:
       0x6F31238275655982, 0x5AE488713E45CF05,
       0xBF619F9954C21157, 0xEABAC46040A8EAE9,
       0x454C6FE9F2C0C1CD, 0x419CF6496412691C,
-      0xD3DC3BEF265B0F70, 0x6D0E60F5C3578A9E},
+      0xD3DC3BEF265B0F70, 0x6D0E60F5C3578A9E}
+      },
 
-   {0x5B0E608526323C55, 0x1A46C1A9FA1B59F5,
+   {
+      {0x5B0E608526323C55, 0x1A46C1A9FA1B59F5,
       0xA9E245A17C4C8FFA, 0x65CA5159DB2955D7,
       0x05DB0A76CE35AFC2, 0x81EAC77EA9113D45,
       0x528EF88AB6AC0A0D, 0xA09EA253597BE3FF,
@@ -547,7 +556,8 @@ private:
       0xCB0C0708705A36A3, 0xE74D14754F986044,
       0xCD56D9430EA8280E, 0xC12591D7535F5065,
       0xC83223F1720AEF96, 0xC3A0396F7363A51F}
-   };
+      }
+   }};
    
 };
 

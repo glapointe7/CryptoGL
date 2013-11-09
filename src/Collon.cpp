@@ -3,7 +3,7 @@
 
 // Series length have to be between 1 and text length.
 
-void Collon::setBlockLength(const uint32_t block_len)
+/*void Collon::setBlockLength(const uint32_t block_len)
 {
    if (block_len == 0)
    {
@@ -11,7 +11,7 @@ void Collon::setBlockLength(const uint32_t block_len)
    }
    
    this->block_len = block_len;
-}
+}*/
 
 const ClassicalType Collon::encode(const ClassicalType &clear_text)
 {

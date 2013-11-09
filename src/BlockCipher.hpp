@@ -11,51 +11,31 @@
 
 #include <functional>
 
-template <class BytesVector, class DataType, uint8_t InputBlockSize, class EndianType>
+template <class BytesVector, class DataType, class EndianType>
 class InputOutputBlockGetter
 { 
 public:   
-   static const BytesVector outputBlock(const DataType &int_block)
-   {
-      BytesVector output_block;
-      output_block.reserve(InputBlockSize);
-      const uint8_t nbSubBlocks = InputBlockSize / sizeof(typename DataType::value_type);
-
-      for(uint8_t i = 0; i < nbSubBlocks; ++i)
-      {
-         const BytesVector out = EndianType::toBytesVector(int_block[i]);
-         output_block.insert(output_block.end(), out.begin(), out.end());
-      }
-
-      return output_block;
+   static BytesVector outputBlock(const DataType &int_block)
+   {  
+      return EndianType::toBytesVector(int_block);
    }
    
-   static const DataType inputBlock(const BytesVector &block)
-   {
-      DataType int_block;
-      const uint8_t value_size = sizeof(typename DataType::value_type);
-      const uint8_t nbSubBlocks = InputBlockSize / value_size;
-      int_block.reserve(nbSubBlocks);
-      
-      for(uint8_t i = 0; i < InputBlockSize; i += value_size)
-      {
-         int_block.push_back(EndianType::toInteger(BytesVector(block.begin() + i, block.begin() + i + value_size)));
-      }
-
-      return int_block;
+   static DataType inputBlock(const BytesVector &block)
+   {  
+      return EndianType::toIntegersVector(block);
    }
 };
 
 template <class BytesVector, class EndianType>
-class InputOutputBlockGetter<BytesVector, uint64_t, 8, EndianType>
+class InputOutputBlockGetter<BytesVector, uint64_t, EndianType>
 {
 public:
-   static const BytesVector outputBlock(const uint64_t &int_block)
+   static BytesVector outputBlock(const uint64_t &int_block)
    {
       return EndianType::toBytesVector(int_block);
    }
    
-   static const uint64_t inputBlock(const BytesVector &block)
+   static uint64_t inputBlock(const BytesVector &block)
    {
       return EndianType::toInteger(block);
    }
@@ -156,19 +136,19 @@ protected:
    
 private:
    /* Extract a vector of integers from the block of bytes. */
-   const DataType getIntegersFromInputBlock(const BytesVector &block) const
+   static DataType getIntegersFromInputBlock(const BytesVector &block)
    {
-      return InputOutputBlockGetter<BytesVector, DataType, InputBlockSize, EndianType>::inputBlock(block);
+      return InputOutputBlockGetter<BytesVector, DataType, EndianType>::inputBlock(block);
    }
    
    /* Extract the bytes from the vector of integers and return the encoded / decoded block. */
-   const BytesVector getOutputBlock(const DataType &int_block)
+   static BytesVector getOutputBlock(const DataType &int_block)
    {      
-      return InputOutputBlockGetter<BytesVector, DataType, InputBlockSize, EndianType>::outputBlock(int_block);
+      return InputOutputBlockGetter<BytesVector, DataType, EndianType>::outputBlock(int_block);
    }
    
    /* Encode an input block of bytes and return the output block. */
-   const BytesVector processEncodeBlock(const BytesVector &block)
+   BytesVector processEncodeBlock(const BytesVector &block)
    {
       DataType int_block = getIntegersFromInputBlock(block);
       int_block = encodeBlock(int_block);
@@ -177,7 +157,7 @@ private:
    }
    
    /* Decode an input block of bytes and return the output block. */
-   const BytesVector processDecodeBlock(const BytesVector &block)
+   BytesVector processDecodeBlock(const BytesVector &block)
    {
       DataType int_block = getIntegersFromInputBlock(block);
       int_block = decodeBlock(int_block);
