@@ -27,7 +27,7 @@ void SquareMatrix::setMatrix(const Int32Matrix &M)
    setDimension(M.size());
 }
 
-const Int32Matrix SquareMatrix::getMatrix() const
+Int32Matrix SquareMatrix::getMatrix() const
 {
    return M;
 }
@@ -37,7 +37,7 @@ void SquareMatrix::setDimension(const uint32_t dim)
    this->dim = dim;
 }
 
-const int32_t SquareMatrix::getModulo() const
+int32_t SquareMatrix::getModulo() const
 {
    return n;
 }
@@ -49,7 +49,7 @@ void SquareMatrix::setModulo(const int32_t n)
 
 // Get a specific value of the current matrix.
 
-const int32_t SquareMatrix::get(const uint32_t row, const uint32_t col) const
+int32_t SquareMatrix::get(const uint32_t row, const uint32_t col) const
 {
    if (row < dim && col < dim)
    {
@@ -87,7 +87,7 @@ uint32_t SquareMatrix::findNonZero(const Int32Matrix &A, const uint32_t from) co
 
 // Multiply a matrix and a column-vector. Return the column-vector solution.
 
-const UInt32Vector operator *(const SquareMatrix *K, const UInt32Vector &V)
+UInt32Vector operator *(const SquareMatrix *K, const UInt32Vector &V)
 {   
    UInt32Vector soln(K->getDimension(), 0);
    const int32_t mod = K->getModulo();
@@ -111,7 +111,7 @@ const UInt32Vector operator *(const SquareMatrix *K, const UInt32Vector &V)
 
 void SquareMatrix::setIdentity()
 {
-   M = Int32Matrix(dim, std::vector<int32_t>(dim, 0));
+   M = Int32Matrix(dim, Int32Vector(dim, 0));
    for (uint32_t i = 0; i < dim; ++i)
    {
       M[i][i] = 1;
@@ -120,7 +120,7 @@ void SquareMatrix::setIdentity()
 
 // Return the matrix Identity.
 
-const Int32Matrix SquareMatrix::identity() const
+Int32Matrix SquareMatrix::identity() const
 {
    Int32Matrix Mat = Int32Matrix(dim, Int32Vector(dim, 0));
    for (uint32_t i = 0; i < dim; ++i)
@@ -245,7 +245,7 @@ int32_t SquareMatrix::det() const
 
 // Return A^-1 using the Gauss-Jordan method.
 
-const SquareMatrix* SquareMatrix::inverse() const
+SquareMatrix* SquareMatrix::inverse() const
 {
    SquareMatrix *result = new SquareMatrix();
    result->setModulo(n);

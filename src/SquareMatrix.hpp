@@ -7,32 +7,29 @@
 #include "Types.hpp"
 
 #include <vector>
-#include <stdint.h>
 
 class SquareMatrix
 {
 public:
-   virtual ~SquareMatrix() {}
-
    void setMatrix(const Int32Matrix &);
-   const Int32Matrix getMatrix() const;
+   Int32Matrix getMatrix() const;
 
-   const int32_t get(const uint32_t row, const uint32_t col) const;
+   int32_t get(const uint32_t row, const uint32_t col) const;
    void set(const uint32_t row, const uint32_t col, const int32_t value);
 
-   const uint32_t getDimension() const { return dim; }
+   uint32_t getDimension() const { return dim; }
    void setDimension(const uint32_t);
    
-   const int32_t getModulo() const;
+   int32_t getModulo() const;
    void setModulo(const int32_t);
 
    /* Multiply a square matrix with a vector of the same dimension. */
-   friend const std::vector<uint32_t> operator *(const SquareMatrix *K, const std::vector<uint32_t> &V);
+   friend UInt32Vector operator *(const SquareMatrix *K, const UInt32Vector &V);
 
-   const Int32Matrix identity() const;
+   Int32Matrix identity() const;
    
    int32_t det() const;
-   const SquareMatrix* inverse() const;
+   SquareMatrix* inverse() const;
    
 private:
    uint32_t findNonZero(const Int32Matrix &A, const uint32_t from) const;

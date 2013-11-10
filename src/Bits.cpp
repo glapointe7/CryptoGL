@@ -1,6 +1,6 @@
 #include "Bits.hpp"
 
-const BytesVector Bits::rotateLeft128(const BytesVector &bytes, const uint8_t shift)
+BytesVector Bits::rotateLeft128(const BytesVector &bytes, const uint8_t shift)
 {
    const uint8_t w = shift >> 3;
    const uint8_t b = shift & 7;

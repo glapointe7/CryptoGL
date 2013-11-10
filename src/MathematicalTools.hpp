@@ -3,13 +3,33 @@
 #define MATHEMATICALTOOLS_HPP
 
 #include <vector>
-#include <stdint.h>
 #include <algorithm>
 
 #include "exceptions/Exception.hpp"
 
 namespace Maths
 {
+   template <uint8_t n>
+   class Power
+   {
+   public:   
+      static uint64_t raise(const uint64_t &x)
+      {
+         return x * Power<n-1>::raise(x);
+      }
+   };
+   
+   template <>
+   class Power<0>
+   {
+   public:
+      static uint64_t raise(const uint64_t &x)
+      {
+         return 1;
+      }
+   };
+
+   
    /* Return the Greatest Common Divisor of x and y. */
    template <class UIntType>
    const UIntType gcd(const UIntType &x, const UIntType &y)

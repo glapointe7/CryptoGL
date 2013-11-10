@@ -1,15 +1,16 @@
 
 #ifndef FILE_HPP
-#define	FILE_HPP
+#define FILE_HPP
 
-#include <vector>
+#include "Types.hpp"
+
 #include <string>
 #include <fstream>
 
 namespace File
 {
    /* Save a vector of bytes in a binary file. */
-   void saveBytes(const std::string &filename, const std::vector<uint8_t> &data)
+   void saveBytes(const std::string &filename, const BytesVector &data)
    {
       FILE *pFile;
       pFile = fopen(filename.c_str(), "wb");
@@ -20,9 +21,9 @@ namespace File
    }
    
    /* Load a binary file and get the bytes in a vector. */
-   const std::vector<uint8_t> loadBytes(const std::string &filename)
+   BytesVector loadBytes(const std::string &filename)
    {
-      std::vector<uint8_t> bytes;
+      BytesVector bytes;
       std::ifstream in(filename.c_str(), std::ios::binary);
 
       try
@@ -57,7 +58,7 @@ namespace File
    }
 
    /* Load a file in a string. */
-   const std::string loadString(const std::string &filename)
+   std::string loadString(const std::string &filename)
    {
       std::string contents;
       std::ifstream in(filename.c_str(), std::ios::binary);

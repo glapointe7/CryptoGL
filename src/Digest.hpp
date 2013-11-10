@@ -17,7 +17,7 @@ namespace Digest
 {
    /* Get the hexadecimal string from a vector of bytes. */
    template <class DataTypeVector>
-   const std::string hexDigest(const DataTypeVector &bytes)
+   std::string hexDigest(const DataTypeVector &bytes)
    {
       const uint8_t data_size = sizeof(typename DataTypeVector::value_type) << 1;
       std::ostringstream ss;
@@ -32,7 +32,7 @@ namespace Digest
    }
    
    template<>
-   const std::string hexDigest(const BytesVector &bytes)
+   std::string hexDigest(const BytesVector &bytes)
    {
       const std::string hex_digits = "0123456789ABCDEF";
       std::string hex_digest;
@@ -46,17 +46,17 @@ namespace Digest
       return hex_digest;
    }
 
-   const BytesVector getBytesFromString(const std::string &str)
+   BytesVector getBytesFromString(const std::string &str)
    {
       return BytesVector(str.begin(), str.end());
    }
 
-   const std::string getStringFromBytes(const BytesVector &bytes)
+   std::string getStringFromBytes(const BytesVector &bytes)
    {
       return std::string(bytes.begin(), bytes.end());
    }
 
-   const BytesVector getBytesFromHexDigest(const std::string &hex_str)
+   BytesVector getBytesFromHexDigest(const std::string &hex_str)
    {
       const uint64_t hex_len = hex_str.length();
       BytesVector bytes;
@@ -71,12 +71,12 @@ namespace Digest
       return bytes;
    }
 
-   const std::string getStringFromBigInteger(const BigInteger &value)
+   std::string getStringFromBigInteger(const BigInteger &value)
    {
       return bigIntegerToString(value);
    }
 
-   const std::string bigIntVectorToString(const std::vector<BigInteger> &V)
+   std::string bigIntVectorToString(const std::vector<BigInteger> &V)
    {
       std::string str;
       for (const auto big_value : V)
@@ -89,7 +89,7 @@ namespace Digest
       return str;
    }
 
-   const std::vector<BigInteger> stringToBigIntVector(const std::string &str)
+   std::vector<BigInteger> stringToBigIntVector(const std::string &str)
    {
       std::istringstream iss(str);
       std::vector<std::string> tokens;

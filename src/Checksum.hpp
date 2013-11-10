@@ -13,9 +13,6 @@ public:
    virtual ~Checksum() {}
    
    virtual DataType encode(const BytesVector &) = 0;
-   
-protected:
-
 };
 
 #endif

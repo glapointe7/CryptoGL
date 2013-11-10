@@ -25,7 +25,7 @@ public:
       return bytes;
    }
    
-   static const UInt toInteger(const BytesVector &bytes)
+   static UInt toInteger(const BytesVector &bytes)
    {
       UInt value = 0;
       for(uint8_t i = 0; i < sizeof(UInt); ++i)

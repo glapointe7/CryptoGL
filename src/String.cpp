@@ -20,7 +20,7 @@ void String::removeChars(std::string &text, const std::string &chars)
    }), text.end());
 }
 
-const std::string String::makeUniqueChars(const std::string &str)
+std::string String::makeUniqueChars(const std::string &str)
 {
    uint32_t str_len = str.length();
    std::string result(str);
@@ -60,7 +60,7 @@ bool String::containsUniqueChars(const std::string &str)
    return true;
 }
 
-const std::string String::uintToString(uint64_t value)
+std::string String::uintToString(uint64_t value)
 {
    std::string str;
    str.reserve(20);

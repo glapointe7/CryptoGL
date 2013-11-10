@@ -52,7 +52,7 @@ namespace Bits
    }
    
    /* Rotate left 'shift' bits of a 16-byte vector. */
-   const BytesVector rotateLeft128(const BytesVector &bytes, const uint8_t shift);
+   BytesVector rotateLeft128(const BytesVector &bytes, const uint8_t shift);
    
    /* Test a bit at a 'pos' in 'value'. */
    template <class UInt>
