@@ -21,6 +21,9 @@ Blake (224, 256, 384, 512), SHA-1, SHA-2 (224, 256, 384, 512, 512/224, 512/256),
 Sponge construction functions include the following :
 Keccak (0, 224, 256, 384, 512)
 
+Checksum functions include the following :
+LRC (Longitudinal redundancy check), Adler-32
+
 
 Other tools :
 Base64, square matrices over the modular integers (Z_n), Functions composition, Big and little endian conversion, various mathematical, padding and bits manipulation tools.

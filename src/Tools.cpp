@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <sstream>
 
-const std::vector<std::string> Tools::split(const std::string &text)
+std::vector<std::string> Tools::split(const std::string &text)
 {
    std::istringstream iss(text);
    std::vector<std::string> split_text;
@@ -20,7 +20,7 @@ const std::vector<std::string> Tools::split(const std::string &text)
    return split_text;
 }
 
-const BytesVector Tools::getXORedBlock(const BytesVector &block1, const BytesVector &block2)
+BytesVector Tools::getXORedBlock(const BytesVector &block1, const BytesVector &block2)
 {
    const uint64_t size = block1.size();
    BytesVector xored_block;
@@ -53,7 +53,7 @@ void Tools::convertMajMinToSymbol(std::string &text, const std::string symbol)
  * @param int to_base : The base for which the number will be converted.
  * @return string result
  */
-const std::string Tools::baseXtoBaseY(const std::string &number, const uint8_t from_base, const uint8_t to_base)
+std::string Tools::baseXtoBaseY(const std::string &number, const uint8_t from_base, const uint8_t to_base)
 {
    const std::string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
    std::string result;

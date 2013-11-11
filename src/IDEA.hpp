@@ -17,10 +17,6 @@ public:
    
    IDEA(const BytesVector &key, const OperationModes mode) 
       : IDEA(key, mode, {}) {}
-      
-   /* Constructor with a vector of IV only for the mode CTR. */
-   IDEA(const BytesVector &key, const IV_Vector &IV) 
-      : BlockCipher(8, IV) { setKey(key); }
    
    virtual void setKey(const BytesVector &key) final;
    

@@ -3,6 +3,7 @@
 #define BLOCKCIPHERMODES_HPP
 
 #include "Types.hpp"
+#include "BigEndian.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
 
@@ -31,22 +32,20 @@ enum class OperationModes : uint8_t
    CBC,     // Cipher-block chaining
    CFB,     // Cipher feedback
    OFB,     // Output feedback
-   //CTR      // Counter
+   CTR      // Counter
 };
 
 
-
 class BlockCipherModes
-{
-protected:
-   using Block = BytesVector;
-   
+{   
 public:   
+   using Block = BytesVector;
    using GetOutputBlockFunction = std::function<const Block(const Block &)>;
+   
    virtual ~BlockCipherModes() {}
    
-   virtual const Block getCipherBlock(const Block &input_block) = 0;
-   virtual const Block getClearBlock(const Block &input_block) = 0;
+   virtual Block getCipherBlock(const Block &input_block) = 0;
+   virtual Block getClearBlock(const Block &input_block) = 0;
 };
 
 class BlockCipherECBMode : public BlockCipherModes
@@ -55,8 +54,8 @@ public:
    BlockCipherECBMode(const GetOutputBlockFunction &encode, const GetOutputBlockFunction &decode)
       : encode(encode), decode(decode) {}
    
-   virtual const Block getCipherBlock(const Block &input_block) final;
-   virtual const Block getClearBlock(const Block &input_block) final;
+   virtual Block getCipherBlock(const Block &input_block) final;
+   virtual Block getClearBlock(const Block &input_block) final;
    
 private:
    const GetOutputBlockFunction encode;
@@ -69,8 +68,8 @@ public:
    BlockCipherCBCMode(const Block &IV, const GetOutputBlockFunction &encode, const GetOutputBlockFunction &decode) 
       : previous_cipher_block(IV), encode(encode), decode(decode) {}
    
-   virtual const Block getCipherBlock(const Block &input_block) final;
-   virtual const Block getClearBlock(const Block &input_block) final;
+   virtual Block getCipherBlock(const Block &input_block) final;
+   virtual Block getClearBlock(const Block &input_block) final;
    
 private:
    Block previous_cipher_block;
@@ -84,8 +83,8 @@ public:
    BlockCipherCFBMode(const Block &IV, const GetOutputBlockFunction &encode)
       : next_input_block(IV), encode(encode) {}
    
-   virtual const Block getCipherBlock(const Block &input_block) final;
-   virtual const Block getClearBlock(const Block &input_block) final;
+   virtual Block getCipherBlock(const Block &input_block) final;
+   virtual Block getClearBlock(const Block &input_block) final;
 
 private:
    Block next_input_block;
@@ -98,8 +97,8 @@ public:
    BlockCipherOFBMode(const Block &IV, const GetOutputBlockFunction &encode)
       : next_input_block(IV), encode(encode) {}
    
-   virtual const Block getCipherBlock(const Block &input_block) final;
-   virtual const Block getClearBlock(const Block &input_block) final;
+   virtual Block getCipherBlock(const Block &input_block) final;
+   virtual Block getClearBlock(const Block &input_block) final;
 
 private:
    Block next_input_block;
@@ -109,28 +108,45 @@ private:
 class BlockCipherCTRMode : public BlockCipherModes
 {
 public:   
-   explicit BlockCipherCTRMode(const IV_Vector &IV, const GetOutputBlockFunction &encode)
-      : IV(IV), encode(encode) {}
+   BlockCipherCTRMode(const Block &IV, const GetOutputBlockFunction &encode)
+      : new_IV(IV), encode(encode) 
+      { 
+         if(IV.size() == 16)
+         {
+            this->IV = Block(IV.begin(), IV.begin() + 8);
+         }
+         counter = BigEndian64::toInteger(Block(IV.begin() + IV.size() - 8, IV.end())); 
+      }
    
-   virtual const Block getCipherBlock(const Block &input_block) final;
-   virtual const Block getClearBlock(const Block &input_block) final;
+   virtual Block getCipherBlock(const Block &input_block) final;
+   virtual Block getClearBlock(const Block &input_block) final;
 
 private:
-   uint64_t block_index = 0;
-   const IV_Vector IV;
+   Block increaseCounter();
+   
+   uint64_t counter;
+   Block new_IV;
+   Block IV;
    const GetOutputBlockFunction encode;
 };
 
-template <class Block>
 class BlockCipherModesFactory
 {
 public:
    static BlockCipherModes* createBlockCipherMode(
       const OperationModes mode,
-      const Block &IV,
-      const BlockCipherCFBMode::GetOutputBlockFunction &encode,
-      const BlockCipherCFBMode::GetOutputBlockFunction &decode)
+      const BlockCipherModes::Block &IV,
+      const uint8_t block_size,
+      const BlockCipherModes::GetOutputBlockFunction &encode,
+      const BlockCipherModes::GetOutputBlockFunction &decode
+   )
    {
+      // Make sure the IV is compatible with the algorithm used for mode other than ECB.
+      if(block_size != IV.size() && mode != OperationModes::ECB)
+      {
+         throw BadIVLength("The size of your IV has to be the same size as the block size", IV.size());
+      }
+      
       switch (mode)
       {
          case OperationModes::ECB: 
@@ -144,20 +160,11 @@ public:
             
          case OperationModes::OFB:  
             return new BlockCipherOFBMode(IV, encode);
+            
+         case OperationModes::CTR:  
+            return new BlockCipherCTRMode(IV, encode);
       }
-      throw Exception("Accepted Modes are : ECB, CBC, CFB and OFB.");
-   }
-};
-
-template<>
-class BlockCipherModesFactory<IV_Vector>
-{
-public:
-   static BlockCipherModes* createBlockCipherMode(
-      const IV_Vector &IV,
-      const BlockCipherCFBMode::GetOutputBlockFunction &encode)
-   { 
-      return new BlockCipherCTRMode(IV, encode);
+      throw Exception("Accepted Modes are : ECB, CBC, CFB, OFB and CTR.");
    }
 };
 

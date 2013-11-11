@@ -22,10 +22,6 @@ public:
    /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
    Camellia(const BytesVector &key, const OperationModes mode) 
       : Camellia(key, mode, {}) {}
-      
-   /* Constructor with a vector of IV only for the mode CTR. */
-   Camellia(const BytesVector &key, const IV_Vector &IV) 
-      : Feistel(24, IV) { setKey(key); }
 
    virtual void setKey(const BytesVector &key) final;
    

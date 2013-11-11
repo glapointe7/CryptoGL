@@ -22,10 +22,6 @@ public:
    /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
    Mysty1(const BytesVector &key, const OperationModes mode) 
       : Mysty1(key, mode, {}) {}
-      
-   /* Constructor with a vector of IV only for the mode CTR. */
-   Mysty1(const BytesVector &key, const IV_Vector &IV) 
-      : Feistel(8, IV) { setKey(key); }
 
    virtual void setKey(const BytesVector &key) final;
    

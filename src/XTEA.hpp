@@ -19,10 +19,6 @@ public:
    
    XTEA(const BytesVector &key, const OperationModes mode) 
       : XTEA(key, mode, {}) {}
-      
-   /* Constructor with a vector of IV only for the mode CTR. */
-   XTEA(const BytesVector &key, const IV_Vector &IV) 
-      : Feistel(32, IV) { setKey(key); }
    
    virtual void setKey(const BytesVector &key) final;
    

@@ -17,10 +17,6 @@ protected:
    /* Constructor with no IV needed : ECB and CTR modes are accepted. */
    Feistel(const OperationModes mode, const uint8_t round) 
       : Feistel(mode, round, {}) {}
-      
-   /* Constructor with a vector of IV only for the mode CTR. */
-   Feistel(const uint8_t round, const IV_Vector &IV) 
-      : BlockCipher<SubkeyType, DataType, InputBlockSize, IndianType>(round, IV) {}
 
    virtual ~Feistel() {}
    

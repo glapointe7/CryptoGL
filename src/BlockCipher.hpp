@@ -52,12 +52,11 @@ public:
    {
       const BytesVector message_padded = Padding::zeros(message, InputBlockSize);
 
+      generateSubkeys();
+
       const uint64_t message_padded_len = message_padded.size();
       BytesVector output;
       output.reserve(message_padded_len);
-
-      generateSubkeys();
-
       for (uint64_t n = 0; n < message_padded_len; n += InputBlockSize)
       {
          const BytesVector input_block(message_padded.begin() + n, message_padded.begin() + n + InputBlockSize);
@@ -71,12 +70,11 @@ public:
    /* Process general decoding for block ciphers. */
    const BytesVector decode(const BytesVector &message)
    {
+      generateInverseSubkeys();
+
       const uint64_t message_len = message.size();
       BytesVector output;
       output.reserve(message_len);
-
-      generateInverseSubkeys();
-
       for (uint64_t n = 0; n < message_len; n += InputBlockSize)
       {
          const BytesVector input_block(message.begin() + n, message.begin() + n + InputBlockSize);
@@ -91,23 +89,16 @@ protected:
    using SubkeysContainer = std::vector<SubkeyType>;
    using THIS = BlockCipher<SubkeyType, DataType, InputBlockSize, EndianType>;
    
-   /* Default constructor : Only for ECB, CBC, CFB and OFB modes. An IV is needed for 
-    * CBC, CFB and OFB modes. For the ECB mode, IV is empty. */
+   /* Default constructor : Only for ECB, CBC, CFB, OFB and CTR modes. An IV is needed for 
+    * CBC, CFB, OFB and CTR modes. For the ECB mode, IV is empty. */
    BlockCipher(const OperationModes mode, const uint8_t rounds, const BytesVector &IV)
       : block_mode(
-        BlockCipherModesFactory<BytesVector>::createBlockCipherMode(
+        BlockCipherModesFactory::createBlockCipherMode(
           mode,
           IV,
+          InputBlockSize,
           std::bind(&THIS::processEncodeBlock, this, std::placeholders::_1),
           std::bind(&THIS::processDecodeBlock, this, std::placeholders::_1))),
-        rounds(rounds) {}
-   
-   /* Constructor for the CTR mode : Take a vector of IVs. */
-   BlockCipher(const uint8_t rounds, const IV_Vector &IV)
-      : block_mode(
-        BlockCipherModesFactory<IV_Vector>::createBlockCipherMode(
-          IV,
-          std::bind(&THIS::processEncodeBlock, this, std::placeholders::_1))),
         rounds(rounds) {}
    
    virtual ~BlockCipher() { delete block_mode; }
@@ -130,7 +121,10 @@ protected:
       generateSubkeys();
    }
    
+   /* Modes used by a block cipher : ECB, CBC, CFB, OFB and CTR. */
    BlockCipherModes *block_mode;
+   
+   /* Number of rounds used by a block cipher algorithm. */
    uint8_t rounds;
    SubkeysContainer subkeys;
    

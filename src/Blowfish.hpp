@@ -25,10 +25,6 @@ public:
    /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
    Blowfish(const BytesVector &key, const OperationModes mode) 
       : Blowfish(key, mode, {}) {}
-   
-   /* Constructor with a vector of IV only for the mode CTR. */
-   Blowfish(const BytesVector &key, const IV_Vector &IV) 
-      : Feistel(16, IV) { setKey(key); }
 
    virtual void setKey(const BytesVector &key) final;
 

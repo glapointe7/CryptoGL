@@ -24,10 +24,6 @@ public:
    
    DES(const BytesVector &key, const OperationModes mode) 
       : DES(key, mode, {}) {}
-      
-   /* Constructor with a vector of IV only for the mode CTR. */
-   DES(const BytesVector &key, const IV_Vector &IV) 
-      : Feistel(16, IV) { setKey(key); }
    
    virtual void setKey(const BytesVector &key) final;
 

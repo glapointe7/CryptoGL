@@ -23,10 +23,6 @@ public:
    /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
    CAST128(const BytesVector &key, const OperationModes mode) 
       : CAST128(key, mode, {}) {}
-      
-   /* Constructor with a vector of IV only for the mode CTR. */
-   CAST128(const BytesVector &key, const IV_Vector &IV) 
-      : Feistel(12, IV) { setKey(key); }
 
    virtual void setKey(const BytesVector &key) final;
 

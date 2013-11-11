@@ -20,10 +20,6 @@ public:
    
    RC5(const BytesVector &key, const OperationModes mode) 
       : RC5(key, mode, {}) {}
-      
-   /* Constructor with a vector of IV only for the mode CTR. */
-   RC5(const BytesVector &key, const IV_Vector &IV) 
-      : Feistel(12, IV) { setKey(key); }
    
    virtual void setKey(const BytesVector &key) final;
    

@@ -22,10 +22,6 @@ public:
    
    AES(const BytesVector &key, const OperationModes mode) 
       : AES(key, mode, {}) {}
-      
-   /* Constructor with a vector of IV only for the mode CTR. */
-   AES(const BytesVector &key, const IV_Vector &IV) 
-      : BlockCipher(10, IV) { setKey(key); }
    
    virtual void setKey(const BytesVector &key) final;
    

@@ -10,12 +10,12 @@
 
 namespace Tools
 {
-   const std::vector<std::string> split(const std::string &text);
+   std::vector<std::string> split(const std::string &text);
    void convertMajMinToSymbol(std::string &text, const std::string symbol);
 
-   const BytesVector getXORedBlock(const BytesVector &block1, const BytesVector &block2);
+   BytesVector getXORedBlock(const BytesVector &block1, const BytesVector &block2);
 
-   const std::string baseXtoBaseY(const std::string &number, const uint8_t from_base, const uint8_t to_base);
+   std::string baseXtoBaseY(const std::string &number, const uint8_t from_base, const uint8_t to_base);
    
    template <uint8_t TableSize>
    uint64_t getBitsFromTable(const uint64_t &data, const std::array<uint8_t, TableSize> &table, const uint8_t from)
@@ -49,6 +49,16 @@ namespace Tools
       }
 
       return out;
+   }
+   
+   template <class VectorType>
+   VectorType mergeVectors(const VectorType &V, const VectorType &W)
+   {
+      VectorType result(V);
+      result.reserve(V.size() + W.size());
+      result.insert(result.end(), W.begin(), W.end());
+      
+      return result;
    }
 }
 

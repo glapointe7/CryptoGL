@@ -21,10 +21,6 @@ public:
    
    Noekeon(const BytesVector &key, const OperationModes mode) 
       : Noekeon(key, mode, {}) {}
-      
-   /* Constructor with a vector of IV only for the mode CTR. */
-   Noekeon(const BytesVector &key, const IV_Vector &IV) 
-      : BlockCipher(16, IV) { setKey(key); }
    
    virtual void setKey(const BytesVector &key) final;
    
