@@ -11,8 +11,8 @@ class Cipher
 {
 protected:
    virtual ~Cipher() {}
-   virtual const ReturnType encode(const ParamType &) = 0;
-   virtual const ParamType decode(const ReturnType &) = 0;
+   virtual ReturnType encode(const ParamType &) = 0;
+   virtual ParamType decode(const ReturnType &) = 0;
 };
 
 #endif

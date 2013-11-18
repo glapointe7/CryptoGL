@@ -48,7 +48,7 @@ static_assert(!(InputBlockSize & 7), "InputBlockSize has to be a multiple of 8."
 
 public:   
    /* Process general encoding for block ciphers. */
-   const BytesVector encode(const BytesVector &message)
+   BytesVector encode(const BytesVector &message)
    {
       const BytesVector message_padded = Padding::zeros(message, InputBlockSize);
 
@@ -68,7 +68,7 @@ public:
    }
    
    /* Process general decoding for block ciphers. */
-   const BytesVector decode(const BytesVector &message)
+   BytesVector decode(const BytesVector &message)
    {
       generateInverseSubkeys();
 
@@ -93,10 +93,9 @@ protected:
     * CBC, CFB, OFB and CTR modes. For the ECB mode, IV is empty. */
    BlockCipher(const OperationModes mode, const uint8_t rounds, const BytesVector &IV)
       : block_mode(
-        BlockCipherModesFactory::createBlockCipherMode(
+        BlockCipherModesFactory<InputBlockSize>::createBlockCipherMode(
           mode,
           IV,
-          InputBlockSize,
           std::bind(&THIS::processEncodeBlock, this, std::placeholders::_1),
           std::bind(&THIS::processDecodeBlock, this, std::placeholders::_1))),
         rounds(rounds) {}
@@ -110,10 +109,10 @@ protected:
    virtual void generateSubkeys() = 0;
    
    /* Encode the input block provided as a vector of integers. */
-   virtual const DataType encodeBlock(const DataType &input) = 0;
+   virtual DataType encodeBlock(const DataType &input) = 0;
    
    /* Encode the input block provided as a vector of integers. */
-   virtual const DataType decodeBlock(const DataType &input) = 0;
+   virtual DataType decodeBlock(const DataType &input) = 0;
       
    /* Generate sub-keys from the key provided by the user when decoding. */
    virtual void generateInverseSubkeys()

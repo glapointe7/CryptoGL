@@ -22,6 +22,10 @@ namespace Bits
       static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
       return value >> ((sizeof (UInt) << 3) - bits_to_extract);
    }
+   
+   uint8_t msb(const BytesVector &V);
+   
+   uint8_t lsb(const BytesVector &V);
 
    /* Rotate left 'value' of 'shift' bits with 'max' in {1,...,63}. */
    template <class UInt>
@@ -55,19 +59,33 @@ namespace Bits
    BytesVector rotateLeft128(const BytesVector &bytes, const uint8_t shift);
    
    /* Test a bit at a 'pos' in 'value'. */
-   template <class UInt>
-   constexpr bool getBitAtPosition(const uint8_t pos, const UInt value)
+   template <typename Integer>
+   constexpr bool getBitAtPosition(const uint8_t pos, const Integer value)
    {
-      static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
+      static_assert(std::is_integral<Integer>::value, "Type UInt must be an integral type.");
       return (value & (1ull << pos)) > 0;
    }
    
    /* Set a bit at 'pos' in 'value'. */
-   template <class UInt>
-   constexpr UInt setBitAtPosition(const uint8_t pos, const UInt value)
+   template <typename Integer>
+   constexpr Integer setBitAtPosition(const uint8_t pos, const Integer value)
    {
-      static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
+      static_assert(std::is_integral<Integer>::value, "Type UInt must be an integral type.");
       return value | (1ull << pos);
+   }
+   
+   /* Number of trailing zeros : return the largest integer 'count' such that 
+      2^count divide value. */
+   template <typename Integer>
+   uint8_t ntz(const Integer value)
+   {
+      uint8_t count = 0;
+      while(!getBitAtPosition(count, value))
+      {
+         ++count;
+      }
+      
+      return count;
    }
    
    /* Swap endianness of an integer 'value'. */

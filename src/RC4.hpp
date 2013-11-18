@@ -16,7 +16,7 @@ public:
    explicit RC4(const BytesVector &key) 
       : RC4(key, 0) {}
    
-   virtual const BytesVector encode(const BytesVector &clear_text) final;
+   virtual BytesVector encode(const BytesVector &clear_text) final;
    
    virtual BytesVector generateKeystream() final;
    

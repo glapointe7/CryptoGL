@@ -15,8 +15,8 @@ class AsymmetricCipher : public Cipher<BigIntVector, BytesVector>
 protected:  
    virtual ~AsymmetricCipher() {}
    
-   virtual const BigIntVector encode(const BytesVector &) = 0;
-   virtual const BytesVector decode(const BigIntVector &) = 0;
+   virtual BigIntVector encode(const BytesVector &) = 0;
+   virtual BytesVector decode(const BigIntVector &) = 0;
    
    virtual void makePublicKey() = 0;
 };

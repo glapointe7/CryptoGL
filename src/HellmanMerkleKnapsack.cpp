@@ -40,7 +40,7 @@ HellmanMerkleKnapsack::HellmanMerkleKnapsack(const BigIntVector &sequence, const
    makePublicKey();
 }
 
-const BigInteger HellmanMerkleKnapsack::isSuperIncresing(const BigIntVector &sequence)
+BigInteger HellmanMerkleKnapsack::isSuperIncresing(const BigIntVector &sequence)
 {
    BigInteger sum;
    for (const auto number : sequence)
@@ -82,7 +82,7 @@ uint8_t HellmanMerkleKnapsack::makePlainByte(const BigInteger &value)
    return byte;
 }
 
-const BigIntVector HellmanMerkleKnapsack::encode(const BytesVector &message)
+BigIntVector HellmanMerkleKnapsack::encode(const BytesVector &message)
 {
    const uint64_t message_len = message.size();
    BigIntVector crypted;
@@ -101,7 +101,7 @@ const BigIntVector HellmanMerkleKnapsack::encode(const BytesVector &message)
    return crypted;
 }
 
-const BytesVector HellmanMerkleKnapsack::decode(const BigIntVector &cipher)
+BytesVector HellmanMerkleKnapsack::decode(const BigIntVector &cipher)
 {
    BytesVector decrypted;
    decrypted.reserve(cipher.size());

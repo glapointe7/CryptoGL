@@ -28,7 +28,7 @@ void SquareCipher::setAlpha(const ClassicalType &alpha)
 
 // Construction of the cipher grid.
 
-const SquareCipher::Grid
+SquareCipher::Grid
 SquareCipher::getGrid(const ClassicalType &chars) const
 {
    const ClassicalType new_alpha = String::makeUniqueChars(chars);
@@ -45,7 +45,7 @@ SquareCipher::getGrid(const ClassicalType &chars) const
 }
 
 // Return character coordinates from the cipher grid.
-const SquareCipher::Coordinates
+SquareCipher::Coordinates
 SquareCipher::getCharCoordinates(const char c, const Grid &grid) const
 {
    auto coords = std::make_pair(0u, 0u);

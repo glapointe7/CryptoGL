@@ -8,10 +8,13 @@
 #include "BigEndian.hpp"
 
 #include <array>
+#include <functional>
+
+using Function = std::function<uint32_t(const uint32_t, const uint32_t, const uint32_t)>;
 
 class CAST256 : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian32>
 {
-public:
+public:   
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
    CAST256(const BytesVector &key, const OperationModes mode, const BytesVector &IV) 
       : BlockCipher(mode, 12, IV) { setKey(key); }
@@ -26,15 +29,17 @@ public:
 
    virtual void setKey(const BytesVector &key) final;
 
-private:
+private:   
    virtual void generateSubkeys() final;
-   virtual const UInt32Vector encodeBlock(const UInt32Vector &input) final;
-   virtual const UInt32Vector decodeBlock(const UInt32Vector &input) final;
+   virtual UInt32Vector encodeBlock(const UInt32Vector &input) final;
+   virtual UInt32Vector decodeBlock(const UInt32Vector &input) final;
    
    static uint32_t F1(const uint32_t D, const uint32_t Km, const uint32_t Kr);
    static uint32_t F2(const uint32_t D, const uint32_t Km, const uint32_t Kr);
    static uint32_t F3(const uint32_t D, const uint32_t Km, const uint32_t Kr);
 
+   static const std::array<Function, 3> F;
+   
    void applyForwardQuadRound(UInt32Vector &beta, const uint8_t round) const;
    void applyReverseQuadRound(UInt32Vector &beta, const uint8_t round) const;
    void applyForwardOctave(UInt32Vector &kappa, const uint8_t round) const;

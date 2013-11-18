@@ -31,7 +31,7 @@ private:
    
    virtual void compress(UInt64Vector &int_block, UInt64Vector &state) final;
    
-   virtual const BytesVector getOutput(const UInt64Vector &hash) const final; 
+   virtual BytesVector getOutput(const UInt64Vector &hash) const final; 
    
    static constexpr std::array<std::array<uint64_t, 256>, 4> sbox = {{
       {

@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include "Tools.hpp"  // fonction split
+#include "Tools.hpp"  
 #include "String.hpp"
 #include "Types.hpp"
 
@@ -17,9 +17,9 @@
 class Vigenere : public StringCipherWithStringKey
 {
 private:
-   using GetCharFunction = std::function<const ClassicalType(const ClassicalType &, const char, const char)>;
+   using GetCharFunction = std::function<ClassicalType(const ClassicalType &, const char, const char)>;
    const GetCharFunction charEncode, charDecode;
-   const ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
+   ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
    
 protected:   
    Vigenere(const GetCharFunction &charEncode, const GetCharFunction &charDecode, const KeyType &key)
@@ -28,19 +28,19 @@ protected:
    Vigenere(const GetCharFunction &charEncode, const GetCharFunction &charDecode)
       : charEncode(charEncode), charDecode(charDecode) {}
 
-   static const ClassicalType clearPlusKey(const ClassicalType &alpha, const char c, const char key_pos)
+   static ClassicalType clearPlusKey(const ClassicalType &alpha, const char c, const char key_pos)
    {
       const uint32_t x = (alpha.find(c) + alpha.find(key_pos)) % alpha.length();
       return ClassicalType(1, alpha[x]);
    }
 
-   static const ClassicalType clearMinusKey(const ClassicalType &alpha, const char c, const char key_pos)
+   static ClassicalType clearMinusKey(const ClassicalType &alpha, const char c, const char key_pos)
    {
       const uint32_t x = (alpha.find(c) - alpha.find(key_pos) + alpha.length()) % alpha.length();
       return ClassicalType(1, alpha[x]);
    }
 
-   static const ClassicalType keyMinusClear(const ClassicalType &alpha, const char c, const char key_pos)
+   static ClassicalType keyMinusClear(const ClassicalType &alpha, const char c, const char key_pos)
    {
       return ClassicalType(1, alpha[(alpha.find(key_pos) - alpha.find(c) + alpha.length()) % alpha.length()]);
    }
@@ -48,10 +48,11 @@ protected:
 public:
    explicit Vigenere(const KeyType &key)
       : Vigenere(clearPlusKey, clearMinusKey, key) {}
+      
    virtual ~Vigenere() {}
 
-   virtual const ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual const ClassicalType decode(const ClassicalType &cipher_text);
+   virtual ClassicalType encode(const ClassicalType &clear_text) final;
+   virtual ClassicalType decode(const ClassicalType &cipher_text);
 };
 
 // Beaufort : CIPHER = -CLEAR + KEY
@@ -125,7 +126,7 @@ public:
 class VigenereMult : public Vigenere
 {
 private:
-   static const ClassicalType clearMultKey(const ClassicalType &alpha, const uint8_t c, const uint8_t key_pos)
+   static ClassicalType clearMultKey(const ClassicalType &alpha, const uint8_t c, const uint8_t key_pos)
    {
       const uint32_t x = (alpha.find(c) + 1) * (alpha.find(key_pos) + 1);
       ClassicalType buffer = String::uintToString(x);
@@ -135,7 +136,7 @@ private:
       return buffer;
    }
 
-   static const ClassicalType keyDivideCipher(const ClassicalType &alpha, const uint16_t c, const uint8_t key_pos)
+   static ClassicalType keyDivideCipher(const ClassicalType &alpha, const uint16_t c, const uint8_t key_pos)
    {
       const uint8_t x = (c / (alpha.find(key_pos) + 1)) - 1;
       return ClassicalType(1, alpha[x]);
@@ -146,7 +147,7 @@ public:
       : Vigenere(clearMultKey, keyDivideCipher, key) {}
 
    /* Decode the Vigenere Multiplication cipher with the given cipher_text. */
-   virtual const ClassicalType decode(const ClassicalType &cipher_text) final
+   virtual ClassicalType decode(const ClassicalType &cipher_text) final
    {
       const KeyType my_key = getKey();
       const uint32_t key_length = my_key.length();

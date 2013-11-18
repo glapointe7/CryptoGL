@@ -27,7 +27,7 @@ protected:
    virtual ~SpongeFunction() {}
 
    virtual void applyAbsorbingPhase(const BytesVector &padded_message) = 0;
-   virtual const BytesVector applySqueezingPhase() = 0;
+   virtual BytesVector applySqueezingPhase() = 0;
    virtual void F() = 0;
 
    /* Bitrate (or r in the spec.) : default = 1024. */
@@ -57,7 +57,7 @@ protected:
 public:
 
    /* General encoding using the sponge construction. */
-   virtual const BytesVector encode(const BytesVector &data) final
+   virtual BytesVector encode(const BytesVector &data) final
    {
       state.resize(5);
       for(uint8_t x = 0; x < 5; ++x)

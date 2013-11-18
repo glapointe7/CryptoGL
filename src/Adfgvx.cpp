@@ -10,6 +10,7 @@
 
 #include <utility>
 #include <algorithm>
+#include <memory>
 
 const ClassicalType Adfgvx::code = "ADFGVX";
 
@@ -61,7 +62,7 @@ Int32Vector Adfgvx::getPermutationKey() const
    return perm_key;
 }
 
-const ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
+ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
 {
    if(grid_key.empty())
    {
@@ -82,14 +83,12 @@ const ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
       first_encoding += code[coords.first];
    }
 
-   TranspositionCompleteColumns *TCol = new TranspositionCompleteColumns(getPermutationKey());
-   ClassicalType encoded_text = TCol->encode(first_encoding);
-   delete TCol;
+   TranspositionCompleteColumns TCC(getPermutationKey());
    
-   return encoded_text;
+   return TCC.encode(first_encoding);
 }
 
-const ClassicalType Adfgvx::decode(const ClassicalType &cipher_text)
+ClassicalType Adfgvx::decode(const ClassicalType &cipher_text)
 {
    if(grid_key.empty())
    {
@@ -100,9 +99,8 @@ const ClassicalType Adfgvx::decode(const ClassicalType &cipher_text)
    ClassicalType decrypted;
    decrypted.reserve(cipher_len / 2);
    
-   TranspositionCompleteColumns *TCol = new TranspositionCompleteColumns(getPermutationKey());
-   ClassicalType first_decoding = TCol->decode(cipher_text);
-   delete TCol;
+   TranspositionCompleteColumns TCol(getPermutationKey());
+   const ClassicalType first_decoding = TCol.decode(cipher_text);
    
    for(uint32_t i = 0; i < cipher_len; i += 2)
    {

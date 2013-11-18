@@ -12,8 +12,8 @@ public:
    RedefenceZigzag(const KeyType &key, const KeyType &key_levels);
    virtual ~RedefenceZigzag() {}
 
-   virtual const ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
+   virtual ClassicalType encode(const ClassicalType &clear_text) final;
+   virtual ClassicalType decode(const ClassicalType &cipher_text) final;
    
    void setOffset(const uint32_t offset) { this->offset = offset; }
    
@@ -23,8 +23,8 @@ private:
            const int32_t i, const int32_t level, const int32_t mod) const;
    
    /* Redefence : Replace each row following the permutation key. */
-   const ClassicalType swapRowsWithPermutationKey(const std::vector<ClassicalType> &rows, const uint32_t length) const;
-   const std::vector<std::list<int8_t> > getFirstDecoding(const ClassicalType &cipher_text, int32_t &last) const;
+   ClassicalType swapRowsWithPermutationKey(const std::vector<ClassicalType> &rows, const uint32_t length) const;
+   std::vector<std::list<int8_t> > getFirstDecoding(const ClassicalType &cipher_text, int32_t &last) const;
    
    uint32_t offset = 0;
    uint32_t max_level;

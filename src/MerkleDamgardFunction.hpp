@@ -25,7 +25,7 @@ class MerkleDamgardFunction : public HashFunction<DataType, EndianType>
 static_assert(!(InputBlockSize & 0xF), "'InputBlockSize' has to be a multiple of 16.");
    
 public:
-   const BytesVector encode(const BytesVector &message)
+   BytesVector encode(const BytesVector &message)
    {
       const BytesVector padded_message = pad(message);
       DataTypeVector hash(this->getIV());
@@ -69,7 +69,7 @@ protected:
    
 private:
    /* Specific padding rule of the Merkel-Damgard construction for 64 and 128 bits blocks. */
-   virtual const BytesVector pad(const BytesVector &message) const final
+   virtual BytesVector pad(const BytesVector &message) const final
    {
       const uint64_t message_size = message.size();
       BytesVector padded_message(message);

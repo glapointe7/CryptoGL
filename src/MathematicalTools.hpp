@@ -31,8 +31,8 @@ namespace Maths
 
    
    /* Return the Greatest Common Divisor of x and y. */
-   template <class UIntType>
-   const UIntType gcd(const UIntType &x, const UIntType &y)
+   template <typename UIntType>
+   UIntType gcd(const UIntType &x, const UIntType &y)
    {
       if (y == 0)
       {
@@ -43,7 +43,7 @@ namespace Maths
    }
 
    /* Check if x and y are coprimes. */
-   template <class UIntType>
+   template <typename UIntType>
    bool areCoprimes(const UIntType &x, const UIntType &y)
    {
       return gcd(x, y) == 1;
@@ -51,10 +51,10 @@ namespace Maths
 
    /* Calculate the inverse of a modulo b in Z_b.
       Theorem of Bézout : a*u + b*v = 1. v is the inverse to find. */
-   template <class IntType>
-   const IntType getModInverse(IntType a, const IntType &b)
+   template <typename IntType>
+   IntType getModInverse(IntType a, const IntType &b)
    {
-      if (gcd(a, b) != 1)
+      if (!areCoprimes(a, b))
       {
          throw Exception("The inverse of 'a' doesn't exist in Z_b. To exist, 'a' and 'b' must be coprimes.");
       }
@@ -77,8 +77,8 @@ namespace Maths
    }
 
    /* Calculate the square root of a big integer. */
-   template <class UIntType>
-   const UIntType integerSqrt(const UIntType &n)
+   template <typename UIntType>
+   UIntType integerSqrt(const UIntType &n)
    {
       UIntType x = n;
       UIntType y = n;
@@ -95,7 +95,7 @@ namespace Maths
    }
 
    /* Test the primality of x. */
-   template <class UIntType>
+   template <typename UIntType>
    bool isPrime(const UIntType &x)
    {
       if (x < 2) return false;

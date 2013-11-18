@@ -20,20 +20,6 @@ std::vector<std::string> Tools::split(const std::string &text)
    return split_text;
 }
 
-BytesVector Tools::getXORedBlock(const BytesVector &block1, const BytesVector &block2)
-{
-   const uint64_t size = block1.size();
-   BytesVector xored_block;
-   xored_block.reserve(size);
-   
-   for(uint64_t i = 0; i < size; ++i)
-   {
-      xored_block.push_back(block1[i] ^ block2[i]);
-   }
-   
-   return xored_block;
-}
-
 void Tools::convertMajMinToSymbol(std::string &text, const std::string symbol)
 {
    std::replace_if(text.begin(), text.end(), [](char c) {

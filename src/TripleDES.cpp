@@ -29,7 +29,7 @@ void TripleDES::setOperationMode(const OperationModes mode)
    this->mode = mode;
 }
 
-const BytesVector TripleDES::encode(const BytesVector &clear_text)
+BytesVector TripleDES::encode(const BytesVector &clear_text)
 {
    DES *D1 = new DES(key, mode);
    const BytesVector first = D1->encode(clear_text);
@@ -43,7 +43,7 @@ const BytesVector TripleDES::encode(const BytesVector &clear_text)
    return D3->encode(second);
 }
 
-const BytesVector TripleDES::decode(const BytesVector &cipher_text)
+BytesVector TripleDES::decode(const BytesVector &cipher_text)
 {
    DES *D1 = new DES(key3, mode);
    const BytesVector first = D1->decode(cipher_text);

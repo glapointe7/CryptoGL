@@ -12,8 +12,8 @@ class Morse : public StringCipher
 public:
    Morse();
 
-   virtual const ClassicalType encode(const ClassicalType &);
-   virtual const ClassicalType decode(const ClassicalType &);
+   virtual ClassicalType encode(const ClassicalType &);
+   virtual ClassicalType decode(const ClassicalType &);
 
 private:
    static const std::array<ClassicalType, 36> morse;

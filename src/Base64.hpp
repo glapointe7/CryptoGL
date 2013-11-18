@@ -12,8 +12,8 @@
 class Base64 : public Cipher<std::string, BytesVector>
 {  
 public:
-   virtual const std::string encode(const BytesVector &clear_data) final;
-   virtual const BytesVector decode(const std::string &cipher_data) final;
+   virtual std::string encode(const BytesVector &clear_data) final;
+   virtual BytesVector decode(const std::string &cipher_data) final;
    
 private:
    static constexpr uint8_t pad_character = '=';

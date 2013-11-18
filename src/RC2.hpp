@@ -26,8 +26,8 @@ public:
      
 private:
    virtual void generateSubkeys() final;
-   virtual const UInt16Vector encodeBlock(const UInt16Vector &input) final;
-   virtual const UInt16Vector decodeBlock(const UInt16Vector &input) final;
+   virtual UInt16Vector encodeBlock(const UInt16Vector &input) final;
+   virtual UInt16Vector decodeBlock(const UInt16Vector &input) final;
    
    void mixUp(UInt16Vector &input, const uint8_t index, const uint8_t key_index) const;
    void mash(UInt16Vector &input, const uint8_t index) const;

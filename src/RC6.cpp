@@ -52,7 +52,7 @@ void RC6::generateSubkeys()
    }
 }
 
-const uint64_t RC6::F(const uint64_t half_block, const uint8_t) const
+uint64_t RC6::F(const uint64_t half_block, const uint8_t) const
 {
    return Bits::rotateLeft((half_block * ((half_block << 1) + 1)) & 0xFFFFFFFF, 5);
 }
@@ -107,7 +107,7 @@ void RC6::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
    R = (static_cast<uint64_t>(C) << 32) | D;
 }
 
-const UInt32Vector RC6::encodeBlock(const UInt32Vector &input)
+UInt32Vector RC6::encodeBlock(const UInt32Vector &input)
 {
    uint64_t L = (static_cast<uint64_t>(input[0]) << 32) | input[1];
    uint64_t R = (static_cast<uint64_t>(input[2]) << 32) | input[3];
@@ -122,7 +122,7 @@ const UInt32Vector RC6::encodeBlock(const UInt32Vector &input)
    return LR;
 }
 
-const UInt32Vector RC6::decodeBlock(const UInt32Vector &input)
+UInt32Vector RC6::decodeBlock(const UInt32Vector &input)
 {
    uint64_t L = (static_cast<uint64_t>(input[0]) << 32) | input[1];
    uint64_t R = (static_cast<uint64_t>(input[2]) << 32) | input[3];

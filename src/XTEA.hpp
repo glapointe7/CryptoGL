@@ -26,10 +26,10 @@ private:
    static constexpr uint32_t delta = 0x9E3779B9;
    
    virtual void generateSubkeys() final;
-   virtual const uint64_t encodeBlock(const uint64_t &input) final;
-   virtual const uint64_t decodeBlock(const uint64_t &input) final;
+   virtual uint64_t encodeBlock(const uint64_t &input) final;
+   virtual uint64_t decodeBlock(const uint64_t &input) final;
    
-   virtual const uint32_t F(const uint32_t half_block, const uint8_t round) const final;
+   virtual uint32_t F(const uint32_t half_block, const uint8_t round) const final;
    virtual void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
    virtual void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
 };

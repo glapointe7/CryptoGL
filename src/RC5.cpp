@@ -76,7 +76,7 @@ void RC5::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
    L -= subkeys[0];
 }
 
-const UInt32Vector RC5::encodeBlock(const UInt32Vector &input)
+UInt32Vector RC5::encodeBlock(const UInt32Vector &input)
 {
    UInt32Vector LR(input);
    encodeFeistelRounds(LR[0], LR[1], 0);
@@ -84,7 +84,7 @@ const UInt32Vector RC5::encodeBlock(const UInt32Vector &input)
    return LR;
 }
 
-const UInt32Vector RC5::decodeBlock(const UInt32Vector &input)
+UInt32Vector RC5::decodeBlock(const UInt32Vector &input)
 {
    UInt32Vector LR(input);
    decodeFeistelRounds(LR[0], LR[1], 0);

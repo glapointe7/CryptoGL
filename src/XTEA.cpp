@@ -28,7 +28,7 @@ void XTEA::generateSubkeys()
    }
 }
 
-const uint32_t XTEA::F(const uint32_t half_block, const uint8_t round) const
+uint32_t XTEA::F(const uint32_t half_block, const uint8_t round) const
 {
    return (((half_block << 4) ^ (half_block >> 5)) + half_block) ^ subkeys[round];
 }
@@ -51,7 +51,7 @@ void XTEA::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
    }
 }
 
-const uint64_t XTEA::encodeBlock(const uint64_t &input)
+uint64_t XTEA::encodeBlock(const uint64_t &input)
 {
    uint32_t L = input >> 32;
    uint32_t R = input & 0xFFFFFFFF;
@@ -60,7 +60,7 @@ const uint64_t XTEA::encodeBlock(const uint64_t &input)
    return (static_cast<uint64_t>(L) << 32) | R;
 }
 
-const uint64_t XTEA::decodeBlock(const uint64_t &input)
+uint64_t XTEA::decodeBlock(const uint64_t &input)
 {
    uint32_t L = input >> 32;
    uint32_t R = input & 0xFFFFFFFF;

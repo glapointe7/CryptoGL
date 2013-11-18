@@ -73,7 +73,7 @@ void RC2::inverseMash(UInt16Vector &input, const uint8_t index) const
    input[index] -= subkeys[input[(index + 3) & 3] & 0x3F];
 }
 
-const UInt16Vector RC2::encodeBlock(const UInt16Vector &input)
+UInt16Vector RC2::encodeBlock(const UInt16Vector &input)
 {
    UInt16Vector encoded_block(input);
    for (uint8_t i = 0; i < rounds; ++i)
@@ -96,7 +96,7 @@ const UInt16Vector RC2::encodeBlock(const UInt16Vector &input)
    return encoded_block;
 }
 
-const UInt16Vector RC2::decodeBlock(const UInt16Vector &input)
+UInt16Vector RC2::decodeBlock(const UInt16Vector &input)
 {
    UInt16Vector decoded_block(input);
    for (int8_t i = rounds - 1; i >= 0; --i)

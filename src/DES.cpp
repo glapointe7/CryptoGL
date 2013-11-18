@@ -73,7 +73,7 @@ uint64_t DES::getSubstitution(const uint64_t &key_mixed)
 // Feistel function F 
 // Param : 32-bits data and a 48-bits sub-key.
 
-const uint64_t DES::F(const uint64_t data, const uint8_t round) const
+uint64_t DES::F(const uint64_t data, const uint8_t round) const
 {
    // Expension from 32 bits to 48 bits.
    const uint64_t E_block = Tools::getBitsFromTable<48>(data, E, 32);
@@ -106,7 +106,7 @@ void DES::decodeFeistelRounds(uint64_t& L, uint64_t& R, const uint8_t) const
    }
 }
 
-const uint64_t DES::encodeBlock(const uint64_t &input)
+uint64_t DES::encodeBlock(const uint64_t &input)
 {
    // Initial permutation of the 64-bits data blocks.
    uint64_t value = input;
@@ -122,7 +122,7 @@ const uint64_t DES::encodeBlock(const uint64_t &input)
    return Tools::getBitsFromTable<64>(RL, IP_inverse, 64);
 }
 
-const uint64_t DES::decodeBlock(const uint64_t &input)
+uint64_t DES::decodeBlock(const uint64_t &input)
 {
    // Initial permutation of the 64-bits data blocks.
    uint64_t value = input;

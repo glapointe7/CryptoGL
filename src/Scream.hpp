@@ -11,7 +11,7 @@
 class Scream : public StreamCipher<BytesVector>
 {
 public:   
-   virtual const BytesVector encode(const BytesVector &message) final;
+   virtual BytesVector encode(const BytesVector &message) final;
    
    /* Generate vectors of 16-byte keystream from IV and key. */
    virtual BytesVector generateKeystream() final;

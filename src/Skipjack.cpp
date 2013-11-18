@@ -18,7 +18,7 @@ void Skipjack::generateSubkeys()
    subkeys = key;
 }
 
-const uint8_t Skipjack::F(const uint8_t half_block, const uint8_t round) const
+uint8_t Skipjack::F(const uint8_t half_block, const uint8_t round) const
 {
    return f_table[half_block ^ subkeys[round]];
 }
@@ -87,7 +87,7 @@ void Skipjack::applyInverseRuleB(UInt16Vector &input, const uint8_t round) const
    input[3] = tmp;
 }
 
-const UInt16Vector Skipjack::encodeBlock(const UInt16Vector &input)
+UInt16Vector Skipjack::encodeBlock(const UInt16Vector &input)
 {
    UInt16Vector encoded_block(input);
    for (uint8_t i = 0; i < 8; ++i)
@@ -102,7 +102,7 @@ const UInt16Vector Skipjack::encodeBlock(const UInt16Vector &input)
    return encoded_block;
 }
 
-const UInt16Vector Skipjack::decodeBlock(const UInt16Vector &input)
+UInt16Vector Skipjack::decodeBlock(const UInt16Vector &input)
 {
    UInt16Vector decoded_block(input);
    for (uint8_t i = 31; i >= 24; --i)

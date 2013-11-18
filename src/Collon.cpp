@@ -13,7 +13,7 @@
    this->block_len = block_len;
 }*/
 
-const ClassicalType Collon::encode(const ClassicalType &clear_text)
+ClassicalType Collon::encode(const ClassicalType &clear_text)
 {
    const uint32_t clear_len = clear_text.length();
    ClassicalType line1, line2;
@@ -47,7 +47,7 @@ const ClassicalType Collon::encode(const ClassicalType &clear_text)
    return crypted;
 }
 
-const ClassicalType Collon::decode(const ClassicalType &cipher_text)
+ClassicalType Collon::decode(const ClassicalType &cipher_text)
 {
    const uint32_t cipher_len = cipher_text.length();
    const uint32_t line_len = cipher_len / 2;

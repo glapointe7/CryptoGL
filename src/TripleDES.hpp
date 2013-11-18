@@ -10,8 +10,8 @@ class TripleDES : public SymmetricCipher
 public:
    TripleDES(const BytesVector &key1, const BytesVector &key2, const BytesVector &key3);
    
-   virtual const BytesVector encode(const BytesVector &clear_text) final;
-   virtual const BytesVector decode(const BytesVector &cipher_text) final;
+   virtual BytesVector encode(const BytesVector &clear_text) final;
+   virtual BytesVector decode(const BytesVector &cipher_text) final;
    
    virtual void setKey(const BytesVector &key) final;
 

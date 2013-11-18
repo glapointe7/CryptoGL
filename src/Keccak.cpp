@@ -96,7 +96,7 @@ void Keccak::applyAbsorbingPhase(const BytesVector &padded_message)
    }
 }
 
-const BytesVector Keccak::applySqueezingPhase()
+BytesVector Keccak::applySqueezingPhase()
 {
    BytesVector output;
    output.reserve(block_size);

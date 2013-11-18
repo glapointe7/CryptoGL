@@ -36,7 +36,7 @@ void MD2::compress(BytesVector &int_block, BytesVector &state)
    }
 }
 
-const BytesVector MD2::encode(const BytesVector &data)
+BytesVector MD2::encode(const BytesVector &data)
 {
    const BytesVector bytes = Padding::remainingValue(data, 16);
    const uint64_t bytes_len = bytes.size();

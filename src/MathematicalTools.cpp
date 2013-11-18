@@ -23,16 +23,41 @@
 
 bool Maths::isPerfectSquare(const uint32_t value)
 {
-   const uint32_t h = value & 0xF;
-   if (h > 9)
+   const uint8_t last_digit = value & 0xF;
+   if (last_digit > 9)
    {
       return false;
    }
 
-   if (h != 2 && h != 3 && h != 5 && h != 6 && h != 7 && h != 8)
+   const uint8_t second_last_digit = (value >> 1) & 0xF;
+   switch(last_digit)
    {
-      const uint32_t t = static_cast<uint32_t> (floor(sqrt(static_cast<double> (value)) + 0.5));
-      return value == t * t;
+      case 0:
+         switch(second_last_digit)
+         {
+            case 0:
+            case 1:
+            case 4:
+            case 9: {
+               const uint32_t t = static_cast<uint32_t> (floor(sqrt(static_cast<double> (value)) + 0.5));
+               return value == t * t; }
+            
+            default:
+               return false;
+         }
+         
+      case 4: {
+         if(!(second_last_digit & 1))
+         {
+            const uint32_t t = static_cast<uint32_t> (floor(sqrt(static_cast<double> (value)) + 0.5));
+            return value == t * t;
+         }
+         return false; }
+         
+      case 1:
+      case 9:
+         const uint32_t t = static_cast<uint32_t> (floor(sqrt(static_cast<double> (value)) + 0.5));
+         return value == t * t;
    }
 
    return false;

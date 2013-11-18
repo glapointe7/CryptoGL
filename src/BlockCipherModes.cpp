@@ -1,6 +1,6 @@
 #include "BlockCipherModes.hpp"
 
-#include "Tools.hpp"
+#include "Vector.hpp"
 
 /*
  * ECB Mode of encryption.
@@ -20,7 +20,7 @@ BlockCipherModes::Block BlockCipherECBMode::getClearBlock(const Block &input_blo
  */
 BlockCipherModes::Block BlockCipherCBCMode::getCipherBlock(const Block &input_block)
 {
-   const Block new_cipher_block = encode(Tools::getXORedBlock(input_block, previous_cipher_block));
+   const Block new_cipher_block = encode(Vector::Xor(input_block, previous_cipher_block));
    previous_cipher_block = new_cipher_block;  
    
    return new_cipher_block;
@@ -28,7 +28,7 @@ BlockCipherModes::Block BlockCipherCBCMode::getCipherBlock(const Block &input_bl
 
 BlockCipherModes::Block BlockCipherCBCMode::getClearBlock(const Block &input_block)
 {
-   const Block clear_block = Tools::getXORedBlock(decode(input_block), previous_cipher_block);
+   const Block clear_block = Vector::Xor(decode(input_block), previous_cipher_block);
    previous_cipher_block = input_block;
    
    return clear_block;
@@ -40,7 +40,7 @@ BlockCipherModes::Block BlockCipherCBCMode::getClearBlock(const Block &input_blo
 BlockCipherModes::Block BlockCipherCFBMode::getCipherBlock(const Block &input_block)
 {   
    const Block output = encode(next_input_block);
-   const Block cipher = Tools::getXORedBlock(input_block, output);
+   const Block cipher = Vector::Xor(input_block, output);
    next_input_block = cipher;
    
    return cipher;
@@ -49,7 +49,7 @@ BlockCipherModes::Block BlockCipherCFBMode::getCipherBlock(const Block &input_bl
 BlockCipherModes::Block  BlockCipherCFBMode::getClearBlock(const Block &input_block)
 {
    const Block output = encode(next_input_block);
-   const Block clear = Tools::getXORedBlock(input_block, output);
+   const Block clear = Vector::Xor(input_block, output);
    next_input_block = input_block;
    
    return clear;
@@ -61,7 +61,7 @@ BlockCipherModes::Block  BlockCipherCFBMode::getClearBlock(const Block &input_bl
 BlockCipherModes::Block BlockCipherOFBMode::getCipherBlock(const Block &input_block)
 {   
    const Block output = encode(next_input_block);
-   const Block cipher = Tools::getXORedBlock(input_block, output);
+   const Block cipher = Vector::Xor(input_block, output);
    next_input_block = output;
    
    return cipher;
@@ -80,7 +80,7 @@ BlockCipherModes::Block BlockCipherCTRMode::getCipherBlock(const Block &input_bl
    const Block output = encode(new_IV);
    new_IV = increaseCounter();
    
-   return Tools::getXORedBlock(input_block, output);
+   return Vector::Xor(input_block, output);
 }
 
 BlockCipherModes::Block  BlockCipherCTRMode::getClearBlock(const Block &input_block)
@@ -91,5 +91,5 @@ BlockCipherModes::Block  BlockCipherCTRMode::getClearBlock(const Block &input_bl
 BlockCipherModes::Block BlockCipherCTRMode::increaseCounter()
 {
    ++counter;
-   return Tools::mergeVectors(IV, BigEndian64::toBytesVector(counter));
+   return Vector::merge(IV, BigEndian64::toBytesVector(counter));
 }

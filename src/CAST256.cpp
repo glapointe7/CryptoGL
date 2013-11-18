@@ -4,6 +4,7 @@
 #include "Bits.hpp"
 
 constexpr std::array<std::array<uint32_t, 256>, 4> CAST256::S;
+const std::array<Function, 3> CAST256::F = {{F1, F2, F3}};
 
 void CAST256::setKey(const BytesVector &key)
 {
@@ -27,32 +28,28 @@ void CAST256::setKey(const BytesVector &key)
 void CAST256::applyForwardQuadRound(UInt32Vector &beta, const uint8_t round) const
 {
    const uint8_t j = round << 2;
-   beta[2] ^= F1(beta[3], subkeys[j], Kr[j]);
-   beta[1] ^= F2(beta[2], subkeys[j+1], Kr[j+1]);
-   beta[0] ^= F3(beta[1], subkeys[j+2], Kr[j+2]);
-   beta[3] ^= F1(beta[0], subkeys[j+3], Kr[j+3]);
+   beta[2] ^= F[0](beta[3], subkeys[j], Kr[j]);
+   beta[1] ^= F[1](beta[2], subkeys[j+1], Kr[j+1]);
+   beta[0] ^= F[2](beta[1], subkeys[j+2], Kr[j+2]);
+   beta[3] ^= F[0](beta[0], subkeys[j+3], Kr[j+3]);
 }
 
 void CAST256::applyReverseQuadRound(UInt32Vector &beta, const uint8_t round) const 
 {
    const uint8_t j = round << 2;
-   beta[3] ^= F1(beta[0], subkeys[j+3], Kr[j+3]);
-   beta[0] ^= F3(beta[1], subkeys[j+2], Kr[j+2]);
-   beta[1] ^= F2(beta[2], subkeys[j+1], Kr[j+1]);
-   beta[2] ^= F1(beta[3], subkeys[j], Kr[j]);
+   beta[3] ^= F[0](beta[0], subkeys[j+3], Kr[j+3]);
+   beta[0] ^= F[2](beta[1], subkeys[j+2], Kr[j+2]);
+   beta[1] ^= F[1](beta[2], subkeys[j+1], Kr[j+1]);
+   beta[2] ^= F[0](beta[3], subkeys[j], Kr[j]);
 }
 
 void CAST256::applyForwardOctave(UInt32Vector &kappa, const uint8_t round) const
 {
    const uint8_t j = round << 3;
-   kappa[6] ^= F1(kappa[7], Tm[j], Tr[j]);
-   kappa[5] ^= F2(kappa[6], Tm[j+1], Tr[j+1]);
-   kappa[4] ^= F3(kappa[5], Tm[j+2], Tr[j+2]);
-   kappa[3] ^= F1(kappa[4], Tm[j+3], Tr[j+3]);
-   kappa[2] ^= F2(kappa[3], Tm[j+4], Tr[j+4]);
-   kappa[1] ^= F3(kappa[2], Tm[j+5], Tr[j+5]);
-   kappa[0] ^= F1(kappa[1], Tm[j+6], Tr[j+6]);
-   kappa[7] ^= F2(kappa[0], Tm[j+7], Tr[j+7]);
+   for(uint8_t i = 0; i < 8; ++i)
+   {
+      kappa[(14 - i) & 7] ^= F[i % 3](kappa[7-i], Tm[j+i], Tr[j+i]);
+   }
 }
 
 void CAST256::generateSubkeys()
@@ -115,7 +112,7 @@ uint32_t CAST256::F3(const uint32_t D, const uint32_t Km, const uint32_t Kr)
            ^ S[2][getByteFromInteger(I, 1)]) - S[3][getByteFromInteger(I, 0)];
 }
 
-const UInt32Vector CAST256::encodeBlock(const UInt32Vector &input)
+UInt32Vector CAST256::encodeBlock(const UInt32Vector &input)
 {
    UInt32Vector beta(input);
    for(uint8_t i = 0; i < 6; ++i)
@@ -130,7 +127,7 @@ const UInt32Vector CAST256::encodeBlock(const UInt32Vector &input)
    return beta;
 }
 
-const UInt32Vector CAST256::decodeBlock(const UInt32Vector &input)
+UInt32Vector CAST256::decodeBlock(const UInt32Vector &input)
 {
    UInt32Vector beta(input);
    for(uint8_t i = rounds - 1; i >= 6; --i)

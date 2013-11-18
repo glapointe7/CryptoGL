@@ -30,7 +30,7 @@ protected:
    virtual ~HashFunction() {}
    
    /* Hash the initial message. */
-   virtual const BytesVector encode(const BytesVector &message) = 0;
+   virtual BytesVector encode(const BytesVector &message) = 0;
    
    /* Take a block of data and an initial state and return the hashed block (not final) in 'state'. */
    virtual void compress(DataTypeVector &int_block, DataTypeVector &state) = 0;
@@ -46,7 +46,7 @@ protected:
       
    /* Append length in bits of the initial message to the padded message. */
    template <class EndianLengthType>
-   static const BytesVector appendLength(const BytesVector &bytes, const uint64_t length)
+   static BytesVector appendLength(const BytesVector &bytes, const uint64_t length)
    {
       const BytesVector bytes_pad = EndianLengthType::toBytesVector(length);
       BytesVector padded_bytes(bytes);
@@ -56,7 +56,7 @@ protected:
    }
    
    /* Pad the initial message. */
-   virtual const BytesVector pad(const BytesVector &data) const
+   virtual BytesVector pad(const BytesVector &data) const
    {
       const uint8_t rest = sizeof(DataType) << 1;
       BytesVector bytes_pad(data);
@@ -74,7 +74,7 @@ protected:
    }
    
    /* Transform the input bytes to input block of integers. */
-   const DataTypeVector getInputBlocks(const BytesVector &bytes, const uint64_t &block_index) const
+   DataTypeVector getInputBlocks(const BytesVector &bytes, const uint64_t &block_index) const
    {      
       const uint8_t DataType_size = sizeof(DataType);
 
@@ -89,7 +89,7 @@ protected:
    }
    
    /* Get the output hash with a specific size. */
-   virtual const BytesVector getOutput(const DataTypeVector &hash) const
+   virtual BytesVector getOutput(const DataTypeVector &hash) const
    {
       BytesVector output;
       output.reserve(output_size);
@@ -106,7 +106,7 @@ protected:
    }
       
 public:   
-   const DataTypeVector getIV() const
+   DataTypeVector getIV() const
    {
       return IV;
    }
@@ -116,7 +116,7 @@ public:
       this->IV = IV;
    }
    
-   const BytesVector hmacEncode(const BytesVector &hmac_key, const BytesVector &message)
+   BytesVector hmacEncode(const BytesVector &hmac_key, const BytesVector &message)
    {
       BytesVector key(hmac_key);
       if(hmac_key.size() > input_block_size)

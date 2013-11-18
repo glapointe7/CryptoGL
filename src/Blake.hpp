@@ -108,7 +108,7 @@ private:
       this->finalize(hash, V);
    }
    
-   const DataTypeVector initialize(const DataTypeVector &h, const DataTypeVector &C)
+   DataTypeVector initialize(const DataTypeVector &h, const DataTypeVector &C)
    {
       DataTypeVector v;
       v.reserve(16);
@@ -161,7 +161,7 @@ protected:
    virtual ~Blake() {} 
    
 public:   
-   virtual const BytesVector encode(const BytesVector &data) final
+   virtual BytesVector encode(const BytesVector &data) final
    {
       const uint64_t data_size = data.size();
       BytesVector bytes = this->pad(data);
@@ -195,7 +195,7 @@ public:
 		0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19}, 14, 32) {}
       
 private:
-   virtual const BytesVector pad(const BytesVector &message) const final;
+   virtual BytesVector pad(const BytesVector &message) const final;
 };
 
 class Blake384 : public Blake<uint64_t, 128>
@@ -212,7 +212,7 @@ public:
 		0x510E527FADE682D1, 0x9B05688C2B3E6C1F, 0x1F83D9ABFB41BD6B, 0x5BE0CD19137E2179}, 16, 64) {}
       
 private:
-   virtual const BytesVector pad(const BytesVector &message) const final;
+   virtual BytesVector pad(const BytesVector &message) const final;
 };
 
 #endif

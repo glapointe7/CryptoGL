@@ -59,14 +59,14 @@ ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix *K)
    return message;
 }
 
-const ClassicalType Hill::encode(const ClassicalType &clear_text)
+ClassicalType Hill::encode(const ClassicalType &clear_text)
 {
    const ClassicalType full_text(appendChars(clear_text, key->getDimension(), 'X'));
    
    return process(full_text, key);
 }
 
-const ClassicalType Hill::decode(const ClassicalType &cipher_text)
+ClassicalType Hill::decode(const ClassicalType &cipher_text)
 {
    return process(cipher_text, key->inverse());
 }

@@ -62,7 +62,7 @@ void IDEA::generateInverseSubkeys()
    decoded_subkeys[0] = inverseMultiplyShort(subkeys[48]);
 }
 
-const UInt16Vector IDEA::encodeBlock(const UInt16Vector &input)
+UInt16Vector IDEA::encodeBlock(const UInt16Vector &input)
 {
    UInt16Vector encoded_block(input);
    for (uint8_t k = 0; k < 48; k += 6)
@@ -91,7 +91,7 @@ const UInt16Vector IDEA::encodeBlock(const UInt16Vector &input)
    return out;
 }
 
-const UInt16Vector IDEA::decodeBlock(const UInt16Vector &input)
+UInt16Vector IDEA::decodeBlock(const UInt16Vector &input)
 {
    subkeys = decoded_subkeys;
    

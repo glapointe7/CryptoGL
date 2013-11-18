@@ -148,7 +148,7 @@ public:
    SHA512_224() : SHA512_t(28, {0x32, 0x32, 0x34}) {}  // code = "224"
    
 private:
-   virtual const BytesVector getOutput(const UInt64Vector &hash) const final;
+   virtual BytesVector getOutput(const UInt64Vector &hash) const final;
 };
 
 class SHA512_256 : public SHA512_t

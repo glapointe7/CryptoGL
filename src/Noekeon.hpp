@@ -27,8 +27,8 @@ public:
 private:
    virtual void generateSubkeys() final;
    virtual void generateInverseSubkeys() final;
-   virtual const UInt32Vector encodeBlock(const UInt32Vector &input) final;
-   virtual const UInt32Vector decodeBlock(const UInt32Vector &input) final;
+   virtual UInt32Vector encodeBlock(const UInt32Vector &input) final;
+   virtual UInt32Vector decodeBlock(const UInt32Vector &input) final;
    
    static void applyGamma(UInt32Vector &state);
    void applyTheta(UInt32Vector &state) const;

@@ -15,8 +15,8 @@ public:
    
    explicit Delastelle(const KeyType &key) : Delastelle(key, 5) {}
    
-   virtual const ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
+   virtual ClassicalType encode(const ClassicalType &clear_text) final;
+   virtual ClassicalType decode(const ClassicalType &cipher_text) final;
    
    void setBlockLength(const uint32_t block_len);
   

@@ -13,8 +13,8 @@ public:
    explicit Hill(const Int32Matrix &key) { this->key = new SquareMatrix(); setKey(key); }
    ~Hill() { delete key; }
    
-   virtual const ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
+   virtual ClassicalType encode(const ClassicalType &clear_text) final;
+   virtual ClassicalType decode(const ClassicalType &cipher_text) final;
    
    void setKey(const Int32Matrix &key);
    

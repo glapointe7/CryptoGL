@@ -34,3 +34,13 @@ uint32_t Bits::permute(const uint32_t value, const uint8_t *table)
    
    return result;
 }
+
+uint8_t msb(const BytesVector &V)
+{
+   return V[0] & 0x7F;
+}
+
+uint8_t lsb(const BytesVector &V)
+{
+   return V[V.size() - 1] & 0x01;
+}

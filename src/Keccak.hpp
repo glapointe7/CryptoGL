@@ -41,7 +41,7 @@ private:
    virtual void applyAbsorbingPhase(const BytesVector &padded_message) final;
 
    /* Apply the squeezing phase from the sponge construction and return the final output hash. */
-   virtual const BytesVector applySqueezingPhase() final;
+   virtual BytesVector applySqueezingPhase() final;
 
    /* Apply theta, rho, pi, chi and iota steps from the specs. */
    void applyRound(const uint8_t round_index);

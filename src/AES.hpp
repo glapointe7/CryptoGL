@@ -27,8 +27,8 @@ public:
    
 private:      
    virtual void generateSubkeys() final;
-   virtual const UInt32Vector encodeBlock(const UInt32Vector &input) final;
-   virtual const UInt32Vector decodeBlock(const UInt32Vector &input) final;
+   virtual UInt32Vector encodeBlock(const UInt32Vector &input) final;
+   virtual UInt32Vector decodeBlock(const UInt32Vector &input) final;
    
    void addRoundKey(UInt32Vector &state, const uint8_t round) const;
    

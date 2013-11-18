@@ -82,7 +82,7 @@ void Fleissner::rotationExists(std::set<Cell> &rotation, const uint32_t x, const
    }
 }
 
-const ClassicalType Fleissner::encode(const ClassicalType &clear_text)
+ClassicalType Fleissner::encode(const ClassicalType &clear_text)
 {
    ClassicalType crypted;
    const uint32_t dim = grid_dim * grid_dim;
@@ -112,7 +112,7 @@ const ClassicalType Fleissner::encode(const ClassicalType &clear_text)
    return crypted;
 }
 
-const ClassicalType Fleissner::decode(const ClassicalType &cipher_text)
+ClassicalType Fleissner::decode(const ClassicalType &cipher_text)
 {
    ClassicalType decrypted;
    decrypted.reserve(cipher_text.length());

@@ -12,7 +12,7 @@ protected:
    explicit PseudoRandomFunction(const SeedType seed) : seed(seed) {}
    virtual ~PseudoRandomFunction() {}
    
-   virtual const GenerateType generate() = 0;
+   virtual GenerateType generate() = 0;
    
    SeedType seed;
 };

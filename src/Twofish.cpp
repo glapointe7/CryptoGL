@@ -116,7 +116,7 @@ uint32_t Twofish::g(const uint32_t X) const
    return h(X, s);
 }
 
-const UInt32Vector Twofish::F(const UInt32Vector half_block, const uint8_t round) const
+UInt32Vector Twofish::F(const UInt32Vector half_block, const uint8_t round) const
 {
    const uint32_t T0 = g(half_block[0]);
    const uint32_t T1 = g(Bits::rotateLeft(half_block[1], 8));
@@ -155,7 +155,7 @@ void Twofish::decodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_
    }
 }
 
-const UInt32Vector Twofish::encodeBlock(const UInt32Vector &input)
+UInt32Vector Twofish::encodeBlock(const UInt32Vector &input)
 {
    // Input whitening.
    UInt32Vector encoded_block(input);
@@ -181,7 +181,7 @@ const UInt32Vector Twofish::encodeBlock(const UInt32Vector &input)
    return encoded_block;
 }
 
-const UInt32Vector Twofish::decodeBlock(const UInt32Vector &input)
+UInt32Vector Twofish::decodeBlock(const UInt32Vector &input)
 {
    // Input whitening.
    UInt32Vector decoded_block(input);

@@ -6,7 +6,7 @@
 
 const std::string Base64::alpha = String::base64_alphabet;
 
-const std::string Base64::encode(const BytesVector &clear_data)
+std::string Base64::encode(const BytesVector &clear_data)
 {
    const uint32_t clear_len = clear_data.size();
    std::string crypted;
@@ -47,7 +47,7 @@ const std::string Base64::encode(const BytesVector &clear_data)
    return crypted;
 }
 
-const BytesVector Base64::decode(const std::string &cipher_data)
+BytesVector Base64::decode(const std::string &cipher_data)
 {
    const uint32_t cipher_len = cipher_data.length();
    if (cipher_len & 3)

@@ -11,7 +11,7 @@ template <class KeystreamType, class EndianType, uint32_t KeystreamSize>
 class SynchronousStreamCipher : public StreamCipher<KeystreamType>
 {
 public:
-   virtual const BytesVector encode(const BytesVector &message) final
+   virtual BytesVector encode(const BytesVector &message) final
    {
       const uint64_t output_size = message.size();
       BytesVector output;

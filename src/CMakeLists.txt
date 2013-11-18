@@ -17,6 +17,7 @@ set(SRC
    File.hpp
    Bits.hpp Bits.cpp
    Types.hpp
+   Vector.hpp
    Padding.hpp Padding.cpp
    FunctionComposition.hpp
 

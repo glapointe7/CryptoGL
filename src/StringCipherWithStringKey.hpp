@@ -14,7 +14,7 @@ class StringCipherWithStringKey : public StringCipher
 public:
    using KeyType = ClassicalType;
 
-   const KeyType getKey() const noexcept { return key; }
+   KeyType getKey() const noexcept { return key; }
    virtual void setKey(const KeyType &key);
 
 protected:

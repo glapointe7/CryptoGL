@@ -23,8 +23,8 @@ public:
 private:   
    virtual void generateSubkeys() final;
    virtual void generateInverseSubkeys() final;
-   virtual const UInt16Vector encodeBlock(const UInt16Vector &input) final;
-   virtual const UInt16Vector decodeBlock(const UInt16Vector &input) final;
+   virtual UInt16Vector encodeBlock(const UInt16Vector &input) final;
+   virtual UInt16Vector decodeBlock(const UInt16Vector &input) final;
    
    /* Decryption subkeys. */
    UInt16Vector decoded_subkeys;

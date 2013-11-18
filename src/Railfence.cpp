@@ -45,7 +45,7 @@ void RedefenceZigzag::addEncodedText(std::vector<ClassicalType> &rows, const Cla
    }
 }
 
-const ClassicalType 
+ClassicalType 
 RedefenceZigzag::swapRowsWithPermutationKey(const std::vector<ClassicalType> &rows, const uint32_t length) const
 {
    const KeyType key = getKey();
@@ -59,7 +59,7 @@ RedefenceZigzag::swapRowsWithPermutationKey(const std::vector<ClassicalType> &ro
    return crypted;
 }
 
-const ClassicalType RedefenceZigzag::encode(const ClassicalType &clear_text)
+ClassicalType RedefenceZigzag::encode(const ClassicalType &clear_text)
 {
    const uint32_t clear_len = clear_text.length();
    std::vector<ClassicalType> rows;
@@ -101,7 +101,7 @@ const ClassicalType RedefenceZigzag::encode(const ClassicalType &clear_text)
    return swapRowsWithPermutationKey(rows, clear_len);
 }
 
-const std::vector<std::list<int8_t> >
+std::vector<std::list<int8_t> >
 RedefenceZigzag::getFirstDecoding(const ClassicalType &cipher_text, int32_t &last) const
 {
    const KeyType key = getKey();
@@ -187,7 +187,7 @@ RedefenceZigzag::getFirstDecoding(const ClassicalType &cipher_text, int32_t &las
    return decoding;
 }
 
-const ClassicalType RedefenceZigzag::decode(const ClassicalType &cipher_text)
+ClassicalType RedefenceZigzag::decode(const ClassicalType &cipher_text)
 {
    const uint32_t cipher_len = cipher_text.length();
    const uint32_t key_levels_size = key_levels.size();

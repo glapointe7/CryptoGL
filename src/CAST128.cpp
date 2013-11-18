@@ -105,7 +105,7 @@ void CAST128::generateSubkeys()
    }
 }
 
-const uint32_t CAST128::F(const uint32_t half_block, const uint8_t index) const
+uint32_t CAST128::F(const uint32_t half_block, const uint8_t index) const
 {
    const uint32_t I = Bits::rotateLeft(subkeys[index] + half_block, subkeys[index + 16] & 0x1F);
    return ((S[0][getByteFromInteger(I, 3)] ^ S[1][getByteFromInteger(I, 2)])
@@ -180,7 +180,7 @@ void CAST128::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
    R ^= F(L, 0);
 }
 
-const uint64_t CAST128::encodeBlock(const uint64_t &input)
+uint64_t CAST128::encodeBlock(const uint64_t &input)
 {
    uint32_t L = input >> 32;
    uint32_t R = input & 0xFFFFFFFF;
@@ -188,7 +188,8 @@ const uint64_t CAST128::encodeBlock(const uint64_t &input)
    
    return (static_cast<uint64_t>(R) << 32) | L;
 }
-const uint64_t CAST128::decodeBlock(const uint64_t &input)
+
+uint64_t CAST128::decodeBlock(const uint64_t &input)
 {
    uint32_t L = input >> 32;
    uint32_t R = input & 0xFFFFFFFF;

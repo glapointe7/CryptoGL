@@ -63,7 +63,7 @@ void Tiger::compress(UInt64Vector &int_block, UInt64Vector &state)
 }
 
 // Specific output for Tiger-160 which is 20 bytes output and it's not a multiple of 8.
-const BytesVector Tiger::getOutput(const UInt64Vector &hash) const
+BytesVector Tiger::getOutput(const UInt64Vector &hash) const
 {
    BytesVector output;
    output.reserve(output_size);

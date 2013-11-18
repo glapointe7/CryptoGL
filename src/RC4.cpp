@@ -45,7 +45,7 @@ BytesVector RC4::generateKeystream()
    return keystream;
 }
 
-const BytesVector RC4::encode(const BytesVector &clear_text)
+BytesVector RC4::encode(const BytesVector &clear_text)
 {         
    BytesVector crypted;
    output_size = clear_text.size();

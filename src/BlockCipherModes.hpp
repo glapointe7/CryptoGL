@@ -40,7 +40,7 @@ class BlockCipherModes
 {   
 public:   
    using Block = BytesVector;
-   using GetOutputBlockFunction = std::function<const Block(const Block &)>;
+   using GetOutputBlockFunction = std::function<Block(const Block &)>;
    
    virtual ~BlockCipherModes() {}
    
@@ -110,13 +110,13 @@ class BlockCipherCTRMode : public BlockCipherModes
 public:   
    BlockCipherCTRMode(const Block &IV, const GetOutputBlockFunction &encode)
       : new_IV(IV), encode(encode) 
-      { 
-         if(IV.size() == 16)
-         {
-            this->IV = Block(IV.begin(), IV.begin() + 8);
-         }
-         counter = BigEndian64::toInteger(Block(IV.begin() + IV.size() - 8, IV.end())); 
+   { 
+      if(IV.size() == 16)
+      {
+         this->IV = Block(IV.begin(), IV.begin() + 8);
       }
+      counter = BigEndian64::toInteger(Block(IV.begin() + IV.size() - 8, IV.end())); 
+   }
    
    virtual Block getCipherBlock(const Block &input_block) final;
    virtual Block getClearBlock(const Block &input_block) final;
@@ -130,19 +130,19 @@ private:
    const GetOutputBlockFunction encode;
 };
 
+template <uint8_t BlockSize>
 class BlockCipherModesFactory
 {
 public:
    static BlockCipherModes* createBlockCipherMode(
       const OperationModes mode,
       const BlockCipherModes::Block &IV,
-      const uint8_t block_size,
       const BlockCipherModes::GetOutputBlockFunction &encode,
       const BlockCipherModes::GetOutputBlockFunction &decode
    )
    {
       // Make sure the IV is compatible with the algorithm used for mode other than ECB.
-      if(block_size != IV.size() && mode != OperationModes::ECB)
+      if(BlockSize != IV.size() && mode != OperationModes::ECB)
       {
          throw BadIVLength("The size of your IV has to be the same size as the block size", IV.size());
       }

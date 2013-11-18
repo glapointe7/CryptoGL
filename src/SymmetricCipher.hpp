@@ -13,8 +13,8 @@ class SymmetricCipher : public Cipher<BytesVector>
 protected:
    virtual ~SymmetricCipher() {}
 
-   virtual const BytesVector encode(const BytesVector &) = 0;
-   virtual const BytesVector decode(const BytesVector &) = 0;
+   virtual BytesVector encode(const BytesVector &) = 0;
+   virtual BytesVector decode(const BytesVector &) = 0;
    
    /* Check the key provided by the user and set it if correct. */
    virtual void setKey(const BytesVector &) = 0;

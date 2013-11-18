@@ -13,7 +13,7 @@ uint32_t Isaac::applyRound(const uint32_t accum_shifted, const uint16_t index)
    return result;
 }
 
-const UInt32Vector Isaac::generate()
+UInt32Vector Isaac::generate()
 {
    counter++;
    previous += counter;

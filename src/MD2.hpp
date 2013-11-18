@@ -11,7 +11,7 @@ class MD2 : public HashFunction<uint8_t, LittleEndian8>
 public:
    MD2() : HashFunction(16, 16, BytesVector(48, 0)) {}
    
-   virtual const BytesVector encode(const BytesVector &data) final;
+   virtual BytesVector encode(const BytesVector &data) final;
    
 private:
    void process(const BytesVector &data, BytesVector &hash) const;

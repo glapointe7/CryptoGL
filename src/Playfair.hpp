@@ -11,8 +11,8 @@ class Playfair : public SquareCipher
 public:
    explicit Playfair(const KeyType &key) : SquareCipher(key) {}
    
-   virtual const ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
+   virtual ClassicalType encode(const ClassicalType &clear_text) final;
+   virtual ClassicalType decode(const ClassicalType &cipher_text) final;
 };
 
 #endif

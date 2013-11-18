@@ -9,7 +9,7 @@ ThreeSquares::ThreeSquares(const KeyType &key1, const KeyType &key2, const KeyTy
    this->key3 = key3;
 }
 
-const ClassicalType ThreeSquares::encode(const ClassicalType &clear_text)
+ClassicalType ThreeSquares::encode(const ClassicalType &clear_text)
 {  
    const ClassicalType full_text(appendChars(clear_text, 2, 'X'));
    const uint32_t clear_len = full_text.length();
@@ -36,7 +36,7 @@ const ClassicalType ThreeSquares::encode(const ClassicalType &clear_text)
    return crypted;
 }
 
-const ClassicalType ThreeSquares::decode(const ClassicalType &cipher_text)
+ClassicalType ThreeSquares::decode(const ClassicalType &cipher_text)
 {  
    const uint32_t cipher_len = cipher_text.length();
    ClassicalType decrypted;

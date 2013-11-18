@@ -19,7 +19,7 @@ const UInt32Vector VectorGetter<UInt32Vector>::G = {
 template <typename DataType, uint8_t InputBlockSize> 
    constexpr std::array<std::array<uint8_t, 16>, 10> Blake<DataType, InputBlockSize>::sigma;
 
-const BytesVector Blake256::pad(const BytesVector &message) const
+BytesVector Blake256::pad(const BytesVector &message) const
 {
    const uint64_t initial_length = message.size();
    BytesVector padding(message);
@@ -42,7 +42,7 @@ const BytesVector Blake256::pad(const BytesVector &message) const
    return padding;
 }
 
-const BytesVector Blake512::pad(const BytesVector &message) const
+BytesVector Blake512::pad(const BytesVector &message) const
 {
    const uint64_t initial_length = message.size();
    BytesVector padding(message);

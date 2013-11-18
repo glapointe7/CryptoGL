@@ -8,7 +8,7 @@ template <class KeystreamType>
 class StreamCipher : public SymmetricCipher
 {
 public:
-   virtual const BytesVector decode(const BytesVector &cipher_message) final
+   virtual BytesVector decode(const BytesVector &cipher_message) final
    {
       return encode(cipher_message);
    }
@@ -16,7 +16,7 @@ public:
 protected:
    virtual ~StreamCipher() {}
 
-   virtual const BytesVector encode(const BytesVector &) = 0;
+   virtual BytesVector encode(const BytesVector &) = 0;
    
    virtual KeystreamType generateKeystream() = 0;
    

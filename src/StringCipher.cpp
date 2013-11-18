@@ -27,14 +27,14 @@ void StringCipher::setAlpha(const ClassicalType &alpha)
    this->alpha = alpha;
 }
 
-const ClassicalType StringCipher::getAlpha() const
+ClassicalType StringCipher::getAlpha() const
 {
    return alpha;
 }
 
 // Append the character c (text.length() % mod) times.
 
-const ClassicalType
+ClassicalType
 StringCipher::appendChars(const ClassicalType &data, const uint32_t to_add, const char c)
 {
    ClassicalType full_text(data);
@@ -50,7 +50,7 @@ StringCipher::appendChars(const ClassicalType &data, const uint32_t to_add, cons
 // Check if text has at least a character that doesn't belong to alpha.
 // Return 0 if nothing is found, otherwise it returns the first char found.
 
-const char StringCipher::badAlphaFound(const ClassicalType &text) const
+int8_t StringCipher::badAlphaFound(const ClassicalType &text) const
 {
    for (const auto c : text)
    {

@@ -19,7 +19,7 @@ Morse::Morse()
    setAlpha(String::uppercase_digits);
 }
 
-const ClassicalType Morse::encode(const ClassicalType &clear_text)
+ClassicalType Morse::encode(const ClassicalType &clear_text)
 {
    ClassicalType crypted;
    crypted.reserve(6 * clear_text.length()); 
@@ -34,7 +34,7 @@ const ClassicalType Morse::encode(const ClassicalType &clear_text)
    return crypted;
 }
 
-const ClassicalType Morse::decode(const ClassicalType &cipher_text)
+ClassicalType Morse::decode(const ClassicalType &cipher_text)
 {
    ClassicalType decrypted;
    decrypted.reserve(cipher_text.length() / 2);

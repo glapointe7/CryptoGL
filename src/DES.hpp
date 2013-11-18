@@ -29,10 +29,10 @@ public:
 
 private:
    virtual void generateSubkeys() final;
-   virtual const uint64_t encodeBlock(const uint64_t &input) final;
-   virtual const uint64_t decodeBlock(const uint64_t &input) final;
+   virtual uint64_t encodeBlock(const uint64_t &input) final;
+   virtual uint64_t decodeBlock(const uint64_t &input) final;
    
-   virtual const uint64_t F(const uint64_t data, const uint8_t round) const final;
+   virtual uint64_t F(const uint64_t data, const uint8_t round) const final;
    virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
    virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
    

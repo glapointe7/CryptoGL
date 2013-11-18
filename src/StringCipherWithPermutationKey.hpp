@@ -13,7 +13,7 @@ class StringCipherWithPermutationKey : public StringCipher
 public:
    using KeyType = Int32Vector;
 
-   const KeyType getKey() const { return key; }
+   KeyType getKey() const { return key; }
    void setKey(const KeyType &key);
 
 protected:

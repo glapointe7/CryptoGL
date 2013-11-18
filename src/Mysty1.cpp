@@ -79,7 +79,7 @@ void Mysty1::generateSubkeys()
    }
 }
 
-const uint32_t Mysty1::F(const uint32_t half_block, const uint8_t index) const
+uint32_t Mysty1::F(const uint32_t half_block, const uint8_t index) const
 {
    uint16_t L = half_block >> 16;
    uint16_t R = half_block & 0xFFFF;
@@ -124,7 +124,7 @@ void Mysty1::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
    }
 }
 
-const uint64_t Mysty1::encodeBlock(const uint64_t &input)
+uint64_t Mysty1::encodeBlock(const uint64_t &input)
 {
    uint32_t L = input >> 32;
    uint32_t R = input & 0xFFFFFFFF;
@@ -133,7 +133,7 @@ const uint64_t Mysty1::encodeBlock(const uint64_t &input)
    return (static_cast<uint64_t>(R) << 32) | L;
 }
 
-const uint64_t Mysty1::decodeBlock(const uint64_t &input)
+uint64_t Mysty1::decodeBlock(const uint64_t &input)
 {
    uint32_t L = input >> 32;
    uint32_t R = input & 0xFFFFFFFF;

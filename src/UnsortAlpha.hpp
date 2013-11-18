@@ -12,8 +12,8 @@ class UnsortAlpha : public StringCipherWithStringKey
 public:
    explicit UnsortAlpha(const KeyType &key);
    
-   virtual const ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual const ClassicalType decode(const ClassicalType &cipher_text) final;
+   virtual ClassicalType encode(const ClassicalType &clear_text) final;
+   virtual ClassicalType decode(const ClassicalType &cipher_text) final;
 
    /* Unordered the alphabet in the vertical way. */
    void setVerticalAlpha();
@@ -22,22 +22,22 @@ public:
    void setHorizontalAlpha();
 
 private:
-   typedef std::function<const char(const ClassicalType &, const ClassicalType &, const char)> GetCharFunction;
+   typedef std::function<char(const ClassicalType &, const ClassicalType &, const char)> GetCharFunction;
    
    ClassicalType unsort_alpha;
    const GetCharFunction charEncode, charDecode;
    
-   static const char sortAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
+   static char sortAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
    {
       return unsort_alpha[alpha.find(c)];
    }
 
-   static const char unorderedAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
+   static char unorderedAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
    {
       return alpha[unsort_alpha.find(c)];
    }
    
-   const ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
+   ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
 };
 
 #endif

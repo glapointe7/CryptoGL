@@ -73,7 +73,7 @@ void SHA512_t::makeNewIV(const BytesVector &code)
    setIV(BigEndian64::toIntegersVector(answer));
 }
 
-const BytesVector SHA512_224::getOutput(const UInt64Vector &hash) const
+BytesVector SHA512_224::getOutput(const UInt64Vector &hash) const
 {
    BytesVector output;
    output.reserve(output_size);

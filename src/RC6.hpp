@@ -27,10 +27,10 @@ private:
    static constexpr uint32_t Q32 = 0x9e3779b9;
    
    virtual void generateSubkeys() final;
-   virtual const UInt32Vector encodeBlock(const UInt32Vector &input) final;
-   virtual const UInt32Vector decodeBlock(const UInt32Vector &input) final;
+   virtual UInt32Vector encodeBlock(const UInt32Vector &input) final;
+   virtual UInt32Vector decodeBlock(const UInt32Vector &input) final;
    
-   virtual const uint64_t F(const uint64_t half_block, const uint8_t) const final;
+   virtual uint64_t F(const uint64_t half_block, const uint8_t) const final;
    virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
    virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
 };

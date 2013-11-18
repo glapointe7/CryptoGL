@@ -170,7 +170,7 @@ UInt32Vector SEAL::generateKeystream()
    return keystream;
 }
 
-const UInt32Vector SEAL::generate()
+UInt32Vector SEAL::generate()
 {
    UInt32Vector random_numbers;
    random_numbers.reserve(output_size);

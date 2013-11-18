@@ -2,8 +2,7 @@
 
 // Process the core of the Vigenere algorithm.
 
-const ClassicalType
-Vigenere::process(const ClassicalType &text, const GetCharFunction &getNextChar)
+ClassicalType Vigenere::process(const ClassicalType &text, const GetCharFunction &getNextChar)
 {
    const KeyType my_key = getKey();
    const uint32_t key_length = my_key.length();
@@ -21,12 +20,12 @@ Vigenere::process(const ClassicalType &text, const GetCharFunction &getNextChar)
    return toReturn;
 }
 
-const ClassicalType Vigenere::encode(const ClassicalType &clear_text)
+ClassicalType Vigenere::encode(const ClassicalType &clear_text)
 {
    return process(clear_text, charEncode);
 }
 
-const ClassicalType Vigenere::decode(const ClassicalType &cipher_text)
+ClassicalType Vigenere::decode(const ClassicalType &cipher_text)
 {
    return process(cipher_text, charDecode);
 }

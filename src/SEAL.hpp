@@ -15,7 +15,7 @@ public:
    SEAL(const BytesVector &key, const uint32_t seed, const uint16_t output_size)
            : PseudoRandomFunction(seed), output_size(output_size) { setKey(key); }
    
-   virtual const UInt32Vector generate() final;
+   virtual UInt32Vector generate() final;
    
    virtual void setKey(const BytesVector &key) final;
    

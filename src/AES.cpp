@@ -165,7 +165,7 @@ void AES::addRoundKey(UInt32Vector &state, const uint8_t round) const
    }
 }
 
-const UInt32Vector AES::encodeBlock(const UInt32Vector &input)
+UInt32Vector AES::encodeBlock(const UInt32Vector &input)
 {
    UInt32Vector encoded_block(input);
    addRoundKey(encoded_block, 0);
@@ -186,7 +186,7 @@ const UInt32Vector AES::encodeBlock(const UInt32Vector &input)
    return encoded_block;
 }
 
-const UInt32Vector AES::decodeBlock(const UInt32Vector &input)
+UInt32Vector AES::decodeBlock(const UInt32Vector &input)
 {
    UInt32Vector decoded_block(input);
    addRoundKey(decoded_block, rounds);

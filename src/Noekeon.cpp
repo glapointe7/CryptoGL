@@ -98,7 +98,7 @@ void Noekeon::applyRound(UInt32Vector &state, const uint8_t constant1, const uin
    applyPi2(state);
 }
 
-const UInt32Vector Noekeon::encodeBlock(const UInt32Vector &input)
+UInt32Vector Noekeon::encodeBlock(const UInt32Vector &input)
 {
    UInt32Vector state(input);
    for(uint8_t i = 0; i < rounds; ++i)
@@ -111,7 +111,7 @@ const UInt32Vector Noekeon::encodeBlock(const UInt32Vector &input)
    return state;
 }
 
-const UInt32Vector Noekeon::decodeBlock(const UInt32Vector &input)
+UInt32Vector Noekeon::decodeBlock(const UInt32Vector &input)
 {
    UInt32Vector state(input);
    for(uint8_t i = rounds; i > 0; --i)

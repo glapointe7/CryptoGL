@@ -9,7 +9,7 @@ Wolseley::Wolseley(const KeyType &key)
    setKey(key);
 }
 
-const ClassicalType Wolseley::encode(const ClassicalType &clear_text)
+ClassicalType Wolseley::encode(const ClassicalType &clear_text)
 {
    ClassicalType crypted;
    crypted.reserve(clear_text.length());
@@ -28,7 +28,7 @@ const ClassicalType Wolseley::encode(const ClassicalType &clear_text)
    return crypted;
 }
 
-const ClassicalType Wolseley::decode(const ClassicalType &cipher_text)
+ClassicalType Wolseley::decode(const ClassicalType &cipher_text)
 {
    return encode(cipher_text);
 }

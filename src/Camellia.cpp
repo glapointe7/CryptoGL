@@ -2,7 +2,7 @@
 
 #include "BigEndian.hpp"
 #include "Bits.hpp"
-#include "Tools.hpp"
+#include "Vector.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
 
@@ -58,7 +58,7 @@ void Camellia::generateSubkeys()
          break;
    }
    
-   BytesVector K = Tools::getXORedBlock(Kl, Kr);
+   BytesVector K = Vector::Xor(Kl, Kr);
    uint64_t K1 = BigEndian64::toInteger(BytesVector(K.begin(), K.begin() + 8));
    uint64_t K2 = BigEndian64::toInteger(BytesVector(K.begin() + 8, K.end()));
    K2 ^= F(K1 ^ key_sigma[0], 0);
@@ -133,7 +133,7 @@ void Camellia::generateSubkeys()
    }
    else
    {
-      K = Tools::getXORedBlock(Ka, Kr);
+      K = Vector::Xor(Ka, Kr);
       K1 = BigEndian64::toInteger(BytesVector(K.begin(), K.begin() + 8));
       K2 = BigEndian64::toInteger(BytesVector(K.begin() + 8, K.end()));
       K2 ^= F(K1 ^ key_sigma[4], 4);
@@ -211,7 +211,7 @@ void Camellia::generateSubkeys()
 }
 
 // Used technic of P.29 from the specs.
-const uint64_t Camellia::F(const uint64_t half_block, const uint8_t) const
+uint64_t Camellia::F(const uint64_t half_block, const uint8_t) const
 {
    uint32_t D = SP1110[half_block & 0xFF] ^ SP0222[(half_block >> 24) & 0xFF] 
            ^ SP3033[(half_block >> 16) & 0xFF] ^ SP4404[(half_block >> 8) & 0xFF];
@@ -305,7 +305,7 @@ void Camellia::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) cons
    L ^= Kw[1];
 }
 
-const UInt64Vector Camellia::encodeBlock(const UInt64Vector &input)
+UInt64Vector Camellia::encodeBlock(const UInt64Vector &input)
 {
    uint64_t L0 = input[0] ^ Kw[0];
    uint64_t R0 = input[1] ^ Kw[1];
@@ -314,7 +314,7 @@ const UInt64Vector Camellia::encodeBlock(const UInt64Vector &input)
    return {R0, L0};
 }
 
-const UInt64Vector Camellia::decodeBlock(const UInt64Vector &input)
+UInt64Vector Camellia::decodeBlock(const UInt64Vector &input)
 {
    uint64_t L0 = input[0] ^ Kw[2];
    uint64_t R0 = input[1] ^ Kw[3];
