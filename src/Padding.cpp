@@ -30,7 +30,7 @@ BytesVector Padding::_10Star(const BytesVector &data, const uint8_t block_size)
    /* Append '1' bit to the message. */
    BytesVector padding(data);
    padding.reserve(message_len + block_size);
-   padding.push_back(0x01);
+   padding.push_back(0x80);
 
    /* Append enough '0' bits such that the length will be a multiple of 'block_size'. */
    const uint8_t bytes_to_append = block_size - ((message_len + 1) % block_size);

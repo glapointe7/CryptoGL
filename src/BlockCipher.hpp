@@ -5,6 +5,7 @@
 #include "SymmetricCipher.hpp"
 
 #include "BlockCipherModes.hpp"
+
 #include "BigEndian.hpp"
 #include "LittleEndian.hpp"
 #include "Padding.hpp"
@@ -85,6 +86,27 @@ public:
       return output;
    }
    
+   /* Encode an input block of bytes and return the output block. */
+   BytesVector processEncodeBlock(const BytesVector &block)
+   {
+      DataType int_block = getIntegersFromInputBlock(block);
+      int_block = encodeBlock(int_block);
+      
+      return getOutputBlock(int_block);
+   }
+   
+   /* Decode an input block of bytes and return the output block. */
+   BytesVector processDecodeBlock(const BytesVector &block)
+   {
+      DataType int_block = getIntegersFromInputBlock(block);
+      int_block = decodeBlock(int_block);
+      
+      return getOutputBlock(int_block);
+   }
+   
+   /* Return the size of a block cipher. */
+   static constexpr uint8_t getBlockSize() { return InputBlockSize; }
+   
 protected:
    using SubkeysContainer = std::vector<SubkeyType>;
    using THIS = BlockCipher<SubkeyType, DataType, InputBlockSize, EndianType>;
@@ -120,7 +142,7 @@ protected:
       generateSubkeys();
    }
    
-   /* Modes used by a block cipher : ECB, CBC, CFB, OFB and CTR. */
+   /* (Strategy) Modes used by a block cipher : ECB, CBC, CFB, OFB and CTR. */
    BlockCipherModes *block_mode;
    
    /* Number of rounds used by a block cipher algorithm. */
@@ -138,24 +160,6 @@ private:
    static BytesVector getOutputBlock(const DataType &int_block)
    {      
       return InputOutputBlockGetter<BytesVector, DataType, EndianType>::outputBlock(int_block);
-   }
-   
-   /* Encode an input block of bytes and return the output block. */
-   BytesVector processEncodeBlock(const BytesVector &block)
-   {
-      DataType int_block = getIntegersFromInputBlock(block);
-      int_block = encodeBlock(int_block);
-      
-      return getOutputBlock(int_block);
-   }
-   
-   /* Decode an input block of bytes and return the output block. */
-   BytesVector processDecodeBlock(const BytesVector &block)
-   {
-      DataType int_block = getIntegersFromInputBlock(block);
-      int_block = decodeBlock(int_block);
-      
-      return getOutputBlock(int_block);
    }
 };
 

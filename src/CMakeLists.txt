@@ -6,6 +6,7 @@ set(SRC
 
 # Misc and tools section	   		
    BlockCipherModes.hpp BlockCipherModes.cpp
+   MAC.hpp MAC.cpp
    Base64.hpp Base64.cpp
    SquareMatrix.hpp SquareMatrix.cpp
    MathematicalTools.hpp MathematicalTools.cpp
@@ -17,7 +18,7 @@ set(SRC
    File.hpp
    Bits.hpp Bits.cpp
    Types.hpp
-   Vector.hpp
+   Vector.hpp Vector.cpp
    Padding.hpp Padding.cpp
    FunctionComposition.hpp
 
