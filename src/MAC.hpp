@@ -32,7 +32,7 @@
 #include "XTEA.hpp"
 
 /*
- * Constants used for L . x^n and L . x^-1.
+ * Constants used for L . x^n and L . x^-1 for n > 0.
  */
 template <uint8_t BlockSize>
 struct Constant

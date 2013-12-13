@@ -8,6 +8,61 @@
 
 namespace Vector
 {
+   class LambdaShift
+   {
+   protected:
+      explicit LambdaShift(const uint32_t shift)
+         : carry(0), shift(shift), inner_shift(8 - shift) {}
+      virtual ~LambdaShift() {}
+      virtual uint8_t operator()(uint8_t val) = 0;
+      
+      uint8_t carry;
+      const uint32_t shift;
+      const uint32_t inner_shift;
+   };
+   
+   /* Used as a lambda function to right shift each element of a vector. */
+   class LambdaRightShift : public LambdaShift
+   {
+   public:
+      explicit LambdaRightShift(const uint32_t shift)
+         : LambdaShift(shift), mask(0xFF >> (8 - shift)) {}
+
+      uint8_t operator()(uint8_t val) final
+      {
+         const uint8_t right = val & mask;
+         val >>= shift;
+         val |= carry;
+
+         carry = right << inner_shift;
+         return val;
+      }
+      
+   private:
+      const uint8_t mask;
+   };
+   
+   /* Used as a lambda function to left shift each element of a vector. */
+   class LambdaLeftShift : public LambdaShift
+   {
+   public:
+      explicit LambdaLeftShift(const uint32_t shift)
+         : LambdaShift(shift), mask(0xFF << (8 - shift)) {}
+
+      uint8_t operator()(uint8_t val) 
+      {
+         const uint8_t left = val & mask;
+         val <<= shift;
+         val |= carry;
+
+         carry = left >> inner_shift;
+         return val;
+      }
+      
+   private:
+      const uint8_t mask;
+   };
+   
    /* XOR each element of vector V with the elements of vector W and return the result. */
    template <class VectorType>
    VectorType Xor(const VectorType &V, const VectorType &W)

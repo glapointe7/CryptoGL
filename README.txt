@@ -24,6 +24,9 @@ Keccak (0, 224, 256, 384, 512)
 Checksum functions include the following :
 LRC (Longitudinal redundancy check), Adler-32
 
+MAC algorithms include the following :
+CBC-MAC, AES-XCBC-MAC, CMAC, PMAC, OMAC, TMAC
+
 
 Other tools :
 Base64, square matrices over the modular integers (Z_n), Functions composition, Big and little endian conversion, various mathematical, padding and bits manipulation tools.
