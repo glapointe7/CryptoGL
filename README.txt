@@ -25,15 +25,24 @@ Checksum functions include the following :
 LRC (Longitudinal redundancy check), Adler-32
 
 MAC algorithms include the following :
-CBC-MAC, AES-XCBC-MAC, CMAC, PMAC, OMAC, TMAC
+CBC-MAC, AES-XCBC-MAC, CMAC, PMAC, OMAC, TMAC and HMAC
 
 
 Other tools :
-Base64, square matrices over the modular integers (Z_n), Functions composition, Big and little endian conversion, various mathematical, padding and bits manipulation tools.
+Base64, square matrices over the modular integers (Z_n), Functions composition, Big and little endian conversion, various mathematical, vector, padding and bits manipulation tools.
 
 Also, at least one test is done for each cipher and hash function. The tests are done with GoogleTest functionalities.
 
 
+MORE TO COME
+
+- Add special case tests (empty vectors, check if the exceptions are raised)
+- Add RSA and some algorithms about arithmetic (modular, primes, gcd, chinese remainder theorem, Euler's totient function)
+- Genetic algorithm for decrypting the monoalphabetic substitution.
+- Add a random number generator for key and IV generation.
+
+
+********************************************************************
 
 1. Procedure to install GoogleTest (gtest) on your computer ( http://code.google.com/p/tonatiuh/wiki/InstallingGoogleTestForLinux ):
 
@@ -53,7 +62,7 @@ cp lib*.a /usr/local/lib
 2. If you are using NetBeans :
 
 Right click on your project name and choose PROPERTIES.
-Under Categories at your left, select C++ COMPILER.
+Under Categories at your left, select C++ Linker.
 At your right, in the ADDITIONAL OPTIONS, add '-lgtest -pthread' without the quotes. This will link to the gtest and gtest_main libraries.
 
 ******************************************************************** 
