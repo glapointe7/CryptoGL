@@ -9,6 +9,7 @@
 #include "BigEndian.hpp"
 #include "LittleEndian.hpp"
 #include "Padding.hpp"
+#include "Vector.hpp"
 
 #include <functional>
 
@@ -51,10 +52,10 @@ public:
    /* Process general encoding for block ciphers. */
    BytesVector encode(const BytesVector &message)
    {
-      const BytesVector message_padded = Padding::zeros(message, InputBlockSize);
-
       generateSubkeys();
 
+      const BytesVector message_padded = Padding::zeros(message, InputBlockSize);
+      
       const uint64_t message_padded_len = message_padded.size();
       BytesVector output;
       output.reserve(message_padded_len);
@@ -62,7 +63,7 @@ public:
       {
          const BytesVector input_block(message_padded.begin() + n, message_padded.begin() + n + InputBlockSize);
          const BytesVector encoded_block = block_mode->getCipherBlock(input_block);
-         output.insert(output.end(), encoded_block.begin(), encoded_block.end());
+         Vector::extend(output, encoded_block);         
       }
 
       return output;
@@ -80,7 +81,7 @@ public:
       {
          const BytesVector input_block(message.begin() + n, message.begin() + n + InputBlockSize);
          const BytesVector decoded_block = block_mode->getClearBlock(input_block);
-         output.insert(output.end(), decoded_block.begin(), decoded_block.end());
+         Vector::extend(output, decoded_block);
       }
 
       return output;
@@ -147,6 +148,8 @@ protected:
    
    /* Number of rounds used by a block cipher algorithm. */
    uint8_t rounds;
+   
+   /* The subkeys created from the main key for the current block cipher. */
    SubkeysContainer subkeys;
    
 private:

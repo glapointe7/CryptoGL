@@ -8,28 +8,7 @@
 #include "exceptions/Exception.hpp"
 
 namespace Maths
-{
-   template <uint8_t n>
-   class Power
-   {
-   public:   
-      static uint64_t raise(const uint64_t &x)
-      {
-         return x * Power<n-1>::raise(x);
-      }
-   };
-   
-   template <>
-   class Power<0>
-   {
-   public:
-      static uint64_t raise(const uint64_t &x)
-      {
-         return 1;
-      }
-   };
-
-   
+{   
    /* Return the Greatest Common Divisor of x and y. */
    template <typename UIntType>
    UIntType gcd(const UIntType &x, const UIntType &y)
@@ -47,6 +26,22 @@ namespace Maths
    bool areCoprimes(const UIntType &x, const UIntType &y)
    {
       return gcd(x, y) == 1;
+   }
+   
+   /* Calculate the Euler's Totient function. */
+   template <typename UInteger>
+   UInteger phi(const UInteger &x)
+   {
+      UInteger sum = 1;
+      for(UInteger i = 2; i < x; ++i)
+      {
+         if(areCoprimes(i, x))
+         {
+            sum++;
+         }
+      }
+      
+      return sum;
    }
 
    /* Calculate the inverse of a modulo b in Z_b.

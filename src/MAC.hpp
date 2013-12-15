@@ -5,14 +5,10 @@
 #define MAC_HPP
 
 #include "Types.hpp"
-#include "exceptions/Exception.hpp"
 #include "exceptions/BadKeyLength.hpp"
-#include <functional>
 
-#include "Bits.hpp"
 #include "Vector.hpp"
 #include "Padding.hpp"
-#include "MathematicalTools.hpp"
 
 /* Include all block ciphers. */
 #include "AES.hpp"
@@ -32,14 +28,27 @@
 #include "XTEA.hpp"
 
 /*
- * Constants used for L . x^n and L . x^-1 for n > 0.
+ * Constants used for L . x^n (msb_value) and L . x^-1 (lsb_value) for n > 0.
  */
 template <uint8_t BlockSize>
 struct Constant
 {
+   static_assert(BlockSize == 8 || BlockSize == 16, "'BlockSize' has to be 8 or 16.");
    static const BytesVector msb_value;
    static const BytesVector lsb_value;
 };
+
+template<>
+const BytesVector Constant<8>::msb_value = {0,0,0,0,0,0,0,0x1B};
+
+template <>
+const BytesVector Constant<16>::msb_value = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0x87};
+
+template<>
+const BytesVector Constant<8>::lsb_value = {0x80,0,0,0,0,0,0,0x0D};
+
+template <>
+const BytesVector Constant<16>::lsb_value = {0x80,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0x43};
 
 /*
  * Calculate L.u^n for any n > 0.
@@ -85,16 +94,24 @@ struct Lu<BlockSize, -1>
    }
 };
 
+/* Used only for checking parent / child routine. */
 using BlockCipherBase = BlockCipher<BytesVector, uint64_t, 16, BigEndian64>;
 
 /*
- * MAC Interface.
+ * MAC abstract class.
  */
 class MAC
 {
 protected:
+   explicit MAC(BytesVector key) : key(key) {}
+   
    virtual ~MAC() {}
-   virtual BytesVector encode(const BytesVector &message) = 0;
+   virtual BytesVector encode(BytesVector message) = 0;
+   
+   /* The main key for encryption. 
+    * This key is already checked in block cipher algorithm's constructor. 
+    */
+   const BytesVector key;
 };
 
 /*
@@ -108,29 +125,27 @@ class CBC_MAC : public MAC
            "'BlockCipherType' has to be a BlockCipher.");
    
 public:
-   explicit CBC_MAC(const BytesVector &key) : key(key) {}
+   explicit CBC_MAC(const BytesVector &key) : MAC(key) {}
    
-   BytesVector encode(const BytesVector &message)
+   virtual BytesVector encode(BytesVector message) final
    {
+      /* Prepare the encryption to be in CBC mode with an IV = 0^{BlockSize}. */
       constexpr uint8_t BlockSize = BlockCipherType::getBlockSize();
       BlockCipherType Block(key, OperationModes::CBC, BytesVector(BlockSize, 0));
       
+      /* Pad the message if empty or not a multiple of BlockSize. */
       const uint64_t message_size = message.size();
-      BytesVector padded_message(message);
       if(message_size == 0 || message_size % BlockSize)
       {
-         padded_message = std::move(Padding::_10Star(message, BlockSize));
+         message = Padding::_10Star(message, BlockSize);
       }
       
       // We encode in CBC mode the padded message.
-      const BytesVector C(Block.encode(padded_message));
+      const BytesVector C(Block.encode(message));
       
       // We keep only the last block of the encryption.
       return BytesVector(C.begin() + C.size() - BlockSize, C.end());
    }
-   
-private:
-   BytesVector key;
 };
 
 /*
@@ -140,21 +155,23 @@ private:
 class AES_XCBC_MAC : public MAC
 {   
 public:
-   explicit AES_XCBC_MAC(const BytesVector &key) : key(key) {}
+   explicit AES_XCBC_MAC(const BytesVector &key) : MAC(key) {}
    
-   virtual BytesVector encode(const BytesVector &message) final
+   virtual BytesVector encode(BytesVector message) final
    {
       AES Block(key);
+      
+      /* Encode 3 keys derived from the main key with specific constants for each one. */
       const BytesVector K1(Block.encode(BytesVector(16, 0x01)));
       const BytesVector K2(Block.processEncodeBlock(BytesVector(16, 0x02)));
       const BytesVector K3(Block.processEncodeBlock(BytesVector(16, 0x03)));
       const uint64_t message_size = message.size();
 
-      BytesVector padded_message(message);
+      /* Pad the message if empty or not multiple of 16 since AES works with block of 16 bytes. */
       BytesVector K;
       if(message_size % 16 || message_size == 0)
       {
-         padded_message = std::move(Padding::_10Star(message, 16));
+         message = Padding::_10Star(message, 16);
          K = K3;
       }
       else
@@ -162,7 +179,9 @@ public:
          K = K2;
       }
       
-      const BytesMatrix M = Vector::chunk(padded_message, 16);
+      /* Split the message in sub messages of 16 bytes length.
+       * Apply the formula : C[i+1] = E(M[i] XOR C[i]) where C[0] = 0^16. */
+      const BytesMatrix M = Vector::chunk(message, 16);
       BytesVector previous_cipher_block(16, 0);
       BytesVector current_cipher_block;
       const int64_t M_size = M.size();
@@ -175,9 +194,6 @@ public:
 
       return Block_K1.encode(Vector::Xor(Vector::Xor(M[M_size - 1], previous_cipher_block), K));
    }
-   
-private:
-   BytesVector key;
 };
 
 
@@ -192,9 +208,9 @@ class CMAC : public MAC
            "'BlockCipherType' has to be a BlockCipher.");
    
 public:
-   explicit CMAC(const BytesVector &key) : key(key) {}
+   explicit CMAC(const BytesVector &key) : MAC(key) {}
    
-   virtual BytesVector encode(const BytesVector &message) final
+   virtual BytesVector encode(BytesVector message) final
    {
       BlockCipherType Block(key);
       constexpr uint8_t BlockSize = BlockCipherType::getBlockSize();
@@ -202,14 +218,13 @@ public:
       BytesVector L_u = Lu<BlockSize, 1>::getValue(L);
             
       const uint64_t message_size = message.size();
-      BytesVector padded_message(message);
       if(message_size == 0 || message_size % BlockSize)
       {
-         padded_message = std::move(Padding::_10Star(message, BlockSize));
+         message = Padding::_10Star(message, BlockSize);
          L_u = Lu<BlockSize, 1>::getValue(L_u);
       }
       
-      const BytesMatrix M = Vector::chunk(padded_message, BlockSize);
+      const BytesMatrix M = Vector::chunk(message, BlockSize);
       BytesVector previous_cipher_block(BlockSize, 0);
       BytesVector current_cipher_block;
       const int64_t M_size = M.size();
@@ -221,9 +236,6 @@ public:
       
       return Block.processEncodeBlock(Vector::Xor(Vector::Xor(M[M_size - 1], previous_cipher_block), L_u));
    }
-   
-private:
-   BytesVector key;
 };
 
 /*
@@ -237,9 +249,9 @@ class OMAC : public MAC
            "'BlockCipherType' has to be a BlockCipher.");
    
 public:
-   explicit OMAC(const BytesVector &key) : key(key) {}
+   explicit OMAC(const BytesVector &key) : MAC(key) {}
    
-   virtual BytesVector encode(const BytesVector &message) final
+   virtual BytesVector encode(BytesVector message) final
    {
       BlockCipherType Block(key);
       constexpr uint8_t BlockSize = BlockCipherType::getBlockSize();
@@ -249,14 +261,13 @@ public:
       // If the message is empty or not a multiple of 'BlockSize', the message 
       // is padded to form a complete block.
       const uint64_t message_size = message.size();
-      BytesVector padded_message(message);
       if(message_size == 0 || message_size % BlockSize)
       {
-         padded_message = std::move(Padding::_10Star(message, BlockSize));
-         L_u = Lu<BlockSize, -1>::getValue(L);       
+         message = Padding::_10Star(message, BlockSize);
+         L_u = Lu<BlockSize, -1>::getValue(L);
       }
       
-      const BytesMatrix M = Vector::chunk(padded_message, BlockSize);      
+      const BytesMatrix M = Vector::chunk(message, BlockSize);      
       BytesVector previous_cipher_block(BlockSize, 0);
       BytesVector current_cipher_block;
       const int64_t M_size = M.size();
@@ -268,10 +279,6 @@ public:
     
       return Block.processEncodeBlock(Vector::Xor(Vector::Xor(M[M_size - 1], previous_cipher_block), L_u));
    }
-   
-      
-private:   
-   BytesVector key;
 };
 
 /*
@@ -285,31 +292,25 @@ class PMAC : public MAC
            "'BlockCipherType' has to be a BlockCipher.");
    
 public:
-   explicit PMAC(const BytesVector &key) : key(key) {}
+   explicit PMAC(const BytesVector &key) : MAC(key) {}
  
-   virtual BytesVector encode(const BytesVector &message) final
+   virtual BytesVector encode(BytesVector message) final
    {
       //const uint64_t message_size = message.size();
       BlockCipherType Block(key);
       constexpr uint8_t BlockSize = BlockCipherType::getBlockSize();
          
       // Pad the message if it's not a multiple of BlockSize.
-      BytesVector padded_message;
       bool need_padding = false;
       const uint64_t message_size = message.size();
       if(message_size % BlockSize || message_size == 0)
       {
          need_padding = true;
-         padded_message = std::move(Padding::_10Star(message, BlockSize));
-      }
-      else
-      {
-         padded_message = message;
+         message = Padding::_10Star(message, BlockSize);
       }
       
-      const BytesMatrix M = Vector::chunk(padded_message, BlockSize);
-      BytesVector previous_cipher_block(BlockSize, 0);
-      BytesVector sigma(previous_cipher_block);
+      const BytesMatrix M = Vector::chunk(message, BlockSize);
+      BytesVector sigma(BlockSize, 0);
       BytesVector L = Block.encode(BytesVector(BlockSize, 0));
       const int64_t M_size = M.size();
       for(int64_t i = 0; i < M_size - 1; ++i)
@@ -326,6 +327,7 @@ public:
    }
    
 private:
+   /* Get L.u^n from the specs. */
    static BytesVector getLuNValue(BytesVector L, const uint64_t &n)
    {
       if(Bits::msb(L) == 0)
@@ -334,8 +336,6 @@ private:
       return Vector::Xor(getLuNValue(Vector::leftShift(L, 1), n-1), 
               Constant<BlockCipherType::getBlockSize()>::msb_value);
    }
-   
-   BytesVector key;
 };
 
 /*
@@ -349,28 +349,26 @@ class TMAC : public MAC
            "'BlockCipherType' has to be a BlockCipher.");
    
 public:
-   TMAC(const BytesVector &key, const BytesVector &key2) : key(key) { setKey(key2); }
+   TMAC(const BytesVector &key, const BytesVector &key2) : MAC(key) { setKey(key2); }
    
-   virtual BytesVector encode(const BytesVector &message) final
+   virtual BytesVector encode(BytesVector message) final
    {
       const uint64_t message_size = message.size();
       BlockCipherType Block(key);
       constexpr uint8_t BlockSize = BlockCipherType::getBlockSize();
       
       BytesVector K;
-      BytesVector padded_message;
       if(message_size % BlockSize || message_size == 0)
       {
          K = key2;
-         padded_message = Padding::_10Star(message, BlockSize);
+         message = Padding::_10Star(message, BlockSize);
       }
       else
       {
          K = Lu<BlockSize, 1>::getValue(key2);
-         padded_message = message;
       }
 
-      const BytesMatrix M = Vector::chunk(padded_message, BlockSize);
+      const BytesMatrix M = Vector::chunk(message, BlockSize);
       BytesVector previous_cipher_block(BlockSize, 0);
       BytesVector current_cipher_block = Block.encode({});
       const int64_t M_size = M.size();
@@ -385,16 +383,17 @@ public:
    
    void setKey(const BytesVector &key2)
    {
-      if(key2.empty() || key2.size() != BlockCipherType::getBlockSize())
+      const uint8_t key2_length = key2.size();
+      if(key2.empty() || key2_length != BlockCipherType::getBlockSize())
       {
-         throw BadKeyLength("Your 'key2' has to be the same size as the block cipher uses.", key2.size());
+         throw BadKeyLength("Your 'key2' has to be the same size as the block cipher uses.", key2_length);
       }
       
       this->key2 = key2;
    }
    
 private:
-   BytesVector key, key2;
+   BytesVector key2;
 };
 
 #endif

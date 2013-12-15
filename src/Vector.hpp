@@ -13,6 +13,7 @@ namespace Vector
    protected:
       explicit LambdaShift(const uint32_t shift)
          : carry(0), shift(shift), inner_shift(8 - shift) {}
+         
       virtual ~LambdaShift() {}
       virtual uint8_t operator()(uint8_t val) = 0;
       
@@ -49,7 +50,7 @@ namespace Vector
       explicit LambdaLeftShift(const uint32_t shift)
          : LambdaShift(shift), mask(0xFF << (8 - shift)) {}
 
-      uint8_t operator()(uint8_t val) 
+      uint8_t operator()(uint8_t val) final
       {
          const uint8_t left = val & mask;
          val <<= shift;
@@ -81,13 +82,20 @@ namespace Vector
    
    /* Add the vector W at the end of V and return the new merged vector. */
    template <class VectorType>
-   VectorType merge(const VectorType &V, const VectorType &W)
+   VectorType merge(VectorType V, const VectorType &W)
    {
       VectorType result(V);
       result.reserve(V.size() + W.size());
       result.insert(result.end(), W.begin(), W.end());
       
       return result;
+   }
+   
+   /* Add the vector W at the end of V and return the new merged vector. */
+   template <class VectorType>
+   void extend(VectorType &self, const VectorType &V)
+   {
+      self.insert(self.end(), V.begin(), V.end());
    }
    
    /* Split the vector V in 'new_size' chunks and return the vector of chunks. */
