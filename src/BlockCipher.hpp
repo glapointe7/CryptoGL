@@ -1,4 +1,6 @@
-
+/*
+ * GenerateSubkeys and its inverse should be done in setKey. This would avoid useless IF.
+ */
 #ifndef BLOCKCIPHER_HPP
 #define BLOCKCIPHER_HPP
 
@@ -90,6 +92,11 @@ public:
    /* Encode an input block of bytes and return the output block. */
    BytesVector processEncodeBlock(const BytesVector &block)
    {
+      if(subkeys.empty())
+      {
+         generateSubkeys();
+      }
+      
       DataType int_block = getIntegersFromInputBlock(block);
       int_block = encodeBlock(int_block);
       
@@ -99,6 +106,11 @@ public:
    /* Decode an input block of bytes and return the output block. */
    BytesVector processDecodeBlock(const BytesVector &block)
    {
+      if(subkeys.empty())
+      {
+         generateInverseSubkeys();
+      }
+      
       DataType int_block = getIntegersFromInputBlock(block);
       int_block = decodeBlock(int_block);
       

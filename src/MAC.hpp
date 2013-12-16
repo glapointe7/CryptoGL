@@ -7,6 +7,7 @@
 #include "Types.hpp"
 #include "exceptions/BadKeyLength.hpp"
 
+#include "Bits.hpp"
 #include "Vector.hpp"
 #include "Padding.hpp"
 
@@ -56,7 +57,7 @@ const BytesVector Constant<16>::lsb_value = {0x80,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0x
 template <uint8_t BlockSize, int64_t n>
 struct Lu
 {
-   static BytesVector getValue(BytesVector L)
+   static BytesVector getValue(const BytesVector &L)
    {
       if(Bits::msb(L) == 0)
          return Lu<BlockSize, n - 1>::getValue(Vector::leftShift(L, 1));
@@ -71,7 +72,7 @@ struct Lu
 template <uint8_t BlockSize>
 struct Lu<BlockSize, 0>
 {
-   static BytesVector getValue(BytesVector L)
+   static BytesVector getValue(const BytesVector &L)
    {
       return L;
    }
@@ -83,7 +84,7 @@ struct Lu<BlockSize, 0>
 template <uint8_t BlockSize>
 struct Lu<BlockSize, -1>
 {
-   static BytesVector getValue(BytesVector L)
+   static BytesVector getValue(const BytesVector &L)
    {
       if(Bits::lsb(L) == 0)
       {
@@ -103,7 +104,7 @@ using BlockCipherBase = BlockCipher<BytesVector, uint64_t, 16, BigEndian64>;
 class MAC
 {
 protected:
-   explicit MAC(BytesVector key) : key(key) {}
+   explicit MAC(BytesVector key) : key(std::move(key)) {}
    
    virtual ~MAC() {}
    virtual BytesVector encode(BytesVector message) = 0;
@@ -125,7 +126,7 @@ class CBC_MAC : public MAC
            "'BlockCipherType' has to be a BlockCipher.");
    
 public:
-   explicit CBC_MAC(const BytesVector &key) : MAC(key) {}
+   explicit CBC_MAC(BytesVector key) : MAC(key) {}
    
    virtual BytesVector encode(BytesVector message) final
    {
@@ -155,14 +156,14 @@ public:
 class AES_XCBC_MAC : public MAC
 {   
 public:
-   explicit AES_XCBC_MAC(const BytesVector &key) : MAC(key) {}
+   explicit AES_XCBC_MAC(BytesVector key) : MAC(key) {}
    
    virtual BytesVector encode(BytesVector message) final
    {
       AES Block(key);
       
       /* Encode 3 keys derived from the main key with specific constants for each one. */
-      const BytesVector K1(Block.encode(BytesVector(16, 0x01)));
+      const BytesVector K1(Block.processEncodeBlock(BytesVector(16, 0x01)));
       const BytesVector K2(Block.processEncodeBlock(BytesVector(16, 0x02)));
       const BytesVector K3(Block.processEncodeBlock(BytesVector(16, 0x03)));
       const uint64_t message_size = message.size();
@@ -188,11 +189,11 @@ public:
       AES Block_K1(K1);
       for(int64_t i = 0; i < M_size - 1; ++i)
       {
-         current_cipher_block = Block_K1.encode(Vector::Xor(M[i], previous_cipher_block));
+         current_cipher_block = Block_K1.processEncodeBlock(Vector::Xor(M[i], previous_cipher_block));
          previous_cipher_block = current_cipher_block;
       }
 
-      return Block_K1.encode(Vector::Xor(Vector::Xor(M[M_size - 1], previous_cipher_block), K));
+      return Block_K1.processEncodeBlock(Vector::Xor(Vector::Xor(M[M_size - 1], previous_cipher_block), K));
    }
 };
 
@@ -208,13 +209,13 @@ class CMAC : public MAC
            "'BlockCipherType' has to be a BlockCipher.");
    
 public:
-   explicit CMAC(const BytesVector &key) : MAC(key) {}
+   explicit CMAC(BytesVector key) : MAC(key) {}
    
    virtual BytesVector encode(BytesVector message) final
    {
       BlockCipherType Block(key);
       constexpr uint8_t BlockSize = BlockCipherType::getBlockSize();
-      BytesVector L = Block.encode(BytesVector(BlockSize, 0));
+      BytesVector L = Block.processEncodeBlock(BytesVector(BlockSize, 0));
       BytesVector L_u = Lu<BlockSize, 1>::getValue(L);
             
       const uint64_t message_size = message.size();
@@ -249,13 +250,13 @@ class OMAC : public MAC
            "'BlockCipherType' has to be a BlockCipher.");
    
 public:
-   explicit OMAC(const BytesVector &key) : MAC(key) {}
+   explicit OMAC(BytesVector key) : MAC(key) {}
    
    virtual BytesVector encode(BytesVector message) final
    {
       BlockCipherType Block(key);
       constexpr uint8_t BlockSize = BlockCipherType::getBlockSize();
-      BytesVector L = Block.encode(BytesVector(BlockSize, 0));
+      BytesVector L = Block.processEncodeBlock(BytesVector(BlockSize, 0));
       BytesVector L_u = Lu<BlockSize, 1>::getValue(L);
       
       // If the message is empty or not a multiple of 'BlockSize', the message 
@@ -292,7 +293,7 @@ class PMAC : public MAC
            "'BlockCipherType' has to be a BlockCipher.");
    
 public:
-   explicit PMAC(const BytesVector &key) : MAC(key) {}
+   explicit PMAC(BytesVector key) : MAC(key) {}
  
    virtual BytesVector encode(BytesVector message) final
    {
@@ -311,7 +312,7 @@ public:
       
       const BytesMatrix M = Vector::chunk(message, BlockSize);
       BytesVector sigma(BlockSize, 0);
-      BytesVector L = Block.encode(BytesVector(BlockSize, 0));
+      BytesVector L = Block.processEncodeBlock(BytesVector(BlockSize, 0));
       const int64_t M_size = M.size();
       for(int64_t i = 0; i < M_size - 1; ++i)
       {
@@ -328,7 +329,7 @@ public:
    
 private:
    /* Get L.u^n from the specs. */
-   static BytesVector getLuNValue(BytesVector L, const uint64_t &n)
+   static BytesVector getLuNValue(const BytesVector &L, const uint64_t &n)
    {
       if(Bits::msb(L) == 0)
          return getLuNValue(Vector::leftShift(L, 1), n-1);
@@ -349,7 +350,7 @@ class TMAC : public MAC
            "'BlockCipherType' has to be a BlockCipher.");
    
 public:
-   TMAC(const BytesVector &key, const BytesVector &key2) : MAC(key) { setKey(key2); }
+   TMAC(BytesVector key, const BytesVector &key2) : MAC(key) { setKey(key2); }
    
    virtual BytesVector encode(BytesVector message) final
    {
@@ -370,7 +371,7 @@ public:
 
       const BytesMatrix M = Vector::chunk(message, BlockSize);
       BytesVector previous_cipher_block(BlockSize, 0);
-      BytesVector current_cipher_block = Block.encode({});
+      BytesVector current_cipher_block;
       const int64_t M_size = M.size();
       for(int64_t i = 0; i < M_size - 1; ++i)
       {

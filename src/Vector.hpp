@@ -91,14 +91,14 @@ namespace Vector
       return result;
    }
    
-   /* Add the vector W at the end of V and return the new merged vector. */
+   /* Append the vector W at the end of V. */
    template <class VectorType>
    void extend(VectorType &self, const VectorType &V)
    {
       self.insert(self.end(), V.begin(), V.end());
    }
    
-   /* Split the vector V in 'new_size' chunks and return the vector of chunks. */
+   /* Split the vector V in 'vector_size' chunks and return the vector of chunks. */
    template <class VectorType>
    std::vector<VectorType> chunk(const VectorType &V, const uint64_t &vector_size)
    {
@@ -110,7 +110,7 @@ namespace Vector
       std::vector<VectorType> result;
       const uint64_t V_size = V.size();
       const uint64_t matrix_size = V_size / vector_size;
-      //const uint64_t matrix_size = static_cast<uint64_t>(ceil(static_cast<float>(V_size) / vector_size));
+     
       result.reserve(matrix_size);
       for(uint64_t i = 0; i < V_size; i += vector_size)
       {
