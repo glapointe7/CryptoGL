@@ -7,6 +7,8 @@
 #include "SynchronousStreamCipher.hpp"
 #include "PseudoRandomFunction.hpp"
 
+#include "SHA1.hpp"
+
 class SEAL : public SynchronousStreamCipher<UInt32Vector, BigEndian32, 1024>, 
         PseudoRandomFunction<uint32_t, UInt32Vector>
 {
@@ -29,7 +31,7 @@ private:
    virtual void keySetup() final;
    
    /* Define an IV with SHA-1 and return the hash truncated. */
-   uint32_t gamma(const uint32_t current_index, uint32_t &previous_index);
+   uint32_t gamma(SHA1 &G, UInt32Vector &block, const uint32_t current_index, uint32_t &previous_index);
    
    /* Subkeys tables : T is 2048 bytes, S is 1024 bytes and R is 16 * (L / 1024) bytes. */
    UInt32Vector R, S, T;

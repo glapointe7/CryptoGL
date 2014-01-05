@@ -68,14 +68,13 @@ BytesVector Tiger::getOutput(const UInt64Vector &hash) const
    BytesVector output;
    output.reserve(output_size);
      
-   const uint8_t out_data_size = output_size >> 3;
+   const uint8_t out_data_size = output_size / 8;
    for (uint8_t j = 0; j < out_data_size; ++j)
    {
-      const BytesVector bytes = LittleEndian64::toBytesVector(hash[j]);
-      output.insert(output.end(), bytes.begin(), bytes.end());
+      Vector::extend(output, LittleEndian64::toBytesVector(hash[j]));
    }
 
-   if (output_size & 7)
+   if (output_size % 8)
    {
       const BytesVector bytes = LittleEndian64::toBytesVector(hash[out_data_size]);
       output.insert(output.end(), bytes.begin(), bytes.begin() + 4);

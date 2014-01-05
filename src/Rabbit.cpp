@@ -47,9 +47,7 @@ uint32_t Rabbit::g(const uint32_t x)
 
 void Rabbit::nextState()
 {
-   const uint32_t old_counters[8] = {counters[0], counters[1], counters[2], counters[3],
-      counters[4], counters[5], counters[6], counters[7]
-   };
+   const std::array<uint32_t, 8> old_counters(counters);
 
    // Calculate new counter values.
    counters[0] += A[0] + counter_carry_bit;
@@ -59,7 +57,7 @@ void Rabbit::nextState()
    }
    counter_carry_bit = (counters[7] < old_counters[7]);
 
-   uint32_t G[8];
+   std::array<uint32_t, 8> G;
    for (uint8_t i = 0; i < 8; ++i)
    {
       G[i] = g(states[i] + counters[i]);
@@ -100,14 +98,14 @@ void Rabbit::keySetup()
 
    counter_carry_bit = 0;
 
-   for (uint8_t i = 0; i < 4; i++)
+   for (uint8_t i = 0; i < 4; ++i)
    {
       nextState();
    }
 
-   for (uint8_t j = 0; j < 8; ++j)
+   for (uint8_t i = 0; i < 8; ++i)
    {
-      counters[j] ^= states[(j + 4) & 7];
+      counters[i] ^= states[(i + 4) & 7];
    }
 }
 
@@ -122,7 +120,7 @@ void Rabbit::IVSetup()
       counters[i] ^= subIV[i & 3];
    }
 
-   for (uint8_t i = 0; i < 4; i++)
+   for (uint8_t i = 0; i < 4; ++i)
    {
       nextState();
    }

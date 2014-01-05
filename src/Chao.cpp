@@ -17,7 +17,7 @@ Chao::Chao(const ClassicalType &left_alpha, const ClassicalType &right_alpha)
    this->right_alpha = right_alpha;
 }
 
-void Chao::leftShiftAlphabet(const int8_t ch, const uint8_t index)
+void Chao::leftShiftAlphabet(const uint8_t index)
 {
    std::rotate(left_alpha.begin(), left_alpha.begin() + index, left_alpha.end());
    const int8_t tmp = left_alpha[1];
@@ -25,7 +25,7 @@ void Chao::leftShiftAlphabet(const int8_t ch, const uint8_t index)
    left_alpha.insert(left_alpha.begin() + nadir, tmp);
 }
 
-void Chao::rightShiftAlphabet(const int8_t ch, const uint8_t index)
+void Chao::rightShiftAlphabet(const uint8_t index)
 {
    std::rotate(right_alpha.begin(), right_alpha.begin() + index + 1, right_alpha.end());
    const int8_t tmp = right_alpha[2];
@@ -43,8 +43,8 @@ ClassicalType Chao::encode(const ClassicalType &clear_text)
       const uint8_t index = right_alpha.find(c);
       const int8_t corresponding_char = left_alpha[index];
       crypted.push_back(corresponding_char);
-      leftShiftAlphabet(corresponding_char, index);
-      rightShiftAlphabet(corresponding_char, index);
+      leftShiftAlphabet(index);
+      rightShiftAlphabet(index);
    }
 
    return crypted;
@@ -60,8 +60,8 @@ ClassicalType Chao::decode(const ClassicalType &cipher_text)
       const uint8_t index = left_alpha.find(c);
       const int8_t corresponding_char = right_alpha[index];
       decrypted.push_back(corresponding_char);
-      leftShiftAlphabet(corresponding_char, index);
-      rightShiftAlphabet(corresponding_char, index);
+      leftShiftAlphabet(index);
+      rightShiftAlphabet(index);
    }
 
    return decrypted;

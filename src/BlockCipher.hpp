@@ -1,5 +1,5 @@
 /*
- * GenerateSubkeys and its inverse should be done in setKey. This would avoid useless IF.
+ * GenerateSubkeys and its inverse should be done in the constructor. This would avoid useless IF.
  */
 #ifndef BLOCKCIPHER_HPP
 #define BLOCKCIPHER_HPP

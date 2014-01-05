@@ -20,7 +20,7 @@ namespace Bits
    constexpr UInt MSB(const UInt &value, const uint8_t bits_to_extract)
    {
       static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
-      return value >> ((sizeof (UInt) << 3) - bits_to_extract);
+      return value >> ((sizeof (UInt) * 8) - bits_to_extract);
    }
    
    uint8_t msb(const BytesVector &V);

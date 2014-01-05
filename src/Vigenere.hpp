@@ -7,10 +7,10 @@
 #include <functional>
 #include <string>
 #include <vector>
-
-#include "Tools.hpp"  
+  
 #include "String.hpp"
 #include "Types.hpp"
+#include "Vector.hpp"
 
 // Vigenere : CIPHER = CLEAR + KEY
 
@@ -104,9 +104,7 @@ public:
 class Caesar : public Vigenere
 {   
 public:
-   using StringCipherWithStringKey::setKey;
-
-   explicit Caesar(const uint8_t key)
+   explicit Caesar(const int8_t key)
       : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
 
    // If the key is < 0 and > alpha_len, we make sure the key will be in the set {0,...,alpha_len-1}.
@@ -151,9 +149,9 @@ public:
    {
       const KeyType my_key = getKey();
       const uint32_t key_length = my_key.length();
-
+      
       ClassicalType toReturn;
-      const std::vector<ClassicalType> cipher_numbers = Tools::split(cipher_text);
+      const std::vector<ClassicalType> cipher_numbers = Vector::split(String::trimEnd(cipher_text), ' ');
       toReturn.reserve(cipher_text.length());
 
       uint32_t idx = 0;

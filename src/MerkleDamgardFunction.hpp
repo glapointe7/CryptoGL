@@ -7,6 +7,7 @@
 #include "Types.hpp"
 #include "BigEndian.hpp"
 #include "LittleEndian.hpp"
+#include "Vector.hpp"
 
 /*
  * DataType : An unsigned integer for the IV and integer input block.
@@ -69,26 +70,24 @@ protected:
    
 private:
    /* Specific padding rule of the Merkel-Damgard construction for 64 and 128 bits blocks. */
-   virtual BytesVector pad(const BytesVector &message) const final
+   virtual BytesVector pad(BytesVector message) const final
    {
       const uint64_t message_size = message.size();
-      BytesVector padded_message(message);
-      padded_message.reserve(message_size + (InputBlockSize << 1));
+      message.reserve(message_size + (InputBlockSize * 2));
 
       // Append a bit '1' to the message. Generally, it could be 0x80 or 0x01.
-      padded_message.push_back(first_byte_padding);
+      message.push_back(first_byte_padding);
 
       // Pad with '0' bits to get a length 56 (mod 64) or 112 (mod 128) depending of the input block size. 
-      const uint8_t rest = sizeof(DataType) << 1;
-      const uint8_t padded_message_size = ((InputBlockSize << 1) - rest - (padded_message.size() & (InputBlockSize - 1))) 
-                                          & (InputBlockSize - 1);
-      padded_message.insert(padded_message.end(), padded_message_size + rest - 8, 0);
+      const uint8_t rest = sizeof(DataType) * 2;
+      const uint8_t padded_message_size = ((InputBlockSize * 2) - rest - (message.size() % InputBlockSize)) 
+                                          % InputBlockSize;
+      message.insert(message.end(), padded_message_size + rest - 8, 0);
       
       // Append the length of the original message in bits following the endianness of EndianLengthType.
-      const BytesVector endian_message_size = EndianLengthType::toBytesVector(message_size << 3);
-      padded_message.insert(padded_message.end(), endian_message_size.begin(), endian_message_size.end());
+      Vector::extend(message, EndianLengthType::toBytesVector(message_size * 8));
 
-      return padded_message;
+      return message;
    }
 };
 

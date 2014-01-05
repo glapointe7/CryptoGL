@@ -39,16 +39,16 @@ private:
    
    static void setTempKeyZ(UInt32Vector &Z, const UInt32Vector &X);
    static void setTempKeyX(UInt32Vector &tmp, const UInt32Vector &Z);
-   void setSubKeysBlock(const UInt32Vector &tmp, const uint8_t *index);
+   void setSubKeysBlock(const UInt32Vector &tmp, const std::array<uint8_t, 20> &index);
    
    static uint8_t getByteFromInteger(const UInt32Vector &bytes, const uint8_t index)
    {
-      return (bytes[index >> 2] >> ((3-(index & 3)) << 3)) & 0xFF;
+      return (bytes[index / 4] >> ((3-(index % 4)) * 8)) & 0xFF;
    }
    
    static constexpr uint8_t getByteFromInteger(const uint32_t bytes, const uint8_t index)
    {
-      return (bytes >> (index << 3)) & 0xFF;
+      return (bytes >> (index * 8)) & 0xFF;
    }
 
    /* 8 S-Boxes. */

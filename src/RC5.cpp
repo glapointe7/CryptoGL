@@ -20,7 +20,7 @@ void RC5::setKey(const BytesVector &key)
 
 void RC5::generateSubkeys()
 {
-   const uint8_t int_size = 4;
+   constexpr uint8_t int_size = 4;
    const uint8_t key_len = key.size();
    const uint8_t tmp_key_len = (key_len + int_size - 1) / int_size;
    UInt32Vector tmp_key;
@@ -32,7 +32,7 @@ void RC5::generateSubkeys()
    }
 
    // Initialize the expanded key table.
-   const uint8_t subkeys_len = (rounds + 1) << 1;
+   const uint8_t subkeys_len = 2 * (rounds + 1);
    subkeys.resize(subkeys_len);
    subkeys[0] = P32;
    for (uint8_t i = 1; i < subkeys_len; ++i)

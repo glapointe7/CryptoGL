@@ -4,74 +4,56 @@
 
 #include "Types.hpp"
 
-#include <string>
 #include <fstream>
+#include <iostream>
 
 namespace File
 {
-   /* Save a vector of bytes in a binary file. */
-   void saveBytes(const std::string &filename, const BytesVector &data)
+   /* Get the file size. */
+   std::ifstream::pos_type getSize(std::ifstream in)
    {
-      FILE *pFile;
-      pFile = fopen(filename.c_str(), "wb");
-      size_t data_size = data.size();
-
-      fwrite(&data.front(), 1, data_size, pFile);
-      fclose(pFile);
+      in.seekg(0, std::ios::end);
+      return in.tellg();
+   }
+   
+   /* Save data in a file named by 'filename'. */
+   template <class DataType>
+   void save(const std::string &filename, const DataType &data)
+   {
+      std::ofstream out;
+      out.exceptions(std::ofstream::failbit | std::ofstream::badbit);
+      try
+      {
+         out.open(filename.c_str(), std::ios::binary);
+         out.write(&data.front(), data.size());
+      }
+      catch (const std::ofstream::failure &e)
+      {
+         std::cerr << "Cannot open / write the file.";
+      }
+      out.close();
    }
    
    /* Load a binary file and get the bytes in a vector. */
-   BytesVector loadBytes(const std::string &filename)
+   template <class DataType>
+   DataType load(const std::string &filename)
    {
-      BytesVector bytes;
-      std::ifstream in(filename.c_str(), std::ios::binary);
-
+      DataType bytes;
+      std::ifstream in;
+      in.exceptions(std::ifstream::failbit | std::ifstream::badbit);
       try
       {
-         in.seekg(0, std::ios::end);
-         bytes.resize(in.tellg());
-         in.seekg(0, std::ios::beg);
+         in.open(filename.c_str(), std::ios::binary);
+         bytes.reserve(getSize(in));
          in.read(reinterpret_cast<char *> (&bytes.front()), bytes.size());
-         in.close();
       }
-      catch (const std::exception &e)
+      catch (const std::ifstream::failure &e)
       {
-         throw e.what();
+         std::cerr << "Cannot open / read the file.";
       }
-
-      return bytes;
-   }
-   
-   /* Save a string in a file named by 'filename'. */
-   void saveString(const std::string &filename, const std::string &data)
-   {
-      try
-      {
-         std::ofstream out(filename.c_str());
-         out << data;
-         out.close();
-      }
-      catch (const std::exception &e)
-      {
-         throw e.what();
-      }
-   }
-
-   /* Load a file in a string. */
-   std::string loadString(const std::string &filename)
-   {
-      std::string contents;
-      std::ifstream in(filename.c_str(), std::ios::binary);
-
-      in.seekg(0, std::ios::end);
-      const std::ifstream::pos_type file_size = in.tellg();
-      contents.reserve(file_size);
-      contents.resize(file_size);
-      in.seekg(0, std::ios::beg);
-      in.read(&contents[0], file_size);
       in.close();
 
-      return contents;
+      return bytes;
    }
 }
 

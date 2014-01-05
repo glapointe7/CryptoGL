@@ -22,7 +22,7 @@ public:
    void setHorizontalAlpha();
 
 private:
-   typedef std::function<char(const ClassicalType &, const ClassicalType &, const char)> GetCharFunction;
+   using GetCharFunction = std::function<char(const ClassicalType &, const ClassicalType &, const char)>;
    
    ClassicalType unsort_alpha;
    const GetCharFunction charEncode, charDecode;

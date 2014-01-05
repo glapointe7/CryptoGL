@@ -22,8 +22,6 @@ public:
    virtual void setKey(const BytesVector &key) final;
       
 private:
-   
-   
    virtual void keySetup() final;
    void IVSetup();
       

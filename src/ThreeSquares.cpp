@@ -11,10 +11,10 @@ ThreeSquares::ThreeSquares(const KeyType &key1, const KeyType &key2, const KeyTy
 
 ClassicalType ThreeSquares::encode(const ClassicalType &clear_text)
 {  
-   const ClassicalType full_text(appendChars(clear_text, 2, 'X'));
+   const ClassicalType full_text = appendChars(clear_text, 2, 'X');
    const uint32_t clear_len = full_text.length();
    ClassicalType crypted;
-   crypted.reserve(clear_len + (clear_len / 2));
+   crypted.reserve(3 * clear_len / 2);
 
    const Grid grid1(getGrid(getKey() + alpha));
    const Grid grid2(getGrid(key2 + alpha));
@@ -40,7 +40,7 @@ ClassicalType ThreeSquares::decode(const ClassicalType &cipher_text)
 {  
    const uint32_t cipher_len = cipher_text.length();
    ClassicalType decrypted;
-   decrypted.reserve((2 * cipher_len) / 3);
+   decrypted.reserve(2 * cipher_len / 3);
 
    const Grid grid1(getGrid(getKey() + alpha));
    const Grid grid2(getGrid(key2 + alpha));

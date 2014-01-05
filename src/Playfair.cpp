@@ -7,7 +7,7 @@
 
 ClassicalType Playfair::encode(const ClassicalType &clear_text)
 {  
-   ClassicalType full_text(appendChars(clear_text, 2, 'X'));
+   ClassicalType full_text = appendChars(clear_text, 2, 'X');
    uint32_t clear_len = full_text.length();
    ClassicalType crypted;
    crypted.reserve(clear_len);

@@ -14,7 +14,8 @@ class ClassicalAnalysis
 public:
    virtual ~ClassicalAnalysis() {}
    
-   enum class Language : uint8_t {
+   enum class Language : uint8_t 
+   {
       french,
       english,
       spanish,
@@ -28,7 +29,7 @@ public:
    void setAlpha(const ClassicalType &alpha);
    void setLanguage(const Language lang);
    
-   const std::map<char, uint32_t> getCharsCount(const ClassicalType &text) const;
+   std::map<char, uint32_t> getCharsCount(const ClassicalType &text) const;
    
 private:
    float ic = 0;

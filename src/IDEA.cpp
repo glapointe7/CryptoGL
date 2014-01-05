@@ -18,9 +18,9 @@ void IDEA::setKey(const BytesVector &key)
 void IDEA::generateSubkeys()
 {
    subkeys.reserve(52);
-   for (uint8_t j = 0; j < 16; j += 2)
+   for (uint8_t i = 0; i < 16; i += 2)
    {
-      subkeys.push_back((key[j] << 8) | key[j + 1]);
+      subkeys.push_back(BigEndian16::toInteger(BytesVector(key.begin() + i, key.begin() + i + 2)));
    }
 
    // The key is rotated left of 25 bits.

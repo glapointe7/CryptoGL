@@ -2,6 +2,7 @@
 #ifndef STRING_HPP
 #define STRING_HPP
 
+#include "Types.hpp"
 #include <string>
 
 namespace String
@@ -36,13 +37,28 @@ namespace String
    void removeChars(std::string &text, const std::string &chars);
    
    /* Remove all chars that are not uniques in 'str'. */
-   std::string makeUniqueChars(const std::string &str);
+   std::string makeUniqueChars(std::string str);
    
    /* Check if 'str' contains unique chars. */
    bool containsUniqueChars(const std::string &str);
 
    /* Convert integer to string in base 10. */
    std::string uintToString(uint64_t value);
+   
+   /* Convert a string to a vector of bytes. */
+   BytesVector toBytes(const std::string &str);
+   
+   /* Convert a hexadecimal string to a vector of bytes. */
+   BytesVector hexToBytes(const std::string &hex_str);
+   
+   /* Trim the beginning of the string from spaces. */
+   std::string trimStart(std::string str);
+   
+   /* Trim end of the string from spaces. */
+   std::string trimEnd(std::string str);
+   
+   /* Append the character 'c' 'x' times at the end of 'str'. */
+   std::string extend(std::string str, const uint32_t x, const char c);
 }
 
 #endif

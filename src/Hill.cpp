@@ -12,8 +12,8 @@ void Hill::setKey(const Int32Matrix &key)
 {
    try
    {
-      this->key->setMatrix(key);
-      this->key->setModulo(alpha.length());
+      this->key.setMatrix(key);
+      this->key.setModulo(alpha.length());
    }
    catch (EmptyMatrix & EM)
    {
@@ -24,7 +24,7 @@ void Hill::setKey(const Int32Matrix &key)
       throw MNS.what();
    }
 
-   if (!Maths::areCoprimes(this->key->det(), this->key->getModulo()))
+   if (!Maths::areCoprimes(this->key.det(), this->key.getModulo()))
    {
       throw MatrixKeyNotReversible("Your matrix key should be reversible to be able to decode the message.");
    }
@@ -32,9 +32,9 @@ void Hill::setKey(const Int32Matrix &key)
 
 /* Process encode / decode of the data with the matrix key K. */
 
-ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix *K)
+ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix K) const
 {  
-   const uint32_t key_dim = K->getDimension();
+   const uint32_t key_dim = K.getDimension();
    const uint32_t data_len = data.length();
    ClassicalType message;
    message.reserve(data_len + key_dim);
@@ -61,12 +61,12 @@ ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix *K)
 
 ClassicalType Hill::encode(const ClassicalType &clear_text)
 {
-   const ClassicalType full_text(appendChars(clear_text, key->getDimension(), 'X'));
+   const ClassicalType full_text = appendChars(clear_text, key.getDimension(), 'X');
    
    return process(full_text, key);
 }
 
 ClassicalType Hill::decode(const ClassicalType &cipher_text)
 {
-   return process(cipher_text, key->inverse());
+   return process(cipher_text, key.inverse());
 }

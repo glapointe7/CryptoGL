@@ -24,7 +24,7 @@ void ClassicalAnalysis::setLanguage(const Language lang)
    }
 }
 
-const std::map<char, uint32_t> ClassicalAnalysis::getCharsCount(const ClassicalType &text) const
+std::map<char, uint32_t> ClassicalAnalysis::getCharsCount(const ClassicalType &text) const
 {
    std::map<char, uint32_t> chars_freq;
 
@@ -45,7 +45,7 @@ void ClassicalAnalysis::calculateIC(const ClassicalType &text)
    const uint32_t text_len = text.length();
    const auto chars_freq = getCharsCount(text);
 
-   for (const auto pair : chars_freq)
+   for (const auto &pair : chars_freq)
    {
       ic +=  static_cast<float>(pair.second * (pair.second - 1)) / (text_len * (text_len - 1));
    }

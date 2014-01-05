@@ -3,12 +3,10 @@
 #include <string>
 #include <algorithm>
 
-#include "Tools.hpp"
-
 #include "exceptions/EmptyAlpha.hpp"
 #include "exceptions/MultipleChar.hpp"
 
-void StringCipher::checkAlpha(const ClassicalType &alpha) const
+void StringCipher::checkAlpha(const ClassicalType &alpha)
 {
    if (alpha.empty())
    {
@@ -34,17 +32,15 @@ ClassicalType StringCipher::getAlpha() const
 
 // Append the character c (text.length() % mod) times.
 
-ClassicalType
-StringCipher::appendChars(const ClassicalType &data, const uint32_t to_add, const char c)
+ClassicalType StringCipher::appendChars(ClassicalType data, const uint32_t to_add, const char c)
 {
-   ClassicalType full_text(data);
    const uint32_t rest = data.length() % to_add;
    if (rest != 0)
    {
-      full_text.append(to_add - rest, c);
+      data.append(to_add - rest, c);
    }
 
-   return full_text;
+   return data;
 }
 
 // Check if text has at least a character that doesn't belong to alpha.

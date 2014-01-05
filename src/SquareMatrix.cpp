@@ -87,11 +87,11 @@ uint32_t SquareMatrix::findNonZero(const Int32Matrix &A, const uint32_t from) co
 
 // Multiply a matrix and a column-vector. Return the column-vector solution.
 
-UInt32Vector operator *(const SquareMatrix *K, const UInt32Vector &V)
+UInt32Vector operator *(const SquareMatrix K, const UInt32Vector &V)
 {   
-   UInt32Vector soln(K->getDimension(), 0);
-   const int32_t mod = K->getModulo();
-   const Int32Matrix mat = K->getMatrix();
+   UInt32Vector soln(K.getDimension(), 0);
+   const int32_t mod = K.getModulo();
+   const Int32Matrix mat = K.getMatrix();
    
    uint32_t i = 0;
    for (const auto row : mat)
@@ -245,10 +245,10 @@ int32_t SquareMatrix::det() const
 
 // Return A^-1 using the Gauss-Jordan method.
 
-SquareMatrix* SquareMatrix::inverse() const
+SquareMatrix SquareMatrix::inverse() const
 {
-   SquareMatrix *result = new SquareMatrix();
-   result->setModulo(n);
+   SquareMatrix result;
+   result.setModulo(n);
    Int32Matrix A;
 
    // Determinant of A is positive and is in the set {0,...,mod_A-1}
@@ -264,7 +264,7 @@ SquareMatrix* SquareMatrix::inverse() const
             A = {
                {(Maths::getModInverse(deter, n) + n) % n}
             };
-            result->setMatrix(A);
+            result.setMatrix(A);
             break;
          }
 
@@ -276,7 +276,7 @@ SquareMatrix* SquareMatrix::inverse() const
                {(((det_inv * M[1][1]) % n) + n) % n, (((det_inv * -M[0][1]) % n) + n) % n},
                {(((det_inv * -M[1][0]) % n) + n) % n, (((det_inv * M[0][0]) % n) + n) % n}
             };
-            result->setMatrix(A);
+            result.setMatrix(A);
             break;
          }
 
@@ -306,7 +306,7 @@ SquareMatrix* SquareMatrix::inverse() const
                   I[k][i] = (I[k][i] * inv) % n;
                }
             } // end FOR k
-            result->setMatrix(I);
+            result.setMatrix(I);
          } // end Default
       } // end Switch
    } // end IF

@@ -32,36 +32,36 @@ TEST_F(CAST128Test, encode128)
 {
    const std::vector<uint8_t> clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
 
-   EXPECT_EQ("238B4FE5847E44B2", Digest::hexDigest(C128->encode(clear_text)));
+   EXPECT_EQ("238B4FE5847E44B2", Vector::toHexString(C128->encode(clear_text)));
 }
 
 TEST_F(CAST128Test, decode128)
 {
-   EXPECT_EQ("0123456789ABCDEF", Digest::hexDigest(C128->decode(Digest::getBytesFromHexDigest("238B4FE5847E44B2"))));
+   EXPECT_EQ("0123456789ABCDEF", Vector::toHexString(C128->decode(String::hexToBytes("238B4FE5847E44B2"))));
 }
 
 TEST_F(CAST128Test, encode80)
 {
    const std::vector<uint8_t> clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
 
-   EXPECT_EQ("EB6A711A2C02271B", Digest::hexDigest(C80->encode(clear_text)));
+   EXPECT_EQ("EB6A711A2C02271B", Vector::toHexString(C80->encode(clear_text)));
 }
 
 TEST_F(CAST128Test, decode80)
 {
-   EXPECT_EQ("0123456789ABCDEF", Digest::hexDigest(C80->decode(Digest::getBytesFromHexDigest("EB6A711A2C02271B"))));
+   EXPECT_EQ("0123456789ABCDEF", Vector::toHexString(C80->decode(String::hexToBytes("EB6A711A2C02271B"))));
 }
 
 TEST_F(CAST128Test, encode40)
 {
    const std::vector<uint8_t> clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
 
-   EXPECT_EQ("7AC816D16E9B302E", Digest::hexDigest(C40->encode(clear_text)));
+   EXPECT_EQ("7AC816D16E9B302E", Vector::toHexString(C40->encode(clear_text)));
 }
 
 TEST_F(CAST128Test, decode40)
 {
-   EXPECT_EQ("0123456789ABCDEF", Digest::hexDigest(C40->decode(Digest::getBytesFromHexDigest("7AC816D16E9B302E"))));
+   EXPECT_EQ("0123456789ABCDEF", Vector::toHexString(C40->decode(String::hexToBytes("7AC816D16E9B302E"))));
 }
 
 #endif

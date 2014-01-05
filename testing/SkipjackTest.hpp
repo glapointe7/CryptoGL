@@ -28,28 +28,28 @@ TEST_F(SkipjackTest, encodeFirst)
 {
    const std::vector<uint8_t> clear_text = {0x33, 0x22, 0x11, 0x00, 0xdd, 0xcc, 0xbb, 0xaa};
    
-   EXPECT_EQ("2587CAE27A12D300", Digest::hexDigest(A->encode(clear_text)));
+   EXPECT_EQ("2587CAE27A12D300", Vector::toHexString(A->encode(clear_text)));
 }
 
 TEST_F(SkipjackTest, decodeFirst)
 {
    const std::vector<uint8_t> clear_text = {0x33, 0x22, 0x11, 0x00, 0xdd, 0xcc, 0xbb, 0xaa};
    
-   EXPECT_EQ(Digest::hexDigest(clear_text), Digest::hexDigest(A->decode(Digest::getBytesFromHexDigest("2587CAE27A12D300"))));
+   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(A->decode(String::hexToBytes("2587CAE27A12D300"))));
 }
 
 TEST_F(SkipjackTest, encodeSecond)
 {
    const std::vector<uint8_t> clear_text = {0x1d, 0xdf, 0x39, 0xab, 0xf5, 0xcd, 0x71, 0x1e};
    
-   EXPECT_EQ("C92D22324C6B31AE", Digest::hexDigest(B->encode(clear_text)));
+   EXPECT_EQ("C92D22324C6B31AE", Vector::toHexString(B->encode(clear_text)));
 }
 
 TEST_F(SkipjackTest, decodeSecond)
 {
    const std::vector<uint8_t> clear_text = {0x1d, 0xdf, 0x39, 0xab, 0xf5, 0xcd, 0x71, 0x1e};
    
-   EXPECT_EQ(Digest::hexDigest(clear_text), Digest::hexDigest(B->decode(Digest::getBytesFromHexDigest("C92D22324C6B31AE"))));
+   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(B->decode(String::hexToBytes("C92D22324C6B31AE"))));
 }
 
 #endif

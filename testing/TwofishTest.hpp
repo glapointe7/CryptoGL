@@ -30,32 +30,32 @@ protected:
 
 TEST_F(TwofishTest, encode128)
 {
-   EXPECT_EQ("9F589F5CF6122C32B6BFEC2F2AE8C35A", Digest::hexDigest(C128->encode(BytesVector(16, 0))));
+   EXPECT_EQ("9F589F5CF6122C32B6BFEC2F2AE8C35A", Vector::toHexString(C128->encode(BytesVector(16, 0))));
 }
 
 TEST_F(TwofishTest, decode128)
 {
-   EXPECT_EQ("00000000000000000000000000000000", Digest::hexDigest(C128->decode(Digest::getBytesFromHexDigest("9F589F5CF6122C32B6BFEC2F2AE8C35A"))));
+   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C128->decode(String::hexToBytes("9F589F5CF6122C32B6BFEC2F2AE8C35A"))));
 }
 
 TEST_F(TwofishTest, encode192)
 {
-   EXPECT_EQ("CFD1D2E5A9BE9CDF501F13B892BD2248", Digest::hexDigest(C192->encode(BytesVector(16, 0))));
+   EXPECT_EQ("CFD1D2E5A9BE9CDF501F13B892BD2248", Vector::toHexString(C192->encode(BytesVector(16, 0))));
 }
 
 TEST_F(TwofishTest, decode192)
 {
-   EXPECT_EQ("00000000000000000000000000000000", Digest::hexDigest(C192->decode(Digest::getBytesFromHexDigest("CFD1D2E5A9BE9CDF501F13B892BD2248"))));
+   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C192->decode(String::hexToBytes("CFD1D2E5A9BE9CDF501F13B892BD2248"))));
 }
 
 TEST_F(TwofishTest, encode256)
 {
-   EXPECT_EQ("37527BE0052334B89F0CFCCAE87CFA20", Digest::hexDigest(C256->encode(BytesVector(16, 0))));
+   EXPECT_EQ("37527BE0052334B89F0CFCCAE87CFA20", Vector::toHexString(C256->encode(BytesVector(16, 0))));
 }
 
 TEST_F(TwofishTest, decode256)
 {
-   EXPECT_EQ("00000000000000000000000000000000", Digest::hexDigest(C256->decode(Digest::getBytesFromHexDigest("37527BE0052334B89F0CFCCAE87CFA20"))));
+   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C256->decode(String::hexToBytes("37527BE0052334B89F0CFCCAE87CFA20"))));
 }
 
 #endif

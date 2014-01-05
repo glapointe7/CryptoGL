@@ -37,7 +37,6 @@ private:
    static uint64_t FL(const uint64_t &half_block, const uint64_t &subkey);
    static uint64_t FLInverse(const uint64_t &half_block, const uint64_t &subkey);
    
-   
    UInt64Vector Kw;
    UInt64Vector Ke;
    

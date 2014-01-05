@@ -5,8 +5,7 @@
 #include "exceptions/BadChar.hpp"
 #include "exceptions/EmptyKey.hpp"
 
-Nihilistes::Nihilistes(const KeyType &key, const KeyType &second_key)
-: SquareCipher(key)
+Nihilistes::Nihilistes(const KeyType &key, const KeyType &second_key) : SquareCipher(key)
 {
    checkKey(second_key);
    this->second_key = second_key;
@@ -15,12 +14,11 @@ Nihilistes::Nihilistes(const KeyType &key, const KeyType &second_key)
 ClassicalType Nihilistes::encode(const ClassicalType &clear_text)
 {
    const uint32_t clear_len = clear_text.length();
-   const KeyType key = getKey();
    const uint32_t second_key_len = second_key.length();
    ClassicalType crypted;
    crypted.reserve(clear_len * 2);
 
-   const Grid grid(getGrid(key + alpha));
+   const Grid grid(getGrid(getKey() + alpha));
 
    uint32_t i = 0;
    for (const auto c : clear_text)
@@ -47,11 +45,10 @@ ClassicalType Nihilistes::encode(const ClassicalType &clear_text)
 ClassicalType Nihilistes::decode(const ClassicalType &cipher_text)
 {
    const uint32_t cipher_len = cipher_text.length();
-   const KeyType key = getKey();
    const uint32_t second_key_len = second_key.length();
    ClassicalType decrypted;
    decrypted.reserve(cipher_len / 2);
-   const Grid grid(getGrid(key + alpha));
+   const Grid grid(getGrid(getKey() + alpha));
 
    uint32_t j = 0;
    for (uint32_t i = 0; i < cipher_len; i += 2)

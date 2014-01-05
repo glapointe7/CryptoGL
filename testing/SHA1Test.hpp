@@ -23,12 +23,12 @@ protected:
 
 TEST_F(SHA1Test, encode)
 {  
-   EXPECT_EQ("DA39A3EE5E6B4B0D3255BFEF95601890AFD80709", Digest::hexDigest(S->encode(BytesVector(0))));
+   EXPECT_EQ("DA39A3EE5E6B4B0D3255BFEF95601890AFD80709", Vector::toHexString(S->encode(BytesVector(0))));
 }
 
 TEST_F(SHA1Test, encodeHMACEmptyText)
 {
-   EXPECT_EQ("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D", Digest::hexDigest(S->hmacEncode(BytesVector(0), BytesVector(0))));
+   EXPECT_EQ("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D", Vector::toHexString(S->hmacEncode(BytesVector(0), BytesVector(0))));
 }
 
 TEST_F(SHA1Test, encodeHMACText)
@@ -36,8 +36,8 @@ TEST_F(SHA1Test, encodeHMACText)
    const std::string clear_text = "The quick brown fox jumps over the lazy dog";
    const std::string hash = "DE7C9B85B8B78AA6BC8A7A36F70A90701C9DB4D9";
    
-   EXPECT_EQ(hash, Digest::hexDigest(S->hmacEncode(Digest::getBytesFromString("key"), 
-           Digest::getBytesFromString(clear_text))));
+   EXPECT_EQ(hash, Vector::toHexString(S->hmacEncode(String::toBytes("key"), 
+           String::toBytes(clear_text))));
 }
 
 #endif

@@ -27,22 +27,22 @@ protected:
 TEST_F(RC2Test, encodeWith8BytesKey)
 {   
    const std::vector<uint8_t> clear_text = {0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
-   EXPECT_EQ("30649EDF9BE7D2C2", Digest::hexDigest(R->encode(clear_text)));
+   EXPECT_EQ("30649EDF9BE7D2C2", Vector::toHexString(R->encode(clear_text)));
 }
 
 TEST_F(RC2Test, decodeWith8BytesKey)
 {
-   EXPECT_EQ("1000000000000001", Digest::hexDigest(R->decode(Digest::getBytesFromHexDigest("30649EDF9BE7D2C2"))));
+   EXPECT_EQ("1000000000000001", Vector::toHexString(R->decode(String::hexToBytes("30649EDF9BE7D2C2"))));
 }
 
 TEST_F(RC2Test, encodeWith16BytesKey)
 {   
-   EXPECT_EQ("2269552AB0F85CA6", Digest::hexDigest(C->encode(std::vector<uint8_t>(8, 0))));
+   EXPECT_EQ("2269552AB0F85CA6", Vector::toHexString(C->encode(std::vector<uint8_t>(8, 0))));
 }
 
 TEST_F(RC2Test, decodeWith16BytesKey)
 {
-   EXPECT_EQ("0000000000000000", Digest::hexDigest(C->decode(Digest::getBytesFromHexDigest("2269552AB0F85CA6"))));
+   EXPECT_EQ("0000000000000000", Vector::toHexString(C->decode(String::hexToBytes("2269552AB0F85CA6"))));
 }
 
 #endif

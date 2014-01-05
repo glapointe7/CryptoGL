@@ -5,6 +5,7 @@
 #include "FunctionComposition.hpp"
 #include "exceptions/BadKeyLength.hpp"
 #include "BigEndian.hpp"
+#include "Vector.hpp"
 
 constexpr std::array<std::array<uint8_t, 4>, 4> Salsa20::sigma;
 constexpr std::array<std::array<uint8_t, 4>, 4> Salsa20::tau;
@@ -42,17 +43,17 @@ UInt32Vector Salsa20::quarterRound(const UInt32Vector &Y)
 
 UInt32Vector Salsa20::rowRound(const UInt32Vector &Y)
 {
-   UInt32Vector Z = quarterRound({Y[0], Y[1], Y[2], Y[3]});
+   UInt32Vector Z = quarterRound(Y);
    Z.reserve(16);
    
    UInt32Vector tmp = quarterRound({Y[5], Y[6], Y[7], Y[4]});
-   Z.insert(Z.end(), {tmp[3], tmp[0], tmp[1], tmp[2]});
+   Vector::extend(Z, {tmp[3], tmp[0], tmp[1], tmp[2]});
    
    tmp = quarterRound({Y[10], Y[11], Y[8], Y[9]});
-   Z.insert(Z.end(), {tmp[2], tmp[3], tmp[0], tmp[1]});
+   Vector::extend(Z, {tmp[2], tmp[3], tmp[0], tmp[1]});
    
    tmp = quarterRound({Y[15], Y[12], Y[13], Y[14]});
-   Z.insert(Z.end(), {tmp[1], tmp[2], tmp[3], tmp[0]});
+   Vector::extend(Z, {tmp[1], tmp[2], tmp[3], tmp[0]});
    
    return Z;
 }
@@ -83,16 +84,14 @@ UInt32Vector Salsa20::doubleRound(const UInt32Vector &Y)
 
 void Salsa20::keySetup()
 {
-   subkeys.clear();
    subkeys.reserve(64);
-   BytesVector counter_bytes = LittleEndian64::toBytesVector(counter);
    if(key.size() == 32)
    {
       subkeys.insert(subkeys.end(), std::begin(sigma[0]), std::end(sigma[0]));
       subkeys.insert(subkeys.end(), key.begin(), key.begin() + 16);
       subkeys.insert(subkeys.end(), std::begin(sigma[1]), std::end(sigma[1]));
       IVSetup();
-      subkeys.insert(subkeys.end(), counter_bytes.begin(), counter_bytes.end());
+      Vector::extend(subkeys, LittleEndian64::toBytesVector(counter));
       subkeys.insert(subkeys.end(), std::begin(sigma[2]), std::end(sigma[2]));
       subkeys.insert(subkeys.end(), key.begin() + 16, key.end());
       subkeys.insert(subkeys.end(), std::begin(sigma[3]), std::end(sigma[3]));
@@ -100,19 +99,19 @@ void Salsa20::keySetup()
    else
    {
       subkeys.insert(subkeys.end(), std::begin(tau[0]), std::end(tau[0]));
-      subkeys.insert(subkeys.end(), key.begin(), key.end());
+      Vector::extend(subkeys, key);
       subkeys.insert(subkeys.end(), std::begin(tau[1]), std::end(tau[1]));
       IVSetup();
-      subkeys.insert(subkeys.end(), counter_bytes.begin(), counter_bytes.end());
+      Vector::extend(subkeys, LittleEndian64::toBytesVector(counter));
       subkeys.insert(subkeys.end(), std::begin(tau[2]), std::end(tau[2]));
-      subkeys.insert(subkeys.end(), key.begin(), key.end());
+      Vector::extend(subkeys, key);
       subkeys.insert(subkeys.end(), std::begin(tau[3]), std::end(tau[3]));
    }
 }
 
 void Salsa20::IVSetup()
 {
-   subkeys.insert(subkeys.end(), IV.begin(), IV.end());
+   Vector::extend(subkeys, IV);
 }
 
 UInt32Vector Salsa20::generateKeystream()
@@ -126,9 +125,7 @@ UInt32Vector Salsa20::generateKeystream()
    result.reserve(16);
    for(uint8_t i = 0; i < 16; ++i)
    {
-      const uint32_t value = z[i] + x[i];
-      result.push_back((value & 0xFF) << 24 | (value & 0xFF00) << 8 |
-         (value & 0xFF0000) >> 8 | (value & 0xFF000000) >> 24);
+      result.push_back(Bits::bytesSwap(z[i] + x[i]));
    }
    
    return result;

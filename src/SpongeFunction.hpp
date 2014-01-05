@@ -55,9 +55,8 @@ protected:
    DataTypeMatrix state;
    
 public:
-
    /* General encoding using the sponge construction. */
-   virtual BytesVector encode(const BytesVector &data) final
+   BytesVector encode(BytesVector data)
    {
       state.resize(5);
       for(uint8_t x = 0; x < 5; ++x)
@@ -65,9 +64,9 @@ public:
          state[x].resize(5);
       }
  
-      const BytesVector padded_message = Padding::_10Star1(data, bitrate >> 3);
+      data = Padding::_10Star1(data, bitrate / 8);
       
-      applyAbsorbingPhase(padded_message);
+      applyAbsorbingPhase(data);
 
       return applySqueezingPhase();
    }

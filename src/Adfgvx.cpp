@@ -33,7 +33,7 @@ void Adfgvx::setGridKey(const Grid &grid)
       throw BadGridDimension("Your grid key should be of dimension 6 by 6.", dimension);
    }
    
-   for(const auto row : grid)
+   for(const auto &row : grid)
    {
       const char c = badAlphaFound(row);
       if(c != 0)
@@ -53,7 +53,6 @@ Int32Vector Adfgvx::getPermutationKey() const
    
    Int32Vector perm_key;
    perm_key.reserve(key.length());
-   
    for(const auto c : key)
    {
       perm_key.push_back(sorted_key.find(c));
@@ -120,9 +119,9 @@ uint8_t Adfgvx::is6X6(const Grid &grid)
       return grid_size;
    }
    
-   for(const auto row : grid)
+   for(const auto &row : grid)
    {
-      const uint8_t row_size = row.length();
+      const uint8_t row_size = row.size();
       if(row_size != 6)
       {
          return row_size;

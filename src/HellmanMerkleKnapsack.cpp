@@ -43,7 +43,7 @@ HellmanMerkleKnapsack::HellmanMerkleKnapsack(const BigIntVector &sequence, const
 BigInteger HellmanMerkleKnapsack::isSuperIncresing(const BigIntVector &sequence)
 {
    BigInteger sum;
-   for (const auto number : sequence)
+   for (const auto &number : sequence)
    {
       if (number <= sum)
       {
@@ -58,25 +58,24 @@ BigInteger HellmanMerkleKnapsack::isSuperIncresing(const BigIntVector &sequence)
 void HellmanMerkleKnapsack::makePublicKey()
 {
    public_key.reserve(sequence.size());
-   for(const auto value : sequence)
+   for(const auto &value : sequence)
    {
       public_key.push_back((value * div) % mod);
    }
 }
 
-uint8_t HellmanMerkleKnapsack::makePlainByte(const BigInteger &value)
+uint8_t HellmanMerkleKnapsack::makePlainByte(BigInteger value)
 {
    uint8_t byte = 0;
-   BigInteger remaining = value;
    uint8_t pos = 7;
-   while(remaining > 0)
+   while(value > 0)
    {
-      while(remaining < sequence[pos])
+      while(value < sequence[pos])
       {
          pos--;
       }
       byte = Bits::setBitAtPosition(7-pos, byte);
-      remaining -= sequence[pos];
+      value -= sequence[pos];
    }
    
    return byte;
@@ -108,10 +107,9 @@ BytesVector HellmanMerkleKnapsack::decode(const BigIntVector &cipher)
    
    const BigInteger inverse_div = Maths::getModInverse(div, mod);
    
-   for(const auto value : cipher)
+   for(const auto &value : cipher)
    {
-      const BigInteger number = (value * inverse_div) % mod;
-      decrypted.push_back(makePlainByte(number));
+      decrypted.push_back(makePlainByte((value * inverse_div) % mod));
    }
    
    return decrypted;

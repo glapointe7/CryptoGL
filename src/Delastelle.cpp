@@ -4,7 +4,6 @@
 #include "MathematicalTools.hpp"
 
 #include <vector>
-#include <utility>
 
 void Delastelle::setBlockLength(const uint32_t block_len)
 {
@@ -18,7 +17,7 @@ void Delastelle::setBlockLength(const uint32_t block_len)
 
 ClassicalType Delastelle::encode(const ClassicalType &clear_text)
 {
-   const ClassicalType full_text(appendChars(clear_text, block_len, 'X'));
+   const ClassicalType full_text = appendChars(clear_text, block_len, 'X');
    const uint32_t clear_len = full_text.length();
 
    // Separate the text in blocks of length chosen by block_len.
@@ -31,14 +30,14 @@ ClassicalType Delastelle::encode(const ClassicalType &clear_text)
    }
 
    // Fill the cipher grid.
-   const Grid grid = getGrid(getKey() + alpha);
+   const Grid grid = getGrid(getKey().append(alpha));
    
    // Under each letter, we note coordinates of letters verticaly.
    ClassicalType crypted;
    crypted.reserve(clear_len);
-   for (const auto str : block)
+   for (const auto &str : block)
    {
-      std::vector<uint8_t> X, Y;
+      BytesVector X, Y;
       X.reserve(block_len);
       Y.reserve(block_len);
       for (const auto c : str)
@@ -81,12 +80,9 @@ ClassicalType Delastelle::encode(const ClassicalType &clear_text)
 
 ClassicalType Delastelle::decode(const ClassicalType &cipher_text)
 {
-   const uint32_t cipher_len = cipher_text.length() << 1;
-   ClassicalType decrypted;
-   decrypted.reserve(cipher_len >> 1);
-
-   const Grid grid(getGrid(getKey() + alpha));
-   std::vector<uint8_t> chars_coords;
+   const uint32_t cipher_len = cipher_text.length() * 2;
+   const Grid grid = getGrid(getKey().append(alpha));
+   BytesVector chars_coords;
    chars_coords.reserve(cipher_len);
    for (const auto c : cipher_text)
    {
@@ -95,7 +91,9 @@ ClassicalType Delastelle::decode(const ClassicalType &cipher_text)
       chars_coords.push_back(coords.first);
    }
 
-   const uint32_t double_block_len = block_len << 1;
+   ClassicalType decrypted;
+   decrypted.reserve(cipher_len / 2);
+   const uint32_t double_block_len = block_len * 2;
    for (uint32_t i = 0; i < cipher_len; i += double_block_len)
    {
       for (uint32_t k = 0; k < block_len; ++k)

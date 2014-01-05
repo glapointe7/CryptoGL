@@ -28,7 +28,7 @@ TEST_F(ScreamTest, generateS)
    const BytesVector keystream = S->generateKeystream();
    const BytesVector input = BytesVector(keystream.begin(), keystream.begin() + 16);
       
-   EXPECT_EQ("748C59F20D769EA87A6DC18746E64AC0", Digest::hexDigest(input));
+   EXPECT_EQ("748C59F20D769EA87A6DC18746E64AC0", Vector::toHexString(input));
 }
 
 #endif

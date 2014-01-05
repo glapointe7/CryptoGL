@@ -22,8 +22,6 @@ public:
    explicit Tiger(const HashSize output_size) 
       : Tiger(output_size, Version::tiger) {}
       
-   virtual ~Tiger() {}
-      
 private:   
    static void applyKeySchedule(UInt64Vector &words);
    static void applyRound(uint64_t &a, uint64_t &b, uint64_t &c, const uint64_t &word, const uint8_t mult);

@@ -4,7 +4,7 @@
  */
 
 #ifndef DES_HPP
-#define	DES_HPP
+#define DES_HPP
 
 #include "Feistel.hpp"
 #include "BigEndian.hpp"
@@ -37,6 +37,24 @@ private:
    virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
    
    static uint64_t getSubstitution(const uint64_t &key_mixed);
+   
+   template <uint8_t TableSize>
+   static uint64_t getBitsFromTable(const uint64_t &data, const std::array<uint8_t, TableSize> &table, const uint8_t from)
+   {
+      uint8_t i = TableSize;
+      uint64_t output = 0;
+
+      for (uint8_t k = 0; k < TableSize; ++k)
+      {
+         --i;
+         if ((data >> (from - table[k])) & 1)
+         {
+            output |= 1ull << i;
+         }
+      }
+
+      return output;
+   }
    
    /* Left rotation table for the 16 rounds. */
    static constexpr std::array<uint8_t, 16> rot_table = {

@@ -29,7 +29,7 @@ private:
    const uint64_t output_size;
    
    /*16 LFSR stages of 32 bits each. */
-   UInt32Vector stages;
+   UInt32Vector state;
    
    /* The registers of the FSM. */
    uint32_t R1, R2, R3;
@@ -41,7 +41,7 @@ private:
    static uint32_t mulAlpha(const uint8_t c);
    static uint32_t divAlpha(const uint8_t c);
    
-   void shiftStages(const uint32_t v);
+   void nextState(const uint32_t v);
    uint32_t getv() const;
    void initializationMode(const uint32_t F);
    void keystreamMode();

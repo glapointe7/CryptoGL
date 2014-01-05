@@ -29,7 +29,7 @@ TEST_F(HC256Test, encodeZero)
    const std::string out = "8589075B0DF3F6D82FC0C5425179B6A63465F053F2891F808B24744E18480B72"
       "EC2792CDBF4DCFEB7769BF8DFA14AEE47B4C50E8EAF3A9C8F506016C81697E32";
    
-   EXPECT_EQ(out, Digest::hexDigest(R->encode(BytesVector(64, 0))));
+   EXPECT_EQ(out, Vector::toHexString(R->encode(BytesVector(64, 0))));
 }
 
 #endif

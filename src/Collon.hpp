@@ -20,8 +20,6 @@ public:
    virtual ClassicalType encode(const ClassicalType &clear_text) final;
    virtual ClassicalType decode(const ClassicalType &cipher_text) final;
 
-   //void setBlockLength(const uint32_t block_len);
-
 private:
    //using ZeroBlockLength = Exception;
    

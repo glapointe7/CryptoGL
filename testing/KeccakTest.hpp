@@ -32,7 +32,7 @@ TEST_F(KeccakTest, encodeEmpty224)
 {
    std::string hash = "F71837502BA8E10837BDD8D365ADB85591895602FC552B48B7390ABD";
 
-   EXPECT_EQ(hash, Digest::hexDigest(S->encode(std::vector<uint8_t>(0))));
+   EXPECT_EQ(hash, Vector::toHexString(S->encode(std::vector<uint8_t>(0))));
 }
 
 TEST_F(KeccakTest, encodeShort224)
@@ -40,14 +40,14 @@ TEST_F(KeccakTest, encodeShort224)
    std::string hash = "6F9D2898EFD096BAAAAAB2E97482DDB6389B8E6CAA964B7A0E347E13";
    std::vector<uint8_t> cipher = {0x1F, 0x87, 0x7C};
    
-   EXPECT_EQ(hash, Digest::hexDigest(S->encode(cipher)));
+   EXPECT_EQ(hash, Vector::toHexString(S->encode(cipher)));
 }
 
 TEST_F(KeccakTest, encodeEmpty256)
 {
    std::string hash = "C5D2460186F7233C927E7DB2DCC703C0E500B653CA82273B7BFAD8045D85A470";
 
-   EXPECT_EQ(hash, Digest::hexDigest(T->encode(std::vector<uint8_t>(0))));
+   EXPECT_EQ(hash, Vector::toHexString(T->encode(std::vector<uint8_t>(0))));
 }
 
 TEST_F(KeccakTest, encodeShort256)
@@ -55,14 +55,14 @@ TEST_F(KeccakTest, encodeShort256)
    std::string hash = "627D7BC1491B2AB127282827B8DE2D276B13D7D70FB4C5957FDF20655BC7AC30";
    std::vector<uint8_t> cipher = {0x1F, 0x87, 0x7C};
    
-   EXPECT_EQ(hash, Digest::hexDigest(T->encode(cipher)));
+   EXPECT_EQ(hash, Vector::toHexString(T->encode(cipher)));
 }
 
 TEST_F(KeccakTest, encodeEmpty384)
 {
    std::string hash = "2C23146A63A29ACF99E73B88F8C24EAA7DC60AA771780CCC006AFBFA8FE2479B2DD2B21362337441AC12B515911957FF";
 
-   EXPECT_EQ(hash, Digest::hexDigest(U->encode(std::vector<uint8_t>(0))));
+   EXPECT_EQ(hash, Vector::toHexString(U->encode(std::vector<uint8_t>(0))));
 }
 
 TEST_F(KeccakTest, encodeShort384)
@@ -70,7 +70,7 @@ TEST_F(KeccakTest, encodeShort384)
    std::string hash = "B0665C345F45E6DE145B0190335EF5D5AA59E0B49FC1425D5EAE7355EA442284CB8A2152D565EBDF2810ECCAB15AF04F";
    std::vector<uint8_t> cipher = {0x1F, 0x87, 0x7C};
    
-   EXPECT_EQ(hash, Digest::hexDigest(U->encode(cipher)));
+   EXPECT_EQ(hash, Vector::toHexString(U->encode(cipher)));
 }
 
 TEST_F(KeccakTest, encodeLong512)
@@ -85,7 +85,7 @@ TEST_F(KeccakTest, encodeLong512)
            "437095707C565E10D8A20B8C20468FF9514FCF31B4249CD82DCEE58C0A2AF538B291A87E3390D737191A07"
            "484A5D3F3FB8C8F15CE056E5E5F8FEBE5E1FB59D6740980AA06CA8A0C20F5712B4CDE5D032E92AB89F0AE1";
 
-   EXPECT_EQ(hash, Digest::hexDigest(V->encode(Digest::getBytesFromHexDigest(digest))));
+   EXPECT_EQ(hash, Vector::toHexString(V->encode(String::hexToBytes(digest))));
 }
      
 TEST_F(KeccakTest, encodeEmpty512)
@@ -93,7 +93,7 @@ TEST_F(KeccakTest, encodeEmpty512)
    std::string hash = "0EAB42DE4C3CEB9235FC91ACFFE746B29C29A8C366B7C60E4E67C466F36A4304C"
            "00FA9CAF9D87976BA469BCBE06713B435F091EF2769FB160CDAB33D3670680E";
 
-   EXPECT_EQ(hash, Digest::hexDigest(V->encode(std::vector<uint8_t>(0))));
+   EXPECT_EQ(hash, Vector::toHexString(V->encode(std::vector<uint8_t>(0))));
 }
 
 TEST_F(KeccakTest, encodeShort512)
@@ -103,7 +103,7 @@ TEST_F(KeccakTest, encodeShort512)
 
    std::vector<uint8_t> cipher = {0x1F, 0x87, 0x7C};
    
-   EXPECT_EQ(hash, Digest::hexDigest(V->encode(cipher)));
+   EXPECT_EQ(hash, Vector::toHexString(V->encode(cipher)));
 }
 
 #endif

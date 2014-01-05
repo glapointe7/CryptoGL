@@ -7,6 +7,7 @@
 #include "HashFunction.hpp"
 #include "BigEndian.hpp"
 #include "Bits.hpp"
+#include "Vector.hpp"
 
 #include <array>
 
@@ -113,7 +114,7 @@ private:
       DataTypeVector v;
       v.reserve(16);
       
-      v.insert(v.end(), h.begin(), h.end());
+      Vector::extend(v, h);
       for(uint8_t i = 0; i < 4; ++i)
       {
          v.push_back(salt[i] ^ C[i]);
@@ -195,7 +196,7 @@ public:
 		0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19}, 14, 32) {}
       
 private:
-   virtual BytesVector pad(const BytesVector &message) const final;
+   virtual BytesVector pad(BytesVector message) const final;
 };
 
 class Blake384 : public Blake<uint64_t, 128>
@@ -212,7 +213,7 @@ public:
 		0x510E527FADE682D1, 0x9B05688C2B3E6C1F, 0x1F83D9ABFB41BD6B, 0x5BE0CD19137E2179}, 16, 64) {}
       
 private:
-   virtual BytesVector pad(const BytesVector &message) const final;
+   virtual BytesVector pad(BytesVector message) const final;
 };
 
 #endif

@@ -14,12 +14,13 @@ constexpr std::array<uint32_t, 256> Camellia::SP4404;
 
 void Camellia::setKey(const BytesVector &key)
 {
-   if (key.size() != 16 && key.size() != 24 && key.size() != 32)
+   const uint8_t key_size = key.size();
+   if (key_size != 16 && key_size != 24 && key_size != 32)
    {
-      throw BadKeyLength("Your key length has to be 16, 24 or 32 bytes.", key.size());
+      throw BadKeyLength("Your key length has to be 16, 24 or 32 bytes.", key_size);
    }
    
-   if(key.size() == 16)
+   if(key_size == 16)
    {
       rounds = 18;
    }
@@ -71,65 +72,30 @@ void Camellia::generateSubkeys()
    
    BytesVector Ka = BigEndian64::toBytesVector(K1);
    Ka.reserve(16);
-   BytesVector tmp = BigEndian64::toBytesVector(K2);
-   Ka.insert(Ka.end(), tmp.begin(), tmp.end());
+   Vector::extend(Ka, BigEndian64::toBytesVector(K2));
          
    /* Prewhitening phase. */
    Kw.reserve(4);
-   Kw.push_back(BigEndian64::toInteger(BytesVector(Kl.begin(), Kl.begin() + 8)));
-   Kw.push_back(BigEndian64::toInteger(BytesVector(Kl.begin() + 8, Kl.end())));
+   Vector::extend(Kw, BigEndian64::toIntegersVector(Kl));
    subkeys.reserve(rounds);
    
    if(rounds == 18)
    {
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(Ka.begin(), Ka.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(Ka.begin() + 8, Ka.end())));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Ka));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kl, 15)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Ka, 15)));
+      Vector::extend(Ke, BigEndian64::toIntegersVector(Bits::rotateLeft128(Ka, 30)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kl, 45)));
 
-      tmp = Bits::rotateLeft128(Kl, 15);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
+      subkeys.push_back(BigEndian64::toIntegerRange(Bits::rotateLeft128(Ka, 45), 8));
+      subkeys.push_back(BigEndian64::toIntegerRange(Bits::rotateLeft128(Kl, 60), 8, 16));
 
-      tmp = Bits::rotateLeft128(Ka, 15);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-
-      tmp = Bits::rotateLeft128(Ka, 30);
-      Ke.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      Ke.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-
-      tmp = Bits::rotateLeft128(Kl, 45);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-
-      tmp = Bits::rotateLeft128(Ka, 45);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      tmp = Bits::rotateLeft128(Kl, 60);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-
-      tmp = Bits::rotateLeft128(Ka, 60);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-
-      tmp = Bits::rotateLeft128(Kl, 77);
-      Ke.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      Ke.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-
-      tmp = Bits::rotateLeft128(Kl, 94);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-
-      tmp = Bits::rotateLeft128(Ka, 94);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-
-      tmp = Bits::rotateLeft128(Kl, 111);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      /* Postwhitening phase. */
-      tmp = Bits::rotateLeft128(Ka, 111);
-      Kw.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      Kw.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Ka, 60)));
+      Vector::extend(Ke, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kl, 77)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kl, 94)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Ka, 94)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kl, 111)));
+      Vector::extend(Kw, BigEndian64::toIntegersVector(Bits::rotateLeft128(Ka, 111)));
    }
    else
    {
@@ -141,72 +107,24 @@ void Camellia::generateSubkeys()
 
       BytesVector Kb = BigEndian64::toBytesVector(K1);
       Kb.reserve(16);
-      tmp = BigEndian64::toBytesVector(K2);
-      Kb.insert(Kb.end(), tmp.begin(), tmp.end());
+      Vector::extend(Kb, BigEndian64::toBytesVector(K2));
       
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(Kb.begin(), Kb.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(Kb.begin() + 8, Kb.end())));
-
-      tmp = Bits::rotateLeft128(Kr, 15);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      tmp = Bits::rotateLeft128(Ka, 15);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      tmp = Bits::rotateLeft128(Kr, 30);
-      Ke.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      Ke.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      tmp = Bits::rotateLeft128(Kb, 30);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      tmp = Bits::rotateLeft128(Kl, 45);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      tmp = Bits::rotateLeft128(Ka, 45);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      tmp = Bits::rotateLeft128(Kl, 60);
-      Ke.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      Ke.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      tmp = Bits::rotateLeft128(Kr, 60);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      tmp = Bits::rotateLeft128(Kb, 60);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      tmp = Bits::rotateLeft128(Kl, 77);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      tmp = Bits::rotateLeft128(Ka, 77);
-      Ke.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      Ke.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      tmp = Bits::rotateLeft128(Kr, 94);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      tmp = Bits::rotateLeft128(Ka, 94);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      tmp = Bits::rotateLeft128(Kl, 111);
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      subkeys.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
-      
-      /* Postwhitening phase. */
-      tmp = Bits::rotateLeft128(Kb, 111);
-      Kw.push_back(BigEndian64::toInteger(BytesVector(tmp.begin(), tmp.begin() + 8)));
-      Kw.push_back(BigEndian64::toInteger(BytesVector(tmp.begin() + 8, tmp.end())));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Kb));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kr, 15)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Ka, 15)));
+      Vector::extend(Ke, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kr, 30)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kb, 30)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kl, 45)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Ka, 45)));
+      Vector::extend(Ke, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kl, 60)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kr, 60)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kb, 60)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kl, 77)));
+      Vector::extend(Ke, BigEndian64::toIntegersVector(Bits::rotateLeft128(Ka, 77)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kr, 94)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Ka, 94)));
+      Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kl, 111)));
+      Vector::extend(Kw, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kb, 111)));
    }   
 }
 
@@ -259,18 +177,18 @@ void Camellia::encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) cons
       L ^= F(R ^ subkeys[j + 1], 0);
    }
    
-   const uint8_t big_rounds = rounds >> 3;
+   const uint8_t big_rounds = rounds / 8;
    for(uint8_t i = 0; i < big_rounds; ++i)
    {
-      const uint8_t index = 6 * i;
-      const uint8_t Ke_index = index / 3;
+      const uint8_t Ke_index = 2 * i;
       L = FL(L, Ke[Ke_index]);
       R = FLInverse(R, Ke[Ke_index + 1]);
       
-      for(uint8_t j = 0; j < 6; j += 2)
+      const uint8_t index = 6 * i;
+      for(uint8_t j = 6; j < 12; j += 2)
       {
-         R ^= F(L ^ subkeys[index + j + 6], 0);
-         L ^= F(R ^ subkeys[index + j + 7], 0);
+         R ^= F(L ^ subkeys[index + j], 0);
+         L ^= F(R ^ subkeys[index + j + 1], 0);
       }
    }
    
@@ -287,14 +205,14 @@ void Camellia::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) cons
       L ^= F(R ^ subkeys[i - 1], 0);
    }
    
-   const uint8_t big_rounds = rounds >> 3;
+   const uint8_t big_rounds = rounds / 8;
    for(int8_t j = big_rounds - 1; j >= 0; --j)
    {
-      const uint8_t index = 6 * j;
-      const uint8_t Ke_index = index / 3;
+      const uint8_t Ke_index = 2 * j;
       L = FL(L, Ke[Ke_index + 1]);
       R = FLInverse(R, Ke[Ke_index]);
       
+      const uint8_t index = 6 * j;
       for(int8_t i = 5; i >= 0; i -= 2)
       {
          R ^= F(L ^ subkeys[index + i], 0);

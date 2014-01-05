@@ -33,7 +33,7 @@ TEST_F(RabbitTest, encode)
       0x51, 0xD4, 0x0C, 0x70, 0xC3, 0xA1, 0x16, 0xF4
    };
 
-   EXPECT_EQ(Digest::hexDigest(cipher), Digest::hexDigest(R->encode(BytesVector(48, 0))));
+   EXPECT_EQ(Vector::toHexString(cipher), Vector::toHexString(R->encode(BytesVector(48, 0))));
 }
 
 TEST_F(RabbitTest, decode)
@@ -47,7 +47,7 @@ TEST_F(RabbitTest, decode)
       0x51, 0xD4, 0x0C, 0x70, 0xC3, 0xA1, 0x16, 0xF4
    };
 
-   EXPECT_EQ(Digest::hexDigest(BytesVector(48, 0)), Digest::hexDigest(R->decode(cipher)));
+   EXPECT_EQ(Vector::toHexString(BytesVector(48, 0)), Vector::toHexString(R->decode(cipher)));
 }
 
 #endif

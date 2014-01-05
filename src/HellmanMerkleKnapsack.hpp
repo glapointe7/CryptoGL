@@ -21,7 +21,7 @@ public:
 private:
    virtual void makePublicKey() final;
    BigInteger isSuperIncresing(const BigIntVector &sequence);
-   uint8_t makePlainByte(const BigInteger &value);
+   uint8_t makePlainByte(BigInteger value);
    
    using SequenceNotSuperIncreasing = BadKey;
    using IntegersNotCoprimes = BadKey;

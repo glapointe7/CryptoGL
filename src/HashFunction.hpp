@@ -4,13 +4,13 @@
 #ifndef HASHFUNCTION_HPP
 #define HASHFUNCTION_HPP
 
-#include <vector>
 #include <string>
 
 #include "Types.hpp"
 
 #include "BigEndian.hpp"
 #include "LittleEndian.hpp"
+#include "Vector.hpp"
 
 /* 
  * DataType : An unsigned integer for the IV and integer input block.
@@ -46,31 +46,28 @@ protected:
       
    /* Append length in bits of the initial message to the padded message. */
    template <class EndianLengthType>
-   static BytesVector appendLength(const BytesVector &bytes, const uint64_t length)
+   static BytesVector appendLength(BytesVector bytes, const uint64_t &length)
    {
-      const BytesVector bytes_pad = EndianLengthType::toBytesVector(length);
-      BytesVector padded_bytes(bytes);
-      padded_bytes.insert(padded_bytes.end(), bytes_pad.begin(), bytes_pad.end());
+      Vector::extend(bytes, EndianLengthType::toBytesVector(length));
       
-      return padded_bytes;
+      return bytes;
    }
    
    /* Pad the initial message. */
-   virtual BytesVector pad(const BytesVector &data) const
+   virtual BytesVector pad(BytesVector data) const
    {
-      const uint8_t rest = sizeof(DataType) << 1;
-      BytesVector bytes_pad(data);
-      bytes_pad.reserve(data.size() + (input_block_size << 1));
+      const uint8_t rest = 2 * sizeof(DataType);
+      data.reserve(data.size() + (input_block_size * 2));
 
       // Append a bit '1' at the end.
-      bytes_pad.push_back(0x80);
+      data.push_back(0x80);
 
       // Pad with '0' bits at the end of bits_pad until the length is 448 (mod 512).
-      const uint8_t bytes_pad_len = ((input_block_size << 1) - rest - (bytes_pad.size() 
-                     & (input_block_size - 1))) & (input_block_size - 1);
-      bytes_pad.insert(bytes_pad.end(), bytes_pad_len + rest - 8, 0);
+      const uint8_t bytes_pad_len = ((input_block_size * 2) - rest - (data.size() 
+                     % input_block_size)) % input_block_size;
+      data.insert(data.end(), bytes_pad_len + rest - 8, 0);
 
-      return bytes_pad;
+      return data;
    }
    
    /* Transform the input bytes to input block of integers. */
@@ -93,19 +90,18 @@ protected:
    {
       BytesVector output;
       output.reserve(output_size);
-
-      const uint8_t DataType_size = sizeof(DataType);      
-      const uint8_t out_data_size = output_size / DataType_size;
+     
+      const uint8_t out_data_size = output_size / sizeof(DataType);
       for (uint8_t j = 0; j < out_data_size; ++j)
       {
-         const BytesVector bytes = EndianType::toBytesVector(hash[j]);
-         output.insert(output.end(), bytes.begin(), bytes.end());
+         Vector::extend(output, EndianType::toBytesVector(hash[j]));
       }
 
       return output;
    }
       
-public:   
+public:
+   /* Get and set for the IV. */
    DataTypeVector getIV() const
    {
       return IV;
@@ -116,27 +112,26 @@ public:
       this->IV = IV;
    }
    
-   BytesVector hmacEncode(const BytesVector &hmac_key, const BytesVector &message)
+   /* Encode a message with a key and return the HMAC. */
+   BytesVector hmacEncode(BytesVector hmac_key, const BytesVector &message)
    {
-      BytesVector key(hmac_key);
       if(hmac_key.size() > input_block_size)
       {
-         key = encode(key);
+         hmac_key = encode(hmac_key);
       }
       
       BytesVector out_key_pad(input_block_size, 0x5C);
       BytesVector in_key_pad(input_block_size, 0x36);
       
-      const uint8_t key_len = key.size();
-      for(uint8_t i = 0; i < key_len; ++i)
+      const uint8_t key_length = hmac_key.size();
+      for(uint8_t i = 0; i < key_length; ++i)
       {
-         out_key_pad[i] ^= key[i];
-         in_key_pad[i] ^= key[i];
+         out_key_pad[i] ^= hmac_key[i];
+         in_key_pad[i] ^= hmac_key[i];
       }
-      in_key_pad.insert(in_key_pad.end(), message.begin(), message.end());
       
-      const BytesVector in_key_pad_encoded = encode(in_key_pad);
-      out_key_pad.insert(out_key_pad.end(), in_key_pad_encoded.begin(), in_key_pad_encoded.end());
+      Vector::extend(in_key_pad, message);
+      Vector::extend(out_key_pad, encode(in_key_pad));
       
       return encode(out_key_pad);
    }

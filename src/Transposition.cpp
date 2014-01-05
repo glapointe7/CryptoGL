@@ -3,18 +3,18 @@
 
 #include <set>
 
-Transposition::Table Transposition::createTable(const ClassicalType &data)
+Transposition::Table Transposition::createTable(ClassicalType data)
 {
-   const uint32_t key_len = getKey().size();
-   const ClassicalType full_data(appendChars(data, key_len, 'X'));
-   const uint32_t data_len = full_data.length();
+   const uint32_t key_len = key.size();
+   data = appendChars(data, key_len, 'X');
+   const uint32_t data_len = data.length();
    Table table;
    table.reserve(data_len / key_len);
 
    // We fill the grid that will be read by column. 
    for (uint32_t i = 0; i < data_len; i += key_len)
    {
-      table.push_back(full_data.substr(i, key_len));
+      table.push_back(data.substr(i, key_len));
    }
 
    return table;
@@ -22,7 +22,7 @@ Transposition::Table Transposition::createTable(const ClassicalType &data)
 
 Transposition::Table Transposition::createIncompleteTable(const ClassicalType &data)
 {
-   const uint32_t key_len = getKey().size();
+   const uint32_t key_len = key.size();
    const uint32_t data_len = data.length();
    const uint32_t rows = data_len / key_len;
    Table table;
@@ -40,8 +40,8 @@ Transposition::Table Transposition::createIncompleteTable(const ClassicalType &d
 ClassicalType Transposition::readPermutedTable(const Table &table)
 {
    ClassicalType data;
-   data.reserve(table.size() * getKey().size());
-   for (const auto str : table)
+   data.reserve(table.size() * key.size());
+   for (const auto &str : table)
    {
       data.append(str);
    }
@@ -52,11 +52,10 @@ ClassicalType Transposition::readPermutedTable(const Table &table)
 // Rows complete encode / decode
 ClassicalType TranspositionCompleteRows::readPermutedTable(const Table &table)
 {
-   const KeyType key = getKey();
    ClassicalType data;
-   data.reserve(table.size() * getKey().size());
+   data.reserve(table.size() * key.size());
    
-   for (const auto str : table)
+   for (const auto &str : table)
    {
       for(const auto k : key)
       {
@@ -70,7 +69,6 @@ ClassicalType TranspositionCompleteRows::readPermutedTable(const Table &table)
 // Rows incomplete encode / decode
 ClassicalType TranspositionIncompleteRows::readPermutedTable(const Table &table)
 {
-   const KeyType key = getKey();
    const uint32_t key_len = key.size();
    const uint32_t rows = table.size();
    ClassicalType data;
@@ -89,7 +87,7 @@ ClassicalType TranspositionIncompleteRows::readPermutedTable(const Table &table)
    for (uint32_t j = 0; j < rest; ++j)
    {
       const auto it = std::next(last_row_sorted.begin(), key[j]);
-      const uint32_t pos = std::find(key.begin(), key.end(), *it) - key.begin();
+      const uint32_t pos = std::distance(key.begin(), std::find(key.begin(), key.end(), *it));
       data.push_back(table[rows - 1][pos]);
    }
 
@@ -98,10 +96,9 @@ ClassicalType TranspositionIncompleteRows::readPermutedTable(const Table &table)
 
 /* Implementation of TranspositionColumns */
 
-Transposition::Table
-TranspositionCompleteColumns::createTable(const ClassicalType &data)
+Transposition::Table TranspositionCompleteColumns::createTable(ClassicalType data)
 {
-   const uint32_t key_len = getKey().size();
+   const uint32_t key_len = key.size();
    const uint32_t data_len = data.length();
    const uint32_t rows = data_len / key_len;
    Table table(rows, ClassicalType(key_len, '.'));
@@ -111,7 +108,7 @@ TranspositionCompleteColumns::createTable(const ClassicalType &data)
    {
       for (uint32_t j = i; j < data_len; j += rows)
       {
-         const uint32_t pos = std::find(key.begin(), key.end(), k) - key.begin();
+         const uint32_t pos = std::distance(key.begin(), std::find(key.begin(), key.end(), k));
          table[i][pos] = data[j];
          k = (k+1) % key_len;
       }
@@ -122,14 +119,14 @@ TranspositionCompleteColumns::createTable(const ClassicalType &data)
 
 ClassicalType TranspositionCompleteColumns::readPermutedTable(const Table &table)
 {
-   const uint32_t key_len = getKey().size();
+   const uint32_t key_len = key.size();
    const uint32_t rows = table.size();
    ClassicalType data;
    data.reserve(rows * key_len);
 
    for (uint32_t i = 0; i < key_len; ++i)
    {
-      const uint32_t pos = std::find(key.begin(), key.end(), i) - key.begin();
+      const uint32_t pos = std::distance(key.begin(), std::find(key.begin(), key.end(), i));
       for(uint32_t j = 0; j < rows; ++j)
       {
          data.push_back(table[j][pos]);
@@ -144,8 +141,7 @@ ClassicalType TranspositionCompleteColumns::readPermutedTable(const Table &table
 Transposition::Table
 TranspositionIncompleteColumns::createIncompleteTable(const ClassicalType &data)
 {
-   const KeyType key = getKey();
-   const uint32_t key_len = getKey().size();
+   const uint32_t key_len = key.size();
    const uint32_t data_len = data.length();
    const uint32_t rows = (data_len / key_len)+1;
    const uint32_t rest = data_len % key_len;
@@ -155,7 +151,7 @@ TranspositionIncompleteColumns::createIncompleteTable(const ClassicalType &data)
    uint32_t k = 0;
    for (uint32_t i = 0; i < key_len; ++i)
    {
-      const uint32_t pos = std::find(key.begin(), key.end(), i) - key.begin();
+      const uint32_t pos = std::distance(key.begin(), std::find(key.begin(), key.end(), i));
       uint32_t total = rows;
       if(pos >= rest)
       {
@@ -171,9 +167,8 @@ TranspositionIncompleteColumns::createIncompleteTable(const ClassicalType &data)
 }
 
 ClassicalType
-TranspositionIncompleteColumns::readPermutedTable(const std::vector<ClassicalType> &table)
+TranspositionIncompleteColumns::readPermutedTable(const Table &table)
 {
-   const KeyType key = getKey();
    const uint32_t key_len = key.size();
    const uint32_t rows = table.size();
    const uint32_t last_row = table[rows - 1].length();
@@ -183,7 +178,7 @@ TranspositionIncompleteColumns::readPermutedTable(const std::vector<ClassicalTyp
    for (uint32_t i = 0; i < key_len; ++i)
    {
       uint32_t total = rows;
-      const uint32_t pos = std::find(key.begin(), key.end(), i) - key.begin();
+      const uint32_t pos = std::distance(key.begin(), std::find(key.begin(), key.end(), i));
       if(pos >= last_row)
       {
          total = rows - 1;

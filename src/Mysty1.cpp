@@ -66,9 +66,9 @@ uint32_t Mysty1::FLInverse(const uint32_t in, const uint8_t index) const
 void Mysty1::generateSubkeys()
 {
    subkeys.resize(32);
-   for(uint8_t i = 0; i < 8; ++i)
+   for(uint8_t i = 0; i < 16; i += 2)
    {
-      subkeys[i] = (key[i << 1] << 8) + key[2*i + 1];
+      subkeys[i / 2] = (key[i] << 8) + key[i + 1];
    }
    
    for(uint8_t i = 0; i < 8; ++i)

@@ -7,9 +7,10 @@
 
 void HC256::setKey(const BytesVector &key)
 {
-   if (key.size() != 32)
+   const uint8_t key_size = key.size();
+   if (key_size != 32)
    {
-      throw BadKeyLength("Your key has to be 256 bits length.", key.size());
+      throw BadKeyLength("Your key has to be 256 bits length.", key_size);
    }
    
    this->key = key;
@@ -18,9 +19,10 @@ void HC256::setKey(const BytesVector &key)
 
 void HC256::setIV(const BytesVector &IV)
 {
-   if (IV.size() != 32)
+   const uint8_t iv_size = IV.size();
+   if (iv_size != 32)
    {
-      throw BadIVLength("Your IV has to be 256 bits length.", IV.size());
+      throw BadIVLength("Your IV has to be 256 bits length.", iv_size);
    }
    
    this->IV = IV;
@@ -32,10 +34,8 @@ uint32_t HC256::g(const uint32_t x, const uint32_t y, const UInt32Vector &K)
 }
 
 uint32_t HC256::h(const uint32_t x, const UInt32Vector &K)
-{
-   const BytesVector X = LittleEndian32::toBytesVector(x);
-   
-   return K[X[0]] + K[256 + X[1]] + K[512 + X[2]] + K[768 + X[3]];
+{  
+   return K[x & 0xFF] + K[256 + ((x >> 8) & 0xFF)] + K[512 + ((x >> 16) & 0xFF)] + K[768 + (x >> 24)];
 }
 
 void HC256::keySetup()
@@ -61,29 +61,34 @@ void HC256::keySetup()
       W.push_back(F2(W[i - 2]) + W[i - 7] + F1(W[i - 15]) + W[i - 16] + i);
    }
    
-   for(uint16_t i = 0; i < 1024; ++i)
+   for(uint16_t i = 512; i < 1536; ++i)
    {
-      P.push_back(W[i + 512]);
-      Q.push_back(W[i + 1536]);
+      P.push_back(W[i]);
+      Q.push_back(W[i + 1024]);
    }
    
    for(uint8_t i = 0; i < 2; ++i)
    {
       for(uint16_t j = 0; j < 1024; ++j)
       {
-         P[j] += P[(j - 10) & 0x3FF] + g(P[(j - 3) & 0x3FF], P[(j - 1023) & 0x3FF], Q);
-      }
+         P[j] += calculateKey(P, Q, j);
+      }     
       
       for(uint16_t j = 0; j < 1024; ++j)
       {
-         Q[j] += Q[(j - 10) & 0x3FF] + g(Q[(j - 3) & 0x3FF], Q[(j - 1023) & 0x3FF], P);
+         Q[j] += calculateKey(Q, P, j);
       }
    }
 }
 
+uint32_t HC256::calculateKey(const UInt32Vector &PQ, const UInt32Vector &QP, const uint16_t i)
+{
+   return PQ[(i - 10) & 0x3FF] + g(PQ[(i - 3) & 0x3FF], PQ[(i - 1023) & 0x3FF], QP);
+}
+
 uint32_t HC256::updateSubkeys(UInt32Vector &K, const UInt32Vector &S, const uint16_t index)
 {
-   K[index] += K[(index - 10) & 0x3FF] + g(K[(index - 3) & 0x3FF], K[(index - 1023) & 0x3FF], S);
+   K[index] += calculateKey(K, S, index);
    
    return h(K[(index - 12) & 0x3FF], S) ^ K[index];
 }
@@ -93,16 +98,16 @@ UInt32Vector HC256::generateKeystream()
    UInt32Vector keystream;
    keystream.reserve(2048);
    
-   for(uint16_t index = 0; index < 2048; ++index)
+   for(uint8_t j = 0; j < 2; ++j)
    {
-      uint16_t j = index & 0x3FF;
-      if(index < 1024)
+      for(uint16_t i = 0; i < 1024; ++i)
       {
-         keystream.push_back(updateSubkeys(P, Q, j));
+         keystream.push_back(updateSubkeys(P, Q, i));
       }
-      else
+      
+      for(uint16_t i = 0; i < 1024; ++i)
       {
-         keystream.push_back(updateSubkeys(Q, P, j));
+         keystream.push_back(updateSubkeys(Q, P, i));
       }
    }
    

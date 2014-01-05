@@ -32,7 +32,7 @@ TEST_F(Salsa20Test, generate256Zero)
    const std::string expected = "9A97F65B9B4C721B960A672145FCA8D4E32E67F9111EA979CE9C4826806AEEE6"
            "3DE9C0DA2BD7F91EBCB2639BF989C6251B29BF38D39A9BDCE7C55F4B2AC12A39";
    
-   EXPECT_EQ(expected, Digest::hexDigest(R->generateKeystream()));
+   EXPECT_EQ(expected, Vector::toHexString(R->generateKeystream()));
 }
 
 TEST_F(Salsa20Test, generate128)
@@ -40,7 +40,7 @@ TEST_F(Salsa20Test, generate128)
    const std::string expected = "05E1E7BEB697D999656BF37C1B978806735D0B903A6007BD329927EFBE1B0E2A"
              "8137C1AE291493AA83A821755BEE0B06CD14855A67E46703EBF8F3114B584CBA";
    
-   EXPECT_EQ(expected, Digest::hexDigest(S128->generateKeystream()));
+   EXPECT_EQ(expected, Vector::toHexString(S128->generateKeystream()));
 }
 
 #endif

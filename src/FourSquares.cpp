@@ -9,7 +9,7 @@ FourSquares::FourSquares(const KeyType &key1, const KeyType &key2)
 
 ClassicalType FourSquares::encode(const ClassicalType &clear_text)
 {  
-   const ClassicalType full_text(appendChars(clear_text, 2, 'X'));
+   const ClassicalType full_text = appendChars(clear_text, 2, 'X');
    const uint32_t clear_len = full_text.length();
    ClassicalType crypted;
    crypted.reserve(clear_len);
@@ -17,8 +17,8 @@ ClassicalType FourSquares::encode(const ClassicalType &clear_text)
    // First 2 grids are simply the alphabet. Third and fourth use the keys.
    const Grid grid1(getGrid(alpha));
    const Grid grid2(grid1);
-   const Grid grid3(getGrid(getKey() + alpha));
-   const Grid grid4(getGrid(key2 + alpha));
+   const Grid grid3(getGrid(getKey().append(alpha)));
+   const Grid grid4(getGrid(key2.append(alpha)));
    
    for (uint32_t i = 0; i < clear_len; i += 2)
    {
@@ -40,8 +40,8 @@ ClassicalType FourSquares::decode(const ClassicalType &cipher_text)
    // First 2 grids are simply the alphabet. Third and fourth use the keys.
    const Grid grid1(getGrid(alpha));
    const Grid grid2(grid1);
-   const Grid grid3(getGrid(getKey() + alpha));
-   const Grid grid4(getGrid(key2 + alpha));
+   const Grid grid3(getGrid(getKey().append(alpha)));
+   const Grid grid4(getGrid(key2.append(alpha)));
    
    for (uint32_t i = 0; i < cipher_len; i += 2)
    {

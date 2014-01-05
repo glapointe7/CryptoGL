@@ -133,14 +133,11 @@ uint32_t AES::subWord(const uint32_t word)
 
 void AES::generateSubkeys()
 {
-   const uint8_t Nk = key.size() >> 2;
-   const uint8_t max_round = (rounds + 1) << 2;
+   const uint8_t Nk = key.size() / 4;
+   const uint8_t max_round = (rounds + 1) * 4;
 
    subkeys.reserve(max_round);
-   for (uint8_t i = 0; i < Nk; ++i)
-   {
-      subkeys.push_back(BigEndian32::toInteger(BytesVector(key.begin() + (i << 2), key.begin() + ((i + 1) << 2))));
-   }
+   Vector::extend(subkeys, BigEndian32::toIntegersVector(key));
 
    for (uint8_t i = Nk; i < max_round; ++i)
    {
@@ -161,7 +158,7 @@ void AES::addRoundKey(UInt32Vector &state, const uint8_t round) const
 {
    for (uint8_t i = 0; i < 4; ++i)
    {
-      state[i] ^= subkeys[(round << 2) + i];
+      state[i] ^= subkeys[(round * 4) + i];
    }
 }
 

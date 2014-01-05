@@ -16,7 +16,7 @@ protected:
 
    virtual void SetUp()
    {
-      R = new RC4(Digest::getBytesFromString("Key"));
+      R = new RC4(String::toBytes("Key"));
    }
 
    virtual void TearDown()
@@ -27,16 +27,16 @@ protected:
 
 TEST_F(RC4Test, encode)
 {
-   const BytesVector clear_text(Digest::getBytesFromString("Plaintext"));
+   const BytesVector clear_text(String::toBytes("Plaintext"));
    
-   EXPECT_EQ("BBF316E8D940AF0AD3", Digest::hexDigest(R->encode(clear_text)));
+   EXPECT_EQ("BBF316E8D940AF0AD3", Vector::toHexString(R->encode(clear_text)));
 }
 
 TEST_F(RC4Test, decode)
 {
-   const BytesVector clear_text(Digest::getBytesFromString("Plaintext"));
+   const BytesVector clear_text(String::toBytes("Plaintext"));
 
-   EXPECT_EQ("Plaintext", Digest::getStringFromBytes(R->decode(Digest::getBytesFromHexDigest("BBF316E8D940AF0AD3"))));
+   EXPECT_EQ("Plaintext", Vector::toString(R->decode(String::hexToBytes("BBF316E8D940AF0AD3"))));
 }
 
 #endif

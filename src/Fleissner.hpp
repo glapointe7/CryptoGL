@@ -14,6 +14,7 @@ class Fleissner : public StringCipher
 {  
    using Cell = std::pair<uint32_t, uint32_t>;
    using Coordinates = std::vector<Cell>;
+   using Grid = std::vector<ClassicalType>;
    using KeyCellNotUnique = BadKey;
    
 public:
@@ -25,7 +26,7 @@ public:
    void setGridDimension(const uint32_t dim);
 
 private:   
-   void rotationExists(std::set<Cell> &cmp, const uint32_t x, const uint32_t y) const;
+   static void rotationExists(std::set<Cell> &cmp, const uint32_t x, const uint32_t y);
 
    // Dimension of the cipher grid.
    uint32_t grid_dim;

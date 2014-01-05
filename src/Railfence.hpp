@@ -1,3 +1,7 @@
+/*
+ * Need review to improve code for optimization.
+ * Need more comments on code.
+ */
 #ifndef RAILFENCE_HPP
 #define RAILFENCE_HPP
 
@@ -31,6 +35,9 @@ private:
    KeyType key_levels;
 };
 
+/*
+ * Railfence cipher : 
+ */
 class Railfence : public RedefenceZigzag
 {
 public:

@@ -1,6 +1,5 @@
 #include "DES.hpp"
 
-#include "Tools.hpp"
 #include "Bits.hpp"
 #include "BigEndian.hpp"
 
@@ -31,7 +30,7 @@ void DES::generateSubkeys()
    const uint64_t key_bits = BigEndian64::toInteger(key);
 
    // We permute with the PC1 table to get a 56-bits key.
-   const uint64_t K56 = Tools::getBitsFromTable<56>(key_bits, PC1, 64);
+   const uint64_t K56 = getBitsFromTable<56>(key_bits, PC1, 64);
 
    // Split the 56-bits key in 2 28-bits sub-keys.
    uint64_t K1, K2;
@@ -47,7 +46,7 @@ void DES::generateSubkeys()
       K2 = KL;
 
       const uint64_t K = KR | (KL << 28);
-      subkeys.push_back(Tools::getBitsFromTable<48>(K, PC2, 56));
+      subkeys.push_back(getBitsFromTable<48>(K, PC2, 56));
    }
 }
 
@@ -76,14 +75,14 @@ uint64_t DES::getSubstitution(const uint64_t &key_mixed)
 uint64_t DES::F(const uint64_t data, const uint8_t round) const
 {
    // Expension from 32 bits to 48 bits.
-   const uint64_t E_block = Tools::getBitsFromTable<48>(data, E, 32);
+   const uint64_t E_block = getBitsFromTable<48>(data, E, 32);
 
    const uint64_t key_mixed = E_block ^ subkeys[round];
 
    // Substitutions with the 8 S-Boxes. Output of 32 bits.
    const uint64_t s_block = getSubstitution(key_mixed);
 
-   return Tools::getBitsFromTable<32>(s_block, P, 32);
+   return getBitsFromTable<32>(s_block, P, 32);
 }
 
 void DES::encodeFeistelRounds(uint64_t& L, uint64_t& R, const uint8_t) const
@@ -110,7 +109,7 @@ uint64_t DES::encodeBlock(const uint64_t &input)
 {
    // Initial permutation of the 64-bits data blocks.
    uint64_t value = input;
-   const uint64_t ip_data = Tools::getBitsFromTable<64>(value, IP, 64);
+   const uint64_t ip_data = getBitsFromTable<64>(value, IP, 64);
 
    // Split the 64-bits block in 2 blocks of 32 bits L and R for the 16 Feistel rounds.
    uint64_t L = ip_data >> 32;
@@ -119,14 +118,14 @@ uint64_t DES::encodeBlock(const uint64_t &input)
    
    // Final permutation of R16.L16. with the IP_inverse table.
    const uint64_t RL = (R << 32) | L;
-   return Tools::getBitsFromTable<64>(RL, IP_inverse, 64);
+   return getBitsFromTable<64>(RL, IP_inverse, 64);
 }
 
 uint64_t DES::decodeBlock(const uint64_t &input)
 {
    // Initial permutation of the 64-bits data blocks.
    uint64_t value = input;
-   const uint64_t ip_data = Tools::getBitsFromTable<64>(value, IP, 64);
+   const uint64_t ip_data = getBitsFromTable<64>(value, IP, 64);
 
    // Split the 64-bits block in 2 blocks of 32 bits L and R for the 16 Feistel rounds.
    uint64_t L = ip_data >> 32;
@@ -134,6 +133,5 @@ uint64_t DES::decodeBlock(const uint64_t &input)
    decodeFeistelRounds(L, R, 0);
    
    // Final permutation of R16.L16. with the IP_inverse table.
-   const uint64_t RL = (R << 32) | L;
-   return Tools::getBitsFromTable<64>(RL, IP_inverse, 64);
+   return getBitsFromTable<64>((R << 32) | L, IP_inverse, 64);
 }

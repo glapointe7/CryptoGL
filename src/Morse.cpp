@@ -3,8 +3,8 @@
 
 #include <algorithm>
 
-#include "Tools.hpp"
 #include "String.hpp"
+#include "Vector.hpp"
 
 const std::array<ClassicalType, 36> Morse::morse = {
    {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..",
@@ -38,9 +38,9 @@ ClassicalType Morse::decode(const ClassicalType &cipher_text)
 {
    ClassicalType decrypted;
    decrypted.reserve(cipher_text.length() / 2);
-   const std::vector<ClassicalType> cipher_word = Tools::split(cipher_text);
+   const std::vector<ClassicalType> cipher_word = Vector::split(cipher_text, ' ');
 
-   for (const auto str : cipher_word)
+   for (const auto &str : cipher_word)
    {
       const uint32_t pos = std::distance(morse.begin(), std::find(morse.begin(), morse.end(), str));
       decrypted.push_back(alpha[pos]);

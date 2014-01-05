@@ -15,9 +15,10 @@ constexpr std::array<std::array<uint8_t, 256>, 4> Twofish::Q;
 
 void Twofish::setKey(const BytesVector &key)
 {
-   if (key.size() != 16 && key.size() != 24 && key.size() != 32)
+   const uint8_t key_size = key.size();
+   if (key_size != 16 && key_size != 24 && key_size != 32)
    {
-      throw BadKeyLength("Your key length has to be of length 16, 24 or 32 bytes.", key.size());
+      throw BadKeyLength("Your key length has to be of length 16, 24 or 32 bytes.", key_size);
    }
 
    this->key = key;
@@ -26,7 +27,7 @@ void Twofish::setKey(const BytesVector &key)
 uint32_t Twofish::h(const uint32_t X, const BytesVector &L)
 {
    // Split X into 4 bytes in little endian.
-   const uint8_t k = L.size() >> 2;
+   const uint8_t k = L.size() / 4;
    BytesVector y = LittleEndian32::toBytesVector(X);
    if(k == 4)
    {
@@ -68,8 +69,8 @@ uint32_t Twofish::h(const uint32_t X, const BytesVector &L)
 void Twofish::generateSubkeys()
 {
    subkeys.reserve(40);
-   const uint8_t k = key.size() >> 3;
-   const uint8_t k4 = k << 2;
+   const uint8_t k = key.size() / 8;
+   const uint8_t k4 = k * 4;
    BytesVector Me, Mo;
    Me.reserve(k4);
    Mo.reserve(k4);
@@ -77,7 +78,7 @@ void Twofish::generateSubkeys()
 
    for (uint8_t i = 0; i < k; ++i)
    {  
-      const uint8_t x = i << 3;
+      const uint8_t x = i * 8;
       Me.insert(Me.end(), key.begin() + x, key.begin() + x + 4);
       Mo.insert(Mo.end(), key.begin() + x + 4, key.begin() + x + 8);
       

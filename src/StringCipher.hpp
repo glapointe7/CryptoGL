@@ -21,9 +21,9 @@ protected:
    virtual ClassicalType encode(const ClassicalType &) = 0;
    virtual ClassicalType decode(const ClassicalType &) = 0;
    
-   ClassicalType appendChars(const ClassicalType &data, const uint32_t to_add, const char c);
    int8_t badAlphaFound(const ClassicalType &text) const;
-   void checkAlpha(const ClassicalType &alpha) const;
+   static ClassicalType appendChars(ClassicalType data, const uint32_t to_add, const char c);
+   static void checkAlpha(const ClassicalType &alpha);
    
    ClassicalType alpha;
 };

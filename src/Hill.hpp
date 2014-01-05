@@ -10,8 +10,7 @@
 class Hill : public StringCipher
 {   
 public:   
-   explicit Hill(const Int32Matrix &key) { this->key = new SquareMatrix(); setKey(key); }
-   ~Hill() { delete key; }
+   explicit Hill(const Int32Matrix &key) { setKey(key); }
    
    virtual ClassicalType encode(const ClassicalType &clear_text) final;
    virtual ClassicalType decode(const ClassicalType &cipher_text) final;
@@ -19,9 +18,9 @@ public:
    void setKey(const Int32Matrix &key);
    
 private:
-   ClassicalType process(const ClassicalType &data, const SquareMatrix *K);
+   ClassicalType process(const ClassicalType &data, const SquareMatrix K) const;
    
-   SquareMatrix *key;
+   SquareMatrix key;
 };
 
 #endif

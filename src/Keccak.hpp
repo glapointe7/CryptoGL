@@ -46,9 +46,6 @@ private:
    /* Apply theta, rho, pi, chi and iota steps from the specs. */
    void applyRound(const uint8_t round_index);
 
-   /* Convert a block of bytes to an array of integers (state). */
-   UInt64Vector convertBlockToState(const BytesVector &block) const;
-
    /* Round constants. */
    static constexpr std::array<uint64_t, 24> round_constants = {
       {0x0000000000000001, 0x0000000000008082, 0x800000000000808A, 0x8000000080008000,

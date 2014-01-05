@@ -1,4 +1,3 @@
-
 #include "UnsortAlpha.hpp"
 
 #include "String.hpp"
@@ -12,15 +11,15 @@ UnsortAlpha::UnsortAlpha(const KeyType &key)
 
 void UnsortAlpha::setHorizontalAlpha()
 {  
-   unsort_alpha = String::makeUniqueChars(getKey() + alpha);
+   unsort_alpha = String::makeUniqueChars(getKey().append(alpha));
 }
 
 // Build an unordered vertical alphabet by transforming the key with only unique chars. 
 
 void UnsortAlpha::setVerticalAlpha()
 {
-   const ClassicalType new_key(String::makeUniqueChars(getKey()));
-   const ClassicalType str(String::makeUniqueChars(new_key + alpha));
+   const ClassicalType new_key = String::makeUniqueChars(getKey());
+   const ClassicalType str = String::makeUniqueChars(new_key + alpha);
    const uint32_t key_len = new_key.length();
    const uint32_t alpha_len = str.length();
 

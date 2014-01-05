@@ -26,12 +26,12 @@ protected:
 
 TEST_F(HellmanMerkleKnapsackTest, encode)
 {
-   EXPECT_EQ("6316 10022 10673 10673 15961", Digest::bigIntVectorToString(H->encode(Digest::getBytesFromString("Hello"))));
+   EXPECT_EQ("6316 10022 10673 10673 15961", Digest::bigIntVectorToString(H->encode(String::toBytes("Hello"))));
 }
 
 TEST_F(HellmanMerkleKnapsackTest, decode)
 {
-   EXPECT_EQ("Hello", Digest::getStringFromBytes(H->decode(Digest::stringToBigIntVector("6316 10022 10673 10673 15961"))));
+   EXPECT_EQ("Hello", Vector::toString(H->decode(Digest::stringToBigIntVector("6316 10022 10673 10673 15961"))));
 }
 
 #endif

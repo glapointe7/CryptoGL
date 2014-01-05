@@ -9,7 +9,7 @@ TwoSquares::TwoSquares(const KeyType &key1, const KeyType &key2)
 
 ClassicalType TwoSquares::encode(const ClassicalType &clear_text)
 {  
-   const ClassicalType full_text(appendChars(clear_text, 2, 'X'));
+   const ClassicalType full_text = appendChars(clear_text, 2, 'X');
    const uint32_t clear_len = full_text.length();
    ClassicalType crypted;
    crypted.reserve(clear_len);

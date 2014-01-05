@@ -44,9 +44,11 @@ private:
    void applyReverseQuadRound(UInt32Vector &beta, const uint8_t round) const;
    void applyForwardOctave(UInt32Vector &kappa, const uint8_t round) const;
    
-   static constexpr uint8_t getByteFromInteger(const uint32_t bytes, const uint8_t index)
+   template <uint8_t index>
+   static constexpr uint8_t getByteFromInteger(const uint32_t bytes)
    {
-      return (bytes >> (index << 3)) & 0xFF;
+      static_assert(index < 4, "The second argument 'index' has to be between 0 and 3.");
+      return (bytes >> (index * 8)) & 0xFF;
    }
    
    UInt32Vector Kr;

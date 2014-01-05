@@ -15,10 +15,10 @@ void SHA1::compress(UInt32Vector &int_block, UInt32Vector &state)
    }
 
    UInt32Vector hash(state);
+   uint32_t f;
    for (uint8_t j = 0; j < rounds; ++j)
    {
       const uint8_t index = j / 20;
-      uint32_t f;
       switch(index)
       {
          case 0: f = ch(hash[1], hash[2], hash[3]); break;

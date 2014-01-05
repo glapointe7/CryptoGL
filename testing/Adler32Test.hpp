@@ -27,7 +27,7 @@ TEST_F(Adler32Test, encodeEmpty)
 
 TEST_F(Adler32Test, encodeNormal)
 {
-   EXPECT_EQ(0x29750586, S->encode(Digest::getBytesFromString("message digest")));
+   EXPECT_EQ(0x29750586, S->encode(String::toBytes("message digest")));
 }
 
 #endif

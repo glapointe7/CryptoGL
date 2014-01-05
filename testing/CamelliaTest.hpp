@@ -36,13 +36,13 @@ TEST_F(CamelliaTest, encode128)
       0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10
    };
 
-   EXPECT_EQ("67673138549669730857065648EABE43", Digest::hexDigest(C128->encode(clear_text)));
+   EXPECT_EQ("67673138549669730857065648EABE43", Vector::toHexString(C128->encode(clear_text)));
 }
 
 TEST_F(CamelliaTest, decode128)
 {
    EXPECT_EQ("0123456789ABCDEFFEDCBA9876543210", 
-           Digest::hexDigest(C128->decode(Digest::getBytesFromHexDigest("67673138549669730857065648EABE43"))));
+           Vector::toHexString(C128->decode(String::hexToBytes("67673138549669730857065648EABE43"))));
 }
 
 TEST_F(CamelliaTest, encode192)
@@ -51,13 +51,13 @@ TEST_F(CamelliaTest, encode192)
       0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10
    };
 
-   EXPECT_EQ("B4993401B3E996F84EE5CEE7D79B09B9", Digest::hexDigest(C192->encode(clear_text)));
+   EXPECT_EQ("B4993401B3E996F84EE5CEE7D79B09B9", Vector::toHexString(C192->encode(clear_text)));
 }
 
 TEST_F(CamelliaTest, decode192)
 {
    EXPECT_EQ("0123456789ABCDEFFEDCBA9876543210", 
-           Digest::hexDigest(C192->decode(Digest::getBytesFromHexDigest("B4993401B3E996F84EE5CEE7D79B09B9"))));
+           Vector::toHexString(C192->decode(String::hexToBytes("B4993401B3E996F84EE5CEE7D79B09B9"))));
 }
 
 TEST_F(CamelliaTest, encode256)
@@ -66,13 +66,13 @@ TEST_F(CamelliaTest, encode256)
       0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10
    };
 
-   EXPECT_EQ("9ACC237DFF16D76C20EF7C919E3A7509", Digest::hexDigest(C256->encode(clear_text)));
+   EXPECT_EQ("9ACC237DFF16D76C20EF7C919E3A7509", Vector::toHexString(C256->encode(clear_text)));
 }
 
 TEST_F(CamelliaTest, decode256)
 {
    EXPECT_EQ("0123456789ABCDEFFEDCBA9876543210", 
-           Digest::hexDigest(C256->decode(Digest::getBytesFromHexDigest("9ACC237DFF16D76C20EF7C919E3A7509"))));
+           Vector::toHexString(C256->decode(String::hexToBytes("9ACC237DFF16D76C20EF7C919E3A7509"))));
 }
 
 #endif

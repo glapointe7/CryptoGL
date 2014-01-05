@@ -1,24 +1,6 @@
-
 #include "Tools.hpp"
 
 #include <algorithm>
-#include <sstream>
-
-std::vector<std::string> Tools::split(const std::string &text)
-{
-   std::istringstream iss(text);
-   std::vector<std::string> split_text;
-   split_text.reserve(text.length());
-   do
-   {
-      std::string word;
-      iss >> word;
-      split_text.push_back(word);
-   } while (iss);
-   split_text.pop_back();
-
-   return split_text;
-}
 
 void Tools::convertMajMinToSymbol(std::string &text, const std::string symbol)
 {

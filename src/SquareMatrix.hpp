@@ -24,12 +24,12 @@ public:
    void setModulo(const int32_t);
 
    /* Multiply a square matrix with a vector of the same dimension. */
-   friend UInt32Vector operator *(const SquareMatrix *K, const UInt32Vector &V);
+   friend UInt32Vector operator *(const SquareMatrix K, const UInt32Vector &V);
 
    Int32Matrix identity() const;
    
    int32_t det() const;
-   SquareMatrix* inverse() const;
+   SquareMatrix inverse() const;
    
 private:
    uint32_t findNonZero(const Int32Matrix &A, const uint32_t from) const;
