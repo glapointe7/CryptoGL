@@ -26,13 +26,13 @@ public:
    /* Convert a vector to an integer from a range(from, to). */
    static UInt toIntegerRange(const BytesVector &bytes, const uint8_t from, const uint8_t to)
    {
-      return toInteger(BytesVector(bytes.begin() + from, bytes.begin() + to));
+      return toInteger(Vector::range(bytes, from, to));
    }
    
-   /* Convert a vector to an integer from a range(0, to). */
-   static UInt toIntegerRange(const BytesVector &bytes, const uint8_t to)
+   /* Convert a vector to an integer from a range(from, bytes.end()). */
+   static UInt toIntegerRange(const BytesVector &bytes, const uint8_t from)
    {
-      return toInteger(BytesVector(bytes.begin(), bytes.begin() + to));
+      return toInteger(Vector::range(bytes, from));
    }
    
    static BytesVector toBytesVector(const UInt &value)
@@ -49,13 +49,13 @@ public:
    
    static UIntVector toIntegersVector(const BytesVector &V)
    {
-      const uint8_t BlockSize = V.size();
+      const uint8_t V_size = V.size();
       const uint8_t type_size = sizeof(UInt);
       UIntVector result;
-      result.reserve(BlockSize / type_size);
-      for(uint8_t i = 0; i < BlockSize; i += type_size)
+      result.reserve(V_size / type_size);
+      for(uint8_t i = 0; i < V_size; i += type_size)
       {
-         result.push_back(toInteger(BytesVector(V.begin() + i, V.begin() + i + type_size)));
+         result.push_back(toIntegerRange(V, i, i + type_size));
       }
 
       return result;

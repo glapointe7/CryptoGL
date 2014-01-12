@@ -28,7 +28,7 @@ void Snow3G::setIV(const BytesVector &IV)
 
 constexpr uint8_t Snow3G::mulx(const uint8_t V, const uint8_t c)
 {
-   return V & 0x80 ? (V << 1) ^ c : V << 1;
+   return V & 0x80 ? (V * 2) ^ c : V * 2;
 }
 
 uint8_t Snow3G::mulxPow(const uint8_t V, const uint8_t i, const uint8_t c)
@@ -114,15 +114,8 @@ uint32_t Snow3G::finiteStateMachine()
 
 void Snow3G::keySetup()
 {
-   UInt32Vector K, Iv;
-   K.reserve(4);
-   Iv.reserve(4);
-   
-   for(uint8_t i = 0; i < 16; i += 4)
-   {
-      K.push_back(BigEndian32::toInteger(BytesVector(key.begin() + i, key.begin() + i + 4)));
-      Iv.push_back(BigEndian32::toInteger(BytesVector(IV.begin() + i, IV.begin() + i + 4)));
-   }
+   UInt32Vector K = BigEndian32::toIntegersVector(key), 
+                Iv = BigEndian32::toIntegersVector(IV);
    
    state.resize(16);
    state[15] = K[3] ^ Iv[0];

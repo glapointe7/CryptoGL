@@ -37,9 +37,6 @@ private:
 
    static uint32_t h(const uint32_t X, const BytesVector &L);
    
-   /* g(X) = h(X, S) from the spec. */
-   uint32_t g(const uint32_t X) const;
-   
    /* The 4 key-dependant S-Boxes s_i. */
    BytesVector s;
         

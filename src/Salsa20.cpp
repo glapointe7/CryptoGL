@@ -12,9 +12,10 @@ constexpr std::array<std::array<uint8_t, 4>, 4> Salsa20::tau;
 
 void Salsa20::setKey(const BytesVector &key)
 {
-   if(key.size() != 16 && key.size() != 32)
+   const uint8_t key_size = key.size();
+   if(key_size != 16 && key_size != 32)
    {
-      throw BadKeyLength("Your key length has to be 16 or 32 bytes.", key.size());
+      throw BadKeyLength("Your key length has to be 16 or 32 bytes.", key_size);
    }
    
    this->key = key;
@@ -22,9 +23,10 @@ void Salsa20::setKey(const BytesVector &key)
 
 void Salsa20::setIV(const BytesVector &IV)
 {
-   if(IV.size() != 8)
+   const uint8_t iv_size = IV.size();
+   if(iv_size != 8)
    {
-      throw BadIVLength("Your IV length has to be 8 bytes.", IV.size());
+      throw BadIVLength("Your IV length has to be 8 bytes.", iv_size);
    }
    
    this->IV = IV;
@@ -88,12 +90,12 @@ void Salsa20::keySetup()
    if(key.size() == 32)
    {
       subkeys.insert(subkeys.end(), std::begin(sigma[0]), std::end(sigma[0]));
-      subkeys.insert(subkeys.end(), key.begin(), key.begin() + 16);
+      Vector::extend(subkeys, key, 0, 16);
       subkeys.insert(subkeys.end(), std::begin(sigma[1]), std::end(sigma[1]));
       IVSetup();
       Vector::extend(subkeys, LittleEndian64::toBytesVector(counter));
       subkeys.insert(subkeys.end(), std::begin(sigma[2]), std::end(sigma[2]));
-      subkeys.insert(subkeys.end(), key.begin() + 16, key.end());
+      Vector::extend(subkeys, key, 16);
       subkeys.insert(subkeys.end(), std::begin(sigma[3]), std::end(sigma[3]));
    }
    else

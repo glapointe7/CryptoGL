@@ -2,13 +2,17 @@
 
 BytesVector Bits::rotateLeft128(const BytesVector &bytes, const uint8_t shift)
 {
-   const uint8_t w = shift >> 3;
-   const uint8_t b = shift & 7;
+   const uint8_t bytes_to_rotate = shift / 8;
+   const uint8_t bits_to_shift = shift % 8;
+   const uint8_t rest = 8 - bits_to_shift;
+   const uint64_t bytes_size = bytes.size();
 
    BytesVector rotated_bytes;
-   rotated_bytes.reserve(16);
-   for (uint8_t i = 0; i < 16; ++i) {
-      rotated_bytes.push_back((bytes[(i+w) & 0xF] << b) | (bytes[(i+w+1) & 0xF] >> (8 - b)));
+   rotated_bytes.reserve(bytes_size);
+   for (uint8_t i = 0; i < bytes_size; ++i) 
+   {
+      rotated_bytes.push_back((bytes[(i+bytes_to_rotate) % bytes_size] << bits_to_shift) 
+                            | (bytes[(i+bytes_to_rotate+1) % bytes_size] >> rest));
    }
 
    return rotated_bytes;

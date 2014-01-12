@@ -46,7 +46,7 @@ void Skipjack::applyRuleA(UInt16Vector &input, const uint8_t round) const
    input[2] = input[1];
    uint8_t L = input[0] >> 8;
    uint8_t R = input[0] & 0xFF;
-   encodeFeistelRounds(L, R, round << 2);
+   encodeFeistelRounds(L, R, round * 4);
    input[1] = (L << 8) | R;
    input[0] = tmp ^ input[1] ^ (round + 1);
 }
@@ -58,7 +58,7 @@ void Skipjack::applyRuleB(UInt16Vector &input, const uint8_t round) const
    input[2] = input[0] ^ input[1] ^ (round + 1);
    uint8_t L = input[0] >> 8;
    uint8_t R = input[0] & 0xFF;
-   encodeFeistelRounds(L, R, round << 2);
+   encodeFeistelRounds(L, R, round * 4);
    input[1] = (L << 8) | R;
    input[0] = tmp;
 }
@@ -68,7 +68,7 @@ void Skipjack::applyInverseRuleA(UInt16Vector &input, const uint8_t round) const
    const uint16_t tmp = input[0] ^ input[1] ^ (round + 1);
    uint8_t R = input[1] >> 8;
    uint8_t L = input[1] & 0xFF;
-   decodeFeistelRounds(L, R, round << 2);
+   decodeFeistelRounds(L, R, round * 4);
    input[0] = (R << 8) | L;
    input[1] = input[2];
    input[2] = input[3];
@@ -80,7 +80,7 @@ void Skipjack::applyInverseRuleB(UInt16Vector &input, const uint8_t round) const
    const uint16_t tmp = input[0];
    uint8_t R = input[1] >> 8;
    uint8_t L = input[1] & 0xFF;
-   decodeFeistelRounds(L, R, round << 2);
+   decodeFeistelRounds(L, R, round * 4);
    input[0] = (R << 8) | L;
    input[1] = input[0] ^ input[2] ^ (round + 1);
    input[2] = input[3];

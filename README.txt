@@ -38,7 +38,6 @@ MORE TO COME
 
 - Add special case tests (empty vectors, check if the exceptions are raised)
 - Add RSA and some algorithms about arithmetic (modular, primes, gcd, chinese remainder theorem, Euler's totient function)
-- Genetic algorithm for decrypting the monoalphabetic substitution.
 - Add a random number generator for key and IV generation.
 
 

@@ -23,16 +23,11 @@ void RC6::generateSubkeys()
    const uint8_t int_size = 4;
    const uint8_t key_len = key.size();
    const uint8_t tmp_key_len = (key_len + int_size - 1) / int_size;
-   UInt32Vector tmp_key;
-   tmp_key.reserve(tmp_key_len);
-
-   for (uint8_t i = 0; i < key_len; i += int_size)
-   {
-      tmp_key.push_back(LittleEndian32::toInteger(BytesVector(key.begin() + i, key.begin() + i + int_size)));
-   }
+   
+   UInt32Vector tmp_key = LittleEndian32::toIntegersVector(key);
 
    // Initialize the expanded key table.
-   const uint8_t subkeys_len = (rounds + 2) << 1;
+   const uint8_t subkeys_len = (rounds + 2) * 2;
    subkeys.resize(subkeys_len);
    subkeys[0] = P32;
    for (uint8_t i = 1; i < subkeys_len; ++i)
@@ -46,7 +41,7 @@ void RC6::generateSubkeys()
    for (uint8_t l = 0, i = 0, j = 0; l < k; ++l)
    {
       L = subkeys[i] = Bits::rotateLeft((subkeys[i] + L + R) & 0xFFFFFFFF, 3);
-      R = tmp_key[j] = Bits::rotateLeft(tmp_key[j] + L + R, (L + R) & 31);
+      R = tmp_key[j] = Bits::rotateLeft(tmp_key[j] + L + R, (L + R) % 32);
       i = (i + 1) % subkeys_len;
       j = (j + 1) % tmp_key_len;
    }
@@ -54,7 +49,7 @@ void RC6::generateSubkeys()
 
 uint64_t RC6::F(const uint64_t half_block, const uint8_t) const
 {
-   return Bits::rotateLeft((half_block * ((half_block << 1) + 1)) & 0xFFFFFFFF, 5);
+   return Bits::rotateLeft((half_block * ((half_block * 2) + 1)) & 0xFFFFFFFF, 5);
 }
 
 void RC6::encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
@@ -68,15 +63,15 @@ void RC6::encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
    D += subkeys[1];
    for (uint8_t i = 1; i <= rounds; ++i)
    {
-      const uint8_t j = i << 1;
+      const uint8_t j = i * 2;
       uint32_t t = F(B, 0);
       const uint32_t u = F(D, 0);
-      A = Bits::rotateLeft(A ^ t, u & 31) + subkeys[j];
-      C = Bits::rotateLeft(C ^ u, t & 31) + subkeys[j + 1];
+      A = Bits::rotateLeft(A ^ t, u % 32) + subkeys[j];
+      C = Bits::rotateLeft(C ^ u, t % 32) + subkeys[j + 1];
       t = A; A = B; B = C; C = D; D = t;
    }
-   A += subkeys[(rounds << 1) + 2];
-   C += subkeys[(rounds << 1) + 3];
+   A += subkeys[(rounds * 2) + 2];
+   C += subkeys[(rounds * 2) + 3];
    
    L = (static_cast<uint64_t>(A) << 32) | B;
    R = (static_cast<uint64_t>(C) << 32) | D;
@@ -89,16 +84,16 @@ void RC6::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
    uint32_t C = R >> 32;
    uint32_t D = R & 0xFFFFFFFF;
    
-   C -= subkeys[(rounds << 1) + 3];
-   A -= subkeys[(rounds << 1) + 2];
+   C -= subkeys[(rounds * 2) + 3];
+   A -= subkeys[(rounds * 2) + 2];
    for (uint8_t i = rounds; i > 0; --i)
    {
-      const uint8_t j = i << 1;
+      const uint8_t j = i * 2;
       uint32_t t = A; A = D; D = C; C = B; B = t;
       const uint32_t u = F(D, 0);
       t = F(B, 0);
-      C = Bits::rotateRight((C - subkeys[j + 1]) & 0xFFFFFFFF, t & 31) ^ u;
-      A = Bits::rotateRight((A - subkeys[j]) & 0xFFFFFFFF, u & 31) ^ t;
+      C = Bits::rotateRight((C - subkeys[j + 1]) & 0xFFFFFFFF, t % 32) ^ u;
+      A = Bits::rotateRight((A - subkeys[j]) & 0xFFFFFFFF, u % 32) ^ t;
    }
    D -= subkeys[1];
    B -= subkeys[0];

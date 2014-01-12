@@ -105,6 +105,13 @@ namespace Maths
 
       return true;
    }
+   
+   /* Get the modulo for positive or negative numbers. */
+   template <typename Integer>
+   Integer mod(const Integer value, const uint64_t &modulo)
+   {
+      return (value + modulo) % modulo;
+   }
 
    /* Check if 'value' is a perfect square. */
    bool isPerfectSquare(const uint32_t value);

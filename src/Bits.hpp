@@ -8,19 +8,19 @@
 namespace Bits
 {
    /* Extract the Least Signifiant Bits from value. */
-   template <class UInt>
-   constexpr UInt LSB(const UInt &value, const uint8_t bits_to_extract)
+   template <typename UInteger>
+   constexpr UInteger LSB(const UInteger &value, const uint8_t bits_to_extract)
    {
-      static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
-      return value & (static_cast<UInt>(1) << bits_to_extract);
+      static_assert(std::is_integral<UInteger>::value, "Type UInt must be an integral type.");
+      return value & (static_cast<UInteger>(1) << bits_to_extract);
    }
 
    /* Extract the Most Signifiant Bits from value. */
-   template <class UInt>
-   constexpr UInt MSB(const UInt &value, const uint8_t bits_to_extract)
+   template <typename UInteger>
+   constexpr UInteger MSB(const UInteger &value, const uint8_t bits_to_extract)
    {
-      static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
-      return value >> ((sizeof (UInt) * 8) - bits_to_extract);
+      static_assert(std::is_integral<UInteger>::value, "Type UInt must be an integral type.");
+      return value >> ((sizeof(UInteger) * 8) - bits_to_extract);
    }
    
    uint8_t msb(const BytesVector &V);
@@ -28,10 +28,10 @@ namespace Bits
    uint8_t lsb(const BytesVector &V);
 
    /* Rotate left 'value' of 'shift' bits with 'max' in {1,...,63}. */
-   template <class UInt>
-   constexpr UInt rotateLeft(const UInt &value, const uint8_t shift, const uint8_t max = 32)
+   template <typename UInteger>
+   constexpr UInteger rotateLeft(const UInteger &value, const uint8_t shift, const uint8_t max = 32)
    {
-      static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
+      static_assert(std::is_integral<UInteger>::value, "Type UInt must be an integral type.");
       return ((value << shift) | (value >> (max - shift))) & ((1ull << max) - 1);
    }
    
@@ -42,10 +42,10 @@ namespace Bits
    }
 
    /* Rotate left 'value' of 'shift' bits with 'max' in {1,...,63}. */
-   template <class UInt>
-   constexpr UInt rotateRight(const UInt &value, const uint8_t shift, const uint8_t max = 32)
+   template <typename UInteger>
+   constexpr UInteger rotateRight(const UInteger &value, const uint8_t shift, const uint8_t max = 32)
    {
-      static_assert(std::is_integral<UInt>::value, "Type UInt must be an integral type.");
+      static_assert(std::is_integral<UInteger>::value, "Type UInt must be an integral type.");
       return ((value >> shift) | (value << (max - shift)));
    }
    

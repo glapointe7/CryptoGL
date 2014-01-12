@@ -8,9 +8,10 @@ constexpr std::array<uint32_t, 8> Rabbit::A;
 
 void Rabbit::setKey(const BytesVector &key)
 {
-   if (key.size() != 16)
+   const uint8_t key_size = key.size();
+   if (key_size != 16)
    {
-      throw BadKeyLength("Your key has to be 16 bytes length.", key.size());
+      throw BadKeyLength("Your key has to be 16 bytes length.", key_size);
    }
 
    this->key = key;
@@ -19,9 +20,10 @@ void Rabbit::setKey(const BytesVector &key)
 
 void Rabbit::setIV(const BytesVector &IV)
 {
-   if (IV.size() != 8 && IV.size() != 0)
+   const uint8_t iv_size = IV.size();
+   if (iv_size != 8 && iv_size != 0)
    {
-      throw BadIVLength("Your IV has to be 8 bytes length.", IV.size());
+      throw BadIVLength("Your IV has to be 8 bytes length.", iv_size);
    }
 
    this->IV = IV;
@@ -66,8 +68,8 @@ void Rabbit::nextState()
    // Calculate new state values.
    for(uint8_t i = 0; i < 8; i += 2)
    {
-      states[i] = G[i] + Bits::rotateLeft(G[(i+7) & 7], 16) + Bits::rotateLeft(G[(i+6) & 7], 16);
-      states[i + 1] = G[i + 1] + Bits::rotateLeft(G[i], 8) + G[(i+7) & 7];
+      states[i] = G[i] + Bits::rotateLeft(G[(i+7) % 8], 16) + Bits::rotateLeft(G[(i+6) % 8], 16);
+      states[i + 1] = G[i + 1] + Bits::rotateLeft(G[i], 8) + G[(i+7) % 8];
    }
 }
 
@@ -105,7 +107,7 @@ void Rabbit::keySetup()
 
    for (uint8_t i = 0; i < 8; ++i)
    {
-      counters[i] ^= states[(i + 4) & 7];
+      counters[i] ^= states[(i + 4) % 8];
    }
 }
 
@@ -117,7 +119,7 @@ void Rabbit::IVSetup()
    /* Modify counter values */
    for(uint8_t i = 0; i < 8; ++i)
    {
-      counters[i] ^= subIV[i & 3];
+      counters[i] ^= subIV[i % 4];
    }
 
    for (uint8_t i = 0; i < 4; ++i)

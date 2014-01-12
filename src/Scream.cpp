@@ -15,18 +15,20 @@ constexpr std::array<uint8_t, 256> Scream::sbox;
 
 void Scream::setKey(const BytesVector &key)
 {
-   if (key.size() != 16)
+   const uint8_t key_size = key.size();
+   if (key_size != 16)
    {
-      throw BadKeyLength("Your key has to be 128 bits length.", key.size());
+      throw BadKeyLength("Your key has to be 128 bits length.", key_size);
    }
    this->key = key;
 }
 
 void Scream::setIV(const BytesVector &IV)
 {
-   if (IV.size() != 16)
+   const uint8_t iv_size = IV.size();
+   if (iv_size != 16)
    {
-      throw BadIVLength("Your IV has to be 128 bits length.", IV.size());
+      throw BadIVLength("Your IV has to be 128 bits length.", iv_size);
    }
    this->IV = IV;
 }
@@ -94,7 +96,7 @@ BytesVector Scream::F(const BytesVector &X)
                       static_cast<uint16_t>(u[2]), static_cast<uint16_t>(u[3])}};
    for(uint8_t i = 0; i < 4; ++i)
    {
-      const uint8_t j = i << 2;
+      const uint8_t j = i * 4;
       bytes23[i] ^= (X[2 + j] << 8) | X[3 + j];
       u[i] >>= 16;
       u[i] |= (bytes23[i] << 16);
@@ -166,9 +168,9 @@ BytesVector Scream::generateKeystream()
    for(uint8_t i = 0; i < 16; ++i)
    {
       X = Vector::Xor(F(Vector::Xor(X, Y)), Z);
-      Vector::extend(keystream, Vector::Xor(X, subkeys[i & 0xF]));
+      Vector::extend(keystream, Vector::Xor(X, subkeys[i % 16]));
 
-      switch(i & 3)
+      switch(i % 4)
       {
          case 0:
          case 2:
@@ -191,7 +193,7 @@ BytesVector Scream::generateKeystream()
    Y = F(Vector::Xor(Y, Z));
    Z = F(Vector::Xor(Z, Y));
    subkeys[counter] = F(subkeys[counter]);
-   counter = (counter + 1) & 0xF;
+   counter = (counter + 1) % 16;
    
    return keystream;
 }

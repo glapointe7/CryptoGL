@@ -42,7 +42,7 @@ void CAST256::applyForwardOctave(UInt32Vector &kappa, const uint8_t round) const
    const uint8_t j = round * 8;
    for(uint8_t i = 0; i < 8; ++i)
    {
-      kappa[(14 - i) & 7] ^= F[i % 3](kappa[7-i], Tm[j+i], Tr[j+i]);
+      kappa[(14 - i) % 8] ^= F[i % 3](kappa[7-i], Tm[j+i], Tr[j+i]);
    }
 }
 
@@ -75,7 +75,7 @@ void CAST256::generateSubkeys()
       for(uint8_t j = 0; j < 8; j += 2)
       {
          Kr.push_back(kappa[j] % 32);
-         subkeys.push_back(kappa[8-j-1]);
+         subkeys.push_back(kappa[7-j]);
       }
    }
 }

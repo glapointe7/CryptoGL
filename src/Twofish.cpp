@@ -29,21 +29,24 @@ uint32_t Twofish::h(const uint32_t X, const BytesVector &L)
    // Split X into 4 bytes in little endian.
    const uint8_t k = L.size() / 4;
    BytesVector y = LittleEndian32::toBytesVector(X);
-   if(k == 4)
+   switch(k)
    {
-      constexpr std::array<uint8_t, 4> k4 = {{1, 0, 0, 1}};
-      for(uint8_t i = 0; i < 4; ++i)
+      case 4 :
       {
-         y[i] = Q[k4[i]][y[i]] ^ L[12 + i];
+         constexpr std::array<uint8_t, 4> k4 = {{1, 0, 0, 1}};
+         for(uint8_t i = 0; i < 4; ++i)
+         {
+            y[i] = Q[k4[i]][y[i]] ^ L[12 + i];
+         }
       }
-   }
          
-   if(k >= 3)
-   {
-      constexpr std::array<uint8_t, 4> k3 = {{1, 1, 0, 0}};
-      for(uint8_t i = 0; i < 4; ++i)
+      case 3:
       {
-         y[i] = Q[k3[i]][y[i]] ^ L[8 + i];
+         constexpr std::array<uint8_t, 4> k3 = {{1, 1, 0, 0}};
+         for(uint8_t i = 0; i < 4; ++i)
+         {
+            y[i] = Q[k3[i]][y[i]] ^ L[8 + i];
+         }
       }
    }
          
@@ -79,8 +82,8 @@ void Twofish::generateSubkeys()
    for (uint8_t i = 0; i < k; ++i)
    {  
       const uint8_t x = i * 8;
-      Me.insert(Me.end(), key.begin() + x, key.begin() + x + 4);
-      Mo.insert(Mo.end(), key.begin() + x + 4, key.begin() + x + 8);
+      Vector::extend(Me, key, x, x+4);
+      Vector::extend(Mo, key, x+4, x+8);
       
       // We multiply RS by the vector key_{8i + j} where j = 0,...,7.
       // w(x) = x^8 + x^6 + x^3 + x^2 + 1 over GF(2). (101001101)_2 = 0x14D.
@@ -105,22 +108,17 @@ void Twofish::generateSubkeys()
    constexpr uint32_t rho2 = 0x02020202;
    for(uint8_t i = 0; i < 20; ++i)
    {
-      const uint32_t A = h(i * rho2, Me);
-      const uint32_t B = Bits::rotateLeft(h(rho2*i + rho, Mo), 8);
-      subkeys.push_back(A + B);
-      subkeys.push_back(Bits::rotateLeft(A + 2*B, 9));
+      const uint32_t x = h(i * rho2, Me);
+      const uint32_t y = Bits::rotateLeft(h(rho2*i + rho, Mo), 8);
+      subkeys.push_back(x + y);
+      subkeys.push_back(Bits::rotateLeft(x + 2*y, 9));
    }
-}
-
-uint32_t Twofish::g(const uint32_t X) const
-{
-   return h(X, s);
 }
 
 UInt32Vector Twofish::F(const UInt32Vector half_block, const uint8_t round) const
 {
-   const uint32_t T0 = g(half_block[0]);
-   const uint32_t T1 = g(Bits::rotateLeft(half_block[1], 8));
+   const uint32_t T0 = h(half_block[0], s);
+   const uint32_t T1 = h(Bits::rotateLeft(half_block[1], 8), s);
    
    return {T0 + T1 + subkeys[2*round + 8], T0 + 2*T1 + subkeys[2*round + 9]};
 }
@@ -135,17 +133,10 @@ void Twofish::encodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_
       std::swap(R[0], L[0]);
       std::swap(R[1], L[1]);
    }
-   
-   // Undo the 2 last swaps.
-   std::swap(R[0], L[0]);
-   std::swap(R[1], L[1]);
 }
 
 void Twofish::decodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_t) const
 {
-   std::swap(R[0], L[0]);
-   std::swap(R[1], L[1]);
-   
    for(int8_t i = rounds - 1; i >= 0; --i)
    {
       std::swap(R[0], L[0]);
@@ -168,10 +159,10 @@ UInt32Vector Twofish::encodeBlock(const UInt32Vector &input)
    UInt32Vector R = {encoded_block[0], encoded_block[1]};
    UInt32Vector L = {encoded_block[2], encoded_block[3]};
    encodeFeistelRounds(L, R, 0);
-   encoded_block[0] = R[0];
-   encoded_block[1] = R[1];
-   encoded_block[2] = L[0];
-   encoded_block[3] = L[1];
+   encoded_block[0] = L[0];
+   encoded_block[1] = L[1];
+   encoded_block[2] = R[0];
+   encoded_block[3] = R[1];
    
    // Output whitening.
    for(uint8_t i = 0; i < 4; ++i)
@@ -191,8 +182,8 @@ UInt32Vector Twofish::decodeBlock(const UInt32Vector &input)
       decoded_block[i] ^= subkeys[i + 4];
    }
    
-   UInt32Vector R = {decoded_block[0], decoded_block[1]};
-   UInt32Vector L = {decoded_block[2], decoded_block[3]};
+   UInt32Vector L = {decoded_block[0], decoded_block[1]};
+   UInt32Vector R = {decoded_block[2], decoded_block[3]};
    decodeFeistelRounds(L, R, 0);
    decoded_block[0] = R[0];
    decoded_block[1] = R[1];

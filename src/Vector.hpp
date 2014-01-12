@@ -81,11 +81,39 @@ namespace Vector
       return out;
    }
    
+   /* Return a vector containing a range of values in vector V from begin to end of V. */
+   template <class VectorType>
+   VectorType range(const VectorType &V, const uint64_t &begin, const uint64_t &end)
+   {
+      return VectorType(V.begin() + begin, V.begin() + end);
+   }
+   
+   /* Return a vector containing a range of values in vector V from begin to end. */
+   template <class VectorType>
+   VectorType range(const VectorType &V, const uint64_t &begin)
+   {
+      return VectorType(V.begin() + begin, V.end());
+   }
+   
    /* Append the vector W at the end of V. */
    template <class VectorType>
    void extend(VectorType &self, const VectorType &V)
    {
       self.insert(self.end(), V.begin(), V.end());
+   }
+   
+   /* Append the range of W given from begin to end at the end of V. */
+   template <class VectorType>
+   void extend(VectorType &self, const VectorType &V, const uint64_t &begin, const uint64_t &end)
+   {
+      self.insert(self.end(), V.begin() + begin, V.begin() + end);
+   }
+   
+   /* Append the range of W given from begin to end at the end of V. */
+   template <class VectorType>
+   void extend(VectorType &self, const VectorType &V, const uint64_t &begin)
+   {
+      self.insert(self.end(), V.begin() + begin, V.end());
    }
    
    /* Add the vector W at the end of V and return the new merged vector. */

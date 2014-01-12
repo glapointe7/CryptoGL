@@ -5,9 +5,10 @@ constexpr std::array<uint16_t, 512> Mysty1::S9;
 
 void Mysty1::setKey(const BytesVector &key)
 {
-   if (key.size() != 16)
+   const uint8_t key_size = key.size();
+   if (key_size != 16)
    {
-      throw BadKeyLength("Your key length has to be 16 bytes.", key.size());
+      throw BadKeyLength("Your key length has to be 16 bytes.", key_size);
    }
 
    this->key = key;
@@ -30,15 +31,15 @@ uint32_t Mysty1::FL(const uint32_t in, const uint8_t index) const
    uint16_t L = in >> 16;
    uint16_t R = in & 0xFFFF;
    
-   if(!(index & 1))
+   if(!(index % 2))
    {
-      R ^= (L & subkeys[index >> 1]);
-      L ^= (R | subkeys[(((index >> 1) + 6) & 7) + 8]);
+      R ^= (L & subkeys[index / 2]);
+      L ^= (R | subkeys[(((index / 2) + 6) % 8) + 8]);
    }
    else
    {
-      R ^= (L & subkeys[((((index - 1) >> 1) + 2) & 7) + 8]);
-      L ^= (R | subkeys[(((index - 1) >> 1) + 4) & 7]);
+      R ^= (L & subkeys[((((index - 1) / 2) + 2) % 8) + 8]);
+      L ^= (R | subkeys[(((index - 1) / 2) + 4) % 8]);
    }
    
    return (L << 16) | R;
@@ -49,15 +50,15 @@ uint32_t Mysty1::FLInverse(const uint32_t in, const uint8_t index) const
    uint16_t L = in >> 16;
    uint16_t R = in & 0xFFFF;
    
-   if(!(index & 1))
+   if(!(index % 2))
    {
-      L ^= (R | subkeys[(((index >> 1) + 6) & 7) + 8]);
-      R ^= (L & subkeys[index >> 1]);
+      L ^= (R | subkeys[(((index / 2) + 6) % 8) + 8]);
+      R ^= (L & subkeys[index / 2]);
    }
    else
    {
-      L ^= (R | subkeys[(((index - 1) >> 1) + 4) & 7]);
-      R ^= (L & subkeys[((((index - 1) >> 1) + 2) & 7) + 8]);
+      L ^= (R | subkeys[(((index - 1) / 2) + 4) % 8]);
+      R ^= (L & subkeys[((((index - 1) / 2) + 2) % 8) + 8]);
    }
    
    return (L << 16) | R;
@@ -65,17 +66,14 @@ uint32_t Mysty1::FLInverse(const uint32_t in, const uint8_t index) const
 
 void Mysty1::generateSubkeys()
 {
+   subkeys = BigEndian16::toIntegersVector(key);
    subkeys.resize(32);
-   for(uint8_t i = 0; i < 16; i += 2)
-   {
-      subkeys[i / 2] = (key[i] << 8) + key[i + 1];
-   }
    
-   for(uint8_t i = 0; i < 8; ++i)
+   for(uint8_t i = 8; i < 16; ++i)
    {
-      subkeys[i + 8] = FI(subkeys[i], subkeys[(i + 1) & 7]);
-      subkeys[i + 16] = subkeys[i + 8] & 0x1FF;
-      subkeys[i + 24] = subkeys[i + 8] >> 9;
+      subkeys[i] = FI(subkeys[i - 8], subkeys[(i + 1) % 8]);
+      subkeys[i + 8] = subkeys[i] & 0x1FF;
+      subkeys[i + 16] = subkeys[i] >> 9;
    }
 }
 
@@ -85,15 +83,15 @@ uint32_t Mysty1::F(const uint32_t half_block, const uint8_t index) const
    uint16_t R = half_block & 0xFFFF;
    
    L ^= subkeys[index];
-   L = FI(L, subkeys[((index + 5) & 7) + 8]) ^ R;
+   L = FI(L, subkeys[((index + 5) % 8) + 8]) ^ R;
    
-   R ^= subkeys[(index + 2) & 7];
-   R = FI(R, subkeys[((index + 1) & 7) + 8]) ^ L;
+   R ^= subkeys[(index + 2) % 8];
+   R = FI(R, subkeys[((index + 1) % 8) + 8]) ^ L;
    
-   L ^= subkeys[(index + 7) & 7];
-   L = FI(L, subkeys[((index + 3) & 7) + 8]) ^ R;
+   L ^= subkeys[(index + 7) % 8];
+   L = FI(L, subkeys[((index + 3) % 8) + 8]) ^ R;
    
-   R ^= subkeys[(index + 4) & 7];
+   R ^= subkeys[(index + 4) % 8];
    
    return (R << 16) | L;
 }

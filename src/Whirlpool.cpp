@@ -10,7 +10,7 @@ uint64_t Whirlpool::applyGammaPiTheta(UInt64Vector &key, const uint8_t index)
    uint64_t tmp_key = 0;
    for (uint8_t i = 0; i < 8; ++i)
    {
-      tmp_key ^= sbox[i][(key[(index - i) & 7] >> ((7 - i) << 3)) & 0xFF];
+      tmp_key ^= sbox[i][(key[(index - i) & 7] >> ((7 - i) * 8)) & 0xFF];
    }
 
    return tmp_key;

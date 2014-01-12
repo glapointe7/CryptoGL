@@ -17,20 +17,16 @@ void IDEA::setKey(const BytesVector &key)
 
 void IDEA::generateSubkeys()
 {
+   subkeys = BigEndian16::toIntegersVector(key);
    subkeys.reserve(52);
-   for (uint8_t i = 0; i < 16; i += 2)
-   {
-      subkeys.push_back(BigEndian16::toInteger(BytesVector(key.begin() + i, key.begin() + i + 2)));
-   }
 
    // The key is rotated left of 25 bits.
    auto it = subkeys.begin();
-   for (uint8_t i = 8, j = 0; i < 52; ++i)
+   for (uint8_t i = 8, j = 1; i < 52; ++i, ++j)
    {
-      j++;
-      subkeys.push_back((*(it + (j & 7)) << 9) | (*(it + ((j + 1) & 7)) >> 7));
+      subkeys.push_back((*(it + (j % 8)) << 9) | (*(it + ((j + 1) % 8)) >> 7));
       it += j & 8;
-      j &= 7;
+      j %= 8;
    }
 }
 

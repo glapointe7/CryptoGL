@@ -2,11 +2,10 @@
  * Source : https://www.cosic.esat.kuleuven.be/nessie/testvectors/bc/idea/Idea-128-64.verified.test-vectors
  */
 #ifndef IDEATEST_HPP
-#define	IDEATEST_HPP
+#define IDEATEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/IDEA.hpp"
-#include "../src/Digest.hpp"
 
 class IDEATest : public ::testing::Test
 {

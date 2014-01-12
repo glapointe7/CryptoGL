@@ -1,9 +1,11 @@
 /*
  * Source : http://www.ime.usp.br/~rt/cast256/CAST-256.pdf
+ * Should be a generalised Feistel Network.
  */
 #ifndef CAST256_HPP
 #define CAST256_HPP
 
+#include "Types.hpp"
 #include "BlockCipher.hpp"
 #include "BigEndian.hpp"
 
@@ -12,7 +14,7 @@
 
 using Function = std::function<uint32_t(const uint32_t, const uint32_t, const uint32_t)>;
 
-class CAST256 : public BlockCipher<uint32_t, std::vector<uint32_t>, 16, BigEndian32>
+class CAST256 : public BlockCipher<uint32_t, UInt32Vector, 16, BigEndian32>
 {
 public:   
    /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */

@@ -43,8 +43,8 @@ void Camellia::generateSubkeys()
          break;
          
       case 24:
-         Kl.insert(Kl.end(), key.begin(), key.begin() + 16);
-         Kr.insert(Kr.end(), key.begin() + 16, key.end());
+         Vector::extend(Kl, key, 0, 16);
+         Vector::extend(Kr, key, 16);
          for(uint8_t i = 0; i < 8; ++i)
          {  // NOT(x AND t) = NOT(x) AND t = x XOR t, where t is tautology.
             Kr.push_back(Kr[i] ^ 0xFF);
@@ -53,20 +53,20 @@ void Camellia::generateSubkeys()
          break;
          
       case 32:
-         Kl.insert(Kl.end(), key.begin(), key.begin() + 16);
-         Kr.insert(Kr.end(), key.begin() + 16, key.end());
+         Vector::extend(Kl, key, 0, 16);
+         Vector::extend(Kr, key, 16);
          Ke.reserve(6);
          break;
    }
    
    BytesVector K = Vector::Xor(Kl, Kr);
-   uint64_t K1 = BigEndian64::toInteger(BytesVector(K.begin(), K.begin() + 8));
-   uint64_t K2 = BigEndian64::toInteger(BytesVector(K.begin() + 8, K.end()));
+   uint64_t K1 = BigEndian64::toIntegerRange(K, 0, 8);
+   uint64_t K2 = BigEndian64::toIntegerRange(K, 8);
    K2 ^= F(K1 ^ key_sigma[0], 0);
    K1 ^= F(K2 ^ key_sigma[1], 1);
    
-   K1 ^= BigEndian64::toInteger(BytesVector(Kl.begin(), Kl.begin() + 8));
-   K2 ^= BigEndian64::toInteger(BytesVector(Kl.begin() + 8, Kl.end()));
+   K1 ^= BigEndian64::toIntegerRange(Kl, 0, 8);
+   K2 ^= BigEndian64::toIntegerRange(Kl, 8);
    K2 ^= F(K1 ^ key_sigma[2], 2);
    K1 ^= F(K2 ^ key_sigma[3], 3);
    
@@ -87,8 +87,8 @@ void Camellia::generateSubkeys()
       Vector::extend(Ke, BigEndian64::toIntegersVector(Bits::rotateLeft128(Ka, 30)));
       Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kl, 45)));
 
-      subkeys.push_back(BigEndian64::toIntegerRange(Bits::rotateLeft128(Ka, 45), 8));
-      subkeys.push_back(BigEndian64::toIntegerRange(Bits::rotateLeft128(Kl, 60), 8, 16));
+      subkeys.push_back(BigEndian64::toIntegerRange(Bits::rotateLeft128(Ka, 45), 0, 8));
+      subkeys.push_back(BigEndian64::toIntegerRange(Bits::rotateLeft128(Kl, 60), 8));
 
       Vector::extend(subkeys, BigEndian64::toIntegersVector(Bits::rotateLeft128(Ka, 60)));
       Vector::extend(Ke, BigEndian64::toIntegersVector(Bits::rotateLeft128(Kl, 77)));
@@ -100,8 +100,8 @@ void Camellia::generateSubkeys()
    else
    {
       K = Vector::Xor(Ka, Kr);
-      K1 = BigEndian64::toInteger(BytesVector(K.begin(), K.begin() + 8));
-      K2 = BigEndian64::toInteger(BytesVector(K.begin() + 8, K.end()));
+      K1 = BigEndian64::toIntegerRange(K, 0, 8);
+      K2 = BigEndian64::toIntegerRange(K, 8);
       K2 ^= F(K1 ^ key_sigma[4], 4);
       K1 ^= F(K2 ^ key_sigma[5], 5);
 

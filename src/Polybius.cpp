@@ -1,14 +1,11 @@
-
-#include "Polybius.hpp"
-
-#include <utility> 
+#include "Polybius.hpp" 
 
 ClassicalType Polybius::encode(const ClassicalType &clear_text)
 {  
    ClassicalType crypted;
    crypted.reserve(clear_text.length() * 2);
 
-   const Grid grid(getGrid(getKey() + alpha));
+   const Grid grid(getGrid(getKey().append(alpha)));
    for (const auto c : clear_text)
    {
       const auto pos = getCharCoordinates(c, grid);
@@ -24,7 +21,7 @@ ClassicalType Polybius::decode(const ClassicalType &cipher_text)
    const uint32_t cipher_len = cipher_text.length();
    ClassicalType decrypted;
    decrypted.reserve(cipher_len / 2);
-   const Grid grid(getGrid(getKey() + alpha));
+   const Grid grid(getGrid(getKey().append(alpha)));
 
    for (uint32_t i = 0; i < cipher_len; i += 2)
    {
