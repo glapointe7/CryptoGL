@@ -97,7 +97,7 @@ public:
    Ripemd128() : Ripemd({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476}, 64, 16) {}
    
 private:
-   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
+   void compress(UInt32Vector &int_block, UInt32Vector &state) override;
 };
 
 class Ripemd160 : public Ripemd
@@ -106,7 +106,7 @@ public:
    Ripemd160() : Ripemd({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0}, 80, 20) {}
    
 private:
-   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
+   void compress(UInt32Vector &int_block, UInt32Vector &state) override;
 };
 
 class Ripemd256 : public Ripemd
@@ -116,7 +116,7 @@ public:
       0x76543210, 0xFEDCBA98, 0x89ABCDEF, 0x01234567}, 64, 32) {}
    
 private:
-   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
+   void compress(UInt32Vector &int_block, UInt32Vector &state) override;
 };
 
 class Ripemd320 : public Ripemd
@@ -126,6 +126,6 @@ public:
       0x76543210, 0xFEDCBA98, 0x89ABCDEF, 0x01234567, 0x3C2D1E0F}, 80, 40) {}
    
 private:
-   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
+   void compress(UInt32Vector &int_block, UInt32Vector &state) override;
 };
 #endif

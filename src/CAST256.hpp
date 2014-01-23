@@ -29,12 +29,12 @@ public:
    CAST256(const BytesVector &key, const OperationModes mode) 
       : CAST256(key, mode, {}) {}
 
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
 
 private:   
-   virtual void generateSubkeys() final;
-   virtual UInt32Vector encodeBlock(const UInt32Vector &input) final;
-   virtual UInt32Vector decodeBlock(const UInt32Vector &input) final;
+   void generateSubkeys() override;
+   UInt32Vector encodeBlock(const UInt32Vector &input) override;
+   UInt32Vector decodeBlock(const UInt32Vector &input) override;
    
    static uint32_t F1(const uint32_t D, const uint32_t Km, const uint32_t Kr);
    static uint32_t F2(const uint32_t D, const uint32_t Km, const uint32_t Kr);

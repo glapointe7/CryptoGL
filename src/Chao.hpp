@@ -9,8 +9,8 @@ class Chao : public StringCipher
 public:
    Chao(const ClassicalType &left_alpha, const ClassicalType &right_alpha);
    
-   virtual ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual ClassicalType decode(const ClassicalType &cipher_text) final;
+   ClassicalType encode(const ClassicalType &clear_text) override;
+   ClassicalType decode(const ClassicalType &cipher_text) override;
    
 private:
    ClassicalType left_alpha;

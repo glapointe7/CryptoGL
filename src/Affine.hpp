@@ -9,8 +9,8 @@ class Affine : public StringCipher
 public:
    Affine(const int32_t a, const int32_t b) { setKey(a, b); }
    
-   virtual ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual ClassicalType decode(const ClassicalType &cipher_text) final;
+   ClassicalType encode(const ClassicalType &clear_text) override;
+   ClassicalType decode(const ClassicalType &cipher_text) override;
    
    void setKey(const int32_t a, const int32_t b);
 

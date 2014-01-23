@@ -22,13 +22,13 @@ public:
    Noekeon(const BytesVector &key, const OperationModes mode) 
       : Noekeon(key, mode, {}) {}
    
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
    
 private:
-   virtual void generateSubkeys() final;
-   virtual void generateInverseSubkeys() final;
-   virtual UInt32Vector encodeBlock(const UInt32Vector &input) final;
-   virtual UInt32Vector decodeBlock(const UInt32Vector &input) final;
+   void generateSubkeys() override;
+   void generateInverseSubkeys() override;
+   UInt32Vector encodeBlock(const UInt32Vector &input) override;
+   UInt32Vector decodeBlock(const UInt32Vector &input) override;
    
    static void applyGamma(UInt32Vector &state);
    void applyTheta(UInt32Vector &state) const;

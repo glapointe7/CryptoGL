@@ -20,8 +20,8 @@ class Fleissner : public StringCipher
 public:
    Fleissner(const Coordinates &key, const uint32_t grid_dim, const bool clockwise);
    
-   virtual ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual ClassicalType decode(const ClassicalType &cipher_text) final;
+   ClassicalType encode(const ClassicalType &clear_text) override;
+   ClassicalType decode(const ClassicalType &cipher_text) override;
 
    void setGridDimension(const uint32_t dim);
 

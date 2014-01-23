@@ -23,12 +23,12 @@ public:
    AES(const BytesVector &key, const OperationModes mode) 
       : AES(key, mode, {}) {}
    
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
    
 private:      
-   virtual void generateSubkeys() final;
-   virtual UInt32Vector encodeBlock(const UInt32Vector &input) final;
-   virtual UInt32Vector decodeBlock(const UInt32Vector &input) final;
+   void generateSubkeys() override;
+   UInt32Vector encodeBlock(const UInt32Vector &input) override;
+   UInt32Vector decodeBlock(const UInt32Vector &input) override;
    
    void addRoundKey(UInt32Vector &state, const uint8_t round) const;
    

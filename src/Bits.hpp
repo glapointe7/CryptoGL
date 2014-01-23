@@ -92,7 +92,7 @@ namespace Bits
    uint32_t bytesSwap(const uint32_t value);
    
    /* Permute each bit of 'value' from positions given in 'table'.*/
-   uint32_t permute(const uint32_t value, const uint8_t *table);
+   //uint32_t permute(const uint32_t value, const uint8_t *table);
 }
 
 #endif

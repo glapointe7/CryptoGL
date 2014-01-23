@@ -25,16 +25,16 @@ public:
    DES(const BytesVector &key, const OperationModes mode) 
       : DES(key, mode, {}) {}
    
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
 
 private:
-   virtual void generateSubkeys() final;
-   virtual uint64_t encodeBlock(const uint64_t &input) final;
-   virtual uint64_t decodeBlock(const uint64_t &input) final;
+   void generateSubkeys() override;
+   uint64_t encodeBlock(const uint64_t &input) override;
+   uint64_t decodeBlock(const uint64_t &input) override;
    
-   virtual uint64_t F(const uint64_t data, const uint8_t round) const final;
-   virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
-   virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
+   uint64_t F(const uint64_t data, const uint8_t round) const override;
+   void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const override;
+   void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const override;
    
    static uint64_t getSubstitution(const uint64_t &key_mixed);
    

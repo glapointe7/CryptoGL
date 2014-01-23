@@ -27,9 +27,9 @@ private:
    static void applyRound(uint64_t &a, uint64_t &b, uint64_t &c, const uint64_t &word, const uint8_t mult);
    static void pass(uint64_t &a, uint64_t &b, uint64_t &c, const UInt64Vector &words, const uint8_t mult);
    
-   virtual void compress(UInt64Vector &int_block, UInt64Vector &state) final;
+   void compress(UInt64Vector &int_block, UInt64Vector &state) override;
    
-   virtual BytesVector getOutput(const UInt64Vector &hash) const final; 
+   BytesVector getOutput(const UInt64Vector &hash) const override; 
    
    static constexpr std::array<std::array<uint64_t, 256>, 4> sbox = {{
       {

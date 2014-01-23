@@ -52,7 +52,7 @@ static_assert(!(InputBlockSize & 7), "InputBlockSize has to be a multiple of 8."
 
 public:   
    /* Process general encoding for block ciphers. */
-   BytesVector encode(const BytesVector &message)
+   BytesVector encode(const BytesVector &message) override
    {
       generateSubkeys();
 
@@ -72,7 +72,7 @@ public:
    }
    
    /* Process general decoding for block ciphers. */
-   BytesVector decode(const BytesVector &message)
+   BytesVector decode(const BytesVector &message) override
    {
       generateInverseSubkeys();
 

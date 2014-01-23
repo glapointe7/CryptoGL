@@ -21,7 +21,7 @@ protected:
    virtual ClassicalType encode(const ClassicalType &) = 0;
    virtual ClassicalType decode(const ClassicalType &) = 0;
 
-   virtual void setAlpha(const ClassicalType &alpha) final;
+   void setAlpha(const ClassicalType &alpha) override;
    
    Grid getGrid(ClassicalType chars) const;
    static Coordinates getCharCoordinates(const char c, const Grid &grid);

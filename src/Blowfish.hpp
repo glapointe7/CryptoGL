@@ -26,16 +26,16 @@ public:
    Blowfish(const BytesVector &key, const OperationModes mode) 
       : Blowfish(key, mode, {}) {}
 
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
 
 private:
-   virtual void generateSubkeys() final;
-   virtual uint64_t encodeBlock(const uint64_t &input) final;
-   virtual uint64_t decodeBlock(const uint64_t &input) final;
+   void generateSubkeys() override;
+   uint64_t encodeBlock(const uint64_t &input) override;
+   uint64_t decodeBlock(const uint64_t &input) override;
 
-   virtual uint32_t F(const uint32_t half_block, const uint8_t) const final;
-   virtual void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
-   virtual void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
+   uint32_t F(const uint32_t half_block, const uint8_t) const override;
+   void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;
+   void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;
 
    static constexpr std::array<uint32_t, 18> P = {
       {0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344, 0xa4093822, 0x299f31d0,

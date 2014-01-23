@@ -30,7 +30,7 @@ namespace Vector
       explicit LambdaRightShift(const uint32_t shift)
          : LambdaShift(shift), mask(0xFF >> (8 - shift)) {}
 
-      uint8_t operator()(uint8_t val) final
+      uint8_t operator()(uint8_t val) override
       {
          const uint8_t right = val & mask;
          val >>= shift;
@@ -51,7 +51,7 @@ namespace Vector
       explicit LambdaLeftShift(const uint32_t shift)
          : LambdaShift(shift), mask(0xFF << (8 - shift)) {}
 
-      uint8_t operator()(uint8_t val) final
+      uint8_t operator()(uint8_t val) override
       {
          const uint8_t left = val & mask;
          val <<= shift;

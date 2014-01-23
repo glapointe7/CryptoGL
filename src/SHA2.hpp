@@ -32,7 +32,7 @@ protected:
 
    virtual ~SHA2() {}
    
-   void compress(DataTypeVector &int_block, DataTypeVector &state)
+   void compress(DataTypeVector &int_block, DataTypeVector &state) override
    {
       int_block.resize(this->rounds);
 
@@ -148,7 +148,7 @@ public:
    SHA512_224() : SHA512_t(28, {0x32, 0x32, 0x34}) {}  // code = "224"
    
 private:
-   virtual BytesVector getOutput(const UInt64Vector &hash) const final;
+   BytesVector getOutput(const UInt64Vector &hash) const override;
 };
 
 class SHA512_256 : public SHA512_t

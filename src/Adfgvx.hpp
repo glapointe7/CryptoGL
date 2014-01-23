@@ -11,8 +11,8 @@ class Adfgvx : public SquareCipher
 public:
    explicit Adfgvx(const KeyType &key);
 
-   virtual ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual ClassicalType decode(const ClassicalType &cipher_text) final;
+   ClassicalType encode(const ClassicalType &clear_text) override;
+   ClassicalType decode(const ClassicalType &cipher_text) override;
 
    void setGridKey(const Grid &grid);
 

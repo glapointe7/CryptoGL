@@ -17,9 +17,9 @@ public:
    Snow3G(const BytesVector &key, const BytesVector &IV, const uint64_t &output_size)
       : output_size(output_size) { setIV(IV); setKey(key); }
    
-   virtual UInt32Vector generateKeystream() final;
+   UInt32Vector generateKeystream() override;
    
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
    void setIV(const BytesVector &IV);
    
 private:
@@ -34,7 +34,7 @@ private:
    /* The registers of the FSM. */
    uint32_t R1, R2, R3;
    
-   virtual void keySetup() final;
+   void keySetup() override;
    
    static constexpr uint8_t mulx(const uint8_t V, const uint8_t c);
    static uint8_t mulxPow(const uint8_t V, const uint8_t i, const uint8_t c);

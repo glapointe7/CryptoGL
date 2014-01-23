@@ -16,7 +16,7 @@ public:
 
 private:
    static uint64_t applyGammaPiTheta(UInt64Vector &key, const uint8_t index);
-   virtual void compress(UInt64Vector &block, UInt64Vector &state) final;
+   void compress(UInt64Vector &block, UInt64Vector &state) override;
 
    /* Round constants. */
    static constexpr std::array<uint64_t, 10> RC = {

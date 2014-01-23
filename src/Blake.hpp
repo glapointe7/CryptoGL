@@ -91,7 +91,7 @@ private:
       b = ShiftingGetter<DataType, 3>::G(b ^ c);
    }
       
-   virtual void compress(DataTypeVector &int_block, DataTypeVector &hash) final
+   void compress(DataTypeVector &int_block, DataTypeVector &hash) override
    {
       DataTypeVector V = this->initialize(hash, GVector::G);
       for(uint8_t j = 0; j < rounds; ++j)
@@ -162,7 +162,7 @@ protected:
    virtual ~Blake() {} 
    
 public:   
-   virtual BytesVector encode(const BytesVector &data) final
+   BytesVector encode(const BytesVector &data) override
    {
       const uint64_t data_size = data.size();
       BytesVector bytes = this->pad(data);
@@ -196,7 +196,7 @@ public:
 		0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19}, 14, 32) {}
       
 private:
-   virtual BytesVector pad(BytesVector message) const final;
+   BytesVector pad(BytesVector message) const override;
 };
 
 class Blake384 : public Blake<uint64_t, 128>
@@ -213,7 +213,7 @@ public:
 		0x510E527FADE682D1, 0x9B05688C2B3E6C1F, 0x1F83D9ABFB41BD6B, 0x5BE0CD19137E2179}, 16, 64) {}
       
 private:
-   virtual BytesVector pad(BytesVector message) const final;
+   BytesVector pad(BytesVector message) const override;
 };
 
 #endif

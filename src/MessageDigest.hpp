@@ -14,10 +14,10 @@ class MessageDigest : public MerkleDamgardFunction<uint32_t, LittleEndian32, Lit
 protected:
    explicit MessageDigest(const uint8_t rounds) 
       : MerkleDamgardFunction({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476}, rounds, 16) {}
-
-   virtual ~MessageDigest() {}
    
    virtual void compress(UInt32Vector &int_block, UInt32Vector &state) = 0;
+
+   virtual ~MessageDigest() {}
 };
 
 class MD4 : public MessageDigest
@@ -26,7 +26,7 @@ public:
    MD4() : MessageDigest(48) {}
    
 private:
-   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
+   void compress(UInt32Vector &int_block, UInt32Vector &state) override;
    
    static constexpr std::array<uint8_t, 48> left_rotation_table = {
       {3, 7, 11, 19, 3, 7, 11, 19, 3, 7, 11, 19, 3, 7, 11, 19,
@@ -64,7 +64,7 @@ public:
    MD5() : MessageDigest(64) {}
    
 private:
-   virtual void compress(UInt32Vector &int_block, UInt32Vector &state) final;
+   void compress(UInt32Vector &int_block, UInt32Vector &state) override;
    
    static constexpr std::array<uint8_t, 64> left_rotation_table = {
       {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,

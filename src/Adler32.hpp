@@ -11,7 +11,7 @@ class Adler32 : public Checksum<uint32_t>
 public:
    Adler32() {}
    
-   virtual uint32_t encode(const BytesVector &input) final;
+   uint32_t encode(const BytesVector &input) override;
    
 private:
    /* largest prime smaller than 65536. */

@@ -12,8 +12,8 @@ class UnsortAlpha : public StringCipherWithStringKey
 public:
    explicit UnsortAlpha(const KeyType &key);
    
-   virtual ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual ClassicalType decode(const ClassicalType &cipher_text) final;
+   ClassicalType encode(const ClassicalType &clear_text) override;
+   ClassicalType decode(const ClassicalType &cipher_text) override;
 
    /* Unordered the alphabet in the vertical way. */
    void setVerticalAlpha();

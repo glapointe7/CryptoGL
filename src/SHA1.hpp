@@ -15,7 +15,7 @@ public:
    SHA1() 
       : MerkleDamgardFunction({0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xC3D2E1F0}, 80, 20) {}
    
-   void compress(UInt32Vector &int_block, UInt32Vector &state);
+   void compress(UInt32Vector &int_block, UInt32Vector &state) override;
    
 private:   
    static constexpr uint32_t ch(const uint32_t x, const uint32_t y, const uint32_t z)

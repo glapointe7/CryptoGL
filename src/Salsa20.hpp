@@ -16,13 +16,13 @@ public:
    Salsa20(const BytesVector &key, const BytesVector &IV) { setIV(IV); setKey(key); }
    
    /* Generate 64 bytes of keystream. */
-   virtual UInt32Vector generateKeystream() final;
+   UInt32Vector generateKeystream() override;
    
    void setIV(const BytesVector &IV);
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
       
 private:
-   virtual void keySetup() final;
+   void keySetup() override;
    void IVSetup();
       
    static UInt32Vector quarterRound(const UInt32Vector &Y);

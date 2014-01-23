@@ -18,7 +18,7 @@ public:
    /* Constructor with no seed given. */
    Isaac() : Isaac(UInt32Vector(0)) {}
    
-   virtual UInt32Vector generate() final;
+   UInt32Vector generate() override;
    
 private:
    void initialize();

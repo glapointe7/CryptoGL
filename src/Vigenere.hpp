@@ -19,6 +19,7 @@ class Vigenere : public StringCipherWithStringKey
 {
 private:
    using GetCharFunction = std::function<ClassicalType(const ClassicalType &, const char, const char)>;
+   
    const GetCharFunction charEncode, charDecode;
    ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
    
@@ -52,8 +53,8 @@ public:
       
    virtual ~Vigenere() {}
 
-   virtual ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual ClassicalType decode(const ClassicalType &cipher_text);
+   ClassicalType encode(const ClassicalType &clear_text) override;
+   virtual ClassicalType decode(const ClassicalType &cipher_text) override;
 };
 
 // Beaufort : CIPHER = -CLEAR + KEY
@@ -83,7 +84,7 @@ public:
       : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
 
    /* Specific to Rozier cipher : the rozier_key is a string. */
-   void setKey(const ClassicalType &rozier_key)
+   void setKey(const ClassicalType &rozier_key) override
    {
       const uint32_t key_length = rozier_key.length() - 1;
       const uint8_t alpha_len = alpha.length();
@@ -145,7 +146,7 @@ public:
       : Vigenere(clearMultKey, keyDivideCipher, key) {}
 
    /* Decode the Vigenere Multiplication cipher with the given cipher_text. */
-   virtual ClassicalType decode(const ClassicalType &cipher_text) final
+   ClassicalType decode(const ClassicalType &cipher_text) override
    {
       const KeyType my_key = getKey();
       const uint32_t key_length = my_key.length();

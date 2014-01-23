@@ -24,16 +24,16 @@ public:
    Twofish(const BytesVector &key, const OperationModes mode) 
       : Twofish(key, mode, {}) {}
 
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
    
 private:
-   virtual void generateSubkeys() final;
-   virtual UInt32Vector encodeBlock(const UInt32Vector &input) final;
-   virtual UInt32Vector decodeBlock(const UInt32Vector &input) final;
+   void generateSubkeys() override;
+   UInt32Vector encodeBlock(const UInt32Vector &input) override;
+   UInt32Vector decodeBlock(const UInt32Vector &input) override;
 
-   virtual UInt32Vector F(const UInt32Vector half_block, const uint8_t round) const final;
-   virtual void encodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_t) const final;
-   virtual void decodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_t) const final;
+   UInt32Vector F(const UInt32Vector half_block, const uint8_t round) const override;
+   void encodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_t) const override;
+   void decodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_t) const override;
 
    static uint32_t h(const uint32_t X, const BytesVector &L);
    

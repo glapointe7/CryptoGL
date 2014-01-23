@@ -16,8 +16,8 @@ public:
    RedefenceZigzag(const KeyType &key, const KeyType &key_levels);
    virtual ~RedefenceZigzag() {}
 
-   virtual ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual ClassicalType decode(const ClassicalType &cipher_text) final;
+   ClassicalType encode(const ClassicalType &clear_text) override;
+   ClassicalType decode(const ClassicalType &cipher_text) override;
    
    void setOffset(const uint32_t offset) { this->offset = offset; }
    

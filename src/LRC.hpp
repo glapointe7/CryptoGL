@@ -9,7 +9,7 @@ class LRC : public Checksum <uint8_t>
 public:
    LRC() {}
    
-   virtual uint8_t encode(const BytesVector &input) final;
+   uint8_t encode(const BytesVector &input) override;
 };
 
 #endif

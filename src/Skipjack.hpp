@@ -22,16 +22,16 @@ public:
    Skipjack(const BytesVector &key, const OperationModes mode) 
       : Skipjack(key, mode, {}) {}
    
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
    
 private:
-   virtual void generateSubkeys() final;
-   virtual UInt16Vector encodeBlock(const UInt16Vector &input) final;
-   virtual UInt16Vector decodeBlock(const UInt16Vector &input) final;
+   void generateSubkeys() override;
+   UInt16Vector encodeBlock(const UInt16Vector &input) override;
+   UInt16Vector decodeBlock(const UInt16Vector &input) override;
    
-   virtual uint8_t F(const uint8_t data, const uint8_t round) const final;
-   virtual void encodeFeistelRounds(uint8_t &L, uint8_t &R, const uint8_t round) const final;
-   virtual void decodeFeistelRounds(uint8_t &L, uint8_t &R, const uint8_t round) const final;
+   uint8_t F(const uint8_t data, const uint8_t round) const override;
+   void encodeFeistelRounds(uint8_t &L, uint8_t &R, const uint8_t round) const override;
+   void decodeFeistelRounds(uint8_t &L, uint8_t &R, const uint8_t round) const override;
    
    /* Rules A and B and their corresponding inverses. */
    void applyRuleA(UInt16Vector &input, const uint8_t round) const;

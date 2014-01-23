@@ -16,14 +16,14 @@ public:
    explicit RC4(const BytesVector &key) 
       : RC4(key, 0) {}
    
-   virtual BytesVector encode(const BytesVector &clear_text) final;
+   BytesVector encode(const BytesVector &clear_text) override;
    
-   virtual BytesVector generateKeystream() final;
+   BytesVector generateKeystream() override;
    
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
    
 private:
-   virtual void keySetup() final;
+   void keySetup() override;
    
    std::array<uint8_t, 256> subkeys;
    uint64_t output_size;

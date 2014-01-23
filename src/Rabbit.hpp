@@ -22,14 +22,14 @@ public:
    explicit Rabbit(const BytesVector &key) 
       : Rabbit(key, BytesVector(0)) {}
    
-   virtual UInt32Vector generateKeystream() final;
+   UInt32Vector generateKeystream() override;
    
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
 
    void setIV(const BytesVector &IV);
 
 private:
-   virtual void keySetup() final;
+   void keySetup() override;
    void IVSetup();
    
    void nextState();

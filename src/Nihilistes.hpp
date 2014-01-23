@@ -9,8 +9,8 @@ class Nihilistes : public SquareCipher
 public:
    Nihilistes(const KeyType &key, const KeyType &second_key);
    
-   virtual ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual ClassicalType decode(const ClassicalType &cipher_text) final;
+   ClassicalType encode(const ClassicalType &clear_text) override;
+   ClassicalType decode(const ClassicalType &cipher_text) override;
    
 private:
    KeyType second_key;

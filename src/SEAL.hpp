@@ -17,18 +17,18 @@ public:
    SEAL(const BytesVector &key, const uint32_t seed, const uint16_t output_size)
            : PseudoRandomFunction(seed), output_size(output_size) { setKey(key); }
    
-   virtual UInt32Vector generate() final;
+   UInt32Vector generate() override;
    
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
    
 private:
    /* Only used by the encode function. */
-   virtual UInt32Vector generateKeystream() final;
+   UInt32Vector generateKeystream() override;
    
    /* Initialise the vectors A and registers from a given value and an index. */
    void initialize();
    
-   virtual void keySetup() final;
+   void keySetup() override;
    
    /* Define an IV with SHA-1 and return the hash truncated. */
    uint32_t gamma(SHA1 &G, UInt32Vector &block, const uint32_t current_index, uint32_t &previous_index);

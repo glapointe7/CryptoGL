@@ -23,16 +23,16 @@ public:
    Camellia(const BytesVector &key, const OperationModes mode) 
       : Camellia(key, mode, {}) {}
 
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
    
 private:
-   virtual void generateSubkeys() final;
-   virtual UInt64Vector encodeBlock(const UInt64Vector &input) final;
-   virtual UInt64Vector decodeBlock(const UInt64Vector &input) final;
+   void generateSubkeys() override;
+   UInt64Vector encodeBlock(const UInt64Vector &input) override;
+   UInt64Vector decodeBlock(const UInt64Vector &input) override;
 
-   virtual uint64_t F(const uint64_t half_block, const uint8_t) const final;
-   virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
-   virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
+   uint64_t F(const uint64_t half_block, const uint8_t) const override;
+   void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const override;
+   void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const override;
    
    static uint64_t FL(const uint64_t &half_block, const uint64_t &subkey);
    static uint64_t FLInverse(const uint64_t &half_block, const uint64_t &subkey);

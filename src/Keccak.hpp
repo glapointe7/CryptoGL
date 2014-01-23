@@ -35,13 +35,13 @@ public:
    
 private:
    /* Keccak-f permutation function. */
-   virtual void F() final;
+   void F() override;
 
    /* Apply the absorbing phase from the sponge construction using the padded input message.*/
-   virtual void applyAbsorbingPhase(const BytesVector &padded_message) final;
+   void applyAbsorbingPhase(const BytesVector &padded_message) override;
 
    /* Apply the squeezing phase from the sponge construction and return the final output hash. */
-   virtual BytesVector applySqueezingPhase() final;
+   BytesVector applySqueezingPhase() override;
 
    /* Apply theta, rho, pi, chi and iota steps from the specs. */
    void applyRound(const uint8_t round_index);

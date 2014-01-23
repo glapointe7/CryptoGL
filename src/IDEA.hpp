@@ -18,13 +18,13 @@ public:
    IDEA(const BytesVector &key, const OperationModes mode) 
       : IDEA(key, mode, {}) {}
    
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
    
 private:   
-   virtual void generateSubkeys() final;
-   virtual void generateInverseSubkeys() final;
-   virtual UInt16Vector encodeBlock(const UInt16Vector &input) final;
-   virtual UInt16Vector decodeBlock(const UInt16Vector &input) final;
+   void generateSubkeys() override;
+   void generateInverseSubkeys() override;
+   UInt16Vector encodeBlock(const UInt16Vector &input) override;
+   UInt16Vector decodeBlock(const UInt16Vector &input) override;
    
    /* Decryption subkeys. */
    UInt16Vector decoded_subkeys;

@@ -9,8 +9,8 @@ class MonoalphabeticSubstitution : public StringCipherWithStringKey
 public:
    explicit MonoalphabeticSubstitution(const KeyType &key) {setKey(key); }
    
-   virtual ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual ClassicalType decode(const ClassicalType &cipher_text) final;
+   ClassicalType encode(const ClassicalType &clear_text) override;
+   ClassicalType decode(const ClassicalType &cipher_text) override;
 };
 
 #endif

@@ -54,8 +54,8 @@ public:
    BlockCipherECBMode(const GetOutputBlockFunction &encode, const GetOutputBlockFunction &decode)
       : encode(encode), decode(decode) {}
    
-   virtual Block getCipherBlock(const Block &input_block) final;
-   virtual Block getClearBlock(const Block &input_block) final;
+   Block getCipherBlock(const Block &input_block) override;
+   Block getClearBlock(const Block &input_block) override;
    
 private:
    const GetOutputBlockFunction encode;
@@ -68,8 +68,8 @@ public:
    BlockCipherCBCMode(const Block &IV, const GetOutputBlockFunction &encode, const GetOutputBlockFunction &decode) 
       : previous_cipher_block(IV), encode(encode), decode(decode) {}
    
-   virtual Block getCipherBlock(const Block &input_block) final;
-   virtual Block getClearBlock(const Block &input_block) final;
+   Block getCipherBlock(const Block &input_block) override;
+   Block getClearBlock(const Block &input_block) override;
    
 private:
    Block previous_cipher_block;
@@ -83,8 +83,8 @@ public:
    BlockCipherCFBMode(const Block &IV, const GetOutputBlockFunction &encode)
       : next_input_block(IV), encode(encode) {}
    
-   virtual Block getCipherBlock(const Block &input_block) final;
-   virtual Block getClearBlock(const Block &input_block) final;
+   Block getCipherBlock(const Block &input_block) override;
+   Block getClearBlock(const Block &input_block) override;
 
 private:
    Block next_input_block;
@@ -97,8 +97,8 @@ public:
    BlockCipherOFBMode(const Block &IV, const GetOutputBlockFunction &encode)
       : next_input_block(IV), encode(encode) {}
    
-   virtual Block getCipherBlock(const Block &input_block) final;
-   virtual Block getClearBlock(const Block &input_block) final;
+   Block getCipherBlock(const Block &input_block) override;
+   Block getClearBlock(const Block &input_block) override;
 
 private:
    Block next_input_block;
@@ -118,8 +118,8 @@ public:
       counter = BigEndian64::toInteger(Block(IV.begin() + IV.size() - 8, IV.end())); 
    }
    
-   virtual Block getCipherBlock(const Block &input_block) final;
-   virtual Block getClearBlock(const Block &input_block) final;
+   Block getCipherBlock(const Block &input_block) override;
+   Block getClearBlock(const Block &input_block) override;
 
 private:
    Block increaseCounter();

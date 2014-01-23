@@ -11,7 +11,7 @@ class StreamCipher : public SymmetricCipher
 {
 public:
    /* Since encoding is his own inverse, then decoding is simply a call to encode. */
-   virtual BytesVector decode(const BytesVector &message) final
+   BytesVector decode(const BytesVector &message) override
    {
       return encode(message);
    }

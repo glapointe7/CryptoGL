@@ -33,18 +33,18 @@ public:
    explicit TranspositionCompleteRows(const KeyType &key) 
       : Transposition(key) {}
    
-   virtual ClassicalType encode(const ClassicalType &clear_text) final
+   ClassicalType encode(const ClassicalType &clear_text) override
    {
       return readPermutedTable(createTable(clear_text));
    }
 
-   virtual ClassicalType decode(const ClassicalType &cipher_text) final
+   ClassicalType decode(const ClassicalType &cipher_text) override
    {
       return encode(cipher_text);
    }
    
 private:
-   virtual ClassicalType readPermutedTable(const Table &table) final;
+   ClassicalType readPermutedTable(const Table &table) override;
 };
 
 class TranspositionIncompleteRows : public Transposition
@@ -53,18 +53,18 @@ public:
    explicit TranspositionIncompleteRows(const KeyType &key)
        : Transposition(key) {}
    
-   virtual ClassicalType encode(const ClassicalType &clear_text) final
+   ClassicalType encode(const ClassicalType &clear_text) override
    {
       return readPermutedTable(createIncompleteTable(clear_text));
    }
 
-   virtual ClassicalType decode(const ClassicalType &cipher_text) final
+   ClassicalType decode(const ClassicalType &cipher_text) override
    {
       return encode(cipher_text);
    }
    
 private:
-   virtual ClassicalType readPermutedTable(const Table &table) final;
+   ClassicalType readPermutedTable(const Table &table) override;
 };
 
 class TranspositionCompleteColumns : public Transposition
@@ -73,19 +73,19 @@ public:
    explicit TranspositionCompleteColumns(const KeyType &key)
        : Transposition(key) {}
    
-   virtual ClassicalType encode(const ClassicalType &clear_text) final
+   ClassicalType encode(const ClassicalType &clear_text) override
    {
       return readPermutedTable(Transposition::createTable(clear_text));
    }
 
-   virtual ClassicalType decode(const ClassicalType &cipher_text) final
+   ClassicalType decode(const ClassicalType &cipher_text) override
    {
       return Transposition::readPermutedTable(createTable(cipher_text));
    }
 
 private:
-   virtual Table createTable(ClassicalType data) final;
-   virtual ClassicalType readPermutedTable(const Table &table);
+   Table createTable(ClassicalType data) override;
+   ClassicalType readPermutedTable(const Table &table);
 };
 
 class TranspositionIncompleteColumns : public Transposition
@@ -94,19 +94,19 @@ public:
    explicit TranspositionIncompleteColumns(const KeyType &key)
        : Transposition(key) {}
    
-   virtual ClassicalType encode(const ClassicalType &clear_text) final
+   ClassicalType encode(const ClassicalType &clear_text) override
    {
       return readPermutedTable(Transposition::createIncompleteTable(clear_text));
    }
 
-   virtual ClassicalType decode(const ClassicalType &cipher_text) final
+   ClassicalType decode(const ClassicalType &cipher_text) override
    {
       return Transposition::readPermutedTable(createIncompleteTable(cipher_text));
    }
 
 private:
-   virtual Table createIncompleteTable(const ClassicalType &data) final;
-   virtual ClassicalType readPermutedTable(const Table &table) final;
+   Table createIncompleteTable(const ClassicalType &data) override;
+   ClassicalType readPermutedTable(const Table &table) override;
 };
 
 
@@ -120,7 +120,7 @@ public:
    TranspositionDouble(const KeyType &first_key, const KeyType &second_key) 
        : Transposition(first_key), second_key(second_key) {}
    
-   ClassicalType encode(const ClassicalType &clear_text)
+   ClassicalType encode(const ClassicalType &clear_text) override
    {
       TranspositionIncompleteColumns TIC_first(key);
       const ClassicalType first_encoded = TIC_first.encode(clear_text);
@@ -131,7 +131,7 @@ public:
       return TIC.encode(first_encoded);
    }
    
-   ClassicalType decode(const ClassicalType &cipher_text)
+   ClassicalType decode(const ClassicalType &cipher_text) override
    {
       TranspositionIncompleteColumns TIC_second(second_key);
       const ClassicalType first_decoded = TIC_second.decode(cipher_text);

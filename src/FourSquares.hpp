@@ -9,8 +9,8 @@ class FourSquares : public SquareCipher
 public:
    FourSquares(const KeyType &key1, const KeyType &key2);
    
-   virtual ClassicalType encode(const ClassicalType &clear_text) final;
-   virtual ClassicalType decode(const ClassicalType &cipher_text) final;
+   ClassicalType encode(const ClassicalType &clear_text) override;
+   ClassicalType decode(const ClassicalType &cipher_text) override;
 
 private:
    KeyType key2;

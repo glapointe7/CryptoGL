@@ -20,19 +20,19 @@ public:
    RC6(const BytesVector &key, const OperationModes mode) 
       : RC6(key, mode, {}) {}
    
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
    
 private:
    static constexpr uint32_t P32 = 0xb7e15163;
    static constexpr uint32_t Q32 = 0x9e3779b9;
    
-   virtual void generateSubkeys() final;
-   virtual UInt32Vector encodeBlock(const UInt32Vector &input) final;
-   virtual UInt32Vector decodeBlock(const UInt32Vector &input) final;
+   void generateSubkeys() override;
+   UInt32Vector encodeBlock(const UInt32Vector &input) override;
+   UInt32Vector decodeBlock(const UInt32Vector &input) override;
    
-   virtual uint64_t F(const uint64_t half_block, const uint8_t) const final;
-   virtual void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
-   virtual void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const final;
+   uint64_t F(const uint64_t half_block, const uint8_t) const override;
+   void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const override;
+   void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const override;
 };
 
 #endif

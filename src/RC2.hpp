@@ -22,12 +22,12 @@ public:
    RC2(const BytesVector &key, const OperationModes mode) 
       : RC2(key, mode, {}) {}
    
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
      
 private:
-   virtual void generateSubkeys() final;
-   virtual UInt16Vector encodeBlock(const UInt16Vector &input) final;
-   virtual UInt16Vector decodeBlock(const UInt16Vector &input) final;
+   void generateSubkeys() final;
+   UInt16Vector encodeBlock(const UInt16Vector &input) override;
+   UInt16Vector decodeBlock(const UInt16Vector &input) override;
    
    void mixUp(UInt16Vector &input, const uint8_t index, const uint8_t key_index) const;
    void mash(UInt16Vector &input, const uint8_t index) const;

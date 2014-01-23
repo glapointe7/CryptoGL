@@ -15,11 +15,11 @@ public:
    /* The private key (W, div, mod) need to be given where W is the super incresing sequence and div (mod mod). */
    HellmanMerkleKnapsack(const BigIntVector &sequence, const BigInteger &div, const BigInteger &mod);
    
-   virtual BigIntVector encode(const BytesVector &message) final;
-   virtual BytesVector decode(const BigIntVector &cipher) final;
+   BigIntVector encode(const BytesVector &message) override;
+   BytesVector decode(const BigIntVector &cipher) override;
    
 private:
-   virtual void makePublicKey() final;
+   void makePublicKey() override;
    BigInteger isSuperIncresing(const BigIntVector &sequence);
    uint8_t makePlainByte(BigInteger value);
    

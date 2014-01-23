@@ -14,13 +14,13 @@ public:
    HC256(const BytesVector &key, const BytesVector &IV) { setIV(IV); setKey(key); }
    
    /* Generate 2048 bytes of keystream. */
-   virtual UInt32Vector generateKeystream() final;
+   UInt32Vector generateKeystream() override;
    
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
    void setIV(const BytesVector &IV);
       
 private:
-   virtual void keySetup() final;
+   void keySetup() override;
          
    static uint32_t g(const uint32_t x, const uint32_t y, const UInt32Vector &K);
    static uint32_t h(const uint32_t x, const UInt32Vector &K);

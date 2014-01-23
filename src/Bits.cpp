@@ -28,7 +28,7 @@ uint32_t Bits::bytesSwap(const uint32_t value)
    return retval;
 }
 
-uint32_t Bits::permute(const uint32_t value, const uint8_t *table)
+/*uint32_t Bits::permute(const uint32_t value, const uint8_t *table)
 {
    uint32_t result = 0;
    for(uint8_t i = 0; i < 32; ++i)
@@ -37,7 +37,7 @@ uint32_t Bits::permute(const uint32_t value, const uint8_t *table)
    }
    
    return result;
-}
+}*/
 
 uint8_t Bits::msb(const BytesVector &V)
 {

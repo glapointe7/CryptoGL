@@ -23,16 +23,16 @@ public:
    Mysty1(const BytesVector &key, const OperationModes mode) 
       : Mysty1(key, mode, {}) {}
 
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
    
 private:
-   virtual void generateSubkeys() final;
-   virtual uint64_t encodeBlock(const uint64_t &input) final;
-   virtual uint64_t decodeBlock(const uint64_t &input) final;
+   void generateSubkeys() override;
+   uint64_t encodeBlock(const uint64_t &input) override;
+   uint64_t decodeBlock(const uint64_t &input) override;
 
-   virtual uint32_t F(const uint32_t half_block, const uint8_t index) const final;
-   virtual void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
-   virtual void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const final;
+   uint32_t F(const uint32_t half_block, const uint8_t index) const override;
+   void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;
+   void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;
    
    static uint16_t FI(const uint16_t in, const uint16_t K);
    uint32_t FL(const uint32_t in, const uint8_t index) const;

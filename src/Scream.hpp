@@ -11,12 +11,12 @@
 class Scream : public StreamCipher<BytesVector>
 {
 public:   
-   virtual BytesVector encode(const BytesVector &message) final;
+   BytesVector encode(const BytesVector &message) override;
    
    /* Generate vectors of 16-byte keystream from IV and key. */
-   virtual BytesVector generateKeystream() final;
+   BytesVector generateKeystream() override;
    
-   virtual void setKey(const BytesVector &key) final;
+   void setKey(const BytesVector &key) override;
    void setIV(const BytesVector &IV);
       
 protected:   
@@ -36,7 +36,7 @@ protected:
    uint8_t composeSBox(const uint8_t n, const uint8_t max, const uint8_t x) const;
    
    void IVSetup();
-   virtual void keySetup() final;
+   void keySetup() override;
    
    BytesVector F(const BytesVector &X);
    
@@ -83,7 +83,7 @@ public:
       : Scream(key, IV) {}
    
 private:
-   virtual void makeS1() final;
+   void makeS1() override;
 };
 
 class Scream_0 : public Scream
@@ -93,7 +93,7 @@ public:
       : Scream(key, IV) {}
    
 private:
-   virtual void makeS1() final;
+   void makeS1() override;
 };
 
 #endif

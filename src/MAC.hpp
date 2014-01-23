@@ -128,7 +128,7 @@ class CBC_MAC : public MAC
 public:
    explicit CBC_MAC(BytesVector key) : MAC(key) {}
    
-   virtual BytesVector encode(BytesVector message) final
+   BytesVector encode(BytesVector message) override
    {
       /* Prepare the encryption to be in CBC mode with an IV = 0^{BlockSize}. */
       constexpr uint8_t BlockSize = BlockCipherType::getBlockSize();
@@ -158,7 +158,7 @@ class AES_XCBC_MAC : public MAC
 public:
    explicit AES_XCBC_MAC(BytesVector key) : MAC(key) {}
    
-   virtual BytesVector encode(BytesVector message) final
+   BytesVector encode(BytesVector message) override
    {
       AES Block(key);
       
@@ -211,7 +211,7 @@ class CMAC : public MAC
 public:
    explicit CMAC(BytesVector key) : MAC(key) {}
    
-   virtual BytesVector encode(BytesVector message) final
+   BytesVector encode(BytesVector message) override
    {
       BlockCipherType Block(key);
       constexpr uint8_t BlockSize = BlockCipherType::getBlockSize();
@@ -252,7 +252,7 @@ class OMAC : public MAC
 public:
    explicit OMAC(BytesVector key) : MAC(key) {}
    
-   virtual BytesVector encode(BytesVector message) final
+   BytesVector encode(BytesVector message) override
    {
       BlockCipherType Block(key);
       constexpr uint8_t BlockSize = BlockCipherType::getBlockSize();
@@ -295,7 +295,7 @@ class PMAC : public MAC
 public:
    explicit PMAC(BytesVector key) : MAC(key) {}
  
-   virtual BytesVector encode(BytesVector message) final
+   BytesVector encode(BytesVector message) override
    {
       //const uint64_t message_size = message.size();
       BlockCipherType Block(key);
@@ -352,7 +352,7 @@ class TMAC : public MAC
 public:
    TMAC(BytesVector key, const BytesVector &key2) : MAC(key) { setKey(key2); }
    
-   virtual BytesVector encode(BytesVector message) final
+   BytesVector encode(BytesVector message) override
    {
       const uint64_t message_size = message.size();
       BlockCipherType Block(key);
