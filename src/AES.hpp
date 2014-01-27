@@ -30,17 +30,19 @@ private:
    UInt32Vector encodeBlock(const UInt32Vector &input) override;
    UInt32Vector decodeBlock(const UInt32Vector &input) override;
    
-   void addRoundKey(UInt32Vector &state, const uint8_t round) const;
+   void addRoundKey(const uint8_t round);
    
-   static void subBytes(UInt32Vector &state, const std::array<uint8_t, 256> &box); 
+   void subBytes(const std::array<uint8_t, 256> &box); 
    static uint32_t subWord(const uint32_t word);
    
-   static void shiftRows(UInt32Vector &state);
-   static void inverseShiftRows(UInt32Vector &state);
+   void shiftRows();
+   void inverseShiftRows();
    
    /* Function using Galois field GF(256) and 4 functions used to calculate each of the 4 rows. */
-   static void mixColumns(UInt32Vector &state);
-   static void inverseMixColumns(UInt32Vector &state);
+   void mixColumns();
+   void inverseMixColumns();
+   
+   UInt32Vector state {0, 0, 0, 0};
    
    static constexpr std::array<uint8_t, 16> shift_indexes = {
       {0, 5, 10, 15, 4, 9, 14, 3, 8, 13, 2, 7, 12, 1, 6, 11}

@@ -18,16 +18,13 @@ ClassicalType Collon::encode(const ClassicalType &clear_text)
    ClassicalType line1, line2;
    line1.reserve(clear_len);
    line2.reserve(clear_len);
-   
-   // Build the cipher grid without duplicated letters.
-   const Grid grid = getGrid(getKey().append(alpha));
 
    // Each characters in (x,y) is encoded by the digram AB such that A = (a,y) et B = (x,b).
    for (const auto c : clear_text)
    {
-      const auto coords = getCharCoordinates(c, grid);
-      line1.push_back(grid[coords.second][0]);
-      line2.push_back(grid[dim - 1][coords.first]);
+      const auto coords = grid.getCharCoordinates(c);
+      line1.push_back(grid.at(coords.second, 0));
+      line2.push_back(grid.at(grid.getDimension() - 1, coords.first));
    }
 
    // The text is then read in blocks. For exemple, for a block of length 3, we have
@@ -70,12 +67,11 @@ ClassicalType Collon::decode(const ClassicalType &cipher_text)
    // Let C = (x, y) be the decoded letter. We have to get C = (x2, y1).
    ClassicalType decrypted;
    decrypted.reserve(line_len);
-   const Grid grid(getGrid(getKey().append(alpha)));
    for (uint32_t i = 0; i < line_len; ++i)
    {
-      const auto A = getCharCoordinates(line1[i], grid);
-      const auto B = getCharCoordinates(line2[i], grid);
-      decrypted.push_back(grid[A.second][B.first]);
+      const auto A = grid.getCharCoordinates(line1[i]);
+      const auto B = grid.getCharCoordinates(line2[i]);
+      decrypted.push_back(grid.at(A.second, B.first));
    }
 
    return decrypted;

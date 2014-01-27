@@ -6,8 +6,6 @@
 
 #include "String.hpp"
 
-#include <string>
-
 class StringCipher : public Cipher<ClassicalType>
 {
 public:

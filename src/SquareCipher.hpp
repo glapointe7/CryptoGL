@@ -5,29 +5,33 @@
 #define SQUARECIPHER_HPP
 
 #include "StringCipherWithStringKey.hpp"
+#include "String.hpp"
+#include "CipherGrid.hpp"
 
 #include <string>
 #include <vector>
 
-using Coordinates = std::pair<uint8_t, uint8_t>;
-using Grid = std::vector<ClassicalType>;
-
 class SquareCipher : public StringCipherWithStringKey
 {
-protected:
-   explicit SquareCipher(const KeyType &key); 
+protected:   
+   const CipherGrid grid;
+   
+   SquareCipher() {}
+   
+   /* Create nXn grid depending of the length of alpha which must be a perfect square. */
+   SquareCipher(const KeyType &key, const ClassicalType &alpha) : grid(key, alpha)
+   {
+      setAlpha(alpha);
+      setKey(key);
+   }
+   
+   /* Default : Create 5X5 grid with unique english uppercase letters with the key. */
+   explicit SquareCipher(const KeyType &key) : SquareCipher(key, String::grid_uppercase_fr) {}
+   
    virtual ~SquareCipher() {}
    
    virtual ClassicalType encode(const ClassicalType &) = 0;
    virtual ClassicalType decode(const ClassicalType &) = 0;
-
-   void setAlpha(const ClassicalType &alpha) override;
-   
-   Grid getGrid(ClassicalType chars) const;
-   static Coordinates getCharCoordinates(const char c, const Grid &grid);
-
-   // Dimension of the square grid.
-   uint8_t dim;
 };
 
 #endif

@@ -9,7 +9,9 @@
 class Polybius : public SquareCipher
 {
 public:
-   explicit Polybius(const KeyType &key) : SquareCipher(key) {}
+   Polybius(const KeyType &key, const ClassicalType &alpha) : SquareCipher(key, alpha) {}
+   
+   explicit Polybius(const KeyType &key) : Polybius(key, String::grid_uppercase_fr) {}
    
    ClassicalType encode(const ClassicalType &clear_text) override;
    ClassicalType decode(const ClassicalType &cipher_text) override;

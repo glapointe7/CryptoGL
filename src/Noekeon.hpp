@@ -30,15 +30,19 @@ private:
    UInt32Vector encodeBlock(const UInt32Vector &input) override;
    UInt32Vector decodeBlock(const UInt32Vector &input) override;
    
-   static void applyGamma(UInt32Vector &state);
-   void applyTheta(UInt32Vector &state) const;
+   static void setClassVector(const std::array<uint8_t, 4> &indices, UInt32Vector &V);
+   
+   void applyGamma();
+   void applyThetaToState();
    
    /* Apply theta on the subkeys with null vector for decoding. */
-   void applyTheta();
+   void applyThetaToSubkeys();
    
-   static void applyPi1(UInt32Vector &state);
-   static void applyPi2(UInt32Vector &state);
-   void applyRound(UInt32Vector &state, const uint8_t constant1, const uint8_t constant2);
+   void applyPiLeft();
+   void applyPiRight();
+   void applyRound(const uint8_t constant1, const uint8_t constant2);
+   
+   UInt32Vector state {0, 0, 0, 0};
    
    static constexpr std::array<uint32_t, 17> round_constants = {
       {0x00000080, 0x0000001b, 0x00000036, 0x0000006c,

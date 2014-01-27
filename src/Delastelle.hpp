@@ -10,8 +10,11 @@
 class Delastelle : public SquareCipher
 {
 public:
+   Delastelle(const KeyType &key, const ClassicalType &alpha, const uint32_t block_length)
+      : SquareCipher(key, alpha), block_len(block_length) {}
+      
    Delastelle(const KeyType &key, const uint32_t block_length)
-      : SquareCipher(key), block_len(block_length) {}
+      : Delastelle(key, String::grid_uppercase_fr, block_length) {}
    
    explicit Delastelle(const KeyType &key) : Delastelle(key, 5) {}
    

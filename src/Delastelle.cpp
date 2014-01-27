@@ -1,4 +1,3 @@
-
 #include "Delastelle.hpp"
 
 #include "MathematicalTools.hpp"
@@ -28,9 +27,6 @@ ClassicalType Delastelle::encode(const ClassicalType &clear_text)
    {
       block.push_back(full_text.substr(i, block_len));
    }
-
-   // Fill the cipher grid.
-   const Grid grid = getGrid(getKey().append(alpha));
    
    // Under each letter, we note coordinates of letters verticaly.
    ClassicalType crypted;
@@ -42,7 +38,7 @@ ClassicalType Delastelle::encode(const ClassicalType &clear_text)
       Y.reserve(block_len);
       for (const auto c : str)
       {
-         const auto coords = getCharCoordinates(c, grid);
+         const auto coords = grid.getCharCoordinates(c);
          X.push_back(coords.first);
          Y.push_back(coords.second);
       }
@@ -52,25 +48,25 @@ ClassicalType Delastelle::encode(const ClassicalType &clear_text)
          // Y coordinates.
          for (uint32_t i = 0; i < block_len; i += 2)
          {
-            crypted.push_back(grid[Y[i]][Y[i+1]]);
+            crypted.push_back(grid.at(Y[i], Y[i+1]));
          }
 
          // X coordinates.
          for (uint32_t i = 0; i < block_len; i += 2)
          {
-            crypted.push_back(grid[X[i]][X[i+1]]);
+            crypted.push_back(grid.at(X[i], X[i+1]));
          }
       }
       else
       {
          for (uint32_t i = 0; i < block_len - 1; i += 2)
          {
-            crypted.push_back(grid[Y[i]][Y[i+1]]);
+            crypted.push_back(grid.at(Y[i], Y[i+1]));
          }
-         crypted.push_back(grid[Y[block_len-1]][X[0]]);
+         crypted.push_back(grid.at(Y[block_len-1], X[0]));
          for (uint32_t i = 1; i < block_len; i += 2)
          {
-            crypted.push_back(grid[X[i]][X[i+1]]);
+            crypted.push_back(grid.at(X[i], X[i+1]));
          }
       }
    }
@@ -81,12 +77,11 @@ ClassicalType Delastelle::encode(const ClassicalType &clear_text)
 ClassicalType Delastelle::decode(const ClassicalType &cipher_text)
 {
    const uint32_t cipher_len = cipher_text.length() * 2;
-   const Grid grid = getGrid(getKey().append(alpha));
    BytesVector chars_coords;
    chars_coords.reserve(cipher_len);
    for (const auto c : cipher_text)
    {
-      const auto coords = getCharCoordinates(c, grid);
+      const auto coords = grid.getCharCoordinates(c);
       chars_coords.push_back(coords.second);
       chars_coords.push_back(coords.first);
    }
@@ -98,7 +93,7 @@ ClassicalType Delastelle::decode(const ClassicalType &cipher_text)
    {
       for (uint32_t k = 0; k < block_len; ++k)
       {
-         decrypted.push_back(grid[chars_coords[i + k]][chars_coords[i + k + block_len]]);
+         decrypted.push_back(grid.at(chars_coords[i + k], chars_coords[i + k + block_len]));
       }
    }
 

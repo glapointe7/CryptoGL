@@ -9,6 +9,7 @@ set(SRC
    MAC.hpp
    Base64.hpp Base64.cpp
    SquareMatrix.hpp SquareMatrix.cpp
+   CipherGrid.hpp CipherGrid.cpp
    MathematicalTools.hpp MathematicalTools.cpp
    BigEndian.hpp
    LittleEndian.hpp
@@ -29,7 +30,7 @@ set(SRC
    Cipher.hpp
    SymmetricCipher.hpp
    StringCipher.hpp StringCipher.cpp
-   SquareCipher.hpp SquareCipher.cpp
+   SquareCipher.hpp
    StringCipherWithStringKey.hpp StringCipherWithStringKey.cpp
    StringCipherWithPermutationKey.hpp StringCipherWithPermutationKey.cpp
 	Adfgvx.hpp Adfgvx.cpp

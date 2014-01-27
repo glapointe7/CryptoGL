@@ -3,26 +3,25 @@
 #define ADFGVX_HPP
 
 #include "SquareCipher.hpp"
+#include "CipherGrid.hpp"
+
 #include <vector>
 #include <string>
 
 class Adfgvx : public SquareCipher
 {
 public:
-   explicit Adfgvx(const KeyType &key);
+   explicit Adfgvx(const KeyType &key, const ClassicalType &grid_key) 
+      : grid_key(grid_key) { setKey(key); }
 
    ClassicalType encode(const ClassicalType &clear_text) override;
    ClassicalType decode(const ClassicalType &cipher_text) override;
 
-   void setGridKey(const Grid &grid);
-
 private:
-   static uint8_t is6X6(const Grid &grid);
    Int32Vector getPermutationKey() const;
-   
-   // 6X6 grid key.
-   Grid grid_key;
 
+   const CipherGrid grid_key;
+   
    static const ClassicalType code;
 };
 

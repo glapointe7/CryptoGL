@@ -37,7 +37,7 @@ void AES::setKey(const BytesVector &key)
    this->key = key;
 }
 
-void AES::subBytes(UInt32Vector &state, const std::array<uint8_t, 256> &box)
+void AES::subBytes(const std::array<uint8_t, 256> &box)
 {
    for (uint8_t i = 0; i < 4; ++i)
    {
@@ -48,9 +48,9 @@ void AES::subBytes(UInt32Vector &state, const std::array<uint8_t, 256> &box)
    }
 }
 
-void AES::shiftRows(UInt32Vector &state)
+void AES::shiftRows()
 {
-   uint32_t state_transposed[4];
+   std::array<uint32_t, 4> state_transposed;
    state_transposed[0] = ((state[0] >> 24) & 0xFF) << 24 | ((state[1] >> 16) & 0xFF) << 16 
            | ((state[2] >> 8) & 0xFF) << 8 | (state[3] & 0xFF);
    
@@ -62,13 +62,13 @@ void AES::shiftRows(UInt32Vector &state)
    
    state_transposed[3] = ((state[3] >> 24) & 0xFF) << 24 | ((state[0] >> 16) & 0xFF) << 16
            | ((state[1] >> 8) & 0xFF) << 8 | (state[2] & 0xFF);
-   state = UInt32Vector(state_transposed, state_transposed + 4);
+   state = UInt32Vector(std::begin(state_transposed), std::end(state_transposed));
    
 }
 
-void AES::inverseShiftRows(UInt32Vector &state)
+void AES::inverseShiftRows()
 {
-   uint32_t state_transposed[4];
+   std::array<uint32_t, 4> state_transposed;
    state_transposed[0] = ((state[0] >> 24) & 0xFF) << 24 | ((state[3] >> 16) & 0xFF) << 16 
            | ((state[2] >> 8) & 0xFF) << 8 | (state[1] & 0xFF);
    
@@ -80,10 +80,10 @@ void AES::inverseShiftRows(UInt32Vector &state)
    
    state_transposed[3] = ((state[3] >> 24) & 0xFF) << 24 | ((state[2] >> 16) & 0xFF) << 16
            | ((state[1] >> 8) & 0xFF) << 8 | (state[0] & 0xFF);
-   state = UInt32Vector(state_transposed, state_transposed + 4);
+   state = UInt32Vector(std::begin(state_transposed), std::end(state_transposed));
 }
 
-void AES::mixColumns(UInt32Vector &state)
+void AES::mixColumns()
 {
    for(uint8_t i = 0; i < 4; ++i)
    {
@@ -103,7 +103,7 @@ void AES::mixColumns(UInt32Vector &state)
    }
 }
 
-void AES::inverseMixColumns(UInt32Vector &state)
+void AES::inverseMixColumns()
 {
    for(uint8_t i = 0; i < 4; ++i)
    {
@@ -154,51 +154,52 @@ void AES::generateSubkeys()
    }
 }
 
-void AES::addRoundKey(UInt32Vector &state, const uint8_t round) const
+void AES::addRoundKey(const uint8_t round)
 {
+   const uint8_t j = round * 4;
    for (uint8_t i = 0; i < 4; ++i)
    {
-      state[i] ^= subkeys[(round * 4) + i];
+      state[i] ^= subkeys[j + i];
    }
 }
 
 UInt32Vector AES::encodeBlock(const UInt32Vector &input)
 {
-   UInt32Vector encoded_block(input);
-   addRoundKey(encoded_block, 0);
+   state = input;
+   addRoundKey(0);
 
    for (uint8_t i = 1; i < rounds; ++i)
    {
-      subBytes(encoded_block, sbox);
-      shiftRows(encoded_block);
-      mixColumns(encoded_block);
-      addRoundKey(encoded_block, i);
+      subBytes(sbox);
+      shiftRows();
+      mixColumns();
+      addRoundKey(i);
    }
 
    // Last round : no mixColumns.
-   subBytes(encoded_block, sbox);
-   shiftRows(encoded_block);
-   addRoundKey(encoded_block, rounds);
+   subBytes(sbox);
+   shiftRows();
+   addRoundKey(rounds);
    
-   return encoded_block;
+   return state;
 }
 
 UInt32Vector AES::decodeBlock(const UInt32Vector &input)
 {
-   UInt32Vector decoded_block(input);
-   addRoundKey(decoded_block, rounds);
+   state = input;
+   addRoundKey(rounds);
 
    for (uint8_t i = rounds - 1; i >= 1; --i)
    {
-      inverseShiftRows(decoded_block);
-      subBytes(decoded_block, inverse_sbox);
-      addRoundKey(decoded_block, i);
-      inverseMixColumns(decoded_block);
+      inverseShiftRows();
+      subBytes(inverse_sbox);
+      addRoundKey(i);
+      inverseMixColumns();
    }
 
-   inverseShiftRows(decoded_block);
-   subBytes(decoded_block, inverse_sbox);
-   addRoundKey(decoded_block, 0);
+   inverseShiftRows();
+   subBytes(inverse_sbox);
+   addRoundKey(0);
    
-   return decoded_block;
+   return state;
 }

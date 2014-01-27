@@ -11,8 +11,11 @@
 class Collon : public SquareCipher
 {
 public:
+   Collon(const KeyType &key, const ClassicalType &alpha, const uint32_t block_length)
+      : SquareCipher(key, alpha), block_len(block_length) {}
+      
    Collon(const KeyType &key, const uint32_t block_length)
-      : SquareCipher(key), block_len(block_length) {}
+      : Collon(key, String::grid_uppercase_fr, block_length) {}
    
    explicit Collon(const KeyType &key) 
       : Collon(key, 5) {}
