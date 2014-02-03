@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-#include "LittleEndian.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
+#include "Endian.hpp"
 #include "Bits.hpp"
 #include "MathematicalTools.hpp"
 

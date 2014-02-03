@@ -1,10 +1,10 @@
 #include "Salsa20.hpp"
 
 #include "Bits.hpp"
-#include "LittleEndian.hpp"
+#include "Endian.hpp"
 #include "FunctionComposition.hpp"
 #include "exceptions/BadKeyLength.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 #include "Vector.hpp"
 
 constexpr std::array<std::array<uint8_t, 4>, 4> Salsa20::sigma;

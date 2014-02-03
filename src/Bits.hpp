@@ -88,7 +88,7 @@ namespace Bits
       return count;
    }
    
-   /* Swap endianness of an integer 'value'. */
+   /* Swap endianness of an integer 'value'. ***To move in Endian class.****/
    uint32_t bytesSwap(const uint32_t value);
    
    /* Permute each bit of 'value' from positions given in 'table'.*/

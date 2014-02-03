@@ -5,7 +5,7 @@
 #define RIPEMD_HPP
 
 #include "MerkleDamgardFunction.hpp"
-#include "LittleEndian.hpp"
+#include "Endian.hpp"
 
 #include <array>
 

@@ -5,7 +5,7 @@
 #define TWOFISH_HPP
 
 #include "Feistel.hpp"
-#include "LittleEndian.hpp"
+#include "Endian.hpp"
 
 #include <array>
 

@@ -2,7 +2,7 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 void XTEA::setKey(const BytesVector &key)
 {

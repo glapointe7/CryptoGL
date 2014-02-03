@@ -1,4 +1,3 @@
-
 #include "Hill.hpp"
 
 #include "exceptions/EmptyMatrix.hpp"
@@ -15,11 +14,11 @@ void Hill::setKey(const Int32Matrix &key)
       this->key.setMatrix(key);
       this->key.setModulo(alpha.length());
    }
-   catch (EmptyMatrix & EM)
+   catch (const EmptyMatrix &EM)
    {
       throw EM.what();
    }
-   catch (MatrixNotSquare &MNS)
+   catch (const MatrixNotSquare &MNS)
    {
       throw MNS.what();
    }
@@ -32,7 +31,7 @@ void Hill::setKey(const Int32Matrix &key)
 
 /* Process encode / decode of the data with the matrix key K. */
 
-ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix K) const
+ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix &K) const
 {  
    const uint32_t key_dim = K.getDimension();
    const uint32_t data_len = data.length();
@@ -47,7 +46,7 @@ ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix K) con
       {
          pos.push_back(alpha.find(data[i + j]));
       }
-      const UInt32Vector cipher_pos(K * pos);
+      const UInt32Vector cipher_pos(K.multiply(pos));
 
       for (const auto x : cipher_pos)
       {

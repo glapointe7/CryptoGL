@@ -1,6 +1,6 @@
 /*
  * Source : http://www.gsma.com/technicalprojects/wp-content/uploads/2012/04/snow3gspec.pdf
- * Use the state machine design pattern.
+ * **** Must use the state machine design pattern.
  * We change of state each time it's clocked.
  */
 #ifndef SNOW3G_HPP
@@ -8,7 +8,7 @@
 
 #include "SynchronousStreamCipher.hpp"
 
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 #include <array>
 

@@ -4,7 +4,7 @@
 
 #include "StreamCipher.hpp"
 
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 
 template <class KeystreamType, class EndianType, uint32_t KeystreamSize>

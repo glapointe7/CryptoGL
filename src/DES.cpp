@@ -1,7 +1,7 @@
 #include "DES.hpp"
 
 #include "Bits.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
 #include "exceptions/EmptyKey.hpp"

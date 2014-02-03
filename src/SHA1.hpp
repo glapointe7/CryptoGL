@@ -5,7 +5,7 @@
 #define SHA1_HPP
 
 #include "MerkleDamgardFunction.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 #include <array>
 

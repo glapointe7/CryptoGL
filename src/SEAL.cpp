@@ -4,7 +4,7 @@
 #include "SEAL.hpp"
 
 #include "Bits.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
 

@@ -7,7 +7,7 @@
 #include "SynchronousStreamCipher.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
-#include "LittleEndian.hpp"
+#include "Endian.hpp"
 
 #include <vector>
 #include <array>

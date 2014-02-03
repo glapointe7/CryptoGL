@@ -7,7 +7,7 @@
 
 #include "Types.hpp"
 #include "BlockCipher.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 #include <array>
 #include <functional>

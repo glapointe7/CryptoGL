@@ -6,7 +6,7 @@
 #define BLOWFISH_HPP
 
 #include "Feistel.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 #include <vector>
 #include <array>

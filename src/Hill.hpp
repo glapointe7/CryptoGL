@@ -18,7 +18,7 @@ public:
    void setKey(const Int32Matrix &key);
    
 private:
-   ClassicalType process(const ClassicalType &data, const SquareMatrix K) const;
+   ClassicalType process(const ClassicalType &data, const SquareMatrix &K) const;
    
    SquareMatrix key;
 };

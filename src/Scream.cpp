@@ -2,7 +2,7 @@
 
 #include "MathematicalTools.hpp"
 #include "Vector.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 #include "FunctionComposition.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
@@ -96,8 +96,8 @@ BytesVector Scream::F(const BytesVector &X)
                       static_cast<uint16_t>(u[2]), static_cast<uint16_t>(u[3])}};
    for(uint8_t i = 0; i < 4; ++i)
    {
-      const uint8_t j = i * 4;
-      bytes23[i] ^= (X[2 + j] << 8) | X[3 + j];
+      const uint8_t j = (i * 4) + 2;
+      bytes23[i] ^= (X[j] << 8) | X[1 + j];
       u[i] >>= 16;
       u[i] |= (bytes23[i] << 16);
    }

@@ -5,7 +5,7 @@
 #define AES_HPP
 
 #include "BlockCipher.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 #include <vector>
 #include <array>

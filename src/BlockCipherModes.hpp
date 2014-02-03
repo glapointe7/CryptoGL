@@ -3,7 +3,7 @@
 #define BLOCKCIPHERMODES_HPP
 
 #include "Types.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
 
@@ -35,7 +35,7 @@ enum class OperationModes : uint8_t
    CTR      // Counter
 };
 
-
+/* Base Class representing the Strategy Design Pattern. */
 class BlockCipherModes
 {   
 public:   
@@ -130,6 +130,7 @@ private:
    const GetOutputBlockFunction encode;
 };
 
+/* Factory design : Choose which mode to use to encode / decode. */
 template <uint8_t BlockSize>
 class BlockCipherModesFactory
 {

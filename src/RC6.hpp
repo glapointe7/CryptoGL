@@ -5,7 +5,7 @@
 #define RC6_HPP
 
 #include "Feistel.hpp"
-#include "LittleEndian.hpp"
+#include "Endian.hpp"
 
 class RC6 : public Feistel<uint64_t, UInt32Vector, 16, LittleEndian32>
 {

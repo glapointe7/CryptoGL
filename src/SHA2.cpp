@@ -1,5 +1,7 @@
 #include "SHA2.hpp"
 
+#include "Vector.hpp"
+
 template <>
 const UInt32Vector RoundConstants<uint32_t>::CubicRootPrimes = {
    {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -50,9 +52,9 @@ const std::array<uint8_t, 6> RoundConstants<uint64_t>::A = {{14, 18, 41, 28, 34,
 
 void SHA512_t::makeNewIV(const BytesVector &code)
 {
-   SHA512 *S = new SHA512();
-   const UInt64Vector IV_512 = S->getIV();
-
+   SHA512 S;
+   const UInt64Vector IV_512 = S.getIV();
+   
    UInt64Vector tmp_IV;
    tmp_IV.reserve(8);
    for (uint8_t i = 0; i < 8; ++i)
@@ -60,14 +62,13 @@ void SHA512_t::makeNewIV(const BytesVector &code)
       tmp_IV.push_back(IV_512[i] ^ 0xa5a5a5a5a5a5a5a5);
    }
 
-   S->setIV(tmp_IV);
+   S.setIV(tmp_IV);
 
    // Encode the string 'SHA-512/224' or 'SHA-512/256'.
    BytesVector data = {0x53, 0x48, 0x41, 0x2D, 0x35, 0x31, 0x32, 0x2F};
    data.reserve(11);
-   data.insert(data.end(), code.begin(), code.end());
-   const BytesVector answer = S->encode(data);
-   delete S;
+   Vector::extend(data, code);
+   const BytesVector answer = S.encode(data);
 
    // Get the new IV vector.
    setIV(BigEndian64::toIntegersVector(answer));
@@ -75,17 +76,9 @@ void SHA512_t::makeNewIV(const BytesVector &code)
 
 BytesVector SHA512_224::getOutput(const UInt64Vector &hash) const
 {
-   BytesVector output;
+   BytesVector output = BigEndian64::toBytesVector(hash, 3);
    output.reserve(output_size);
-      
-   for (uint8_t j = 0; j < 3; ++j)
-   {
-      const BytesVector bytes = BigEndian64::toBytesVector(hash[j]);
-      output.insert(output.end(), bytes.begin(), bytes.end());
-   }
-
-   const BytesVector bytes = BigEndian64::toBytesVector(hash[3]);
-   output.insert(output.end(), bytes.begin(), bytes.begin() + 4);
+   Vector::extend(output, BigEndian64::toBytesVector(hash[3]), 0, 4);
 
    return output;
 }

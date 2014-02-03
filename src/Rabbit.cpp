@@ -2,7 +2,7 @@
 
 #include "Bits.hpp"
 #include "exceptions/BadKeyLength.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 constexpr std::array<uint32_t, 8> Rabbit::A;
 

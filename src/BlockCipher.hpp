@@ -8,8 +8,7 @@
 
 #include "BlockCipherModes.hpp"
 
-#include "BigEndian.hpp"
-#include "LittleEndian.hpp"
+#include "Endian.hpp"
 #include "Padding.hpp"
 #include "Vector.hpp"
 

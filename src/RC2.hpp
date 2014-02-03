@@ -5,7 +5,7 @@
 #define RC2_HPP
 
 #include "BlockCipher.hpp"
-#include "LittleEndian.hpp"
+#include "Endian.hpp"
 
 #include <array>
 

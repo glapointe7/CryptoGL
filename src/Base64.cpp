@@ -10,7 +10,7 @@ std::string Base64::encode(const BytesVector &clear_data)
 {
    const uint32_t clear_len = clear_data.size();
    std::string crypted;
-   crypted.reserve(((clear_len / 3) + (clear_len % 3 > 0)) << 2);
+   crypted.reserve(((clear_len / 3) + (clear_len % 3 > 0)) * 4);
 
    uint32_t temp;
    auto cursor = clear_data.begin();
@@ -50,7 +50,7 @@ std::string Base64::encode(const BytesVector &clear_data)
 BytesVector Base64::decode(const std::string &cipher_data)
 {
    const uint32_t cipher_len = cipher_data.length();
-   if (cipher_len & 3)
+   if (cipher_len % 4)
    {
       throw Exception("The cipher must be a multiple of 4 to be a valid base64.");
    }
@@ -64,11 +64,12 @@ BytesVector Base64::decode(const std::string &cipher_data)
    }
    // Setup a vector to hold the result.
    BytesVector decrypted;
-   decrypted.reserve(((cipher_len >> 2) * 3) - padding);
+   decrypted.reserve(((cipher_len / 4) * 3) - padding);
    
    uint32_t temp = 0; 
    auto cursor = cipher_data.begin();
-   while (cursor < cipher_data.end())
+   const auto cursor_end = cipher_data.end();
+   while (cursor < cursor_end)
    {
       for (uint8_t i = 0; i < 4; ++i)
       {
@@ -93,7 +94,7 @@ BytesVector Base64::decode(const std::string &cipher_data)
                   
                case pad_character:
                {
-                  switch (cipher_data.end() - cursor)
+                  switch (cursor_end - cursor)
                   {
                      case 1: 
                         decrypted.push_back((temp >> 16) & 0xFF);

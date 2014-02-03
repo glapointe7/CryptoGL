@@ -3,7 +3,7 @@
 #define IDEA_HPP
 
 #include "BlockCipher.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 class IDEA : public BlockCipher<uint16_t, UInt16Vector, 8, BigEndian16>
 {

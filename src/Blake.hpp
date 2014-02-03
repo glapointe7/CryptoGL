@@ -5,7 +5,7 @@
 #define BLAKE_HPP
 
 #include "HashFunction.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 #include "Bits.hpp"
 #include "Vector.hpp"
 
@@ -49,12 +49,12 @@ struct ShiftingGetter<uint32_t, Index>
 
 
 template <class DataType, uint8_t InputBlockSize>
-class Blake : public HashFunction<DataType, BigEndian<DataType>>
+class Blake : public HashFunction<DataType, Endian<BigEndian<DataType>, DataType>>
 {
 static_assert(!(InputBlockSize & 0x3F), "'InputBlockSize' has to be a multiple of 64.");   
    
 private:
-   using HashFunctionType = HashFunction<DataType, BigEndian<DataType>>;
+   using HashFunctionType = HashFunction<DataType, Endian<BigEndian<DataType>, DataType>>;
    using DataTypeVector = typename HashFunctionType::DataTypeVector;
    using GVector = VectorGetter<DataTypeVector>;
    
@@ -131,13 +131,13 @@ private:
    void setCounter(const uint64_t &data_size, const uint64_t &bytes_len)
    {
       const uint8_t rest = data_size % InputBlockSize;
-      if(rest == 0 || rest >= InputBlockSize - (sizeof(DataType) << 1))
+      if(rest == 0 || rest >= InputBlockSize - (sizeof(DataType) * 2))
       {
          counter = 0;
       }
       else
       {
-         counter = (InputBlockSize - (bytes_len - data_size)) << 3;
+         counter = (InputBlockSize - (bytes_len - data_size)) * 8;
       }
    }
    
@@ -145,7 +145,7 @@ private:
    {
       for(uint8_t i = 0; i < 8; ++i)
       {
-         h[i] ^= v[i] ^ salt[i & 3] ^ v[i + 8];
+         h[i] ^= v[i] ^ salt[i % 4] ^ v[i + 8];
       }
    }
    
@@ -157,7 +157,7 @@ protected:
       
    /* Default constructor : no salt provided. */
    Blake(const DataTypeVector &IV, const uint8_t rounds, const uint8_t output_size) 
-      : Blake(IV, DataTypeVector{0, 0, 0, 0}, rounds, output_size) {}
+      : Blake(IV, DataTypeVector(4, 0), rounds, output_size) {}
    
    virtual ~Blake() {} 
    
@@ -166,7 +166,7 @@ public:
    {
       const uint64_t data_size = data.size();
       BytesVector bytes = this->pad(data);
-      bytes = this->template appendLength<BigEndian64>(bytes, data_size << 3);
+      bytes = this->template appendLength<BigEndian64>(bytes, data_size * 8);
 
       const uint64_t bytes_len = bytes.size();
       setCounter(data_size, bytes_len);

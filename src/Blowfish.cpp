@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
 

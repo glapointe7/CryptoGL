@@ -5,10 +5,10 @@
 
 #include "exceptions/BadAlphaLength.hpp"
 
-CipherGrid::CipherGrid(const ClassicalType &key, const ClassicalType &alpha)
+CipherGrid::CipherGrid(ClassicalType key, const ClassicalType &alpha)
 {
    setDimension(alpha);
-   setGrid(key + alpha);
+   setGrid(key.append(alpha));
 }
 
 void CipherGrid::setGrid(ClassicalType chars)

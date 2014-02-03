@@ -8,7 +8,6 @@
 #include "String.hpp"
 #include "CipherGrid.hpp"
 
-#include <string>
 #include <vector>
 
 class SquareCipher : public StringCipherWithStringKey

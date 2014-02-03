@@ -1,7 +1,7 @@
 #include "Keccak.hpp"
 
 #include "Bits.hpp"
-#include "LittleEndian.hpp"
+#include "Endian.hpp"
 #include "Vector.hpp"
 
 constexpr std::array<uint64_t, 24> Keccak::round_constants;

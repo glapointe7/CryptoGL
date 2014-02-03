@@ -1,10 +1,9 @@
-
 #include "SquareMatrix.hpp"
 
-// Exceptions
+#include "MathematicalTools.hpp"
+
 #include "exceptions/EmptyMatrix.hpp"
 #include "exceptions/MatrixNotSquare.hpp"
-#include "MathematicalTools.hpp"
 #include "exceptions/MatrixOutOfRange.hpp"
 
 #include <algorithm>  // swap
@@ -20,26 +19,16 @@ void SquareMatrix::setMatrix(const Int32Matrix &M)
    
    if (!isSquare(M))
    {
-      throw MatrixNotSquare("The matrix is not square.");
+      throw MatrixNotSquare("The matrix has to be square.");
    }
    
    this->M = M;
    setDimension(M.size());
 }
 
-Int32Matrix SquareMatrix::getMatrix() const
-{
-   return M;
-}
-
 void SquareMatrix::setDimension(const uint32_t dim)
 {
    this->dim = dim;
-}
-
-int32_t SquareMatrix::getModulo() const
-{
-   return n;
 }
 
 void SquareMatrix::setModulo(const int32_t n)
@@ -51,33 +40,30 @@ void SquareMatrix::setModulo(const int32_t n)
 
 int32_t SquareMatrix::get(const uint32_t row, const uint32_t col) const
 {
-   if (row < dim && col < dim)
+   if (row >= dim || col >= dim)
    {
-      return M[row][col];
+      throw MatrixOutOfRange("The row and/or column selected are greater or equal than the matrix dimension.");
    }
-
-   throw MatrixOutOfRange("The row and/or column selected are out of range.");
+   
+   return M[row][col];
 }
 
 // Set value to M(row,col).
 
 void SquareMatrix::set(const uint32_t row, const uint32_t col, const int32_t value)
 {
-   if (row < dim && col < dim)
+   if (row >= dim || col >= dim)
    {
-      M[row][col] = value;
+      throw MatrixOutOfRange("The row and/or column selected are out of range.");
    }
 
-   throw MatrixOutOfRange("The row and/or column selected are out of range.");
+   M[row][col] = value;
 }
-
-// Find the first pivot A(n,n) != 0 if it exists.
-// Otherwise, return dim + 1.
 
 uint32_t SquareMatrix::findNonZero(const Int32Matrix &A, const uint32_t from) const
 {
    uint32_t pos = from;
-   while ((A[pos][from] == 0 || Maths::gcd(A[pos][from], n) != 1) && pos != dim)
+   while ((A[pos][from] == 0 || !Maths::areCoprimes(A[pos][from], n)) && pos != dim)
    {
       pos++;
    }
@@ -85,23 +71,21 @@ uint32_t SquareMatrix::findNonZero(const Int32Matrix &A, const uint32_t from) co
    return pos;
 }
 
-// Multiply a matrix and a column-vector. Return the column-vector solution.
-
-UInt32Vector operator *(const SquareMatrix K, const UInt32Vector &V)
+UInt32Vector SquareMatrix::multiply (const UInt32Vector &V) const
 {   
-   UInt32Vector soln(K.getDimension(), 0);
-   const int32_t mod = K.getModulo();
-   const Int32Matrix mat = K.getMatrix();
+   UInt32Vector soln(dim, 0);
+   //const int32_t mod = getModulo();
+   //const Int32Matrix mat = getMatrix();
    
    uint32_t i = 0;
-   for (const auto row : mat)
+   for (const auto &row : M)
    {
       uint32_t j = 0;
       for (const auto number : row)
       {
          soln[i] += number * V[j++];
       }
-      soln[i++] %= mod;
+      soln[i++] %= n;
    }
 
    return soln;
@@ -131,9 +115,12 @@ Int32Matrix SquareMatrix::identity() const
    return Mat;
 }
 
-// Return diagonal product.
+int32_t SquareMatrix::trace() const
+{
+   return trace(M);
+}
 
-int32_t SquareMatrix::getDiagonalProduct(const Int32Matrix &A) const
+int32_t SquareMatrix::trace(const Int32Matrix &A) const
 {
    int32_t prod = 1;
    for (uint32_t i = 0; i < dim; ++i)
@@ -144,12 +131,10 @@ int32_t SquareMatrix::getDiagonalProduct(const Int32Matrix &A) const
    return prod;
 }
 
-// Check if the matrix mat is square.
-
 bool SquareMatrix::isSquare(const Int32Matrix &mat)
 {
    const uint32_t A_size = mat.size();
-   for (const auto V : mat)
+   for (const auto &V : mat)
    {
       if (V.size() != A_size)
       {
@@ -160,7 +145,8 @@ bool SquareMatrix::isSquare(const Int32Matrix &mat)
    return true;
 }
 
-void SquareMatrix::triangularize(Int32Matrix &A, Int32Matrix &I, const uint32_t k, const uint32_t lower_i, const uint32_t upper_i) const
+void SquareMatrix::triangularize(Int32Matrix &A, Int32Matrix &I, const uint32_t k, 
+        const uint32_t lower_i, const uint32_t upper_i) const
 {
    // Swap null pivot with a non null one.
    if (A[k][k] == 0 || !Maths::areCoprimes(A[k][k], n))
@@ -174,7 +160,7 @@ void SquareMatrix::triangularize(Int32Matrix &A, Int32Matrix &I, const uint32_t 
    for (uint32_t i = lower_i; i < upper_i; ++i)
    {
       // For rows : Li = Li + lq*Ln.
-      const int32_t lq = (inv * (n - A[i][k])) % n;
+      const int32_t lq = (inv * (n - A[i][k]));
       for (uint32_t j = 0; j < dim; ++j)
       {
          A[i][j] = (A[i][j] + (lq * A[k][j])) % n;
@@ -236,7 +222,7 @@ int32_t SquareMatrix::det() const
                }
             }
          }
-         determinant = getDiagonalProduct(A) * swapping;
+         determinant = trace(A) * swapping;
       }
    }
 

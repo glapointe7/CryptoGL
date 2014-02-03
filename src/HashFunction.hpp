@@ -8,8 +8,7 @@
 
 #include "Types.hpp"
 
-#include "BigEndian.hpp"
-#include "LittleEndian.hpp"
+#include "Endian.hpp"
 #include "Vector.hpp"
 
 /* 
@@ -37,9 +36,6 @@ protected:
    
    /* Output hash size in bytes. */
    const uint8_t output_size;
-   
-   /* Number of rounds. */
-   //const uint8_t rounds;
       
    /* Size of the input block to be hashed. */
    const uint8_t input_block_size;
@@ -73,31 +69,13 @@ protected:
    /* Transform the input bytes to input block of integers. */
    DataTypeVector getInputBlocks(const BytesVector &bytes, const uint64_t &block_index) const
    {      
-      const uint8_t DataType_size = sizeof(DataType);
-
-      DataTypeVector int_block;
-      int_block.reserve(input_block_size / DataType_size);
-      for (uint8_t k = 0; k < input_block_size; k += DataType_size)
-      {
-         int_block.push_back(EndianType::toInteger(BytesVector(bytes.begin() + k + block_index, bytes.begin() + k + block_index + DataType_size)));
-      }
-      
-      return int_block;
+      return EndianType::toIntegersVector(bytes, block_index, input_block_size);
    }
    
    /* Get the output hash with a specific size. */
    virtual BytesVector getOutput(const DataTypeVector &hash) const
    {
-      BytesVector output;
-      output.reserve(output_size);
-     
-      const uint8_t out_data_size = output_size / sizeof(DataType);
-      for (uint8_t j = 0; j < out_data_size; ++j)
-      {
-         Vector::extend(output, EndianType::toBytesVector(hash[j]));
-      }
-
-      return output;
+      return EndianType::toBytesVector(hash, output_size / sizeof(DataType));
    }
       
 public:

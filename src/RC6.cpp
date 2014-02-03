@@ -5,7 +5,7 @@
 #include "exceptions/BadKeyLength.hpp"
 
 #include "Bits.hpp"
-#include "LittleEndian.hpp"
+#include "Endian.hpp"
 
 void RC6::setKey(const BytesVector &key)
 {

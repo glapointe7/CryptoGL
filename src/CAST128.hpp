@@ -5,7 +5,7 @@
 #define CAST128_HPP
 
 #include "Feistel.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 #include <array>
 

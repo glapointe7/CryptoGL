@@ -5,7 +5,7 @@
 #define SHA2_HPP
 
 #include "MerkleDamgardFunction.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 #include "Bits.hpp"
 
 #include <array>
@@ -19,10 +19,10 @@ struct RoundConstants
 };
 
 template <typename DataType, uint8_t InputBlockSize>
-class SHA2 : public MerkleDamgardFunction<DataType, BigEndian<DataType>, BigEndian64, InputBlockSize>
+class SHA2 : public MerkleDamgardFunction<DataType, Endian<BigEndian<DataType>, DataType>, BigEndian64, InputBlockSize>
 {
 private:
-   using MerkleDamgardFunctionType = MerkleDamgardFunction<DataType, BigEndian<DataType>, BigEndian64, InputBlockSize>;
+   using MerkleDamgardFunctionType = MerkleDamgardFunction<DataType, Endian<BigEndian<DataType>, DataType>, BigEndian64, InputBlockSize>;
    using DataTypeVector = typename MerkleDamgardFunctionType::DataTypeVector;
    using RC = RoundConstants<DataType>;   
    

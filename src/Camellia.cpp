@@ -1,6 +1,6 @@
 #include "Camellia.hpp"
 
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 #include "Bits.hpp"
 #include "Vector.hpp"
 

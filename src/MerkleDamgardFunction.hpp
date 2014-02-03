@@ -5,8 +5,8 @@
 #include "HashFunction.hpp"
 
 #include "Types.hpp"
-#include "BigEndian.hpp"
-#include "LittleEndian.hpp"
+#include "Endian.hpp"
+#include "Endian.hpp"
 #include "Vector.hpp"
 
 /*
@@ -85,7 +85,8 @@ private:
       message.insert(message.end(), padded_message_size + rest - 8, 0);
       
       // Append the length of the original message in bits following the endianness of EndianLengthType.
-      Vector::extend(message, EndianLengthType::toBytesVector(message_size * 8));
+      EndianLengthType E;
+      Vector::extend(message, E.toBytesVector(message_size * 8));
 
       return message;
    }

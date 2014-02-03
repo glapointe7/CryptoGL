@@ -12,7 +12,7 @@ class CipherGrid
 public:
    CipherGrid() {} 
    
-   CipherGrid(const ClassicalType &key, const ClassicalType &alpha);
+   CipherGrid(ClassicalType key, const ClassicalType &alpha);
    
    explicit CipherGrid(const ClassicalType &alpha) : CipherGrid("", alpha) {}
    

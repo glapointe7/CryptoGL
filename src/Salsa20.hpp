@@ -6,7 +6,7 @@
 
 #include "SynchronousStreamCipher.hpp"
 
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 #include <array>
 

@@ -5,113 +5,94 @@ set(SRC
    main.cpp
 
 # Misc and tools section	   		
-   BlockCipherModes.hpp BlockCipherModes.cpp
-   MAC.hpp
-   Base64.hpp Base64.cpp
-   SquareMatrix.hpp SquareMatrix.cpp
-   CipherGrid.hpp CipherGrid.cpp
-   MathematicalTools.hpp MathematicalTools.cpp
-   BigEndian.hpp
-   LittleEndian.hpp
-	Tools.hpp Tools.cpp
-   String.hpp String.cpp
-   Digest.hpp
-   File.hpp
-   Bits.hpp Bits.cpp
-   Types.hpp
-   Vector.hpp Vector.cpp
-   Padding.hpp Padding.cpp
-   FunctionComposition.hpp
+   BlockCipherModes.cpp
+   Base64.cpp
+   SquareMatrix.cpp
+   CipherGrid.cpp
+   MathematicalTools.cpp
+	Tools.cpp
+   String.cpp
+   Bits.cpp
+   Vector.cpp
+   Padding.cpp
 
 # Cryptanalysis section
-   cryptanalysis/ClassicalAnalysis.hpp cryptanalysis/ClassicalAnalysis.cpp
+   cryptanalysis/ClassicalAnalysis.cpp
 	
 # Classic ciphers section
-   Cipher.hpp
-   SymmetricCipher.hpp
-   StringCipher.hpp StringCipher.cpp
-   SquareCipher.hpp
-   StringCipherWithStringKey.hpp StringCipherWithStringKey.cpp
-   StringCipherWithPermutationKey.hpp StringCipherWithPermutationKey.cpp
-	Adfgvx.hpp Adfgvx.cpp
-	Collon.hpp Collon.cpp
-	Delastelle.hpp Delastelle.cpp
-	Fleissner.hpp Fleissner.cpp
-	Hill.hpp Hill.cpp
-   Transposition.hpp Transposition.cpp
-	Morse.hpp Morse.cpp
-	Playfair.hpp Playfair.cpp
-	Polybius.hpp Polybius.cpp
-	Railfence.hpp Railfence.cpp
-   UnsortAlpha.hpp UnsortAlpha.cpp
-	Vigenere.hpp Vigenere.cpp
-	Wolseley.hpp Wolseley.cpp
-   Affine.hpp Affine.cpp
-   MonoalphabeticSubstitution.hpp MonoalphabeticSubstitution.cpp
-   Nihilistes.hpp Nihilistes.cpp
-   Chao.hpp Chao.cpp
-   TwoSquares.hpp TwoSquares.cpp
-   ThreeSquares.hpp ThreeSquares.cpp
-   FourSquares.hpp FourSquares.cpp
+   StringCipher.cpp
+   StringCipherWithStringKey.cpp
+   StringCipherWithPermutationKey.cpp
+	Adfgvx.cpp
+	Collon.cpp
+	Delastelle.cpp
+	Fleissner.cpp
+	Hill.cpp
+   Transposition.cpp
+	Morse.cpp
+	Playfair.cpp
+	Polybius.cpp
+	Railfence.cpp
+   UnsortAlpha.cpp
+	Vigenere.cpp
+	Wolseley.cpp
+   Affine.cpp
+   MonoalphabeticSubstitution.cpp
+   Nihilistes.cpp
+   Chao.cpp
+   TwoSquares.cpp
+   ThreeSquares.cpp
+   FourSquares.cpp
 
 # Block ciphers section
-   BlockCipher.hpp
-   TripleDES.hpp TripleDES.cpp
-   AES.hpp AES.cpp
-   IDEA.hpp IDEA.cpp
-   Noekeon.hpp Noekeon.cpp
-   RC2.hpp RC2.cpp
-   Serpent.hpp Serpent.cpp
-   Feistel.hpp
-   Skipjack.hpp Skipjack.cpp
-   Blowfish.hpp Blowfish.cpp
-   DES.hpp DES.cpp
-   RC5.hpp RC5.cpp
-   RC6.hpp RC6.cpp
-   XTEA.hpp XTEA.cpp
-   CAST128.hpp CAST128.cpp
-   CAST256.hpp CAST256.cpp
-   Twofish.hpp Twofish.cpp
-   Camellia.hpp Camellia.cpp
-   Mysty1.hpp Mysty1.cpp
+   TripleDES.cpp
+   AES.cpp
+   IDEA.cpp
+   Noekeon.cpp
+   RC2.cpp
+   Serpent.cpp
+   Skipjack.cpp
+   Blowfish.cpp
+   DES.cpp
+   RC5.cpp
+   RC6.cpp
+   XTEA.cpp
+   CAST128.cpp
+   CAST256.cpp
+   Twofish.cpp
+   Camellia.cpp
+   Mysty1.cpp
 
 # Stream ciphers and Pseudo-random functions familly section
-   StreamCipher.hpp
-   SynchronousStreamCipher.hpp
-   PseudoRandomFunction.hpp
-   RC4.hpp RC4.cpp
-   Rabbit.hpp Rabbit.cpp
-   HC256.hpp HC256.cpp
-   SEAL.hpp SEAL.cpp
-   Isaac.hpp Isaac.cpp
-   Scream.hpp Scream.cpp
-   Salsa20.hpp Salsa20.cpp
-   Snow3G.hpp Snow3G.cpp
+   RC4.cpp
+   Rabbit.cpp
+   HC256.cpp
+   SEAL.cpp
+   Isaac.cpp
+   Scream.cpp
+   Salsa20.cpp
+   Snow3G.cpp
 
 # Hash functions section
-   MerkleDamgardFunction.hpp
-   HashFunction.hpp
-   MessageDigest.hpp MessageDigest.cpp
-   MD2.hpp MD2.cpp
-   SHA2.hpp SHA2.cpp
-   SHA1.hpp SHA1.cpp
-   Ripemd.hpp Ripemd.cpp
-   Tiger.hpp Tiger.cpp
-   Whirlpool.hpp Whirlpool.cpp
-   Blake.hpp Blake.cpp
+   MessageDigest.cpp
+   MD2.cpp
+   SHA2.cpp
+   SHA1.cpp
+   Ripemd.cpp
+   Tiger.cpp
+   Whirlpool.cpp
+   Blake.cpp
 
 # Sponge functions section
-   SpongeFunction.hpp
-   Keccak.hpp Keccak.cpp
+   Keccak.cpp
 
 # Checksum functions
-   Checksum.hpp
-   LRC.hpp LRC.cpp
-   Adler32.hpp Adler32.cpp
+   LRC.cpp
+   Adler32.cpp
 
 # Asymmetric ciphers section
-   AsymmetricCipher.hpp AsymmetricCipher.cpp
-   HellmanMerkleKnapsack.hpp HellmanMerkleKnapsack.cpp
+   AsymmetricCipher.cpp
+   HellmanMerkleKnapsack.cpp
 )
 
 # exception handlers section

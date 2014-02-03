@@ -2,8 +2,8 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
-#include "BigEndian.hpp"
-#include "LittleEndian.hpp"
+#include "Endian.hpp"
+#include "Endian.hpp"
 
 void HC256::setKey(const BytesVector &key)
 {

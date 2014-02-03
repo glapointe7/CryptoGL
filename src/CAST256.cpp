@@ -1,6 +1,6 @@
 #include "CAST256.hpp"
 
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 #include "Bits.hpp"
 #include "Padding.hpp"
 

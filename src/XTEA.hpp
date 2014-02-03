@@ -5,7 +5,7 @@
 #define XTEA_HPP
 
 #include "Feistel.hpp"
-#include "BigEndian.hpp"
+#include "Endian.hpp"
 
 class XTEA : public Feistel<uint32_t, uint64_t, 8, BigEndian64>
 {

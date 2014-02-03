@@ -3,7 +3,7 @@
 #define FUNCTIONCOMPOSITION_HPP
 
 /*
- * Compose a function F on itself. 
+ * Compose a function F on itself : F^n(x) = (F o F^{n-1})(x). 
  * Usage for non-members class : Type X = compose<n>(function)(arg1);
  * Usage for class members : Type X = compose<n>(std::bind(classname::function, this, std::placeholders::_1))(arg1);
  */
@@ -38,6 +38,7 @@ Composer<F> compose(F f)
 
 
 /*
+ * Compose with multiple functions : (f o g o h)(x) = f(g(h(x))).
  * Usage : Compose(f,g,h,...)(value).
  */
 template <typename F0, typename... F>

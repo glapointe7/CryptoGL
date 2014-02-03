@@ -2,15 +2,14 @@
  * Frequencies taken on : http://www.letterfrequency.org/
  */
 #ifndef CLASSICALANALYSIS_HPP
-#define	CLASSICALANALYSIS_HPP
+#define CLASSICALANALYSIS_HPP
 
-#include <string>
 #include <map>
 
+#include "../Types.hpp"
+
 class ClassicalAnalysis
-{
-   typedef std::string ClassicalType;
-   
+{  
 public:
    virtual ~ClassicalAnalysis() {}
    
@@ -24,12 +23,12 @@ public:
    };
    
    void calculateIC(const ClassicalType &text);
-   float getIC() const;
+   float getIC() const { return ic; };
    
    void setAlpha(const ClassicalType &alpha);
    void setLanguage(const Language lang);
    
-   std::map<char, uint32_t> getCharsCount(const ClassicalType &text) const;
+   std::map<char, uint32_t> getTextFrequency(const ClassicalType &text) const;
    
 private:
    float ic = 0;
