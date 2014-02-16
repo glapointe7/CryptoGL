@@ -1,6 +1,6 @@
 #include "Bits.hpp"
 
-BytesVector Bits::rotateLeft128(const BytesVector &bytes, const uint8_t shift)
+/*BytesVector Bits::rotateLeft128(const BytesVector &bytes, const uint8_t shift)
 {
    const uint8_t bytes_to_rotate = shift / 8;
    const uint8_t bits_to_shift = shift % 8;
@@ -16,7 +16,7 @@ BytesVector Bits::rotateLeft128(const BytesVector &bytes, const uint8_t shift)
    }
 
    return rotated_bytes;
-}
+}*/
 
 uint32_t Bits::bytesSwap(const uint32_t value)
 {

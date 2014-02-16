@@ -1,8 +1,6 @@
 #ifndef CAESARTEST_HPP
 #define CAESARTEST_HPP
 
-#include <ctime>
-
 #include <gtest/gtest.h>
 #include "../src/Vigenere.hpp"
 #include "../src/String.hpp"

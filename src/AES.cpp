@@ -62,7 +62,7 @@ void AES::shiftRows()
    
    state_transposed[3] = ((state[3] >> 24) & 0xFF) << 24 | ((state[0] >> 16) & 0xFF) << 16
            | ((state[1] >> 8) & 0xFF) << 8 | (state[2] & 0xFF);
-   state = UInt32Vector(std::begin(state_transposed), std::end(state_transposed));
+   state = UInt32Vector(state_transposed.begin(), state_transposed.end());
    
 }
 
@@ -80,7 +80,7 @@ void AES::inverseShiftRows()
    
    state_transposed[3] = ((state[3] >> 24) & 0xFF) << 24 | ((state[2] >> 16) & 0xFF) << 16
            | ((state[1] >> 8) & 0xFF) << 8 | (state[0] & 0xFF);
-   state = UInt32Vector(std::begin(state_transposed), std::end(state_transposed));
+   state = UInt32Vector(state_transposed.begin(), state_transposed.end());
 }
 
 void AES::mixColumns()

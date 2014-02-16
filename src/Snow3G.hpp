@@ -37,16 +37,16 @@ private:
    uint32_t R1, R2, R3;
    
    void keySetup() override;
+      
+   void nextState(const uint32_t v);
+   uint32_t getv() const;
+   void initializationMode(const uint32_t F);
+   void keystreamMode();
    
    static constexpr uint8_t mulx(const uint8_t V, const uint8_t c);
    static uint8_t mulxPow(const uint8_t V, const uint8_t i, const uint8_t c);
    static uint32_t mulAlpha(const uint8_t c);
    static uint32_t divAlpha(const uint8_t c);
-   
-   void nextState(const uint32_t v);
-   uint32_t getv() const;
-   void initializationMode(const uint32_t F);
-   void keystreamMode();
    
    static uint32_t S(const uint32_t w, const std::array<uint8_t, 256> &sbox, const uint8_t c);
    static uint32_t S1(const uint32_t w);

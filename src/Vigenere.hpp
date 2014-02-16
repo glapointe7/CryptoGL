@@ -169,13 +169,13 @@ public:
 class Gronsfeld : public Vigenere
 {  
 public:
-   using StringCipherWithStringKey::setKey;
+   //using StringCipherWithStringKey::setKey;
    
-   explicit Gronsfeld(const Int32Vector &key)
+   explicit Gronsfeld(const UInt32Vector &key)
       : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
    
    /* Specific to Gronsfeld cipher : the grons_key is a vector of integers. */
-   void setKey(const Int32Vector &grons_key)
+   void setKey(const UInt32Vector &grons_key)
    {
       const uint8_t alpha_len = alpha.length();
       KeyType new_key;

@@ -4,7 +4,6 @@
 
 #include "Types.hpp"
 
-
 namespace Bits
 {
    /* Extract the Least Signifiant Bits from value. */
@@ -56,7 +55,7 @@ namespace Bits
    }
    
    /* Rotate left 'shift' bits of a 16-byte vector. */
-   BytesVector rotateLeft128(const BytesVector &bytes, const uint8_t shift);
+   //BytesVector rotateLeft128(const BytesVector &bytes, const uint8_t shift);
    
    /* Test a bit at a 'pos' in 'value'. */
    template <typename Integer>

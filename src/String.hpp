@@ -3,7 +3,76 @@
 #define STRING_HPP
 
 #include "Types.hpp"
-#include <string>
+
+class String1
+{
+public:
+   explicit String1(const uint64_t &to_reserve) { str.reserve(to_reserve); }
+   
+   // Useful constants for alpha string.
+   static const std::string letters;
+   static const std::string uppercase;
+   static const std::string lowercase;
+   static const std::string grid_uppercase_fr;
+   static const std::string grid_lowercase_fr;
+   static const std::string grid_uppercase_en;
+   static const std::string grid_lowercase_en;
+   static const std::string digits;
+   static const std::string uppercase_digits;
+   static const std::string lowercase_digits;
+   static const std::string hex_digits;
+   static const std::string alpha_numeric;
+   static const std::string ascii_ordered_alpha_numeric;
+   static const std::string lower_ordered_alpha_numeric;
+   static const std::string base64_alphabet;
+   static const std::string printable;
+   static const std::string punctuation;
+   static const std::string white_space;
+   
+   /* Uppercase the text. */
+   void toUpperCase();
+
+   /* Lowercase the text. */
+   void toLowerCase();
+
+   /* Remove all characters in text specified by chars. */
+   void removeChars(const std::string &chars);
+   
+   /* Remove all chars that are not uniques in 'str'. */
+   std::string makeUniqueChars();
+   
+   /* Check if 'str' contains unique chars. */
+   bool containsUniqueChars() const;
+
+   /* Convert integer to string in base 10. */
+   //std::string uintToString(uint64_t value);
+   
+   /* Convert a string to a vector of bytes. */
+   BytesVector toBytes() const;
+   
+   /* Convert a hexadecimal string to a vector of bytes. */
+   BytesVector hexToBytes() const;
+   
+   /* Trim the beginning of the string from spaces. */
+   std::string trimStart();
+   
+   /* Trim end of the string from spaces. */
+   std::string trimEnd();
+   
+   /* Append the character 'c' 'x' times at the end of 'str'. */
+   std::string extend(const uint32_t x, const char c);
+   
+   /* Split the string with a specific separator and return a vector of substrings. 
+    Example: "AB-CD-EF".split('-') = ["AB", "CD", "EF"] */
+   std::vector<std::string> split(const char separator) const;
+   
+   /* Find a character 'c' in the string and return the position if found, -1 if not. */
+   int64_t find(const char c) const;
+   
+private:
+   std::string str;
+};
+
 
 namespace String
 {
