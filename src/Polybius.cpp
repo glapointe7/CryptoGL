@@ -2,9 +2,7 @@
 
 ClassicalType Polybius::encode(const ClassicalType &clear_text)
 {  
-   ClassicalType crypted;
-   crypted.reserve(clear_text.length() * 2);
-
+   ClassicalType crypted(clear_text.length() * 2);
    for (const auto c : clear_text)
    {
       const auto pos = grid.getCharCoordinates(c);
@@ -18,8 +16,7 @@ ClassicalType Polybius::encode(const ClassicalType &clear_text)
 ClassicalType Polybius::decode(const ClassicalType &cipher_text)
 {  
    const uint32_t cipher_len = cipher_text.length();
-   ClassicalType decrypted;
-   decrypted.reserve(cipher_len / 2);
+   ClassicalType decrypted(cipher_len / 2);
 
    for (uint32_t i = 0; i < cipher_len; i += 2)
    {

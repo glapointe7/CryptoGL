@@ -12,7 +12,7 @@
 class StringCipherWithStringKey : public StringCipher
 {
 public:
-   using KeyType = ClassicalType;
+   using KeyType = String;
 
    KeyType getKey() const noexcept { return key; }
    virtual void setKey(const KeyType &key);

@@ -11,8 +11,7 @@ ClassicalType TwoSquares::encode(const ClassicalType &clear_text)
 {  
    const ClassicalType full_text = appendChars(clear_text, 2, 'X');
    const uint32_t clear_len = full_text.length();
-   ClassicalType crypted;
-   crypted.reserve(clear_len);
+   ClassicalType crypted(clear_len);
 
    for (uint32_t i = 0; i < clear_len; i += 2)
    {
@@ -38,8 +37,7 @@ ClassicalType TwoSquares::encode(const ClassicalType &clear_text)
 ClassicalType TwoSquares::decode(const ClassicalType &cipher_text)
 {  
    const uint32_t cipher_len = cipher_text.length();
-   ClassicalType decrypted;
-   decrypted.reserve(cipher_len);
+   ClassicalType decrypted(cipher_len);
 
    for (uint32_t i = 0; i < cipher_len; i += 2)
    {

@@ -25,12 +25,11 @@ ClassicalType Delastelle::encode(const ClassicalType &clear_text)
    block.reserve(block_size);
    for (uint32_t i = 0; i < clear_len; i += block_len)
    {
-      block.push_back(full_text.substr(i, block_len));
+      block.push_back(ClassicalType(full_text.substr(i, block_len)));
    }
    
    // Under each letter, we note coordinates of letters verticaly.
-   ClassicalType crypted;
-   crypted.reserve(clear_len);
+   ClassicalType crypted(clear_len);
    for (const auto &str : block)
    {
       BytesVector X, Y;
@@ -86,8 +85,7 @@ ClassicalType Delastelle::decode(const ClassicalType &cipher_text)
       chars_coords.push_back(coords.first);
    }
 
-   ClassicalType decrypted;
-   decrypted.reserve(cipher_len / 2);
+   ClassicalType decrypted(cipher_len / 2);
    const uint32_t double_block_len = block_len * 2;
    for (uint32_t i = 0; i < cipher_len; i += double_block_len)
    {

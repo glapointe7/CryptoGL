@@ -5,12 +5,10 @@
 #include "StringCipherWithStringKey.hpp"
 
 #include <functional>
-#include <string>
-#include <vector>
   
 #include "String.hpp"
-#include "Types.hpp"
 #include "Vector.hpp"
+#include "Integer.hpp"
 #include "MathematicalTools.hpp"
 
 // Vigenere : CIPHER = CLEAR + KEY
@@ -88,15 +86,13 @@ public:
    {
       const uint32_t key_length = rozier_key.length() - 1;
       const uint8_t alpha_len = alpha.length();
-      KeyType new_key;
-      new_key.reserve(key_length + 1);
+      KeyType new_key(key_length + 1);
 
       for (uint32_t i = 0; i < key_length; ++i)
       {
-         new_key += alpha[Maths::mod(alpha.find(rozier_key[i + 1]) - alpha.find(rozier_key[i]), alpha_len)];
+         new_key.push_back(alpha[Maths::mod(alpha.find(rozier_key[i + 1]) - alpha.find(rozier_key[i]), alpha_len)]);
       }
-      new_key += alpha[Maths::mod(alpha.find(rozier_key[key_length]) - alpha.find(rozier_key[0]), alpha_len)];
-      //new_key += alpha[(alpha.find(rozier_key[key_length - 1]) - alpha.find(rozier_key[0]) + alpha_len) % alpha_len];
+      new_key.push_back(alpha[Maths::mod(alpha.find(rozier_key[key_length]) - alpha.find(rozier_key[0]), alpha_len)]);
       
       StringCipherWithStringKey::setKey(new_key);
    }
@@ -128,7 +124,7 @@ private:
    static ClassicalType clearMultKey(const ClassicalType &alpha, const uint8_t c, const uint8_t key_pos)
    {
       const uint32_t x = (alpha.find(c) + 1) * (alpha.find(key_pos) + 1);
-      ClassicalType buffer = String::uintToString(x);
+      ClassicalType buffer(uint32::toString(x));
       buffer.reserve(buffer.length() + 1);
       buffer.push_back(' '); 
       
@@ -151,14 +147,13 @@ public:
       const KeyType my_key = getKey();
       const uint32_t key_length = my_key.length();
       
-      ClassicalType toReturn;
-      const std::vector<ClassicalType> cipher_numbers = Vector::split(String::trimEnd(cipher_text), ' ');
-      toReturn.reserve(cipher_text.length());
+      ClassicalType toReturn(cipher_text.length());
+      const std::vector<ClassicalType> cipher_numbers = ClassicalType(cipher_text.trimEnd()).split(' ');
 
       uint32_t idx = 0;
       for (const auto number : cipher_numbers)
       {
-         toReturn.append(keyDivideCipher(alpha, atoi(number.c_str()), my_key[idx]));
+         toReturn.push_back(keyDivideCipher(alpha, atoi(number.c_str()), my_key[idx]).toChar());
          idx = (idx + 1) % key_length;
       }
 
@@ -169,8 +164,6 @@ public:
 class Gronsfeld : public Vigenere
 {  
 public:
-   //using StringCipherWithStringKey::setKey;
-   
    explicit Gronsfeld(const UInt32Vector &key)
       : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
    
@@ -178,8 +171,7 @@ public:
    void setKey(const UInt32Vector &grons_key)
    {
       const uint8_t alpha_len = alpha.length();
-      KeyType new_key;
-      new_key.reserve(grons_key.size());
+      KeyType new_key(grons_key.size());
       
       for(const auto number : grons_key)
       {

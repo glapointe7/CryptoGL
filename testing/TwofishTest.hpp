@@ -35,7 +35,8 @@ TEST_F(TwofishTest, encode128)
 
 TEST_F(TwofishTest, decode128)
 {
-   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C128->decode(String::hexToBytes("9F589F5CF6122C32B6BFEC2F2AE8C35A"))));
+   StringTest code("9F589F5CF6122C32B6BFEC2F2AE8C35A");
+   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C128->decode(code.hexToBytes())));
 }
 
 TEST_F(TwofishTest, encode192)
@@ -45,7 +46,8 @@ TEST_F(TwofishTest, encode192)
 
 TEST_F(TwofishTest, decode192)
 {
-   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C192->decode(String::hexToBytes("CFD1D2E5A9BE9CDF501F13B892BD2248"))));
+   StringTest code("CFD1D2E5A9BE9CDF501F13B892BD2248");
+   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C192->decode(code.hexToBytes())));
 }
 
 TEST_F(TwofishTest, encode256)
@@ -55,7 +57,8 @@ TEST_F(TwofishTest, encode256)
 
 TEST_F(TwofishTest, decode256)
 {
-   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C256->decode(String::hexToBytes("37527BE0052334B89F0CFCCAE87CFA20"))));
+   StringTest code("37527BE0052334B89F0CFCCAE87CFA20");
+   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C256->decode(code.hexToBytes())));
 }
 
 #endif

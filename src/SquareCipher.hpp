@@ -25,7 +25,7 @@ protected:
    }
    
    /* Default : Create 5X5 grid with unique english uppercase letters with the key. */
-   explicit SquareCipher(const KeyType &key) : SquareCipher(key, String::grid_uppercase_fr) {}
+   explicit SquareCipher(const KeyType &key) : SquareCipher(key, ClassicalType::grid_uppercase_fr) {}
    
    virtual ~SquareCipher() {}
    

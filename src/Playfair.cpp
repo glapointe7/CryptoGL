@@ -6,8 +6,7 @@ ClassicalType Playfair::encode(const ClassicalType &clear_text)
 {  
    ClassicalType full_text = appendChars(clear_text, 2, 'X');
    uint32_t clear_len = full_text.length();
-   ClassicalType crypted;
-   crypted.reserve(clear_len);
+   ClassicalType crypted(clear_len);
    const uint8_t dim = grid.getDimension();
 
    for (uint32_t i = 0; i < clear_len; i += 2)
@@ -54,8 +53,7 @@ ClassicalType Playfair::encode(const ClassicalType &clear_text)
 ClassicalType Playfair::decode(const ClassicalType &cipher_text)
 {  
    const uint32_t cipher_len = cipher_text.length();
-   ClassicalType decrypted;
-   decrypted.reserve(cipher_len);
+   ClassicalType decrypted(cipher_len);
    const uint8_t dim = grid.getDimension();
 
    for (uint32_t i = 0; i < cipher_len; i += 2)

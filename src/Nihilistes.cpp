@@ -2,6 +2,7 @@
 
 #include "String.hpp"
 #include "MathematicalTools.hpp"
+#include "Integer.hpp"
 
 #include "exceptions/BadChar.hpp"
 #include "exceptions/EmptyKey.hpp"
@@ -17,8 +18,7 @@ ClassicalType Nihilistes::encode(const ClassicalType &clear_text)
 {
    const uint32_t clear_len = clear_text.length();
    const uint32_t second_key_len = second_key.length();
-   ClassicalType crypted;
-   crypted.reserve(clear_len * 2);
+   ClassicalType crypted(clear_len * 2);
 
    uint32_t i = 0;
    for (const auto c : clear_text)
@@ -35,7 +35,7 @@ ClassicalType Nihilistes::encode(const ClassicalType &clear_text)
          crypted.push_back('0');
       }
       
-      crypted.append(String::uintToString(final_value));
+      crypted.append(uint16::toString(final_value));
       i = (i + 1) % second_key_len;
    }
    
@@ -46,8 +46,7 @@ ClassicalType Nihilistes::decode(const ClassicalType &cipher_text)
 {
    const uint32_t cipher_len = cipher_text.length();
    const uint32_t second_key_len = second_key.length();
-   ClassicalType decrypted;
-   decrypted.reserve(cipher_len / 2);
+   ClassicalType decrypted(cipher_len / 2);
 
    uint32_t j = 0;
    for (uint32_t i = 0; i < cipher_len; i += 2)
@@ -56,7 +55,7 @@ ClassicalType Nihilistes::decode(const ClassicalType &cipher_text)
       const uint8_t key_value = ((pos_key.second+1) * 10) + pos_key.first + 1;
       const uint8_t value = Maths::mod(atoi(cipher_text.substr(i, 2).c_str()) - key_value, 100);
       const uint8_t last_digit = value % 10;
-      decrypted += grid.at(((value - last_digit) / 10) - 1, last_digit - 1);
+      decrypted.push_back(grid.at(((value - last_digit) / 10) - 1, last_digit - 1));
       j = (j + 1) % second_key_len;
    }
    

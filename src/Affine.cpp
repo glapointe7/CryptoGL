@@ -12,8 +12,7 @@ void Affine::setKey(const int32_t a, const int32_t b)
 ClassicalType Affine::encode(const ClassicalType &clear_text)
 {
    const uint32_t alpha_len = alpha.length();
-   ClassicalType crypted;
-   crypted.reserve(clear_text.length());
+   ClassicalType crypted(clear_text.length());
    
    for(const auto c : clear_text)
    {
@@ -28,8 +27,7 @@ ClassicalType Affine::encode(const ClassicalType &clear_text)
 ClassicalType Affine::decode(const ClassicalType &cipher_text)
 {
    const int32_t alpha_len = alpha.length();
-   ClassicalType decrypted;
-   decrypted.reserve(cipher_text.length());
+   ClassicalType decrypted(cipher_text.length());
    
    const int32_t a_inv = Maths::getModInverse(a, alpha_len);
    

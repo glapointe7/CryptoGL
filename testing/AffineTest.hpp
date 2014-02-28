@@ -23,14 +23,14 @@ protected:
 
 TEST_F(AffineTest, encode) 
 {
-  const std::string clear_text = "DIESISTEINEGEHEIMENACHRICHT";
+  const ClassicalType clear_text = "DIESISTEINEGEHEIMENACHRICHT";
   
   EXPECT_EQ("GNXBNBSXNUXFXWXNDXUHPWKNPWS", A->encode(clear_text));
 }
 
 TEST_F(AffineTest, decode) 
 {
-  const std::string clear_text = "DIESISTEINEGEHEIMENACHRICHT";
+  const ClassicalType clear_text = "DIESISTEINEGEHEIMENACHRICHT";
   
   EXPECT_EQ(clear_text, A->decode("GNXBNBSXNUXFXWXNDXUHPWKNPWS"));
 }

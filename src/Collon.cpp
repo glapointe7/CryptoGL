@@ -15,9 +15,7 @@
 ClassicalType Collon::encode(const ClassicalType &clear_text)
 {
    const uint32_t clear_len = clear_text.length();
-   ClassicalType line1, line2;
-   line1.reserve(clear_len);
-   line2.reserve(clear_len);
+   ClassicalType line1(clear_len), line2(clear_len);
 
    // Each characters in (x,y) is encoded by the digram AB such that A = (a,y) et B = (x,b).
    for (const auto c : clear_text)
@@ -29,8 +27,7 @@ ClassicalType Collon::encode(const ClassicalType &clear_text)
 
    // The text is then read in blocks. For exemple, for a block of length 3, we have
    // L1 = MHD et L2 = JME => crypted = MHDJME.
-   ClassicalType crypted;
-   crypted.reserve(clear_len * 2);
+   ClassicalType crypted(clear_len * 2);
    for (uint32_t j = 0; j < clear_len; j += block_len)
    {
       crypted.append(line1.substr(j, block_len));
@@ -45,9 +42,7 @@ ClassicalType Collon::decode(const ClassicalType &cipher_text)
    const uint32_t cipher_len = cipher_text.length();
    const uint32_t line_len = cipher_len / 2;
 
-   ClassicalType line1, line2;
-   line1.reserve(line_len);
-   line2.reserve(line_len);
+   ClassicalType line1(line_len), line2(line_len);
 
    // Put the digrams in 2 lines. Generally, the length of a line is not a multiple of
    // the block length. For that reason, we keep the rest stored in line_rest_len.
@@ -65,8 +60,7 @@ ClassicalType Collon::decode(const ClassicalType &cipher_text)
 
    // Let A = (x1, y1) and B = (x2, y2) be the 2-letter digram at iteration i.
    // Let C = (x, y) be the decoded letter. We have to get C = (x2, y1).
-   ClassicalType decrypted;
-   decrypted.reserve(line_len);
+   ClassicalType decrypted(line_len);
    for (uint32_t i = 0; i < line_len; ++i)
    {
       const auto A = grid.getCharCoordinates(line1[i]);

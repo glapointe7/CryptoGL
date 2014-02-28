@@ -4,7 +4,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/Skipjack.hpp"
-#include "../src/Digest.hpp"
 
 class SkipjackTest : public ::testing::Test
 {
@@ -26,30 +25,32 @@ protected:
 
 TEST_F(SkipjackTest, encodeFirst)
 {
-   const std::vector<uint8_t> clear_text = {0x33, 0x22, 0x11, 0x00, 0xdd, 0xcc, 0xbb, 0xaa};
+   const BytesVector clear_text = {0x33, 0x22, 0x11, 0x00, 0xdd, 0xcc, 0xbb, 0xaa};
    
    EXPECT_EQ("2587CAE27A12D300", Vector::toHexString(A->encode(clear_text)));
 }
 
 TEST_F(SkipjackTest, decodeFirst)
 {
-   const std::vector<uint8_t> clear_text = {0x33, 0x22, 0x11, 0x00, 0xdd, 0xcc, 0xbb, 0xaa};
+   const BytesVector clear_text = {0x33, 0x22, 0x11, 0x00, 0xdd, 0xcc, 0xbb, 0xaa};
+   const StringTest message("2587CAE27A12D300");
    
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(A->decode(String::hexToBytes("2587CAE27A12D300"))));
+   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(A->decode(message.hexToBytes())));
 }
 
 TEST_F(SkipjackTest, encodeSecond)
 {
-   const std::vector<uint8_t> clear_text = {0x1d, 0xdf, 0x39, 0xab, 0xf5, 0xcd, 0x71, 0x1e};
+   const BytesVector clear_text = {0x1d, 0xdf, 0x39, 0xab, 0xf5, 0xcd, 0x71, 0x1e};
    
    EXPECT_EQ("C92D22324C6B31AE", Vector::toHexString(B->encode(clear_text)));
 }
 
 TEST_F(SkipjackTest, decodeSecond)
 {
-   const std::vector<uint8_t> clear_text = {0x1d, 0xdf, 0x39, 0xab, 0xf5, 0xcd, 0x71, 0x1e};
+   const BytesVector clear_text = {0x1d, 0xdf, 0x39, 0xab, 0xf5, 0xcd, 0x71, 0x1e};
+   const StringTest message("C92D22324C6B31AE");
    
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(B->decode(String::hexToBytes("C92D22324C6B31AE"))));
+   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(B->decode(message.hexToBytes())));
 }
 
 #endif

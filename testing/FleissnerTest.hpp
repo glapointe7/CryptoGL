@@ -29,14 +29,14 @@ protected:
 
 TEST_F(FleissnerTest, encode)
 {
-   const std::string clear_text = "JECHIFFRECETEXTEAVECUNCACHETOURNANT";
+   const ClassicalType clear_text = "JECHIFFRECETEXTEAVECUNCACHETOURNANT";
 
    EXPECT_EQ("TJEEOCCUCRHENUITNAEFNCFXTATAERCAHEEV", F->encode(clear_text));
 }
 
 TEST_F(FleissnerTest, decode)
 {
-   const std::string clear_text = "JECHIFFRECETEXTEAVECUNCACHETOURNANTA";
+   const ClassicalType clear_text = "JECHIFFRECETEXTEAVECUNCACHETOURNANTA";
 
    EXPECT_EQ(clear_text, F->decode("TJEEOCCUCRHENUITNAEFNCFXTATAERCAHEEV"));
 }

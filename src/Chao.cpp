@@ -19,24 +19,23 @@ Chao::Chao(const ClassicalType &left_alpha, const ClassicalType &right_alpha)
 
 void Chao::leftShiftAlphabet(const uint8_t index)
 {
-   std::rotate(left_alpha.begin(), left_alpha.begin() + index, left_alpha.end());
-   const int8_t tmp = left_alpha[1];
+   left_alpha.rotateLeft(index);
+   const char tmp = left_alpha[1];
    left_alpha.erase(left_alpha.begin() + 1);
    left_alpha.insert(left_alpha.begin() + nadir, tmp);
 }
 
 void Chao::rightShiftAlphabet(const uint8_t index)
 {
-   std::rotate(right_alpha.begin(), right_alpha.begin() + index + 1, right_alpha.end());
-   const int8_t tmp = right_alpha[2];
+   right_alpha.rotateLeft(index + 1);
+   const char tmp = right_alpha[2];
    right_alpha.erase(right_alpha.begin() + 2);
    right_alpha.insert(right_alpha.begin() + nadir, tmp);
 }
 
 ClassicalType Chao::encode(const ClassicalType &clear_text)
 {
-   ClassicalType crypted;
-   crypted.reserve(clear_text.length());
+   ClassicalType crypted(clear_text.length());
 
    for (const auto c : clear_text)
    {
@@ -52,8 +51,7 @@ ClassicalType Chao::encode(const ClassicalType &clear_text)
 
 ClassicalType Chao::decode(const ClassicalType &cipher_text)
 {
-   ClassicalType decrypted;
-   decrypted.reserve(cipher_text.length());
+   ClassicalType decrypted(cipher_text.length());
 
    for (const auto c : cipher_text)
    {

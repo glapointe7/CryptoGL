@@ -1,10 +1,9 @@
 
 #ifndef SHA512_224TEST_HPP
-#define	SHA512_224TEST_HPP
+#define SHA512_224TEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/SHA2.hpp"
-#include "../src/Digest.hpp"
 
 class SHA512_224Test : public ::testing::Test
 {
@@ -24,17 +23,17 @@ protected:
 
 TEST_F(SHA512_224Test, encodeNormalText)
 {
-   const std::string clear_text = "The quick brown fox jumps over the lazy dog";
+   const StringTest clear_text = "The quick brown fox jumps over the lazy dog";
    std::string hash = "944CD2847FB54558D4775DB0485A50003111C8E5DAA63FE722C6AA37";
 
-   EXPECT_EQ(hash, Vector::toHexString(S->encode(String::toBytes(clear_text))));
+   EXPECT_EQ(hash, Vector::toHexString(S->encode(clear_text.toBytes())));
 }
 
 TEST_F(SHA512_224Test, encodeEmptyText)
 {
    std::string hash = "6ED0DD02806FA89E25DE060C19D3AC86CABB87D6A0DDD05C333B84F4";
 
-   EXPECT_EQ(hash, Vector::toHexString(S->encode(std::vector<uint8_t>(0))));
+   EXPECT_EQ(hash, Vector::toHexString(S->encode(BytesVector(0))));
 }
 
 #endif

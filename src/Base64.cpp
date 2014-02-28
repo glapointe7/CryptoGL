@@ -4,13 +4,10 @@
 
 #include "exceptions/BadChar.hpp"
 
-const std::string Base64::alpha = String::base64_alphabet;
-
-std::string Base64::encode(const BytesVector &clear_data)
+ClassicalType Base64::encode(const BytesVector &clear_data)
 {
    const uint32_t clear_len = clear_data.size();
-   std::string crypted;
-   crypted.reserve(((clear_len / 3) + (clear_len % 3 > 0)) * 4);
+   ClassicalType crypted(((clear_len / 3) + (clear_len % 3 > 0)) * 4);
 
    uint32_t temp;
    auto cursor = clear_data.begin();
@@ -20,26 +17,26 @@ std::string Base64::encode(const BytesVector &clear_data)
       temp += (*cursor++) << 8;
       temp += (*cursor++);
       
-      crypted.push_back(alpha[(temp & 0x00FC0000) >> 18]);
-      crypted.push_back(alpha[(temp & 0x0003F000) >> 12]);
-      crypted.push_back(alpha[(temp & 0x00000FC0) >> 6 ]);
-      crypted.push_back(alpha[(temp & 0x0000003F)]);
+      crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x00FC0000) >> 18]);
+      crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x0003F000) >> 12]);
+      crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x00000FC0) >> 6 ]);
+      crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x0000003F)]);
    }
    switch (clear_len % 3)
    {
       case 1:
          temp = (*cursor++) << 16; 
-         crypted.push_back(alpha[(temp & 0x00FC0000) >> 18]);
-         crypted.push_back(alpha[(temp & 0x0003F000) >> 12]);
+         crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x00FC0000) >> 18]);
+         crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x0003F000) >> 12]);
          crypted.append(2, pad_character);
          break;
          
       case 2:
          temp = (*cursor++) << 16; 
          temp += (*cursor++) << 8;
-         crypted.push_back(alpha[(temp & 0x00FC0000) >> 18]);
-         crypted.push_back(alpha[(temp & 0x0003F000) >> 12]);
-         crypted.push_back(alpha[(temp & 0x00000FC0) >> 6 ]);
+         crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x00FC0000) >> 18]);
+         crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x0003F000) >> 12]);
+         crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x00000FC0) >> 6 ]);
          crypted.push_back(pad_character);
          break;
    }
@@ -47,7 +44,7 @@ std::string Base64::encode(const BytesVector &clear_data)
    return crypted;
 }
 
-BytesVector Base64::decode(const std::string &cipher_data)
+BytesVector Base64::decode(const ClassicalType &cipher_data)
 {
    const uint32_t cipher_len = cipher_data.length();
    if (cipher_len % 4)

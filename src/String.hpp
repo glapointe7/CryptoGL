@@ -2,32 +2,50 @@
 #ifndef STRING_HPP
 #define STRING_HPP
 
-#include "Types.hpp"
+#include <string>
+#include <vector>
 
-class String1
+/* Inherits from std::string : Add features and useful constants. */
+class String : public std::string
 {
 public:
-   explicit String1(const uint64_t &to_reserve) { str.reserve(to_reserve); }
+   /* Default constructor. */
+   String() {}
+   
+   /* Constructor that reserve 'to_reserve' bytes to a string. */
+   explicit String(const uint64_t &to_reserve) { this->reserve(to_reserve); }
+   
+   /* Constructor that converts char* to a std::string. */
+   String(const char* str) : std::string(str) { }
+   
+   /* Constructor that converts String to std::string. */
+   explicit String(const std::string &str) : std::string(str) { }
+   
+   /* Constructor that fill a string with character 'c' 'n' times. */
+   String(const uint64_t &n, const uint8_t c) : std::string(n, c) {}
+   
+   /* Move constructor. */
+   String(std::string &&str) : std::string(str) {}
    
    // Useful constants for alpha string.
-   static const std::string letters;
-   static const std::string uppercase;
-   static const std::string lowercase;
-   static const std::string grid_uppercase_fr;
-   static const std::string grid_lowercase_fr;
-   static const std::string grid_uppercase_en;
-   static const std::string grid_lowercase_en;
-   static const std::string digits;
-   static const std::string uppercase_digits;
-   static const std::string lowercase_digits;
-   static const std::string hex_digits;
-   static const std::string alpha_numeric;
-   static const std::string ascii_ordered_alpha_numeric;
-   static const std::string lower_ordered_alpha_numeric;
-   static const std::string base64_alphabet;
-   static const std::string printable;
-   static const std::string punctuation;
-   static const std::string white_space;
+   static const String letters;
+   static const String uppercase;
+   static const String lowercase;
+   static const String grid_uppercase_fr;
+   static const String grid_lowercase_fr;
+   static const String grid_uppercase_en;
+   static const String grid_lowercase_en;
+   static const String digits;
+   static const String uppercase_digits;
+   static const String lowercase_digits;
+   static const String hex_digits;
+   static const String alpha_numeric;
+   static const String ascii_ordered_alpha_numeric;
+   static const String lower_ordered_alpha_numeric;
+   static const String base64_alphabet;
+   static const String printable;
+   static const String punctuation;
+   static const String white_space;
    
    /* Uppercase the text. */
    void toUpperCase();
@@ -39,95 +57,38 @@ public:
    void removeChars(const std::string &chars);
    
    /* Remove all chars that are not uniques in 'str'. */
-   std::string makeUniqueChars();
+   void removeDuplicates();
    
    /* Check if 'str' contains unique chars. */
    bool containsUniqueChars() const;
-
-   /* Convert integer to string in base 10. */
-   //std::string uintToString(uint64_t value);
+   
+   /* Convert String to char if the string has ONLY one character. */
+   char toChar() const;
+   
+   /* Cast from String to std::string. */
+   std::string toStdString() const;
    
    /* Convert a string to a vector of bytes. */
-   BytesVector toBytes() const;
+   std::vector<uint8_t> toBytes() const;
    
    /* Convert a hexadecimal string to a vector of bytes. */
-   BytesVector hexToBytes() const;
+   std::vector<uint8_t> hexToBytes() const;
    
    /* Trim the beginning of the string from spaces. */
-   std::string trimStart();
+   std::string trimStart() const;
    
    /* Trim end of the string from spaces. */
-   std::string trimEnd();
-   
-   /* Append the character 'c' 'x' times at the end of 'str'. */
-   std::string extend(const uint32_t x, const char c);
+   std::string trimEnd() const;
    
    /* Split the string with a specific separator and return a vector of substrings. 
     Example: "AB-CD-EF".split('-') = ["AB", "CD", "EF"] */
-   std::vector<std::string> split(const char separator) const;
+   std::vector<String> split(const char separator) const;
    
-   /* Find a character 'c' in the string and return the position if found, -1 if not. */
-   int64_t find(const char c) const;
+   /* Sort the entire string. */
+   void sort();
    
-private:
-   std::string str;
+   /* Rotate left of 'to_rotate' characters in string. */
+   void rotateLeft(const uint64_t &to_rotate);
 };
-
-
-namespace String
-{
-   // Useful constants for alpha string.
-   const std::string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-   const std::string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-   const std::string lowercase = "abcdefghijklmnopqrstuvwxyz";
-   const std::string grid_uppercase_fr = "ABCDEFGHIJKLMNOPQRSTUVXYZ";
-   const std::string grid_lowercase_fr = "abcdefghijklmnopqrstuvxyz";
-   const std::string grid_uppercase_en = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
-   const std::string grid_lowercase_en = "abcdefghiklmnopqrstuvwxyz";
-   const std::string digits = "0123456789";
-   const std::string uppercase_digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-   const std::string lowercase_digits = "abcdefghijklmnopqrstuvwxyz0123456789";
-   const std::string hex_digits = "0123456789ABCDEF";
-   const std::string alpha_numeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-   const std::string ascii_ordered_alpha_numeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-   const std::string lower_ordered_alpha_numeric = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-   const std::string base64_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-   const std::string printable = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"'().:;? \t\n\r#[]$%&*/@|_=+<>{}~";
-   const std::string punctuation = "!\"'().:;?-";
-   const std::string white_space = " \t\n\r";
-
-   /* Uppercase the text. */
-   void toUpperCase(std::string &text);
-
-   /* Lowercase the text. */
-   void toLowerCase(std::string &text);
-
-   /* Remove all characters in text specified by chars. */
-   void removeChars(std::string &text, const std::string &chars);
-   
-   /* Remove all chars that are not uniques in 'str'. */
-   std::string makeUniqueChars(std::string str);
-   
-   /* Check if 'str' contains unique chars. */
-   bool containsUniqueChars(const std::string &str);
-
-   /* Convert integer to string in base 10. */
-   std::string uintToString(uint64_t value);
-   
-   /* Convert a string to a vector of bytes. */
-   BytesVector toBytes(const std::string &str);
-   
-   /* Convert a hexadecimal string to a vector of bytes. */
-   BytesVector hexToBytes(const std::string &hex_str);
-   
-   /* Trim the beginning of the string from spaces. */
-   std::string trimStart(std::string str);
-   
-   /* Trim end of the string from spaces. */
-   std::string trimEnd(std::string str);
-   
-   /* Append the character 'c' 'x' times at the end of 'str'. */
-   std::string extend(std::string str, const uint32_t x, const char c);
-}
 
 #endif

@@ -6,7 +6,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/Snow3G.hpp"
-#include "../src/Digest.hpp"
 
 class Snow3GTest : public ::testing::Test
 {

@@ -24,8 +24,8 @@ public:
 private:
    using GetCharFunction = std::function<char(const ClassicalType &, const ClassicalType &, const char)>;
    
-   ClassicalType unsort_alpha;
    const GetCharFunction charEncode, charDecode;
+   ClassicalType unsort_alpha;
    
    static char sortAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
    {

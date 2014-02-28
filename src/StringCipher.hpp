@@ -3,7 +3,6 @@
 #define STRINGCIPHER_HPP
 
 #include "Cipher.hpp"
-
 #include "String.hpp"
 
 class StringCipher : public Cipher<ClassicalType>
@@ -13,7 +12,7 @@ public:
    ClassicalType getAlpha() const;
 
 protected: 
-   StringCipher() : alpha(String::uppercase) {}
+   StringCipher() : alpha(ClassicalType::uppercase) {}
    virtual ~StringCipher() {}
 
    virtual ClassicalType encode(const ClassicalType &) = 0;

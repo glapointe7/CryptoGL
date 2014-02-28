@@ -15,7 +15,7 @@ public:
       : SquareCipher(key, alpha), block_len(block_length) {}
       
    Collon(const KeyType &key, const uint32_t block_length)
-      : Collon(key, String::grid_uppercase_fr, block_length) {}
+      : Collon(key, ClassicalType::grid_uppercase_fr, block_length) {}
    
    explicit Collon(const KeyType &key) 
       : Collon(key, 5) {}

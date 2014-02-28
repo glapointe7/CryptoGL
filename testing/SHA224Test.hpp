@@ -4,7 +4,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/SHA2.hpp"
-#include "../src/Digest.hpp"
 
 class SHA224Test : public ::testing::Test
 {
@@ -24,27 +23,27 @@ protected:
 
 TEST_F(SHA224Test, encodeNormalText)
 {
-   const std::string clear_text = "The quick brown fox jumps over the lazy dog";
-   std::string hash = "730E109BD7A8A32B1CB9D9A09AA2325D2430587DDBC0C38BAD911525";
+   const StringTest clear_text = "The quick brown fox jumps over the lazy dog";
+   const std::string hash = "730E109BD7A8A32B1CB9D9A09AA2325D2430587DDBC0C38BAD911525";
 
-   EXPECT_EQ(hash, Vector::toHexString(S->encode(String::toBytes(clear_text))));
+   EXPECT_EQ(hash, Vector::toHexString(S->encode(clear_text.toBytes())));
 }
 
 TEST_F(SHA224Test, encodeEmptyText)
 {
    std::string hash = "D14A028C2A3A2BC9476102BB288234C415A2B01F828EA62AC5B3E42F";
 
-   EXPECT_EQ(hash, Vector::toHexString(S->encode(std::vector<uint8_t>(0))));
+   EXPECT_EQ(hash, Vector::toHexString(S->encode(BytesVector(0))));
 }
 
 TEST_F(SHA224Test, encodeHMACText)
 {
-   const std::string clear_text = "Hi There";
+   const StringTest clear_text = "Hi There";
    const std::vector<uint8_t> key = {0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 
       0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B};
    std::string hash = "896FB1128ABBDF196832107CD49DF33F47B4B1169912BA4F53684B22";
 
-   EXPECT_EQ(hash, Vector::toHexString(S->hmacEncode(key, String::toBytes(clear_text))));
+   EXPECT_EQ(hash, Vector::toHexString(S->hmacEncode(key, clear_text.toBytes())));
 }
 
 #endif

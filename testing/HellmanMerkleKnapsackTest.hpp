@@ -26,7 +26,7 @@ protected:
 
 TEST_F(HellmanMerkleKnapsackTest, encode)
 {
-   EXPECT_EQ("6316 10022 10673 10673 15961", Digest::bigIntVectorToString(H->encode(String::toBytes("Hello"))));
+   EXPECT_EQ("6316 10022 10673 10673 15961", Digest::bigIntVectorToString(H->encode(StringTest("Hello").toBytes())));
 }
 
 TEST_F(HellmanMerkleKnapsackTest, decode)

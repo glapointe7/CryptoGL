@@ -23,7 +23,7 @@ protected:
 
 TEST_F(VigenereMultTest, encode) 
 {
-  const std::string clear_text = "TIGARSESTENBAWATARNACHEONDIRAIT";
+  const ClassicalType clear_text = "TIGARSESTENBAWATARNACHEONDIRAIT";
   
   EXPECT_EQ("400 9 14 1 324 266 5 209 400 5 28 2 18 322 1 220 20 18 28 1 54 112 5 165 280 4 18 18 18 126 20 ", 
           V->encode(clear_text));
@@ -31,7 +31,7 @@ TEST_F(VigenereMultTest, encode)
 
 TEST_F(VigenereMultTest, decode) 
 {
-  const std::string clear_text = "TIGARSESTENBAWATARNACHEONDIRAIT";
+  const ClassicalType clear_text = "TIGARSESTENBAWATARNACHEONDIRAIT";
   
   EXPECT_EQ(clear_text, 
           V->decode("400 9 14 1 324 266 5 209 400 5 28 2 18 322 1 220 20 18 28 1 54 112 5 165 280 4 18 18 18 126 20 "));

@@ -86,15 +86,16 @@ void Fleissner::rotationExists(std::set<Cell> &rotation, const uint32_t x, const
 ClassicalType Fleissner::encode(const ClassicalType &clear_text)
 {
    const uint32_t dim = grid_dim * grid_dim;
-   const ClassicalType full_text = String::extend(clear_text, dim, 'A');
+   ClassicalType full_text(clear_text);
+   full_text.reserve(full_text.length() + dim);
+   full_text.append(dim, 'A');
    Grid grid(grid_dim, ClassicalType(grid_dim, '.'));
 
    // If the grid is filled, we clear it and we start the process again.
    const uint32_t clear_len = full_text.length();
    const uint32_t max_grid = clear_len / dim;
    
-   ClassicalType crypted;
-   crypted.reserve(clear_len);
+   ClassicalType crypted(clear_len);
 
    uint32_t k = 0;
    for (uint32_t i = 0; i < max_grid; ++i)
@@ -122,15 +123,14 @@ ClassicalType Fleissner::decode(const ClassicalType &cipher_text)
    
    Grid grid;
    grid.reserve(grid_dim);
-   ClassicalType decrypted;
-   decrypted.reserve(cipher_len);
+   ClassicalType decrypted(cipher_len);
    uint32_t k = 0;
    for (uint32_t i = 0; i < max_grid; i++)
    {
       // Fill the grid with the cipher text.
       for (uint32_t j = 0; j < grid_dim; ++j, k += grid_dim)
       {
-         grid.push_back(cipher_text.substr(k, grid_dim));
+         grid.push_back(ClassicalType(cipher_text.substr(k, grid_dim)));
       }
 
       for (uint32_t c = 0; c < dim; ++c)

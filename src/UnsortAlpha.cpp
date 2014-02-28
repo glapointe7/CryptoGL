@@ -3,24 +3,28 @@
 #include "String.hpp"
 
 UnsortAlpha::UnsortAlpha(const KeyType &key)
-   : charEncode(sortAlpha), charDecode(unorderedAlpha)
+   : charEncode(sortAlpha), charDecode(unorderedAlpha), unsort_alpha(alpha.length())
 {
-   unsort_alpha.reserve(alpha.length());
    setKey(key);
 }
 
 void UnsortAlpha::setHorizontalAlpha()
 {  
-   unsort_alpha = String::makeUniqueChars(getKey().append(alpha));
+   ClassicalType key_alpha(getKey().append(alpha));
+   key_alpha.removeDuplicates();
+   unsort_alpha = key_alpha;
 }
 
 // Build an unordered vertical alphabet by transforming the key with only unique chars. 
 
 void UnsortAlpha::setVerticalAlpha()
 {
-   const ClassicalType new_key = String::makeUniqueChars(getKey());
-   const ClassicalType str = String::makeUniqueChars(new_key + alpha);
+   ClassicalType new_key(getKey());
+   new_key.removeDuplicates();
    const uint32_t key_len = new_key.length();
+   
+   ClassicalType str(new_key.append(alpha));
+   str.removeDuplicates();
    const uint32_t alpha_len = str.length();
 
    for (uint32_t i = 0; i < key_len; ++i)
@@ -36,8 +40,7 @@ void UnsortAlpha::setVerticalAlpha()
 
 ClassicalType UnsortAlpha::process(const ClassicalType &text, const GetCharFunction &getNextChar)
 {
-   ClassicalType toReturn;
-   toReturn.reserve(text.length());
+   ClassicalType toReturn(text.length());
 
    for (const auto c : text)
    {

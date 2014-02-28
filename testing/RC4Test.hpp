@@ -7,7 +7,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/RC4.hpp"
-#include "../src/Digest.hpp"
 
 class RC4Test : public ::testing::Test
 {
@@ -16,7 +15,7 @@ protected:
 
    virtual void SetUp()
    {
-      R = new RC4(String::toBytes("Key"));
+      R = new RC4(StringTest("Key").toBytes());
    }
 
    virtual void TearDown()
@@ -27,16 +26,16 @@ protected:
 
 TEST_F(RC4Test, encode)
 {
-   const BytesVector clear_text(String::toBytes("Plaintext"));
+   const StringTest clear_text("Plaintext");
    
-   EXPECT_EQ("BBF316E8D940AF0AD3", Vector::toHexString(R->encode(clear_text)));
+   EXPECT_EQ("BBF316E8D940AF0AD3", Vector::toHexString(R->encode(clear_text.toBytes())));
 }
 
 TEST_F(RC4Test, decode)
 {
-   const BytesVector clear_text(String::toBytes("Plaintext"));
+   const StringTest clear_text("BBF316E8D940AF0AD3");
 
-   EXPECT_EQ("Plaintext", Vector::toString(R->decode(String::hexToBytes("BBF316E8D940AF0AD3"))));
+   EXPECT_EQ("Plaintext", Vector::toString(R->decode(clear_text.hexToBytes())));
 }
 
 #endif

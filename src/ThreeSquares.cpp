@@ -13,8 +13,7 @@ ClassicalType ThreeSquares::encode(const ClassicalType &clear_text)
 {  
    const ClassicalType full_text = appendChars(clear_text, 2, 'X');
    const uint32_t clear_len = full_text.length();
-   ClassicalType crypted;
-   crypted.reserve(3 * clear_len / 2);
+   ClassicalType crypted(3 * clear_len / 2);
    
    srand (time(0));
 
@@ -35,8 +34,7 @@ ClassicalType ThreeSquares::encode(const ClassicalType &clear_text)
 ClassicalType ThreeSquares::decode(const ClassicalType &cipher_text)
 {  
    const uint32_t cipher_len = cipher_text.length();
-   ClassicalType decrypted;
-   decrypted.reserve(2 * cipher_len / 3);
+   ClassicalType decrypted(2 * cipher_len / 3);
    
    srand (time(0));
 

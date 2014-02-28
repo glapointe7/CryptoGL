@@ -4,7 +4,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/RC5.hpp"
-#include "../src/Digest.hpp"
 
 class RC5Test : public ::testing::Test
 {
@@ -31,7 +30,7 @@ TEST_F(RC5Test, encodeZero)
 
 TEST_F(RC5Test, decodeZero)
 {
-   EXPECT_EQ("0000000000000000", Vector::toHexString(R->decode(String::hexToBytes("21A5DBEE154B8F6D"))));
+   EXPECT_EQ("0000000000000000", Vector::toHexString(R->decode(StringTest("21A5DBEE154B8F6D").hexToBytes())));
 }
 
 TEST_F(RC5Test, encodeNormal)
@@ -42,7 +41,7 @@ TEST_F(RC5Test, encodeNormal)
 
 TEST_F(RC5Test, decodeNormal)
 {
-   EXPECT_EQ("21A5DBEE154B8F6D", Vector::toHexString(C->decode(String::hexToBytes("F7C013AC5B2B8952"))));
+   EXPECT_EQ("21A5DBEE154B8F6D", Vector::toHexString(C->decode(StringTest("F7C013AC5B2B8952").hexToBytes())));
 }
 
 #endif

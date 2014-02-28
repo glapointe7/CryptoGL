@@ -8,18 +8,18 @@
 CipherGrid::CipherGrid(ClassicalType key, const ClassicalType &alpha)
 {
    setDimension(alpha);
-   setGrid(key.append(alpha));
+   setGrid(ClassicalType(key.append(alpha)));
 }
 
 void CipherGrid::setGrid(ClassicalType chars)
 {
-   chars = String::makeUniqueChars(chars);
+   chars.removeDuplicates();
    grid.reserve(dim);
 
    // Split the string to set a square grid of dimension (dim X dim) of chars.
    for (uint8_t i = 0; i < dim; ++i)
    {
-      grid.push_back(chars.substr(i * dim, dim));
+      grid.push_back(ClassicalType(chars.substr(i * dim, dim)));
    }
 }
 

@@ -30,38 +30,41 @@ protected:
 
 TEST_F(CAST128Test, encode128)
 {
-   const std::vector<uint8_t> clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
+   const BytesVector clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
 
    EXPECT_EQ("238B4FE5847E44B2", Vector::toHexString(C128->encode(clear_text)));
 }
 
 TEST_F(CAST128Test, decode128)
 {
-   EXPECT_EQ("0123456789ABCDEF", Vector::toHexString(C128->decode(String::hexToBytes("238B4FE5847E44B2"))));
+   StringTest code("238B4FE5847E44B2");
+   EXPECT_EQ("0123456789ABCDEF", Vector::toHexString(C128->decode(code.hexToBytes())));
 }
 
 TEST_F(CAST128Test, encode80)
 {
-   const std::vector<uint8_t> clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
+   const BytesVector clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
 
    EXPECT_EQ("EB6A711A2C02271B", Vector::toHexString(C80->encode(clear_text)));
 }
 
 TEST_F(CAST128Test, decode80)
 {
-   EXPECT_EQ("0123456789ABCDEF", Vector::toHexString(C80->decode(String::hexToBytes("EB6A711A2C02271B"))));
+   StringTest code("EB6A711A2C02271B");
+   EXPECT_EQ("0123456789ABCDEF", Vector::toHexString(C80->decode(code.hexToBytes())));
 }
 
 TEST_F(CAST128Test, encode40)
 {
-   const std::vector<uint8_t> clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
+   const BytesVector clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
 
    EXPECT_EQ("7AC816D16E9B302E", Vector::toHexString(C40->encode(clear_text)));
 }
 
 TEST_F(CAST128Test, decode40)
 {
-   EXPECT_EQ("0123456789ABCDEF", Vector::toHexString(C40->decode(String::hexToBytes("7AC816D16E9B302E"))));
+   StringTest code("7AC816D16E9B302E");
+   EXPECT_EQ("0123456789ABCDEF", Vector::toHexString(C40->decode(code.hexToBytes())));
 }
 
 #endif

@@ -9,15 +9,14 @@
 #include <vector>
 #include <string>
 
-class Base64 : public Cipher<std::string, BytesVector>
+class Base64 : public Cipher<ClassicalType, BytesVector>
 {  
 public:
-   std::string encode(const BytesVector &clear_data) override;
-   BytesVector decode(const std::string &cipher_data) override;
+   ClassicalType encode(const BytesVector &clear_data) override;
+   BytesVector decode(const ClassicalType &cipher_data) override;
    
 private:
    static constexpr uint8_t pad_character = '=';
-   static const std::string alpha;
 };
 
 #endif

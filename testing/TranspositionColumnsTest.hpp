@@ -22,14 +22,14 @@ protected:
 
 TEST_F(TranspositionColumnsTest, encode)
 {
-   const std::string clear_text = "SALUTLESPETITSPOTS";
+   const ClassicalType clear_text = "SALUTLESPETITSPOTS";
 
    EXPECT_EQ("LSTSSLTOUPSXTEPXAEIT", TC->encode(clear_text));
 }
 
 TEST_F(TranspositionColumnsTest, decode)
 {
-   const std::string clear_text = "SALUTLESPETITSPOTSXX";
+   const ClassicalType clear_text = "SALUTLESPETITSPOTSXX";
 
    EXPECT_EQ(clear_text, TC->decode("LSTSSLTOUPSXTEPXAEIT"));
 }

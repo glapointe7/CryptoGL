@@ -30,32 +30,35 @@ protected:
 
 TEST_F(CAST256Test, encode128)
 {
-   EXPECT_EQ("C842A08972B43D20836C91D1B7530F6B", Vector::toHexString(C128->encode(std::vector<uint8_t>(16, 0))));
+   EXPECT_EQ("C842A08972B43D20836C91D1B7530F6B", Vector::toHexString(C128->encode(BytesVector(16, 0))));
 }
 
 TEST_F(CAST256Test, decode128)
 {
-   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C128->decode(String::hexToBytes("C842A08972B43D20836C91D1B7530F6B"))));
+   StringTest code("C842A08972B43D20836C91D1B7530F6B");
+   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C128->decode(code.hexToBytes())));
 }
 
 TEST_F(CAST256Test, encode192)
 {
-   EXPECT_EQ("1B386C0210DCADCBDD0E41AA08A7A7E8", Vector::toHexString(C192->encode(std::vector<uint8_t>(16, 0))));
+   EXPECT_EQ("1B386C0210DCADCBDD0E41AA08A7A7E8", Vector::toHexString(C192->encode(BytesVector(16, 0))));
 }
 
 TEST_F(CAST256Test, decode192)
 {
-   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C192->decode(String::hexToBytes("1B386C0210DCADCBDD0E41AA08A7A7E8"))));
+   StringTest code("1B386C0210DCADCBDD0E41AA08A7A7E8");
+   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C192->decode(code.hexToBytes())));
 }
 
 TEST_F(CAST256Test, encode256)
 {
-   EXPECT_EQ("4F6A2038286897B9C9870136553317FA", Vector::toHexString(C256->encode(std::vector<uint8_t>(16, 0))));
+   EXPECT_EQ("4F6A2038286897B9C9870136553317FA", Vector::toHexString(C256->encode(BytesVector(16, 0))));
 }
 
 TEST_F(CAST256Test, decode256)
 {
-   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C256->decode(String::hexToBytes("4F6A2038286897B9C9870136553317FA"))));
+   StringTest code("4F6A2038286897B9C9870136553317FA");
+   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C256->decode(code.hexToBytes())));
 }
 
 #endif

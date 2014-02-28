@@ -23,31 +23,31 @@ protected:
 
 TEST_F(VigenereTest, encode) 
 {
-  const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
+  const ClassicalType clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
   
   EXPECT_EQ("LEDNBAOEMDIIEGBXINMGAVSFGIVYEEHKWTXTQETBVUGSJBMAZXIGURRZLYJEMOUNXVXAQUBKLL", V->encode(clear_text));
   
-  V->setAlpha(String::alpha_numeric);
+  V->setAlpha(ClassicalType::alpha_numeric);
   V->setKey("V1Gen3rE");
   EXPECT_EQ("n1Ry6GzPdCVe43zXlLKx755Ri1Owy36Vj7XezFrXdFTs4BvRo5KsoCvXnLXpr45Yo4KwqHzKoJ", V->encode(clear_text));
   
-  V->setAlpha(String::letters);
+  V->setAlpha(ClassicalType::letters);
   V->setKey("vvvvvvvv");
   EXPECT_EQ("NvGPOIDGDGKvMvDOLPzOPxJIIvDNGvKMJBMvHHvODJIJMDzIOzzJwEzONPMGzwJPOyzNyJDBON", V->encode(clear_text));
 }
 
 TEST_F(VigenereTest, decode) 
 {
-  const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
+  const ClassicalType clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
   
   V->setKey("TESTING");
   EXPECT_EQ(clear_text, V->decode("LEDNBAOEMDIIEGBXINMGAVSFGIVYEEHKWTXTQETBVUGSJBMAZXIGURRZLYJEMOUNXVXAQUBKLL"));
   
-  V->setAlpha(String::alpha_numeric);
+  V->setAlpha(ClassicalType::alpha_numeric);
   V->setKey("V1Gen3rE");
   EXPECT_EQ(clear_text, V->decode("n1Ry6GzPdCVe43zXlLKx755Ri1Owy36Vj7XezFrXdFTs4BvRo5KsoCvXnLXpr45Yo4KwqHzKoJ"));
   
-  V->setAlpha(String::letters);
+  V->setAlpha(ClassicalType::letters);
   V->setKey("vvvvvvvv");
   EXPECT_EQ(clear_text, V->decode("NvGPOIDGDGKvMvDOLPzOPxJIIvDNGvKMJBMvHHvODJIJMDzIOzzJwEzONPMGzwJPOyzNyJDBON"));
 }

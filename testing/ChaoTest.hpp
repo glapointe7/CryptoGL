@@ -23,14 +23,14 @@ protected:
 
 TEST_F(ChaoTest, encode)
 {
-   const std::string clear_text = "WELLDONEISBETTERTHANWELLSAID";
+   const ClassicalType clear_text = "WELLDONEISBETTERTHANWELLSAID";
 
    EXPECT_EQ("OAHQHCNYNXTSZJRRHJBYHQKSOUJY", C->encode(clear_text));
 }
 
 TEST_F(ChaoTest, decode)
 {
-   const std::string clear_text = "WELLDONEISBETTERTHANWELLSAID";
+   const ClassicalType clear_text = "WELLDONEISBETTERTHANWELLSAID";
 
    EXPECT_EQ(clear_text, C->decode("OAHQHCNYNXTSZJRRHJBYHQKSOUJY"));
 }

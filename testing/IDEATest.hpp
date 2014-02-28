@@ -34,9 +34,9 @@ TEST_F(IDEATest, encodeNotZero)
 
 TEST_F(IDEATest, decodeNotZero)
 {
-   const BytesVector clear_text = {0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08};
-   
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(A->decode(String::hexToBytes("F5DB1AC45E5EF9F9"))));
+   const BytesVector clear_text(8, 8);
+   const StringTest message("F5DB1AC45E5EF9F9");
+   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(A->decode(message.hexToBytes())));
 }
 
 TEST_F(IDEATest, encodeZero)
@@ -48,9 +48,9 @@ TEST_F(IDEATest, encodeZero)
 
 TEST_F(IDEATest, decodeZero)
 {
-   const BytesVector clear_text = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-   
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(B->decode(String::hexToBytes("0001000100000000"))));
+   const BytesVector clear_text(8, 0);
+   const StringTest message("0001000100000000");
+   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(B->decode(message.hexToBytes())));
 }
 
 #endif

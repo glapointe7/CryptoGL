@@ -4,7 +4,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/AES.hpp"
-#include "../src/Digest.hpp"
 #include "../src/MAC.hpp"
 
 class AESTest : public ::testing::Test
@@ -62,7 +61,8 @@ TEST_F(AESTest, decode128Bits)
       0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff
    };
 
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(A->decode(String::hexToBytes("69C4E0D86A7B0430D8CDB78070B4C55A"))));
+   const StringTest message("69C4E0D86A7B0430D8CDB78070B4C55A");
+   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(A->decode(message.hexToBytes())));
 }
 
 TEST_F(AESTest, decode192Bits)
@@ -71,7 +71,8 @@ TEST_F(AESTest, decode192Bits)
       0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff
    };
 
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(B->decode(String::hexToBytes("DDA97CA4864CDFE06EAF70A0EC0D7191"))));
+   const StringTest message("DDA97CA4864CDFE06EAF70A0EC0D7191");
+   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(B->decode(message.hexToBytes())));
 }
 
 TEST_F(AESTest, decode256Bits)
@@ -80,7 +81,8 @@ TEST_F(AESTest, decode256Bits)
       0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff
    };
 
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(C->decode(String::hexToBytes("8EA2B7CA516745BFEAFC49904B496089"))));
+   const StringTest message("8EA2B7CA516745BFEAFC49904B496089");
+   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(C->decode(message.hexToBytes())));
 }
 
 /*
@@ -105,16 +107,16 @@ TEST_F(AESTest, encode40BitsMessage128BitsOMAC)
 {  
    OMAC<AES> omac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
-   EXPECT_EQ("23FDAA0831CD314491CE4B25ACB6023B", Vector::toHexString(omac.encode(String::hexToBytes(
-           "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411"))));
+   const StringTest message = "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411";
+   EXPECT_EQ("23FDAA0831CD314491CE4B25ACB6023B", Vector::toHexString(omac.encode(message.hexToBytes())));
 }    
 
 TEST_F(AESTest, encode64BitsMessage128BitsOMAC)
 {  
    OMAC<AES> omac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
-   EXPECT_EQ("51F0BEBF7E3B9D92FC49741779363CFE", Vector::toHexString(omac.encode(String::hexToBytes(
-           "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411E5FBC1191A0A52EFF69F2445DF4F9B17AD2B417BE66C3710"))));
+   const StringTest message = "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411E5FBC1191A0A52EFF69F2445DF4F9B17AD2B417BE66C3710";
+   EXPECT_EQ("51F0BEBF7E3B9D92FC49741779363CFE", Vector::toHexString(omac.encode(message.hexToBytes())));
 }
 
 /*
@@ -139,8 +141,8 @@ TEST_F(AESTest, encode40BitsMessage128BitsCMAC)
 {  
    CMAC<AES> cmac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
-   EXPECT_EQ("DFA66747DE9AE63030CA32611497C827", Vector::toHexString(cmac.encode(String::hexToBytes(
-           "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411"))));
+   const StringTest message = "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411";
+   EXPECT_EQ("DFA66747DE9AE63030CA32611497C827", Vector::toHexString(cmac.encode(message.hexToBytes())));
 }
 
 /*
@@ -168,8 +170,8 @@ TEST_F(AESTest, encode40BitsMessage128BitsTMAC)
    TMAC<AES> tmac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C},
            {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
 
-   EXPECT_EQ("B656B827EABDF8E5D7F460E9F5100769", Vector::toHexString(tmac.encode(String::hexToBytes(
-           "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411"))));
+   const StringTest message = "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411";
+   EXPECT_EQ("B656B827EABDF8E5D7F460E9F5100769", Vector::toHexString(tmac.encode(message.hexToBytes())));
 }
 
 /*

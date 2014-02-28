@@ -4,7 +4,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/Adler32.hpp"
-#include "../src/Digest.hpp"
 
 class Adler32Test : public ::testing::Test
 {
@@ -27,7 +26,8 @@ TEST_F(Adler32Test, encodeEmpty)
 
 TEST_F(Adler32Test, encodeNormal)
 {
-   EXPECT_EQ(0x29750586, S->encode(String::toBytes("message digest")));
+   const StringTest message = "message digest";
+   EXPECT_EQ(0x29750586, S->encode(message.toBytes()));
 }
 
 #endif

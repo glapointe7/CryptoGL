@@ -4,7 +4,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/Rabbit.hpp"
-#include "../src/Digest.hpp"
 
 class RabbitTest : public ::testing::Test
 {

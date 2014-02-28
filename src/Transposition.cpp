@@ -14,7 +14,7 @@ Transposition::Table Transposition::createTable(ClassicalType data)
    // We fill the grid that will be read by column. 
    for (uint32_t i = 0; i < data_len; i += key_len)
    {
-      table.push_back(data.substr(i, key_len));
+      table.push_back(ClassicalType(data.substr(i, key_len)));
    }
 
    return table;
@@ -30,17 +30,16 @@ Transposition::Table Transposition::createIncompleteTable(const ClassicalType &d
 
    for (uint32_t i = 0; i < data_len - key_len; i += key_len)
    {
-      table.push_back(data.substr(i, key_len));
+      table.push_back(ClassicalType(data.substr(i, key_len)));
    }
-   table.push_back(data.substr(rows * key_len));
+   table.push_back(ClassicalType(data.substr(rows * key_len)));
 
    return table;
 }
 
 ClassicalType Transposition::readPermutedTable(const Table &table)
 {
-   ClassicalType data;
-   data.reserve(table.size() * key.size());
+   ClassicalType data(table.size() * key.size());
    for (const auto &str : table)
    {
       data.append(str);
@@ -52,9 +51,7 @@ ClassicalType Transposition::readPermutedTable(const Table &table)
 // Rows complete encode / decode
 ClassicalType TranspositionCompleteRows::readPermutedTable(const Table &table)
 {
-   ClassicalType data;
-   data.reserve(table.size() * key.size());
-   
+   ClassicalType data(table.size() * key.size());
    for (const auto &str : table)
    {
       for(const auto k : key)
@@ -71,8 +68,7 @@ ClassicalType TranspositionIncompleteRows::readPermutedTable(const Table &table)
 {
    const uint32_t key_len = key.size();
    const uint32_t rows = table.size();
-   ClassicalType data;
-   data.reserve(rows * key_len);
+   ClassicalType data(rows * key_len);
    
    for (uint32_t i = 0; i < rows-1; ++i)
    {
@@ -121,8 +117,7 @@ ClassicalType TranspositionCompleteColumns::readPermutedTable(const Table &table
 {
    const uint32_t key_len = key.size();
    const uint32_t rows = table.size();
-   ClassicalType data;
-   data.reserve(rows * key_len);
+   ClassicalType data(rows * key_len);
 
    for (uint32_t i = 0; i < key_len; ++i)
    {
@@ -172,8 +167,7 @@ TranspositionIncompleteColumns::readPermutedTable(const Table &table)
    const uint32_t key_len = key.size();
    const uint32_t rows = table.size();
    const uint32_t last_row = table[rows - 1].length();
-   ClassicalType data;
-   data.reserve(rows * key_len);
+   ClassicalType data(rows * key_len);
 
    for (uint32_t i = 0; i < key_len; ++i)
    {

@@ -22,7 +22,7 @@ protected:
 
 TEST_F(MorseTest, encode)
 {
-   const std::string clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
+   const ClassicalType clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
    
    EXPECT_EQ(".- - - . -. -.. --- -. ... ...- --- ... .. -. ... - .-. ..- -.-. - .. --- "
            "-. ... .- ...- .- -. - .--. --- ..- .-. ... ..- .. ...- .-. . --- "
@@ -31,7 +31,7 @@ TEST_F(MorseTest, encode)
 
 TEST_F(MorseTest, decode)
 {
-   const std::string clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
+   const ClassicalType clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
    
    EXPECT_EQ(clear_text, M->decode(".- - - . -. -.. --- -. ... ...- --- ... .. -. ... - .-. ..- -.-. - .. --- "
            "-. ... .- ...- .- -. - .--. --- ..- .-. ... ..- .. ...- .-. . --- "

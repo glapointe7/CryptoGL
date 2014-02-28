@@ -2,12 +2,15 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
-#include <string>
+#include "String.hpp"
 #include <vector>
 #include <stdint.h>
 
 /* For the string ciphers. */
-using ClassicalType = std::string;
+using ClassicalType = String;
+
+/* For strings in the test section for all cryptos except string ciphers. */
+using StringTest = String;
 
 using BytesVector = std::vector<uint8_t>;
 using UInt16Vector = std::vector<uint16_t>;

@@ -1,6 +1,5 @@
 #include "StringCipher.hpp"
 
-#include <string>
 #include <algorithm>
 
 #include "exceptions/EmptyAlpha.hpp"
@@ -13,7 +12,7 @@ void StringCipher::checkAlpha(const ClassicalType &alpha)
       throw EmptyAlpha("Your alphabet is empty.");
    }
 
-   if (!String::containsUniqueChars(alpha))
+   if (!alpha.containsUniqueChars())
    {
       throw MultipleChar("Your alphabet have to contain unique characters.");
    }
@@ -50,7 +49,7 @@ int8_t StringCipher::badAlphaFound(const ClassicalType &text) const
 {
    for (const auto c : text)
    {
-      if (alpha.find(c) == std::string::npos)
+      if (alpha.find(c) == ClassicalType::npos)
       {
          return c;
       }

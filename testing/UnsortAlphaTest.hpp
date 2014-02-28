@@ -23,7 +23,7 @@ protected:
 
 TEST_F(UnsortAlphaTest, encode_horiz)
 {
-   const std::string clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
+   const ClassicalType clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
    
    UA->setHorizontalAlpha();
    EXPECT_EQ("TRRNKILKQVLQCKQRPUSRCLKQTVTKRMLUPQUCVPNLMPTRCLKQ", UA->encode(clear_text));
@@ -31,7 +31,7 @@ TEST_F(UnsortAlphaTest, encode_horiz)
 
 TEST_F(UnsortAlphaTest, encode_vert)
 {
-   const std::string clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
+   const ClassicalType clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
    
    UA->setKey("TESTING");
    UA->setVerticalAlpha();
@@ -40,7 +40,7 @@ TEST_F(UnsortAlphaTest, encode_vert)
 
 TEST_F(UnsortAlphaTest, decode_horiz)
 {
-   const std::string clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
+   const ClassicalType clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
    
    UA->setKey("TESTING");
    UA->setHorizontalAlpha();
@@ -49,7 +49,7 @@ TEST_F(UnsortAlphaTest, decode_horiz)
 
 TEST_F(UnsortAlphaTest, decode_vert)
 {
-   const std::string clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
+   const ClassicalType clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
    
    UA->setKey("TESTING");
    UA->setVerticalAlpha();

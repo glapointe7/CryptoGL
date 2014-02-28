@@ -23,21 +23,21 @@ protected:
 
 TEST_F(RedefenceZigzagTest, encode)
 {
-   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAM";
+   const ClassicalType clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAM";
 
    EXPECT_EQ("LAUSGAUNLATCNAARIQRMSTPUNPLIIREOILOTA", R->encode(clear_text));
 }
 
 TEST_F(RedefenceZigzagTest, decode)
 {
-   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAM";
+   const ClassicalType clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAM";
 
    EXPECT_EQ(clear_text, R->decode("LAUSGAUNLATCNAARIQRMSTPUNPLIIREOILOTA"));
 }
 
 TEST_F(RedefenceZigzagTest, encodeWithOffset)
 {
-   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAM";
+   const ClassicalType clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAM";
    
    R->setOffset(2);
    EXPECT_EQ("NATARAAULLUTCNSARIORLIEOLSTIPQUNIPMAG", R->encode(clear_text));
@@ -45,7 +45,7 @@ TEST_F(RedefenceZigzagTest, encodeWithOffset)
 
 TEST_F(RedefenceZigzagTest, decodeWithOffset)
 {
-   const std::string clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAM";
+   const ClassicalType clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAM";
 
    R->setOffset(2);
    EXPECT_EQ(clear_text, R->decode("NATARAAULLUTCNSARIORLIEOLSTIPQUNIPMAG"));

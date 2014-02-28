@@ -35,8 +35,7 @@ ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix &K) co
 {  
    const uint32_t key_dim = K.getDimension();
    const uint32_t data_len = data.length();
-   ClassicalType message;
-   message.reserve(data_len + key_dim);
+   ClassicalType message(data_len + key_dim);
    UInt32Vector pos;
    pos.reserve(key_dim);
    

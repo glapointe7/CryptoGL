@@ -3,7 +3,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/SHA1.hpp"
-#include "../src/Digest.hpp"
 
 class SHA1Test : public ::testing::Test
 {
@@ -33,11 +32,12 @@ TEST_F(SHA1Test, encodeHMACEmptyText)
 
 TEST_F(SHA1Test, encodeHMACText)
 {
-   const std::string clear_text = "The quick brown fox jumps over the lazy dog";
-   const std::string hash = "DE7C9B85B8B78AA6BC8A7A36F70A90701C9DB4D9";
+   const StringTest clear_text = "The quick brown fox jumps over the lazy dog";
+   const StringTest hash = "DE7C9B85B8B78AA6BC8A7A36F70A90701C9DB4D9";
+   const StringTest hmac_key = "key";
    
-   EXPECT_EQ(hash, Vector::toHexString(S->hmacEncode(String::toBytes("key"), 
-           String::toBytes(clear_text))));
+   EXPECT_EQ(hash, Vector::toHexString(S->hmacEncode(hmac_key.toBytes(), 
+           clear_text.toBytes())));
 }
 
 #endif

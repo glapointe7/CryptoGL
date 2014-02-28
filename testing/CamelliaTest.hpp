@@ -6,7 +6,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/Camellia.hpp"
-#include "../src/Digest.hpp"
 
 class CamelliaTest : public ::testing::Test
 {
@@ -32,7 +31,7 @@ protected:
 
 TEST_F(CamelliaTest, encode128)
 {
-   const std::vector<uint8_t> clear_text = {
+   const BytesVector clear_text = {
       0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10
    };
 
@@ -41,13 +40,14 @@ TEST_F(CamelliaTest, encode128)
 
 TEST_F(CamelliaTest, decode128)
 {
+   StringTest code("67673138549669730857065648EABE43");
    EXPECT_EQ("0123456789ABCDEFFEDCBA9876543210", 
-           Vector::toHexString(C128->decode(String::hexToBytes("67673138549669730857065648EABE43"))));
+           Vector::toHexString(C128->decode(code.hexToBytes())));
 }
 
 TEST_F(CamelliaTest, encode192)
 {
-   const std::vector<uint8_t> clear_text = {
+   const BytesVector clear_text = {
       0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10
    };
 
@@ -56,13 +56,14 @@ TEST_F(CamelliaTest, encode192)
 
 TEST_F(CamelliaTest, decode192)
 {
+   StringTest code("B4993401B3E996F84EE5CEE7D79B09B9");
    EXPECT_EQ("0123456789ABCDEFFEDCBA9876543210", 
-           Vector::toHexString(C192->decode(String::hexToBytes("B4993401B3E996F84EE5CEE7D79B09B9"))));
+           Vector::toHexString(C192->decode(code.hexToBytes())));
 }
 
 TEST_F(CamelliaTest, encode256)
 {
-   const std::vector<uint8_t> clear_text = {
+   const BytesVector clear_text = {
       0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10
    };
 
@@ -71,8 +72,9 @@ TEST_F(CamelliaTest, encode256)
 
 TEST_F(CamelliaTest, decode256)
 {
+   StringTest code("9ACC237DFF16D76C20EF7C919E3A7509");
    EXPECT_EQ("0123456789ABCDEFFEDCBA9876543210", 
-           Vector::toHexString(C256->decode(String::hexToBytes("9ACC237DFF16D76C20EF7C919E3A7509"))));
+           Vector::toHexString(C256->decode(code.hexToBytes())));
 }
 
 #endif

@@ -14,7 +14,7 @@ public:
       : SquareCipher(key, alpha), block_len(block_length) {}
       
    Delastelle(const KeyType &key, const uint32_t block_length)
-      : Delastelle(key, String::grid_uppercase_fr, block_length) {}
+      : Delastelle(key, ClassicalType::grid_uppercase_fr, block_length) {}
    
    explicit Delastelle(const KeyType &key) : Delastelle(key, 5) {}
    

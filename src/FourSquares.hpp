@@ -11,7 +11,7 @@ public:
    FourSquares(const KeyType &key1, const KeyType &key2, const ClassicalType &alpha);
    
    FourSquares(const KeyType &key1, const KeyType &key2) 
-      : FourSquares(key1, key2, String::grid_uppercase_fr) {}
+      : FourSquares(key1, key2, ClassicalType::grid_uppercase_fr) {}
    
    ClassicalType encode(const ClassicalType &clear_text) override;
    ClassicalType decode(const ClassicalType &cipher_text) override;
