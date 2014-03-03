@@ -34,7 +34,7 @@ TEST_F(AESTest, encode128Bits)
       0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff
    };
 
-   EXPECT_EQ("69C4E0D86A7B0430D8CDB78070B4C55A", Vector::toHexString(A->encode(clear_text)));
+   EXPECT_EQ("69C4E0D86A7B0430D8CDB78070B4C55A", A->encode(clear_text).toHexString());
 }
 
 TEST_F(AESTest, encode192Bits)
@@ -43,7 +43,7 @@ TEST_F(AESTest, encode192Bits)
       0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff
    };
 
-   EXPECT_EQ("DDA97CA4864CDFE06EAF70A0EC0D7191", Vector::toHexString(B->encode(clear_text)));
+   EXPECT_EQ("DDA97CA4864CDFE06EAF70A0EC0D7191", B->encode(clear_text).toHexString());
 }
 
 TEST_F(AESTest, encode256Bits)
@@ -52,7 +52,7 @@ TEST_F(AESTest, encode256Bits)
       0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff
    };
 
-   EXPECT_EQ("8EA2B7CA516745BFEAFC49904B496089", Vector::toHexString(C->encode(clear_text)));
+   EXPECT_EQ("8EA2B7CA516745BFEAFC49904B496089", C->encode(clear_text).toHexString());
 }
 
 TEST_F(AESTest, decode128Bits)
@@ -62,7 +62,7 @@ TEST_F(AESTest, decode128Bits)
    };
 
    const StringTest message("69C4E0D86A7B0430D8CDB78070B4C55A");
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(A->decode(message.hexToBytes())));
+   EXPECT_EQ(clear_text.toHexString(), A->decode(message.hexToBytes()).toHexString());
 }
 
 TEST_F(AESTest, decode192Bits)
@@ -72,7 +72,7 @@ TEST_F(AESTest, decode192Bits)
    };
 
    const StringTest message("DDA97CA4864CDFE06EAF70A0EC0D7191");
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(B->decode(message.hexToBytes())));
+   EXPECT_EQ(clear_text.toHexString(), B->decode(message.hexToBytes()).toHexString());
 }
 
 TEST_F(AESTest, decode256Bits)
@@ -82,7 +82,7 @@ TEST_F(AESTest, decode256Bits)
    };
 
    const StringTest message("8EA2B7CA516745BFEAFC49904B496089");
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(C->decode(message.hexToBytes())));
+   EXPECT_EQ(clear_text.toHexString(), C->decode(message.hexToBytes()).toHexString());
 }
 
 /*
@@ -92,15 +92,15 @@ TEST_F(AESTest, encodeEmpty128BitsOMAC)
 {  
    OMAC<AES> omac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
-   EXPECT_EQ("F6BC6A41F4F84593809E59B719299CFE", Vector::toHexString(omac.encode({})));
+   EXPECT_EQ("F6BC6A41F4F84593809E59B719299CFE", omac.encode({}).toHexString());
 }
 
 TEST_F(AESTest, encode128BitsOMAC)
 {  
    OMAC<AES> omac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
-   EXPECT_EQ("070A16B46B4D4144F79BDD9DD04A287C", Vector::toHexString(
-      omac.encode({0x6B, 0xC1, 0xBE, 0xE2, 0x2E, 0x40, 0x9F, 0x96, 0xE9, 0x3D, 0x7E, 0x11, 0x73, 0x93, 0x17, 0x2A})));
+   EXPECT_EQ("070A16B46B4D4144F79BDD9DD04A287C", 
+           omac.encode({0x6B, 0xC1, 0xBE, 0xE2, 0x2E, 0x40, 0x9F, 0x96, 0xE9, 0x3D, 0x7E, 0x11, 0x73, 0x93, 0x17, 0x2A}).toHexString());
 }
         
 TEST_F(AESTest, encode40BitsMessage128BitsOMAC)
@@ -108,7 +108,7 @@ TEST_F(AESTest, encode40BitsMessage128BitsOMAC)
    OMAC<AES> omac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
    const StringTest message = "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411";
-   EXPECT_EQ("23FDAA0831CD314491CE4B25ACB6023B", Vector::toHexString(omac.encode(message.hexToBytes())));
+   EXPECT_EQ("23FDAA0831CD314491CE4B25ACB6023B", omac.encode(message.hexToBytes()).toHexString());
 }    
 
 TEST_F(AESTest, encode64BitsMessage128BitsOMAC)
@@ -116,7 +116,7 @@ TEST_F(AESTest, encode64BitsMessage128BitsOMAC)
    OMAC<AES> omac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
    const StringTest message = "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411E5FBC1191A0A52EFF69F2445DF4F9B17AD2B417BE66C3710";
-   EXPECT_EQ("51F0BEBF7E3B9D92FC49741779363CFE", Vector::toHexString(omac.encode(message.hexToBytes())));
+   EXPECT_EQ("51F0BEBF7E3B9D92FC49741779363CFE", omac.encode(message.hexToBytes()).toHexString());
 }
 
 /*
@@ -126,15 +126,15 @@ TEST_F(AESTest, encodeEmpty128BitsCMAC)
 {  
    CMAC<AES> cmac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
-   EXPECT_EQ("BB1D6929E95937287FA37D129B756746", Vector::toHexString(cmac.encode({})));
+   EXPECT_EQ("BB1D6929E95937287FA37D129B756746", cmac.encode({}).toHexString());
 }
 
 TEST_F(AESTest, encode128BitsCMAC)
 {  
    CMAC<AES> cmac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
-   EXPECT_EQ("070A16B46B4D4144F79BDD9DD04A287C", Vector::toHexString(
-      cmac.encode({0x6B, 0xC1, 0xBE, 0xE2, 0x2E, 0x40, 0x9F, 0x96, 0xE9, 0x3D, 0x7E, 0x11, 0x73, 0x93, 0x17, 0x2A})));
+   EXPECT_EQ("070A16B46B4D4144F79BDD9DD04A287C", 
+           cmac.encode({0x6B, 0xC1, 0xBE, 0xE2, 0x2E, 0x40, 0x9F, 0x96, 0xE9, 0x3D, 0x7E, 0x11, 0x73, 0x93, 0x17, 0x2A}).toHexString());
 }
 
 TEST_F(AESTest, encode40BitsMessage128BitsCMAC)
@@ -142,7 +142,7 @@ TEST_F(AESTest, encode40BitsMessage128BitsCMAC)
    CMAC<AES> cmac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
    const StringTest message = "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411";
-   EXPECT_EQ("DFA66747DE9AE63030CA32611497C827", Vector::toHexString(cmac.encode(message.hexToBytes())));
+   EXPECT_EQ("DFA66747DE9AE63030CA32611497C827", cmac.encode(message.hexToBytes()).toHexString());
 }
 
 /*
@@ -153,7 +153,7 @@ TEST_F(AESTest, encodeEmpty128BitsTMAC)
    TMAC<AES> tmac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C},
                   {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
 
-   EXPECT_EQ("4C08220C79D9191022DC6674874CEAF8", Vector::toHexString(tmac.encode({})));
+   EXPECT_EQ("4C08220C79D9191022DC6674874CEAF8", tmac.encode({}).toHexString());
 }
 
 TEST_F(AESTest, encode128BitsTMAC)
@@ -161,8 +161,8 @@ TEST_F(AESTest, encode128BitsTMAC)
    TMAC<AES> tmac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C},
                   {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
 
-   EXPECT_EQ("6C3076442EEAD2741DD08057A2F51F44", Vector::toHexString(tmac.encode(
-         {0x6B, 0xC1, 0xBE, 0xE2, 0x2E, 0x40, 0x9F, 0x96, 0xE9, 0x3D, 0x7E, 0x11, 0x73, 0x93, 0x17, 0x2A})));
+   EXPECT_EQ("6C3076442EEAD2741DD08057A2F51F44", tmac.encode(
+         {0x6B, 0xC1, 0xBE, 0xE2, 0x2E, 0x40, 0x9F, 0x96, 0xE9, 0x3D, 0x7E, 0x11, 0x73, 0x93, 0x17, 0x2A}).toHexString());
 }
 
 TEST_F(AESTest, encode40BitsMessage128BitsTMAC)
@@ -171,7 +171,7 @@ TEST_F(AESTest, encode40BitsMessage128BitsTMAC)
            {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
 
    const StringTest message = "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411";
-   EXPECT_EQ("B656B827EABDF8E5D7F460E9F5100769", Vector::toHexString(tmac.encode(message.hexToBytes())));
+   EXPECT_EQ("B656B827EABDF8E5D7F460E9F5100769", tmac.encode(message.hexToBytes()).toHexString());
 }
 
 /*
@@ -181,15 +181,15 @@ TEST_F(AESTest, encodeEmpty128BitsPMAC)
 {  
    PMAC<AES> pmac({0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
 
-   EXPECT_EQ("4399572CD6EA5341B8D35876A7098AF7", Vector::toHexString(pmac.encode({})));
+   EXPECT_EQ("4399572CD6EA5341B8D35876A7098AF7", pmac.encode({}).toHexString());
 }
 
 TEST_F(AESTest, encode128BitsPMAC)
 {  
    PMAC<AES> pmac({0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
 
-   EXPECT_EQ("EBBD822FA458DAF6DFDAD7C27DA76338", Vector::toHexString(pmac.encode(
-           {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F})));
+   EXPECT_EQ("EBBD822FA458DAF6DFDAD7C27DA76338", pmac.encode(
+           {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F}).toHexString());
 }
 
 /*
@@ -200,7 +200,7 @@ TEST_F(AESTest, encodeEmpty128BitsAES_XCBC_MAC)
 {  
    AES_XCBC_MAC xcbc({0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
 
-   EXPECT_EQ("75F0251D528AC01C4573DFD584D79F29", Vector::toHexString(xcbc.encode({})));
+   EXPECT_EQ("75F0251D528AC01C4573DFD584D79F29", xcbc.encode({}).toHexString());
 }
 
 #endif

@@ -4,7 +4,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/Scream.hpp"
-#include "../src/Digest.hpp"
 
 class ScreamTest : public ::testing::Test
 {
@@ -26,9 +25,9 @@ protected:
 TEST_F(ScreamTest, generateS)
 {
    const BytesVector keystream = S->generateKeystream();
-   const BytesVector input = BytesVector(keystream.begin(), keystream.begin() + 16);
+   const BytesVector input = keystream.range(0, 16);
       
-   EXPECT_EQ("748C59F20D769EA87A6DC18746E64AC0", Vector::toHexString(input));
+   EXPECT_EQ("748C59F20D769EA87A6DC18746E64AC0", input.toHexString());
 }
 
 #endif

@@ -32,12 +32,12 @@ TEST_F(RabbitTest, encode)
       0x51, 0xD4, 0x0C, 0x70, 0xC3, 0xA1, 0x16, 0xF4
    };
 
-   EXPECT_EQ(Vector::toHexString(cipher), Vector::toHexString(R->encode(BytesVector(48, 0))));
+   EXPECT_EQ(cipher.toHexString(), R->encode(BytesVector(48, 0)).toHexString());
 }
 
 TEST_F(RabbitTest, decode)
 {
-   const std::vector<uint8_t> cipher = {
+   const BytesVector cipher = {
       0x02, 0xF7, 0x4A, 0x1C, 0x26, 0x45, 0x6B, 0xF5,
       0xEC, 0xD6, 0xA5, 0x36, 0xF0, 0x54, 0x57, 0xB1,
       0xA7, 0x8A, 0xC6, 0x89, 0x47, 0x6C, 0x69, 0x7B,
@@ -46,7 +46,7 @@ TEST_F(RabbitTest, decode)
       0x51, 0xD4, 0x0C, 0x70, 0xC3, 0xA1, 0x16, 0xF4
    };
 
-   EXPECT_EQ(Vector::toHexString(BytesVector(48, 0)), Vector::toHexString(R->decode(cipher)));
+   EXPECT_EQ(BytesVector(48, 0).toHexString(), R->decode(cipher).toHexString());
 }
 
 #endif

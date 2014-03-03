@@ -31,7 +31,7 @@ TEST_F(HellmanMerkleKnapsackTest, encode)
 
 TEST_F(HellmanMerkleKnapsackTest, decode)
 {
-   EXPECT_EQ("Hello", Vector::toString(H->decode(Digest::stringToBigIntVector("6316 10022 10673 10673 15961"))));
+   EXPECT_EQ("Hello", H->decode(Digest::stringToBigIntVector("6316 10022 10673 10673 15961")).toString());
 }
 
 #endif

@@ -13,7 +13,6 @@ set(SRC
 	Tools.cpp
    String.cpp
    Bits.cpp
-   Vector.cpp
    Padding.cpp
 
 # Cryptanalysis section

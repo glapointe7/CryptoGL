@@ -26,22 +26,22 @@ protected:
 TEST_F(RC2Test, encodeWith8BytesKey)
 {   
    const BytesVector clear_text = {0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
-   EXPECT_EQ("30649EDF9BE7D2C2", Vector::toHexString(R->encode(clear_text)));
+   EXPECT_EQ("30649EDF9BE7D2C2", R->encode(clear_text).toHexString());
 }
 
 TEST_F(RC2Test, decodeWith8BytesKey)
 {
-   EXPECT_EQ("1000000000000001", Vector::toHexString(R->decode(StringTest("30649EDF9BE7D2C2").hexToBytes())));
+   EXPECT_EQ("1000000000000001", R->decode(StringTest("30649EDF9BE7D2C2").hexToBytes()).toHexString());
 }
 
 TEST_F(RC2Test, encodeWith16BytesKey)
 {   
-   EXPECT_EQ("2269552AB0F85CA6", Vector::toHexString(C->encode(BytesVector(8, 0))));
+   EXPECT_EQ("2269552AB0F85CA6", C->encode(BytesVector(8, 0)).toHexString());
 }
 
 TEST_F(RC2Test, decodeWith16BytesKey)
 {
-   EXPECT_EQ("0000000000000000", Vector::toHexString(C->decode(StringTest("2269552AB0F85CA6").hexToBytes())));
+   EXPECT_EQ("0000000000000000", C->decode(StringTest("2269552AB0F85CA6").hexToBytes()).toHexString());
 }
 
 #endif

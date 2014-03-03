@@ -10,7 +10,7 @@ class String : public std::string
 {
 public:
    /* Default constructor. */
-   String() {}
+   String() : std::string("") {}
    
    /* Constructor that reserve 'to_reserve' bytes to a string. */
    explicit String(const uint64_t &to_reserve) { this->reserve(to_reserve); }
@@ -61,9 +61,6 @@ public:
    
    /* Check if 'str' contains unique chars. */
    bool containsUniqueChars() const;
-   
-   /* Convert String to char if the string has ONLY one character. */
-   char toChar() const;
    
    /* Cast from String to std::string. */
    std::string toStdString() const;

@@ -35,14 +35,14 @@ TEST_F(CamelliaTest, encode128)
       0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10
    };
 
-   EXPECT_EQ("67673138549669730857065648EABE43", Vector::toHexString(C128->encode(clear_text)));
+   EXPECT_EQ("67673138549669730857065648EABE43", C128->encode(clear_text).toHexString());
 }
 
 TEST_F(CamelliaTest, decode128)
 {
    StringTest code("67673138549669730857065648EABE43");
    EXPECT_EQ("0123456789ABCDEFFEDCBA9876543210", 
-           Vector::toHexString(C128->decode(code.hexToBytes())));
+           C128->decode(code.hexToBytes()).toHexString());
 }
 
 TEST_F(CamelliaTest, encode192)
@@ -51,14 +51,14 @@ TEST_F(CamelliaTest, encode192)
       0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10
    };
 
-   EXPECT_EQ("B4993401B3E996F84EE5CEE7D79B09B9", Vector::toHexString(C192->encode(clear_text)));
+   EXPECT_EQ("B4993401B3E996F84EE5CEE7D79B09B9", C192->encode(clear_text).toHexString());
 }
 
 TEST_F(CamelliaTest, decode192)
 {
    StringTest code("B4993401B3E996F84EE5CEE7D79B09B9");
    EXPECT_EQ("0123456789ABCDEFFEDCBA9876543210", 
-           Vector::toHexString(C192->decode(code.hexToBytes())));
+           C192->decode(code.hexToBytes()).toHexString());
 }
 
 TEST_F(CamelliaTest, encode256)
@@ -67,14 +67,14 @@ TEST_F(CamelliaTest, encode256)
       0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10
    };
 
-   EXPECT_EQ("9ACC237DFF16D76C20EF7C919E3A7509", Vector::toHexString(C256->encode(clear_text)));
+   EXPECT_EQ("9ACC237DFF16D76C20EF7C919E3A7509", C256->encode(clear_text).toHexString());
 }
 
 TEST_F(CamelliaTest, decode256)
 {
    StringTest code("9ACC237DFF16D76C20EF7C919E3A7509");
    EXPECT_EQ("0123456789ABCDEFFEDCBA9876543210", 
-           Vector::toHexString(C256->decode(code.hexToBytes())));
+           C256->decode(code.hexToBytes()).toHexString());
 }
 
 #endif

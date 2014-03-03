@@ -153,7 +153,7 @@ public:
       uint32_t idx = 0;
       for (const auto number : cipher_numbers)
       {
-         toReturn.push_back(keyDivideCipher(alpha, atoi(number.c_str()), my_key[idx]).toChar());
+         toReturn.push_back(keyDivideCipher(alpha, atoi(number.c_str()), my_key[idx]).front());
          idx = (idx + 1) % key_length;
       }
 

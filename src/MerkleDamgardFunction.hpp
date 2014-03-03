@@ -42,7 +42,7 @@ public:
    }
       
 protected:
-   using DataTypeVector = std::vector<DataType>;
+   using DataTypeVector = Vector<DataType>;
    
    MerkleDamgardFunction(const DataTypeVector &IV, const uint8_t rounds, const uint8_t output_size)
       : HashFunction<DataType, EndianType>(InputBlockSize, output_size, IV), rounds(rounds) {}
@@ -86,7 +86,7 @@ private:
       
       // Append the length of the original message in bits following the endianness of EndianLengthType.
       EndianLengthType E;
-      Vector::extend(message, E.toBytesVector(message_size * 8));
+      message.extend(E.toBytesVector(message_size * 8));
 
       return message;
    }

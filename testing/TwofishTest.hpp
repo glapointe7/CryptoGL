@@ -4,7 +4,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/Twofish.hpp"
-#include "../src/Digest.hpp"
 
 class TwofishTest : public ::testing::Test
 {
@@ -30,35 +29,35 @@ protected:
 
 TEST_F(TwofishTest, encode128)
 {
-   EXPECT_EQ("9F589F5CF6122C32B6BFEC2F2AE8C35A", Vector::toHexString(C128->encode(BytesVector(16, 0))));
+   EXPECT_EQ("9F589F5CF6122C32B6BFEC2F2AE8C35A", C128->encode(BytesVector(16, 0)).toHexString());
 }
 
 TEST_F(TwofishTest, decode128)
 {
    StringTest code("9F589F5CF6122C32B6BFEC2F2AE8C35A");
-   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C128->decode(code.hexToBytes())));
+   EXPECT_EQ("00000000000000000000000000000000", C128->decode(code.hexToBytes()).toHexString());
 }
 
 TEST_F(TwofishTest, encode192)
 {
-   EXPECT_EQ("CFD1D2E5A9BE9CDF501F13B892BD2248", Vector::toHexString(C192->encode(BytesVector(16, 0))));
+   EXPECT_EQ("CFD1D2E5A9BE9CDF501F13B892BD2248", C192->encode(BytesVector(16, 0)).toHexString());
 }
 
 TEST_F(TwofishTest, decode192)
 {
    StringTest code("CFD1D2E5A9BE9CDF501F13B892BD2248");
-   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C192->decode(code.hexToBytes())));
+   EXPECT_EQ("00000000000000000000000000000000", C192->decode(code.hexToBytes()).toHexString());
 }
 
 TEST_F(TwofishTest, encode256)
 {
-   EXPECT_EQ("37527BE0052334B89F0CFCCAE87CFA20", Vector::toHexString(C256->encode(BytesVector(16, 0))));
+   EXPECT_EQ("37527BE0052334B89F0CFCCAE87CFA20", C256->encode(BytesVector(16, 0)).toHexString());
 }
 
 TEST_F(TwofishTest, decode256)
 {
    StringTest code("37527BE0052334B89F0CFCCAE87CFA20");
-   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C256->decode(code.hexToBytes())));
+   EXPECT_EQ("00000000000000000000000000000000", C256->decode(code.hexToBytes()).toHexString());
 }
 
 #endif

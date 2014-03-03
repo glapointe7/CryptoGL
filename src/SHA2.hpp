@@ -7,13 +7,14 @@
 #include "MerkleDamgardFunction.hpp"
 #include "Endian.hpp"
 #include "Bits.hpp"
+#include "Vector.hpp"
 
 #include <array>
 
 template <typename Integer>
 struct RoundConstants
 {
-   static const std::vector<Integer> CubicRootPrimes;
+   static const Vector<Integer> CubicRootPrimes;
    static const std::array<uint8_t, 6> Shifters;
    static const std::array<uint8_t, 6> A;
 };

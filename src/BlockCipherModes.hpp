@@ -113,9 +113,9 @@ public:
    { 
       if(IV.size() == 16)
       {
-         this->IV = Block(IV.begin(), IV.begin() + 8);
+         this->IV = IV.range(0, 8);//Block(IV.begin(), IV.begin() + 8);
       }
-      counter = BigEndian64::toInteger(Block(IV.begin() + IV.size() - 8, IV.end())); 
+      counter = BigEndian64::toIntegerRange(IV, IV.size() - 8); 
    }
    
    Block getCipherBlock(const Block &input_block) override;

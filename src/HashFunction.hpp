@@ -21,7 +21,7 @@ class HashFunction
 static_assert(std::is_integral<DataType>::value, "Type 'DataType' must be an integral type.");
    
 protected:
-   using DataTypeVector = std::vector<DataType>;
+   using DataTypeVector = Vector<DataType>;
    
    HashFunction(const uint8_t input_block_size, const uint8_t output_size, const DataTypeVector &IV) 
       : output_size(output_size), input_block_size(input_block_size), IV(IV) {}
@@ -44,7 +44,7 @@ protected:
    template <class EndianLengthType>
    static BytesVector appendLength(BytesVector bytes, const uint64_t &length)
    {
-      Vector::extend(bytes, EndianLengthType::toBytesVector(length));
+      bytes.extend(EndianLengthType::toBytesVector(length));
       
       return bytes;
    }
@@ -108,8 +108,8 @@ public:
          in_key_pad[i] ^= hmac_key[i];
       }
       
-      Vector::extend(in_key_pad, message);
-      Vector::extend(out_key_pad, encode(in_key_pad));
+      in_key_pad.extend(message);
+      out_key_pad.extend(encode(in_key_pad));
       
       return encode(out_key_pad);
    }

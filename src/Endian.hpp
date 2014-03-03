@@ -27,13 +27,13 @@ public:
    /* Convert a vector to an integer from a range(from, to). */
    static UInteger toIntegerRange(const BytesVector &bytes, const uint64_t &from, const uint64_t &to)
    {
-      return toInteger(Vector::range(bytes, from, to));
+      return toInteger(bytes.range(from, to));
    }
    
    /* Convert a vector to an integer from a range(from, bytes.end()). */
    static UInteger toIntegerRange(const BytesVector &bytes, const uint64_t &from)
    {
-      return toInteger(Vector::range(bytes, from));
+      return toInteger(bytes.range(from));
    }
       
    /* Convert a vector of bytes to a vector of integers with the proper endianness. */
@@ -77,7 +77,7 @@ public:
       result.reserve(BlockSize * sizeof(UInteger));
       for(uint8_t i = 0; i < BlockSize; ++i)
       {
-         Vector::extend(result, toBytesVector(V[i]));
+         result.extend(toBytesVector(V[i]));
       }
 
       return result;
@@ -91,7 +91,7 @@ public:
       result.reserve(length * sizeof(UInteger));
       for(uint8_t i = 0; i < length; ++i)
       {
-         Vector::extend(result, toBytesVector(V[i]));
+         result.extend(toBytesVector(V[i]));
       }
 
       return result;

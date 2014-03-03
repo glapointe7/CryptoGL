@@ -29,28 +29,28 @@ TEST_F(IDEATest, encodeNotZero)
 {
    const BytesVector clear_text = {0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08};
    
-   EXPECT_EQ("F5DB1AC45E5EF9F9", Vector::toHexString(A->encode(clear_text)));
+   EXPECT_EQ("F5DB1AC45E5EF9F9", A->encode(clear_text).toHexString());
 }
 
 TEST_F(IDEATest, decodeNotZero)
 {
    const BytesVector clear_text(8, 8);
    const StringTest message("F5DB1AC45E5EF9F9");
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(A->decode(message.hexToBytes())));
+   EXPECT_EQ(clear_text.toHexString(), A->decode(message.hexToBytes()).toHexString());
 }
 
 TEST_F(IDEATest, encodeZero)
 {
    const BytesVector clear_text = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
    
-   EXPECT_EQ("0001000100000000", Vector::toHexString(B->encode(clear_text)));
+   EXPECT_EQ("0001000100000000", B->encode(clear_text).toHexString());
 }
 
 TEST_F(IDEATest, decodeZero)
 {
    const BytesVector clear_text(8, 0);
    const StringTest message("0001000100000000");
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(B->decode(message.hexToBytes())));
+   EXPECT_EQ(clear_text.toHexString(), B->decode(message.hexToBytes()).toHexString());
 }
 
 #endif

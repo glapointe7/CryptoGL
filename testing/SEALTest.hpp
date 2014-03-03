@@ -6,7 +6,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/SEAL.hpp"
-#include "../src/Digest.hpp"
 
 class SEALTest : public ::testing::Test
 {
@@ -112,7 +111,7 @@ TEST_F(SEALTest, generate)
    "75523CA31A64012D11BB7F60F1F67B199A4F2013F6EA3808E2639EB5F2631C19568BCF36071235DE8AE7B2D5815E2E0A2E"
    "81098A6B4D6179E29ED0A92BDF585A2905F0496BA58EB3D740EFA54B664D1A6134FED9FEDE636504AA691E08E4";
    
-   EXPECT_EQ(out, Vector::toHexString(R->generate()));
+   EXPECT_EQ(out, R->generate().toHexString());
 }
 
 #endif

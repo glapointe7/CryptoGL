@@ -24,7 +24,7 @@ TEST_F(DESTest, encode)
 {
    const BytesVector clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
    
-   EXPECT_EQ("85E813540F0AB405", Vector::toHexString(D->encode(clear_text)));
+   EXPECT_EQ("85E813540F0AB405", D->encode(clear_text).toHexString());
 }
 
 TEST_F(DESTest, decode)
@@ -32,7 +32,7 @@ TEST_F(DESTest, decode)
    const BytesVector clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
    const StringTest message("85E813540F0AB405");
    
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(D->decode(message.hexToBytes())));
+   EXPECT_EQ(clear_text.toHexString(), D->decode(message.hexToBytes()).toHexString());
 }
 
 #endif

@@ -31,7 +31,7 @@ TEST_F(Mysty1Test, encodeECBMode)
    const BytesVector clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD,
       0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10};
 
-   EXPECT_EQ("8B1DA5F56AB3D07C04B68240B13BE95D", Vector::toHexString(ECB->encode(clear_text)));
+   EXPECT_EQ("8B1DA5F56AB3D07C04B68240B13BE95D", ECB->encode(clear_text).toHexString());
 }
 
 TEST_F(Mysty1Test, decodeECBMode)
@@ -40,7 +40,7 @@ TEST_F(Mysty1Test, decodeECBMode)
       0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10};
 
    StringTest expected("8B1DA5F56AB3D07C04B68240B13BE95D");
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(ECB->decode(expected.hexToBytes())));
+   EXPECT_EQ(clear_text.toHexString(), ECB->decode(expected.hexToBytes()).toHexString());
 }
 
 TEST_F(Mysty1Test, encodeCBCMode)
@@ -48,7 +48,7 @@ TEST_F(Mysty1Test, encodeCBCMode)
    const BytesVector clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD,
       0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10};
 
-   EXPECT_EQ("461C1E879C18C27FB9ADF2D80C89031F", Vector::toHexString(CBC->encode(clear_text)));
+   EXPECT_EQ("461C1E879C18C27FB9ADF2D80C89031F", CBC->encode(clear_text).toHexString());
 }
 
 TEST_F(Mysty1Test, decodeCBCMode)
@@ -57,7 +57,7 @@ TEST_F(Mysty1Test, decodeCBCMode)
       0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10};
 
    StringTest expected("461C1E879C18C27FB9ADF2D80C89031F");
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(CBC->decode(expected.hexToBytes())));
+   EXPECT_EQ(clear_text.toHexString(), CBC->decode(expected.hexToBytes()).toHexString());
 }
 
 #endif

@@ -30,12 +30,12 @@ protected:
 
 TEST_F(Snow3GTest, generateSet1)
 {
-   EXPECT_EQ("ABEE97047AC31373", Vector::toHexString(S->generateKeystream()));
+   EXPECT_EQ("ABEE97047AC31373", S->generateKeystream().toHexString());
 }
 
 TEST_F(Snow3GTest, generateSet2)
 {
-   EXPECT_EQ("EFF8A342F751480F", Vector::toHexString(S2->generateKeystream()));
+   EXPECT_EQ("EFF8A342F751480F", S2->generateKeystream().toHexString());
 }
 
 #endif

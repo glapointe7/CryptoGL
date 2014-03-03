@@ -4,7 +4,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/CAST256.hpp"
-#include "../src/Digest.hpp"
 
 class CAST256Test : public ::testing::Test
 {
@@ -30,35 +29,35 @@ protected:
 
 TEST_F(CAST256Test, encode128)
 {
-   EXPECT_EQ("C842A08972B43D20836C91D1B7530F6B", Vector::toHexString(C128->encode(BytesVector(16, 0))));
+   EXPECT_EQ("C842A08972B43D20836C91D1B7530F6B", C128->encode(BytesVector(16, 0)).toHexString());
 }
 
 TEST_F(CAST256Test, decode128)
 {
    StringTest code("C842A08972B43D20836C91D1B7530F6B");
-   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C128->decode(code.hexToBytes())));
+   EXPECT_EQ("00000000000000000000000000000000", C128->decode(code.hexToBytes()).toHexString());
 }
 
 TEST_F(CAST256Test, encode192)
 {
-   EXPECT_EQ("1B386C0210DCADCBDD0E41AA08A7A7E8", Vector::toHexString(C192->encode(BytesVector(16, 0))));
+   EXPECT_EQ("1B386C0210DCADCBDD0E41AA08A7A7E8", C192->encode(BytesVector(16, 0)).toHexString());
 }
 
 TEST_F(CAST256Test, decode192)
 {
    StringTest code("1B386C0210DCADCBDD0E41AA08A7A7E8");
-   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C192->decode(code.hexToBytes())));
+   EXPECT_EQ("00000000000000000000000000000000", C192->decode(code.hexToBytes()).toHexString());
 }
 
 TEST_F(CAST256Test, encode256)
 {
-   EXPECT_EQ("4F6A2038286897B9C9870136553317FA", Vector::toHexString(C256->encode(BytesVector(16, 0))));
+   EXPECT_EQ("4F6A2038286897B9C9870136553317FA", C256->encode(BytesVector(16, 0)).toHexString());
 }
 
 TEST_F(CAST256Test, decode256)
 {
    StringTest code("4F6A2038286897B9C9870136553317FA");
-   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(C256->decode(code.hexToBytes())));
+   EXPECT_EQ("00000000000000000000000000000000", C256->decode(code.hexToBytes()).toHexString());
 }
 
 #endif

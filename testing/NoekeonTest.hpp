@@ -2,11 +2,10 @@
  * Source : https://www.cosic.esat.kuleuven.be/nessie/testvectors/bc/noekeon/Noekeon-Direct-128-128.verified.test-vectors
  */
 #ifndef NOEKEONTEST_HPP
-#define	NOEKEONTEST_HPP
+#define NOEKEONTEST_HPP
 
 #include <gtest/gtest.h>
 #include "../src/Noekeon.hpp"
-#include "../src/Digest.hpp"
 
 class NoekeonTest : public ::testing::Test
 {
@@ -28,13 +27,13 @@ protected:
 
 TEST_F(NoekeonTest, encodeZero)
 {   
-   EXPECT_EQ("EA6552BA793546C261E4B3E90433F5A2", Vector::toHexString(R->encode(BytesVector(16, 0))));
+   EXPECT_EQ("EA6552BA793546C261E4B3E90433F5A2", R->encode(BytesVector(16, 0)).toHexString());
 }
 
 TEST_F(NoekeonTest, decodeZero)
 {
    const StringTest code("EA6552BA793546C261E4B3E90433F5A2");
-   EXPECT_EQ("00000000000000000000000000000000", Vector::toHexString(R->decode(code.hexToBytes())));
+   EXPECT_EQ("00000000000000000000000000000000", R->decode(code.hexToBytes()).toHexString());
 }
 
 TEST_F(NoekeonTest, encodeNormal)
@@ -42,13 +41,13 @@ TEST_F(NoekeonTest, encodeNormal)
    const BytesVector clear_text = {
       0x47, 0x65, 0xF3, 0xDA, 0x10, 0xCD, 0x3D, 0x04, 0x73, 0x86, 0x77, 0x42, 0xB5, 0xE5, 0xCC, 0x3C
    };
-   EXPECT_EQ("EA024714AD5C4D84EA024714AD5C4D84", Vector::toHexString(C->encode(clear_text)));
+   EXPECT_EQ("EA024714AD5C4D84EA024714AD5C4D84", C->encode(clear_text).toHexString());
 }
 
 TEST_F(NoekeonTest, decodeNormal)
 {
    const StringTest code("EA024714AD5C4D84EA024714AD5C4D84");
-   EXPECT_EQ("4765F3DA10CD3D0473867742B5E5CC3C", Vector::toHexString(C->decode(code.hexToBytes())));
+   EXPECT_EQ("4765F3DA10CD3D0473867742B5E5CC3C", C->decode(code.hexToBytes()).toHexString());
 }
 
 #endif

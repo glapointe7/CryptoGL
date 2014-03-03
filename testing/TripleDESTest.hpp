@@ -29,7 +29,7 @@ TEST_F(TripleDESTest, encode)
    const StringTest clear_text = "The qufck brown fox jump";
    
    EXPECT_EQ("A826FD8CE53B855FCCE21C8112256FE668D5C05DD9B6B900",
-           Vector::toHexString(D->encode(clear_text.toBytes())));
+           D->encode(clear_text.toBytes()).toHexString());
 }
 
 TEST_F(TripleDESTest, decode)
@@ -37,7 +37,7 @@ TEST_F(TripleDESTest, decode)
    const std::string clear_text = "The qufck brown fox jump";
    const StringTest message("A826FD8CE53B855FCCE21C8112256FE668D5C05DD9B6B900");
    
-   EXPECT_EQ(clear_text, Vector::toString(D->decode(message.hexToBytes())));
+   EXPECT_EQ(clear_text, D->decode(message.hexToBytes()).toString());
 }
 
 #endif

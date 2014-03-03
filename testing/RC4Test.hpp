@@ -28,14 +28,14 @@ TEST_F(RC4Test, encode)
 {
    const StringTest clear_text("Plaintext");
    
-   EXPECT_EQ("BBF316E8D940AF0AD3", Vector::toHexString(R->encode(clear_text.toBytes())));
+   EXPECT_EQ("BBF316E8D940AF0AD3", R->encode(clear_text.toBytes()).toHexString());
 }
 
 TEST_F(RC4Test, decode)
 {
    const StringTest clear_text("BBF316E8D940AF0AD3");
 
-   EXPECT_EQ("Plaintext", Vector::toString(R->decode(clear_text.hexToBytes())));
+   EXPECT_EQ("Plaintext", R->decode(clear_text.hexToBytes()).toString());
 }
 
 #endif

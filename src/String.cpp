@@ -1,7 +1,6 @@
 #include "String.hpp"
 
 #include <algorithm>
-#include <vector>
 
 const String String::letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 const String String::uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -88,11 +87,6 @@ bool String::containsUniqueChars() const
 std::string String::toStdString() const
 {
    return std::string(this->begin(), this->end());
-}
-
-char String::toChar() const
-{
-   return this->at(0);
 }
 
 std::vector<uint8_t> String::toBytes() const

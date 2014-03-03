@@ -177,7 +177,7 @@ UInt32Vector SEAL::generate()
    const uint8_t number_of_Kb = output_size / 1024;
    while(counter < number_of_Kb)
    {
-      Vector::extend(random_numbers, generateKeystream());
+      random_numbers.extend(generateKeystream());
    }
    
    return random_numbers;

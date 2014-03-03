@@ -26,14 +26,14 @@ TEST_F(MD4Test, encodeNormalText)
    const StringTest clear_text = "message digest";
    std::string hash = "D9130A8164549FE818874806E1C7014B";
 
-   EXPECT_EQ(hash, Vector::toHexString(S->encode(clear_text.toBytes())));
+   EXPECT_EQ(hash, S->encode(clear_text.toBytes()).toHexString());
 }
 
 TEST_F(MD4Test, encodeEmptyText)
 {
    std::string hash = "31D6CFE0D16AE931B73C59D7E0C089C0";
 
-   EXPECT_EQ(hash, Vector::toHexString(S->encode(BytesVector(0))));
+   EXPECT_EQ(hash, S->encode(BytesVector()).toHexString());
 }
 
 TEST_F(MD4Test, encodeHMACNormalText)
@@ -46,7 +46,7 @@ TEST_F(MD4Test, encodeHMACNormalText)
    0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
       0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
 
-   EXPECT_EQ(hash, Vector::toHexString(S->hmacEncode(key, clear_text.toBytes())));
+   EXPECT_EQ(hash, S->hmacEncode(key, clear_text.toBytes()).toHexString());
 }
 
 TEST_F(MD4Test, encodeHMACEmptyText)
@@ -58,7 +58,7 @@ TEST_F(MD4Test, encodeHMACEmptyText)
    0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
       0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
 
-   EXPECT_EQ(hash, Vector::toHexString(S->hmacEncode(key, BytesVector(0))));
+   EXPECT_EQ(hash, S->hmacEncode(key, BytesVector()).toHexString());
 }
 
 #endif

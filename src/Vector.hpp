@@ -9,106 +9,115 @@
 #include "Integer.hpp"
 
 #include <functional>
+#include <algorithm>
 
 /* Extension of std::vector. */
 template <typename Type>
-class Vector1
+class Vector : public std::vector<Type>
 {
 private:
    using VectorType = std::vector<Type>;
    using MatrixType = std::vector<VectorType>;
-   VectorType V;
    
 public:
-   explicit Vector1(const uint64_t &new_size) { V.reserve(new_size); }
+   /* Create an empty vector. */
+   Vector() : std::vector<Type>(0) {}
+   
+   /* Create an empty vector with memory reserved. */
+   explicit Vector(const uint64_t &new_size) { this->reserve(new_size); }
+   
+   /* Create a copy of a std::vector in Vector. */
+   explicit Vector(const std::vector<Type> &V) : std::vector<Type>(V) {}
+   
+   template <class InputIterator>
+   Vector(InputIterator first, InputIterator last) : std::vector<Type>(first, last) {}
+   
+   /* Create a Vector filled with 'n' times the value 'value'. */
+   Vector(const uint64_t &n, const Type value) : std::vector<Type>(n, value) {}
+   
+   /* Create a vector with a list of initialized values. */
+   Vector(std::initializer_list<Type> init_list) : std::vector<Type>(init_list) {}
+   
+   /* Move Constructor. */
+   Vector(std::vector<Type>&& V) : std::vector<Type>(V) {}
    
    /* XOR each element of vector V with the elements of vector W and return the result. */
-   VectorType Xor(const VectorType &W)
+   Vector<Type> Xor(const Vector &W) const
    {
-      const uint64_t size = V.size();
-      VectorType out;
+      const uint64_t size = this->size();
+      Vector<Type> out;
       out.reserve(size);
 
       for(uint64_t i = 0; i < size; ++i)
       {
-         out.push_back(V[i] ^ W[i]);
+         out.push_back(this->at(i) ^ W[i]);
       }
 
       return out;
    }
    
-   /* Append a value at the end of the vector. */
-   inline void append(const Type value)
-   {
-      V.push_back(value);
-   }
-   
    /* Return a vector containing a range of values in vector V from begin to end. */
-   VectorType range(const uint64_t &begin, const uint64_t &end)
+   VectorType range(const uint64_t &begin, const uint64_t &end) const
    {
-      return VectorType(V.begin() + begin, V.begin() + end);
+      return VectorType(this->begin() + begin, this->begin() + end);
    }
    
    /* Return a vector containing a range of values in vector V from begin to end of V. */
-   VectorType range(const uint64_t &begin)
+   VectorType range(const uint64_t &begin) const
    {
-      return VectorType(V.begin() + begin, V.end());
+      return VectorType(this->begin() + begin, this->end());
    }
    
    /* Append the vector W at the end of V. */
-   void extend(VectorType W)
+   void extend(Vector W)
    {
-      V.insert(V.end(), W.begin(), W.end());
+      this->insert(this->end(), W.begin(), W.end());
    }
    
    /* Append the range of W given from begin to end at the end. */
-   void extend(VectorType W, const uint64_t &begin, const uint64_t &end)
+   void extend(Vector W, const uint64_t &begin, const uint64_t &end)
    {
-      V.insert(V.end(), W.begin() + begin, W.begin() + end);
+      this->insert(this->end(), W.begin() + begin, W.begin() + end);
    }
    
    /* Append the range of W given from begin to end at the end of V. */
-   void extend(VectorType W, const uint64_t &begin)
+   void extend(Vector W, const uint64_t &begin)
    {
-      V.insert(V.end(), W.begin() + begin, W.end());
+      this->insert(this->end(), W.begin() + begin, W.end());
    }
    
    /* Add the vector W at the end of V and reserve new capacity. Return the new merged vector. */
-   void merge(const VectorType &W)
+   Vector<Type> merge(const Vector &W)
    {
-      V.reserve(V.size() + W.size());
-      extend(V, W);
+      this->reserve(this->size() + W.size());
+      this->extend(W);
+      return Vector<Type>(this->begin(), this->end());
    }
    
    /* Find a value in the vector and return the position if found, -1 if not. */
-   int64_t find(const Type value)
+   int64_t find(const Type value) const
    {
-      uint64_t i = 0;
-      for(const auto val : V)
+      const auto it = std::find(this->begin(), this->end(), value);
+      if(it == this->end())
       {
-         if(val == value)
-         {
-            return i;
-         }
-         i++;
+         return -1;
       }
-      
-      return -1;
+
+      return std::distance(this->begin(), it);
    }
    
    /* Split the vector V in 'vector_size' chunks and return the vector of chunks. */
-   MatrixType chunk(const uint64_t &vector_size)
+   Vector<Vector<Type>> chunk(const uint64_t &vector_size) const
    {
-      if(V.empty())
+      if(this->empty())
       {
          return {};
       }
       
-      MatrixType result;
-      const uint64_t V_size = V.size();
+      const uint64_t V_size = this->size();
       const uint64_t matrix_size = V_size / vector_size;
      
-      result.reserve(matrix_size);
+      Vector<Vector<Type>> result(matrix_size);
       for(uint64_t i = 0; i < V_size; i += vector_size)
       {
          result.push_back(range(i, i + vector_size));
@@ -117,17 +126,93 @@ public:
       return result;
    }
    
-   /* Transform a vector of integers to a hexadecimal string. */
-   std::string toHexString()
+   /* Shift a vector of integers 'v' to the left of 'shift' bits. */
+   Vector leftShift(uint32_t shift) const
    {
-      const uint8_t data_size = sizeof(typename VectorType::value_type) * 8;
-      std::string hex_digest;
-      hex_digest.reserve(V.size() * data_size / 4);
-      for(const auto uint : V)
+      const uint8_t size_type = sizeof(Type) * 8;
+      const uint32_t v_size = this->size();
+      const uint32_t start = std::min(shift / size_type, v_size);
+      Vector result(range(start));
+      result.reserve(v_size);
+
+      result.insert(result.end(), start, 0);
+
+      if(shift % size_type == 0 || shift >= size_type * v_size) { return result; }
+
+      shift %= size_type;
+      std::transform(result.rbegin(), result.rend(), result.rbegin(), LeftShift(shift));
+
+      return result;
+   }
+   
+   Vector rightShift(uint32_t shift) const
+   {
+      const uint8_t size_type = sizeof(Type) * 8;
+      const uint32_t v_size = this->size();
+      const uint32_t start = std::min(shift / size_type, v_size);
+      Vector result(start, 0);
+      result.reserve(v_size);
+
+      result.extend(range(0), 0, v_size - start);
+
+      if (shift % size_type == 0 || shift >= size_type * v_size) { return result; }
+
+      shift %= size_type;
+      std::transform(result.begin(), result.end(), result.begin(), RightShift(shift));
+
+      return result;
+   }
+   
+   /* Rotate a vector of integers 'V' to the left of 'to_rotate' bits. */
+   Vector rotateLeft(const uint32_t to_rotate) const
+   {
+      const uint8_t size_type = sizeof(Type) * 8;
+      const uint8_t bytes_to_rotate = to_rotate / size_type;
+      const uint8_t bits_to_shift = to_rotate % size_type;
+      const uint8_t rest = size_type - bits_to_shift;
+      const uint64_t V_size = this->size();
+
+      Vector rotated_bytes(V_size);
+      for (uint8_t i = 0; i < V_size; ++i) 
       {
-         for(int8_t i = data_size - 4; i >= 0; i -= 4)
+         rotated_bytes.push_back((this->at((i+bytes_to_rotate) % V_size) << bits_to_shift) 
+                               | (this->at((i+bytes_to_rotate+1) % V_size) >> rest));
+      }
+
+      return rotated_bytes;
+   }
+   
+   /* Rotate a vector of integers 'V' to the right of 'to_rotate' bits. */
+   Vector rotateRight(const uint32_t to_rotate) const
+   {
+      const uint8_t size_type = sizeof(Type) * 8;
+      const uint8_t bytes_to_rotate = to_rotate / size_type;
+      const uint8_t bits_to_shift = to_rotate % size_type;
+      const uint8_t rest = size_type - bits_to_shift;
+      const uint64_t V_size = this->size();
+
+      Vector rotated_bytes(V_size);
+      for (uint8_t i = 0; i < V_size; ++i) 
+      {
+         rotated_bytes.push_back((this->at((i+bytes_to_rotate) % V_size) << bits_to_shift) 
+                               | (this->at((i+bytes_to_rotate+1) % V_size) >> rest));
+      }
+
+      return rotated_bytes;
+   }
+   
+   /* Transform a vector of integers to a hexadecimal string. */
+   std::string toHexString() const
+   {
+      const uint8_t data_size = sizeof(Type) * 8;
+      const uint64_t vect_size = this->size();
+      std::string hex_digest;
+      hex_digest.reserve(vect_size * data_size / 4);
+      for(uint64_t i = 0; i < vect_size; ++i)
+      {
+         for(int8_t j = data_size - 4; j >= 0; j -= 4)
          {
-            hex_digest.push_back(String::hex_digits[(uint >> i) % 16]);
+            hex_digest.push_back(String::hex_digits[(this->at(i) >> j) & 0xF]);
          }
       }
 
@@ -135,181 +220,65 @@ public:
    }
    
    /* Convert a Vector to a string. *********ADD Reserve********/
-   std::string toString()
+   std::string toString() const
    {
-      std::string result;
-      for(const auto number : V)
-      {
-         result.append(Integer<Type>::toString(number));
-      }
-      
-      return result;
+      return std::string(this->begin(), this->end());
    }
-};
-
-using VectorOfBytes = Vector1<uint8_t>;
-using VectorOfUInt16 = Vector1<uint16_t>;
-using VectorOfUInt32 = Vector1<uint32_t>;
-using VectorOfUInt64 = Vector1<uint64_t>;
-using VectorOfStrings = Vector1<std::string>;
-
-
-
-
-namespace Vector
-{
-   /*
-    * Lambda Shift classes are redondants. The best way is to pass the operator << or >>
-    * as an argument to a function like this pseudo-code : shift(5, <<);
-    */
-   uint8_t shr(uint8_t value, const uint8_t to_shift);
-   uint8_t shl(uint8_t value, const uint8_t to_shift);
-   using SH = std::function<uint8_t(uint8_t value, const uint8_t to_shift)>;
    
-   class Shift
+private:
+   class LeftShift
    {
    public:
-      Shift(const uint32_t to_shift, const SH &sh, const SH &sh_inv) 
-         : carry(0), sh(sh), sh_inv(sh_inv), mask(sh(0xFF, 8 - to_shift)), 
+      LeftShift(const uint32_t to_shift) 
+         : carry(0), mask(0xFF << (8 - to_shift)), 
            shift(to_shift), inner_shift(8 - to_shift) {}
-      virtual ~Shift() {}
       
       uint8_t operator()(uint8_t value)
       {
          const uint8_t direction = value & mask;
-         value = sh(value, shift);
+         value <<= shift;
          value |= carry;
 
-         carry = sh_inv(direction, inner_shift);
+         carry = direction >> inner_shift;
          return value;
       }
       
    private:
       uint8_t carry;
-      const SH sh, sh_inv;
       const uint8_t mask;
       const uint32_t shift;
       const uint32_t inner_shift;
    };
    
-   /* XOR each element of vector V with the elements of vector W and return the result. */
-   template <class VectorType>
-   VectorType Xor(const VectorType &V, const VectorType &W)
+   class RightShift
    {
-      const uint64_t size = V.size();
-      VectorType out;
-      out.reserve(size);
-
-      for(uint64_t i = 0; i < size; ++i)
-      {
-         out.push_back(V[i] ^ W[i]);
-      }
-
-      return out;
-   }
-   
-   /* Return a vector containing a range of values in vector V from begin to end of V. */
-   template <class VectorType>
-   VectorType range(const VectorType &V, const uint64_t &begin, const uint64_t &end)
-   {
-      return VectorType(V.begin() + begin, V.begin() + end);
-   }
-   
-   /* Return a vector containing a range of values in vector V from begin to end. */
-   template <class VectorType>
-   VectorType range(const VectorType &V, const uint64_t &begin)
-   {
-      return VectorType(V.begin() + begin, V.end());
-   }
-   
-   /* Append the vector W at the end of V. */
-   template <class VectorType>
-   void extend(VectorType &self, const VectorType &V)
-   {
-      self.insert(self.end(), V.begin(), V.end());
-   }
-   
-   /* Append the range of W given from begin to end at the end of V. */
-   template <class VectorType>
-   void extend(VectorType &self, const VectorType &V, const uint64_t &begin, const uint64_t &end)
-   {
-      self.insert(self.end(), V.begin() + begin, V.begin() + end);
-   }
-   
-   /* Append the range of W given from begin to end at the end of V. */
-   template <class VectorType>
-   void extend(VectorType &self, const VectorType &V, const uint64_t &begin)
-   {
-      self.insert(self.end(), V.begin() + begin, V.end());
-   }
-   
-   /* Add the vector W at the end of V and return the new merged vector. */
-   template <class VectorType>
-   VectorType merge(VectorType V, const VectorType &W)
-   {
-      V.reserve(V.size() + W.size());
-      extend(V, W);
+   public:
+      RightShift(const uint32_t to_shift) 
+         : carry(0), mask(0xFF >> (8 - to_shift)), 
+           shift(to_shift), inner_shift(8 - to_shift) {}
       
-      return V;
-   }
-   
-   /* Split the vector V in 'vector_size' chunks and return the vector of chunks. */
-   template <class VectorType>
-   std::vector<VectorType> chunk(const VectorType &V, const uint64_t &vector_size)
-   {
-      if(V.empty())
+      uint8_t operator()(uint8_t value)
       {
-         return {};
+         const uint8_t direction = value & mask;
+         value >>= shift;
+         value |= carry;
+
+         carry = direction << inner_shift;
+         return value;
       }
       
-      std::vector<VectorType> result;
-      const uint64_t V_size = V.size();
-      const uint64_t matrix_size = V_size / vector_size;
-     
-      result.reserve(matrix_size);
-      for(uint64_t i = 0; i < V_size; i += vector_size)
-      {
-         result.push_back(VectorType(V.begin() + i, V.begin() + i + vector_size));
-      }
+   private:
+      uint8_t carry;
+      const uint8_t mask;
+      const uint32_t shift;
+      const uint32_t inner_shift;
+   };
+};
 
-      return result;
-   }
-   
-   /* Transform a vector of integers to a hexadecimal string. */
-   template <class DataTypeVector>
-   std::string toHexString(const DataTypeVector &bytes)
-   {
-      const uint8_t data_size = sizeof(typename DataTypeVector::value_type) * 8;
-      std::string hex_digest;
-      hex_digest.reserve(bytes.size() * data_size / 4);
-      for(const auto uint : bytes)
-      {
-         for(int8_t i = data_size - 4; i >= 0; i -= 4)
-         {
-            hex_digest.push_back(String::hex_digits[(uint >> i) & 0xF]);
-         }
-      }
-
-      return hex_digest;
-   }
-   
-   /* Convert a bytes Vector to a string. */
-   std::string toString(const BytesVector &bytes);
-   
-   /* Shift a vector of bytes 'v' to the left of 'shift' bits. */
-   BytesVector leftShift(const BytesVector &v, uint32_t shift);
-   
-   /* Shift a vector of bytes 'v' to the right of 'shift' bits. */
-   BytesVector rightShift(const BytesVector &v, const uint32_t shift);
-   
-   /* Rotate a vector of bytes 'V' to the left of 'to_rotate' bits. */
-   BytesVector rotateLeft(BytesVector V, const uint32_t to_rotate);
-   
-   /* Rotate a vector of bytes 'V' to the right of 'to_rotate' bits. */
-   BytesVector rotateRight(BytesVector V, const uint32_t to_rotate);
-   
-   /* Split the string str with a specific separator. */
-   std::vector<std::string> split(const std::string &str, const int8_t separator);
-}
+//using VectorOfBytes = Vector<uint8_t>;
+//using VectorOfUInt16 = Vector<uint16_t>;
+//using VectorOfUInt32 = Vector<uint32_t>;
+//using VectorOfUInt64 = Vector<uint64_t>;
+//using VectorOfStrings = Vector<String>;
 
 #endif

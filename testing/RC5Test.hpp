@@ -25,23 +25,23 @@ protected:
 
 TEST_F(RC5Test, encodeZero)
 {   
-   EXPECT_EQ("21A5DBEE154B8F6D", Vector::toHexString(R->encode(BytesVector(8, 0))));
+   EXPECT_EQ("21A5DBEE154B8F6D", R->encode(BytesVector(8, 0)).toHexString());
 }
 
 TEST_F(RC5Test, decodeZero)
 {
-   EXPECT_EQ("0000000000000000", Vector::toHexString(R->decode(StringTest("21A5DBEE154B8F6D").hexToBytes())));
+   EXPECT_EQ("0000000000000000", R->decode(StringTest("21A5DBEE154B8F6D").hexToBytes()).toHexString());
 }
 
 TEST_F(RC5Test, encodeNormal)
 {
    const BytesVector clear_text = {0x21, 0xA5, 0xDB, 0xEE, 0x15, 0x4B, 0x8F, 0x6D};
-   EXPECT_EQ("F7C013AC5B2B8952", Vector::toHexString(C->encode(clear_text)));
+   EXPECT_EQ("F7C013AC5B2B8952", C->encode(clear_text).toHexString());
 }
 
 TEST_F(RC5Test, decodeNormal)
 {
-   EXPECT_EQ("21A5DBEE154B8F6D", Vector::toHexString(C->decode(StringTest("F7C013AC5B2B8952").hexToBytes())));
+   EXPECT_EQ("21A5DBEE154B8F6D", C->decode(StringTest("F7C013AC5B2B8952").hexToBytes()).toHexString());
 }
 
 #endif

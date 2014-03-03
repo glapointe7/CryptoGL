@@ -49,13 +49,13 @@ UInt32Vector Salsa20::rowRound(const UInt32Vector &Y)
    Z.reserve(16);
    
    UInt32Vector tmp = quarterRound({Y[5], Y[6], Y[7], Y[4]});
-   Vector::extend(Z, {tmp[3], tmp[0], tmp[1], tmp[2]});
+   Z.extend({tmp[3], tmp[0], tmp[1], tmp[2]});
    
    tmp = quarterRound({Y[10], Y[11], Y[8], Y[9]});
-   Vector::extend(Z, {tmp[2], tmp[3], tmp[0], tmp[1]});
+   Z.extend({tmp[2], tmp[3], tmp[0], tmp[1]});
    
    tmp = quarterRound({Y[15], Y[12], Y[13], Y[14]});
-   Vector::extend(Z, {tmp[1], tmp[2], tmp[3], tmp[0]});
+   Z.extend({tmp[1], tmp[2], tmp[3], tmp[0]});
    
    return Z;
 }
@@ -90,30 +90,30 @@ void Salsa20::keySetup()
    if(key.size() == 32)
    {
       subkeys.insert(subkeys.end(), std::begin(sigma[0]), std::end(sigma[0]));
-      Vector::extend(subkeys, key, 0, 16);
+      subkeys.extend(key, 0, 16);
       subkeys.insert(subkeys.end(), std::begin(sigma[1]), std::end(sigma[1]));
       IVSetup();
-      Vector::extend(subkeys, LittleEndian64::toBytesVector(counter));
+      subkeys.extend(LittleEndian64::toBytesVector(counter));
       subkeys.insert(subkeys.end(), std::begin(sigma[2]), std::end(sigma[2]));
-      Vector::extend(subkeys, key, 16);
+      subkeys.extend(key, 16);
       subkeys.insert(subkeys.end(), std::begin(sigma[3]), std::end(sigma[3]));
    }
    else
    {
       subkeys.insert(subkeys.end(), std::begin(tau[0]), std::end(tau[0]));
-      Vector::extend(subkeys, key);
+      subkeys.extend(key);
       subkeys.insert(subkeys.end(), std::begin(tau[1]), std::end(tau[1]));
       IVSetup();
-      Vector::extend(subkeys, LittleEndian64::toBytesVector(counter));
+      subkeys.extend(LittleEndian64::toBytesVector(counter));
       subkeys.insert(subkeys.end(), std::begin(tau[2]), std::end(tau[2]));
-      Vector::extend(subkeys, key);
+      subkeys.extend(key);
       subkeys.insert(subkeys.end(), std::begin(tau[3]), std::end(tau[3]));
    }
 }
 
 void Salsa20::IVSetup()
 {
-   Vector::extend(subkeys, IV);
+   subkeys.extend(IV);
 }
 
 UInt32Vector Salsa20::generateKeystream()

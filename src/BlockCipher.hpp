@@ -58,13 +58,12 @@ public:
       const BytesVector message_padded = Padding::zeros(message, InputBlockSize);
       
       const uint64_t message_padded_len = message_padded.size();
-      BytesVector output;
-      output.reserve(message_padded_len);
+      BytesVector output(message_padded_len);
       for (uint64_t n = 0; n < message_padded_len; n += InputBlockSize)
       {
-         const BytesVector input_block(message_padded.begin() + n, message_padded.begin() + n + InputBlockSize);
+         const BytesVector input_block(message_padded.range(n, n + InputBlockSize));
          const BytesVector encoded_block = block_mode->getCipherBlock(input_block);
-         Vector::extend(output, encoded_block);         
+         output.extend(encoded_block);         
       }
 
       return output;
@@ -76,13 +75,12 @@ public:
       generateInverseSubkeys();
 
       const uint64_t message_len = message.size();
-      BytesVector output;
-      output.reserve(message_len);
+      BytesVector output(message_len);
       for (uint64_t n = 0; n < message_len; n += InputBlockSize)
       {
-         const BytesVector input_block(message.begin() + n, message.begin() + n + InputBlockSize);
+         const BytesVector input_block(message.range(n, n + InputBlockSize));
          const BytesVector decoded_block = block_mode->getClearBlock(input_block);
-         Vector::extend(output, decoded_block);
+         output.extend(decoded_block);
       }
 
       return output;
@@ -120,7 +118,7 @@ public:
    static constexpr uint8_t getBlockSize() { return InputBlockSize; }
    
 protected:
-   using SubkeysContainer = std::vector<SubkeyType>;
+   using SubkeysContainer = Vector<SubkeyType>;
    using THIS = BlockCipher<SubkeyType, DataType, InputBlockSize, EndianType>;
    
    /* Default constructor : Only for ECB, CBC, CFB, OFB and CTR modes. An IV is needed for 

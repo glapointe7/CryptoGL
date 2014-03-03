@@ -111,10 +111,8 @@ private:
    
    DataTypeVector initialize(const DataTypeVector &h, const DataTypeVector &C)
    {
-      DataTypeVector v;
-      v.reserve(16);
-      
-      Vector::extend(v, h);
+      DataTypeVector v(16);
+      v.extend(h);
       for(uint8_t i = 0; i < 4; ++i)
       {
          v.push_back(salt[i] ^ C[i]);

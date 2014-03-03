@@ -26,14 +26,14 @@ TEST_F(MD2Test, encodeNormalText)
    const StringTest clear_text = "message digest";
    std::string hash = "AB4F496BFB2A530B219FF33031FE06B0";
 
-   EXPECT_EQ(hash, Vector::toHexString(S->encode(clear_text.toBytes())));
+   EXPECT_EQ(hash, S->encode(clear_text.toBytes()).toHexString());
 }
 
 TEST_F(MD2Test, encodeEmptyText)
 {
    std::string hash = "8350E5A3E24C153DF2275C9F80692773";
 
-   EXPECT_EQ(hash, Vector::toHexString(S->encode(BytesVector(0))));
+   EXPECT_EQ(hash, S->encode(BytesVector()).toHexString());
 }
 
 #endif

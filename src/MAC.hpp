@@ -60,9 +60,9 @@ struct Lu
    static BytesVector getValue(const BytesVector &L)
    {
       if(Bits::msb(L) == 0)
-         return Lu<BlockSize, n - 1>::getValue(Vector::leftShift(L, 1));
+         return Lu<BlockSize, n - 1>::getValue(L.leftShift(1));
       
-      return Vector::Xor(Lu<BlockSize, n - 1>::getValue(Vector::leftShift(L, 1)), Constant<BlockSize>::msb_value);
+      return Lu<BlockSize, n - 1>::getValue(L.leftShift(1)).Xor(Constant<BlockSize>::msb_value);
    }
 };
 
@@ -88,10 +88,10 @@ struct Lu<BlockSize, -1>
    {
       if(Bits::lsb(L) == 0)
       {
-         return Vector::rightShift(L, 1);
+         return L.rightShift(1);
       }
       
-      return Vector::Xor(Vector::rightShift(L, 1), Constant<BlockSize>::lsb_value);
+      return L.rightShift(1).Xor(Constant<BlockSize>::lsb_value);
    }
 };
 
@@ -182,18 +182,18 @@ public:
       
       /* Split the message in sub messages of 16 bytes length.
        * Apply the formula : C[i+1] = E(M[i] XOR C[i]) where C[0] = 0^16. */
-      const BytesMatrix M = Vector::chunk(message, 16);
+      const BytesMatrix M = message.chunk(16);
       BytesVector previous_cipher_block(16, 0);
       BytesVector current_cipher_block;
       const int64_t M_size = M.size();
       AES Block_K1(K1);
       for(int64_t i = 0; i < M_size - 1; ++i)
       {
-         current_cipher_block = Block_K1.processEncodeBlock(Vector::Xor(M[i], previous_cipher_block));
+         current_cipher_block = Block_K1.processEncodeBlock(M[i].Xor(previous_cipher_block));
          previous_cipher_block = current_cipher_block;
       }
 
-      return Block_K1.processEncodeBlock(Vector::Xor(Vector::Xor(M[M_size - 1], previous_cipher_block), K));
+      return Block_K1.processEncodeBlock(M[M_size - 1].Xor(previous_cipher_block).Xor(K));
    }
 };
 
@@ -225,17 +225,17 @@ public:
          L_u = Lu<BlockSize, 1>::getValue(L_u);
       }
       
-      const BytesMatrix M = Vector::chunk(message, BlockSize);
+      const BytesMatrix M = message.chunk(BlockSize);
       BytesVector previous_cipher_block(BlockSize, 0);
       BytesVector current_cipher_block;
       const int64_t M_size = M.size();
       for(int64_t i = 0; i < M_size - 1; ++i)
       {
-         current_cipher_block = Block.processEncodeBlock(Vector::Xor(M[i], previous_cipher_block));
+         current_cipher_block = Block.processEncodeBlock(M[i].Xor(previous_cipher_block));
          previous_cipher_block = current_cipher_block;
       }
       
-      return Block.processEncodeBlock(Vector::Xor(Vector::Xor(M[M_size - 1], previous_cipher_block), L_u));
+      return Block.processEncodeBlock(M[M_size - 1].Xor(previous_cipher_block).Xor(L_u));
    }
 };
 
@@ -268,17 +268,17 @@ public:
          L_u = Lu<BlockSize, -1>::getValue(L);
       }
       
-      const BytesMatrix M = Vector::chunk(message, BlockSize);      
+      const BytesMatrix M = message.chunk(BlockSize);      
       BytesVector previous_cipher_block(BlockSize, 0);
       BytesVector current_cipher_block;
       const int64_t M_size = M.size();
       for(int64_t i = 0; i < M_size - 1; ++i)
       {
-         current_cipher_block = Block.processEncodeBlock(Vector::Xor(M[i], previous_cipher_block));
+         current_cipher_block = Block.processEncodeBlock(M[i].Xor(previous_cipher_block));
          previous_cipher_block = current_cipher_block;
       }
     
-      return Block.processEncodeBlock(Vector::Xor(Vector::Xor(M[M_size - 1], previous_cipher_block), L_u));
+      return Block.processEncodeBlock(M[M_size - 1].Xor(previous_cipher_block).Xor(L_u));
    }
 };
 
@@ -310,18 +310,18 @@ public:
          message = Padding::_10Star(message, BlockSize);
       }
       
-      const BytesMatrix M = Vector::chunk(message, BlockSize);
+      const BytesMatrix M = message.chunk(BlockSize);
       BytesVector sigma(BlockSize, 0);
       BytesVector L = Block.processEncodeBlock(BytesVector(BlockSize, 0));
       const int64_t M_size = M.size();
       for(int64_t i = 0; i < M_size - 1; ++i)
       {
-         sigma = Vector::Xor(Block.processEncodeBlock(Vector::Xor(M[i], getLuNValue(L, i))), sigma);
+         sigma = Block.processEncodeBlock(M[i].Xor(getLuNValue(L, i))).Xor(sigma);
       }
-      sigma = Vector::Xor(M[M_size - 1], sigma);
+      sigma = M[M_size - 1].Xor(sigma);
       if(!need_padding)
       {
-         sigma = Vector::Xor(Lu<BlockSize, -1>::getValue(L), sigma);
+         sigma = Lu<BlockSize, -1>::getValue(L).Xor(sigma);
       }
 
       return Block.processEncodeBlock(sigma);
@@ -332,10 +332,9 @@ private:
    static BytesVector getLuNValue(const BytesVector &L, const uint64_t &n)
    {
       if(Bits::msb(L) == 0)
-         return getLuNValue(Vector::leftShift(L, 1), n-1);
+         return getLuNValue(L.leftShift(1), n-1);
       
-      return Vector::Xor(getLuNValue(Vector::leftShift(L, 1), n-1), 
-              Constant<BlockCipherType::getBlockSize()>::msb_value);
+      return getLuNValue(L.leftShift(1), n-1).Xor(Constant<BlockCipherType::getBlockSize()>::msb_value);
    }
 };
 
@@ -369,17 +368,17 @@ public:
          K = Lu<BlockSize, 1>::getValue(key2);
       }
 
-      const BytesMatrix M = Vector::chunk(message, BlockSize);
+      const BytesMatrix M = message.chunk(BlockSize);
       BytesVector previous_cipher_block(BlockSize, 0);
       BytesVector current_cipher_block;
       const int64_t M_size = M.size();
       for(int64_t i = 0; i < M_size - 1; ++i)
       {
-         current_cipher_block = Block.processEncodeBlock(Vector::Xor(M[i], previous_cipher_block));
+         current_cipher_block = Block.processEncodeBlock(M[i].Xor(previous_cipher_block));
          previous_cipher_block = current_cipher_block;
       }
 
-      return Block.processEncodeBlock(Vector::Xor(Vector::Xor(M[M_size - 1], previous_cipher_block), K));
+      return Block.processEncodeBlock(M[M_size - 1].Xor(previous_cipher_block).Xor(K));
    }
    
    void setKey(const BytesVector &key2)

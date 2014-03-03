@@ -82,8 +82,8 @@ void Twofish::generateSubkeys()
    for (uint8_t i = 0; i < k; ++i)
    {  
       const uint8_t x = i * 8;
-      Vector::extend(Me, key, x, x+4);
-      Vector::extend(Mo, key, x+4, x+8);
+      Me.extend(key, x, x+4);
+      Mo.extend(key, x+4, x+8);
       
       // We multiply RS by the vector key_{8i + j} where j = 0,...,7.
       // w(x) = x^8 + x^6 + x^3 + x^2 + 1 over GF(2). (101001101)_2 = 0x14D.

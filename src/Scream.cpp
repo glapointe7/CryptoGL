@@ -116,7 +116,7 @@ BytesVector Scream::F(const BytesVector &X)
       x[i] &= 0xFFFF0000;
       x[i] |= bytes23[i];
       
-      Vector::extend(out, BigEndian32::toBytesVector(x[i]));
+      out.extend(BigEndian32::toBytesVector(x[i]));
    }
    
    return out;
@@ -125,18 +125,18 @@ BytesVector Scream::F(const BytesVector &X)
 void Scream::IVSetup()
 {
    const auto F = std::bind(&Scream::F, this, std::placeholders::_1);
-   Z = compose<2>(F)(Vector::Xor(IV, subkeys[1]));
-   Y = compose<2>(F)(Vector::Xor(Z, subkeys[3]));
-   const BytesVector A = compose<2>(F)(Vector::Xor(Y, subkeys[5]));
-   X = F(Vector::Xor(A, subkeys[7]));
+   Z = compose<2>(F)(IV.Xor(subkeys[1]));
+   Y = compose<2>(F)(Z.Xor(subkeys[3]));
+   const BytesVector A = compose<2>(F)(Y.Xor(subkeys[5]));
+   X = F(A.Xor(subkeys[7]));
    BytesVector B(X);
    
    for(uint8_t i = 0; i < 8; ++i)
    {
       const uint8_t j = i * 2;
-      B = F(Vector::Xor(B, subkeys[j]));
-      subkeys[j] = Vector::Xor(subkeys[j], A);
-      subkeys[j+1] = Vector::Xor(subkeys[j + 1], B);
+      B = F(B.Xor(subkeys[j]));
+      subkeys[j] = subkeys[j].Xor(A);
+      subkeys[j+1] = subkeys[j+1].Xor(B);
    }
 }
 
@@ -148,12 +148,12 @@ void Scream::keySetup()
    makeT0();
    makeT1();
    
-   const BytesVector B = F(Vector::Xor(key, BytesVector(pi.begin(), pi.end())));
+   const BytesVector B = F(key.Xor(BytesVector(pi.begin(), pi.end())));
    subkeys.reserve(16);
    BytesVector A(key);
    for(uint8_t i = 0; i < 16; ++i)
    {
-      A = Vector::Xor(compose<4>(std::bind(&Scream::F, this, std::placeholders::_1))(A), B);
+      A = compose<4>(std::bind(&Scream::F, this, std::placeholders::_1))(A).Xor(B);
       subkeys.push_back(A);
    }
 }
@@ -167,8 +167,8 @@ BytesVector Scream::generateKeystream()
    keystream.reserve(256);
    for(uint8_t i = 0; i < 16; ++i)
    {
-      X = Vector::Xor(F(Vector::Xor(X, Y)), Z);
-      Vector::extend(keystream, Vector::Xor(X, subkeys[i % 16]));
+      X = F(X.Xor(Y)).Xor(Z);
+      keystream.extend(X.Xor(subkeys[i % 16]));
 
       switch(i % 4)
       {
@@ -190,8 +190,8 @@ BytesVector Scream::generateKeystream()
             }
       }      
    }
-   Y = F(Vector::Xor(Y, Z));
-   Z = F(Vector::Xor(Z, Y));
+   Y = F(Y.Xor(Z));
+   Z = F(Z.Xor(Y));
    subkeys[counter] = F(subkeys[counter]);
    counter = (counter + 1) % 16;
    

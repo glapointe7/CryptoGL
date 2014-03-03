@@ -95,7 +95,7 @@ BytesVector Keccak::applySqueezingPhase()
       {
          for(uint8_t y = 0; y < 5; ++y)
          {
-            Vector::extend(output, LittleEndian64::toBytesVector(state[y][x]));
+            output.extend(LittleEndian64::toBytesVector(state[y][x]));
          }
       }      
       if(remaining_size > 0)

@@ -43,7 +43,7 @@ TEST_F(BlowfishTest, encode)
 {
    const BytesVector clear_text = {0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
    
-   EXPECT_EQ("7D856F9A613063F2", Vector::toHexString(B->encode(clear_text)));
+   EXPECT_EQ("7D856F9A613063F2", B->encode(clear_text).toHexString());
 }
 
 TEST_F(BlowfishTest, decode)
@@ -51,7 +51,7 @@ TEST_F(BlowfishTest, decode)
    const BytesVector clear_text = {0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
    const StringTest message = "7D856F9A613063F2";
    
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(B->decode(message.hexToBytes())));
+   EXPECT_EQ(clear_text.toHexString(), B->decode(message.hexToBytes()).toHexString());
 }
 
 TEST_F(BlowfishTest, encodeWithCBCMode)
@@ -59,14 +59,14 @@ TEST_F(BlowfishTest, encodeWithCBCMode)
    const BytesVector clear_text = {0x37, 0x36, 0x35, 0x34, 0x33, 0x32, 0x31, 0x20, 0x4E, 0x6F, 
    0x77, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x65, 0x20, 0x74, 0x69, 0x6D, 0x65, 0x20, 0x66, 0x6F, 0x72, 0x20, 0x00};
    
-   EXPECT_EQ("6B77B4D63006DEE605B156E27403979358DEB9E7154616D959F1652BD5FF92CC", Vector::toHexString(CBC->encode(clear_text)));
+   EXPECT_EQ("6B77B4D63006DEE605B156E27403979358DEB9E7154616D959F1652BD5FF92CC", CBC->encode(clear_text).toHexString());
 }
 
 TEST_F(BlowfishTest, decodeWithCBCMode)
 {   
    const StringTest message = "6B77B4D63006DEE605B156E27403979358DEB9E7154616D959F1652BD5FF92CC";
    EXPECT_EQ("37363534333231204E6F77206973207468652074696D6520666F722000000000", 
-           Vector::toHexString(CBC->decode(message.hexToBytes())));
+           CBC->decode(message.hexToBytes()).toHexString());
 }
 
 TEST_F(BlowfishTest, encodeWithCFBMode)
@@ -74,14 +74,14 @@ TEST_F(BlowfishTest, encodeWithCFBMode)
    const BytesVector clear_text = {0x37, 0x36, 0x35, 0x34, 0x33, 0x32, 0x31, 0x20, 0x4E, 0x6F, 
    0x77, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x65, 0x20, 0x74, 0x69, 0x6D, 0x65, 0x20, 0x66, 0x6F, 0x72, 0x20, 0x00};
    
-   EXPECT_EQ("E73214A2822139CAF26ECF6D2EB9E76E3DA3DE04D1517200519D57A6C3384ECE", Vector::toHexString(CFB->encode(clear_text)));
+   EXPECT_EQ("E73214A2822139CAF26ECF6D2EB9E76E3DA3DE04D1517200519D57A6C3384ECE", CFB->encode(clear_text).toHexString());
 }
 
 TEST_F(BlowfishTest, decodeWithCFBMode)
 {   
    const StringTest message = "E73214A2822139CAF26ECF6D2EB9E76E3DA3DE04D1517200519D57A6C3384ECE";
    EXPECT_EQ("37363534333231204E6F77206973207468652074696D6520666F722000000000", 
-           Vector::toHexString(CFB->decode(message.hexToBytes())));
+           CFB->decode(message.hexToBytes()).toHexString());
 }
 
 TEST_F(BlowfishTest, encodeWithOFBMode)
@@ -89,14 +89,14 @@ TEST_F(BlowfishTest, encodeWithOFBMode)
    const BytesVector clear_text = {0x37, 0x36, 0x35, 0x34, 0x33, 0x32, 0x31, 0x20, 0x4E, 0x6F, 
    0x77, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x65, 0x20, 0x74, 0x69, 0x6D, 0x65, 0x20, 0x66, 0x6F, 0x72, 0x20, 0x00};
    
-   EXPECT_EQ("E73214A2822139CA62B343CC5B65587310DD908D0C241B2263C2CF80DA46FBB8", Vector::toHexString(OFB->encode(clear_text)));
+   EXPECT_EQ("E73214A2822139CA62B343CC5B65587310DD908D0C241B2263C2CF80DA46FBB8", OFB->encode(clear_text).toHexString());
 }
 
 TEST_F(BlowfishTest, decodeWithOFBMode)
 {   
    const StringTest message = "E73214A2822139CA62B343CC5B65587310DD908D0C241B2263C2CF80DA46FBB8";
    EXPECT_EQ("37363534333231204E6F77206973207468652074696D6520666F722000000000", 
-           Vector::toHexString(OFB->decode(message.hexToBytes())));
+           OFB->decode(message.hexToBytes()).toHexString());
 }
 
 TEST_F(BlowfishTest, encodeWithCTRMode)
@@ -105,7 +105,7 @@ TEST_F(BlowfishTest, encodeWithCTRMode)
    "AC45AF8E5130C81C46A35CE411E5FBC1191A0A52EFF69F2445DF4F9B17AD2B417BE66C3710");
    
    EXPECT_EQ("EF2CA093ECC80BD87DDC11D06DBCD38B3B5205EEDCCF58945B192755945003FC44B144F5DC1ACC5F14EACCA935125879FEED0C53019712B1B07438BA4C19C864", 
-           Vector::toHexString(CTR->encode(clear_text.hexToBytes())));
+           CTR->encode(clear_text.hexToBytes()).toHexString());
 }
 
 TEST_F(BlowfishTest, decodeWithCTRMode)
@@ -113,7 +113,7 @@ TEST_F(BlowfishTest, decodeWithCTRMode)
    const StringTest clear_text("EF2CA093ECC80BD87DDC11D06DBCD38B3"
            "B5205EEDCCF58945B192755945003FC44B144F5DC1ACC5F14EACCA935125879FEED0C53019712B1B07438BA4C19C864");
    EXPECT_EQ("6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411E5FBC1191A0A52EFF69F2445DF4F9B17AD2B417BE66C3710", 
-           Vector::toHexString(CTR->decode(clear_text.hexToBytes())));
+           CTR->decode(clear_text.hexToBytes()).toHexString());
 }
 
 #endif

@@ -27,7 +27,7 @@ TEST_F(SkipjackTest, encodeFirst)
 {
    const BytesVector clear_text = {0x33, 0x22, 0x11, 0x00, 0xdd, 0xcc, 0xbb, 0xaa};
    
-   EXPECT_EQ("2587CAE27A12D300", Vector::toHexString(A->encode(clear_text)));
+   EXPECT_EQ("2587CAE27A12D300", A->encode(clear_text).toHexString());
 }
 
 TEST_F(SkipjackTest, decodeFirst)
@@ -35,14 +35,14 @@ TEST_F(SkipjackTest, decodeFirst)
    const BytesVector clear_text = {0x33, 0x22, 0x11, 0x00, 0xdd, 0xcc, 0xbb, 0xaa};
    const StringTest message("2587CAE27A12D300");
    
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(A->decode(message.hexToBytes())));
+   EXPECT_EQ(clear_text.toHexString(), A->decode(message.hexToBytes()).toHexString());
 }
 
 TEST_F(SkipjackTest, encodeSecond)
 {
    const BytesVector clear_text = {0x1d, 0xdf, 0x39, 0xab, 0xf5, 0xcd, 0x71, 0x1e};
    
-   EXPECT_EQ("C92D22324C6B31AE", Vector::toHexString(B->encode(clear_text)));
+   EXPECT_EQ("C92D22324C6B31AE", B->encode(clear_text).toHexString());
 }
 
 TEST_F(SkipjackTest, decodeSecond)
@@ -50,7 +50,7 @@ TEST_F(SkipjackTest, decodeSecond)
    const BytesVector clear_text = {0x1d, 0xdf, 0x39, 0xab, 0xf5, 0xcd, 0x71, 0x1e};
    const StringTest message("C92D22324C6B31AE");
    
-   EXPECT_EQ(Vector::toHexString(clear_text), Vector::toHexString(B->decode(message.hexToBytes())));
+   EXPECT_EQ(clear_text.toHexString(), B->decode(message.hexToBytes()).toHexString());
 }
 
 #endif
