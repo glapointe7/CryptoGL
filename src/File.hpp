@@ -7,18 +7,21 @@
 #include <fstream>
 #include <iostream>
 
-namespace File
+template <class DataType>
+class File
 {
+public:
+   explicit File(const std::string &filename) : filename(filename) {}
+   
    /* Get the file size. */
-   std::ifstream::pos_type getSize(std::ifstream in)
+   static std::ifstream::pos_type size(std::ifstream in)
    {
       in.seekg(0, std::ios::end);
       return in.tellg();
    }
    
    /* Save data in a file named by 'filename'. */
-   template <class DataType>
-   void save(const std::string &filename, const DataType &data)
+   void save(const DataType &data) const
    {
       std::ofstream out;
       out.exceptions(std::ofstream::failbit | std::ofstream::badbit);
@@ -35,8 +38,7 @@ namespace File
    }
    
    /* Load a binary file and get the bytes in a vector. */
-   template <class DataType>
-   DataType load(const std::string &filename)
+   DataType load() const
    {
       DataType bytes;
       std::ifstream in;
@@ -44,7 +46,7 @@ namespace File
       try
       {
          in.open(filename.c_str(), std::ios::binary);
-         bytes.reserve(getSize(in));
+         bytes.reserve(size(in));
          in.read(reinterpret_cast<char *> (&bytes.front()), bytes.size());
       }
       catch (const std::ifstream::failure &e)
@@ -55,6 +57,9 @@ namespace File
 
       return bytes;
    }
-}
+   
+private:
+   const std::string filename;
+};
 
 #endif

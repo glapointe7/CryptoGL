@@ -54,7 +54,7 @@ public:
       str.reserve(20);
       do
       {
-         str.push_back(static_cast<int8_t>(48 + (value % 10)));
+         str.push_back(static_cast<char>(48 + (value % 10)));
       }while(value /= 10);
       std::reverse(str.begin(), str.end());
 

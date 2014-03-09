@@ -1,4 +1,3 @@
-
 #ifndef VIGENERE_HPP
 #define VIGENERE_HPP
 
@@ -121,7 +120,7 @@ public:
 class VigenereMult : public Vigenere
 {
 private:
-   static ClassicalType clearMultKey(const ClassicalType &alpha, const uint8_t c, const uint8_t key_pos)
+   static ClassicalType clearMultKey(const ClassicalType &alpha, const char c, const uint8_t key_pos)
    {
       const uint32_t x = (alpha.find(c) + 1) * (alpha.find(key_pos) + 1);
       ClassicalType buffer(uint32::toString(x));

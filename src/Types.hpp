@@ -10,7 +10,7 @@
 using ClassicalType = String;
 
 /* For strings in the test section for all cryptos except string ciphers. */
-using StringTest = String;
+using StringTest = ClassicalType;
 
 using BytesVector = Vector<uint8_t>;
 using UInt16Vector = Vector<uint16_t>;

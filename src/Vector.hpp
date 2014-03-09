@@ -194,8 +194,8 @@ public:
       Vector rotated_bytes(V_size);
       for (uint8_t i = 0; i < V_size; ++i) 
       {
-         rotated_bytes.push_back((this->at((i+bytes_to_rotate) % V_size) << bits_to_shift) 
-                               | (this->at((i+bytes_to_rotate+1) % V_size) >> rest));
+         rotated_bytes.push_back((this->at((i+bytes_to_rotate) % V_size) >> bits_to_shift) 
+                               | (this->at((i+bytes_to_rotate+1) % V_size) << rest));
       }
 
       return rotated_bytes;
@@ -223,6 +223,12 @@ public:
    std::string toString() const
    {
       return std::string(this->begin(), this->end());
+   }
+   
+   /* Convert a Vector to std::vector. */
+   VectorType toStdVector()
+   {
+      return VectorType(this->begin(), this->end());
    }
    
 private:

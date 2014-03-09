@@ -129,7 +129,7 @@ std::string String::trimEnd() const
       str_length--;
    }
    
-   return this->substr(0, str_length);
+   return this->substr(0, str_length + 1);
 }
 
 std::vector<String> String::split(const char separator) const

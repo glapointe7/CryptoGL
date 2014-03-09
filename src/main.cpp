@@ -3,7 +3,7 @@
 
 #include "../testing/CaesarTest.hpp"
 #include "../testing/VigenereTest.hpp"
-//#include "../testing/VigenereMultTest.hpp"
+#include "../testing/VigenereMultTest.hpp"
 #include "../testing/RozierTest.hpp"
 #include "../testing/BeaufortTest.hpp"
 #include "../testing/BeaufortGermanTest.hpp"
