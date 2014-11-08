@@ -167,3 +167,8 @@ void String::rotateLeft(const uint64_t &to_rotate)
 {
    std::rotate(this->begin(), this->begin() + to_rotate, this->end());
 }
+
+void String::rotateRight(const uint64_t &to_rotate)
+{
+   std::rotate(this->rbegin(), this->rbegin() + to_rotate, this->rend());
+}

@@ -81,21 +81,7 @@ void Camellia::generateSubkeys()
    
    if(rounds == 18)
    {
-      subkeys.extend(BigEndian64::toIntegersVector(Ka));
-      subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(15)));
-      subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(15)));
-      Ke.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(30)));
-      subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(45)));
-
-      subkeys.push_back(BigEndian64::toIntegerRange(Ka.rotateLeft(45), 0, 8));
-      subkeys.push_back(BigEndian64::toIntegerRange(Kl.rotateLeft(60), 8));
-
-      subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(60)));
-      Ke.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(77)));
-      subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(94)));
-      subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(94)));
-      subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(111)));
-      Kw.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(111)));
+      extendSubKeys18Rounds(Ka, Kl);
    }
    else
    {
@@ -109,23 +95,48 @@ void Camellia::generateSubkeys()
       Kb.reserve(16);
       Kb.extend(BigEndian64::toBytesVector(K2));
       
-      subkeys.extend(BigEndian64::toIntegersVector(Kb));
-      subkeys.extend(BigEndian64::toIntegersVector(Kr.rotateLeft(15)));
-      subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(15)));
-      Ke.extend(BigEndian64::toIntegersVector(Kr.rotateLeft(30)));
-      subkeys.extend(BigEndian64::toIntegersVector(Kb.rotateLeft(30)));
-      subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(45)));
-      subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(45)));
-      Ke.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(60)));
-      subkeys.extend(BigEndian64::toIntegersVector(Kr.rotateLeft(60)));
-      subkeys.extend(BigEndian64::toIntegersVector(Kb.rotateLeft(60)));
-      subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(77)));
-      Ke.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(77)));
-      subkeys.extend(BigEndian64::toIntegersVector(Kr.rotateLeft(94)));
-      subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(94)));
-      subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(111)));
-      Kw.extend(BigEndian64::toIntegersVector(Kb.rotateLeft(111)));
+      extendSubKeysNot18Rounds(Ka, Kl, Kr, Kb);
    }   
+}
+
+void Camellia::extendSubKeys18Rounds(const BytesVector &Ka, const BytesVector &Kl)
+{
+    subkeys.extend(BigEndian64::toIntegersVector(Ka));
+    subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(15)));
+    subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(15)));
+    Ke.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(30)));
+    subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(45)));
+
+    subkeys.push_back(BigEndian64::toIntegerRange(Ka.rotateLeft(45), 0, 8));
+    subkeys.push_back(BigEndian64::toIntegerRange(Kl.rotateLeft(60), 8));
+
+    subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(60)));
+    Ke.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(77)));
+    subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(94)));
+    subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(94)));
+    subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(111)));
+    Kw.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(111)));
+}
+
+void Camellia::extendSubKeysNot18Rounds(const BytesVector &Ka, const BytesVector &Kl, 
+                                        const BytesVector &Kr, const BytesVector &Kb)
+{      
+    subkeys.extend(BigEndian64::toIntegersVector(Kb));
+    subkeys.extend(BigEndian64::toIntegersVector(Kr.rotateLeft(15)));
+    subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(15)));
+    Ke.extend(BigEndian64::toIntegersVector(Kr.rotateLeft(30)));
+    subkeys.extend(BigEndian64::toIntegersVector(Kb.rotateLeft(30)));
+    subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(45)));
+    subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(45)));
+    Ke.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(60)));
+    subkeys.extend(BigEndian64::toIntegersVector(Kr.rotateLeft(60)));
+    subkeys.extend(BigEndian64::toIntegersVector(Kb.rotateLeft(60)));
+    subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(77)));
+    Ke.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(77)));
+    subkeys.extend(BigEndian64::toIntegersVector(Kr.rotateLeft(94)));
+    subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(94)));
+    subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(111)));
+    Kw.extend(BigEndian64::toIntegersVector(Kb.rotateLeft(111)));
 }
 
 // Used technic of P.29 from the specs.

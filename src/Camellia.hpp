@@ -34,6 +34,10 @@ private:
    void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const override;
    void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const override;
    
+   void extendSubKeys18Rounds(const BytesVector &Ka, const BytesVector &Kl);
+   void extendSubKeysNot18Rounds(const BytesVector &Ka, const BytesVector &Kl, 
+                                 const BytesVector &Kr, const BytesVector &Kb);
+   
    static uint64_t FL(const uint64_t &half_block, const uint64_t &subkey);
    static uint64_t FLInverse(const uint64_t &half_block, const uint64_t &subkey);
    

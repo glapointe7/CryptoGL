@@ -86,6 +86,9 @@ public:
    
    /* Rotate left of 'to_rotate' characters in string. */
    void rotateLeft(const uint64_t &to_rotate);
+   
+   /* Rotate right of 'to_rotate' characters in string. */
+   void rotateRight(const uint64_t &to_rotate);
 };
 
 #endif

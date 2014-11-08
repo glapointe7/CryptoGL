@@ -1,5 +1,5 @@
 /*
- * Utilities for vectors.
+ * Add responsabilities to the original std vector.
  */
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
@@ -280,11 +280,5 @@ private:
       const uint32_t inner_shift;
    };
 };
-
-//using VectorOfBytes = Vector<uint8_t>;
-//using VectorOfUInt16 = Vector<uint16_t>;
-//using VectorOfUInt32 = Vector<uint32_t>;
-//using VectorOfUInt64 = Vector<uint64_t>;
-//using VectorOfStrings = Vector<String>;
 
 #endif
