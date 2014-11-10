@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+using namespace CryptoGL;
+
 const String String::letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 const String String::uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const String String::lowercase = "abcdefghijklmnopqrstuvwxyz";

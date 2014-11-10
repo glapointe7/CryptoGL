@@ -5,6 +5,8 @@
 #include "Endian.hpp"
 #include "Endian.hpp"
 
+using namespace CryptoGL;
+
 void HC256::setKey(const BytesVector &key)
 {
    const uint8_t key_size = key.size();

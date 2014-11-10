@@ -4,6 +4,8 @@
 #include "Endian.hpp"
 #include "Vector.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<uint64_t, 24> Keccak::round_constants;
 constexpr std::array<std::array<uint8_t, 5>, 5> Keccak::rho_offsets;
 

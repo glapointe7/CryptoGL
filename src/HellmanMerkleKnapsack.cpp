@@ -5,6 +5,8 @@
 
 #include <algorithm>
 
+using namespace CryptoGL;
+
 HellmanMerkleKnapsack::HellmanMerkleKnapsack(const BigIntVector &sequence, const BigInteger &div, const BigInteger &mod)
 {
    if(!Maths::areCoprimes(div, mod))

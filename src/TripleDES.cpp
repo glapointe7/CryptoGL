@@ -4,6 +4,8 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
+using namespace CryptoGL;
+
 TripleDES::TripleDES(const BytesVector &key1, const BytesVector &key2, const BytesVector &key3)
 {
    setKey(key1);

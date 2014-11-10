@@ -1,5 +1,7 @@
 #include "Tiger.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<std::array<uint64_t, 256>, 4> Tiger::sbox;
 
 void Tiger::applyKeySchedule(UInt64Vector &words)

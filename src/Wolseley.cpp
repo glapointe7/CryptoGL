@@ -2,6 +2,8 @@
 
 #include "String.hpp"
 
+using namespace CryptoGL;
+
 Wolseley::Wolseley(const KeyType &key)
 {
    setAlpha(ClassicalType::grid_uppercase_fr);

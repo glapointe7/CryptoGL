@@ -2,6 +2,8 @@
 
 #include "MathematicalTools.hpp"
 
+using namespace CryptoGL;
+
 ClassicalType Playfair::encode(const ClassicalType &clear_text)
 {  
    ClassicalType full_text = appendChars(clear_text, 2, 'X');

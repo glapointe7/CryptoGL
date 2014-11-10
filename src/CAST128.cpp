@@ -4,6 +4,8 @@
 #include "Bits.hpp"
 #include "Padding.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<std::array<uint32_t, 256>, 8> CAST128::S;
 
 void CAST128::setKey(const BytesVector &key)

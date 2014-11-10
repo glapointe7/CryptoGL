@@ -9,6 +9,8 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<std::array<uint8_t, 8>, 4> Twofish::RS;
 constexpr std::array<std::array<uint8_t, 4>, 4> Twofish::MDS;
 constexpr std::array<std::array<uint8_t, 256>, 4> Twofish::Q;

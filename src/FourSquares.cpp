@@ -1,5 +1,7 @@
 #include "FourSquares.hpp"
 
+using namespace CryptoGL;
+
 FourSquares::FourSquares(const KeyType &key1, const KeyType &key2, const ClassicalType &alpha)
    : SquareCipher(key1, alpha), grid2(key2, alpha)
 {

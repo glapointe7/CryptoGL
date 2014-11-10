@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+using namespace CryptoGL;
+
 constexpr std::array<std::array<uint64_t, 256>, 8> Whirlpool::sbox;
 constexpr std::array<uint64_t, 10> Whirlpool::RC;
 

@@ -4,6 +4,8 @@
 
 #include "Checksum.hpp"
 
+using namespace CryptoGL;
+
 class LRC : public Checksum <uint8_t>
 {
 public:

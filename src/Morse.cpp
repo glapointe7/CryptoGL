@@ -6,6 +6,8 @@
 #include "String.hpp"
 #include "Vector.hpp"
 
+using namespace CryptoGL;
+
 const std::array<ClassicalType, 36> Morse::morse = {
    {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..",
    ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.",

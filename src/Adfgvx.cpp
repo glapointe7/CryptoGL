@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <memory>
 
+using namespace CryptoGL;
+
 const ClassicalType Adfgvx::code = "ADFGVX";
 
 Int32Vector Adfgvx::getPermutationKey() const

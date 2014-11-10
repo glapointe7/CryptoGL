@@ -1,5 +1,7 @@
 #include "Skipjack.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<uint8_t, 256> Skipjack::f_table;
 
 void Skipjack::setKey(const BytesVector &key)

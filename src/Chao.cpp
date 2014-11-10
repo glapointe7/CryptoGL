@@ -4,6 +4,8 @@
 
 #include <algorithm>
 
+using namespace CryptoGL;
+
 Chao::Chao(const ClassicalType &left_alpha, const ClassicalType &right_alpha)
 {
    checkAlpha(left_alpha);

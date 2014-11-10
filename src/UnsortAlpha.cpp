@@ -2,6 +2,8 @@
 
 #include "String.hpp"
 
+using namespace CryptoGL;
+
 UnsortAlpha::UnsortAlpha(const KeyType &key)
    : charEncode(sortAlpha), charDecode(unorderedAlpha), unsort_alpha(alpha.length())
 {

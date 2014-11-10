@@ -7,6 +7,8 @@
 
 #include "MathematicalTools.hpp" 
 
+using namespace CryptoGL;
+
 void Hill::setKey(const Int32Matrix &key)
 {
    try

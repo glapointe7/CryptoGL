@@ -4,6 +4,8 @@
 
 #include <algorithm>
 
+using namespace CryptoGL;
+
 constexpr std::array<uint32_t, 5> Ripemd::magic_numbers1;
 constexpr std::array<uint32_t, 5> Ripemd::magic_numbers_big2;
 constexpr std::array<uint32_t, 4> Ripemd::magic_numbers2;

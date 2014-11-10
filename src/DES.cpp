@@ -6,6 +6,8 @@
 #include "exceptions/BadKeyLength.hpp"
 #include "exceptions/EmptyKey.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<uint8_t, 16> DES::rot_table;
 constexpr std::array<uint8_t, 64> DES::IP;
 constexpr std::array<uint8_t, 64> DES::IP_inverse;

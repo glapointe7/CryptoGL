@@ -7,16 +7,19 @@
 #include <string>
 #include <array>
 
-class Morse : public StringCipher
+namespace CryptoGL
 {
-public:
-   Morse();
+    class Morse : public StringCipher
+    {
+    public:
+       Morse();
 
-   ClassicalType encode(const ClassicalType &) override;
-   ClassicalType decode(const ClassicalType &) override;
+       ClassicalType encode(const ClassicalType &) override;
+       ClassicalType decode(const ClassicalType &) override;
 
-private:
-   static const std::array<ClassicalType, 36> morse;
-};
+    private:
+       static const std::array<ClassicalType, 36> morse;
+    };
+}
 
 #endif

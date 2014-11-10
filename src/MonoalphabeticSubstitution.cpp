@@ -1,5 +1,7 @@
 #include "MonoalphabeticSubstitution.hpp"
 
+using namespace CryptoGL;
+
 ClassicalType MonoalphabeticSubstitution::encode(const ClassicalType &clear_text)
 {
    const KeyType key = getKey();

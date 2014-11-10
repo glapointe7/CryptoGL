@@ -7,6 +7,8 @@
 #include "exceptions/BadChar.hpp"
 #include "exceptions/EmptyKey.hpp"
 
+using namespace CryptoGL;
+
 Nihilistes::Nihilistes(const KeyType &key, const KeyType &second_key, const ClassicalType &alpha) 
    : SquareCipher(key, alpha)
 {

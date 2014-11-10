@@ -3,6 +3,8 @@
 
 #include <set>
 
+using namespace CryptoGL;
+
 Transposition::Table Transposition::createTable(ClassicalType data)
 {
    const uint32_t key_len = key.size();

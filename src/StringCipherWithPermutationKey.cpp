@@ -5,6 +5,8 @@
 
 #include "exceptions/EmptyKey.hpp"
 
+using namespace CryptoGL;
+
 bool StringCipherWithPermutationKey::isUniqueWithoutMissingIntegers(const KeyType &key)
 {
    const uint32_t key_len = key.size();

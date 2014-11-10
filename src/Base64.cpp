@@ -4,6 +4,8 @@
 
 #include "exceptions/BadChar.hpp"
 
+using namespace CryptoGL;
+
 ClassicalType Base64::encode(const BytesVector &clear_data)
 {
    const uint32_t clear_len = clear_data.size();

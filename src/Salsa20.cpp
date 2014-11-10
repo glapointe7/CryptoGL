@@ -7,6 +7,8 @@
 #include "Endian.hpp"
 #include "Vector.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<std::array<uint8_t, 4>, 4> Salsa20::sigma;
 constexpr std::array<std::array<uint8_t, 4>, 4> Salsa20::tau;
 

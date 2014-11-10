@@ -1,5 +1,6 @@
 #include "Bits.hpp"
 
+using namespace CryptoGL;
 /*BytesVector Bits::rotateLeft128(const BytesVector &bytes, const uint8_t shift)
 {
    const uint8_t bytes_to_rotate = shift / 8;

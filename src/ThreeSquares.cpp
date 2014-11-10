@@ -1,5 +1,7 @@
 #include "ThreeSquares.hpp"
 
+using namespace CryptoGL;
+
 ThreeSquares::ThreeSquares(const KeyType &key1, const KeyType &key2, const KeyType &key3, const ClassicalType &alpha)
    : SquareCipher(key1, alpha), grid2(key2, alpha), grid3(key3, alpha)
 {

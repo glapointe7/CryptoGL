@@ -9,14 +9,17 @@
 #include <vector>
 #include <string>
 
-class Base64 : public Cipher<ClassicalType, BytesVector>
-{  
-public:
-   ClassicalType encode(const BytesVector &clear_data) override;
-   BytesVector decode(const ClassicalType &cipher_data) override;
-   
-private:
-   static constexpr uint8_t pad_character = '=';
-};
+namespace CryptoGL
+{
+    class Base64 : public Cipher<ClassicalType, BytesVector>
+    {  
+    public:
+       ClassicalType encode(const BytesVector &clear_data) override;
+       BytesVector decode(const ClassicalType &cipher_data) override;
+
+    private:
+       static constexpr uint8_t pad_character = '=';
+    };
+}
 
 #endif

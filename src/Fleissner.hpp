@@ -10,28 +10,31 @@
 #include <string>
 #include <set>
 
-class Fleissner : public StringCipher
-{  
-   using Cell = std::pair<uint32_t, uint32_t>;
-   using Coordinates = std::vector<Cell>;
-   using Grid = std::vector<ClassicalType>;
-   using KeyCellNotUnique = BadKey;
-   
-public:
-   Fleissner(const Coordinates &key, const uint32_t grid_dim, const bool clockwise);
-   
-   ClassicalType encode(const ClassicalType &clear_text) override;
-   ClassicalType decode(const ClassicalType &cipher_text) override;
+namespace CryptoGL
+{
+    class Fleissner : public StringCipher
+    {  
+       using Cell = std::pair<uint32_t, uint32_t>;
+       using Coordinates = std::vector<Cell>;
+       using Grid = std::vector<ClassicalType>;
+       using KeyCellNotUnique = BadKey;
 
-   void setGridDimension(const uint32_t dim);
+    public:
+       Fleissner(const Coordinates &key, const uint32_t grid_dim, const bool clockwise);
 
-private:   
-   static void rotationExists(std::set<Cell> &cmp, const uint32_t x, const uint32_t y);
+       ClassicalType encode(const ClassicalType &clear_text) override;
+       ClassicalType decode(const ClassicalType &cipher_text) override;
 
-   // Dimension of the cipher grid.
-   uint32_t grid_dim;
+       void setGridDimension(const uint32_t dim);
 
-   Coordinates key;
-};
+    private:   
+       static void rotationExists(std::set<Cell> &cmp, const uint32_t x, const uint32_t y);
+
+       // Dimension of the cipher grid.
+       uint32_t grid_dim;
+
+       Coordinates key;
+    };
+}
 
 #endif

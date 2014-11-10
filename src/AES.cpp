@@ -6,6 +6,8 @@
 
 #include <algorithm>
 
+using namespace CryptoGL;
+
 constexpr std::array<uint8_t, 16> AES::shift_indexes;
 constexpr std::array<uint8_t, 16> AES::inverse_shift_indexes;
 constexpr std::array<uint32_t, 15> AES::round_constants;

@@ -2,6 +2,8 @@
 
 #include "Vector.hpp"
 
+using namespace CryptoGL;
+
 /*
  * ECB Mode of encryption.
  */

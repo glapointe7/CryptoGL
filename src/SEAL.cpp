@@ -8,6 +8,8 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
+using namespace CryptoGL;
+
 void SEAL::setKey(const BytesVector &key)
 {
    if (key.size() != 20)

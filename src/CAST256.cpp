@@ -4,6 +4,8 @@
 #include "Bits.hpp"
 #include "Padding.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<std::array<uint32_t, 256>, 4> CAST256::S;
 const std::array<Function, 3> CAST256::F = {{F1, F2, F3}};
 

@@ -10,6 +10,8 @@
 
 #include <algorithm>
 
+using namespace CryptoGL;
+
 constexpr std::array<uint8_t, 16> Scream::pi;
 constexpr std::array<uint8_t, 256> Scream::sbox;
 

@@ -8,8 +8,9 @@
 
 #include <algorithm>  // swap
 
-// Exceptions : Matrix have to be square and not empty.
+using namespace CryptoGL;
 
+// Exceptions : Matrix have to be square and not empty.
 void SquareMatrix::setMatrix(const Int32Matrix &M)
 {
    if (M.empty())

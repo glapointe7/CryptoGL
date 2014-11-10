@@ -5,6 +5,8 @@
 
 #include "exceptions/BadAlphaLength.hpp"
 
+using namespace CryptoGL;
+
 CipherGrid::CipherGrid(ClassicalType key, const ClassicalType &alpha)
 {
    setDimension(alpha);

@@ -1,5 +1,7 @@
 #include "Blake.hpp"
 
+using namespace CryptoGL;
+
 template <>
 const UInt64Vector VectorGetter<UInt64Vector>::G = {
    0x243F6A8885A308D3, 0x13198A2E03707344, 0xA4093822299F31D0, 0x082EFA98EC4E6C89,

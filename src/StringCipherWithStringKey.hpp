@@ -9,22 +9,25 @@
 #include <string>
 #include <vector>
 
-class StringCipherWithStringKey : public StringCipher
+namespace CryptoGL
 {
-public:
-   using KeyType = String;
+    class StringCipherWithStringKey : public StringCipher
+    {
+    public:
+       using KeyType = String;
 
-   KeyType getKey() const noexcept { return key; }
-   virtual void setKey(const KeyType &key);
+       KeyType getKey() const noexcept { return key; }
+       virtual void setKey(const KeyType &key);
 
-protected:
-   StringCipherWithStringKey() {}
-   virtual ~StringCipherWithStringKey() {}
-   
-   void checkKey(const KeyType &key) const;
-   
-private:   
-   KeyType key;
-};
+    protected:
+       StringCipherWithStringKey() {}
+       virtual ~StringCipherWithStringKey() {}
+
+       void checkKey(const KeyType &key) const;
+
+    private:   
+       KeyType key;
+    };
+}
 
 #endif

@@ -4,6 +4,8 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
+using namespace CryptoGL;
+
 void IDEA::setKey(const BytesVector &key)
 {
    const uint8_t key_len = key.size();

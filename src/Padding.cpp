@@ -1,5 +1,7 @@
 #include "Padding.hpp"
 
+using namespace CryptoGL;
+
 BytesVector Padding::zeros(BytesVector data, const uint8_t block_size)
 {
    const uint8_t remaining = data.size() % block_size;

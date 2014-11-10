@@ -1,5 +1,7 @@
 #include "Isaac.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<uint8_t, 8> Isaac::shift;
 
 uint32_t Isaac::applyRound(const uint32_t accum_shifted, const uint16_t index)

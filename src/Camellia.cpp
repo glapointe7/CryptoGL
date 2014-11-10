@@ -6,6 +6,8 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<uint64_t, 6> Camellia::key_sigma;
 constexpr std::array<uint32_t, 256> Camellia::SP1110;
 constexpr std::array<uint32_t, 256> Camellia::SP0222;

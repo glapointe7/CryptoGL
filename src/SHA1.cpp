@@ -2,6 +2,8 @@
 
 #include "Integer.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<uint32_t, 4> SHA1::k;
 
 void SHA1::compress(UInt32Vector &int_block, UInt32Vector &state)

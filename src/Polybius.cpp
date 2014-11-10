@@ -1,5 +1,7 @@
 #include "Polybius.hpp" 
 
+using namespace CryptoGL;
+
 ClassicalType Polybius::encode(const ClassicalType &clear_text)
 {  
    ClassicalType crypted(clear_text.length() * 2);

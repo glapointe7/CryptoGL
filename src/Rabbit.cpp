@@ -4,6 +4,8 @@
 #include "exceptions/BadKeyLength.hpp"
 #include "Endian.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<uint32_t, 8> Rabbit::A;
 
 void Rabbit::setKey(const BytesVector &key)

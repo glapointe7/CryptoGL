@@ -5,6 +5,8 @@
 #include "exceptions/EmptyAlpha.hpp"
 #include "exceptions/MultipleChar.hpp"
 
+using namespace CryptoGL;
+
 void StringCipher::checkAlpha(const ClassicalType &alpha)
 {
    if (alpha.empty())

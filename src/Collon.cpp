@@ -1,7 +1,8 @@
 #include "Collon.hpp"
 
-// Series length have to be between 1 and text length.
+using namespace CryptoGL;
 
+// Series length have to be between 1 and text length.
 /*void Collon::setBlockLength(const uint32_t block_len)
 {
    if (block_len == 0)

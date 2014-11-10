@@ -1,7 +1,8 @@
 #include "Vigenere.hpp"
 
-// Process the core of the Vigenere algorithm.
+using namespace CryptoGL;
 
+// Process the core of the Vigenere algorithm
 ClassicalType Vigenere::process(const ClassicalType &text, const GetCharFunction &getNextChar)
 {
    const KeyType my_key = getKey();

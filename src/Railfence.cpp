@@ -2,6 +2,8 @@
 
 #include "exceptions/EmptyKey.hpp"
 
+using namespace CryptoGL;
+
 RedefenceZigzag::RedefenceZigzag(const KeyType &key, const KeyType &key_levels)
 {
    if (key.size() == 1)

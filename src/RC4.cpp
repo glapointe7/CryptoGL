@@ -4,6 +4,8 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
+using namespace CryptoGL;
+
 void RC4::setKey(const BytesVector &key)
 {
    if(key.size() > 256 || key.size() == 0)

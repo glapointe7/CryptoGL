@@ -2,6 +2,8 @@
 
 #include "Padding.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<uint8_t, 256> MD2::digits_of_pi;
 
 void MD2::process(const BytesVector &data, BytesVector &hash) const

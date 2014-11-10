@@ -4,13 +4,16 @@
 
 #include "StringCipherWithStringKey.hpp"
 
-class MonoalphabeticSubstitution : public StringCipherWithStringKey
+namespace CryptoGL
 {
-public:
-   explicit MonoalphabeticSubstitution(const KeyType &key) {setKey(key); }
-   
-   ClassicalType encode(const ClassicalType &clear_text) override;
-   ClassicalType decode(const ClassicalType &cipher_text) override;
-};
+    class MonoalphabeticSubstitution : public StringCipherWithStringKey
+    {
+    public:
+       explicit MonoalphabeticSubstitution(const KeyType &key) {setKey(key); }
+
+       ClassicalType encode(const ClassicalType &clear_text) override;
+       ClassicalType decode(const ClassicalType &cipher_text) override;
+    };
+}
 
 #endif

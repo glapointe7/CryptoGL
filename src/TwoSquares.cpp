@@ -1,5 +1,7 @@
 #include "TwoSquares.hpp"
 
+using namespace CryptoGL;
+
 TwoSquares::TwoSquares(const KeyType &key1, const KeyType &key2, const ClassicalType &alpha)
    : SquareCipher(key1, alpha), grid2(key2, alpha)
 {

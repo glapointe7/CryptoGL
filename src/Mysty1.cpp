@@ -1,5 +1,7 @@
 #include "Mysty1.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<uint8_t, 128> Mysty1::S7;
 constexpr std::array<uint16_t, 512> Mysty1::S9;
 

@@ -4,15 +4,17 @@
 
 #include "Types.hpp"
 
-
-template <class DataType>
-class Checksum
+namespace CryptoGL
 {
-public:
-   
-   virtual ~Checksum() {}
-   
-   virtual DataType encode(const BytesVector &) = 0;
-};
+    template <class DataType>
+    class Checksum
+    {
+    public:
+
+       virtual ~Checksum() {}
+
+       virtual DataType encode(const BytesVector &) = 0;
+    };
+}
 
 #endif

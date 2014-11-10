@@ -5,6 +5,8 @@
 #include "../src/Vigenere.hpp"
 #include "../src/String.hpp"
 
+using namespace CryptoGL;
+
 class CaesarTest : public ::testing::Test
 {
 protected:

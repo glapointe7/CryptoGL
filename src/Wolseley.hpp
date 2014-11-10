@@ -6,13 +6,16 @@
 
 #include <string>
 
-class Wolseley : public StringCipherWithStringKey
+namespace CryptoGL
 {
-public:
-   explicit Wolseley(const KeyType &key);
+    class Wolseley : public StringCipherWithStringKey
+    {
+    public:
+       explicit Wolseley(const KeyType &key);
 
-   ClassicalType encode(const ClassicalType &clear_text) override;
-   ClassicalType decode(const ClassicalType &cipher_text) override;
-};
+       ClassicalType encode(const ClassicalType &clear_text) override;
+       ClassicalType decode(const ClassicalType &cipher_text) override;
+    };
+}
 
 #endif

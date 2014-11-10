@@ -7,6 +7,8 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<uint32_t, 17> Noekeon::round_constants;
 
 void Noekeon::setKey(const BytesVector &key)

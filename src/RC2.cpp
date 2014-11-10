@@ -2,6 +2,8 @@
 
 #include "Bits.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<uint8_t, 256> RC2::pi_table;
 constexpr std::array<uint8_t, 4> RC2::mixup_rotation;
 

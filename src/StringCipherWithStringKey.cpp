@@ -4,6 +4,8 @@
 #include "exceptions/EmptyKey.hpp"
 #include "exceptions/BadChar.hpp"
 
+using namespace CryptoGL;
+
 void StringCipherWithStringKey::checkKey(const KeyType &key) const
 {
    if (key.empty())

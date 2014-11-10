@@ -7,8 +7,9 @@
 #include <time.h>
 #include <vector>
 
-// The key is represented by the coordinates of each 'hole' in the grid's mask.
+using namespace CryptoGL;
 
+// The key is represented by the coordinates of each 'hole' in the grid's mask.
 Fleissner::Fleissner(const Coordinates &key, const uint32_t grid_dim, const bool clockwise)
 {
    Coordinates coords(key);

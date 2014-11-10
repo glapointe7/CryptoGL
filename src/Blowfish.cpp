@@ -6,6 +6,8 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
+using namespace CryptoGL;
+
 constexpr std::array<uint32_t, 18> Blowfish::P;
 
 void Blowfish::setKey(const BytesVector &key)

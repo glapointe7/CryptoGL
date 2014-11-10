@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+using namespace CryptoGL;
+
 void Tools::convertMajMinToSymbol(std::string &text, const std::string symbol)
 {
    std::replace_if(text.begin(), text.end(), [](char c) {

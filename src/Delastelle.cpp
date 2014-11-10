@@ -4,6 +4,8 @@
 
 #include <vector>
 
+using namespace CryptoGL;
+
 void Delastelle::setBlockLength(const uint32_t block_len)
 {
    if (block_len == 0)

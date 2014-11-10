@@ -2,6 +2,8 @@
 
 #include "MathematicalTools.hpp"
 
+using namespace CryptoGL;
+
 void Affine::setKey(const int32_t a, const int32_t b)
 {
    this->a = a;

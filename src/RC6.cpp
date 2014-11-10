@@ -7,6 +7,8 @@
 #include "Bits.hpp"
 #include "Endian.hpp"
 
+using namespace CryptoGL;
+
 void RC6::setKey(const BytesVector &key)
 {
    const uint8_t key_len = key.size();

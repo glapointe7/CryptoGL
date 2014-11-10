@@ -10,175 +10,177 @@
 #include "Integer.hpp"
 #include "MathematicalTools.hpp"
 
-// Vigenere : CIPHER = CLEAR + KEY
-
-class Vigenere : public StringCipherWithStringKey
+namespace CryptoGL
 {
-private:
-   using GetCharFunction = std::function<ClassicalType(const ClassicalType &, const char, const char)>;
-   
-   const GetCharFunction charEncode, charDecode;
-   ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
-   
-protected:   
-   Vigenere(const GetCharFunction &charEncode, const GetCharFunction &charDecode, const KeyType &key)
-      : charEncode(charEncode), charDecode(charDecode) { setKey(key); }
-   
-   Vigenere(const GetCharFunction &charEncode, const GetCharFunction &charDecode)
-      : charEncode(charEncode), charDecode(charDecode) {}
+    // Vigenere : CIPHER = CLEAR + KEY
+    class Vigenere : public StringCipherWithStringKey
+    {
+    private:
+       using GetCharFunction = std::function<ClassicalType(const ClassicalType &, const char, const char)>;
 
-   static ClassicalType clearPlusKey(const ClassicalType &alpha, const char c, const char key_pos)
-   {
-      const uint32_t x = (alpha.find(c) + alpha.find(key_pos)) % alpha.length();
-      return ClassicalType(1, alpha[x]);
-   }
+       const GetCharFunction charEncode, charDecode;
+       ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
 
-   static ClassicalType clearMinusKey(const ClassicalType &alpha, const char c, const char key_pos)
-   {
-      const uint32_t x = Maths::mod(alpha.find(c) - alpha.find(key_pos), alpha.length());
-      return ClassicalType(1, alpha[x]);
-   }
+    protected:   
+       Vigenere(const GetCharFunction &charEncode, const GetCharFunction &charDecode, const KeyType &key)
+          : charEncode(charEncode), charDecode(charDecode) { setKey(key); }
 
-   static ClassicalType keyMinusClear(const ClassicalType &alpha, const char c, const char key_pos)
-   {
-      return ClassicalType(1, alpha[Maths::mod(alpha.find(key_pos) - alpha.find(c), alpha.length())]);
-   }
+       Vigenere(const GetCharFunction &charEncode, const GetCharFunction &charDecode)
+          : charEncode(charEncode), charDecode(charDecode) {}
 
-public:
-   explicit Vigenere(const KeyType &key)
-      : Vigenere(clearPlusKey, clearMinusKey, key) {}
-      
-   virtual ~Vigenere() {}
+       static ClassicalType clearPlusKey(const ClassicalType &alpha, const char c, const char key_pos)
+       {
+          const uint32_t x = (alpha.find(c) + alpha.find(key_pos)) % alpha.length();
+          return ClassicalType(1, alpha[x]);
+       }
 
-   ClassicalType encode(const ClassicalType &clear_text) override;
-   virtual ClassicalType decode(const ClassicalType &cipher_text) override;
-};
+       static ClassicalType clearMinusKey(const ClassicalType &alpha, const char c, const char key_pos)
+       {
+          const uint32_t x = Maths::mod(alpha.find(c) - alpha.find(key_pos), alpha.length());
+          return ClassicalType(1, alpha[x]);
+       }
 
-// Beaufort : CIPHER = -CLEAR + KEY
+       static ClassicalType keyMinusClear(const ClassicalType &alpha, const char c, const char key_pos)
+       {
+          return ClassicalType(1, alpha[Maths::mod(alpha.find(key_pos) - alpha.find(c), alpha.length())]);
+       }
 
-class Beaufort : public Vigenere
-{
-public:
-   explicit Beaufort(const KeyType &key)
-      : Vigenere(keyMinusClear, keyMinusClear, key) {}
-};
+    public:
+       explicit Vigenere(const KeyType &key)
+          : Vigenere(clearPlusKey, clearMinusKey, key) {}
 
-// Beaufort German : CIPHER = CLEAR - KEY
+       virtual ~Vigenere() {}
 
-class BeaufortGerman : public Vigenere
-{
-public:
-   explicit BeaufortGerman(const KeyType &key)
-      : Vigenere(clearMinusKey, clearPlusKey, key) {}
-};
+       ClassicalType encode(const ClassicalType &clear_text) override;
+       virtual ClassicalType decode(const ClassicalType &cipher_text) override;
+    };
 
-// Rozier : CIPHER = CLEAR + KEY
+    // Beaufort : CIPHER = -CLEAR + KEY
 
-class Rozier : public Vigenere
-{
-public:
-   explicit Rozier(const KeyType &key)
-      : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
+    class Beaufort : public Vigenere
+    {
+    public:
+       explicit Beaufort(const KeyType &key)
+          : Vigenere(keyMinusClear, keyMinusClear, key) {}
+    };
 
-   /* Specific to Rozier cipher : the rozier_key is a string. */
-   void setKey(const ClassicalType &rozier_key) override
-   {
-      const uint32_t key_length = rozier_key.length() - 1;
-      const uint8_t alpha_len = alpha.length();
-      KeyType new_key(key_length + 1);
+    // Beaufort German : CIPHER = CLEAR - KEY
 
-      for (uint32_t i = 0; i < key_length; ++i)
-      {
-         new_key.push_back(alpha[Maths::mod(alpha.find(rozier_key[i + 1]) - alpha.find(rozier_key[i]), alpha_len)]);
-      }
-      new_key.push_back(alpha[Maths::mod(alpha.find(rozier_key[key_length]) - alpha.find(rozier_key[0]), alpha_len)]);
-      
-      StringCipherWithStringKey::setKey(new_key);
-   }
-};
+    class BeaufortGerman : public Vigenere
+    {
+    public:
+       explicit BeaufortGerman(const KeyType &key)
+          : Vigenere(clearMinusKey, clearPlusKey, key) {}
+    };
 
-// Caesar : Cipher = Clear + key where key is a byte.
+    // Rozier : CIPHER = CLEAR + KEY
 
-class Caesar : public Vigenere
-{   
-public:
-   explicit Caesar(const int8_t key)
-      : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
+    class Rozier : public Vigenere
+    {
+    public:
+       explicit Rozier(const KeyType &key)
+          : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
 
-   // If the key is < 0 and > alpha_len, we make sure the key will be in the set {0,...,alpha_len-1}.
-   /* Specific to Caesar cipher : the caesar_key is a byte. */
-   void setKey(const int8_t caesar_key)
-   {
-      const uint8_t alpha_len = alpha.length();
-      const int8_t the_key = Maths::mod(caesar_key % alpha_len, alpha_len);
-      StringCipherWithStringKey::setKey(KeyType(1, alpha[the_key]));
-   }
-};
+       /* Specific to Rozier cipher : the rozier_key is a string. */
+       void setKey(const ClassicalType &rozier_key) override
+       {
+          const uint32_t key_length = rozier_key.length() - 1;
+          const uint8_t alpha_len = alpha.length();
+          KeyType new_key(key_length + 1);
 
-// VigenereMult : CIPHER = CLEAR * KEY
+          for (uint32_t i = 0; i < key_length; ++i)
+          {
+             new_key.push_back(alpha[Maths::mod(alpha.find(rozier_key[i + 1]) - alpha.find(rozier_key[i]), alpha_len)]);
+          }
+          new_key.push_back(alpha[Maths::mod(alpha.find(rozier_key[key_length]) - alpha.find(rozier_key[0]), alpha_len)]);
 
-class VigenereMult : public Vigenere
-{
-private:
-   static ClassicalType clearMultKey(const ClassicalType &alpha, const char c, const uint8_t key_pos)
-   {
-      const uint32_t x = (alpha.find(c) + 1) * (alpha.find(key_pos) + 1);
-      ClassicalType buffer(uint32::toString(x));
-      buffer.reserve(buffer.length() + 1);
-      buffer.push_back(' '); 
-      
-      return buffer;
-   }
+          StringCipherWithStringKey::setKey(new_key);
+       }
+    };
 
-   static ClassicalType keyDivideCipher(const ClassicalType &alpha, const uint16_t c, const uint8_t key_pos)
-   {
-      const uint8_t x = (c / (alpha.find(key_pos) + 1)) - 1;
-      return ClassicalType(1, alpha[x]);
-   }
+    // Caesar : Cipher = Clear + key where key is a byte.
 
-public:
-   explicit VigenereMult(const KeyType &key)
-      : Vigenere(clearMultKey, keyDivideCipher, key) {}
+    class Caesar : public Vigenere
+    {   
+    public:
+       explicit Caesar(const int8_t key)
+          : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
 
-   /* Decode the Vigenere Multiplication cipher with the given cipher_text. */
-   ClassicalType decode(const ClassicalType &cipher_text) override
-   {
-      const KeyType my_key = getKey();
-      const uint32_t key_length = my_key.length();
-      
-      ClassicalType toReturn(cipher_text.length());
-      const std::vector<ClassicalType> cipher_numbers = ClassicalType(cipher_text.trimEnd()).split(' ');
+       // If the key is < 0 and > alpha_len, we make sure the key will be in the set {0,...,alpha_len-1}.
+       /* Specific to Caesar cipher : the caesar_key is a byte. */
+       void setKey(const int8_t caesar_key)
+       {
+          const uint8_t alpha_len = alpha.length();
+          const int8_t the_key = Maths::mod(caesar_key % alpha_len, alpha_len);
+          StringCipherWithStringKey::setKey(KeyType(1, alpha[the_key]));
+       }
+    };
 
-      uint32_t idx = 0;
-      for (const auto number : cipher_numbers)
-      {
-         toReturn.push_back(keyDivideCipher(alpha, atoi(number.c_str()), my_key[idx]).front());
-         idx = (idx + 1) % key_length;
-      }
+    // VigenereMult : CIPHER = CLEAR * KEY
 
-      return toReturn;
-   }
-};
+    class VigenereMult : public Vigenere
+    {
+    private:
+       static ClassicalType clearMultKey(const ClassicalType &alpha, const char c, const uint8_t key_pos)
+       {
+          const uint32_t x = (alpha.find(c) + 1) * (alpha.find(key_pos) + 1);
+          ClassicalType buffer(uint32::toString(x));
+          buffer.reserve(buffer.length() + 1);
+          buffer.push_back(' '); 
 
-class Gronsfeld : public Vigenere
-{  
-public:
-   explicit Gronsfeld(const UInt32Vector &key)
-      : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
-   
-   /* Specific to Gronsfeld cipher : the grons_key is a vector of integers. */
-   void setKey(const UInt32Vector &grons_key)
-   {
-      const uint8_t alpha_len = alpha.length();
-      KeyType new_key(grons_key.size());
-      
-      for(const auto number : grons_key)
-      {
-         const uint8_t x = Maths::mod(number % alpha_len, alpha_len);
-         new_key.push_back(alpha[x]);
-      }
-      StringCipherWithStringKey::setKey(new_key);
-   }
-};
+          return buffer;
+       }
+
+       static ClassicalType keyDivideCipher(const ClassicalType &alpha, const uint16_t c, const uint8_t key_pos)
+       {
+          const uint8_t x = (c / (alpha.find(key_pos) + 1)) - 1;
+          return ClassicalType(1, alpha[x]);
+       }
+
+    public:
+       explicit VigenereMult(const KeyType &key)
+          : Vigenere(clearMultKey, keyDivideCipher, key) {}
+
+       /* Decode the Vigenere Multiplication cipher with the given cipher_text. */
+       ClassicalType decode(const ClassicalType &cipher_text) override
+       {
+          const KeyType my_key = getKey();
+          const uint32_t key_length = my_key.length();
+
+          ClassicalType toReturn(cipher_text.length());
+          const std::vector<ClassicalType> cipher_numbers = ClassicalType(cipher_text.trimEnd()).split(' ');
+
+          uint32_t idx = 0;
+          for (const auto number : cipher_numbers)
+          {
+             toReturn.push_back(keyDivideCipher(alpha, atoi(number.c_str()), my_key[idx]).front());
+             idx = (idx + 1) % key_length;
+          }
+
+          return toReturn;
+       }
+    };
+
+    class Gronsfeld : public Vigenere
+    {  
+    public:
+       explicit Gronsfeld(const UInt32Vector &key)
+          : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
+
+       /* Specific to Gronsfeld cipher : the grons_key is a vector of integers. */
+       void setKey(const UInt32Vector &grons_key)
+       {
+          const uint8_t alpha_len = alpha.length();
+          KeyType new_key(grons_key.size());
+
+          for(const auto number : grons_key)
+          {
+             const uint8_t x = Maths::mod(number % alpha_len, alpha_len);
+             new_key.push_back(alpha[x]);
+          }
+          StringCipherWithStringKey::setKey(new_key);
+       }
+    };
+}
 
 #endif
