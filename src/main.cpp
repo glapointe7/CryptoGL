@@ -79,12 +79,11 @@
 //#include <sys/time.h>
 
 #include "../UnitTests/TestContainer.hpp"
-#include "../UnitTests/InitUnitTests.hpp"
+#include "../UnitTests/Adler32Test.hpp"
 
 int main(int argc, char **argv)
 {
-    UnitTests::initialize();
-    UnitTests::TestContainer::runAllTests();
+    return UnitTests::TestContainer::runAllTests();
     
 //    ::testing::InitGoogleTest(&argc, argv);
 //    return RUN_ALL_TESTS();

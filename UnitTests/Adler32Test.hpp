@@ -10,10 +10,9 @@ namespace UnitTests
 {
     class Adler32Test : public Test
     {
-    private:
+    protected:
         Adler32 *A;
         
-    public:
         void setUp() override 
         { 
             A = new Adler32(); 
@@ -23,27 +22,18 @@ namespace UnitTests
         { 
             delete A; 
         }
-        
-        void run() override
-        {
-            runWithEmptyValue();
-            runNormalCase();
-        }
-        
-        void runWithEmptyValue()
-        {
-            setName("Adler32WithEmptyValue");
-            compare(0x00000001u, A->encode({}));
-        }
-        
-        void runNormalCase()
-        {
-            setName("Adler32NormalCase");
-            const String message = "message digest";
-            compare(0x29750586u, A->encode(message.toBytes()));
-        }
-
     };
+    
+    TEST(Adler32WithEmptyValue, Adler32Test)
+    {
+        compare(0x00000001u, A->encode({}));
+    }
+
+    TEST(Adler32NormalCase, Adler32Test)
+    {
+        const String message = "message digest";
+        compare(0x29750586u, A->encode(message.toBytes()));
+    }
 }
 
 #endif
