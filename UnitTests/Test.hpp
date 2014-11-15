@@ -4,8 +4,6 @@
 
 #include "../src/Types.hpp"
 
-#include "TestContainer.hpp"
-
 #include <iostream>
 
 using namespace CryptoGL;
@@ -21,25 +19,11 @@ namespace UnitTests
         
         void printResult()
         {
-//            if(is_success)
-//            {
-//                std::cout << "[PASSED] " << name;
-//            }
-//            else
-//            {
-//                std::cout << "[FAILED] " << name;
-//            }
-            std::cout << (is_success) ? "[PASSED] " : "[FAILED] ";
+            std::cout << ((is_success) ? "[PASSED] " : "[FAILED] ");
             std::cout << name << " ";
-            
         }
         
     protected:
-        explicit Test(const String &name) : name(name) 
-        { 
-            TestContainer::getInstance().append(this); 
-        }
-        
         virtual ~Test() {}
         
         template <class Type>
@@ -47,17 +31,16 @@ namespace UnitTests
         {
             if(expected_value == input_value)
             {
-                total_passed_tests++;
                 is_success = true;
             }
-            total_tests++;
         }
+        
+        void setName(const String &name) { this->name = name; }
         
     private:
         bool is_success = false;
-        static uint64_t total_tests = 0;
-        static uint64_t total_passed_tests = 0;
-        const String name;
+        double execution_time;
+        String name;
     };
 }
 

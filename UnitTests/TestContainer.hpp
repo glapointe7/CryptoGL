@@ -13,6 +13,9 @@ namespace UnitTests
         
         static Vector<Test *> unit_tests_vector;
         
+        uint64_t total_tests = 0;
+        uint64_t total_passed_tests = 0;
+        
     public:
         static TestContainer &getInstance() 
         { 
@@ -20,7 +23,7 @@ namespace UnitTests
             return instance; 
         }
         
-        void append(const Test *CurrentTest)
+        static void append(Test *CurrentTest)
         {
             unit_tests_vector.push_back(CurrentTest);
         }
@@ -28,19 +31,18 @@ namespace UnitTests
         /* Run all tests */
         static void runAllTests()
         {
-            if(!unit_tests_vector.empty())
+            for(const auto &current_test : unit_tests_vector)
             {
-                for(const auto current_test : unit_tests_vector)
-                {
-                    current_test->setUp();
-                    current_test->run();
-                    current_test->tearDown();
-                    
-                    current_test->printResult();
-                }
+                current_test->setUp();
+                current_test->run();
+                current_test->tearDown();
+
+                current_test->printResult();
             }
         }
     };
+    
+    Vector<Test *> TestContainer::unit_tests_vector;
 }
 
 #endif

@@ -79,9 +79,11 @@
 //#include <sys/time.h>
 
 #include "../UnitTests/TestContainer.hpp"
+#include "../UnitTests/InitUnitTests.hpp"
 
 int main(int argc, char **argv)
 {
+    UnitTests::initialize();
     UnitTests::TestContainer::runAllTests();
     
 //    ::testing::InitGoogleTest(&argc, argv);
