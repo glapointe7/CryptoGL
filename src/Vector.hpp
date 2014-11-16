@@ -204,11 +204,11 @@ namespace CryptoGL
        }
 
        /* Transform a vector of integers to a hexadecimal string. */
-       std::string toHexString() const
+       String toHexString() const
        {
           const uint8_t data_size = sizeof(Type) * 8;
           const uint64_t vect_size = this->size();
-          std::string hex_digest;
+          String hex_digest;
           hex_digest.reserve(vect_size * data_size / 4);
           for(uint64_t i = 0; i < vect_size; ++i)
           {
@@ -222,9 +222,9 @@ namespace CryptoGL
        }
 
        /* Convert a Vector to a string. *********ADD Reserve********/
-       std::string toString() const
+       String toString() const
        {
-          return std::string(this->begin(), this->end());
+          return String(this->begin(), this->end());
        }
 
        /* Convert a Vector to std::vector. */

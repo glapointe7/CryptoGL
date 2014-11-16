@@ -79,7 +79,22 @@
 //#include <sys/time.h>
 
 #include "../UnitTests/TestContainer.hpp"
+
 #include "../UnitTests/Adler32Test.hpp"
+#include "../UnitTests/AffineTest.hpp"
+#include "../UnitTests/AdfgvxTest.hpp"
+#include "../UnitTests/AESTest.hpp"
+#include "../UnitTests/Base64Test.hpp"
+#include "../UnitTests/BeaufortGermanTest.hpp"
+#include "../UnitTests/BeaufortTest.hpp"
+#include "../UnitTests/BlakeTest.hpp"
+#include "../UnitTests/BlowfishTest.hpp"
+#include "../UnitTests/CAST128Test.hpp"
+#include "../UnitTests/CAST256Test.hpp"
+#include "../UnitTests/CaesarTest.hpp"
+#include "../UnitTests/CamelliaTest.hpp"
+#include "../UnitTests/ChaoTest.hpp"
+#include "../UnitTests/CollonTest.hpp"
 
 int main(int argc, char **argv)
 {
@@ -87,12 +102,4 @@ int main(int argc, char **argv)
     
 //    ::testing::InitGoogleTest(&argc, argv);
 //    return RUN_ALL_TESTS();
-
-   /*struct timeval tim;
-   gettimeofday(&tim, NULL);
-   const double t1 = tim.tv_sec + (tim.tv_usec / 1000000.0);
-   
-   gettimeofday(&tim, NULL);
-   const double t2 = tim.tv_sec + (tim.tv_usec / 1000000.0);
-   std::cout << "Time elapsed: " << t2 - t1 << " seconds";*/
 }
