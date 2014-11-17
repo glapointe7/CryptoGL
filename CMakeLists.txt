@@ -11,24 +11,27 @@ set (CMAKE_CXX_FLAGS                "-Winline -Wall -Werror -pedantic-errors -pt
 add_subdirectory (src)
 
 #Include the testing source file headers.
-include_directories (testing)
+include_directories (UnitTests)
 
 enable_testing()
-find_package(GTest REQUIRED)
+#find_package(GTest REQUIRED)
 
-include_directories(${GTEST_INCLUDE_DIRS})
+#include_directories(${GTEST_INCLUDE_DIRS})
 
 # Target the project name to be built.
 add_executable(${Project_Name} src/main.cpp)
 
 # Link the gtest librairy to the project.
-target_link_libraries(${Project_Name} ${GTEST_BOTH_LIBRARIES})
+#target_link_libraries(${Project_Name} ${GTEST_BOTH_LIBRARIES})
 
 # Link the src librairy to the project.
 target_link_libraries (${Project_Name} cryptoGL)
 
 # Link the big_integers librairy to the project.
 target_link_libraries (${Project_Name} big_integers)
+
+# Link the UnitTests librairy to the project.
+target_link_libraries (${Project_Name} UnitTests)
 
 add_test(AllTestsInCryptology ${Project_Name})
 
