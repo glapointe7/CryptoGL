@@ -9,18 +9,17 @@
 #include "big_integers/BigIntegerUtils.hh"
 #include "big_integers/BigInteger.hh"
 #include "Types.hpp"
-#include "String.hpp"
 
 namespace Digest
 {
-   std::string getStringFromBigInteger(const BigInteger &value)
+   String getStringFromBigInteger(const BigInteger &value)
    {
       return bigIntegerToString(value);
    }
 
-   std::string bigIntVectorToString(const std::vector<BigInteger> &V)
+   String bigIntVectorToString(const std::vector<BigInteger> &V)
    {
-      std::string str;
+      String str;
       for (const auto &big_value : V)
       {
          str.append(getStringFromBigInteger(big_value));
@@ -31,12 +30,12 @@ namespace Digest
       return str;
    }
 
-   std::vector<BigInteger> stringToBigIntVector(const std::string &str)
+   std::vector<BigInteger> stringToBigIntVector(const String &str)
    {
       std::istringstream iss(str);
-      std::vector<std::string> tokens;
-      std::copy(std::istream_iterator<std::string>(iss), std::istream_iterator<std::string>(),
-              std::back_inserter<std::vector<std::string>>(tokens));
+      std::vector<String> tokens;
+      std::copy(std::istream_iterator<String>(iss), std::istream_iterator<String>(),
+              std::back_inserter<std::vector<String>>(tokens));
 
       std::vector<BigInteger> V;
       V.reserve(tokens.size());
