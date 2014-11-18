@@ -4,6 +4,7 @@
 
 #include "String.hpp"
 #include "Vector.hpp"
+#include "Integer.hpp"
 #include <stdint.h>
 
 namespace CryptoGL

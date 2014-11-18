@@ -7,16 +7,19 @@
 #include "../String.hpp"
 #include "../Integer.hpp"
 
-class BadKeyLength : public BadKey
+namespace CryptoGL
 {
-public:
+    class BadKeyLength : public BadKey
+    {
+    public:
 
-   BadKeyLength() {}
-   explicit BadKeyLength(const ErrorType &message) : BadKey(message) {}
-   BadKeyLength(const ErrorType &message, const uint32_t len)
-      : BadKey(message + "Your key length is : " + uint32::toString(len)) { }
-};
+       BadKeyLength() {}
+       explicit BadKeyLength(const ErrorType &message) : BadKey(message) {}
+       BadKeyLength(const ErrorType &message, const uint32_t len)
+          : BadKey(message + "Your key length is : " + uint32::toString(len)) { }
+    };
 
-using BadIVLength = BadKeyLength;
+    using BadIVLength = BadKeyLength;
+}
 
 #endif

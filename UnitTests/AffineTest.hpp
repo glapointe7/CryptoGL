@@ -11,8 +11,8 @@ namespace UnitTests
     {
     protected:
        Affine *A;
-       static const ClassicalType clear_text;
-       static const ClassicalType cipher_text;
+       static const StringTest clear_text;
+       static const StringTest cipher_text;
 
        void setUp() override
        {
@@ -25,8 +25,8 @@ namespace UnitTests
        }
     };
     
-    const ClassicalType AffineTest::clear_text = "DIESISTEINEGEHEIMENACHRICHT";
-    const ClassicalType AffineTest::cipher_text = "GNXBNBSXNUXFXWXNDXUHPWKNPWS";
+    const StringTest AffineTest::clear_text = "DIESISTEINEGEHEIMENACHRICHT";
+    const StringTest AffineTest::cipher_text = "GNXBNBSXNUXFXWXNDXUHPWKNPWS";
 
     TEST(AffineEncode, AffineTest) 
     {

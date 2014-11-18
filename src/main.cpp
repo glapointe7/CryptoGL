@@ -61,7 +61,7 @@
 #include "../UnitTests/SkipjackTest.hpp"
 #include "../UnitTests/Snow3GTest.hpp"
 #include "../UnitTests/TigerTest.hpp"
-#include"../UnitTests/TranspositionColumnsTest.hpp"
+#include "../UnitTests/TranspositionColumnsTest.hpp"
 #include "../UnitTests/TranspositionDoubleTest.hpp"
 #include "../UnitTests/TranspositionRowsTest.hpp"
 #include "../UnitTests/TripleDESTest.hpp"

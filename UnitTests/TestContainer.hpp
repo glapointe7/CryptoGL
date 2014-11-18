@@ -27,7 +27,6 @@ namespace UnitTests
             unit_tests_vector.push_back(CurrentTest);
         }
         
-        /* Run all tests */
         static int runAllTests()
         {
             for(const auto &current_test : unit_tests_vector)

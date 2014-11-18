@@ -47,14 +47,16 @@ namespace UnitTests
             if(has_passed)
             {
                 std::cout << Color::FG_GREEN << "\n[PASSED] ";
+                std::cout << Color::FG_DEFAULT << name;
             }
             else
             {
                 std::cout << Color::FG_RED << "\n[FAILED] ";
+                std::cout << Color::FG_DEFAULT << name << " \n   Input value: ";
+                std::cout << input_value << "\nExpected value: " << expected_value;
             }
 
-            std::cout << Color::FG_DEFAULT << name << " \n";
-            std::cout << "Time elapsed: " << end_time - start_time << " ms\n";
+            std::cout << "\nTime elapsed: " << end_time - start_time << " ms\n";
         }
         
         /* Start the timer for the current test. */
@@ -76,16 +78,38 @@ namespace UnitTests
         double getExecutedTime() { return end_time - start_time; }
         
     protected:
-        template <class Type>
-        void compare(const Type &expected_value, const Type &input_value)
+        /* Compare Strings */
+        void compare(const String &expected_value, const String &input_value)
         {
             if(expected_value == input_value)
             {
                 has_passed = true;
             }
+            else
+            {
+                this->expected_value = expected_value;
+                this->input_value = input_value;
+            }
         }
         
+        /* Compare integers */
+        void compare(const uint64_t &expected_value, const uint64_t &input_value)
+        {
+            if(expected_value == input_value)
+            {
+                has_passed = true;
+            }
+            else
+            {
+                this->expected_value = uint64::toString(expected_value);
+                this->input_value = uint64::toString(input_value);
+            }
+        }
+        
+        
     private:
+        String expected_value;
+        String input_value;
         struct timeval time_obj;
         bool has_passed = false;
         double start_time;
