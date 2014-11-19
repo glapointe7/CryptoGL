@@ -28,7 +28,7 @@ namespace UnitTests
        const StringTest clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
 
        UA->setHorizontalAlpha();
-       compare(StringTest("TRRNKILKQVLQCKQRPUSRCLKQTVTKRMLUPQUCVPNLMPTRCLKQ"), UA->encode(clear_text));
+       compare("TRRNKILKQVLQCKQRPUSRCLKQTVTKRMLUPQUCVPNLMPTRCLKQ", UA->encode(clear_text));
     }
 
     TEST(UnsortAlphaEncodeVertical, UnsortAlphaTest)
@@ -37,7 +37,7 @@ namespace UnitTests
 
        UA->setKey("TESTING");
        UA->setVerticalAlpha();
-       compare(StringTest("TFFYUQIUNWINRUNFVOJFRIUNTWTUFDIOVNORWVYIDVTFRIUN"), UA->encode(clear_text));
+       compare("TFFYUQIUNWINRUNFVOJFRIUNTWTUFDIOVNORWVYIDVTFRIUN", UA->encode(clear_text));
     }
 
     TEST(UnsortAlphaDecodeHorizontal, UnsortAlphaTest)

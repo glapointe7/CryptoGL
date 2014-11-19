@@ -32,12 +32,12 @@ namespace UnitTests
 
     TEST(Snow3GGenerateSet1, Snow3GTest)
     {
-       compare(StringTest("ABEE97047AC31373"), S->generateKeystream().toHexString());
+       compare("ABEE97047AC31373", S->generateKeystream().toHexString());
     }
 
     TEST(Snow3GGenerateSet2, Snow3GTest)
     {
-       compare(StringTest("EFF8A342F751480F"), S2->generateKeystream().toHexString());
+       compare("EFF8A342F751480F", S2->generateKeystream().toHexString());
     }
 }
 

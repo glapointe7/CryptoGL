@@ -26,9 +26,9 @@ namespace UnitTests
     {
        const StringTest clear_text = "ATTENDONSVOSINSTRUCTIONSAVANTPOURSUIVREOPRATIONS";
 
-       compare(StringTest(".- - - . -. -.. --- -. ... ...- --- ... .. -. ... - .-. ..- -.-. - .. --- "
+       compare(".- - - . -. -.. --- -. ... ...- --- ... .. -. ... - .-. ..- -.-. - .. --- "
                "-. ... .- ...- .- -. - .--. --- ..- .-. ... ..- .. ...- .-. . --- "
-               ".--. .-. .- - .. --- -. ... "), M->encode(clear_text));
+               ".--. .-. .- - .. --- -. ... ", M->encode(clear_text));
     }
 
     TEST(MorseDecode, MorseTest)

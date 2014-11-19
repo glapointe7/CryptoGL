@@ -28,12 +28,12 @@ namespace UnitTests
 
     TEST(HellmanMerkleKnapsackEncode, HellmanMerkleKnapsackTest)
     {
-       compare(StringTest("6316 10022 10673 10673 15961"), Digest::bigIntVectorToString(H->encode(StringTest("Hello").toBytes())));
+       compare("6316 10022 10673 10673 15961", Digest::bigIntVectorToString(H->encode(StringTest("Hello").toBytes())));
     }
 
     TEST(HellmanMerkleKnapsackDecode, HellmanMerkleKnapsackTest)
     {
-       compare(StringTest("Hello"), H->decode(Digest::stringToBigIntVector("6316 10022 10673 10673 15961")).toString());
+       compare("Hello", H->decode(Digest::stringToBigIntVector("6316 10022 10673 10673 15961")).toString());
     }
 }
 

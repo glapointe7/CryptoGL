@@ -29,7 +29,7 @@ namespace UnitTests
     {
        const BytesVector clear_text = {0x33, 0x22, 0x11, 0x00, 0xdd, 0xcc, 0xbb, 0xaa};
 
-       compare(StringTest("2587CAE27A12D300"), A->encode(clear_text).toHexString());
+       compare("2587CAE27A12D300", A->encode(clear_text).toHexString());
     }
 
     TEST(SkipjackDecodeFirst, SkipjackTest)
@@ -44,7 +44,7 @@ namespace UnitTests
     {
        const BytesVector clear_text = {0x1d, 0xdf, 0x39, 0xab, 0xf5, 0xcd, 0x71, 0x1e};
 
-       compare(StringTest("C92D22324C6B31AE"), B->encode(clear_text).toHexString());
+       compare("C92D22324C6B31AE", B->encode(clear_text).toHexString());
     }
 
     TEST(SkipjackDecodeSecond, SkipjackTest)

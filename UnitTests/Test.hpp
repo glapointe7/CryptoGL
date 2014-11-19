@@ -2,18 +2,22 @@
 #ifndef TEST_HPP
 #define	TEST_HPP
 
-#include <sys/time.h>
+//#include <sys/time.h>
 
 #include "../src/Types.hpp"
 #include "TextColors.hpp"
 #include "TestContainer.hpp"
 
 #include <iostream>
+#include <chrono>
 
 using namespace CryptoGL;
+using namespace std::chrono;
 
 namespace UnitTests
 {    
+
+typedef high_resolution_clock Time;
     
 #define TEST(ClassName, Parent) \
     class ClassName : public Parent \
@@ -55,28 +59,11 @@ namespace UnitTests
                 std::cout << Color::FG_DEFAULT << name << " \n   Input value: ";
                 std::cout << input_value << "\nExpected value: " << expected_value;
             }
-
-            std::cout << "\nTime elapsed: " << end_time - start_time << " ms\n";
-        }
-        
-        /* Start the timer for the current test. */
-        void startTimer()
-        {
-            gettimeofday(&time_obj, NULL);
-            start_time = time_obj.tv_sec + (time_obj.tv_usec / 1000.0);
-        }
-        
-        /* Stop the timer for the current test. */
-        void stopTimer()
-        {
-            gettimeofday(&time_obj, NULL);
-            end_time = time_obj.tv_sec + (time_obj.tv_usec / 1000.0);
         }
         
         void setName(const String &name) { this->name = name; }
         bool hasPassed() { return has_passed; }
-        double getExecutedTime() { return end_time - start_time; }
-        
+                
     protected:
         /* Compare Strings */
         void compare(const String &expected_value, const String &input_value)
@@ -106,14 +93,25 @@ namespace UnitTests
             }
         }
         
+        /* Compare char* with String */
+        void compare(const char *const expected_value, const String &input_value)
+        {
+            const String str_expected_value(expected_value);
+            if(str_expected_value == input_value)
+            {
+                has_passed = true;
+            }
+            else
+            {
+                this->expected_value = str_expected_value;
+                this->input_value = input_value;
+            }
+        }
         
     private:
         String expected_value;
         String input_value;
-        struct timeval time_obj;
         bool has_passed = false;
-        double start_time;
-        double end_time;
         String name;
     };
 }

@@ -27,7 +27,7 @@ namespace UnitTests
     {
        const StringTest clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAM";
 
-       compare(StringTest("LAUSGAUNLATCNAARIQRMSTPUNPLIIREOILOTA"), R->encode(clear_text));
+       compare("LAUSGAUNLATCNAARIQRMSTPUNPLIIREOILOTA", R->encode(clear_text));
     }
 
     TEST(RedefenceZigzagDecodeWithNoOffset, RedefenceZigzagTest)
@@ -42,7 +42,7 @@ namespace UnitTests
        const StringTest clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAM";
 
        R->setOffset(2);
-       compare(StringTest("NATARAAULLUTCNSARIORLIEOLSTIPQUNIPMAG"), R->encode(clear_text));
+       compare("NATARAAULLUTCNSARIORLIEOLSTIPQUNIPMAG", R->encode(clear_text));
     }
 
     TEST(RedefenceZigzagDecodeWithOffset, RedefenceZigzagTest)

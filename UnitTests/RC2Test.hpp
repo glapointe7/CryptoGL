@@ -28,22 +28,22 @@ namespace UnitTests
     TEST(RC2EncodeWith8BytesKey, RC2Test)
     {   
        const BytesVector clear_text = {0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
-       compare(StringTest("30649EDF9BE7D2C2"), R->encode(clear_text).toHexString());
+       compare("30649EDF9BE7D2C2", R->encode(clear_text).toHexString());
     }
 
     TEST(RC2DecodeWith8BytesKey, RC2Test)
     {
-       compare(StringTest("1000000000000001"), R->decode(StringTest("30649EDF9BE7D2C2").hexToBytes()).toHexString());
+       compare("1000000000000001", R->decode(StringTest("30649EDF9BE7D2C2").hexToBytes()).toHexString());
     }
 
     TEST(RC2EncodeWith16BytesKey, RC2Test)
     {   
-       compare(StringTest("2269552AB0F85CA6"), C->encode(BytesVector(8, 0)).toHexString());
+       compare("2269552AB0F85CA6", C->encode(BytesVector(8, 0)).toHexString());
     }
 
     TEST(RC2DecodeWith16BytesKey, RC2Test)
     {
-       compare(StringTest("0000000000000000"), C->decode(StringTest("2269552AB0F85CA6").hexToBytes()).toHexString());
+       compare("0000000000000000", C->decode(StringTest("2269552AB0F85CA6").hexToBytes()).toHexString());
     }
 }
 

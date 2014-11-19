@@ -26,7 +26,7 @@ namespace UnitTests
     {
        const StringTest clear_text = "YOURMOTHERWASAHAMSTERANDYOURFATHERSMELTOFELDERBERRIES";
 
-       compare(StringTest("NDODRWTRFHASEERAERMROFLBEOERSAYEAEIHMRALUTERHMTTYSOSU"), TD->encode(clear_text));
+       compare("NDODRWTRFHASEERAERMROFLBEOERSAYEAEIHMRALUTERHMTTYSOSU", TD->encode(clear_text));
     }
 
     TEST(TranspositionDoubleDecode, TranspositionDoubleTest)

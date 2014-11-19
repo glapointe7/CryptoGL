@@ -26,7 +26,7 @@ namespace UnitTests
     {
        const StringTest clear_text = "SALUTLESPETITSPOTS";
 
-       compare(StringTest("LSTSSLTOUPSXTEPXAEIT"), TC->encode(clear_text));
+       compare("LSTSSLTOUPSXTEPXAEIT", TC->encode(clear_text));
     }
 
     TEST(TranspositionColumnsDecode, TranspositionColumnsTest)

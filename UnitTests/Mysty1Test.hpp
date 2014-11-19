@@ -33,7 +33,7 @@ namespace UnitTests
        const BytesVector clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD,
           0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10};
 
-       compare(StringTest("8B1DA5F56AB3D07C04B68240B13BE95D"), ECB->encode(clear_text).toHexString());
+       compare("8B1DA5F56AB3D07C04B68240B13BE95D", ECB->encode(clear_text).toHexString());
     }
 
     TEST(Mysty1ECBDecode, Mysty1Test)
@@ -50,7 +50,7 @@ namespace UnitTests
        const BytesVector clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD,
           0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10};
 
-       compare(StringTest("461C1E879C18C27FB9ADF2D80C89031F"), CBC->encode(clear_text).toHexString());
+       compare("461C1E879C18C27FB9ADF2D80C89031F", CBC->encode(clear_text).toHexString());
     }
 
     TEST(Mysty1CBCDecode, Mysty1Test)

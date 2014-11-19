@@ -29,7 +29,7 @@ namespace UnitTests
        const BytesVector keystream = S->generateKeystream();
        const BytesVector input = keystream.range(0, 16);
 
-       compare(StringTest("748C59F20D769EA87A6DC18746E64AC0"), input.toHexString());
+       compare("748C59F20D769EA87A6DC18746E64AC0", input.toHexString());
     }
 }
 

@@ -33,39 +33,39 @@ namespace UnitTests
     {
        const BytesVector clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
 
-       compare(StringTest("238B4FE5847E44B2"), C128->encode(clear_text).toHexString());
+       compare("238B4FE5847E44B2", C128->encode(clear_text).toHexString());
     }
 
     TEST(CAST128Decode128Bits, CAST128Test)
     {
        const StringTest code = "238B4FE5847E44B2";
-       compare(StringTest("0123456789ABCDEF"), C128->decode(code.hexToBytes()).toHexString());
+       compare("0123456789ABCDEF", C128->decode(code.hexToBytes()).toHexString());
     }
 
     TEST(CAST128Encode80Bits, CAST128Test)
     {
        const BytesVector clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
 
-       compare(StringTest("EB6A711A2C02271B"), C80->encode(clear_text).toHexString());
+       compare("EB6A711A2C02271B", C80->encode(clear_text).toHexString());
     }
 
     TEST(CAST128Decode80Bits, CAST128Test)
     {
        const StringTest code = "EB6A711A2C02271B";
-       compare(StringTest("0123456789ABCDEF"), C80->decode(code.hexToBytes()).toHexString());
+       compare("0123456789ABCDEF", C80->decode(code.hexToBytes()).toHexString());
     }
 
     TEST(CAST128Encode40Bits, CAST128Test)
     {
        const BytesVector clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
 
-       compare(StringTest("7AC816D16E9B302E"), C40->encode(clear_text).toHexString());
+       compare("7AC816D16E9B302E", C40->encode(clear_text).toHexString());
     }
 
     TEST(CAST128Decode40Bits, CAST128Test)
     {
        const StringTest code = "7AC816D16E9B302E";
-       compare(StringTest("0123456789ABCDEF"), C40->decode(code.hexToBytes()).toHexString());
+       compare("0123456789ABCDEF", C40->decode(code.hexToBytes()).toHexString());
     }
 }
 

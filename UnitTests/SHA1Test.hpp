@@ -24,12 +24,12 @@ namespace UnitTests
 
     TEST(SHA1Encode, SHA1Test)
     {  
-       compare(StringTest("DA39A3EE5E6B4B0D3255BFEF95601890AFD80709"), S->encode(BytesVector()).toHexString());
+       compare("DA39A3EE5E6B4B0D3255BFEF95601890AFD80709", S->encode(BytesVector()).toHexString());
     }
 
     TEST(SHA1EncodeHMACEmptyText, SHA1Test)
     {
-       compare(StringTest("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D"), S->hmacEncode(BytesVector(), BytesVector()).toHexString());
+       compare("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D", S->hmacEncode(BytesVector(), BytesVector()).toHexString());
     }
 
     TEST(SHA1EncodeHMACNormalCaseText, SHA1Test)

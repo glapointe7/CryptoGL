@@ -31,35 +31,35 @@ namespace UnitTests
 
     TEST(CAST256Encode128Bits, CAST256Test)
     {
-       compare(StringTest("C842A08972B43D20836C91D1B7530F6B"), C128->encode(BytesVector(16, 0)).toHexString());
+       compare("C842A08972B43D20836C91D1B7530F6B", C128->encode(BytesVector(16, 0)).toHexString());
     }
 
     TEST(CAST256Decode128Bits, CAST256Test)
     {
        const StringTest code = "C842A08972B43D20836C91D1B7530F6B";
-       compare(StringTest("00000000000000000000000000000000"), C128->decode(code.hexToBytes()).toHexString());
+       compare("00000000000000000000000000000000", C128->decode(code.hexToBytes()).toHexString());
     }
 
     TEST(CAST256Encode192Bits, CAST256Test)
     {
-       compare(StringTest("1B386C0210DCADCBDD0E41AA08A7A7E8"), C192->encode(BytesVector(16, 0)).toHexString());
+       compare("1B386C0210DCADCBDD0E41AA08A7A7E8", C192->encode(BytesVector(16, 0)).toHexString());
     }
 
     TEST(CAST256Decode192Bits, CAST256Test)
     {
        const StringTest code = "1B386C0210DCADCBDD0E41AA08A7A7E8";
-       compare(StringTest("00000000000000000000000000000000"), C192->decode(code.hexToBytes()).toHexString());
+       compare("00000000000000000000000000000000", C192->decode(code.hexToBytes()).toHexString());
     }
 
     TEST(CAST256Encode256Bits, CAST256Test)
     {
-       compare(StringTest("4F6A2038286897B9C9870136553317FA"), C256->encode(BytesVector(16, 0)).toHexString());
+       compare("4F6A2038286897B9C9870136553317FA", C256->encode(BytesVector(16, 0)).toHexString());
     }
 
     TEST(CAST256Decode256Bits, CAST256Test)
     {
        const StringTest code = "4F6A2038286897B9C9870136553317FA";
-       compare(StringTest("00000000000000000000000000000000"), C256->decode(code.hexToBytes()).toHexString());
+       compare("00000000000000000000000000000000", C256->decode(code.hexToBytes()).toHexString());
     }
 }
 

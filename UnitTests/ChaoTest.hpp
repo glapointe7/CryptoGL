@@ -27,7 +27,7 @@ namespace UnitTests
     {
        const StringTest clear_text = "WELLDONEISBETTERTHANWELLSAID";
 
-       compare(StringTest("OAHQHCNYNXTSZJRRHJBYHQKSOUJY"), C->encode(clear_text));
+       compare("OAHQHCNYNXTSZJRRHJBYHQKSOUJY", C->encode(clear_text));
     }
 
     TEST(ChaoDecode, ChaoTest)

@@ -27,21 +27,21 @@ namespace UnitTests
 
     TEST(VigenereEncodeNormalCase, VigenereTest) 
     {
-      compare(StringTest("LEDNBAOEMDIIEGBXINMGAVSFGIVYEEHKWTXTQETBVUGSJBMAZXIGURRZLYJEMOUNXVXAQUBKLL"), V->encode(clear_text));
+      compare("LEDNBAOEMDIIEGBXINMGAVSFGIVYEEHKWTXTQETBVUGSJBMAZXIGURRZLYJEMOUNXVXAQUBKLL", V->encode(clear_text));
     }
 
     TEST(VigenereEncodeAlphaNum, VigenereTest) 
     {
       V->setAlpha(StringTest::alpha_numeric);
       V->setKey("V1Gen3rE");
-      compare(StringTest("n1Ry6GzPdCVe43zXlLKx755Ri1Owy36Vj7XezFrXdFTs4BvRo5KsoCvXnLXpr45Yo4KwqHzKoJ"), V->encode(clear_text));
+      compare("n1Ry6GzPdCVe43zXlLKx755Ri1Owy36Vj7XezFrXdFTs4BvRo5KsoCvXnLXpr45Yo4KwqHzKoJ", V->encode(clear_text));
     }
 
     TEST(VigenereEncodeLetters, VigenereTest) 
     {
       V->setAlpha(StringTest::letters);
       V->setKey("vvvvvvvv");
-      compare(StringTest("NvGPOIDGDGKvMvDOLPzOPxJIIvDNGvKMJBMvHHvODJIJMDzIOzzJwEzONPMGzwJPOyzNyJDBON"), V->encode(clear_text));
+      compare("NvGPOIDGDGKvMvDOLPzOPxJIIvDNGvKMJBMvHHvODJIJMDzIOzzJwEzONPMGzwJPOyzNyJDBON", V->encode(clear_text));
     }
 
     TEST(VigenereDecodeNormalCase, VigenereTest) 

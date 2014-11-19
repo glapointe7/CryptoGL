@@ -77,5 +77,5 @@
 
 int main(int argc, char **argv)
 {
-    return UnitTests::TestContainer::runAllTests();
+    UnitTests::TestContainer::runAllTests();
 }

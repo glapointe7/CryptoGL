@@ -11,10 +11,12 @@ namespace UnitTests
     {
     protected:
        VigenereMult *V;
+       static const StringTest clear_text;
+       static const StringTest cipher_text;
 
        void setUp() override
        {
-          V = new VigenereMult("TABARNAK");
+          V = new VigenereMult("THEKEY");
        }
 
        void tearDown() override
@@ -22,21 +24,20 @@ namespace UnitTests
           delete V;
        }
     };
+    
+    const StringTest VigenereMultTest::clear_text = "THISISVIGENEREWITHMULTIPLICATION";
+    const StringTest VigenereMultTest::cipher_text = "400 64 45 209 45 475 440 72 35 55 70 125 360 40 115 99 100 200 260 168 60 220 45 400 240 72 15 11 100 225 300 112 ";
 
     TEST(VigenereMultEncode, VigenereMultTest) 
     {
-      const StringTest clear_text = "TIGARSESTENBAWATARNACHEONDIRAIT";
-
-      compare(StringTest("400 9 14 1 324 266 5 209 400 5 28 2 18 322 1 220 20 18 28 1 54 112 5 165 280 4 18 18 18 126 20 "), 
-              V->encode(clear_text));
+      compare(cipher_text, V->encode(clear_text));
     }
 
     TEST(VigenereMultDecode, VigenereMultTest) 
     {
-      const StringTest clear_text = "TIGARSESTENBAWATARNACHEONDIRAIT";
+      const StringTest clear_text = "THISISVIGENEREWITHMULTIPLICATION";
 
-      compare(clear_text, 
-              V->decode("400 9 14 1 324 266 5 209 400 5 28 2 18 322 1 220 20 18 28 1 54 112 5 165 280 4 18 18 18 126 20 "));
+      compare(clear_text, V->decode(cipher_text));
     }
 }
 

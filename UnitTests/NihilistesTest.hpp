@@ -27,7 +27,7 @@ namespace UnitTests
     {
       const StringTest clear_text = "LECOYOTEHURLE";
 
-      compare(StringTest("36435889755789754673876942"), P->encode(clear_text));
+      compare("36435889755789754673876942", P->encode(clear_text));
     }
 
     TEST(NihilistesDecode, NihilistesTest) 

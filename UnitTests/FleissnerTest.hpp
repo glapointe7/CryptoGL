@@ -33,7 +33,7 @@ namespace UnitTests
     {
        const StringTest clear_text = "JECHIFFRECETEXTEAVECUNCACHETOURNANT";
 
-       compare(StringTest("TJEEOCCUCRHENUITNAEFNCFXTATAERCAHEEV"), F->encode(clear_text));
+       compare("TJEEOCCUCRHENUITNAEFNCFXTATAERCAHEEV", F->encode(clear_text));
     }
 
     TEST(FleissnerDecode, FleissnerTest)

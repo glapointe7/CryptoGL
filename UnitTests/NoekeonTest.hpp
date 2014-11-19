@@ -29,13 +29,13 @@ namespace UnitTests
 
     TEST(NoekeonEncodeZeroValues, NoekeonTest)
     {   
-       compare(StringTest("EA6552BA793546C261E4B3E90433F5A2"), R->encode(BytesVector(16, 0)).toHexString());
+       compare("EA6552BA793546C261E4B3E90433F5A2", R->encode(BytesVector(16, 0)).toHexString());
     }
 
     TEST(NoekeonDecodeZeroValues, NoekeonTest)
     {
        const StringTest code("EA6552BA793546C261E4B3E90433F5A2");
-       compare(StringTest("00000000000000000000000000000000"), R->decode(code.hexToBytes()).toHexString());
+       compare("00000000000000000000000000000000", R->decode(code.hexToBytes()).toHexString());
     }
 
     TEST(NoekeonEncodeNormalCase, NoekeonTest)
@@ -43,13 +43,13 @@ namespace UnitTests
        const BytesVector clear_text = {
           0x47, 0x65, 0xF3, 0xDA, 0x10, 0xCD, 0x3D, 0x04, 0x73, 0x86, 0x77, 0x42, 0xB5, 0xE5, 0xCC, 0x3C
        };
-       compare(StringTest("EA024714AD5C4D84EA024714AD5C4D84"), C->encode(clear_text).toHexString());
+       compare("EA024714AD5C4D84EA024714AD5C4D84", C->encode(clear_text).toHexString());
     }
 
     TEST(NoekeonDecodeNormalCase, NoekeonTest)
     {
        const StringTest code("EA024714AD5C4D84EA024714AD5C4D84");
-       compare(StringTest("4765F3DA10CD3D0473867742B5E5CC3C"), C->decode(code.hexToBytes()).toHexString());
+       compare("4765F3DA10CD3D0473867742B5E5CC3C", C->decode(code.hexToBytes()).toHexString());
     }
 }
 

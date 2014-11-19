@@ -27,24 +27,24 @@ namespace UnitTests
             unit_tests_vector.push_back(CurrentTest);
         }
         
-        static int runAllTests()
+        static void runAllTests()
         {
             for(const auto &current_test : unit_tests_vector)
             {
-                current_test->startTimer();
+                const auto start_time = Time::now();
                 current_test->setUp();
                 current_test->run();
                 current_test->tearDown();
-                current_test->stopTimer();
+                const auto end_time = Time::now();
                 
-                total_executed_time += current_test->getExecutedTime();
+                const double elapsed_time = duration <double, std::milli> (end_time - start_time).count();
+                total_executed_time += elapsed_time;
                 total_passed_tests += current_test->hasPassed();
                 current_test->printResult();
+                std::cout << "\nTime elapsed: " << elapsed_time << " ms\n";
             }
             
             printReport();
-            
-            return 0;
         }
         
         static void printReport()

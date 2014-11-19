@@ -31,7 +31,7 @@ namespace UnitTests
     {
        const BytesVector clear_text = {0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08};
 
-       compare(StringTest("F5DB1AC45E5EF9F9"), A->encode(clear_text).toHexString());
+       compare("F5DB1AC45E5EF9F9", A->encode(clear_text).toHexString());
     }
 
     TEST(IDEADecodeEightValues, IDEATest)
@@ -45,7 +45,7 @@ namespace UnitTests
     {
        const BytesVector clear_text = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-       compare(StringTest("0001000100000000"), B->encode(clear_text).toHexString());
+       compare("0001000100000000", B->encode(clear_text).toHexString());
     }
 
     TEST(IDEADecodeZeroValues, IDEATest)
