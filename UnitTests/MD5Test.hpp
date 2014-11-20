@@ -30,14 +30,14 @@ namespace UnitTests
        const StringTest clear_text = "The quick brown fox jumps over the lazy dog";
        const StringTest hash = "9E107D9D372BB6826BD81D3542A419D6";
 
-       compare(hash, S->encode(clear_text.toBytes()).toHexString());
+       compare(hash, S->encode(clear_text.toBytes()));
     }
 
     TEST(MD5EncodeEmptyText, MD5Test)
     {
        const StringTest hash = "D41D8CD98F00B204E9800998ECF8427E";
 
-       compare(hash, S->encode({}).toHexString());
+       compare(hash, S->encode({}));
     }
 
     TEST(MD5EncodeHMACNormalCaseText, MD5Test)
@@ -45,14 +45,14 @@ namespace UnitTests
        const StringTest clear_text = "The quick brown fox jumps over the lazy dog";
        const StringTest hash = "80070713463E7749B90C2DC24911E275";
 
-       compare(hash, S->hmacEncode(StringTest("key").toBytes(), clear_text.toBytes()).toHexString());
+       compare(hash, S->hmacEncode(StringTest("key").toBytes(), clear_text.toBytes()));
     }
 
     TEST(MD5EncodeHMACEmptyText, MD5Test)
     {
        const StringTest hash = "74E6F7298A9C2D168935F58C001BAD88";
 
-       compare(hash, S->hmacEncode({}, {}).toHexString());
+       compare(hash, S->hmacEncode({}, {}));
     }
 }
 

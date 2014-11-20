@@ -135,29 +135,34 @@ std::string String::trimEnd() const
 }
 
 std::vector<String> String::split(const char separator) const
-{
-   std::vector<String> result;
-   result.reserve(std::count(this->begin(), this->end(), separator) + 1);
+{    
+    int32_t sep_pos = this->find(separator);
+    if(sep_pos == -1 && !this->empty())
+    {
+        return std::vector<String>(1, *this);
+    }
+    
+    std::vector<String> result;
+    result.reserve(std::count(this->begin(), this->end(), separator) + 1);
+    
+    // find the first separator in the string if it exists and loop.
+    uint32_t previous_pos = 0;
+    uint32_t sub_length = sep_pos;
+    while(sep_pos != -1)
+    {
+       result.push_back(String(this->substr(previous_pos, sub_length)));
+       previous_pos = sep_pos + 1;
+       sep_pos = this->find(separator, previous_pos);
+       sub_length = sep_pos - previous_pos;
+    }
    
-   // find the first separator in the string if it exists.
-   int32_t sep_pos = this->find(separator);
-   uint32_t start_pos = 0;
-   uint32_t sub_length = sep_pos;
-   while(sep_pos != -1)
-   {
-      result.push_back(String(this->substr(start_pos, sub_length)));
-      start_pos = sep_pos + 1;
-      sep_pos = this->find(separator, start_pos);
-      sub_length = sep_pos - start_pos;
-   }
+    // If we didn't reach the end of str, we have to take the last substring.
+    if(previous_pos < this->length())
+    {
+       result.push_back(String(this->substr(previous_pos)));
+    }
    
-   // If we didn't reach the end of str, we have to take the last substring.
-   if(start_pos < this->length())
-   {
-      result.push_back(String(this->substr(start_pos)));
-   }
-   
-   return result;
+    return result;
 }
 
 void String::sort()

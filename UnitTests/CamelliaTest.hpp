@@ -37,14 +37,14 @@ namespace UnitTests
           0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10
        };
 
-       compare("67673138549669730857065648EABE43", C128->encode(clear_text).toHexString());
+       compare("67673138549669730857065648EABE43", C128->encode(clear_text));
     }
 
     TEST(CamelliaDecode128Bits, CamelliaTest)
     {
        const StringTest code = "67673138549669730857065648EABE43";
        compare("0123456789ABCDEFFEDCBA9876543210", 
-               C128->decode(code.hexToBytes()).toHexString());
+               C128->decode(code.hexToBytes()));
     }
 
     TEST(CamelliaEncode192Bits, CamelliaTest)
@@ -53,14 +53,14 @@ namespace UnitTests
           0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10
        };
 
-       compare("B4993401B3E996F84EE5CEE7D79B09B9", C192->encode(clear_text).toHexString());
+       compare("B4993401B3E996F84EE5CEE7D79B09B9", C192->encode(clear_text));
     }
 
     TEST(CamelliaDecode192Bits, CamelliaTest)
     {
        StringTest code("B4993401B3E996F84EE5CEE7D79B09B9");
        compare("0123456789ABCDEFFEDCBA9876543210", 
-               C192->decode(code.hexToBytes()).toHexString());
+               C192->decode(code.hexToBytes()));
     }
 
     TEST(CamelliaEncode256Bits, CamelliaTest)
@@ -69,14 +69,14 @@ namespace UnitTests
           0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10
        };
 
-       compare("9ACC237DFF16D76C20EF7C919E3A7509", C256->encode(clear_text).toHexString());
+       compare("9ACC237DFF16D76C20EF7C919E3A7509", C256->encode(clear_text));
     }
 
     TEST(CamelliaDecode256Bits, CamelliaTest)
     {
        StringTest code("9ACC237DFF16D76C20EF7C919E3A7509");
        compare("0123456789ABCDEFFEDCBA9876543210", 
-               C256->decode(code.hexToBytes()).toHexString());
+               C256->decode(code.hexToBytes()));
     }
 }
 

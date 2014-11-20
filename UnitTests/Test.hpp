@@ -82,32 +82,27 @@ typedef high_resolution_clock Time;
         /* Compare integers */
         void compare(const uint64_t &expected_value, const uint64_t &input_value)
         {
-            if(expected_value == input_value)
-            {
-                has_passed = true;
-            }
-            else
-            {
-                this->expected_value = uint64::toString(expected_value);
-                this->input_value = uint64::toString(input_value);
-            }
+            compare(uint64::toString(expected_value), uint64::toString(input_value));
         }
         
-        /* Compare char* with String */
-        void compare(const char *const expected_value, const String &input_value)
+        /* Cast the input value to an hexa String and compare them. */
+        void compare(const String &expected_value, const BytesVector &input_value)
         {
-            const String str_expected_value(expected_value);
-            if(str_expected_value == input_value)
-            {
-                has_passed = true;
-            }
-            else
-            {
-                this->expected_value = str_expected_value;
-                this->input_value = input_value;
-            }
+            compare(expected_value, input_value.toHexString());
         }
         
+        /* Cast expected and input values to an hexa String and compare them. */
+        void compare(const BytesVector &expected_value, const BytesVector &input_value)
+        {
+            compare(expected_value.toHexString(), input_value.toHexString());
+        }
+        
+        /* Cast expected and input values to an hexa String and compare them. */
+        void compare(const String &expected_value, const UInt32Vector &input_value)
+        {
+            compare(expected_value, input_value.toHexString());
+        }
+               
     private:
         String expected_value;
         String input_value;

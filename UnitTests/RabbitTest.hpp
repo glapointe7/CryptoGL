@@ -34,7 +34,7 @@ namespace UnitTests
           0x51, 0xD4, 0x0C, 0x70, 0xC3, 0xA1, 0x16, 0xF4
        };
 
-       compare(cipher.toHexString(), R->encode(BytesVector(48, 0)).toHexString());
+       compare(cipher.toHexString(), R->encode(BytesVector(48, 0)));
     }
 
     TEST(RabbitDecode, RabbitTest)
@@ -48,7 +48,7 @@ namespace UnitTests
           0x51, 0xD4, 0x0C, 0x70, 0xC3, 0xA1, 0x16, 0xF4
        };
 
-       compare(BytesVector(48, 0).toHexString(), R->decode(cipher).toHexString());
+       compare(BytesVector(48, 0), R->decode(cipher));
     }
 }
 

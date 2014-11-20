@@ -28,14 +28,14 @@ namespace UnitTests
        const StringTest clear_text = "message digest";
        const StringTest hash = "AB4F496BFB2A530B219FF33031FE06B0";
 
-       compare(hash, S->encode(clear_text.toBytes()).toHexString());
+       compare(hash, S->encode(clear_text.toBytes()));
     }
 
     TEST(MD2EncodeEmptyText, MD2Test)
     {
        const StringTest hash = "8350E5A3E24C153DF2275C9F80692773";
 
-       compare(hash, S->encode(BytesVector()).toHexString());
+       compare(hash, S->encode(BytesVector()));
     }
 }
 

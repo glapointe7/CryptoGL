@@ -34,14 +34,14 @@ namespace UnitTests
        const StringTest clear_text = "The quick brown fox jumps over the lazy dog";
        const StringTest hash = "6D12A41E72E644F017B6F0E2F7B44C62";
 
-       compare(hash, T1->encode(clear_text.toBytes()).toHexString());
+       compare(hash, T1->encode(clear_text.toBytes()));
     }
 
     TEST(Tiger128EncodeEmptyText, TigerTest)
     {
        const StringTest hash = "3293AC630C13F0245F92BBB1766E1616";
 
-       compare(hash, T1->encode({}).toHexString());
+       compare(hash, T1->encode({}));
     }
 
     TEST(Tiger160EncodeNormalCase, TigerTest)
@@ -49,14 +49,14 @@ namespace UnitTests
        const StringTest clear_text = "The quick brown fox jumps over the lazy dog";
        const StringTest hash = "6D12A41E72E644F017B6F0E2F7B44C6285F06DD5";
 
-       compare(hash, T2->encode(clear_text.toBytes()).toHexString());
+       compare(hash, T2->encode(clear_text.toBytes()));
     }
 
     TEST(Tiger160EncodeEmptyText, TigerTest)
     {
        const StringTest hash = "3293AC630C13F0245F92BBB1766E16167A4E5849";
 
-       compare(hash, T2->encode({}).toHexString());
+       compare(hash, T2->encode({}));
     }
 
     TEST(Tiger192EncodeNormalCase, TigerTest)
@@ -64,14 +64,14 @@ namespace UnitTests
        const StringTest clear_text = "The quick brown fox jumps over the lazy dog";
        const StringTest hash = "6D12A41E72E644F017B6F0E2F7B44C6285F06DD5D2C5B075";
 
-       compare(hash, T3->encode(clear_text.toBytes()).toHexString());
+       compare(hash, T3->encode(clear_text.toBytes()));
     }
 
     TEST(Tiger192EncodeEmptyText, TigerTest)
     {
        const StringTest hash = "3293AC630C13F0245F92BBB1766E16167A4E58492DDE73F3";
 
-       compare(hash, T3->encode({}).toHexString());
+       compare(hash, T3->encode({}));
     }
 
     TEST(Tiger2_192EncodeNormalCase, TigerTest)
@@ -79,14 +79,14 @@ namespace UnitTests
        const StringTest clear_text = "The quick brown fox jumps over the lazy dog";
        const StringTest hash = "976ABFF8062A2E9DCEA3A1ACE966ED9C19CB85558B4976D8";
 
-       compare(hash, Tiger2->encode(clear_text.toBytes()).toHexString());
+       compare(hash, Tiger2->encode(clear_text.toBytes()));
     }
 
     TEST(Tiger2_192EncodeEmptyText, TigerTest)
     {
        const StringTest hash = "4441BE75F6018773C206C22745374B924AA8313FEF919F41";
 
-       compare(hash, Tiger2->encode({}).toHexString());
+       compare(hash, Tiger2->encode({}));
     }
 
     TEST(Tiger192EncodeHMACNormalCase, TigerTest)
@@ -99,7 +99,7 @@ namespace UnitTests
        0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
           0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
 
-       compare(hash, T3->hmacEncode(key, clear_text.toBytes()).toHexString());
+       compare(hash, T3->hmacEncode(key, clear_text.toBytes()));
     }
 
     TEST(Tiger192EncodeHMACEmptyText, TigerTest)
@@ -111,7 +111,7 @@ namespace UnitTests
        0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
           0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
 
-       compare(hash, T3->hmacEncode(key, {}).toHexString());
+       compare(hash, T3->hmacEncode(key, {}));
     }
 }
 

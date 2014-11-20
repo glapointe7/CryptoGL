@@ -30,14 +30,14 @@ namespace UnitTests
        const StringTest clear_text = "message digest";
        const StringTest hash = "87E971759A1CE47A514D5C914C392C9018C7C46BC14465554AFCDF54A5070C0E";
 
-       compare(hash, S->encode(clear_text.toBytes()).toHexString());
+       compare(hash, S->encode(clear_text.toBytes()));
     }
 
     TEST(Ripemd256EncodeEmptyText, Ripemd256Test)
     {
        const StringTest hash = "02BA4C4E5F8ECD1877FC52D64D30E37A2D9774FB1E5D026380AE0168E3C5522D";
 
-       compare(hash, S->encode(BytesVector()).toHexString());
+       compare(hash, S->encode(BytesVector()));
     }
 }
 

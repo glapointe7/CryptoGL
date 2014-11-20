@@ -28,14 +28,14 @@ namespace UnitTests
        const StringTest clear_text = "message digest";
        const StringTest hash = "D9130A8164549FE818874806E1C7014B";
 
-       compare(hash, S->encode(clear_text.toBytes()).toHexString());
+       compare(hash, S->encode(clear_text.toBytes()));
     }
 
     TEST(MD4EncodeEmptyText, MD4Test)
     {
        const StringTest hash = "31D6CFE0D16AE931B73C59D7E0C089C0";
 
-       compare(hash, S->encode(BytesVector()).toHexString());
+       compare(hash, S->encode(BytesVector()));
     }
 
     TEST(MD4EncodeHMACNormalCaseText, MD4Test)
@@ -48,7 +48,7 @@ namespace UnitTests
        0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
           0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
 
-       compare(hash, S->hmacEncode(key, clear_text.toBytes()).toHexString());
+       compare(hash, S->hmacEncode(key, clear_text.toBytes()));
     }
 
     TEST(MD4EncodeHMACEmptyText, MD4Test)
@@ -60,7 +60,7 @@ namespace UnitTests
        0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
           0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
 
-       compare(hash, S->hmacEncode(key, BytesVector()).toHexString());
+       compare(hash, S->hmacEncode(key, BytesVector()));
     }
 }
 

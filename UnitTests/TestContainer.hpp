@@ -37,7 +37,7 @@ namespace UnitTests
                 current_test->tearDown();
                 const auto end_time = Time::now();
                 
-                const double elapsed_time = duration <double, std::milli> (end_time - start_time).count();
+                const double elapsed_time = duration<double, std::milli>(end_time - start_time).count();
                 total_executed_time += elapsed_time;
                 total_passed_tests += current_test->hasPassed();
                 current_test->printResult();

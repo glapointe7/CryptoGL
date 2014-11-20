@@ -31,7 +31,7 @@ namespace UnitTests
        const StringTest clear_text = "The qufck brown fox jump";
 
        compare("A826FD8CE53B855FCCE21C8112256FE668D5C05DD9B6B900",
-               D->encode(clear_text.toBytes()).toHexString());
+               D->encode(clear_text.toBytes()));
     }
 
     TEST(TripleDESDecode, TripleDESTest)

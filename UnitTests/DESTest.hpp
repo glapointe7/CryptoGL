@@ -26,7 +26,7 @@ namespace UnitTests
     {
        const BytesVector clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
 
-       compare("85E813540F0AB405", D->encode(clear_text).toHexString());
+       compare("85E813540F0AB405", D->encode(clear_text));
     }
 
     TEST(DESDecode, DESTest)
@@ -34,7 +34,7 @@ namespace UnitTests
        const BytesVector clear_text = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
        const StringTest message("85E813540F0AB405");
 
-       compare(clear_text.toHexString(), D->decode(message.hexToBytes()).toHexString());
+       compare(clear_text, D->decode(message.hexToBytes()));
     }
 }
 

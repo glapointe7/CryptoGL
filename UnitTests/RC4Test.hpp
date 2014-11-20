@@ -30,7 +30,7 @@ namespace UnitTests
     {
        const StringTest clear_text("Plaintext");
 
-       compare("BBF316E8D940AF0AD3", R->encode(clear_text.toBytes()).toHexString());
+       compare("BBF316E8D940AF0AD3", R->encode(clear_text.toBytes()));
     }
 
     TEST(RC4Decode, RC4Test)

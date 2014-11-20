@@ -36,7 +36,7 @@ namespace UnitTests
           0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff
        };
 
-       compare("69C4E0D86A7B0430D8CDB78070B4C55A", A->encode(clear_text).toHexString());
+       compare("69C4E0D86A7B0430D8CDB78070B4C55A", A->encode(clear_text));
     }
 
     TEST(AESEncodeECB192Bits, AESTest)
@@ -45,7 +45,7 @@ namespace UnitTests
           0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff
        };
 
-       compare("DDA97CA4864CDFE06EAF70A0EC0D7191", B->encode(clear_text).toHexString());
+       compare("DDA97CA4864CDFE06EAF70A0EC0D7191", B->encode(clear_text));
     }
 
     TEST(AESEncodeECB256Bits, AESTest)
@@ -54,7 +54,7 @@ namespace UnitTests
           0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff
        };
 
-       compare("8EA2B7CA516745BFEAFC49904B496089", C->encode(clear_text).toHexString());
+       compare("8EA2B7CA516745BFEAFC49904B496089", C->encode(clear_text));
     }
 
     TEST(AESDecodeECB128Bits, AESTest)
@@ -64,7 +64,7 @@ namespace UnitTests
        };
 
        const StringTest message("69C4E0D86A7B0430D8CDB78070B4C55A");
-       compare(clear_text.toHexString(), A->decode(message.hexToBytes()).toHexString());
+       compare(clear_text, A->decode(message.hexToBytes()));
     }
 
     TEST(AESDecodeECB192Bits, AESTest)
@@ -74,7 +74,7 @@ namespace UnitTests
        };
 
        const StringTest message("DDA97CA4864CDFE06EAF70A0EC0D7191");
-       compare(clear_text.toHexString(), B->decode(message.hexToBytes()).toHexString());
+       compare(clear_text, B->decode(message.hexToBytes()));
     }
 
     TEST(AESDecodeECB256Bits, AESTest)
@@ -84,7 +84,7 @@ namespace UnitTests
        };
 
        const StringTest message("8EA2B7CA516745BFEAFC49904B496089");
-       compare(clear_text.toHexString(), C->decode(message.hexToBytes()).toHexString());
+       compare(clear_text, C->decode(message.hexToBytes()));
     }
 
     /*
@@ -94,7 +94,7 @@ namespace UnitTests
     {  
        OMAC<AES> omac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
-       compare("F6BC6A41F4F84593809E59B719299CFE", omac.encode({}).toHexString());
+       compare("F6BC6A41F4F84593809E59B719299CFE", omac.encode({}));
     }
 
     TEST(AESEncodeOMACNormalCase128Bits, AESTest)
@@ -102,7 +102,7 @@ namespace UnitTests
        OMAC<AES> omac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
        compare("070A16B46B4D4144F79BDD9DD04A287C", 
-               omac.encode({0x6B, 0xC1, 0xBE, 0xE2, 0x2E, 0x40, 0x9F, 0x96, 0xE9, 0x3D, 0x7E, 0x11, 0x73, 0x93, 0x17, 0x2A}).toHexString());
+               omac.encode({0x6B, 0xC1, 0xBE, 0xE2, 0x2E, 0x40, 0x9F, 0x96, 0xE9, 0x3D, 0x7E, 0x11, 0x73, 0x93, 0x17, 0x2A}));
     }
 
     TEST(AESEncodeOMAC40BitsMessage128Bits, AESTest)
@@ -110,7 +110,7 @@ namespace UnitTests
        OMAC<AES> omac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
        const StringTest message = "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411";
-       compare("23FDAA0831CD314491CE4B25ACB6023B", omac.encode(message.hexToBytes()).toHexString());
+       compare("23FDAA0831CD314491CE4B25ACB6023B", omac.encode(message.hexToBytes()));
     }    
 
     TEST(AESEncodeOMAC64BitsMessage128Bits, AESTest)
@@ -118,7 +118,7 @@ namespace UnitTests
        OMAC<AES> omac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
        const StringTest message = "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411E5FBC1191A0A52EFF69F2445DF4F9B17AD2B417BE66C3710";
-       compare("51F0BEBF7E3B9D92FC49741779363CFE", omac.encode(message.hexToBytes()).toHexString());
+       compare("51F0BEBF7E3B9D92FC49741779363CFE", omac.encode(message.hexToBytes()));
     }
 
     /*
@@ -128,7 +128,7 @@ namespace UnitTests
     {  
        CMAC<AES> cmac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
-       compare("BB1D6929E95937287FA37D129B756746", cmac.encode({}).toHexString());
+       compare("BB1D6929E95937287FA37D129B756746", cmac.encode({}));
     }
 
     TEST(AESEncodeCMACNormalCase128Bits, AESTest)
@@ -136,7 +136,7 @@ namespace UnitTests
        CMAC<AES> cmac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
        compare("070A16B46B4D4144F79BDD9DD04A287C", 
-               cmac.encode({0x6B, 0xC1, 0xBE, 0xE2, 0x2E, 0x40, 0x9F, 0x96, 0xE9, 0x3D, 0x7E, 0x11, 0x73, 0x93, 0x17, 0x2A}).toHexString());
+               cmac.encode({0x6B, 0xC1, 0xBE, 0xE2, 0x2E, 0x40, 0x9F, 0x96, 0xE9, 0x3D, 0x7E, 0x11, 0x73, 0x93, 0x17, 0x2A}));
     }
 
     TEST(AESEncodeCMAC40BitsMessage128Bits, AESTest)
@@ -144,7 +144,7 @@ namespace UnitTests
        CMAC<AES> cmac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C});
 
        const StringTest message = "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411";
-       compare("DFA66747DE9AE63030CA32611497C827", cmac.encode(message.hexToBytes()).toHexString());
+       compare("DFA66747DE9AE63030CA32611497C827", cmac.encode(message.hexToBytes()));
     }
 
     /*
@@ -155,7 +155,7 @@ namespace UnitTests
        TMAC<AES> tmac({0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3C},
                       {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
 
-       compare("4C08220C79D9191022DC6674874CEAF8", tmac.encode({}).toHexString());
+       compare("4C08220C79D9191022DC6674874CEAF8", tmac.encode({}));
     }
 
     TEST(AESEncodeTMACNormalCase128Bits, AESTest)
@@ -164,7 +164,7 @@ namespace UnitTests
                       {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
 
        compare("6C3076442EEAD2741DD08057A2F51F44", tmac.encode(
-             {0x6B, 0xC1, 0xBE, 0xE2, 0x2E, 0x40, 0x9F, 0x96, 0xE9, 0x3D, 0x7E, 0x11, 0x73, 0x93, 0x17, 0x2A}).toHexString());
+             {0x6B, 0xC1, 0xBE, 0xE2, 0x2E, 0x40, 0x9F, 0x96, 0xE9, 0x3D, 0x7E, 0x11, 0x73, 0x93, 0x17, 0x2A}));
     }
 
     TEST(AESEncodeTMAC40BitsMessage128Bits, AESTest)
@@ -173,7 +173,7 @@ namespace UnitTests
                {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
 
        const StringTest message = "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411";
-       compare("B656B827EABDF8E5D7F460E9F5100769", tmac.encode(message.hexToBytes()).toHexString());
+       compare("B656B827EABDF8E5D7F460E9F5100769", tmac.encode(message.hexToBytes()));
     }
 
     /*
@@ -183,7 +183,7 @@ namespace UnitTests
     {  
        PMAC<AES> pmac({0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
 
-       compare("4399572CD6EA5341B8D35876A7098AF7", pmac.encode({}).toHexString());
+       compare("4399572CD6EA5341B8D35876A7098AF7", pmac.encode({}));
     }
 
     TEST(AESEncodePMACNormalCase128Bits, AESTest)
@@ -191,7 +191,7 @@ namespace UnitTests
        PMAC<AES> pmac({0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
 
        compare("EBBD822FA458DAF6DFDAD7C27DA76338", pmac.encode(
-               {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F}).toHexString());
+               {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F}));
     }
 
     /*
@@ -202,7 +202,7 @@ namespace UnitTests
     {  
        AES_XCBC_MAC xcbc({0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
 
-       compare("75F0251D528AC01C4573DFD584D79F29", xcbc.encode({}).toHexString());
+       compare("75F0251D528AC01C4573DFD584D79F29", xcbc.encode({}));
     }
 }
 

@@ -27,23 +27,23 @@ namespace UnitTests
 
     TEST(RC5EncodeZeroValues, RC5Test)
     {   
-       compare("21A5DBEE154B8F6D", R->encode(BytesVector(8, 0)).toHexString());
+       compare("21A5DBEE154B8F6D", R->encode(BytesVector(8, 0)));
     }
 
     TEST(RC5DecodeZeroValues, RC5Test)
     {
-       compare("0000000000000000", R->decode(StringTest("21A5DBEE154B8F6D").hexToBytes()).toHexString());
+       compare("0000000000000000", R->decode(StringTest("21A5DBEE154B8F6D").hexToBytes()));
     }
 
     TEST(RC5EncodeNormalCase, RC5Test)
     {
        const BytesVector clear_text = {0x21, 0xA5, 0xDB, 0xEE, 0x15, 0x4B, 0x8F, 0x6D};
-       compare("F7C013AC5B2B8952", C->encode(clear_text).toHexString());
+       compare("F7C013AC5B2B8952", C->encode(clear_text));
     }
 
     TEST(RC5DecodeNormalCase, RC5Test)
     {
-       compare("21A5DBEE154B8F6D", C->decode(StringTest("F7C013AC5B2B8952").hexToBytes()).toHexString());
+       compare("21A5DBEE154B8F6D", C->decode(StringTest("F7C013AC5B2B8952").hexToBytes()));
     }
 }
 

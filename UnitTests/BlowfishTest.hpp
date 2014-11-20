@@ -45,7 +45,7 @@ namespace UnitTests
     {
        const BytesVector clear_text = {0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
 
-       compare("7D856F9A613063F2", B->encode(clear_text).toHexString());
+       compare("7D856F9A613063F2", B->encode(clear_text));
     }
 
     TEST(BlowfishECBDecode, BlowfishTest)
@@ -53,7 +53,7 @@ namespace UnitTests
        const BytesVector clear_text = {0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
        const StringTest message = "7D856F9A613063F2";
 
-       compare(clear_text.toHexString(), B->decode(message.hexToBytes()).toHexString());
+       compare(clear_text, B->decode(message.hexToBytes()));
     }
 
     TEST(BlowfishCBCEncode, BlowfishTest)
@@ -61,14 +61,14 @@ namespace UnitTests
        const BytesVector clear_text = {0x37, 0x36, 0x35, 0x34, 0x33, 0x32, 0x31, 0x20, 0x4E, 0x6F, 
        0x77, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x65, 0x20, 0x74, 0x69, 0x6D, 0x65, 0x20, 0x66, 0x6F, 0x72, 0x20, 0x00};
 
-       compare("6B77B4D63006DEE605B156E27403979358DEB9E7154616D959F1652BD5FF92CC", CBC->encode(clear_text).toHexString());
+       compare("6B77B4D63006DEE605B156E27403979358DEB9E7154616D959F1652BD5FF92CC", CBC->encode(clear_text));
     }
 
     TEST(BlowfishCBCDecode, BlowfishTest)
     {   
        const StringTest message = "6B77B4D63006DEE605B156E27403979358DEB9E7154616D959F1652BD5FF92CC";
        compare("37363534333231204E6F77206973207468652074696D6520666F722000000000", 
-               CBC->decode(message.hexToBytes()).toHexString());
+               CBC->decode(message.hexToBytes()));
     }
 
     TEST(BlowfishCFBEncode, BlowfishTest)
@@ -76,14 +76,14 @@ namespace UnitTests
        const BytesVector clear_text = {0x37, 0x36, 0x35, 0x34, 0x33, 0x32, 0x31, 0x20, 0x4E, 0x6F, 
        0x77, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x65, 0x20, 0x74, 0x69, 0x6D, 0x65, 0x20, 0x66, 0x6F, 0x72, 0x20, 0x00};
 
-       compare("E73214A2822139CAF26ECF6D2EB9E76E3DA3DE04D1517200519D57A6C3384ECE", CFB->encode(clear_text).toHexString());
+       compare("E73214A2822139CAF26ECF6D2EB9E76E3DA3DE04D1517200519D57A6C3384ECE", CFB->encode(clear_text));
     }
 
     TEST(BlowfishCFBDecode, BlowfishTest)
     {   
        const StringTest message = "E73214A2822139CAF26ECF6D2EB9E76E3DA3DE04D1517200519D57A6C3384ECE";
        compare("37363534333231204E6F77206973207468652074696D6520666F722000000000", 
-               CFB->decode(message.hexToBytes()).toHexString());
+               CFB->decode(message.hexToBytes()));
     }
 
     TEST(BlowfishOFBEncode, BlowfishTest)
@@ -91,14 +91,14 @@ namespace UnitTests
        const BytesVector clear_text = {0x37, 0x36, 0x35, 0x34, 0x33, 0x32, 0x31, 0x20, 0x4E, 0x6F, 
        0x77, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x65, 0x20, 0x74, 0x69, 0x6D, 0x65, 0x20, 0x66, 0x6F, 0x72, 0x20, 0x00};
 
-       compare("E73214A2822139CA62B343CC5B65587310DD908D0C241B2263C2CF80DA46FBB8", OFB->encode(clear_text).toHexString());
+       compare("E73214A2822139CA62B343CC5B65587310DD908D0C241B2263C2CF80DA46FBB8", OFB->encode(clear_text));
     }
 
     TEST(BlowfishOFBDecode, BlowfishTest)
     {   
        const StringTest message = "E73214A2822139CA62B343CC5B65587310DD908D0C241B2263C2CF80DA46FBB8";
        compare("37363534333231204E6F77206973207468652074696D6520666F722000000000", 
-               OFB->decode(message.hexToBytes()).toHexString());
+               OFB->decode(message.hexToBytes()));
     }
 
     TEST(BlowfishCTREncode, BlowfishTest)
@@ -107,7 +107,7 @@ namespace UnitTests
        "AC45AF8E5130C81C46A35CE411E5FBC1191A0A52EFF69F2445DF4F9B17AD2B417BE66C3710");
 
        compare("EF2CA093ECC80BD87DDC11D06DBCD38B3B5205EEDCCF58945B192755945003FC44B144F5DC1ACC5F14EACCA935125879FEED0C53019712B1B07438BA4C19C864", 
-               CTR->encode(clear_text.hexToBytes()).toHexString());
+               CTR->encode(clear_text.hexToBytes()));
     }
 
     TEST(BlowfishCTRDecode, BlowfishTest)
@@ -115,7 +115,7 @@ namespace UnitTests
        const StringTest clear_text("EF2CA093ECC80BD87DDC11D06DBCD38B3"
                "B5205EEDCCF58945B192755945003FC44B144F5DC1ACC5F14EACCA935125879FEED0C53019712B1B07438BA4C19C864");
        compare("6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411E5FBC1191A0A52EFF69F2445DF4F9B17AD2B417BE66C3710", 
-               CTR->decode(clear_text.hexToBytes()).toHexString());
+               CTR->decode(clear_text.hexToBytes()));
     }
 }
 

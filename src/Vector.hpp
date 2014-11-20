@@ -127,6 +127,21 @@ namespace CryptoGL
 
           return result;
        }
+       
+       /* Take the contain of this vector and transform it to String.
+        * Example: {12, 11, 3, 434} with separator '-' will give the String "12-11-3-434". */
+       String join(const char separator)
+       {
+           const uint64_t length = this->size();
+           String result = Type::toString(this->at(0));
+           for(uint64_t i = 1; i < length; ++i)
+           {
+               result.push_back(separator);
+               result.append(Type::toString(this->at(i)));
+           }
+           
+           return result;
+       }
 
        /* Shift a vector of integers 'v' to the left of 'shift' bits. */
        Vector leftShift(uint32_t shift) const
@@ -221,7 +236,7 @@ namespace CryptoGL
           return hex_digest;
        }
 
-       /* Convert a Vector to a string. *********ADD Reserve********/
+       /* Convert a Vector of bytes to a string. */
        String toString() const
        {
           return String(this->begin(), this->end());

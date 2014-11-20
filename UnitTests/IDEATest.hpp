@@ -31,28 +31,28 @@ namespace UnitTests
     {
        const BytesVector clear_text = {0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08};
 
-       compare("F5DB1AC45E5EF9F9", A->encode(clear_text).toHexString());
+       compare("F5DB1AC45E5EF9F9", A->encode(clear_text));
     }
 
     TEST(IDEADecodeEightValues, IDEATest)
     {
        const BytesVector clear_text = {0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08};
        const StringTest message("F5DB1AC45E5EF9F9");
-       compare(clear_text.toHexString(), A->decode(message.hexToBytes()).toHexString());
+       compare(clear_text, A->decode(message.hexToBytes()));
     }
 
     TEST(IDEAEncodeZeroValues, IDEATest)
     {
        const BytesVector clear_text = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-       compare("0001000100000000", B->encode(clear_text).toHexString());
+       compare("0001000100000000", B->encode(clear_text));
     }
 
     TEST(IDEADecodeZeroValues, IDEATest)
     {
        const BytesVector clear_text(8, 0);
        const StringTest message("0001000100000000");
-       compare(clear_text.toHexString(), B->decode(message.hexToBytes()).toHexString());
+       compare(clear_text, B->decode(message.hexToBytes()));
     }
 }
 
