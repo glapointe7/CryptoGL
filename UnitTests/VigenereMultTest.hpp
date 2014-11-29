@@ -26,7 +26,7 @@ namespace UnitTests
     };
     
     const StringTest VigenereMultTest::clear_text = "THISISVIGENEREWITHMULTIPLICATION";
-    const StringTest VigenereMultTest::cipher_text = "400 64 45 209 45 475 440 72 35 55 70 125 360 40 115 99 100 200 260 168 60 220 45 400 240 72 15 11 100 225 300 112 ";
+    const StringTest VigenereMultTest::cipher_text = "400 64 45 209 45 475 440 72 35 55 70 125 360 40 115 99 100 200 260 168 60 220 45 400 240 72 15 11 100 225 300 112";
 
     TEST(VigenereMultEncode, VigenereMultTest) 
     {

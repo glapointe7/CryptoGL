@@ -16,7 +16,7 @@ set(SRC
    Padding.cpp
 
 # Cryptanalysis section
-   cryptanalysis/ClassicalAnalysis.cpp
+   #cryptanalysis/ClassicalAnalysis.cpp
 	
 # Classic ciphers section
    StringCipher.cpp
@@ -49,7 +49,7 @@ set(SRC
    IDEA.cpp
    Noekeon.cpp
    RC2.cpp
-   Serpent.cpp
+   #Serpent.cpp
    Skipjack.cpp
    Blowfish.cpp
    DES.cpp
@@ -100,7 +100,7 @@ include_directories (exceptions)
 # Add the source files code (CPP, HPP and the CMakeLists.txt) of 'big_numbers' directory.
 add_subdirectory (big_integers)
 
-# Create libcomponants.a with all the source files provided by SRC.
+# Create libCryptoGL.a with all the source files provided by SRC.
 add_library(cryptoGL ${SRC})
 
 

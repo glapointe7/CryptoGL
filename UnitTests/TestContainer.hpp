@@ -4,8 +4,13 @@
 
 #include "Test.hpp"
 
+#include <chrono>
+
 namespace UnitTests
 {
+    using namespace std::chrono;
+    using Time = high_resolution_clock;
+    
     class TestContainer
     {
     private:

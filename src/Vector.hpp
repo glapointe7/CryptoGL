@@ -133,11 +133,11 @@ namespace CryptoGL
        String join(const char separator)
        {
            const uint64_t length = this->size();
-           String result = Type::toString(this->at(0));
+           String result = Integer<Type>::toString(this->at(0));
            for(uint64_t i = 1; i < length; ++i)
            {
                result.push_back(separator);
-               result.append(Type::toString(this->at(i)));
+               result.append(Integer<Type>::toString(this->at(i)));
            }
            
            return result;

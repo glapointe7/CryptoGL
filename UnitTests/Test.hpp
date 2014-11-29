@@ -2,23 +2,17 @@
 #ifndef TEST_HPP
 #define	TEST_HPP
 
-//#include <sys/time.h>
-
 #include "../src/Types.hpp"
 #include "TextColors.hpp"
 #include "TestContainer.hpp"
 
 #include <iostream>
-#include <chrono>
 
 using namespace CryptoGL;
-using namespace std::chrono;
 
 namespace UnitTests
 {    
-
-typedef high_resolution_clock Time;
-    
+// Macro to be able to automatically run unit tests easily.
 #define TEST(ClassName, Parent) \
     class ClassName : public Parent \
     { \
@@ -35,7 +29,7 @@ typedef high_resolution_clock Time;
     void ClassName::run()
 
     
-    
+    // Parent class for all unit tests.
     class Test  
     {
     public:
@@ -45,8 +39,8 @@ typedef high_resolution_clock Time;
         virtual void run() = 0;
         virtual void tearDown() = 0;
         
-        /* Print the result for one test if passed or failed, name and execution time. */
-        void printResult()
+        /* Print the result for one test if passed or failed with the expected result. */
+        void printResult() const
         {
             if(has_passed)
             {
@@ -57,14 +51,16 @@ typedef high_resolution_clock Time;
             {
                 std::cout << Color::FG_RED << "\n[FAILED] ";
                 std::cout << Color::FG_DEFAULT << name << " \n   Input value: ";
-                std::cout << input_value << "\nExpected value: " << expected_value;
+                std::cout << Color::FG_RED << input_value;
+                std::cout << Color::FG_DEFAULT << "\nExpected value: " << expected_value;
             }
         }
-        
-        void setName(const String &name) { this->name = name; }
-        bool hasPassed() { return has_passed; }
+                
+        bool hasPassed() const { return has_passed; }
                 
     protected:
+        void setName(const String &name) { this->name = name; }
+        
         /* Compare Strings */
         void compare(const String &expected_value, const String &input_value)
         {

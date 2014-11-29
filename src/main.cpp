@@ -75,6 +75,9 @@
 #include "../UnitTests/XTEATest.hpp"
 //#include "../testing/SerpentTest.hpp"
 
+#include "../UnitTests/StringMethodsTest.hpp"
+#include "../UnitTests/VectorMethodsTest.hpp"
+
 int main(int argc, char **argv)
 {
     UnitTests::TestContainer::runAllTests();

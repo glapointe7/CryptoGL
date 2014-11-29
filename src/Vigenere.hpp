@@ -141,6 +141,23 @@ namespace CryptoGL
        explicit VigenereMult(const KeyType &key)
           : Vigenere(clearMultKey, keyDivideCipher, key) {}
 
+       ClassicalType encode(const ClassicalType &clear_text) override
+       {
+           const KeyType my_key = getKey();
+           const uint32_t key_length = my_key.length();
+
+           ClassicalType cipher_text(clear_text.length() * 4);
+           uint32_t idx = 0;
+           for(const auto c : clear_text)
+           {
+               cipher_text.append(clearMultKey(alpha, c, my_key[idx]));
+               idx = (idx + 1) % key_length;
+           }
+           cipher_text.pop_back();
+           
+           return cipher_text;
+       }
+          
        /* Decode the Vigenere Multiplication cipher with the given cipher_text. */
        ClassicalType decode(const ClassicalType &cipher_text) override
        {

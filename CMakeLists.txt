@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 2.8)
 
-set (Project_Name Cryptology)
+set (Project_Name CryptoGL)
 
 project (${Project_Name})
 
@@ -10,19 +10,12 @@ set (CMAKE_CXX_FLAGS                "-Winline -Wall -Werror -pedantic-errors -pt
 # Add the source files code (CPP, HPP and the CMakeLists.txt).
 add_subdirectory (src)
 
-#Include the testing source file headers.
+#Include the unit test source file headers.
+#enable_testing()
 include_directories (UnitTests)
-
-enable_testing()
-#find_package(GTest REQUIRED)
-
-#include_directories(${GTEST_INCLUDE_DIRS})
 
 # Target the project name to be built.
 add_executable(${Project_Name} src/main.cpp)
-
-# Link the gtest librairy to the project.
-#target_link_libraries(${Project_Name} ${GTEST_BOTH_LIBRARIES})
 
 # Link the src librairy to the project.
 target_link_libraries (${Project_Name} cryptoGL)
@@ -31,7 +24,7 @@ target_link_libraries (${Project_Name} cryptoGL)
 target_link_libraries (${Project_Name} big_integers)
 
 # Link the UnitTests librairy to the project.
-target_link_libraries (${Project_Name} UnitTests)
+#target_link_libraries (${Project_Name} CryptoGL_UnitTests)
 
-add_test(AllTestsInCryptology ${Project_Name})
+#add_test(CryptoGL_UnitTests ${Project_Name})
 
