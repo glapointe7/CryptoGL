@@ -5,19 +5,21 @@
 #include "Types.hpp"
 
 #include <fstream>
-#include <iostream>
 
 template <class DataType>
 class File
 {
 public:
-   explicit File(const std::string &filename) : filename(filename) {}
+   File(const String &filename) : filename(filename) {}
    
    /* Get the file size. */
-   static std::ifstream::pos_type size(std::ifstream in)
+   static std::ifstream::pos_type size(std::ifstream &in)
    {
       in.seekg(0, std::ios::end);
-      return in.tellg();
+      const std::ifstream::pos_type file_size = in.tellg();
+      in.seekg(0, std::ios::beg);
+      
+      return file_size;
    }
    
    /* Save data in a file named by 'filename'. */
@@ -32,34 +34,35 @@ public:
       }
       catch (const std::ofstream::failure &e)
       {
-         std::cerr << "Cannot open / write the file.";
+         throw "Cannot open / write the file.";
       }
       out.close();
    }
    
    /* Load a binary file and get the bytes in a vector. */
-   DataType load() const
+   Vector<DataType> load() const
    {
-      DataType bytes;
-      std::ifstream in;
-      in.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-      try
-      {
-         in.open(filename.c_str(), std::ios::binary);
-         bytes.reserve(size(in));
-         in.read(reinterpret_cast<char *> (&bytes.front()), bytes.size());
-      }
-      catch (const std::ifstream::failure &e)
-      {
-         std::cerr << "Cannot open / read the file.";
-      }
-      in.close();
+        Vector<DataType> bytes;
+        std::ifstream in(filename.c_str());
+        if(!in)
+        {
+            throw Exception("Check if your file exists in the directory you gave.");
+        }
+        
+        const uint32_t total_size = size(in);
+        bytes.reserve(size(in));
+        DataType value;
+        while(in >> value)
+        {
+            bytes.push_back(value);
+        }
+        in.close();
 
-      return bytes;
+        return bytes;
    }
    
 private:
-   const std::string filename;
+   const String filename;
 };
 
 #endif

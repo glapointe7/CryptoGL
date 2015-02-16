@@ -98,6 +98,19 @@ namespace UnitTests
         {
             compare(expected_value, input_value.toHexString());
         }
+        
+//        void compare(const UInt32Vector &expected_value, const UInt32Vector &input_value)
+//        {
+//            if(expected_value == input_value)
+//            {
+//                has_passed = true;
+//            }
+//            else
+//            {
+//                this->expected_value = expected_value;
+//                this->input_value = input_value;
+//            }
+//        }
                
     private:
         String expected_value;

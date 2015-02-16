@@ -142,6 +142,14 @@ namespace CryptoGL
            
            return result;
        }
+       
+       /* Swap the positions i and j in the current vector. */
+       void swap(const uint64_t &i, const uint64_t &j)
+       {
+           const Type tmp = this->at(i);
+           this->at(i) = this->at(j);
+           this->at(j) = tmp;
+       }
 
        /* Shift a vector of integers 'v' to the left of 'shift' bits. */
        Vector leftShift(uint32_t shift) const
