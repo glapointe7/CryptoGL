@@ -153,9 +153,7 @@ namespace CryptoGL
         
         void medianOf3(const int32_t first, const int32_t last) 
         {
-            const int32_t length = first + last;
-            int32_t middle = length / 2;
-            
+            const int32_t middle = (first + last) / 2;          
             if (V[first] > V[middle])
               V.swap(first, middle);
 

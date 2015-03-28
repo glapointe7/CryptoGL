@@ -4,32 +4,63 @@
 #include "Test.hpp"
 #include "../src/Graph.hpp"
 
+using namespace DataStructure;
+
 namespace UnitTests
 {
     class GraphTest : public Test
     {
     protected:
        Graph *Sample200, *Sample40;
+       Graph *Karger8, *Dijkstra4;
 
        void setUp() override
        {
           Sample200 = new Graph();
-          Sample40 = new Graph();       
+          Sample40 = new Graph();    
+          Karger8 = new Graph();
+          Dijkstra4 = new Graph();
        }
 
        void tearDown() override
        {
           delete Sample200;
           delete Sample40;
+          delete Karger8;
+          delete Dijkstra4;
        }
     };
 
         
-    TEST(KargerMinimalCutsOnSample200, GraphTest) 
+//    TEST(KargerMinimalCutsOnSample200, GraphTest) 
+//    {
+//        Sample200->load("/media/gabriel/Data/Algorithms Analysis/kargerMinCut.txt");
+//        compare(17, Sample200->getMinimumCut());
+//    }
+    
+//    TEST(KargerMinimalCutsOnSample8, GraphTest) 
+//    {
+//        Karger8->load("/home/gabriel/Documents/CryptoGL_DEV/UnitTests/karger8.txt");
+//        compare(2, Karger8->getMinimumCut());
+//    }
+    
+    // Dijkstra4 => shortest path length = 2 starts = 1 ; end = 4
+    TEST(DijkstraShortestPathOnSample4, GraphTest) 
     {
-        Sample200->load("/media/gabriel/Data/Algorithms Analysis/kargerMinCut.txt");
-        compare(17, Sample200->getMinimumCut());
+        Dijkstra4->loadWithWeight("/home/gabriel/Documents/CryptoGL_DEV/UnitTests/Dijkstra4Easy.txt");
+        //const Vector<Vertex> ShortestPath = Dijkstra4->getShortestPath();
+        compare(2, Dijkstra4->getShortestPath());
     }
+    
+    // 2599,2610,2947,2052,2367,2399,2029,2442,2505,3068
+    // Dijkstra length for vertices 7,37,59,82,99,115,133,165,188,197
+    
+    // 10,30,50,80,90,110,130,160,180,190
+    // Give: 3205,2303,3152,982,2018,2317,1820,2403,3027,2596
+    
+    // Dijkstra7 => shortest path length = 5 starts = 1 ; end = 7
+    // Dijkstra15 => shortest path length = 26 starts = 13 ; end = 5
+    // Dijkstra50 => shortest path length = 9 starts = 28 ; end = 6
 }
 
 #endif
