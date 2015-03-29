@@ -1,3 +1,4 @@
+
 #include "../UnitTests/TestContainer.hpp"
 
 #include "../UnitTests/Adler32Test.hpp"
@@ -77,9 +78,6 @@
 
 #include "../UnitTests/StringMethodsTest.hpp"
 #include "../UnitTests/VectorMethodsTest.hpp"
-#include "../UnitTests/SortTest.hpp"
-#include "../UnitTests/QuickSortTest.hpp"
-#include "../UnitTests/GraphTest.hpp"
 
 
 int main(int argc, char **argv)
