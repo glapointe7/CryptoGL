@@ -20,10 +20,11 @@ namespace CryptoGL
         Heap() : height(0) {}
         explicit Heap(const Vector<Type> &V) : HeapVector(V)
         {
+            // Build the heap in O(n).
             const int32_t v_size = V.size();
-            for(int32_t i = v_size - 1; i >= 0; --i)
+            for(int64_t i = v_size / 2; i >= 0; --i)
             {
-                siftDown(i);
+                siftUp(i);
             }
         }
         
@@ -34,7 +35,7 @@ namespace CryptoGL
         void push(const Type &Value)
         {
             HeapVector.push_back(Value);
-            siftUp(HeapVector.size() - 1);
+            siftUp(size() - 1);
         }
         
         /* Get the parent of the given index. */
@@ -69,8 +70,8 @@ namespace CryptoGL
                 throw Exception("Can not remove the minimum value because the heap is empty.");
             }
             
-            HeapVector.swap(ROOT, size() - 1);
-            const Type MinimumValue = HeapVector.back();
+            const Type MinimumValue = HeapVector[ROOT];
+            HeapVector[ROOT] = HeapVector.back();
             HeapVector.pop_back();
             if(!isEmpty())
             {

@@ -17,7 +17,7 @@ namespace DataStructure
         Vertex Source;
         //Vector<Vector<Vertex>> Cycles;
         
-        void detectCycle(Vertex Parents);
+        //void detectCycle(Vertex Parents);
         
     public:
         explicit Graph(const Vertex &Source) : Source(Source) {}
@@ -30,11 +30,11 @@ namespace DataStructure
         
         /* Get the shortest path distance of the current graph. 
            Dijkstra algorithm using binary Heap. */
-        uint64_t getShortestPath();
+        uint64_t getShortestPath(const uint64_t &start, const uint64_t &end);
         
-        uint64_t getMinimalCuts() const;
+        //uint64_t getMinimalCuts() const;
         
-        bool isConnexe();
+        //bool isConnexe();
     };
 }
 

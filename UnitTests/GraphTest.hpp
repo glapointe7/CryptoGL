@@ -11,23 +11,22 @@ namespace UnitTests
     class GraphTest : public Test
     {
     protected:
-       Graph *Sample200, *Sample40;
-       Graph *Karger8, *Dijkstra4;
+       Graph *Dijkstra7, *Dijkstra4, *Dijkstra15, *Dijkstra50;
 
        void setUp() override
        {
-          Sample200 = new Graph();
-          Sample40 = new Graph();    
-          Karger8 = new Graph();
           Dijkstra4 = new Graph();
+          Dijkstra7 = new Graph();
+          Dijkstra15 = new Graph();
+          Dijkstra50 = new Graph();
        }
 
        void tearDown() override
        {
-          delete Sample200;
-          delete Sample40;
-          delete Karger8;
           delete Dijkstra4;
+          delete Dijkstra7;
+          delete Dijkstra15;
+          delete Dijkstra50;
        }
     };
 
@@ -49,7 +48,31 @@ namespace UnitTests
     {
         Dijkstra4->loadWithWeight("/home/gabriel/Documents/CryptoGL_DEV/UnitTests/Dijkstra4Easy.txt");
         //const Vector<Vertex> ShortestPath = Dijkstra4->getShortestPath();
-        compare(2, Dijkstra4->getShortestPath());
+        compare(2, Dijkstra4->getShortestPath(1, 4));
+    }
+    
+    // Dijkstra7 => shortest path length = 5 starts = 1 ; end = 7
+    TEST(DijkstraShortestPathOnSample7, GraphTest) 
+    {
+        Dijkstra7->loadWithWeight("/home/gabriel/Documents/CryptoGL_DEV/UnitTests/Dijkstra7Normal.txt");
+        //const Vector<Vertex> ShortestPath = Dijkstra4->getShortestPath();
+        compare(5, Dijkstra7->getShortestPath(1, 7));
+    }
+    
+    // Dijkstra15 => shortest path length = 26 starts = 13 ; end = 5
+    TEST(DijkstraShortestPathOnSample15, GraphTest) 
+    {
+        Dijkstra15->loadWithWeight("/home/gabriel/Documents/CryptoGL_DEV/UnitTests/Dijkstra15Medium.txt");
+        //const Vector<Vertex> ShortestPath = Dijkstra4->getShortestPath();
+        compare(26, Dijkstra15->getShortestPath(14, 6));
+    }
+    
+    // Dijkstra50 => shortest path length = 9 starts = 28 ; end = 6
+    TEST(DijkstraShortestPathOnSample50, GraphTest) 
+    {
+        Dijkstra50->loadWithWeight("/home/gabriel/Documents/CryptoGL_DEV/UnitTests/Dijkstra50Large.txt");
+        //const Vector<Vertex> ShortestPath = Dijkstra4->getShortestPath();
+        compare(9, Dijkstra50->getShortestPath(29, 7));
     }
     
     // 2599,2610,2947,2052,2367,2399,2029,2442,2505,3068
@@ -57,10 +80,6 @@ namespace UnitTests
     
     // 10,30,50,80,90,110,130,160,180,190
     // Give: 3205,2303,3152,982,2018,2317,1820,2403,3027,2596
-    
-    // Dijkstra7 => shortest path length = 5 starts = 1 ; end = 7
-    // Dijkstra15 => shortest path length = 26 starts = 13 ; end = 5
-    // Dijkstra50 => shortest path length = 9 starts = 28 ; end = 6
 }
 
 #endif

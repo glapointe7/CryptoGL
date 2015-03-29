@@ -31,6 +31,7 @@ namespace DataStructure
         ~Vertex() {}
         
         void appendNeighbor(const Edge &E);
+        void reserveNeighbors(const uint64_t &n);
         
         Vector<Edge> getNeighbors() const { return Neighbors; }
         
