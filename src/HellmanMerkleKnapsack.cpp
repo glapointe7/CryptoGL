@@ -11,12 +11,12 @@ HellmanMerkleKnapsack::HellmanMerkleKnapsack(const BigIntVector &sequence, const
 {
    if(!Maths::areCoprimes(div, mod))
    {
-      throw IntegersNotCoprimes("The modulo 'mod' and dividend 'r' have to be coprimes.");
+      throw IntegersNotCoprimes("The modulo 'mod' and dividend 'div' have to be coprimes.");
    }
    
    if(div >= mod)
    {
-      throw DividendGreaterThanModulo("Your modulo 'mod' has to be greater than your dividend 'r'.");
+      throw DividendGreaterThanModulo("Your modulo 'mod' has to be greater than your dividend 'div'.");
    }
    
    if(sequence.size() != 8)
@@ -66,7 +66,7 @@ void HellmanMerkleKnapsack::makePublicKey()
    }
 }
 
-uint8_t HellmanMerkleKnapsack::makePlainByte(BigInteger value)
+uint8_t HellmanMerkleKnapsack::makePlainByte(BigInteger value) const
 {
    uint8_t byte = 0;
    uint8_t pos = 7;

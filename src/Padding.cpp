@@ -4,10 +4,12 @@ using namespace CryptoGL;
 
 BytesVector Padding::zeros(BytesVector data, const uint8_t block_size)
 {
-   const uint8_t remaining = data.size() % block_size;
+    const uint64_t data_size = data.size();
+   const uint8_t remaining = data_size % block_size;
    if (remaining != 0)
    {
-      data.insert(data.end(), block_size - remaining, 0);
+       data.reserve(data_size + block_size - remaining);
+       data.insert(data.end(), block_size - remaining, 0);
    }
 
    return data;

@@ -22,8 +22,8 @@ namespace CryptoGL
 
     private:
        void makePublicKey() override;
-       BigInteger isSuperIncresing(const BigIntVector &sequence);
-       uint8_t makePlainByte(BigInteger value);
+       static BigInteger isSuperIncresing(const BigIntVector &sequence);
+       uint8_t makePlainByte(BigInteger value) const;
 
        using SequenceNotSuperIncreasing = BadKey;
        using IntegersNotCoprimes = BadKey;

@@ -126,7 +126,7 @@ ClassicalType Fleissner::decode(const ClassicalType &cipher_text)
    grid.reserve(grid_dim);
    ClassicalType decrypted(cipher_len);
    uint32_t k = 0;
-   for (uint32_t i = 0; i < max_grid; i++)
+   for (uint32_t i = 0; i < max_grid; ++i)
    {
       // Fill the grid with the cipher text.
       for (uint32_t j = 0; j < grid_dim; ++j, k += grid_dim)

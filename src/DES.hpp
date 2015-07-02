@@ -49,7 +49,7 @@ namespace CryptoGL
           for (uint8_t k = 0; k < TableSize; ++k)
           {
              --i;
-             if ((data >> (from - table[k])) & 1)
+             if ((data >> (from - table[k])) % 2)
              {
                 output |= 1ull << i;
              }

@@ -8,7 +8,7 @@ namespace CryptoGL
 {
     namespace Padding
     {   
-       /* Pad 'data' with 'input_block_length' values given by 'fill_with'. */
+       /* Pad 'data' with 'block_size' times 0x0. */
        BytesVector zeros(BytesVector data, const uint8_t block_size);
 
        /* Add the 'value' of the number of remaining byte 'value' times. */

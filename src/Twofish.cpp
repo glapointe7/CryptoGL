@@ -81,6 +81,8 @@ void Twofish::generateSubkeys()
    Mo.reserve(k4);
    BytesMatrix S(k, BytesVector(4, 0));
 
+   // w(x) = x^8 + x^6 + x^3 + x^2 + 1 over GF(2). (101001101)_2 = 0x14D.
+   constexpr uint16_t WX = 0x14D;
    for (uint8_t i = 0; i < k; ++i)
    {  
       const uint8_t x = i * 8;
@@ -88,12 +90,11 @@ void Twofish::generateSubkeys()
       Mo.extend(key, x+4, x+8);
       
       // We multiply RS by the vector key_{8i + j} where j = 0,...,7.
-      // w(x) = x^8 + x^6 + x^3 + x^2 + 1 over GF(2). (101001101)_2 = 0x14D.
       for(uint8_t j = 0; j < 4; ++j)
       {
          for(uint8_t l = 0; l < 8; ++l)
          {
-            S[i][j] ^= Maths::GFMultiply(RS[j][l], key[x + l], 0x14D);
+            S[i][j] ^= Maths::GFMultiply(RS[j][l], key[x + l], WX);
          }
       }
    }
