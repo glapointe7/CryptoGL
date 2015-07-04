@@ -1,10 +1,8 @@
-
 #ifndef THREESQUARES_HPP
 #define THREESQUARES_HPP
 
 #include "SquareCipher.hpp"
 #include "CipherGrid.hpp"
-#include "String.hpp"
 
 namespace CryptoGL
 {

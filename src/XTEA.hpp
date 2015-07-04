@@ -22,7 +22,7 @@ namespace CryptoGL
        XTEA(const BytesVector &key, const OperationModes mode) 
           : XTEA(key, mode, {}) {}
 
-       void setKey(const BytesVector &key) final;
+       void setKey(const BytesVector &key) override;
 
     private:
        static constexpr uint32_t delta = 0x9E3779B9;

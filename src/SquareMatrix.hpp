@@ -21,7 +21,10 @@ namespace CryptoGL
        void setMatrix(const Int32Matrix &);
        Int32Matrix getMatrix() const { return M; };
 
+       /* Get a specific value of the current matrix. */
        int32_t get(const uint32_t row, const uint32_t col) const;
+       
+       /* Set value to a specific cell of the matrix.*/
        void set(const uint32_t row, const uint32_t col, const int32_t value);
 
        uint32_t getDimension() const { return dim; }
@@ -35,7 +38,10 @@ namespace CryptoGL
 
        Int32Matrix identity() const;
 
+       /* Return the determinant of the current matrix.*/
        int32_t det() const;
+       
+       /* Return the inverse of the current matrix using the Gauss-Jordan method.*/
        SquareMatrix inverse() const;
 
     private:

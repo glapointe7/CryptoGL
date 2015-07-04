@@ -6,8 +6,6 @@
 
 #include "exceptions/BadKey.hpp"
 
-#include <vector>
-
 namespace CryptoGL
 {
     class StringCipherWithPermutationKey : public StringCipher

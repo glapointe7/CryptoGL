@@ -6,10 +6,6 @@
 
 #include "SynchronousStreamCipher.hpp"
 
-#include "exceptions/BadKeyLength.hpp"
-#include "Endian.hpp"
-
-#include <vector>
 #include <array>
 
 namespace CryptoGL

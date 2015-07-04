@@ -1,6 +1,7 @@
 #include "Bits.hpp"
 
 using namespace CryptoGL;
+
 /*BytesVector Bits::rotateLeft128(const BytesVector &bytes, const uint8_t shift)
 {
    const uint8_t bytes_to_rotate = shift / 8;
@@ -21,12 +22,12 @@ using namespace CryptoGL;
 
 uint32_t Bits::bytesSwap(const uint32_t value)
 {
-   uint32_t retval = value & 0xFF;
-   retval = (retval << 8) | ((value >> 8) & 0xFF);
-   retval = (retval << 8) | ((value >> 16) & 0xFF);
-   retval = (retval << 8) | ((value >> 24) & 0xFF);
+    uint32_t retval = value & 0xFF;
+    retval = (retval << 8) | ((value >> 8) & 0xFF);
+    retval = (retval << 8) | ((value >> 16) & 0xFF);
+    retval = (retval << 8) | ((value >> 24) & 0xFF);
 
-   return retval;
+    return retval;
 }
 
 /*uint32_t Bits::permute(const uint32_t value, const uint8_t *table)
@@ -42,10 +43,10 @@ uint32_t Bits::bytesSwap(const uint32_t value)
 
 uint8_t Bits::msb(const BytesVector &V)
 {
-   return *(V.begin()) & 0x80;
+    return *(V.begin()) & 0x80;
 }
 
 uint8_t Bits::lsb(const BytesVector &V)
 {
-   return *(V.rbegin()) & 0x01;
+    return *(V.rbegin()) & 0x01;
 }

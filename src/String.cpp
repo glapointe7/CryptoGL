@@ -68,7 +68,7 @@ void String::removeDuplicates()
 // Check if it exists a duplicate char in text.
 bool String::containsUniqueChars() const
 {
-   std::vector<bool> array(256, 0);
+   std::vector<bool> array(256, false);
 
    const auto end = this->end();
    for (std::string::const_iterator it = this->begin(); it != end; ++it)

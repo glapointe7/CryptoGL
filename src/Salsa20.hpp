@@ -6,8 +6,6 @@
 
 #include "SynchronousStreamCipher.hpp"
 
-#include "Endian.hpp"
-
 #include <array>
 
 namespace CryptoGL

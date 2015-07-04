@@ -3,7 +3,6 @@
 #define STRINGCIPHER_HPP
 
 #include "Cipher.hpp"
-#include "String.hpp"
 
 namespace CryptoGL
 {
@@ -20,7 +19,11 @@ namespace CryptoGL
        virtual ClassicalType encode(const ClassicalType &) = 0;
        virtual ClassicalType decode(const ClassicalType &) = 0;
 
+       /* Check if text has at least a character that doesn't belong to alpha.
+        * Return 0 if nothing is found, otherwise it returns the first char found.*/
        int8_t badAlphaFound(const ClassicalType &text) const;
+       
+       /* Append the character c (text.length() % mod) times.*/
        static ClassicalType appendChars(ClassicalType data, const uint32_t to_add, const char c);
        static void checkAlpha(const ClassicalType &alpha);
 

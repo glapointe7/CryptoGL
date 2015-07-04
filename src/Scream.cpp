@@ -1,12 +1,11 @@
 #include "Scream.hpp"
 
 #include "MathematicalTools.hpp"
-#include "Vector.hpp"
 #include "Endian.hpp"
+#include "Bits.hpp"
 #include "FunctionComposition.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
-#include "Bits.hpp"
 
 #include <algorithm>
 
@@ -96,13 +95,14 @@ BytesVector Scream::F(const BytesVector &X)
 {
     std::array<uint32_t, 4> u = {
         {T0[X[0]] ^ T1[X[13]], T0[X[4]] ^ T1[X[1]],
-            T0[X[8]] ^ T1[X[5]], T0[X[12]] ^ T1[X[9]]}
+         T0[X[8]] ^ T1[X[5]], T0[X[12]] ^ T1[X[9]]}
     };
 
     std::array<uint16_t, 4> bytes23 = {
         {static_cast<uint16_t> (u[0]), static_cast<uint16_t> (u[1]),
             static_cast<uint16_t> (u[2]), static_cast<uint16_t> (u[3])}
     };
+    
     for (uint8_t i = 0; i < 4; ++i)
     {
         const uint8_t j = (i * 4) + 2;

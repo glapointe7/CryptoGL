@@ -51,7 +51,7 @@ namespace CryptoGL
        template <uint8_t index>
        static constexpr uint8_t getByteFromInteger(const uint32_t bytes)
        {
-          static_assert(index < 4, "The second argument 'index' has to be between 0 and 3.");
+          static_assert(index < 4, "The argument 'index' has to be between 0 and 3.");
           return (bytes >> (index * 8)) & 0xFF;
        }
 

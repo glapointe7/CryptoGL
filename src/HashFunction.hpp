@@ -4,12 +4,9 @@
 #ifndef HASHFUNCTION_HPP
 #define HASHFUNCTION_HPP
 
-#include <string>
-
 #include "Types.hpp"
 
 #include "Endian.hpp"
-#include "Vector.hpp"
 
 namespace CryptoGL
 {

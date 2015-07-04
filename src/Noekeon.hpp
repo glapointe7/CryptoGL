@@ -5,7 +5,6 @@
 #define NOEKEON_HPP
 
 #include "BlockCipher.hpp"
-#include "Endian.hpp"
 
 #include <array>
 

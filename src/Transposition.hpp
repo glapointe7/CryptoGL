@@ -5,8 +5,6 @@
 #include "StringCipherWithPermutationKey.hpp"
 
 #include <algorithm>
-#include <string>
-#include <vector>
 #include <memory>
 
 namespace CryptoGL
@@ -127,7 +125,6 @@ namespace CryptoGL
           TranspositionIncompleteColumns TIC_first(key);
           const ClassicalType first_encoded = TIC_first.encode(clear_text);
 
-          /* Prevent memory leak : delete can't be used. */
           TranspositionIncompleteColumns TIC(second_key);
 
           return TIC.encode(first_encoded);
@@ -138,7 +135,6 @@ namespace CryptoGL
           TranspositionIncompleteColumns TIC_second(second_key);
           const ClassicalType first_decoded = TIC_second.decode(cipher_text);
 
-          /* Prevent memory leak : delete can't be used. */
           TranspositionIncompleteColumns TIC(key);
 
           return TIC.decode(first_decoded);

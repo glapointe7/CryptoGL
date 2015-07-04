@@ -5,8 +5,6 @@
 
 #include <functional>
   
-#include "String.hpp"
-#include "Vector.hpp"
 #include "Integer.hpp"
 #include "MathematicalTools.hpp"
 
@@ -164,11 +162,11 @@ namespace CryptoGL
           const KeyType my_key = getKey();
           const uint32_t key_length = my_key.length();
 
-          ClassicalType toReturn(cipher_text.length());
-          const std::vector<ClassicalType> cipher_numbers = ClassicalType(cipher_text.trimEnd()).split(' ');
+          ClassicalType toReturn(cipher_text.trimEnd().length());
+          const Vector<ClassicalType> cipher_numbers = cipher_text.split(' ');
 
           uint32_t idx = 0;
-          for (const auto number : cipher_numbers)
+          for (const auto &number : cipher_numbers)
           {
              toReturn.push_back(keyDivideCipher(alpha, atoi(number.c_str()), my_key[idx]).front());
              idx = (idx + 1) % key_length;
@@ -190,7 +188,7 @@ namespace CryptoGL
           const uint8_t alpha_len = alpha.length();
           KeyType new_key(grons_key.size());
 
-          for(const auto number : grons_key)
+          for(const auto &number : grons_key)
           {
              const uint8_t x = Maths::mod(number % alpha_len, alpha_len);
              new_key.push_back(alpha[x]);

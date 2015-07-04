@@ -9,7 +9,7 @@ void Skipjack::setKey(const BytesVector &key)
    const uint8_t key_len = key.size();
    if (key_len != 10)
    {
-      throw BadKeyLength("Your key has to be 80 bits length.", key_len);
+      throw BadKeyLength("Your key has to be 10 bytes length.", key_len);
    }
 
    this->key = key;

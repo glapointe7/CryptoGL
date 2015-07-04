@@ -16,23 +16,36 @@ namespace CryptoGL
     public:
        enum class HashSize : uint8_t { _128bits = 16, _160bits = 20, _192bits = 24 };
        enum class Version : uint8_t { tiger = 0x01, tiger2 = 0x80 };
+       
+       /* Constants for the initialization of the 3 registers. */
+       static constexpr uint64_t REGISTER_A_CONSTANT = 0x0123456789ABCDEF;
+       static constexpr uint64_t REGISTER_B_CONSTANT = 0xFEDCBA9876543210;
+       static constexpr uint64_t REGISTER_C_CONSTANT = 0xF096A5B4C3B2E187;
 
        Tiger(const HashSize output_size, const Version version)
-          : MerkleDamgardFunction({0x0123456789ABCDEF, 0xFEDCBA9876543210, 0xF096A5B4C3B2E187}, 24,
-               static_cast<uint8_t>(output_size)) { first_byte_padding = static_cast<uint8_t>(version); }
+            : MerkleDamgardFunction({REGISTER_A_CONSTANT, REGISTER_B_CONSTANT, REGISTER_C_CONSTANT}, 24,
+                                    static_cast<uint8_t>(output_size)) 
+          { 
+              first_byte_padding = static_cast<uint8_t>(version); 
+          }
 
        explicit Tiger(const HashSize output_size) 
           : Tiger(output_size, Version::tiger) {}
 
-    private:   
+    private:        
        static void applyKeySchedule(UInt64Vector &words);
-       static void applyRound(uint64_t &a, uint64_t &b, uint64_t &c, const uint64_t &word, const uint8_t mult);
-       static void pass(uint64_t &a, uint64_t &b, uint64_t &c, const UInt64Vector &words, const uint8_t mult);
+       void applyRound(const uint64_t &word, const uint8_t mult);
+       void pass(const UInt64Vector &words, const uint8_t mult);
+       void feedForward(const UInt64Vector &saved_registers);
 
        void compress(UInt64Vector &int_block, UInt64Vector &state) override;
 
+       /* Specific output for Tiger-160 which is 20 bytes output and it's not a multiple of 8.*/
        BytesVector getOutput(const UInt64Vector &hash) const override; 
 
+       // Equivalent to the registers a,b,c from the specs.
+       UInt64Vector registers;
+       
        static constexpr std::array<std::array<uint64_t, 256>, 4> sbox = {{
           {
              {0x02AAB17CF7E90C5E, 0xAC424B03E243A8EC,

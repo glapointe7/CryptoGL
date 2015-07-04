@@ -7,7 +7,6 @@
 
 #include "StringCipherWithPermutationKey.hpp"
 
-#include <string>
 #include <list>
 
 namespace CryptoGL
@@ -25,12 +24,12 @@ namespace CryptoGL
 
     private:
        /* Encode data block with the basic railfence cipher. */
-       void addEncodedText(std::vector<ClassicalType> &rows, const ClassicalType &data, 
+       void addEncodedText(Vector<ClassicalType> &rows, const ClassicalType &data, 
                const int32_t i, const int32_t level, const int32_t mod) const;
 
        /* Redefence : Replace each row following the permutation key. */
-       ClassicalType swapRowsWithPermutationKey(const std::vector<ClassicalType> &rows, const uint32_t length) const;
-       std::vector<std::list<int8_t> > getFirstDecoding(const ClassicalType &cipher_text, int32_t &last) const;
+       ClassicalType swapRowsWithPermutationKey(const Vector<ClassicalType> &rows, const uint32_t length) const;
+       Vector<std::list<int8_t> > getFirstDecoding(const ClassicalType &cipher_text, int32_t &last) const;
 
        uint32_t offset = 0;
        uint32_t max_level;

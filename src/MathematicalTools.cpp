@@ -19,8 +19,7 @@
    return a;
 }*/
 
-// All perfect squares in base 16 end by the following digit : 0,1,4 or 9.
-
+/* All perfect squares in base 16 end by the following digit : 0,1,4 or 9.*/
 bool Maths::isPerfectSquare(const uint32_t value)
 {
    const uint8_t last_digit = value & 0xF;
@@ -38,9 +37,11 @@ bool Maths::isPerfectSquare(const uint32_t value)
             case 0:
             case 1:
             case 4:
-            case 9: {
+            case 9: 
+            {
                const uint32_t t = static_cast<uint32_t> (floor(sqrt(static_cast<double> (value)) + 0.5));
-               return value == t * t; }
+               return value == t * t; 
+            }
             
             default:
                return false;

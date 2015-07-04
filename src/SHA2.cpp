@@ -56,12 +56,13 @@ void SHA512_t::makeNewIV(const BytesVector &code)
 {
    SHA512 S;
    const UInt64Vector IV_512 = S.getIV();
+   constexpr uint64_t A5_64BITS_CONSTANT = 0xa5a5a5a5a5a5a5a5;
    
    UInt64Vector tmp_IV;
    tmp_IV.reserve(8);
    for (uint8_t i = 0; i < 8; ++i)
    {
-      tmp_IV.push_back(IV_512[i] ^ 0xa5a5a5a5a5a5a5a5);
+      tmp_IV.push_back(IV_512[i] ^ A5_64BITS_CONSTANT);
    }
 
    S.setIV(tmp_IV);

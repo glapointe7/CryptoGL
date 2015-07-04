@@ -4,8 +4,6 @@
 
 #include "StringCipherWithStringKey.hpp"
 
-#include <string>
-
 namespace CryptoGL
 {
     class Wolseley : public StringCipherWithStringKey
