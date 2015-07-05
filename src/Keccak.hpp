@@ -6,7 +6,6 @@
 
 #include "SpongeFunction.hpp"
 
-#include <vector>
 #include <array>
 
 namespace CryptoGL

@@ -4,11 +4,8 @@
 
 #include "HashFunction.hpp"
 
-#include "Endian.hpp"
-
 namespace CryptoGL
 {
-
     /*
      * DataType : An unsigned integer for the IV and integer input block.
      * 
@@ -50,7 +47,7 @@ namespace CryptoGL
         virtual ~MerkleDamgardFunction() { }
 
         /* Process the main algorithm of the hash function. */
-        virtual void compress(DataTypeVector &int_block, DataTypeVector &state) = 0;
+        virtual void compress(DataTypeVector &int_block, DataTypeVector &state) override = 0;
 
         /* Finalize the block to get the final hashed block. */
         static void applyDaviesMayerFunction(DataTypeVector &hash, DataTypeVector &state)

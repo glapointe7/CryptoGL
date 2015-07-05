@@ -4,7 +4,6 @@
 
 #include "StringCipher.hpp"
 
-#include <string>
 #include <array>
 
 namespace CryptoGL
@@ -12,13 +11,13 @@ namespace CryptoGL
     class Morse : public StringCipher
     {
     public:
-       Morse();
+        Morse();
 
-       ClassicalType encode(const ClassicalType &) override;
-       ClassicalType decode(const ClassicalType &) override;
+        ClassicalType encode(const ClassicalType &) override;
+        ClassicalType decode(const ClassicalType &) override;
 
     private:
-       static const std::array<ClassicalType, 36> morse;
+        static const std::array<ClassicalType, 36> morse;
     };
 }
 

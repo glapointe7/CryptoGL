@@ -10,17 +10,16 @@ namespace CryptoGL
     class FourSquares : public SquareCipher
     {
     public:
-       FourSquares(const KeyType &key1, const KeyType &key2, const ClassicalType &alpha);
+        FourSquares(const KeyType &key1, const KeyType &key2, const ClassicalType &alpha);
+        FourSquares(const KeyType &key1, const KeyType &key2)
+            : FourSquares(key1, key2, ClassicalType::grid_uppercase_fr) { }
 
-       FourSquares(const KeyType &key1, const KeyType &key2) 
-          : FourSquares(key1, key2, ClassicalType::grid_uppercase_fr) {}
-
-       ClassicalType encode(const ClassicalType &clear_text) override;
-       ClassicalType decode(const ClassicalType &cipher_text) override;
+        ClassicalType encode(const ClassicalType &clear_text) override;
+        ClassicalType decode(const ClassicalType &cipher_text) override;
 
     private:
-       KeyType key2;
-       const CipherGrid grid2;
+        KeyType key2;
+        const CipherGrid grid2;
     };
 }
 

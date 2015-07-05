@@ -43,11 +43,11 @@ namespace CryptoGL
     protected:         
        virtual ~SynchronousStreamCipher() {}
 
-       virtual KeystreamType generateKeystream() = 0;
+       virtual KeystreamType generateKeystream() override = 0;
 
-       virtual void setKey(const BytesVector &) = 0;
+       virtual void setKey(const BytesVector &) override = 0;
 
-       virtual void keySetup() = 0;
+       virtual void keySetup() override = 0;
     };
 }
 

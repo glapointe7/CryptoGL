@@ -9,7 +9,7 @@ using namespace CryptoGL;
 void RC4::setKey(const BytesVector &key)
 {
     const uint8_t key_len = key.size();
-    if (key_len > 256 || key_len == 0)
+    if (key_len > 32 || key_len == 0)
     {
         throw BadKeyLength("Your key has to be less or equal to 32 bytes length and not empty.", key_len);
     }

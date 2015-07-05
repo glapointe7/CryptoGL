@@ -6,13 +6,16 @@
 
 #include "Types.hpp"
 
-template <class ReturnType, class ParamType = ReturnType>
-class Cipher
+namespace CryptoGL
 {
-protected:
-   virtual ~Cipher() {}
-   virtual ReturnType encode(const ParamType &) = 0;
-   virtual ParamType decode(const ReturnType &) = 0;
-};
+    template <class ReturnType, class ParamType = ReturnType>
+    class Cipher
+    {
+    protected:
+        virtual ~Cipher() { }
+        virtual ReturnType encode(const ParamType &) = 0;
+        virtual ParamType decode(const ReturnType &) = 0;
+    };
+}
 
 #endif

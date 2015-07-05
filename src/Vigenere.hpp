@@ -104,6 +104,9 @@ namespace CryptoGL
        explicit Caesar(const int8_t key)
           : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
 
+          // Tell the compiler we want both the 'setKey' from Vigenere and ours.
+          using Vigenere::setKey;
+          
        // If the key is < 0 and > alpha_len, we make sure the key will be in the set {0,...,alpha_len-1}.
        /* Specific to Caesar cipher : the caesar_key is a byte. */
        void setKey(const int8_t caesar_key)
@@ -182,6 +185,9 @@ namespace CryptoGL
        explicit Gronsfeld(const UInt32Vector &key)
           : Vigenere(clearPlusKey, clearMinusKey) { setKey(key); }
 
+          // Tell the compiler we want both the 'setKey' from Vigenere and ours. 
+          using Vigenere::setKey;
+          
        /* Specific to Gronsfeld cipher : the grons_key is a vector of integers. */
        void setKey(const UInt32Vector &grons_key)
        {

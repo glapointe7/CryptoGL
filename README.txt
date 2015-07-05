@@ -1,5 +1,11 @@
-CryptoGL is a c++ library containing classical ciphers, symmetric ciphers, asymmetric ciphers, hash functions and some other tools. The UML directory contains the UML class diagrams of this library.
-CryptoGL has been compiled successfully with g++ 4.7 and clang++ 3.5 and uses features of C++11. 
+CryptoGL is a c++ library containing classical ciphers, symmetric ciphers, asymmetric ciphers, hash functions and some other tools. 
+The UML directory contains the UML class diagrams of this library.
+CryptoGL has been compiled successfully using netbeans 8.0.2 with g++ 4.8 and clang++ 3.6 which are using features of C++14.
+*************************************************
+To compile with Clang++ 3.6 and using c++14, use the option -std=c++1z
+Also, in the cstdio file, replace `using ::gets` by #if !_ISOC11_SOURCE using ::gets; #endif
+*************************************************
+ 
 
 Classical ciphers include the following :
 ADFGVX, Caesar, Vigenere, Rozier, Beaufort, Beaufort (German variant), Vigenere Multiplicative, Chao, Collon, Delastelle, Fleissner, 2-square, 3-square, 4-square, Hill, Morse, Monoalphabetic Substitution, Nihiliste, Playfair, Polibius, Railfence, Redefence, Transpositions, Wolseley and Affine.
@@ -31,7 +37,7 @@ Other tools :
 Base64, square matrices over the modular integers (Z_n), Functions composition, Big and little endian conversion, various mathematical, vector, padding and bits manipulation tools.
 
 Unit tests framework:
-CryptoGL contains his own unit tests framework. The folder 'UnitTests' contains a lot of tests (261) as examples. A report is generated for all tests in the following form:
+CryptoGL contains his own unit tests framework. The folder 'UnitTests' contains a lot of tests as examples. A report is generated for all tests.
 
 
 *******************************************************************************

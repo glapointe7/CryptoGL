@@ -1,8 +1,6 @@
 #include "Camellia.hpp"
 
-#include "Endian.hpp"
 #include "Bits.hpp"
-#include "Vector.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
 

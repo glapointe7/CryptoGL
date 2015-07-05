@@ -1,6 +1,5 @@
 #include "CAST256.hpp"
 
-#include "Endian.hpp"
 #include "Bits.hpp"
 #include "Padding.hpp"
 
@@ -88,21 +87,21 @@ void CAST256::generateSubkeys()
     }
 }
 
-uint32_t CAST256::F1(const uint32_t D, const uint32_t Km, const uint32_t Kr)
+constexpr uint32_t CAST256::F1(const uint32_t D, const uint32_t Km, const uint32_t Kr)
 {
     const uint32_t I = Bits::rotateLeft(Km + D, Kr);
     return ((S[0][getByteFromInteger<3>(I)] ^ S[1][getByteFromInteger<2>(I)])
             - S[2][getByteFromInteger<1>(I)]) +S[3][getByteFromInteger<0>(I)];
 }
 
-uint32_t CAST256::F2(const uint32_t D, const uint32_t Km, const uint32_t Kr)
+constexpr uint32_t CAST256::F2(const uint32_t D, const uint32_t Km, const uint32_t Kr)
 {
     const uint32_t I = Bits::rotateLeft(Km ^ D, Kr);
     return ((S[0][getByteFromInteger<3>(I)] - S[1][getByteFromInteger<2>(I)])
             + S[2][getByteFromInteger<1>(I)]) ^ S[3][getByteFromInteger<0>(I)];
 }
 
-uint32_t CAST256::F3(const uint32_t D, const uint32_t Km, const uint32_t Kr)
+constexpr uint32_t CAST256::F3(const uint32_t D, const uint32_t Km, const uint32_t Kr)
 {
     const uint32_t I = Bits::rotateLeft(Km - D, Kr);
     return ((S[0][getByteFromInteger<3>(I)] + S[1][getByteFromInteger<2>(I)])

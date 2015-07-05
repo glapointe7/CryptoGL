@@ -10,7 +10,6 @@
 
 namespace CryptoGL
 {
-
     class Fleissner : public StringCipher
     {
         using Cell = std::pair<uint32_t, uint32_t>;

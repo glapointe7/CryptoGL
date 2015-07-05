@@ -30,12 +30,12 @@ void HC256::setIV(const BytesVector &IV)
     this->IV = IV;
 }
 
-uint32_t HC256::g(const uint32_t x, const uint32_t y, const UInt32Vector &K)
+constexpr uint32_t HC256::g(const uint32_t x, const uint32_t y, const UInt32Vector &K)
 {
     return (Bits::rotateRight(x, 10) ^ Bits::rotateRight(y, 23)) +K[(x ^ y) & 0x3FF];
 }
 
-uint32_t HC256::h(const uint32_t x, const UInt32Vector &K)
+constexpr uint32_t HC256::h(const uint32_t x, const UInt32Vector &K)
 {
     return K[x & 0xFF] + K[256 + ((x >> 8) & 0xFF)] + K[512 + ((x >> 16) & 0xFF)] + K[768 + (x >> 24)];
 }
@@ -83,12 +83,12 @@ void HC256::keySetup()
     }
 }
 
-uint32_t HC256::calculateKey(const UInt32Vector &PQ, const UInt32Vector &QP, const uint16_t i)
+constexpr uint32_t HC256::calculateKey(const UInt32Vector &PQ, const UInt32Vector &QP, const uint16_t i)
 {
     return PQ[(i - 10) & 0x3FF] + g(PQ[(i - 3) & 0x3FF], PQ[(i - 1023) & 0x3FF], QP);
 }
 
-uint32_t HC256::updateSubkeys(UInt32Vector &K, const UInt32Vector &S, const uint16_t index)
+constexpr uint32_t HC256::updateSubkeys(UInt32Vector &K, const UInt32Vector &S, const uint16_t index)
 {
     K[index] += calculateKey(K, S, index);
 

@@ -4,14 +4,15 @@
 
 #include "Checksum.hpp"
 
-using namespace CryptoGL;
-
-class LRC : public Checksum <uint8_t>
+namespace CryptoGL
 {
-public:
-   LRC() {}
-   
-   uint8_t encode(const BytesVector &input) override;
-};
+    class LRC : public Checksum <uint8_t>
+    {
+    public:
+        LRC() { }
+
+        uint8_t encode(const BytesVector &input) override;
+    };
+}
 
 #endif

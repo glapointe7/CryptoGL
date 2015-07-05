@@ -9,7 +9,6 @@
 #include "Feistel.hpp"
 #include "Endian.hpp"
 
-#include <vector>
 #include <array>
 
 namespace CryptoGL
@@ -41,7 +40,7 @@ namespace CryptoGL
        static uint64_t getSubstitution(const uint64_t &key_mixed);
 
        template <uint8_t TableSize>
-       static uint64_t getBitsFromTable(const uint64_t &data, const std::array<uint8_t, TableSize> &table, const uint8_t from)
+       static constexpr uint64_t getBitsFromTable(const uint64_t &data, const std::array<uint8_t, TableSize> &table, const uint8_t from)
        {
           uint8_t i = TableSize;
           uint64_t output = 0;

@@ -78,7 +78,7 @@ namespace CryptoGL
        /* Number of trailing zeros : return the largest integer 'count' such that 
           2^count divide value. */
        template <typename Integer>
-       uint8_t ntz(const Integer value)
+       constexpr uint8_t ntz(const Integer value)
        {
           uint8_t count = 0;
           while(!getBitAtPosition(count, value))

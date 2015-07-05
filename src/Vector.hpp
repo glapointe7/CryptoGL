@@ -5,7 +5,6 @@
 #define VECTOR_HPP
 
 #include "Types.hpp"
-#include "String.hpp"
 #include "Integer.hpp"
 
 #include <functional>
@@ -13,7 +12,6 @@
 
 namespace CryptoGL
 {
-
     /* Extension of std::vector. */
     template <typename Type>
     class Vector : public std::vector<Type>

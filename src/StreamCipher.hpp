@@ -21,13 +21,13 @@ namespace CryptoGL
     protected:
        virtual ~StreamCipher() {}
 
-       virtual BytesVector encode(const BytesVector &) = 0;
+       virtual BytesVector encode(const BytesVector &) override = 0;
 
        virtual KeystreamType generateKeystream() = 0;
 
        /* Set the key and check if the key has a correct length. 
           If yes, then it execute the keySetup. */
-       virtual void setKey(const BytesVector &) = 0;
+       virtual void setKey(const BytesVector &) override = 0;
 
        virtual void keySetup() = 0;
     };

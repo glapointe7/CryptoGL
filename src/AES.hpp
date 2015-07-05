@@ -7,7 +7,6 @@
 #include "BlockCipher.hpp"
 #include "Endian.hpp"
 
-#include <vector>
 #include <array>
 
 namespace CryptoGL

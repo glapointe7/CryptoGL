@@ -4,13 +4,11 @@
 
 #include "Cipher.hpp"
 
-#include <vector>
-
 #include "big_integers/BigIntegerLibrary.hh"
 
 namespace CryptoGL
 {
-    using BigIntVector = std::vector<BigInteger>;
+    using BigIntVector = Vector<BigInteger>;
 
     class AsymmetricCipher : public Cipher<BigIntVector, BytesVector>
     {   

@@ -10,7 +10,6 @@
 
 #include "Endian.hpp"
 #include "Padding.hpp"
-#include "Vector.hpp"
 
 #include <functional>
 
@@ -49,7 +48,7 @@ namespace CryptoGL
     template <class SubkeyType, class DataType, uint8_t InputBlockSize, class EndianType>
     class BlockCipher : public SymmetricCipher
     {   
-    static_assert(!(InputBlockSize & 7), "InputBlockSize has to be a multiple of 8.");
+    static_assert(!(InputBlockSize % 8), "InputBlockSize has to be a multiple of 8.");
 
     public:   
        /* Process general encoding for block ciphers. */
@@ -137,7 +136,7 @@ namespace CryptoGL
        virtual ~BlockCipher() { delete block_mode; }
 
        /* Check the key provided by the user and set it if correct. */
-       virtual void setKey(const BytesVector &) = 0;
+       virtual void setKey(const BytesVector &) override = 0;
 
        /* Generate sub-keys from the key provided by the user when encoding. */
        virtual void generateSubkeys() = 0;

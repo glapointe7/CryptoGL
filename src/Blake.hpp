@@ -7,7 +7,6 @@
 #include "HashFunction.hpp"
 #include "Endian.hpp"
 #include "Bits.hpp"
-#include "Vector.hpp"
 
 #include <array>
 
@@ -26,13 +25,13 @@ namespace CryptoGL
     template <typename Integer, uint8_t Index>
     struct ShiftingGetter
     {
-       static Integer G(const Integer &value) { return value; }
+       static constexpr Integer G(const Integer &value) { return value; }
     };
 
     template <uint8_t Index>
     struct ShiftingGetter<uint64_t, Index>
     {
-       static uint64_t G(const uint64_t &value)
+       static constexpr uint64_t G(const uint64_t &value)
        {
           constexpr std::array<uint8_t, 4> shifts = {{32, 25, 16, 11}};
           return Bits::rotateRight64(value, shifts[Index]);
@@ -42,7 +41,7 @@ namespace CryptoGL
     template <uint8_t Index>
     struct ShiftingGetter<uint32_t, Index>
     {
-       static uint32_t G(const uint32_t &value)
+       static constexpr uint32_t G(const uint32_t &value)
        {
           constexpr std::array<uint8_t, 4> shifts = {{16, 12, 8, 7}};
           return Bits::rotateRight(value, shifts[Index]);
@@ -53,7 +52,7 @@ namespace CryptoGL
     template <class DataType, uint8_t InputBlockSize>
     class Blake : public HashFunction<DataType, Endian<BigEndian<DataType>, DataType>>
     {
-    static_assert(!(InputBlockSize & 0x3F), "'InputBlockSize' has to be a multiple of 64.");   
+    static_assert(!(InputBlockSize % 64), "'InputBlockSize' has to be a multiple of 64.");   
 
     private:
        using HashFunctionType = HashFunction<DataType, Endian<BigEndian<DataType>, DataType>>;
@@ -64,68 +63,70 @@ namespace CryptoGL
        uint64_t counter;
 
        const uint8_t rounds;
+       
+       DataTypeVector registers;
 
        static constexpr std::array<std::array<uint8_t, 16>, 10> sigma = {{
-          {{0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15}},
-                    {{14, 10,  4,  8,  9, 15, 13,  6,  1, 12,  0,  2, 11,  7,  5,  3}},
-                    {{11,  8, 12,  0,  5,  2, 15, 13, 10, 14,  3,  6,  7,  1,  9,  4}},
-          {{7,  9,  3,  1, 13, 12, 11, 14,  2,  6,  5, 10,  4,  0, 15,  8}},
-          {{9,  0,  5,  7,  2,  4, 10, 15, 14,  1, 11, 12,  6,  8,  3, 13}},
-          {{2, 12,  6, 10,  0, 11,  8,  3,  4, 13,  7,  5, 15, 14,  1,  9}},
-                    {{12,  5,  1, 15, 14, 13,  4, 10,  0,  7,  6,  3,  9,  2,  8, 11}},
-                    {{13, 11,  7, 14, 12,  1,  3,  9,  5,  0, 15,  4,  8,  6,  2, 10}},
-          {{6, 15, 14,  9, 11,  3,  0,  8, 12,  2, 13,  7,  1,  4, 10,  5}},
-                    {{10,  2,  8,  4,  7,  6,  1,  5, 15, 11,  9, 14,  3, 12, 13,  0}}
+           {{0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15}},
+           {{14, 10,  4,  8,  9, 15, 13,  6,  1, 12,  0,  2, 11,  7,  5,  3}},
+           {{11,  8, 12,  0,  5,  2, 15, 13, 10, 14,  3,  6,  7,  1,  9,  4}},
+           {{7,  9,  3,  1, 13, 12, 11, 14,  2,  6,  5, 10,  4,  0, 15,  8}},
+           {{9,  0,  5,  7,  2,  4, 10, 15, 14,  1, 11, 12,  6,  8,  3, 13}},
+           {{2, 12,  6, 10,  0, 11,  8,  3,  4, 13,  7,  5, 15, 14,  1,  9}},
+           {{12,  5,  1, 15, 14, 13,  4, 10,  0,  7,  6,  3,  9,  2,  8, 11}},
+           {{13, 11,  7, 14, 12,  1,  3,  9,  5,  0, 15,  4,  8,  6,  2, 10}},
+           {{6, 15, 14,  9, 11,  3,  0,  8, 12,  2, 13,  7,  1,  4, 10,  5}},
+           {{10,  2,  8,  4,  7,  6,  1,  5, 15, 11,  9, 14,  3, 12, 13,  0}}
        }};
 
-       void G(DataType &a, DataType &b, DataType &c, DataType &d, 
-               const DataTypeVector &block, const uint8_t r, const uint8_t i) const
+       void G(const std::array<uint8_t, 4> &I, const DataTypeVector &block, const uint8_t k, const uint8_t i)
        {
           const DataTypeVector C = GVector::G;
-          a += b + (block[sigma[r % 10][i]] ^ C[sigma[r % 10][i + 1]]);
-          d = ShiftingGetter<DataType, 0>::G(d ^ a);
-          c += d;
-          b = ShiftingGetter<DataType, 1>::G(b ^ c);
+          registers[I[0]] += registers[I[1]] + (block[sigma[k][i]] ^ C[sigma[k][i + 1]]);
+          registers[I[3]] = ShiftingGetter<DataType, 0>::G(registers[I[3]] ^ registers[I[0]]);
+          registers[I[2]] += registers[I[3]];
+          registers[I[1]] = ShiftingGetter<DataType, 1>::G(registers[I[1]] ^ registers[I[2]]);
 
-          a += b + (block[sigma[r % 10][i + 1]] ^ C[sigma[r % 10][i]]);
-          d = ShiftingGetter<DataType, 2>::G(d ^ a);
-          c += d;
-          b = ShiftingGetter<DataType, 3>::G(b ^ c);
+          registers[I[0]] += registers[I[1]] + (block[sigma[k][i + 1]] ^ C[sigma[k][i]]);
+          registers[I[3]] = ShiftingGetter<DataType, 2>::G(registers[I[3]] ^ registers[I[0]]);
+          registers[I[2]] += registers[I[3]];
+          registers[I[1]] = ShiftingGetter<DataType, 3>::G(registers[I[1]] ^ registers[I[2]]);
        }
 
        void compress(DataTypeVector &int_block, DataTypeVector &hash) override
        {
-          DataTypeVector V = this->initialize(hash, GVector::G);
+          this->initialize(hash, GVector::G);
           for(uint8_t j = 0; j < rounds; ++j)
           {
-             this->G(V[0], V[4], V[8], V[12], int_block, j, 0);
-             this->G(V[1], V[5], V[9], V[13], int_block, j, 2);
-             this->G(V[2], V[6], V[10], V[14], int_block, j, 4);
-             this->G(V[3], V[7], V[11], V[15], int_block, j, 6);
-             this->G(V[0], V[5], V[10], V[15], int_block, j, 8);
-             this->G(V[1], V[6], V[11], V[12], int_block, j, 10);
-             this->G(V[2], V[7], V[8], V[13], int_block, j, 12);
-             this->G(V[3], V[4], V[9], V[14], int_block, j, 14);
+              const uint8_t k = j % 10;
+              for(uint8_t i = 0; i < 4; ++i)
+              {
+                  const std::array<uint8_t, 4> Indices = {{i, static_cast<uint8_t>(i + 4), static_cast<uint8_t>(i + 8), static_cast<uint8_t>(i + 12)}};
+                  this->G(Indices, int_block, k, 2 * i);
+              }
+             
+             this->G({{0, 5, 10, 15}}, int_block, k, 8);
+             this->G({{1, 6, 11, 12}}, int_block, k, 10);
+             this->G({{2, 7, 8, 13}}, int_block, k, 12);
+             this->G({{3, 4, 9, 14}}, int_block, k, 14);
           }
 
-          this->finalize(hash, V);
+          this->finalize(hash);
        }
 
-       DataTypeVector initialize(const DataTypeVector &h, const DataTypeVector &C)
+       void initialize(const DataTypeVector &h, const DataTypeVector &C)
        {
-          DataTypeVector v(16);
-          v.extend(h);
-          for(uint8_t i = 0; i < 4; ++i)
-          {
-             v.push_back(salt[i] ^ C[i]);
-          }
+           registers.reserve(16);
+           registers.extend(h);
+           for(uint8_t i = 0; i < 4; ++i)
+           {
+             registers.push_back(salt[i] ^ C[i]);
+           }
 
-          v.push_back((counter & 0xFFFFFFFF) ^ C[4]);
-          v.push_back((counter & 0xFFFFFFFF) ^ C[5]);
-          v.push_back((counter >> 32) ^ C[6]);
-          v.push_back((counter >> 32) ^ C[7]);
-
-          return v;
+           registers.push_back((counter & 0xFFFFFFFF) ^ C[4]);
+           registers.push_back((counter & 0xFFFFFFFF) ^ C[5]);
+           registers.push_back((counter >> 32) ^ C[6]);
+           registers.push_back((counter >> 32) ^ C[7]);
        }
 
        void setCounter(const uint64_t &data_size, const uint64_t &bytes_len)
@@ -141,11 +142,11 @@ namespace CryptoGL
           }
        }
 
-       void finalize(DataTypeVector &h, const DataTypeVector &v) const
+       void finalize(DataTypeVector &h) const
        {
           for(uint8_t i = 0; i < 8; ++i)
           {
-             h[i] ^= v[i] ^ salt[i % 4] ^ v[i + 8];
+             h[i] ^= registers[i] ^ salt[i % 4] ^ registers[i + 8];
           }
        }
 

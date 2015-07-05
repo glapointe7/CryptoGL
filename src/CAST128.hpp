@@ -11,22 +11,20 @@
 
 namespace CryptoGL
 {
-
     class CAST128 : public Feistel<uint32_t, uint64_t, 8, BigEndian64>
     {
     public:
-
         /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
         CAST128(const BytesVector &key, const OperationModes mode, const BytesVector &IV)
             : Feistel(mode, 12, IV)
         {
             setKey(key);
         }
-
+        
         /* Default constructor : default on ECB mode of encryption. */
         explicit CAST128(const BytesVector &key)
             : CAST128(key, OperationModes::ECB,{}) { }
-
+        
         /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
         CAST128(const BytesVector &key, const OperationModes mode)
             : CAST128(key, mode,{}) { }
@@ -47,12 +45,12 @@ namespace CryptoGL
         static void setTempKeyZ(UInt32Vector &Z, const UInt32Vector &X);
         static void setTempKeyX(UInt32Vector &tmp, const UInt32Vector &Z);
         void setSubKeysBlock(const UInt32Vector &tmp, const std::array<uint8_t, 20> &index);
-
-        static uint8_t getByteFromInteger(const UInt32Vector &bytes, const uint8_t index)
+        
+        static constexpr uint8_t getByteFromInteger(const UInt32Vector &bytes, const uint8_t index)
         {
             return (bytes[index / 4] >> ((3 - (index % 4)) * 8)) & 0xFF;
         }
-
+        
         static constexpr uint8_t getByteFromInteger(const uint32_t bytes, const uint8_t index)
         {
             return (bytes >> (index * 8)) & 0xFF;
@@ -428,7 +426,8 @@ namespace CryptoGL
                         0xa466bb1e, 0xf8da0a82, 0x04f19130, 0xba6e4ec0, 0x99265164, 0x1ee7230d,
                         0x50b2ad80, 0xeaee6801, 0x8db2a283, 0xea8bf59e}
                 }
-            }};
+            }
+        };
     };
 }
 

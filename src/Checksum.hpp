@@ -10,10 +10,9 @@ namespace CryptoGL
     class Checksum
     {
     public:
+        virtual ~Checksum() { }
 
-       virtual ~Checksum() {}
-
-       virtual DataType encode(const BytesVector &) = 0;
+        virtual DataType encode(const BytesVector &) = 0;
     };
 }
 

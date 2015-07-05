@@ -5,7 +5,6 @@
 #define ENDIAN_HPP
 
 #include "Types.hpp"
-#include "Vector.hpp"
 
 namespace CryptoGL
 {

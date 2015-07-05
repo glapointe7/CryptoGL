@@ -1,5 +1,7 @@
 #include "LRC.hpp"
 
+using namespace CryptoGL;
+
 uint8_t LRC::encode(const BytesVector &input)
 {
     uint8_t sum = 0;

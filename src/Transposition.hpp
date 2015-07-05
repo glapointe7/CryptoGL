@@ -85,7 +85,7 @@ namespace CryptoGL
 
     private:
        Table createTable(ClassicalType data) override;
-       ClassicalType readPermutedTable(const Table &table);
+       ClassicalType readPermutedTable(const Table &table) override;
     };
 
     class TranspositionIncompleteColumns : public Transposition
