@@ -6,27 +6,28 @@
 
 #include "StringCipher.hpp"
 
-#include <string>
-#include <vector>
-
 namespace CryptoGL
 {
     class StringCipherWithStringKey : public StringCipher
     {
     public:
-       using KeyType = String;
-
-       KeyType getKey() const noexcept { return key; }
-       virtual void setKey(const KeyType &key);
+        using KeyType = String;
+        
+        KeyType getKey() const
+        {
+            return key;
+        }
+        
+        virtual void setKey(const KeyType &key);
 
     protected:
-       StringCipherWithStringKey() {}
-       virtual ~StringCipherWithStringKey() {}
+        StringCipherWithStringKey() { }
+        virtual ~StringCipherWithStringKey() { }
 
-       void checkKey(const KeyType &key) const;
+        void checkKey(const KeyType &key) const;
 
-    private:   
-       KeyType key;
+    private:
+        KeyType key;
     };
 }
 

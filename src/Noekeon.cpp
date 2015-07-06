@@ -3,7 +3,6 @@
 #include <algorithm>
 
 #include "Bits.hpp"
-#include "Endian.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
 

@@ -1,7 +1,5 @@
 #include "SHA2.hpp"
 
-#include "Vector.hpp"
-
 using namespace CryptoGL;
 
 template <>

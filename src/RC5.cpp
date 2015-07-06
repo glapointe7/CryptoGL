@@ -12,7 +12,7 @@ using namespace CryptoGL;
 void RC5::setKey(const BytesVector &key)
 {
     const uint8_t key_len = key.size();
-    if (key_len < 1 || key_len > 255)
+    if (key_len == 0)
     {
         throw BadKeyLength("Your key has to be between 1 byte and 255 bytes length.", key_len);
     }

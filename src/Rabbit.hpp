@@ -5,45 +5,50 @@
 #define RABBIT_HPP
 
 #include "SynchronousStreamCipher.hpp"
+#include "Endian.hpp"
 
 #include <array>
 
 namespace CryptoGL
 {
     class Rabbit : public SynchronousStreamCipher<UInt32Vector, LittleEndian32, 16>
-    {   
+    {
     public:
-       /* Constructor with an IV. */
-       Rabbit(const BytesVector &key, const BytesVector &IV) { setIV(IV); setKey(key); }
+        /* Constructor with an IV. */
+        Rabbit(const BytesVector &key, const BytesVector &IV)
+        {
+            setIV(IV);
+            setKey(key);
+        }
+        
+        /* Constructor without IV. */
+        explicit Rabbit(const BytesVector &key)
+            : Rabbit(key, BytesVector(0)) { }
 
-       /* Constructor without IV. */
-       explicit Rabbit(const BytesVector &key) 
-          : Rabbit(key, BytesVector(0)) {}
+        UInt32Vector generateKeystream() override;
 
-       UInt32Vector generateKeystream() override;
+        void setKey(const BytesVector &key) override;
 
-       void setKey(const BytesVector &key) override;
-
-       void setIV(const BytesVector &IV);
+        void setIV(const BytesVector &IV);
 
     private:
-       void keySetup() override;
-       void IVSetup();
+        void keySetup() override;
+        void IVSetup();
 
-       void nextState();
-       static uint32_t g(const uint32_t x);
+        void nextState();
+        static constexpr uint32_t g(const uint32_t x);
 
-       std::array<uint32_t, 8> states;
-       std::array<uint32_t, 8> counters;
+        std::array<uint32_t, 8> states;
+        std::array<uint32_t, 8> counters;
 
-       BytesVector IV;
+        BytesVector IV;
 
-       bool counter_carry_bit = 0;
+        bool counter_carry_bit = 0;
 
-       static constexpr std::array<uint32_t, 8> A = {
-          {0x4D34D34D, 0xD34D34D3, 0x34D34D34, 0x4D34D34D,
-          0xD34D34D3, 0x34D34D34, 0x4D34D34D, 0xD34D34D3}
-       };
+        static constexpr std::array<uint32_t, 8> A = {
+            {0x4D34D34D, 0xD34D34D3, 0x34D34D34, 0x4D34D34D,
+             0xD34D34D3, 0x34D34D34, 0x4D34D34D, 0xD34D34D3}
+        };
     };
 }
 

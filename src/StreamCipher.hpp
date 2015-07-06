@@ -12,24 +12,24 @@ namespace CryptoGL
     class StreamCipher : public SymmetricCipher
     {
     public:
-       /* Since encoding is his own inverse, then decoding is simply a call to encode. */
-       BytesVector decode(const BytesVector &message) override
-       {
-          return encode(message);
-       }
+        /* Since encoding is his own inverse, then decoding is simply a call to encode. */
+        BytesVector decode(const BytesVector &message) override
+        {
+            return encode(message);
+        }
 
     protected:
-       virtual ~StreamCipher() {}
+        virtual ~StreamCipher() { }
 
-       virtual BytesVector encode(const BytesVector &) override = 0;
+        virtual BytesVector encode(const BytesVector &) override = 0;
 
-       virtual KeystreamType generateKeystream() = 0;
+        virtual KeystreamType generateKeystream() = 0;
 
-       /* Set the key and check if the key has a correct length. 
-          If yes, then it execute the keySetup. */
-       virtual void setKey(const BytesVector &) override = 0;
+        /* Set the key and check if the key has a correct length. 
+           If yes, then it execute the keySetup. */
+        virtual void setKey(const BytesVector &) override = 0;
 
-       virtual void keySetup() = 0;
+        virtual void keySetup() = 0;
     };
 }
 

@@ -33,7 +33,7 @@ constexpr uint8_t Snow3G::mulx(const uint8_t V, const uint8_t c)
     return V & 0x80 ? (V * 2) ^ c : V * 2;
 }
 
-uint8_t Snow3G::mulxPow(const uint8_t V, const uint8_t i, const uint8_t c)
+constexpr uint8_t Snow3G::mulxPow(const uint8_t V, const uint8_t i, const uint8_t c)
 {
     if (i == 0)
         return V;
@@ -121,23 +121,24 @@ void Snow3G::keySetup()
     const UInt32Vector K = BigEndian32::toIntegersVector(key);
     const UInt32Vector Iv = BigEndian32::toIntegersVector(IV);
 
+    constexpr uint32_t MAX_UINT32_CONSTANT = std::numeric_limits<uint32_t>::max();
     state.resize(16);
     state[15] = K[3] ^ Iv[0];
     state[14] = K[2];
     state[13] = K[1];
     state[12] = K[0] ^ Iv[1];
-    state[11] = K[3] ^ 0xFFFFFFFF;
-    state[10] = K[2] ^ 0xFFFFFFFF ^ Iv[2];
-    state[9] = K[1] ^ 0xFFFFFFFF ^ Iv[3];
-    state[8] = K[0] ^ 0xFFFFFFFF;
+    state[11] = K[3] ^ MAX_UINT32_CONSTANT;
+    state[10] = K[2] ^ MAX_UINT32_CONSTANT ^ Iv[2];
+    state[9] = K[1] ^ MAX_UINT32_CONSTANT ^ Iv[3];
+    state[8] = K[0] ^ MAX_UINT32_CONSTANT;
     state[7] = K[3];
     state[6] = K[2];
     state[5] = K[1];
     state[4] = K[0];
-    state[3] = K[3] ^ 0xFFFFFFFF;
-    state[2] = K[2] ^ 0xFFFFFFFF;
-    state[1] = K[1] ^ 0xFFFFFFFF;
-    state[0] = K[0] ^ 0xFFFFFFFF;
+    state[3] = K[3] ^ MAX_UINT32_CONSTANT;
+    state[2] = K[2] ^ MAX_UINT32_CONSTANT;
+    state[1] = K[1] ^ MAX_UINT32_CONSTANT;
+    state[0] = K[0] ^ MAX_UINT32_CONSTANT;
 
     R1 = R2 = R3 = 0;
 

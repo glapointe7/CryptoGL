@@ -9,23 +9,23 @@
 namespace CryptoGL
 {
     class StringCipherWithPermutationKey : public StringCipher
-    {   
+    {
     public:
-       using KeyType = Int32Vector;
+        using KeyType = Int32Vector;
 
-       void setKey(const KeyType &key);
+        void setKey(const KeyType &key);
 
     protected:
-       StringCipherWithPermutationKey() {}
-       virtual ~StringCipherWithPermutationKey() {}
+        StringCipherWithPermutationKey() { }
+        virtual ~StringCipherWithPermutationKey() { }
 
-       KeyType key;
+        KeyType key;
 
     private:
-       /* Check if the key contains unique integers. */
-       static bool isUniqueWithoutMissingIntegers(const KeyType &key);
+        /* Check if the key contains unique integers. */
+        static bool isUniqueWithoutMissingIntegers(const KeyType &key);
 
-       using BadPermutationKey = BadKey;
+        using BadPermutationKey = BadKey;
     };
 }
 

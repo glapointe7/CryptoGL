@@ -47,72 +47,74 @@ void RC2::generateSubkeys()
     }
 }
 
-void RC2::mixUp(UInt16Vector &input, const uint8_t index, const uint8_t key_index) const
+void RC2::mixUp(const uint8_t index, const uint8_t key_index)
 {
     const uint8_t i = 4 + index;
-    input[index] += subkeys[key_index + index] + (input[(i - 2) % 4] & input[(i - 1) % 4]) + (input[(i - 3) % 4] & ~input[(i - 1) % 4]);
-    input[index] = Bits::rotateLeft(input[index], mixup_rotation[index], 16);
+    block[index] += subkeys[key_index + index] + (block[(i - 2) % 4] & block[(i - 1) % 4]) + (block[(i - 3) % 4] & ~block[(i - 1) % 4]);
+    block[index] = Bits::rotateLeft(block[index], mixup_rotation[index], 16);
 }
 
-void RC2::mash(UInt16Vector &input, const uint8_t index) const
+void RC2::mash(const uint8_t index)
 {
-    input[index] += subkeys[input[(index + 3) % 4] % 64];
+    block[index] += subkeys[block[(index + 3) % 4] % 64];
 }
 
-void RC2::inverseMixUp(UInt16Vector &input, const uint8_t index, const uint8_t key_index) const
+void RC2::inverseMixUp(const uint8_t index, const uint8_t key_index)
 {
     const uint8_t i = 4 + index;
-    input[index] = Bits::rotateRight(input[index], mixup_rotation[index], 16);
-    input[index] -= subkeys[key_index + index] + (input[(i - 2) % 4] & input[(i - 1) % 4]) + (input[(i - 3) % 4] & ~input[(i - 1) % 4]);
+    block[index] = Bits::rotateRight(block[index], mixup_rotation[index], 16);
+    block[index] -= subkeys[key_index + index] + (block[(i - 2) % 4] & block[(i - 1) % 4]) + (block[(i - 3) % 4] & ~block[(i - 1) % 4]);
 }
 
-void RC2::inverseMash(UInt16Vector &input, const uint8_t index) const
+void RC2::inverseMash(const uint8_t index)
 {
-    input[index] -= subkeys[input[(index + 3) % 4] % 64];
+    block[index] -= subkeys[block[(index + 3) % 4] % 64];
 }
 
 UInt16Vector RC2::encodeBlock(const UInt16Vector &input)
 {
-    UInt16Vector encoded_block(input);
+    //UInt16Vector encoded_block(input);
+    block = input;
     for (uint8_t i = 0; i < rounds; ++i)
     {
-        const uint8_t key_index = i * 4;
+        const uint8_t k = i * 4;
         for (uint8_t j = 0; j < 4; ++j)
         {
-            mixUp(encoded_block, j, key_index);
+            mixUp(j, k);
         }
 
         if (i == 4 || i == 10)
         {
             for (uint8_t j = 0; j < 4; ++j)
             {
-                mash(encoded_block, j);
+                mash(j);
             }
         }
     }
 
-    return encoded_block;
+    return block;
 }
 
 UInt16Vector RC2::decodeBlock(const UInt16Vector &input)
 {
-    UInt16Vector decoded_block(input);
+    //UInt16Vector decoded_block(input);
+    block = input;
     for (int8_t i = rounds - 1; i >= 0; --i)
     {
-        const uint8_t key_index = i * 4;
+        const uint8_t k = i * 4;
         if (i == 4 || i == 10)
         {
             for (int8_t j = 3; j >= 0; --j)
             {
-                inverseMash(decoded_block, j);
+                inverseMash(j);
             }
         }
 
         for (int8_t j = 3; j >= 0; --j)
         {
-            inverseMixUp(decoded_block, j, key_index);
+            inverseMixUp(j, k);
         }
     }
 
-    return decoded_block;
+    return block;
 }

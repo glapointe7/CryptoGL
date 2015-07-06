@@ -2,7 +2,6 @@
 
 #include "Bits.hpp"
 #include "exceptions/BadKeyLength.hpp"
-#include "Endian.hpp"
 
 using namespace CryptoGL;
 
@@ -36,7 +35,7 @@ void Rabbit::setIV(const BytesVector &IV)
     }
 }
 
-uint32_t Rabbit::g(const uint32_t x)
+constexpr uint32_t Rabbit::g(const uint32_t x)
 {
     // Construct high and low argument for squaring.
     const uint32_t a = x & 0xFFFF;
@@ -81,24 +80,27 @@ void Rabbit::keySetup()
     const UInt32Vector subkeys = BigEndian32::toIntegersVector(key);
 
     /* Generate initial state variables */
+    constexpr uint8_t SHIFT_CONSTANT = 16;
+    constexpr uint32_t HIGH_UINT_MOD_CONSTANT = 0xFFFF0000;
+    constexpr uint32_t LOW_UINT_MOD_CONSTANT = 0xFFFF;
     states[0] = subkeys[0];
     states[2] = subkeys[1];
     states[4] = subkeys[2];
     states[6] = subkeys[3];
-    states[1] = (subkeys[3] << 16) | (subkeys[2] >> 16);
-    states[3] = (subkeys[0] << 16) | (subkeys[3] >> 16);
-    states[5] = (subkeys[1] << 16) | (subkeys[0] >> 16);
-    states[7] = (subkeys[2] << 16) | (subkeys[1] >> 16);
+    states[1] = (subkeys[3] << SHIFT_CONSTANT) | (subkeys[2] >> SHIFT_CONSTANT);
+    states[3] = (subkeys[0] << SHIFT_CONSTANT) | (subkeys[3] >> SHIFT_CONSTANT);
+    states[5] = (subkeys[1] << SHIFT_CONSTANT) | (subkeys[0] >> SHIFT_CONSTANT);
+    states[7] = (subkeys[2] << SHIFT_CONSTANT) | (subkeys[1] >> SHIFT_CONSTANT);
 
     /* Generate initial counter values */
-    counters[0] = Bits::rotateLeft(subkeys[2], 16);
-    counters[2] = Bits::rotateLeft(subkeys[3], 16);
-    counters[4] = Bits::rotateLeft(subkeys[0], 16);
-    counters[6] = Bits::rotateLeft(subkeys[1], 16);
-    counters[1] = (subkeys[0] & 0xFFFF0000) | (subkeys[1] & 0xFFFF);
-    counters[3] = (subkeys[1] & 0xFFFF0000) | (subkeys[2] & 0xFFFF);
-    counters[5] = (subkeys[2] & 0xFFFF0000) | (subkeys[3] & 0xFFFF);
-    counters[7] = (subkeys[3] & 0xFFFF0000) | (subkeys[0] & 0xFFFF);
+    counters[0] = Bits::rotateLeft(subkeys[2], SHIFT_CONSTANT);
+    counters[2] = Bits::rotateLeft(subkeys[3], SHIFT_CONSTANT);
+    counters[4] = Bits::rotateLeft(subkeys[0], SHIFT_CONSTANT);
+    counters[6] = Bits::rotateLeft(subkeys[1], SHIFT_CONSTANT);
+    counters[1] = (subkeys[0] & HIGH_UINT_MOD_CONSTANT) | (subkeys[1] & LOW_UINT_MOD_CONSTANT);
+    counters[3] = (subkeys[1] & HIGH_UINT_MOD_CONSTANT) | (subkeys[2] & LOW_UINT_MOD_CONSTANT);
+    counters[5] = (subkeys[2] & HIGH_UINT_MOD_CONSTANT) | (subkeys[3] & LOW_UINT_MOD_CONSTANT);
+    counters[7] = (subkeys[3] & HIGH_UINT_MOD_CONSTANT) | (subkeys[0] & LOW_UINT_MOD_CONSTANT);
 
     counter_carry_bit = 0;
 
@@ -133,10 +135,11 @@ void Rabbit::IVSetup()
 UInt32Vector Rabbit::generateKeystream()
 {
     nextState();
+    constexpr uint8_t SHIFT_CONSTANT = 16;
 
-    return {states[0] ^ (states[5] >> 16) ^ (states[3] << 16),
-            states[2] ^ (states[7] >> 16) ^ (states[5] << 16),
-            states[4] ^ (states[1] >> 16) ^ (states[7] << 16),
-            states[6] ^ (states[3] >> 16) ^ (states[1] << 16)
+    return {states[0] ^ (states[5] >> SHIFT_CONSTANT) ^ (states[3] << SHIFT_CONSTANT),
+            states[2] ^ (states[7] >> SHIFT_CONSTANT) ^ (states[5] << SHIFT_CONSTANT),
+            states[4] ^ (states[1] >> SHIFT_CONSTANT) ^ (states[7] << SHIFT_CONSTANT),
+            states[6] ^ (states[3] >> SHIFT_CONSTANT) ^ (states[1] << SHIFT_CONSTANT)
     };
 }

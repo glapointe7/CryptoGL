@@ -4,7 +4,6 @@
 
 #include "StringCipherWithStringKey.hpp"
 
-#include <string>
 #include <functional>
 
 namespace CryptoGL
@@ -12,34 +11,34 @@ namespace CryptoGL
     class UnsortAlpha : public StringCipherWithStringKey
     {
     public:
-       explicit UnsortAlpha(const KeyType &key);
+        explicit UnsortAlpha(const KeyType &key);
 
-       ClassicalType encode(const ClassicalType &clear_text) override;
-       ClassicalType decode(const ClassicalType &cipher_text) override;
+        ClassicalType encode(const ClassicalType &clear_text) override;
+        ClassicalType decode(const ClassicalType &cipher_text) override;
 
-       /* Unordered the alphabet in the vertical way. */
-       void setVerticalAlpha();
+        /* Unordered the alphabet in the vertical way. */
+        void setVerticalAlpha();
 
-       /* Unordered the alphabet in the horizontal way. */
-       void setHorizontalAlpha();
+        /* Unordered the alphabet in the horizontal way. */
+        void setHorizontalAlpha();
 
     private:
-       using GetCharFunction = std::function<char(const ClassicalType &, const ClassicalType &, const char)>;
+        using GetCharFunction = std::function<char(const ClassicalType &, const ClassicalType &, const char) >;
 
-       const GetCharFunction charEncode, charDecode;
-       ClassicalType unsort_alpha;
+        const GetCharFunction charEncode, charDecode;
+        ClassicalType unsort_alpha;
+        
+        static constexpr char sortAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
+        {
+            return unsort_alpha[alpha.find(c)];
+        }
+        
+        static constexpr char unorderedAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
+        {
+            return alpha[unsort_alpha.find(c)];
+        }
 
-       static char sortAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
-       {
-          return unsort_alpha[alpha.find(c)];
-       }
-
-       static char unorderedAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
-       {
-          return alpha[unsort_alpha.find(c)];
-       }
-
-       ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
+        ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
     };
 }
 
