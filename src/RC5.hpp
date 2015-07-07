@@ -37,8 +37,8 @@ namespace CryptoGL
         //static const uint64_t Q64 = 0x9e3779b97f4a7c15;
 
         void generateSubkeys() override;
-        UInt32Vector encodeBlock(const UInt32Vector &input) override;
-        UInt32Vector decodeBlock(const UInt32Vector &input) override;
+        void processEncodingCurrentBlock() override;
+        void processDecodingCurrentBlock() override;
         
         uint32_t F(const uint32_t half_block, const uint8_t) const override
         {

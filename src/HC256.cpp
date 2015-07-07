@@ -2,9 +2,6 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
-#include "Endian.hpp"
-#include "Endian.hpp"
-
 using namespace CryptoGL;
 
 void HC256::setKey(const BytesVector &key)
@@ -16,7 +13,6 @@ void HC256::setKey(const BytesVector &key)
     }
 
     this->key = key;
-    keySetup();
 }
 
 void HC256::setIV(const BytesVector &IV)
@@ -97,6 +93,8 @@ constexpr uint32_t HC256::updateSubkeys(UInt32Vector &K, const UInt32Vector &S, 
 
 UInt32Vector HC256::generateKeystream()
 {
+    keySetup();
+    
     UInt32Vector keystream;
     keystream.reserve(2048);
 

@@ -106,11 +106,10 @@ void DES::decodeFeistelRounds(uint64_t& L, uint64_t& R, const uint8_t) const
     }
 }
 
-uint64_t DES::encodeBlock(const uint64_t &input)
+void DES::processEncodingCurrentBlock()
 {
     // Initial permutation of the 64-bits data blocks.
-    uint64_t value = input;
-    const uint64_t ip_data = getBitsFromTable<64>(value, IP, 64);
+    const uint64_t ip_data = getBitsFromTable<64>(current_block, IP, 64);
 
     // Split the 64-bits block in 2 blocks of 32 bits L and R for the 16 Feistel rounds.
     uint64_t L = ip_data >> 32;
@@ -119,14 +118,13 @@ uint64_t DES::encodeBlock(const uint64_t &input)
 
     // Final permutation of R16.L16. with the IP_inverse table.
     const uint64_t RL = (R << 32) | L;
-    return getBitsFromTable<64>(RL, IP_inverse, 64);
+    current_block = getBitsFromTable<64>(RL, IP_inverse, 64);
 }
 
-uint64_t DES::decodeBlock(const uint64_t &input)
+void DES::processDecodingCurrentBlock()
 {
     // Initial permutation of the 64-bits data blocks.
-    uint64_t value = input;
-    const uint64_t ip_data = getBitsFromTable<64>(value, IP, 64);
+    const uint64_t ip_data = getBitsFromTable<64>(current_block, IP, 64);
 
     // Split the 64-bits block in 2 blocks of 32 bits L and R for the 16 Feistel rounds.
     uint64_t L = ip_data >> 32;
@@ -134,5 +132,6 @@ uint64_t DES::decodeBlock(const uint64_t &input)
     decodeFeistelRounds(L, R, 0);
 
     // Final permutation of R16.L16. with the IP_inverse table.
-    return getBitsFromTable<64>((R << 32) | L, IP_inverse, 64);
+    const uint64_t RL = (R << 32) | L;
+    current_block = getBitsFromTable<64>(RL, IP_inverse, 64);
 }

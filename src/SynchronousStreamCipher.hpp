@@ -40,12 +40,10 @@ namespace CryptoGL
             return output;
         }
 
-    protected:
+    protected:       
         virtual ~SynchronousStreamCipher() { }
 
         virtual KeystreamType generateKeystream() override = 0;
-
-        virtual void setKey(const BytesVector &) override = 0;
 
         virtual void keySetup() override = 0;
     };

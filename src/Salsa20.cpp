@@ -20,17 +20,6 @@ void Salsa20::setKey(const BytesVector &key)
     this->key = key;
 }
 
-void Salsa20::setIV(const BytesVector &IV)
-{
-    const uint8_t iv_size = IV.size();
-    if (iv_size != 8)
-    {
-        throw BadIVLength("Your IV length has to be 8 bytes.", iv_size);
-    }
-
-    this->IV = IV;
-}
-
 UInt32Vector Salsa20::quarterRound(const UInt32Vector &Y)
 {
     UInt32Vector Z(4, 0);

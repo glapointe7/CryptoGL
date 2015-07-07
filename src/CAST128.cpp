@@ -172,20 +172,20 @@ void CAST128::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
     R ^= F(L, 0);
 }
 
-uint64_t CAST128::encodeBlock(const uint64_t &input)
+void CAST128::processEncodingCurrentBlock()
 {
-    uint32_t L = input >> 32;
-    uint32_t R = input & 0xFFFFFFFF;
+    uint32_t L = current_block >> 32;
+    uint32_t R = current_block & 0xFFFFFFFF;
     encodeFeistelRounds(L, R, 0);
 
-    return (static_cast<uint64_t> (R) << 32) | L;
+    current_block =  (static_cast<uint64_t> (R) << 32) | L;
 }
 
-uint64_t CAST128::decodeBlock(const uint64_t &input)
+void CAST128::processDecodingCurrentBlock()
 {
-    uint32_t L = input >> 32;
-    uint32_t R = input & 0xFFFFFFFF;
+    uint32_t L = current_block >> 32;
+    uint32_t R = current_block & 0xFFFFFFFF;
     decodeFeistelRounds(L, R, 0);
 
-    return (static_cast<uint64_t> (R) << 32) | L;
+    current_block = (static_cast<uint64_t> (R) << 32) | L;
 }

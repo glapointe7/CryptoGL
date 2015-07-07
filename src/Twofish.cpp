@@ -152,53 +152,47 @@ void Twofish::decodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_
     }
 }
 
-UInt32Vector Twofish::encodeBlock(const UInt32Vector &input)
+void Twofish::processEncodingCurrentBlock()
 {
     // Input whitening.
-    UInt32Vector encoded_block(input);
     for (uint8_t i = 0; i < 4; ++i)
     {
-        encoded_block[i] ^= subkeys[i];
+        current_block[i] ^= subkeys[i];
     }
 
-    UInt32Vector R = {encoded_block[0], encoded_block[1]};
-    UInt32Vector L = {encoded_block[2], encoded_block[3]};
+    UInt32Vector R = {current_block[0], current_block[1]};
+    UInt32Vector L = {current_block[2], current_block[3]};
     encodeFeistelRounds(L, R, 0);
-    encoded_block[0] = L[0];
-    encoded_block[1] = L[1];
-    encoded_block[2] = R[0];
-    encoded_block[3] = R[1];
+    current_block[0] = L[0];
+    current_block[1] = L[1];
+    current_block[2] = R[0];
+    current_block[3] = R[1];
 
     // Output whitening.
     for (uint8_t i = 0; i < 4; ++i)
     {
-        encoded_block[i] ^= subkeys[i + 4];
+        current_block[i] ^= subkeys[i + 4];
     }
-
-    return encoded_block;
 }
 
-UInt32Vector Twofish::decodeBlock(const UInt32Vector &input)
+void Twofish::processDecodingCurrentBlock()
 {
     // Input whitening.
-    UInt32Vector decoded_block(input);
     for (uint8_t i = 0; i < 4; ++i)
     {
-        decoded_block[i] ^= subkeys[i + 4];
+        current_block[i] ^= subkeys[i + 4];
     }
 
-    UInt32Vector L = {decoded_block[0], decoded_block[1]};
-    UInt32Vector R = {decoded_block[2], decoded_block[3]};
+    UInt32Vector L = {current_block[0], current_block[1]};
+    UInt32Vector R = {current_block[2], current_block[3]};
     decodeFeistelRounds(L, R, 0);
-    decoded_block[0] = R[0];
-    decoded_block[1] = R[1];
-    decoded_block[2] = L[0];
-    decoded_block[3] = L[1];
+    current_block[0] = R[0];
+    current_block[1] = R[1];
+    current_block[2] = L[0];
+    current_block[3] = L[1];
 
     for (uint8_t i = 0; i < 4; ++i)
     {
-        decoded_block[i] ^= subkeys[i];
+        current_block[i] ^= subkeys[i];
     }
-
-    return decoded_block;
 }

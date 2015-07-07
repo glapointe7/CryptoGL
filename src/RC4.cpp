@@ -15,7 +15,6 @@ void RC4::setKey(const BytesVector &key)
     }
 
     this->key = key;
-    keySetup();
 }
 
 void RC4::keySetup()
@@ -34,6 +33,8 @@ void RC4::keySetup()
 
 BytesVector RC4::generateKeystream()
 {
+    keySetup();
+    
     BytesVector keystream;
     keystream.reserve(output_size);
 

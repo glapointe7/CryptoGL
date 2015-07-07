@@ -3,7 +3,6 @@
 #define IDEA_HPP
 
 #include "BlockCipher.hpp"
-#include "Endian.hpp"
 
 namespace CryptoGL
 {
@@ -18,18 +17,16 @@ namespace CryptoGL
         }
         
         explicit IDEA(const BytesVector &key)
-            : IDEA(key, OperationModes::ECB,{}) { }
+            : IDEA(key, OperationModes::ECB, {}) { }
         
         IDEA(const BytesVector &key, const OperationModes mode)
-            : IDEA(key, mode,{}) { }
-
-        void setKey(const BytesVector &key) override;
+            : IDEA(key, mode, {}) { }
 
     private:
         void generateSubkeys() override;
         void generateInverseSubkeys() override;
-        UInt16Vector encodeBlock(const UInt16Vector &input) override;
-        UInt16Vector decodeBlock(const UInt16Vector &input) override;
+        void processEncodingCurrentBlock() override;
+        void processDecodingCurrentBlock() override;
 
         /* Decryption subkeys. */
         UInt16Vector decoded_subkeys;

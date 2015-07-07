@@ -42,46 +42,46 @@ void AES::subBytes(const std::array<uint8_t, 256> &box)
 {
     for (uint8_t i = 0; i < 4; ++i)
     {
-        state[i] = box[(state[i] >> 24) & 0xFF] << 24
-                | box[(state[i] >> 16) & 0xFF] << 16
-                | box[(state[i] >> 8) & 0xFF] << 8
-                | box[state[i] & 0xFF];
+        current_block[i] = box[(current_block[i] >> 24) & 0xFF] << 24
+                | box[(current_block[i] >> 16) & 0xFF] << 16
+                | box[(current_block[i] >> 8) & 0xFF] << 8
+                | box[current_block[i] & 0xFF];
     }
 }
 
 void AES::shiftRows()
 {
     std::array<uint32_t, 4> state_transposed;
-    state_transposed[0] = ((state[0] >> 24) & 0xFF) << 24 | ((state[1] >> 16) & 0xFF) << 16
-            | ((state[2] >> 8) & 0xFF) << 8 | (state[3] & 0xFF);
+    state_transposed[0] = ((current_block[0] >> 24) & 0xFF) << 24 | ((current_block[1] >> 16) & 0xFF) << 16
+            | ((current_block[2] >> 8) & 0xFF) << 8 | (current_block[3] & 0xFF);
 
-    state_transposed[1] = ((state[1] >> 24) & 0xFF) << 24 | ((state[2] >> 16) & 0xFF) << 16
-            | ((state[3] >> 8) & 0xFF) << 8 | (state[0] & 0xFF);
+    state_transposed[1] = ((current_block[1] >> 24) & 0xFF) << 24 | ((current_block[2] >> 16) & 0xFF) << 16
+            | ((current_block[3] >> 8) & 0xFF) << 8 | (current_block[0] & 0xFF);
 
-    state_transposed[2] = ((state[2] >> 24) & 0xFF) << 24 | ((state[3] >> 16) & 0xFF) << 16
-            | ((state[0] >> 8) & 0xFF) << 8 | (state[1] & 0xFF);
+    state_transposed[2] = ((current_block[2] >> 24) & 0xFF) << 24 | ((current_block[3] >> 16) & 0xFF) << 16
+            | ((current_block[0] >> 8) & 0xFF) << 8 | (current_block[1] & 0xFF);
 
-    state_transposed[3] = ((state[3] >> 24) & 0xFF) << 24 | ((state[0] >> 16) & 0xFF) << 16
-            | ((state[1] >> 8) & 0xFF) << 8 | (state[2] & 0xFF);
-    state = UInt32Vector(state_transposed.begin(), state_transposed.end());
+    state_transposed[3] = ((current_block[3] >> 24) & 0xFF) << 24 | ((current_block[0] >> 16) & 0xFF) << 16
+            | ((current_block[1] >> 8) & 0xFF) << 8 | (current_block[2] & 0xFF);
+    current_block = UInt32Vector(state_transposed.begin(), state_transposed.end());
 
 }
 
 void AES::inverseShiftRows()
 {
     std::array<uint32_t, 4> state_transposed;
-    state_transposed[0] = ((state[0] >> 24) & 0xFF) << 24 | ((state[3] >> 16) & 0xFF) << 16
-            | ((state[2] >> 8) & 0xFF) << 8 | (state[1] & 0xFF);
+    state_transposed[0] = ((current_block[0] >> 24) & 0xFF) << 24 | ((current_block[3] >> 16) & 0xFF) << 16
+            | ((current_block[2] >> 8) & 0xFF) << 8 | (current_block[1] & 0xFF);
 
-    state_transposed[1] = ((state[1] >> 24) & 0xFF) << 24 | ((state[0] >> 16) & 0xFF) << 16
-            | ((state[3] >> 8) & 0xFF) << 8 | (state[2] & 0xFF);
+    state_transposed[1] = ((current_block[1] >> 24) & 0xFF) << 24 | ((current_block[0] >> 16) & 0xFF) << 16
+            | ((current_block[3] >> 8) & 0xFF) << 8 | (current_block[2] & 0xFF);
 
-    state_transposed[2] = ((state[2] >> 24) & 0xFF) << 24 | ((state[1] >> 16) & 0xFF) << 16
-            | ((state[0] >> 8) & 0xFF) << 8 | (state[3] & 0xFF);
+    state_transposed[2] = ((current_block[2] >> 24) & 0xFF) << 24 | ((current_block[1] >> 16) & 0xFF) << 16
+            | ((current_block[0] >> 8) & 0xFF) << 8 | (current_block[3] & 0xFF);
 
-    state_transposed[3] = ((state[3] >> 24) & 0xFF) << 24 | ((state[2] >> 16) & 0xFF) << 16
-            | ((state[1] >> 8) & 0xFF) << 8 | (state[0] & 0xFF);
-    state = UInt32Vector(state_transposed.begin(), state_transposed.end());
+    state_transposed[3] = ((current_block[3] >> 24) & 0xFF) << 24 | ((current_block[2] >> 16) & 0xFF) << 16
+            | ((current_block[1] >> 8) & 0xFF) << 8 | (current_block[0] & 0xFF);
+    current_block = UInt32Vector(state_transposed.begin(), state_transposed.end());
 }
 
 void AES::mixColumns()
@@ -89,18 +89,18 @@ void AES::mixColumns()
     for (uint8_t i = 0; i < 4; ++i)
     {
         uint32_t x = 0;
-        x |= (table_2[(state[i] >> 24) & 0xFF] ^ table_3[(state[i] >> 16) & 0xFF]
-                ^ ((state[i] >> 8) & 0xFF) ^ (state[i] & 0xFF)) << 24;
+        x |= (table_2[(current_block[i] >> 24) & 0xFF] ^ table_3[(current_block[i] >> 16) & 0xFF]
+                ^ ((current_block[i] >> 8) & 0xFF) ^ (current_block[i] & 0xFF)) << 24;
 
-        x |= (((state[i] >> 24) & 0xFF) ^ table_2[(state[i] >> 16) & 0xFF]
-                ^ table_3[(state[i] >> 8) & 0xFF] ^ (state[i] & 0xFF)) << 16;
+        x |= (((current_block[i] >> 24) & 0xFF) ^ table_2[(current_block[i] >> 16) & 0xFF]
+                ^ table_3[(current_block[i] >> 8) & 0xFF] ^ (current_block[i] & 0xFF)) << 16;
 
-        x |= (((state[i] >> 24) & 0xFF) ^ ((state[i] >> 16) & 0xFF)
-                ^ table_2[(state[i] >> 8) & 0xFF] ^ table_3[state[i] & 0xFF]) << 8;
+        x |= (((current_block[i] >> 24) & 0xFF) ^ ((current_block[i] >> 16) & 0xFF)
+                ^ table_2[(current_block[i] >> 8) & 0xFF] ^ table_3[current_block[i] & 0xFF]) << 8;
 
-        x |= table_3[(state[i] >> 24) & 0xFF] ^ ((state[i] >> 16) & 0xFF)
-                ^ ((state[i] >> 8) & 0xFF) ^ table_2[state[i] & 0xFF];
-        state[i] = x;
+        x |= table_3[(current_block[i] >> 24) & 0xFF] ^ ((current_block[i] >> 16) & 0xFF)
+                ^ ((current_block[i] >> 8) & 0xFF) ^ table_2[current_block[i] & 0xFF];
+        current_block[i] = x;
     }
 }
 
@@ -109,18 +109,18 @@ void AES::inverseMixColumns()
     for (uint8_t i = 0; i < 4; ++i)
     {
         uint32_t x = 0;
-        x |= (table_14[(state[i] >> 24) & 0xFF] ^ table_11[(state[i] >> 16) & 0xFF]
-                ^ table_13[(state[i] >> 8) & 0xFF] ^ table_9[state[i] & 0xFF]) << 24;
+        x |= (table_14[(current_block[i] >> 24) & 0xFF] ^ table_11[(current_block[i] >> 16) & 0xFF]
+                ^ table_13[(current_block[i] >> 8) & 0xFF] ^ table_9[current_block[i] & 0xFF]) << 24;
 
-        x |= (table_9[(state[i] >> 24) & 0xFF] ^ table_14[(state[i] >> 16) & 0xFF]
-                ^ table_11[(state[i] >> 8) & 0xFF] ^ table_13[state[i] & 0xFF]) << 16;
+        x |= (table_9[(current_block[i] >> 24) & 0xFF] ^ table_14[(current_block[i] >> 16) & 0xFF]
+                ^ table_11[(current_block[i] >> 8) & 0xFF] ^ table_13[current_block[i] & 0xFF]) << 16;
 
-        x |= (table_13[(state[i] >> 24) & 0xFF] ^ table_9[(state[i] >> 16) & 0xFF]
-                ^ table_14[(state[i] >> 8) & 0xFF] ^ table_11[state[i] & 0xFF]) << 8;
+        x |= (table_13[(current_block[i] >> 24) & 0xFF] ^ table_9[(current_block[i] >> 16) & 0xFF]
+                ^ table_14[(current_block[i] >> 8) & 0xFF] ^ table_11[current_block[i] & 0xFF]) << 8;
 
-        x |= table_11[(state[i] >> 24) & 0xFF] ^ table_13[(state[i] >> 16) & 0xFF]
-                ^ table_9[(state[i] >> 8) & 0xFF] ^ table_14[state[i] & 0xFF];
-        state[i] = x;
+        x |= table_11[(current_block[i] >> 24) & 0xFF] ^ table_13[(current_block[i] >> 16) & 0xFF]
+                ^ table_9[(current_block[i] >> 8) & 0xFF] ^ table_14[current_block[i] & 0xFF];
+        current_block[i] = x;
     }
 }
 
@@ -160,13 +160,12 @@ void AES::addRoundKey(const uint8_t round)
     const uint8_t j = round * 4;
     for (uint8_t i = 0; i < 4; ++i)
     {
-        state[i] ^= subkeys[j + i];
+        current_block[i] ^= subkeys[j + i];
     }
 }
 
-UInt32Vector AES::encodeBlock(const UInt32Vector &input)
+void AES::processEncodingCurrentBlock()
 {
-    state = input;
     addRoundKey(0);
 
     for (uint8_t i = 1; i < rounds; ++i)
@@ -181,13 +180,10 @@ UInt32Vector AES::encodeBlock(const UInt32Vector &input)
     subBytes(sbox);
     shiftRows();
     addRoundKey(rounds);
-
-    return state;
 }
 
-UInt32Vector AES::decodeBlock(const UInt32Vector &input)
+void AES::processDecodingCurrentBlock()
 {
-    state = input;
     addRoundKey(rounds);
 
     for (uint8_t i = rounds - 1; i >= 1; --i)
@@ -201,6 +197,4 @@ UInt32Vector AES::decodeBlock(const UInt32Vector &input)
     inverseShiftRows();
     subBytes(inverse_sbox);
     addRoundKey(0);
-
-    return state;
 }

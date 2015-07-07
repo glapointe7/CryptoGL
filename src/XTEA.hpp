@@ -24,14 +24,12 @@ namespace CryptoGL
         XTEA(const BytesVector &key, const OperationModes mode)
             : XTEA(key, mode,{}) { }
 
-        void setKey(const BytesVector &key) override;
-
     private:
         static constexpr uint32_t delta = 0x9E3779B9;
 
         void generateSubkeys() override;
-        uint64_t encodeBlock(const uint64_t &input) override;
-        uint64_t decodeBlock(const uint64_t &input) override;
+        void processEncodingCurrentBlock() override;
+        void processDecodingCurrentBlock() override;
 
         uint32_t F(const uint32_t half_block, const uint8_t round) const override;
         void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;

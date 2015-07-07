@@ -21,20 +21,16 @@ namespace CryptoGL
         }
         
         explicit Noekeon(const BytesVector &key)
-            : Noekeon(key, OperationModes::ECB,{}) { }
+            : Noekeon(key, OperationModes::ECB, {}) { }
         
         Noekeon(const BytesVector &key, const OperationModes mode)
-            : Noekeon(key, mode,{}) { }
-
-        void setKey(const BytesVector &key) override;
+            : Noekeon(key, mode, {}) { }
 
     private:
-        UInt32Vector state;
-        
         void generateSubkeys() override;
         void generateInverseSubkeys() override;
-        UInt32Vector encodeBlock(const UInt32Vector &input) override;
-        UInt32Vector decodeBlock(const UInt32Vector &input) override;
+        void processEncodingCurrentBlock() override;
+        void processDecodingCurrentBlock() override;
 
         static void setClassVector(const std::array<uint8_t, 4> &indices, UInt32Vector &V);
 

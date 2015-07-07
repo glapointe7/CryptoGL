@@ -234,20 +234,20 @@ void Camellia::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) cons
     L ^= Kw[1];
 }
 
-UInt64Vector Camellia::encodeBlock(const UInt64Vector &input)
+void Camellia::processEncodingCurrentBlock()
 {
-    uint64_t L0 = input[0] ^ Kw[0];
-    uint64_t R0 = input[1] ^ Kw[1];
+    uint64_t L0 = current_block[0] ^ Kw[0];
+    uint64_t R0 = current_block[1] ^ Kw[1];
     encodeFeistelRounds(L0, R0, 0);
 
-    return {R0, L0};
+    current_block = {R0, L0};
 }
 
-UInt64Vector Camellia::decodeBlock(const UInt64Vector &input)
+void Camellia::processDecodingCurrentBlock()
 {
-    uint64_t L0 = input[0] ^ Kw[2];
-    uint64_t R0 = input[1] ^ Kw[3];
+    uint64_t L0 = current_block[0] ^ Kw[2];
+    uint64_t R0 = current_block[1] ^ Kw[3];
     decodeFeistelRounds(L0, R0, 0);
 
-    return {R0, L0};
+    current_block = {R0, L0};
 }

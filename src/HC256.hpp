@@ -23,7 +23,7 @@ namespace CryptoGL
         UInt32Vector generateKeystream() override;
 
         void setKey(const BytesVector &key) override;
-        void setIV(const BytesVector &IV);
+        void setIV(const BytesVector &IV) override;
 
     private:
         void keySetup() override;
@@ -42,8 +42,6 @@ namespace CryptoGL
         {
             return Bits::rotateRight(X, 17) ^ Bits::rotateRight(X, 19) ^ (X >> 10);
         }
-
-        BytesVector IV;
 
         UInt32Vector P, Q;
     };

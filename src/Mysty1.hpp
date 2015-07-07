@@ -22,18 +22,16 @@ namespace CryptoGL
         
         /* Default constructor : default on ECB mode of encryption. */
         explicit Mysty1(const BytesVector &key)
-            : Mysty1(key, OperationModes::ECB,{}) { }
+            : Mysty1(key, OperationModes::ECB, {}) { }
         
         /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
         Mysty1(const BytesVector &key, const OperationModes mode)
-            : Mysty1(key, mode,{}) { }
-
-        void setKey(const BytesVector &key) override;
+            : Mysty1(key, mode, {}) { }
 
     private:
         void generateSubkeys() override;
-        uint64_t encodeBlock(const uint64_t &input) override;
-        uint64_t decodeBlock(const uint64_t &input) override;
+        void processEncodingCurrentBlock() override;
+        void processDecodingCurrentBlock() override;
 
         uint32_t F(const uint32_t half_block, const uint8_t index) const override;
         void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;

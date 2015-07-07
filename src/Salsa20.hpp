@@ -19,7 +19,6 @@ namespace CryptoGL
         /* Generate 64 bytes of keystream. */
         UInt32Vector generateKeystream() override;
 
-        void setIV(const BytesVector &IV);
         void setKey(const BytesVector &key) override;
 
     private:
@@ -31,7 +30,6 @@ namespace CryptoGL
         static UInt32Vector columnRound(const UInt32Vector &Y);
         static UInt32Vector doubleRound(const UInt32Vector &Y);
 
-        BytesVector IV;
         BytesVector subkeys;
         uint64_t counter = 0;
 

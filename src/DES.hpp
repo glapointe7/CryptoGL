@@ -7,7 +7,6 @@
 #define DES_HPP
 
 #include "Feistel.hpp"
-#include "Endian.hpp"
 
 #include <array>
 
@@ -30,8 +29,8 @@ namespace CryptoGL
 
     private:
        void generateSubkeys() override;
-       uint64_t encodeBlock(const uint64_t &input) override;
-       uint64_t decodeBlock(const uint64_t &input) override;
+       void processEncodingCurrentBlock() override;
+       void processDecodingCurrentBlock() override;
 
        uint64_t F(const uint64_t data, const uint8_t round) const override;
        void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const override;

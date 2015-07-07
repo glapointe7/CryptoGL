@@ -19,17 +19,27 @@ namespace CryptoGL
         }
 
     protected:
+        /* Initial Vector */
+        BytesVector IV;
+        
         virtual ~StreamCipher() { }
 
         virtual BytesVector encode(const BytesVector &) override = 0;
 
         virtual KeystreamType generateKeystream() = 0;
 
-        /* Set the key and check if the key has a correct length. 
-           If yes, then it execute the keySetup. */
-        virtual void setKey(const BytesVector &) override = 0;
-
         virtual void keySetup() = 0;
+        
+        virtual void setIV(const BytesVector &IV)
+        {
+            const uint8_t iv_size = IV.size();
+            if (iv_size != 8)
+            {
+                throw BadIVLength("Your IV length has to be 8 bytes.", iv_size);
+            }
+
+            this->IV = IV;
+        }
     };
 }
 

@@ -14,16 +14,6 @@ using namespace CryptoGL;
 constexpr std::array<uint8_t, 16> Scream::pi;
 constexpr std::array<uint8_t, 256> Scream::sbox;
 
-void Scream::setKey(const BytesVector &key)
-{
-    const uint8_t key_size = key.size();
-    if (key_size != 16)
-    {
-        throw BadKeyLength("Your key has to be 128 bits length.", key_size);
-    }
-    this->key = key;
-}
-
 void Scream::setIV(const BytesVector &IV)
 {
     const uint8_t iv_size = IV.size();

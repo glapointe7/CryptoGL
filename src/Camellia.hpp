@@ -5,7 +5,6 @@
 #define CAMELLIA_HPP
 
 #include "Feistel.hpp"
-#include "Endian.hpp"
 
 #include <array>
 
@@ -36,8 +35,8 @@ namespace CryptoGL
         UInt64Vector Ke;
         
         void generateSubkeys() override;
-        UInt64Vector encodeBlock(const UInt64Vector &input) override;
-        UInt64Vector decodeBlock(const UInt64Vector &input) override;
+        void processEncodingCurrentBlock() override;
+        void processDecodingCurrentBlock() override;
 
         uint64_t F(const uint64_t half_block, const uint8_t) const override;
         void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const override;

@@ -5,17 +5,6 @@ using namespace CryptoGL;
 constexpr std::array<uint8_t, 128> Mysty1::S7;
 constexpr std::array<uint16_t, 512> Mysty1::S9;
 
-void Mysty1::setKey(const BytesVector &key)
-{
-    const uint8_t key_size = key.size();
-    if (key_size != 16)
-    {
-        throw BadKeyLength("Your key length has to be 16 bytes.", key_size);
-    }
-
-    this->key = key;
-}
-
 constexpr uint16_t Mysty1::FI(const uint16_t in, const uint16_t K)
 {
     uint16_t d9 = in >> 7;
@@ -124,20 +113,20 @@ void Mysty1::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
     }
 }
 
-uint64_t Mysty1::encodeBlock(const uint64_t &input)
+void Mysty1::processEncodingCurrentBlock()
 {
-    uint32_t L = input >> 32;
-    uint32_t R = input & 0xFFFFFFFF;
+    uint32_t L = current_block >> 32;
+    uint32_t R = current_block & 0xFFFFFFFF;
     encodeFeistelRounds(L, R, 0);
 
-    return (static_cast<uint64_t> (R) << 32) | L;
+    current_block = (static_cast<uint64_t> (R) << 32) | L;
 }
 
-uint64_t Mysty1::decodeBlock(const uint64_t &input)
+void Mysty1::processDecodingCurrentBlock()
 {
-    uint32_t L = input >> 32;
-    uint32_t R = input & 0xFFFFFFFF;
+    uint32_t L = current_block >> 32;
+    uint32_t R = current_block & 0xFFFFFFFF;
     decodeFeistelRounds(R, L, 0);
 
-    return (static_cast<uint64_t> (R) << 32) | L;
+    current_block = (static_cast<uint64_t> (R) << 32) | L;
 }

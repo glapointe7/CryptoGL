@@ -29,19 +29,19 @@ void CAST256::setKey(const BytesVector &key)
 void CAST256::applyForwardQuadRound(const uint8_t round)
 {
     const uint8_t j = round * 4;
-    block[2] ^= F[0](block[3], subkeys[j], Kr[j]);
-    block[1] ^= F[1](block[2], subkeys[j + 1], Kr[j + 1]);
-    block[0] ^= F[2](block[1], subkeys[j + 2], Kr[j + 2]);
-    block[3] ^= F[0](block[0], subkeys[j + 3], Kr[j + 3]);
+    current_block[2] ^= F[0](current_block[3], subkeys[j], Kr[j]);
+    current_block[1] ^= F[1](current_block[2], subkeys[j + 1], Kr[j + 1]);
+    current_block[0] ^= F[2](current_block[1], subkeys[j + 2], Kr[j + 2]);
+    current_block[3] ^= F[0](current_block[0], subkeys[j + 3], Kr[j + 3]);
 }
 
 void CAST256::applyReverseQuadRound(const uint8_t round)
 {
     const uint8_t j = round * 4;
-    block[3] ^= F[0](block[0], subkeys[j + 3], Kr[j + 3]);
-    block[0] ^= F[2](block[1], subkeys[j + 2], Kr[j + 2]);
-    block[1] ^= F[1](block[2], subkeys[j + 1], Kr[j + 1]);
-    block[2] ^= F[0](block[3], subkeys[j], Kr[j]);
+    current_block[3] ^= F[0](current_block[0], subkeys[j + 3], Kr[j + 3]);
+    current_block[0] ^= F[2](current_block[1], subkeys[j + 2], Kr[j + 2]);
+    current_block[1] ^= F[1](current_block[2], subkeys[j + 1], Kr[j + 1]);
+    current_block[2] ^= F[0](current_block[3], subkeys[j], Kr[j]);
 }
 
 void CAST256::applyForwardOctave(UInt32Vector &kappa, const uint8_t round) const
@@ -108,9 +108,8 @@ constexpr uint32_t CAST256::F3(const uint32_t D, const uint32_t Km, const uint32
             ^ S[2][getByteFromInteger<1>(I)]) -S[3][getByteFromInteger<0>(I)];
 }
 
-UInt32Vector CAST256::encodeBlock(const UInt32Vector &input)
+void CAST256::processEncodingCurrentBlock()
 {
-    block = input;
     for (uint8_t i = 0; i < 6; ++i)
     {
         applyForwardQuadRound(i);
@@ -119,13 +118,10 @@ UInt32Vector CAST256::encodeBlock(const UInt32Vector &input)
     {
         applyReverseQuadRound(i);
     }
-
-    return block;
 }
 
-UInt32Vector CAST256::decodeBlock(const UInt32Vector &input)
+void CAST256::processDecodingCurrentBlock()
 {
-    block = input;
     for (uint8_t i = rounds - 1; i >= 6; --i)
     {
         applyForwardQuadRound(i);
@@ -134,6 +130,4 @@ UInt32Vector CAST256::decodeBlock(const UInt32Vector &input)
     {
         applyReverseQuadRound(i);
     }
-
-    return block;
 }

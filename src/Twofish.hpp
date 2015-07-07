@@ -32,8 +32,8 @@ namespace CryptoGL
 
     private:
         void generateSubkeys() override;
-        UInt32Vector encodeBlock(const UInt32Vector &input) override;
-        UInt32Vector decodeBlock(const UInt32Vector &input) override;
+        void processEncodingCurrentBlock() override;
+        void processDecodingCurrentBlock() override;
 
         UInt32Vector F(const UInt32Vector half_block, const uint8_t round) const override;
         void encodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_t) const override;

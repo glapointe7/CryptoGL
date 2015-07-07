@@ -111,32 +111,26 @@ void RC6::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
     R = (static_cast<uint64_t> (C) << 32) | D;
 }
 
-UInt32Vector RC6::encodeBlock(const UInt32Vector &input)
+void RC6::processEncodingCurrentBlock()
 {
-    uint64_t L = (static_cast<uint64_t> (input[0]) << 32) | input[1];
-    uint64_t R = (static_cast<uint64_t> (input[2]) << 32) | input[3];
+    uint64_t L = (static_cast<uint64_t> (current_block[0]) << 32) | current_block[1];
+    uint64_t R = (static_cast<uint64_t> (current_block[2]) << 32) | current_block[3];
     encodeFeistelRounds(L, R, 0);
 
-    UInt32Vector LR(4, 0);
-    LR[0] = L >> 32;
-    LR[1] = L & 0xFFFFFFFF;
-    LR[2] = R >> 32;
-    LR[3] = R & 0xFFFFFFFF;
-
-    return LR;
+    current_block[0] = L >> 32;
+    current_block[1] = L & 0xFFFFFFFF;
+    current_block[2] = R >> 32;
+    current_block[3] = R & 0xFFFFFFFF;
 }
 
-UInt32Vector RC6::decodeBlock(const UInt32Vector &input)
+void RC6::processDecodingCurrentBlock()
 {
-    uint64_t L = (static_cast<uint64_t> (input[0]) << 32) | input[1];
-    uint64_t R = (static_cast<uint64_t> (input[2]) << 32) | input[3];
+    uint64_t L = (static_cast<uint64_t> (current_block[0]) << 32) | current_block[1];
+    uint64_t R = (static_cast<uint64_t> (current_block[2]) << 32) | current_block[3];
     decodeFeistelRounds(L, R, 0);
 
-    UInt32Vector LR(4, 0);
-    LR[0] = L >> 32;
-    LR[1] = L & 0xFFFFFFFF;
-    LR[2] = R >> 32;
-    LR[3] = R & 0xFFFFFFFF;
-
-    return LR;
+    current_block[0] = L >> 32;
+    current_block[1] = L & 0xFFFFFFFF;
+    current_block[2] = R >> 32;
+    current_block[3] = R & 0xFFFFFFFF;
 }

@@ -31,8 +31,8 @@ namespace CryptoGL
         static constexpr uint32_t Q32 = 0x9e3779b9;
 
         void generateSubkeys() override;
-        UInt32Vector encodeBlock(const UInt32Vector &input) override;
-        UInt32Vector decodeBlock(const UInt32Vector &input) override;
+        void processEncodingCurrentBlock() override;
+        void processDecodingCurrentBlock() override;
 
         uint64_t F(const uint64_t half_block, const uint8_t) const override;
         void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const override;

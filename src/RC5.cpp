@@ -72,18 +72,12 @@ void RC5::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
     L -= subkeys[0];
 }
 
-UInt32Vector RC5::encodeBlock(const UInt32Vector &input)
+void RC5::processEncodingCurrentBlock()
 {
-    UInt32Vector LR(input);
-    encodeFeistelRounds(LR[0], LR[1], 0);
-
-    return LR;
+    encodeFeistelRounds(current_block[0], current_block[1], 0);
 }
 
-UInt32Vector RC5::decodeBlock(const UInt32Vector &input)
+void RC5::processDecodingCurrentBlock()
 {
-    UInt32Vector LR(input);
-    decodeFeistelRounds(LR[0], LR[1], 0);
-
-    return LR;
+    decodeFeistelRounds(current_block[0], current_block[1], 0);
 }

@@ -6,7 +6,6 @@
 #define CAST256_HPP
 
 #include "BlockCipher.hpp"
-#include "Endian.hpp"
 
 #include <array>
 #include <functional>
@@ -40,11 +39,9 @@ namespace CryptoGL
         UInt32Vector Tm;
         UInt32Vector Tr;
         
-        UInt32Vector block;
-        
         void generateSubkeys() override;
-        UInt32Vector encodeBlock(const UInt32Vector &input) override;
-        UInt32Vector decodeBlock(const UInt32Vector &input) override;
+        void processEncodingCurrentBlock() override;
+        void processDecodingCurrentBlock() override;
 
         static constexpr uint32_t F1(const uint32_t D, const uint32_t Km, const uint32_t Kr);
         static constexpr uint32_t F2(const uint32_t D, const uint32_t Km, const uint32_t Kr);

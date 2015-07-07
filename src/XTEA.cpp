@@ -4,17 +4,6 @@
 
 using namespace CryptoGL;
 
-void XTEA::setKey(const BytesVector &key)
-{
-    const uint8_t key_len = key.size();
-    if (key_len != 16)
-    {
-        throw BadKeyLength("Your key has to be 16 bytes length.", key_len);
-    }
-
-    this->key = key;
-}
-
 void XTEA::generateSubkeys()
 {
     const UInt32Vector tmp_key = BigEndian32::toIntegersVector(key);
@@ -51,20 +40,20 @@ void XTEA::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
     }
 }
 
-uint64_t XTEA::encodeBlock(const uint64_t &input)
+void XTEA::processEncodingCurrentBlock()
 {
-    uint32_t L = input >> 32;
-    uint32_t R = input & 0xFFFFFFFF;
+    uint32_t L = current_block >> 32;
+    uint32_t R = current_block & 0xFFFFFFFF;
     encodeFeistelRounds(L, R, 0);
 
-    return (static_cast<uint64_t> (L) << 32) | R;
+    current_block = (static_cast<uint64_t> (L) << 32) | R;
 }
 
-uint64_t XTEA::decodeBlock(const uint64_t &input)
+void XTEA::processDecodingCurrentBlock()
 {
-    uint32_t L = input >> 32;
-    uint32_t R = input & 0xFFFFFFFF;
+    uint32_t L = current_block >> 32;
+    uint32_t R = current_block & 0xFFFFFFFF;
     decodeFeistelRounds(L, R, 0);
 
-    return (static_cast<uint64_t> (L) << 32) | R;
+    current_block = (static_cast<uint64_t> (L) << 32) | R;
 }

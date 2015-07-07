@@ -6,7 +6,6 @@
 #define BLOWFISH_HPP
 
 #include "Feistel.hpp"
-#include "Endian.hpp"
 
 #include <array>
 
@@ -32,8 +31,8 @@ namespace CryptoGL
 
     private:
         void generateSubkeys() override;
-        uint64_t encodeBlock(const uint64_t &input) override;
-        uint64_t decodeBlock(const uint64_t &input) override;
+        void processEncodingCurrentBlock() override;
+        void processDecodingCurrentBlock() override;
 
         uint32_t F(const uint32_t half_block, const uint8_t) const override;
         void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;

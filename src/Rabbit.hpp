@@ -5,7 +5,6 @@
 #define RABBIT_HPP
 
 #include "SynchronousStreamCipher.hpp"
-#include "Endian.hpp"
 
 #include <array>
 
@@ -19,6 +18,7 @@ namespace CryptoGL
         {
             setIV(IV);
             setKey(key);
+            keySetup();
         }
         
         /* Constructor without IV. */
@@ -27,9 +27,7 @@ namespace CryptoGL
 
         UInt32Vector generateKeystream() override;
 
-        void setKey(const BytesVector &key) override;
-
-        void setIV(const BytesVector &IV);
+        void setIV(const BytesVector &IV) override;
 
     private:
         void keySetup() override;
@@ -40,8 +38,6 @@ namespace CryptoGL
 
         std::array<uint32_t, 8> states;
         std::array<uint32_t, 8> counters;
-
-        BytesVector IV;
 
         bool counter_carry_bit = 0;
 

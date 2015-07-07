@@ -91,20 +91,20 @@ void Blowfish::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) cons
     std::swap(L, R);
 }
 
-uint64_t Blowfish::encodeBlock(const uint64_t &input)
+void Blowfish::processEncodingCurrentBlock()
 {
-    uint32_t L = input >> 32;
-    uint32_t R = input & 0xFFFFFFFF;
+    uint32_t L = current_block >> 32;
+    uint32_t R = current_block & 0xFFFFFFFF;
     encodeFeistelRounds(L, R, 0);
 
-    return (static_cast<uint64_t> (L) << 32) | R;
+    current_block =  (static_cast<uint64_t> (L) << 32) | R;
 }
 
-uint64_t Blowfish::decodeBlock(const uint64_t &input)
+void Blowfish::processDecodingCurrentBlock()
 {
-    uint32_t L = input >> 32;
-    uint32_t R = input & 0xFFFFFFFF;
+    uint32_t L = current_block >> 32;
+    uint32_t R = current_block & 0xFFFFFFFF;
     decodeFeistelRounds(L, R, 0);
 
-    return (static_cast<uint64_t> (L) << 32) | R;
+    current_block = (static_cast<uint64_t> (L) << 32) | R;
 }

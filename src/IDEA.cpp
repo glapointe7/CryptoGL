@@ -6,17 +6,6 @@
 
 using namespace CryptoGL;
 
-void IDEA::setKey(const BytesVector &key)
-{
-    const uint8_t key_len = key.size();
-    if (key_len != 16)
-    {
-        throw BadKeyLength("Your key has to be 128 bits length.", key_len);
-    }
-
-    this->key = key;
-}
-
 void IDEA::generateSubkeys()
 {
     subkeys = BigEndian16::toIntegersVector(key);
@@ -60,9 +49,9 @@ void IDEA::generateInverseSubkeys()
     decoded_subkeys[0] = inverseMultiplyShort(subkeys[48]);
 }
 
-UInt16Vector IDEA::encodeBlock(const UInt16Vector &input)
+void IDEA::processEncodingCurrentBlock()
 {
-    UInt16Vector encoded_block(input);
+    UInt16Vector encoded_block(current_block);
     for (uint8_t k = 0; k < 48; k += 6)
     {
         encoded_block[0] = multiplyShort(encoded_block[0], subkeys[k]);
@@ -80,18 +69,15 @@ UInt16Vector IDEA::encodeBlock(const UInt16Vector &input)
     }
 
     // Half last round completing the encryption / decryption.
-    UInt16Vector out(4, 0);
-    out[0] = multiplyShort(encoded_block[0], subkeys[48]);
-    out[1] = encoded_block[2] + subkeys[49];
-    out[2] = encoded_block[1] + subkeys[50];
-    out[3] = multiplyShort(encoded_block[3], subkeys[51]);
-
-    return out;
+    current_block[0] = multiplyShort(encoded_block[0], subkeys[48]);
+    current_block[1] = encoded_block[2] + subkeys[49];
+    current_block[2] = encoded_block[1] + subkeys[50];
+    current_block[3] = multiplyShort(encoded_block[3], subkeys[51]);
 }
 
-UInt16Vector IDEA::decodeBlock(const UInt16Vector &input)
+void IDEA::processDecodingCurrentBlock()
 {
     subkeys = decoded_subkeys;
 
-    return encodeBlock(input);
+    processEncodingCurrentBlock();
 }

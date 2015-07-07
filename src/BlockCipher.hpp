@@ -19,9 +19,9 @@ namespace CryptoGL
     class InputOutputBlockGetter
     { 
     public:   
-       static BytesVector outputBlock(const DataType &int_block)
+       static BytesVector outputBlock(const DataType &current_block)
        {  
-          return EndianType::toBytesVector(int_block);
+          return EndianType::toBytesVector(current_block);
        }
 
        static DataType inputBlock(const BytesVector &block)
@@ -95,10 +95,10 @@ namespace CryptoGL
              generateSubkeys();
           }
 
-          DataType int_block = getIntegersFromInputBlock(block);
-          int_block = encodeBlock(int_block);
+          current_block = getIntegersFromInputBlock(block);
+          processEncodingCurrentBlock();
 
-          return getOutputBlock(int_block);
+          return getOutputBlock();
        }
 
        /* Decode an input block of bytes and return it with the right type. */
@@ -109,10 +109,10 @@ namespace CryptoGL
              generateInverseSubkeys();
           }
 
-          DataType int_block = getIntegersFromInputBlock(block);
-          int_block = decodeBlock(int_block);
+          current_block = getIntegersFromInputBlock(block);
+          processDecodingCurrentBlock();
 
-          return getOutputBlock(int_block);
+          return getOutputBlock();
        }
 
        /* Return the size of a block cipher. */
@@ -134,18 +134,15 @@ namespace CryptoGL
             rounds(rounds) {}
 
        virtual ~BlockCipher() { delete block_mode; }
-
-       /* Check the key provided by the user and set it if correct. */
-       virtual void setKey(const BytesVector &) override = 0;
-
+       
        /* Generate sub-keys from the key provided by the user when encoding. */
        virtual void generateSubkeys() = 0;
 
-       /* Encode the input block provided as a vector of integers. */
-       virtual DataType encodeBlock(const DataType &input) = 0;
+       /* Process encoding algorithm to the current block which is a vector of integers. */
+       virtual void processEncodingCurrentBlock() = 0;
 
-       /* Decode the input block provided as a vector of integers. */
-       virtual DataType decodeBlock(const DataType &input) = 0;
+       /* Process decoding algorithm to the current block which is a vector of integers. */
+       virtual void processDecodingCurrentBlock() = 0;
 
        /* Generate sub-keys from the key provided by the user when decoding. */
        virtual void generateInverseSubkeys()
@@ -173,9 +170,9 @@ namespace CryptoGL
        }
 
        /* Extract the bytes from the vector of integers and return the encoded / decoded block. */
-       static BytesVector getOutputBlock(const DataType &int_block)
+       BytesVector getOutputBlock() const
        {      
-          return InputOutputBlockGetter<BytesVector, DataType, EndianType>::outputBlock(int_block);
+          return InputOutputBlockGetter<BytesVector, DataType, EndianType>::outputBlock(current_block);
        }
     };
 }

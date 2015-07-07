@@ -5,7 +5,6 @@
 #define AES_HPP
 
 #include "BlockCipher.hpp"
-#include "Endian.hpp"
 
 #include <array>
 
@@ -33,8 +32,8 @@ namespace CryptoGL
 
     private:
         void generateSubkeys() override;
-        UInt32Vector encodeBlock(const UInt32Vector &input) override;
-        UInt32Vector decodeBlock(const UInt32Vector &input) override;
+        void processEncodingCurrentBlock() override;
+        void processDecodingCurrentBlock() override;
 
         void addRoundKey(const uint8_t round);
 
@@ -48,8 +47,6 @@ namespace CryptoGL
         void mixColumns();
         void inverseMixColumns();
 
-        UInt32Vector state{0, 0, 0, 0};
-
         static constexpr std::array<uint8_t, 16> shift_indexes = {
             {0, 5, 10, 15, 4, 9, 14, 3, 8, 13, 2, 7, 12, 1, 6, 11}
         };
@@ -60,7 +57,7 @@ namespace CryptoGL
 
         static constexpr std::array<uint32_t, 15> round_constants = {
             {0x01000000, 0x02000000, 0x04000000, 0x08000000, 0x10000000, 0x20000000, 0x40000000, 0x80000000,
-                0x1B000000, 0x36000000, 0x6C000000, 0xD8000000, 0xAB000000, 0x4D000000, 0x9A000000}
+             0x1B000000, 0x36000000, 0x6C000000, 0xD8000000, 0xAB000000, 0x4D000000, 0x9A000000}
         };
 
         static constexpr std::array<uint8_t, 256> sbox = {

@@ -43,55 +43,54 @@ void Skipjack::decodeFeistelRounds(uint8_t& L, uint8_t& R, const uint8_t round) 
 
 void Skipjack::applyRuleAOnBlock(const uint8_t round)
 {
-    const uint16_t tmp = block[3];
-    block[3] = block[2];
-    block[2] = block[1];
-    uint8_t L = block[0] >> 8;
-    uint8_t R = block[0] & 0xFF;
+    const uint16_t tmp = current_block[3];
+    current_block[3] = current_block[2];
+    current_block[2] = current_block[1];
+    uint8_t L = current_block[0] >> 8;
+    uint8_t R = current_block[0] & 0xFF;
     encodeFeistelRounds(L, R, round * 4);
-    block[1] = (L << 8) | R;
-    block[0] = tmp ^ block[1] ^ (round + 1);
+    current_block[1] = (L << 8) | R;
+    current_block[0] = tmp ^ current_block[1] ^ (round + 1);
 }
 
 void Skipjack::applyRuleBOnBlock(const uint8_t round)
 {
-    const uint16_t tmp = block[3];
-    block[3] = block[2];
-    block[2] = block[0] ^ block[1] ^ (round + 1);
-    uint8_t L = block[0] >> 8;
-    uint8_t R = block[0] & 0xFF;
+    const uint16_t tmp = current_block[3];
+    current_block[3] = current_block[2];
+    current_block[2] = current_block[0] ^ current_block[1] ^ (round + 1);
+    uint8_t L = current_block[0] >> 8;
+    uint8_t R = current_block[0] & 0xFF;
     encodeFeistelRounds(L, R, round * 4);
-    block[1] = (L << 8) | R;
-    block[0] = tmp;
+    current_block[1] = (L << 8) | R;
+    current_block[0] = tmp;
 }
 
 void Skipjack::applyInverseRuleAOnBlock(const uint8_t round)
 {
-    const uint16_t tmp = block[0] ^ block[1] ^ (round + 1);
-    uint8_t R = block[1] >> 8;
-    uint8_t L = block[1] & 0xFF;
+    const uint16_t tmp = current_block[0] ^ current_block[1] ^ (round + 1);
+    uint8_t R = current_block[1] >> 8;
+    uint8_t L = current_block[1] & 0xFF;
     decodeFeistelRounds(L, R, round * 4);
-    block[0] = (R << 8) | L;
-    block[1] = block[2];
-    block[2] = block[3];
-    block[3] = tmp;
+    current_block[0] = (R << 8) | L;
+    current_block[1] = current_block[2];
+    current_block[2] = current_block[3];
+    current_block[3] = tmp;
 }
 
 void Skipjack::applyInverseRuleBOnBlock(const uint8_t round)
 {
-    const uint16_t tmp = block[0];
-    uint8_t R = block[1] >> 8;
-    uint8_t L = block[1] & 0xFF;
+    const uint16_t tmp = current_block[0];
+    uint8_t R = current_block[1] >> 8;
+    uint8_t L = current_block[1] & 0xFF;
     decodeFeistelRounds(L, R, round * 4);
-    block[0] = (R << 8) | L;
-    block[1] = block[0] ^ block[2] ^ (round + 1);
-    block[2] = block[3];
-    block[3] = tmp;
+    current_block[0] = (R << 8) | L;
+    current_block[1] = current_block[0] ^ current_block[2] ^ (round + 1);
+    current_block[2] = current_block[3];
+    current_block[3] = tmp;
 }
 
-UInt16Vector Skipjack::encodeBlock(const UInt16Vector &input)
+void Skipjack::processEncodingCurrentBlock()
 {
-    block = input;
     for (uint8_t i = 0; i < 8; ++i)
         applyRuleAOnBlock(i);
     for (uint8_t i = 8; i < 16; ++i)
@@ -100,13 +99,10 @@ UInt16Vector Skipjack::encodeBlock(const UInt16Vector &input)
         applyRuleAOnBlock(i);
     for (uint8_t i = 24; i < 32; ++i)
         applyRuleBOnBlock(i);
-
-    return block;
 }
 
-UInt16Vector Skipjack::decodeBlock(const UInt16Vector &input)
+void Skipjack::processDecodingCurrentBlock()
 {
-    block = input;
     for (uint8_t i = 31; i >= 24; --i)
         applyInverseRuleBOnBlock(i);
     for (uint8_t i = 23; i >= 16; --i)
@@ -115,6 +111,4 @@ UInt16Vector Skipjack::decodeBlock(const UInt16Vector &input)
         applyInverseRuleBOnBlock(i);
     for (int8_t i = 7; i >= 0; --i)
         applyInverseRuleAOnBlock(i);
-
-    return block;
 }

@@ -18,8 +18,7 @@ namespace CryptoGL
         /* Generate vectors of 16-byte keystream from IV and key. */
         BytesVector generateKeystream() override;
 
-        void setKey(const BytesVector &key) override;
-        void setIV(const BytesVector &IV);
+        void setIV(const BytesVector &IV) override;
 
     protected:
         Scream(const BytesVector &key, const BytesVector &IV)
@@ -49,7 +48,6 @@ namespace CryptoGL
         uint8_t counter = 0;
 
         BytesMatrix subkeys;
-        BytesVector IV;
 
         BytesVector X, Y, Z;
 

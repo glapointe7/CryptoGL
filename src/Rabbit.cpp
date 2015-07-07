@@ -7,18 +7,6 @@ using namespace CryptoGL;
 
 constexpr std::array<uint32_t, 8> Rabbit::A;
 
-void Rabbit::setKey(const BytesVector &key)
-{
-    const uint8_t key_size = key.size();
-    if (key_size != 16)
-    {
-        throw BadKeyLength("Your key has to be 16 bytes length.", key_size);
-    }
-
-    this->key = key;
-    keySetup();
-}
-
 void Rabbit::setIV(const BytesVector &IV)
 {
     const uint8_t iv_size = IV.size();

@@ -21,19 +21,17 @@ namespace CryptoGL
         }
         
         explicit Skipjack(const BytesVector &key)
-            : Skipjack(key, OperationModes::ECB,{}) { }
+            : Skipjack(key, OperationModes::ECB, {}) { }
         
         Skipjack(const BytesVector &key, const OperationModes mode)
-            : Skipjack(key, mode,{}) { }
+            : Skipjack(key, mode, {}) { }
 
         void setKey(const BytesVector &key) override;
 
     private:
-        UInt16Vector block;
-
         void generateSubkeys() override;
-        UInt16Vector encodeBlock(const UInt16Vector &input) override;
-        UInt16Vector decodeBlock(const UInt16Vector &input) override;
+        void processEncodingCurrentBlock() override;
+        void processDecodingCurrentBlock() override;
 
         uint8_t F(const uint8_t data, const uint8_t round) const override;
         void encodeFeistelRounds(uint8_t &L, uint8_t &R, const uint8_t round) const override;

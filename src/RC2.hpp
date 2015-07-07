@@ -5,7 +5,6 @@
 #define RC2_HPP
 
 #include "BlockCipher.hpp"
-#include "Endian.hpp"
 
 #include <array>
 
@@ -30,12 +29,9 @@ namespace CryptoGL
         void setKey(const BytesVector &key) override;
 
     private:
-        // 128-bit block to be transformed for encoding / decoding.
-        UInt16Vector block;
-
-        void generateSubkeys() final;
-        UInt16Vector encodeBlock(const UInt16Vector &input) override;
-        UInt16Vector decodeBlock(const UInt16Vector &input) override;
+        void generateSubkeys() override;
+        void processEncodingCurrentBlock() override;
+        void processDecodingCurrentBlock() override;
 
         void mixUp(const uint8_t index, const uint8_t key_index);
         void mash(const uint8_t index);

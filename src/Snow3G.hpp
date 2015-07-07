@@ -26,12 +26,9 @@ namespace CryptoGL
         UInt32Vector generateKeystream() override;
 
         void setKey(const BytesVector &key) override;
-        void setIV(const BytesVector &IV);
+        void setIV(const BytesVector &IV) override;
 
     private:
-        /* 128-bit initial vector. */
-        BytesVector IV;
-
         const uint64_t output_size;
 
         /*16 LFSR stages of 32 bits each. */
