@@ -39,7 +39,7 @@ namespace CryptoGL
         void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;
         void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;
 
-        static uint16_t FI(const uint16_t in, const uint16_t K);
+        static constexpr uint16_t FI(const uint16_t in, const uint16_t K);
         uint32_t FL(const uint32_t in, const uint8_t index) const;
         uint32_t FLInverse(const uint32_t in, const uint8_t index) const;
 

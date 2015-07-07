@@ -2,8 +2,6 @@
 
 #include <algorithm>
 
-#include "Endian.hpp"
-
 #include "exceptions/BadKeyLength.hpp"
 
 using namespace CryptoGL;

@@ -8,7 +8,6 @@
 
 namespace CryptoGL
 {
-
     template <class FeistelType, class DataType, uint8_t InputBlockSize, class IndianType, class SubkeyType = FeistelType>
     class Feistel : public BlockCipher<SubkeyType, DataType, InputBlockSize, IndianType>
     {
@@ -19,7 +18,7 @@ namespace CryptoGL
         
         /* Constructor with no IV needed : ECB and CTR modes are accepted. */
         Feistel(const OperationModes mode, const uint8_t round)
-            : Feistel(mode, round,{}) { }
+            : Feistel(mode, round, {}) { }
         
         virtual ~Feistel() { }
 

@@ -51,7 +51,7 @@ namespace CryptoGL
     static_assert(!(InputBlockSize % 8), "InputBlockSize has to be a multiple of 8.");
 
     public:   
-       /* Process general encoding for block ciphers. */
+       /* Encode a message block by block. */
        BytesVector encode(const BytesVector &message) override
        {
           generateSubkeys();
@@ -62,15 +62,15 @@ namespace CryptoGL
           BytesVector output(message_padded_len);
           for (uint64_t n = 0; n < message_padded_len; n += InputBlockSize)
           {
-             const BytesVector input_block(message_padded.range(n, n + InputBlockSize));
-             const BytesVector encoded_block = block_mode->getCipherBlock(input_block);
+             const BytesVector input_block = message_padded.range(n, n + InputBlockSize);
+             const BytesVector encoded_block = block_mode->encodeBlock(input_block);
              output.extend(encoded_block);         
           }
 
           return output;
        }
 
-       /* Process general decoding for block ciphers. */
+       /* Decode a message block by block. */
        BytesVector decode(const BytesVector &message) override
        {
           generateInverseSubkeys();
@@ -79,16 +79,16 @@ namespace CryptoGL
           BytesVector output(message_len);
           for (uint64_t n = 0; n < message_len; n += InputBlockSize)
           {
-             const BytesVector input_block(message.range(n, n + InputBlockSize));
-             const BytesVector decoded_block = block_mode->getClearBlock(input_block);
+             const BytesVector input_block = message.range(n, n + InputBlockSize);
+             const BytesVector decoded_block = block_mode->decodeBlock(input_block);
              output.extend(decoded_block);
           }
 
           return output;
        }
 
-       /* Encode an input block of bytes and return the output block. */
-       BytesVector processEncodeBlock(const BytesVector &block)
+       /* Encode an input block of bytes and return it with the right type. */
+       BytesVector encodeCurrentBlock(const BytesVector &block)
        {
           if(subkeys.empty())
           {
@@ -101,8 +101,8 @@ namespace CryptoGL
           return getOutputBlock(int_block);
        }
 
-       /* Decode an input block of bytes and return the output block. */
-       BytesVector processDecodeBlock(const BytesVector &block)
+       /* Decode an input block of bytes and return it with the right type. */
+       BytesVector decodeCurrentBlock(const BytesVector &block)
        {
           if(subkeys.empty())
           {
@@ -129,8 +129,8 @@ namespace CryptoGL
             BlockCipherModesFactory<InputBlockSize>::createBlockCipherMode(
               mode,
               IV,
-              std::bind(&THIS::processEncodeBlock, this, std::placeholders::_1),
-              std::bind(&THIS::processDecodeBlock, this, std::placeholders::_1))),
+              std::bind(&THIS::encodeCurrentBlock, this, std::placeholders::_1),
+              std::bind(&THIS::decodeCurrentBlock, this, std::placeholders::_1))),
             rounds(rounds) {}
 
        virtual ~BlockCipher() { delete block_mode; }
@@ -144,7 +144,7 @@ namespace CryptoGL
        /* Encode the input block provided as a vector of integers. */
        virtual DataType encodeBlock(const DataType &input) = 0;
 
-       /* Encode the input block provided as a vector of integers. */
+       /* Decode the input block provided as a vector of integers. */
        virtual DataType decodeBlock(const DataType &input) = 0;
 
        /* Generate sub-keys from the key provided by the user when decoding. */
@@ -153,7 +153,7 @@ namespace CryptoGL
           generateSubkeys();
        }
 
-       /* (Strategy) Modes used by a block cipher : ECB, CBC, CFB, OFB and CTR. */
+       /* (Strategies) Modes used by a block cipher : ECB, CBC, CFB, OFB and CTR. */
        BlockCipherModes *block_mode;
 
        /* Number of rounds used by a block cipher algorithm. */
@@ -161,6 +161,9 @@ namespace CryptoGL
 
        /* The subkeys created from the main key for the current block cipher. */
        SubkeysContainer subkeys;
+       
+       /* Current block to process encoding or decoding algorithm. */
+       DataType current_block;
 
     private:
        /* Extract a vector of integers from the block of bytes. */

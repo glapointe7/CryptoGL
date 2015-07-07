@@ -29,6 +29,8 @@ namespace CryptoGL
         void setKey(const BytesVector &key) override;
 
     private:
+        UInt32Vector state;
+        
         void generateSubkeys() override;
         void generateInverseSubkeys() override;
         UInt32Vector encodeBlock(const UInt32Vector &input) override;
@@ -45,9 +47,7 @@ namespace CryptoGL
         void applyPiLeft();
         void applyPiRight();
         void applyRound(const uint8_t constant1, const uint8_t constant2);
-
-        UInt32Vector state{0, 0, 0, 0};
-
+        
         static constexpr std::array<uint32_t, 17> round_constants = {
             {0x00000080, 0x0000001b, 0x00000036, 0x0000006c,
                 0x000000d8, 0x000000ab, 0x0000004d, 0x0000009a,

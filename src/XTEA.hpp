@@ -5,7 +5,6 @@
 #define XTEA_HPP
 
 #include "Feistel.hpp"
-#include "Endian.hpp"
 
 namespace CryptoGL
 {

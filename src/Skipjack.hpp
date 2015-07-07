@@ -5,7 +5,6 @@
 #define SKIPJACK_HPP
 
 #include "Feistel.hpp"
-#include "Endian.hpp"
 
 #include <array>
 

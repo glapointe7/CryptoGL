@@ -36,6 +36,12 @@ namespace CryptoGL
         void setKey(const BytesVector &key) override;
 
     private:
+        UInt32Vector Kr;
+        UInt32Vector Tm;
+        UInt32Vector Tr;
+        
+        UInt32Vector block;
+        
         void generateSubkeys() override;
         UInt32Vector encodeBlock(const UInt32Vector &input) override;
         UInt32Vector decodeBlock(const UInt32Vector &input) override;
@@ -46,8 +52,8 @@ namespace CryptoGL
 
         static const std::array<Function, 3> F;
 
-        void applyForwardQuadRound(UInt32Vector &beta, const uint8_t round) const;
-        void applyReverseQuadRound(UInt32Vector &beta, const uint8_t round) const;
+        void applyForwardQuadRound(const uint8_t round);
+        void applyReverseQuadRound(const uint8_t round);
         void applyForwardOctave(UInt32Vector &kappa, const uint8_t round) const;
         
         template <uint8_t index>
@@ -56,11 +62,7 @@ namespace CryptoGL
             static_assert(index < 4, "The argument 'index' has to be between 0 and 3.");
             return (bytes >> (index * 8)) & 0xFF;
         }
-
-        UInt32Vector Kr;
-        UInt32Vector Tm;
-        UInt32Vector Tr;
-
+        
         static constexpr std::array<std::array<uint32_t, 256>, 4> S = {
             {
                 {

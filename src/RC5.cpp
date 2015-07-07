@@ -4,7 +4,6 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
-#include "Endian.hpp"
 #include "Bits.hpp"
 
 using namespace CryptoGL;

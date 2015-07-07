@@ -5,6 +5,7 @@
 #define VECTOR_HPP
 
 #include "Types.hpp"
+#include "Integer.hpp"
 
 #include <functional>
 #include <algorithm>

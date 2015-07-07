@@ -1,7 +1,6 @@
 #include "AES.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
-#include "Endian.hpp"
 #include "Bits.hpp"
 
 #include <algorithm>
@@ -125,7 +124,7 @@ void AES::inverseMixColumns()
     }
 }
 
-uint32_t AES::subWord(const uint32_t word)
+constexpr uint32_t AES::subWord(const uint32_t word)
 {
     return sbox[word & 0xFF]
             | (sbox[(word >> 8) & 0xFF]) << 8

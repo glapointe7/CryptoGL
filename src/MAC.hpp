@@ -163,9 +163,9 @@ namespace CryptoGL
             AES Block(key);
 
             /* Encode 3 keys derived from the main key with specific constants for each one. */
-            const BytesVector K1 = Block.processEncodeBlock(BytesVector(16, 0x01));
-            const BytesVector K2 = Block.processEncodeBlock(BytesVector(16, 0x02));
-            const BytesVector K3 = Block.processEncodeBlock(BytesVector(16, 0x03));
+            const BytesVector K1 = Block.encodeCurrentBlock(BytesVector(16, 0x01));
+            const BytesVector K2 = Block.encodeCurrentBlock(BytesVector(16, 0x02));
+            const BytesVector K3 = Block.encodeCurrentBlock(BytesVector(16, 0x03));
             const uint64_t message_size = message.size();
 
             /* Pad the message if empty or not multiple of 16 since AES works with block of 16 bytes. */
@@ -189,11 +189,11 @@ namespace CryptoGL
             AES Block_K1(K1);
             for (int64_t i = 0; i < M_size - 1; ++i)
             {
-                current_cipher_block = Block_K1.processEncodeBlock(M[i].Xor(previous_cipher_block));
+                current_cipher_block = Block_K1.encodeCurrentBlock(M[i].Xor(previous_cipher_block));
                 previous_cipher_block = current_cipher_block;
             }
 
-            return Block_K1.processEncodeBlock(M[M_size - 1].Xor(previous_cipher_block).Xor(K));
+            return Block_K1.encodeCurrentBlock(M[M_size - 1].Xor(previous_cipher_block).Xor(K));
         }
     };
 
@@ -214,7 +214,7 @@ namespace CryptoGL
         {
             BlockCipherType Block(key);
             constexpr uint8_t BlockSize = BlockCipherType::getBlockSize();
-            BytesVector L = Block.processEncodeBlock(BytesVector(BlockSize, 0));
+            BytesVector L = Block.encodeCurrentBlock(BytesVector(BlockSize, 0));
             BytesVector L_u = Lu<BlockSize, 1>::getValue(L);
 
             const uint64_t message_size = message.size();
@@ -230,11 +230,11 @@ namespace CryptoGL
             const int64_t M_size = M.size();
             for (int64_t i = 0; i < M_size - 1; ++i)
             {
-                current_cipher_block = Block.processEncodeBlock(M[i].Xor(previous_cipher_block));
+                current_cipher_block = Block.encodeCurrentBlock(M[i].Xor(previous_cipher_block));
                 previous_cipher_block = current_cipher_block;
             }
 
-            return Block.processEncodeBlock(M[M_size - 1].Xor(previous_cipher_block).Xor(L_u));
+            return Block.encodeCurrentBlock(M[M_size - 1].Xor(previous_cipher_block).Xor(L_u));
         }
     };
 
@@ -255,7 +255,7 @@ namespace CryptoGL
         {
             BlockCipherType Block(key);
             constexpr uint8_t BlockSize = BlockCipherType::getBlockSize();
-            BytesVector L = Block.processEncodeBlock(BytesVector(BlockSize, 0));
+            BytesVector L = Block.encodeCurrentBlock(BytesVector(BlockSize, 0));
             BytesVector L_u = Lu<BlockSize, 1>::getValue(L);
 
             // If the message is empty or not a multiple of 'BlockSize', the message 
@@ -273,11 +273,11 @@ namespace CryptoGL
             const int64_t M_size = M.size();
             for (int64_t i = 0; i < M_size - 1; ++i)
             {
-                current_cipher_block = Block.processEncodeBlock(M[i].Xor(previous_cipher_block));
+                current_cipher_block = Block.encodeCurrentBlock(M[i].Xor(previous_cipher_block));
                 previous_cipher_block = current_cipher_block;
             }
 
-            return Block.processEncodeBlock(M[M_size - 1].Xor(previous_cipher_block).Xor(L_u));
+            return Block.encodeCurrentBlock(M[M_size - 1].Xor(previous_cipher_block).Xor(L_u));
         }
     };
 
@@ -310,11 +310,11 @@ namespace CryptoGL
 
             const BytesMatrix M = message.chunk(BlockSize);
             BytesVector sigma(BlockSize, 0);
-            BytesVector L = Block.processEncodeBlock(BytesVector(BlockSize, 0));
+            BytesVector L = Block.encodeCurrentBlock(BytesVector(BlockSize, 0));
             const int64_t M_size = M.size();
             for (int64_t i = 0; i < M_size - 1; ++i)
             {
-                sigma = Block.processEncodeBlock(M[i].Xor(getLuNValue(L, i))).Xor(sigma);
+                sigma = Block.encodeCurrentBlock(M[i].Xor(getLuNValue(L, i))).Xor(sigma);
             }
             sigma = M[M_size - 1].Xor(sigma);
             if (!need_padding)
@@ -322,7 +322,7 @@ namespace CryptoGL
                 sigma = Lu<BlockSize, -1 > ::getValue(L).Xor(sigma);
             }
 
-            return Block.processEncodeBlock(sigma);
+            return Block.encodeCurrentBlock(sigma);
         }
 
     private:
@@ -375,11 +375,11 @@ namespace CryptoGL
             const int64_t M_size = M.size();
             for (int64_t i = 0; i < M_size - 1; ++i)
             {
-                current_cipher_block = Block.processEncodeBlock(M[i].Xor(previous_cipher_block));
+                current_cipher_block = Block.encodeCurrentBlock(M[i].Xor(previous_cipher_block));
                 previous_cipher_block = current_cipher_block;
             }
 
-            return Block.processEncodeBlock(M[M_size - 1].Xor(previous_cipher_block).Xor(K));
+            return Block.encodeCurrentBlock(M[M_size - 1].Xor(previous_cipher_block).Xor(K));
         }
         
         void setKey(const BytesVector &key2)

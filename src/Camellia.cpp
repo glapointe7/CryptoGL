@@ -140,7 +140,6 @@ void Camellia::extendSubKeysNot18Rounds(const BytesVector &Ka, const BytesVector
 }
 
 // Used technic of P.29 from the specs.
-
 uint64_t Camellia::F(const uint64_t half_block, const uint8_t) const
 {
     uint32_t D = SP1110[half_block & 0xFF] ^ SP0222[(half_block >> 24) & 0xFF]

@@ -39,7 +39,7 @@ namespace CryptoGL
         void addRoundKey(const uint8_t round);
 
         void subBytes(const std::array<uint8_t, 256> &box);
-        static uint32_t subWord(const uint32_t word);
+        static constexpr uint32_t subWord(const uint32_t word);
 
         void shiftRows();
         void inverseShiftRows();

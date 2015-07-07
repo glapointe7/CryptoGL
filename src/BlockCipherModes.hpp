@@ -46,8 +46,8 @@ namespace CryptoGL
 
        virtual ~BlockCipherModes() {}
 
-       virtual Block getCipherBlock(const Block &input_block) = 0;
-       virtual Block getClearBlock(const Block &input_block) = 0;
+       virtual Block encodeBlock(const Block &input_block) = 0;
+       virtual Block decodeBlock(const Block &input_block) = 0;
     };
 
     class BlockCipherECBMode : public BlockCipherModes
@@ -56,8 +56,8 @@ namespace CryptoGL
        BlockCipherECBMode(const GetOutputBlockFunction &encode, const GetOutputBlockFunction &decode)
           : encode(encode), decode(decode) {}
 
-       Block getCipherBlock(const Block &input_block) override;
-       Block getClearBlock(const Block &input_block) override;
+       Block encodeBlock(const Block &input_block) override;
+       Block decodeBlock(const Block &input_block) override;
 
     private:
        const GetOutputBlockFunction encode;
@@ -70,8 +70,8 @@ namespace CryptoGL
        BlockCipherCBCMode(const Block &IV, const GetOutputBlockFunction &encode, const GetOutputBlockFunction &decode) 
           : previous_cipher_block(IV), encode(encode), decode(decode) {}
 
-       Block getCipherBlock(const Block &input_block) override;
-       Block getClearBlock(const Block &input_block) override;
+       Block encodeBlock(const Block &input_block) override;
+       Block decodeBlock(const Block &input_block) override;
 
     private:
        Block previous_cipher_block;
@@ -85,8 +85,8 @@ namespace CryptoGL
        BlockCipherCFBMode(const Block &IV, const GetOutputBlockFunction &encode)
           : next_input_block(IV), encode(encode) {}
 
-       Block getCipherBlock(const Block &input_block) override;
-       Block getClearBlock(const Block &input_block) override;
+       Block encodeBlock(const Block &input_block) override;
+       Block decodeBlock(const Block &input_block) override;
 
     private:
        Block next_input_block;
@@ -99,8 +99,8 @@ namespace CryptoGL
        BlockCipherOFBMode(const Block &IV, const GetOutputBlockFunction &encode)
           : next_input_block(IV), encode(encode) {}
 
-       Block getCipherBlock(const Block &input_block) override;
-       Block getClearBlock(const Block &input_block) override;
+       Block encodeBlock(const Block &input_block) override;
+       Block decodeBlock(const Block &input_block) override;
 
     private:
        Block next_input_block;
@@ -115,13 +115,13 @@ namespace CryptoGL
        { 
           if(IV.size() == 16)
           {
-             this->IV = IV.range(0, 8);//Block(IV.begin(), IV.begin() + 8);
+             this->IV = IV.range(0, 8);
           }
           counter = BigEndian64::toIntegerRange(IV, IV.size() - 8); 
        }
 
-       Block getCipherBlock(const Block &input_block) override;
-       Block getClearBlock(const Block &input_block) override;
+       Block encodeBlock(const Block &input_block) override;
+       Block decodeBlock(const Block &input_block) override;
 
     private:
        Block increaseCounter();
@@ -132,7 +132,7 @@ namespace CryptoGL
        const GetOutputBlockFunction encode;
     };
 
-    /* Factory design : Choose which mode to use to encode / decode. */
+    /* Choose which mode to apply when encoding or decoding. */
     template <uint8_t BlockSize>
     class BlockCipherModesFactory
     {

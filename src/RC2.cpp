@@ -10,7 +10,7 @@ constexpr std::array<uint8_t, 4> RC2::mixup_rotation;
 void RC2::setKey(const BytesVector &key)
 {
     const uint8_t key_len = key.size();
-    if (key_len > 16 || key_len < 1)
+    if (key_len > 16 || key_len == 0)
     {
         throw BadKeyLength("Your key has to be between 1 and 16 bytes length.", key_len);
     }

@@ -26,22 +26,22 @@ void CAST256::setKey(const BytesVector &key)
     this->key = Padding::zeros(key, 32);
 }
 
-void CAST256::applyForwardQuadRound(UInt32Vector &beta, const uint8_t round) const
+void CAST256::applyForwardQuadRound(const uint8_t round)
 {
     const uint8_t j = round * 4;
-    beta[2] ^= F[0](beta[3], subkeys[j], Kr[j]);
-    beta[1] ^= F[1](beta[2], subkeys[j + 1], Kr[j + 1]);
-    beta[0] ^= F[2](beta[1], subkeys[j + 2], Kr[j + 2]);
-    beta[3] ^= F[0](beta[0], subkeys[j + 3], Kr[j + 3]);
+    block[2] ^= F[0](block[3], subkeys[j], Kr[j]);
+    block[1] ^= F[1](block[2], subkeys[j + 1], Kr[j + 1]);
+    block[0] ^= F[2](block[1], subkeys[j + 2], Kr[j + 2]);
+    block[3] ^= F[0](block[0], subkeys[j + 3], Kr[j + 3]);
 }
 
-void CAST256::applyReverseQuadRound(UInt32Vector &beta, const uint8_t round) const
+void CAST256::applyReverseQuadRound(const uint8_t round)
 {
     const uint8_t j = round * 4;
-    beta[3] ^= F[0](beta[0], subkeys[j + 3], Kr[j + 3]);
-    beta[0] ^= F[2](beta[1], subkeys[j + 2], Kr[j + 2]);
-    beta[1] ^= F[1](beta[2], subkeys[j + 1], Kr[j + 1]);
-    beta[2] ^= F[0](beta[3], subkeys[j], Kr[j]);
+    block[3] ^= F[0](block[0], subkeys[j + 3], Kr[j + 3]);
+    block[0] ^= F[2](block[1], subkeys[j + 2], Kr[j + 2]);
+    block[1] ^= F[1](block[2], subkeys[j + 1], Kr[j + 1]);
+    block[2] ^= F[0](block[3], subkeys[j], Kr[j]);
 }
 
 void CAST256::applyForwardOctave(UInt32Vector &kappa, const uint8_t round) const
@@ -110,30 +110,30 @@ constexpr uint32_t CAST256::F3(const uint32_t D, const uint32_t Km, const uint32
 
 UInt32Vector CAST256::encodeBlock(const UInt32Vector &input)
 {
-    UInt32Vector beta(input);
+    block = input;
     for (uint8_t i = 0; i < 6; ++i)
     {
-        applyForwardQuadRound(beta, i);
+        applyForwardQuadRound(i);
     }
     for (uint8_t i = 6; i < rounds; ++i)
     {
-        applyReverseQuadRound(beta, i);
+        applyReverseQuadRound(i);
     }
 
-    return beta;
+    return block;
 }
 
 UInt32Vector CAST256::decodeBlock(const UInt32Vector &input)
 {
-    UInt32Vector beta(input);
+    block = input;
     for (uint8_t i = rounds - 1; i >= 6; --i)
     {
-        applyForwardQuadRound(beta, i);
+        applyForwardQuadRound(i);
     }
     for (int8_t i = 5; i >= 0; --i)
     {
-        applyReverseQuadRound(beta, i);
+        applyReverseQuadRound(i);
     }
 
-    return beta;
+    return block;
 }
