@@ -10,7 +10,7 @@ constexpr std::array<uint32_t, 3> MD4::k;
 constexpr std::array<uint8_t, 64> MD5::left_rotation_table;
 constexpr std::array<uint32_t, 64> MD5::sine_magic_numbers;
 
-void MD4::compress(UInt32Vector &int_block, UInt32Vector &state)
+void MD4::compress(UInt32Vector &state)
 {
     UInt32Vector hash(state);
     for (uint8_t j = 0; j < rounds; ++j)
@@ -32,14 +32,14 @@ void MD4::compress(UInt32Vector &int_block, UInt32Vector &state)
         const uint32_t tmp = hash[3];
         hash[3] = hash[2];
         hash[2] = hash[1];
-        hash[1] = Bits::rotateLeft(hash[0] + f + int_block[word_indexes[j]] + k[index], left_rotation_table[j], 32);
+        hash[1] = Bits::rotateLeft(hash[0] + f + current_block[word_indexes[j]] + k[index], left_rotation_table[j], 32);
         hash[0] = tmp;
     }
 
     applyDaviesMayerFunction(hash, state);
 }
 
-void MD5::compress(UInt32Vector &int_block, UInt32Vector &state)
+void MD5::compress(UInt32Vector &state)
 {
     UInt32Vector hash(state);
     for (uint8_t j = 0; j < rounds; ++j)
@@ -72,7 +72,7 @@ void MD5::compress(UInt32Vector &int_block, UInt32Vector &state)
         const uint32_t tmp = hash[3];
         hash[3] = hash[2];
         hash[2] = hash[1];
-        hash[1] += Bits::rotateLeft(hash[0] + f + int_block[k] + sine_magic_numbers[j], left_rotation_table[j], 32);
+        hash[1] += Bits::rotateLeft(hash[0] + f + current_block[k] + sine_magic_numbers[j], left_rotation_table[j], 32);
         hash[0] = tmp;
     }
 

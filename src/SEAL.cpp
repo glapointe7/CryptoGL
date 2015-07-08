@@ -28,7 +28,9 @@ uint32_t SEAL::gamma(SHA1 &G, UInt32Vector &block, const uint32_t index, uint32_
 
         // Apply G_a(i) to the block.
         H = IV;
-        G.compress(block, H);
+        G.setCurrentBlock(block);
+        G.compress(H);
+        block = G.getCurrentBlock();
         previous_index = current_index;
     }
 

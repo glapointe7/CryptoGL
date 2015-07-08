@@ -17,7 +17,7 @@ namespace CryptoGL
 
     private:
         void process(const BytesVector &data, BytesVector &hash) const;
-        void compress(BytesVector &int_block, BytesVector &state) override;
+        void compress(BytesVector &state) override;
 
         static constexpr std::array<uint8_t, 256> digits_of_pi = {
             {0x29, 0x2E, 0x43, 0xC9, 0xA2, 0xD8, 0x7C, 0x01, 0x3D, 0x36, 0x54, 0xA1, 0xEC, 0xF0, 0x06, 0x13,

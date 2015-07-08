@@ -5,7 +5,6 @@
 #define MESSAGEDIGEST_HPP
 
 #include "MerkleDamgardFunction.hpp"
-#include "Endian.hpp"
 
 #include <array>
 
@@ -15,11 +14,21 @@ namespace CryptoGL
     {   
     protected:
        explicit MessageDigest(const uint8_t rounds) 
-          : MerkleDamgardFunction({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476}, rounds, 16) {}
+          : MerkleDamgardFunction({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476}, rounds, 16) { }
 
-       virtual void compress(UInt32Vector &int_block, UInt32Vector &state) = 0;
+       virtual void compress(UInt32Vector &state) = 0;
 
        virtual ~MessageDigest() {}
+       
+       static constexpr uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
+       {
+          return (x & y) | (~x & z);
+       }
+       
+       static constexpr uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
+       {
+          return x ^ y ^ z;
+       }
     };
 
     class MD4 : public MessageDigest
@@ -28,7 +37,7 @@ namespace CryptoGL
        MD4() : MessageDigest(48) {}
 
     private:
-       void compress(UInt32Vector &int_block, UInt32Vector &state) override;
+       void compress(UInt32Vector &state) override;
 
        static constexpr std::array<uint8_t, 48> left_rotation_table = {
           {3, 7, 11, 19, 3, 7, 11, 19, 3, 7, 11, 19, 3, 7, 11, 19,
@@ -42,21 +51,11 @@ namespace CryptoGL
           0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15}
        };
 
-       static constexpr std::array<uint32_t, 3> k = {{0, 0x5A827999, 0x6ED9EBA1}};
-
-       static constexpr uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
-       {
-          return (x & y) | (~x & z);
-       }
+       static constexpr std::array<uint32_t, 3> k = {{0, 0x5A827999, 0x6ED9EBA1}};  
 
        static constexpr uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
        {
           return (x & y) | (x & z) | (y & z);
-       }
-
-       static constexpr uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
-       {
-          return x ^ y ^ z;
        }
     };
 
@@ -66,7 +65,7 @@ namespace CryptoGL
        MD5() : MessageDigest(64) {}
 
     private:
-       void compress(UInt32Vector &int_block, UInt32Vector &state) override;
+       void compress(UInt32Vector &state) override;
 
        static constexpr std::array<uint8_t, 64> left_rotation_table = {
           {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
@@ -94,20 +93,10 @@ namespace CryptoGL
           0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
           0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391}
        };
-
-       static constexpr uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
-       {
-          return (x & y) | (~x & z);
-       }
-
+       
        static constexpr uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
        {
           return (x & z) | (y & ~z);
-       }
-
-       static constexpr uint32_t H(const uint32_t x, const uint32_t y, const uint32_t z)
-       {
-          return x ^ y ^ z;
        }
 
        static constexpr uint32_t I(const uint32_t x, const uint32_t y, const uint32_t z)

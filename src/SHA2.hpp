@@ -33,18 +33,18 @@ namespace CryptoGL
         
         virtual ~SHA2() { }
         
-        void compress(DataTypeVector &int_block, DataTypeVector &state) override
+        void compress(DataTypeVector &state) override
         {
-            int_block.resize(this->rounds);
+            this->current_block.resize(this->rounds);
 
             // Extention of the 32-bit 16 blocks in 64 blocks of 32 bits.
-            extendWords(int_block, RC::Shifters);
+            extendWords(RC::Shifters);
 
             DataTypeVector hash(state);
             for (uint8_t j = 0; j < this->rounds; ++j)
             {
                 const DataType tmp1 = hash[7] + A(hash[4], RC::A[0], RC::A[1], RC::A[2]) + ch(hash[4], hash[5], hash[6])
-                        + RC::CubicRootPrimes[j] + int_block[j];
+                        + RC::CubicRootPrimes[j] + this->current_block[j];
                 const DataType tmp2 = A(hash[0], RC::A[3], RC::A[4], RC::A[5]) + maj(hash[0], hash[1], hash[2]);
                 swapHash(hash, tmp1, tmp2);
             }
@@ -53,12 +53,12 @@ namespace CryptoGL
         }
         
         /* Extend the 16 words vector to 'rounds' words with specific operations. */
-        void extendWords(DataTypeVector &words, const std::array<uint8_t, 6> &to_shift) const
+        void extendWords(const std::array<uint8_t, 6> &to_shift)
         {
             for (uint8_t j = 16; j < this->rounds; ++j)
             {
-                words[j] = words[j - 16] + B(words[j - 15], to_shift[0], to_shift[1], to_shift[2])
-                        + words[j - 7] + B(words[j - 2], to_shift[3], to_shift[4], to_shift[5]);
+                this->current_block[j] = this->current_block[j - 16] + B(this->current_block[j - 15], to_shift[0], to_shift[1], to_shift[2])
+                        + this->current_block[j - 7] + B(this->current_block[j - 2], to_shift[3], to_shift[4], to_shift[5]);
             }
         }
        

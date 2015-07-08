@@ -18,13 +18,13 @@ uint64_t Whirlpool::applyGammaPiTheta(UInt64Vector &key, const uint8_t index)
     return tmp_key;
 }
 
-void Whirlpool::compress(UInt64Vector &block, UInt64Vector &state)
+void Whirlpool::compress(UInt64Vector &state)
 {
     // The last state becomes the key.
     UInt64Vector key(state);
 
     // Apply K^0 to the cipher state.
-    UInt64Vector xored_block(block);
+    UInt64Vector xored_block(current_block);
     for (uint8_t i = 0; i < 8; ++i)
     {
         xored_block[i] ^= key[i];
@@ -63,6 +63,6 @@ void Whirlpool::compress(UInt64Vector &block, UInt64Vector &state)
     // Apply the Miyaguchi-Preneel hash scheme.
     for (uint8_t j = 0; j < 8; ++j)
     {
-        state[j] ^= xored_block[j] ^ block[j];
+        state[j] ^= xored_block[j] ^ current_block[j];
     }
 }

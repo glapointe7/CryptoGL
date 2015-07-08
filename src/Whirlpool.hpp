@@ -5,7 +5,6 @@
 #define WHIRLPOOL_HPP
 
 #include "MerkleDamgardFunction.hpp"
-#include "Endian.hpp"
 
 #include <array>
 
@@ -19,7 +18,7 @@ namespace CryptoGL
     private:
         static uint64_t applyGammaPiTheta(UInt64Vector &key, const uint8_t index);
 
-        void compress(UInt64Vector &block, UInt64Vector &state) override;
+        void compress(UInt64Vector &state) override;
 
         /* Round constants. */
         static constexpr std::array<uint64_t, 10> RC = {

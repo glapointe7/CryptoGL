@@ -30,7 +30,7 @@ namespace CryptoGL
         /* Only used by the encode function. */
         UInt32Vector generateKeystream() override;
 
-        /* Initialise the vectors A and registers from a given value and an index. */
+        /* Initialize the vectors A and registers from a given value and an index. */
         void initialize();
 
         void keySetup() override;

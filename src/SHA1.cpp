@@ -6,14 +6,14 @@ using namespace CryptoGL;
 
 constexpr std::array<uint32_t, 4> SHA1::k;
 
-void SHA1::compress(UInt32Vector &int_block, UInt32Vector &state)
+void SHA1::compress(UInt32Vector &state)
 {
-    int_block.resize(rounds);
+    current_block.resize(rounds);
 
     // Extention of the 16 32-bit blocks to 80 blocks of 32 bits.
     for (uint8_t j = 16; j < rounds; ++j)
     {
-        int_block[j] = uint32::rotateLeft(int_block[j - 3] ^ int_block[j - 8] ^ int_block[j - 14] ^ int_block[j - 16], 1);
+        current_block[j] = uint32::rotateLeft(current_block[j - 3] ^ current_block[j - 8] ^ current_block[j - 14] ^ current_block[j - 16], 1);
     }
 
     UInt32Vector hash(state);
@@ -32,7 +32,7 @@ void SHA1::compress(UInt32Vector &int_block, UInt32Vector &state)
                 break;
         }
 
-        const uint32_t tmp = uint32::rotateLeft(hash[0], 5) + f + hash[4] + k[index] + int_block[j];
+        const uint32_t tmp = uint32::rotateLeft(hash[0], 5) + f + hash[4] + k[index] + current_block[j];
         hash[4] = hash[3];
         hash[3] = hash[2];
         hash[2] = uint32::rotateLeft(hash[1], 30);

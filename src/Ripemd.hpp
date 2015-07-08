@@ -5,7 +5,6 @@
 #define RIPEMD_HPP
 
 #include "MerkleDamgardFunction.hpp"
-#include "Endian.hpp"
 
 #include <array>
 
@@ -19,10 +18,10 @@ namespace CryptoGL
         
         virtual ~Ripemd() { }
 
-        virtual void compress(UInt32Vector &int_block, UInt32Vector &state) override = 0;
+        virtual void compress(UInt32Vector &state) override = 0;
 
-        static void process128_256(const UInt32Vector &words, UInt32Vector &hash, const uint8_t j);
-        static void process160_320(const UInt32Vector &words, UInt32Vector &hash, const uint8_t j);
+        void process128_256(UInt32Vector &hash, const uint8_t j) const;
+        void process160_320(UInt32Vector &hash, const uint8_t j) const;
         
         static constexpr uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
         {
@@ -101,7 +100,7 @@ namespace CryptoGL
         Ripemd128() : Ripemd({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476}, 64, 16) { }
 
     private:
-        void compress(UInt32Vector &int_block, UInt32Vector &state) override;
+        void compress(UInt32Vector &state) override;
     };
 
     
@@ -111,7 +110,7 @@ namespace CryptoGL
         Ripemd160() : Ripemd({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0}, 80, 20) { }
 
     private:
-        void compress(UInt32Vector &int_block, UInt32Vector &state) override;
+        void compress(UInt32Vector &state) override;
     };
 
     
@@ -122,7 +121,7 @@ namespace CryptoGL
             0x76543210, 0xFEDCBA98, 0x89ABCDEF, 0x01234567}, 64, 32) { }
 
     private:
-        void compress(UInt32Vector &int_block, UInt32Vector &state) override;
+        void compress(UInt32Vector &state) override;
     };
 
     
@@ -133,7 +132,7 @@ namespace CryptoGL
             0x76543210, 0xFEDCBA98, 0x89ABCDEF, 0x01234567, 0x3C2D1E0F}, 80, 40) { }
 
     private:
-        void compress(UInt32Vector &int_block, UInt32Vector &state) override;
+        void compress(UInt32Vector &state) override;
     };
 }
 

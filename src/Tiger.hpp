@@ -5,7 +5,6 @@
 #define TIGER_HPP
 
 #include "MerkleDamgardFunction.hpp"
-#include "Endian.hpp"
 
 #include <array>
 
@@ -40,12 +39,12 @@ namespace CryptoGL
             : Tiger(output_size, Version::tiger) { }
 
     private:
-        static void applyKeySchedule(UInt64Vector &words);
+        void applyKeySchedule();
         void applyRound(const uint64_t &word, const uint8_t mult);
-        void pass(const UInt64Vector &words, const uint8_t mult);
+        void pass(const uint8_t mult);
         void feedForward(const UInt64Vector &saved_registers);
 
-        void compress(UInt64Vector &int_block, UInt64Vector &state) override;
+        void compress(UInt64Vector &state) override;
 
         /* Specific output for Tiger-160 which is 20 bytes output and it's not a multiple of 8.*/
         BytesVector getOutput(const UInt64Vector &hash) const override;

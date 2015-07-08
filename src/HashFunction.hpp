@@ -31,13 +31,16 @@ namespace CryptoGL
        virtual BytesVector encode(const BytesVector &message) = 0;
 
        /* Take a block of data and an initial state and return the hashed block (not final) in 'state'. */
-       virtual void compress(DataTypeVector &int_block, DataTypeVector &state) = 0;
+       virtual void compress(DataTypeVector &state) = 0;
 
        /* Output hash size in bytes. */
        const uint8_t output_size;
 
        /* Size of the input block to be hashed. */
        const uint8_t input_block_size;
+       
+       /* Current block to process the encoding algorithm. */
+       DataTypeVector current_block;
 
        /* Append length in bits of the initial message to the padded message. */
        template <class EndianLengthType>
@@ -87,6 +90,18 @@ namespace CryptoGL
        void setIV(const DataTypeVector &IV)
        {
           this->IV = IV;
+       }
+       
+       /* Getter to get the current block (will be used by SEAL keysetup and Gamma methods. */
+       DataTypeVector getCurrentBlock() const
+       {
+          return current_block;
+       }
+       
+       /* Setter to get the current block (will be used by SEAL keysetup and Gamma methods. */
+       void setCurrentBlock(const DataTypeVector &current_block)
+       {
+          this->current_block = current_block;
        }
 
        /* Encode a message with a key and return the HMAC. */

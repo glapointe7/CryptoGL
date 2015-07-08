@@ -26,15 +26,15 @@ void MD2::process(const BytesVector &data, BytesVector &hash) const
     }
 }
 
-void MD2::compress(BytesVector &int_block, BytesVector &state)
+void MD2::compress(BytesVector &state)
 {
-    process(int_block, state);
+    process(current_block, state);
 
     // Update checksum.
     uint8_t t = checksum[15];
     for (uint8_t j = 0; j < input_block_size; ++j)
     {
-        t = checksum[j] ^= digits_of_pi[int_block[j] ^ t];
+        t = checksum[j] ^= digits_of_pi[current_block[j] ^ t];
     }
 }
 
@@ -46,8 +46,8 @@ BytesVector MD2::encode(const BytesVector &data)
     BytesVector hash(getIV());
     for (uint64_t i = 0; i < bytes_len; i += input_block_size)
     {
-        BytesVector int_block = getInputBlocks(bytes, i);
-        compress(int_block, hash);
+        current_block = getInputBlocks(bytes, i);
+        compress(hash);
     }
 
     // Last update of checksum.

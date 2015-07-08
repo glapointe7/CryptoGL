@@ -5,7 +5,6 @@
 #define BLAKE_HPP
 
 #include "HashFunction.hpp"
-#include "Endian.hpp"
 #include "Bits.hpp"
 
 #include <array>
@@ -79,21 +78,21 @@ namespace CryptoGL
            {{10,  2,  8,  4,  7,  6,  1,  5, 15, 11,  9, 14,  3, 12, 13,  0}}
        }};
 
-       void G(const std::array<uint8_t, 4> &I, const DataTypeVector &block, const uint8_t k, const uint8_t i)
+       void G(const std::array<uint8_t, 4> &I, const uint8_t k, const uint8_t i)
        {
           const DataTypeVector C = GVector::G;
-          registers[I[0]] += registers[I[1]] + (block[sigma[k][i]] ^ C[sigma[k][i + 1]]);
+          registers[I[0]] += registers[I[1]] + (this->current_block[sigma[k][i]] ^ C[sigma[k][i + 1]]);
           registers[I[3]] = ShiftingGetter<DataType, 0>::G(registers[I[3]] ^ registers[I[0]]);
           registers[I[2]] += registers[I[3]];
           registers[I[1]] = ShiftingGetter<DataType, 1>::G(registers[I[1]] ^ registers[I[2]]);
 
-          registers[I[0]] += registers[I[1]] + (block[sigma[k][i + 1]] ^ C[sigma[k][i]]);
+          registers[I[0]] += registers[I[1]] + (this->current_block[sigma[k][i + 1]] ^ C[sigma[k][i]]);
           registers[I[3]] = ShiftingGetter<DataType, 2>::G(registers[I[3]] ^ registers[I[0]]);
           registers[I[2]] += registers[I[3]];
           registers[I[1]] = ShiftingGetter<DataType, 3>::G(registers[I[1]] ^ registers[I[2]]);
        }
 
-       void compress(DataTypeVector &int_block, DataTypeVector &hash) override
+       void compress(DataTypeVector &hash) override
        {
           this->initialize(hash, GVector::G);
           for(uint8_t j = 0; j < rounds; ++j)
@@ -102,22 +101,22 @@ namespace CryptoGL
               for(uint8_t i = 0; i < 4; ++i)
               {
                   const std::array<uint8_t, 4> Indices = {{i, static_cast<uint8_t>(i + 4), static_cast<uint8_t>(i + 8), static_cast<uint8_t>(i + 12)}};
-                  this->G(Indices, int_block, k, 2 * i);
+                  G(Indices, k, 2 * i);
               }
              
-             this->G({{0, 5, 10, 15}}, int_block, k, 8);
-             this->G({{1, 6, 11, 12}}, int_block, k, 10);
-             this->G({{2, 7, 8, 13}}, int_block, k, 12);
-             this->G({{3, 4, 9, 14}}, int_block, k, 14);
+             G({{0, 5, 10, 15}}, k, 8);
+             G({{1, 6, 11, 12}}, k, 10);
+             G({{2, 7, 8, 13}}, k, 12);
+             G({{3, 4, 9, 14}}, k, 14);
           }
 
           this->finalize(hash);
        }
 
-       void initialize(const DataTypeVector &h, const DataTypeVector &C)
+       void initialize(const DataTypeVector &hash, const DataTypeVector &C)
        {
            registers.reserve(16);
-           registers.extend(h);
+           registers.extend(hash);
            for(uint8_t i = 0; i < 4; ++i)
            {
              registers.push_back(salt[i] ^ C[i]);
@@ -163,20 +162,20 @@ namespace CryptoGL
        virtual ~Blake() {} 
 
     public:   
-       BytesVector encode(const BytesVector &data) override
+       BytesVector encode(const BytesVector &message) override
        {
-          const uint64_t data_size = data.size();
-          BytesVector bytes = this->pad(data);
-          bytes = this->template appendLength<BigEndian64>(bytes, data_size * 8);
+          const uint64_t message_size = message.size();
+          BytesVector bytes = this->pad(message);
+          bytes = this->template appendLength<BigEndian64>(bytes, message_size * 8);
 
           const uint64_t bytes_len = bytes.size();
-          setCounter(data_size, bytes_len);
+          setCounter(message_size, bytes_len);
 
           DataTypeVector hash(this->getIV());
           for (uint64_t i = 0; i < bytes_len; i += InputBlockSize)
           {              
-             DataTypeVector int_block = this->getInputBlocks(bytes, i);    
-             compress(int_block, hash);
+             this->current_block = this->getInputBlocks(bytes, i);    
+             compress(hash);
           }
 
           return this->getOutput(hash);

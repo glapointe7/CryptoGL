@@ -20,7 +20,7 @@ namespace CryptoGL
     template <typename DataType, class EndianType, class EndianLengthType, uint8_t InputBlockSize>
     class MerkleDamgardFunction : public HashFunction<DataType, EndianType>
     {
-        static_assert(!(InputBlockSize & 0xF), "'InputBlockSize' has to be a multiple of 16.");
+        static_assert(!(InputBlockSize % 16), "'InputBlockSize' has to be a multiple of 16.");
 
     public:
         BytesVector encode(const BytesVector &message) override
@@ -31,8 +31,8 @@ namespace CryptoGL
             const uint64_t padded_message_size = padded_message.size();
             for (uint64_t i = 0; i < padded_message_size; i += InputBlockSize)
             {
-                DataTypeVector int_block = this->getInputBlocks(padded_message, i);
-                compress(int_block, hash);
+                this->current_block = this->getInputBlocks(padded_message, i);
+                compress(hash);
             }
 
             return this->getOutput(hash);
@@ -47,7 +47,7 @@ namespace CryptoGL
         virtual ~MerkleDamgardFunction() { }
 
         /* Process the main algorithm of the hash function. */
-        virtual void compress(DataTypeVector &int_block, DataTypeVector &state) override = 0;
+        virtual void compress(DataTypeVector &state) override = 0;
 
         /* Finalize the block to get the final hashed block. */
         static void applyDaviesMayerFunction(DataTypeVector &hash, DataTypeVector &state)

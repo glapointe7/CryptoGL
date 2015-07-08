@@ -6,25 +6,25 @@ using namespace CryptoGL;
 
 constexpr std::array<std::array<uint64_t, 256>, 4> Tiger::sbox;
 
-void Tiger::applyKeySchedule(UInt64Vector &words)
+void Tiger::applyKeySchedule()
 {
     constexpr uint64_t MAGIC_CONSTANT = 0xA5A5A5A5A5A5A5A5;
-    words[0] -= words[7] ^ MAGIC_CONSTANT;
-    words[1] ^= words[0];
-    words[2] += words[1];
-    words[3] -= words[2] ^ ((~words[1]) << 19);
-    words[4] ^= words[3];
-    words[5] += words[4];
-    words[6] -= words[5] ^ ((~words[4]) >> 23);
-    words[7] ^= words[6];
-    words[0] += words[7];
-    words[1] -= words[0] ^ ((~words[7]) << 19);
-    words[2] ^= words[1];
-    words[3] += words[2];
-    words[4] -= words[3] ^ ((~words[2]) >> 23);
-    words[5] ^= words[4];
-    words[6] += words[5];
-    words[7] -= words[6] ^ REGISTER_A_CONSTANT;
+    current_block[0] -= current_block[7] ^ MAGIC_CONSTANT;
+    current_block[1] ^= current_block[0];
+    current_block[2] += current_block[1];
+    current_block[3] -= current_block[2] ^ ((~current_block[1]) << 19);
+    current_block[4] ^= current_block[3];
+    current_block[5] += current_block[4];
+    current_block[6] -= current_block[5] ^ ((~current_block[4]) >> 23);
+    current_block[7] ^= current_block[6];
+    current_block[0] += current_block[7];
+    current_block[1] -= current_block[0] ^ ((~current_block[7]) << 19);
+    current_block[2] ^= current_block[1];
+    current_block[3] += current_block[2];
+    current_block[4] -= current_block[3] ^ ((~current_block[2]) >> 23);
+    current_block[5] ^= current_block[4];
+    current_block[6] += current_block[5];
+    current_block[7] -= current_block[6] ^ REGISTER_A_CONSTANT;
 }
 
 void Tiger::applyRound(const uint64_t &word, const uint8_t mult)
@@ -39,11 +39,11 @@ void Tiger::applyRound(const uint64_t &word, const uint8_t mult)
     registers[1] *= mult;
 }
 
-void Tiger::pass(const UInt64Vector &words, const uint8_t mult)
+void Tiger::pass(const uint8_t mult)
 {
     for (uint8_t i = 0; i < 8; ++i)
     {
-        applyRound(words[i], mult);
+        applyRound(current_block[i], mult);
         std::rotate(registers.begin(), registers.begin() + 1, registers.end());
     }
     std::rotate(registers.begin(), registers.begin() + 1, registers.end());
@@ -56,20 +56,20 @@ void Tiger::feedForward(const UInt64Vector &saved_registers)
     registers[2] += saved_registers[2];
 }
 
-void Tiger::compress(UInt64Vector &int_block, UInt64Vector &state)
+void Tiger::compress(UInt64Vector &state)
 {
     registers = state;
 
     // Since we have 3 elements in the vector, the "+2" means that we rotate right of 1 element.
-    pass(int_block, 5);
-    applyKeySchedule(int_block);
+    pass(5);
+    applyKeySchedule();
     std::rotate(registers.begin(), registers.begin() + 2, registers.end());
 
-    pass(int_block, 7);
-    applyKeySchedule(int_block);
+    pass(7);
+    applyKeySchedule();
     std::rotate(registers.begin(), registers.begin() + 2, registers.end());
 
-    pass(int_block, 9);
+    pass(9);
     std::rotate(registers.begin(), registers.begin() + 2, registers.end());
 
     feedForward(state);
