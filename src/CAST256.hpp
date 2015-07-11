@@ -26,11 +26,11 @@ namespace CryptoGL
         
         /* Default constructor : default on ECB mode of encryption. */
         explicit CAST256(const BytesVector &key)
-            : CAST256(key, OperationModes::ECB,{}) { }
+            : CAST256(key, OperationModes::ECB, {}) { }
         
         /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
         CAST256(const BytesVector &key, const OperationModes mode)
-            : CAST256(key, mode,{}) { }
+            : CAST256(key, mode, {}) { }
 
         void setKey(const BytesVector &key) override;
 
@@ -56,7 +56,7 @@ namespace CryptoGL
         template <uint8_t index>
         static constexpr uint8_t getByteFromInteger(const uint32_t bytes)
         {
-            static_assert(index < 4, "The argument 'index' has to be between 0 and 3.");
+            static_assert(index < 4, "CAST256 (getByteFromInteger): The argument 'index' has to be between 0 and 3.");
             return (bytes >> (index * 8)) & 0xFF;
         }
         

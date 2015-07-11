@@ -46,7 +46,7 @@ BytesVector MD2::encode(const BytesVector &data)
     BytesVector hash(getIV());
     for (uint64_t i = 0; i < bytes_len; i += input_block_size)
     {
-        current_block = getInputBlocks(bytes, i);
+        current_block = convertToIntegersBlock(bytes, i);
         compress(hash);
     }
 

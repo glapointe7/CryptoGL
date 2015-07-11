@@ -12,7 +12,8 @@ namespace CryptoGL
     {
     public:
 
-        explicit Adfgvx(const KeyType &key, const ClassicalType &grid_key) : grid_key(grid_key)
+        explicit Adfgvx(const KeyType &key, const ClassicalType &grid_key) 
+            : grid_key(grid_key)
         {
             setKey(key);
         }

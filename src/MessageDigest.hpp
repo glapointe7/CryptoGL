@@ -17,8 +17,8 @@ namespace CryptoGL
           : MerkleDamgardFunction({0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476}, rounds, 16) { }
 
        virtual void compress(UInt32Vector &state) = 0;
-
-       virtual ~MessageDigest() {}
+       
+       void swapHashElements(UInt32Vector &hash, const uint32_t special_value);
        
        static constexpr uint32_t F(const uint32_t x, const uint32_t y, const uint32_t z)
        {

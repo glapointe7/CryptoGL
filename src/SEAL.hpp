@@ -20,6 +20,7 @@ namespace CryptoGL
             : PseudoRandomFunction(seed), output_size(output_size)
         {
             setKey(key);
+            keySetup();
         }
 
         UInt32Vector generate() override;
@@ -32,6 +33,8 @@ namespace CryptoGL
 
         /* Initialize the vectors A and registers from a given value and an index. */
         void initialize();
+        
+        void applyFourRounds();
 
         void keySetup() override;
 

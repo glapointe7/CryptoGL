@@ -23,7 +23,7 @@ namespace CryptoGL
         
         /* Constructor without IV. */
         explicit Rabbit(const BytesVector &key)
-            : Rabbit(key, BytesVector(0)) { }
+            : Rabbit(key, {}) { }
 
         UInt32Vector generateKeystream() override;
 
@@ -41,10 +41,10 @@ namespace CryptoGL
 
         bool counter_carry_bit = 0;
 
-        static constexpr std::array<uint32_t, 8> A = {
-            {0x4D34D34D, 0xD34D34D3, 0x34D34D34, 0x4D34D34D,
-             0xD34D34D3, 0x34D34D34, 0x4D34D34D, 0xD34D34D3}
-        };
+        static constexpr std::array<uint32_t, 8> A = {{
+            0x4D34D34D, 0xD34D34D3, 0x34D34D34, 0x4D34D34D,
+            0xD34D34D3, 0x34D34D34, 0x4D34D34D, 0xD34D34D3
+        }};
     };
 }
 

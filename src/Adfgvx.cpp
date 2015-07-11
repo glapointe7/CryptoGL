@@ -2,10 +2,8 @@
 #include "Adfgvx.hpp"
 
 #include "Transposition.hpp"
-#include "String.hpp"
 
 #include <algorithm>
-#include <memory>
 
 using namespace CryptoGL;
 
@@ -29,15 +27,15 @@ Int32Vector Adfgvx::getPermutationKey() const
 
 ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
 {
-    // Take the coordinates of each letter and replace them by A,D,F,G,V ou X such that
-    // A=0, D=1, F=2, G=3, V=4, X=5. For exemple, if 'K' has coordinates (2,3), then
+    // Take the coordinates of each letter and replace them by A,D,F,G,V or X such that
+    // A=0, D=1, F=2, G=3, V=4, X=5. For example, if 'K' has coordinates (2,3), then
     // we encode K as FG.
     const KeyType key = getKey();
     ClassicalType first_encoding((clear_text.length() + key.length()) * 2);
 
     for (const auto c : clear_text)
     {
-        const auto coords = grid_key.getCharCoordinates(c);
+        const Coordinates coords = grid_key.getCharCoordinates(c);
         first_encoding.push_back(code[coords.second]);
         first_encoding.push_back(code[coords.first]);
     }

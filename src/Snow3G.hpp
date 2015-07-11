@@ -7,7 +7,6 @@
 #define SNOW3G_HPP
 
 #include "SynchronousStreamCipher.hpp"
-#include "Endian.hpp"
 
 #include <array>
 
@@ -21,11 +20,11 @@ namespace CryptoGL
         {
             setIV(IV);
             setKey(key);
+            keySetup();
         }
 
         UInt32Vector generateKeystream() override;
 
-        void setKey(const BytesVector &key) override;
         void setIV(const BytesVector &IV) override;
 
     private:

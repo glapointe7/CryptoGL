@@ -26,8 +26,6 @@ namespace CryptoGL
             setKey(key);
             setIV(IV);
         }
-        
-        virtual ~Scream() { }
 
         /* Construction of the S1(x) from the 'sbox' table following the specs. */
         virtual void makeS1() = 0;

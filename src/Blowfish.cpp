@@ -58,7 +58,7 @@ void Blowfish::generateSubkeys()
 uint32_t Blowfish::F(const uint32_t half_block, const uint8_t) const
 {
     return ((sbox[0][(half_block >> 24) & 0xFF] + sbox[1][(half_block >> 16) & 0xFF])
-            ^ (sbox[2][(half_block >> 8) & 0xFF])) +sbox[3][half_block & 0xFF];
+          ^ (sbox[2][(half_block >> 8) & 0xFF])) + sbox[3][half_block & 0xFF];
 }
 
 void Blowfish::encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const

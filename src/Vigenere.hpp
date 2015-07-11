@@ -48,8 +48,6 @@ namespace CryptoGL
     public:
         explicit Vigenere(const KeyType &key)
             : Vigenere(clearPlusKey, clearMinusKey, key) { }
-        
-        virtual ~Vigenere() { }
 
         ClassicalType encode(const ClassicalType &clear_text) override;
         virtual ClassicalType decode(const ClassicalType &cipher_text) override;

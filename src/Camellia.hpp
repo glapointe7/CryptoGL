@@ -38,16 +38,20 @@ namespace CryptoGL
         void processEncodingCurrentBlock() override;
         void processDecodingCurrentBlock() override;
 
+        /* Use the technic of P.29 from the specs. */
         uint64_t F(const uint64_t half_block, const uint8_t) const override;
         void encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const override;
         void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const override;
 
         void extendSubKeys18Rounds(const BytesVector &Ka, const BytesVector &Kl);
         void extendSubKeysNot18Rounds(const BytesVector &Ka, const BytesVector &Kl,
-                const BytesVector &Kr, const BytesVector &Kb);
+                                      const BytesVector &Kr, const BytesVector &Kb);
+        
+        /* Prewhitening phase from the spec. */
+        void processPrewhiteningPhase(const BytesVector &Ka, const BytesVector &Kl, const BytesVector &Kr);
 
-        static uint64_t FL(const uint64_t &half_block, const uint64_t &subkey);
-        static uint64_t FLInverse(const uint64_t &half_block, const uint64_t &subkey);
+        static constexpr uint64_t FL(const uint64_t &half_block, const uint64_t &subkey);
+        static constexpr uint64_t FLInverse(const uint64_t &half_block, const uint64_t &subkey);
         
         static constexpr std::array<uint64_t, 6> key_sigma = {
             {0xA09E667F3BCC908B, 0xB67AE8584CAA73B2, 0xC6EF372FE94F82BE,

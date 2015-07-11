@@ -41,8 +41,6 @@ namespace CryptoGL
         }
 
     protected:       
-        virtual ~SynchronousStreamCipher() { }
-
         virtual KeystreamType generateKeystream() override = 0;
 
         virtual void keySetup() override = 0;

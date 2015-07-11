@@ -26,40 +26,64 @@ void CAST128::setKey(const BytesVector &key)
 
 void CAST128::setTempKeyZ(UInt32Vector &Z, const UInt32Vector &X)
 {
-    Z[0] = X[0] ^ S[4][getByteFromInteger(X, 13)] ^ S[5][getByteFromInteger(X, 15)]
-            ^ S[6][getByteFromInteger(X, 12)] ^ S[7][getByteFromInteger(X, 14)]
-            ^ S[6][getByteFromInteger(X, 8)];
+    Z[0] = X[0] 
+        ^ S[4][getByteFromInteger(X, 13)] 
+        ^ S[5][getByteFromInteger(X, 15)]
+        ^ S[6][getByteFromInteger(X, 12)] 
+        ^ S[7][getByteFromInteger(X, 14)]
+        ^ S[6][getByteFromInteger(X, 8)];
 
-    Z[1] = X[2] ^ S[4][getByteFromInteger(Z, 0)] ^ S[5][getByteFromInteger(Z, 2)]
-            ^ S[6][getByteFromInteger(Z, 1)] ^ S[7][getByteFromInteger(Z, 3)]
-            ^ S[7][getByteFromInteger(X, 10)];
+    Z[1] = X[2] 
+        ^ S[4][getByteFromInteger(Z, 0)] 
+        ^ S[5][getByteFromInteger(Z, 2)]
+        ^ S[6][getByteFromInteger(Z, 1)] 
+        ^ S[7][getByteFromInteger(Z, 3)]
+        ^ S[7][getByteFromInteger(X, 10)];
 
-    Z[2] = X[3] ^ S[4][getByteFromInteger(Z, 7)] ^ S[5][getByteFromInteger(Z, 6)]
-            ^ S[6][getByteFromInteger(Z, 5)] ^ S[7][getByteFromInteger(Z, 4)]
-            ^ S[4][getByteFromInteger(X, 9)];
+    Z[2] = X[3] 
+        ^ S[4][getByteFromInteger(Z, 7)] 
+        ^ S[5][getByteFromInteger(Z, 6)]
+        ^ S[6][getByteFromInteger(Z, 5)] 
+        ^ S[7][getByteFromInteger(Z, 4)]
+        ^ S[4][getByteFromInteger(X, 9)];
 
-    Z[3] = X[1] ^ S[4][getByteFromInteger(Z, 10)] ^ S[5][getByteFromInteger(Z, 9)]
-            ^ S[6][getByteFromInteger(Z, 11)] ^ S[7][getByteFromInteger(Z, 8)]
-            ^ S[5][getByteFromInteger(X, 11)];
+    Z[3] = X[1] 
+        ^ S[4][getByteFromInteger(Z, 10)] 
+        ^ S[5][getByteFromInteger(Z, 9)]
+        ^ S[6][getByteFromInteger(Z, 11)] 
+        ^ S[7][getByteFromInteger(Z, 8)]
+        ^ S[5][getByteFromInteger(X, 11)];
 }
 
 void CAST128::setTempKeyX(UInt32Vector &X, const UInt32Vector &Z)
 {
-    X[0] = Z[2] ^ S[4][getByteFromInteger(Z, 5)] ^ S[5][getByteFromInteger(Z, 7)]
-            ^ S[6][getByteFromInteger(Z, 4)] ^ S[7][getByteFromInteger(Z, 6)]
-            ^ S[6][getByteFromInteger(Z, 0)];
+    X[0] = Z[2] 
+        ^ S[4][getByteFromInteger(Z, 5)] 
+        ^ S[5][getByteFromInteger(Z, 7)]
+        ^ S[6][getByteFromInteger(Z, 4)] 
+        ^ S[7][getByteFromInteger(Z, 6)]
+        ^ S[6][getByteFromInteger(Z, 0)];
 
-    X[1] = Z[0] ^ S[4][getByteFromInteger(X, 0)] ^ S[5][getByteFromInteger(X, 2)]
-            ^ S[6][getByteFromInteger(X, 1)] ^ S[7][getByteFromInteger(X, 3)]
-            ^ S[7][getByteFromInteger(Z, 2)];
+    X[1] = Z[0] 
+        ^ S[4][getByteFromInteger(X, 0)] 
+        ^ S[5][getByteFromInteger(X, 2)]
+        ^ S[6][getByteFromInteger(X, 1)] 
+        ^ S[7][getByteFromInteger(X, 3)]
+        ^ S[7][getByteFromInteger(Z, 2)];
 
-    X[2] = Z[1] ^ S[4][getByteFromInteger(X, 7)] ^ S[5][getByteFromInteger(X, 6)]
-            ^ S[6][getByteFromInteger(X, 5)] ^ S[7][getByteFromInteger(X, 4)]
-            ^ S[4][getByteFromInteger(Z, 1)];
+    X[2] = Z[1] 
+        ^ S[4][getByteFromInteger(X, 7)] 
+        ^ S[5][getByteFromInteger(X, 6)]
+        ^ S[6][getByteFromInteger(X, 5)] 
+        ^ S[7][getByteFromInteger(X, 4)]
+        ^ S[4][getByteFromInteger(Z, 1)];
 
-    X[3] = Z[3] ^ S[4][getByteFromInteger(X, 10)] ^ S[5][getByteFromInteger(X, 9)]
-            ^ S[6][getByteFromInteger(X, 11)] ^ S[7][getByteFromInteger(X, 8)]
-            ^ S[5][getByteFromInteger(Z, 3)];
+    X[3] = Z[3] 
+        ^ S[4][getByteFromInteger(X, 10)] 
+        ^ S[5][getByteFromInteger(X, 9)]
+        ^ S[6][getByteFromInteger(X, 11)] 
+        ^ S[7][getByteFromInteger(X, 8)]
+        ^ S[5][getByteFromInteger(Z, 3)];
 }
 
 void CAST128::setSubKeysBlock(const UInt32Vector &tmp, const std::array<uint8_t, 20> &index)
@@ -67,9 +91,13 @@ void CAST128::setSubKeysBlock(const UInt32Vector &tmp, const std::array<uint8_t,
     for (uint8_t i = 0; i < 4; ++i)
     {
         const uint8_t j = 5 * i;
-        subkeys.push_back(S[4][getByteFromInteger(tmp, index[j])] ^ S[5][getByteFromInteger(tmp, index[j + 1])]
-                ^ S[6][getByteFromInteger(tmp, index[j + 2])] ^ S[7][getByteFromInteger(tmp, index[j + 3])]
-                ^ S[4 + i][getByteFromInteger(tmp, index[j + 4])]);
+        subkeys.push_back(
+                  S[4][getByteFromInteger(tmp, index[j])] 
+                ^ S[5][getByteFromInteger(tmp, index[j + 1])]
+                ^ S[6][getByteFromInteger(tmp, index[j + 2])] 
+                ^ S[7][getByteFromInteger(tmp, index[j + 3])]
+                ^ S[4 + i][getByteFromInteger(tmp, index[j + 4])]
+        );
     }
 }
 
@@ -100,22 +128,25 @@ void CAST128::generateSubkeys()
 uint32_t CAST128::F(const uint32_t half_block, const uint8_t index) const
 {
     const uint32_t I = Bits::rotateLeft(subkeys[index] + half_block, subkeys[index + 16] % 32);
+    
     return ((S[0][getByteFromInteger(I, 3)] ^ S[1][getByteFromInteger(I, 2)])
-            - S[2][getByteFromInteger(I, 1)]) +S[3][getByteFromInteger(I, 0)];
+           - S[2][getByteFromInteger(I, 1)]) + S[3][getByteFromInteger(I, 0)];
 }
 
 uint32_t CAST128::F2(const uint32_t half_block, const uint8_t index) const
 {
     const uint32_t I = Bits::rotateLeft(subkeys[index] ^ half_block, subkeys[index + 16] % 32);
+    
     return ((S[0][getByteFromInteger(I, 3)] - S[1][getByteFromInteger(I, 2)])
-            + S[2][getByteFromInteger(I, 1)]) ^ S[3][getByteFromInteger(I, 0)];
+           + S[2][getByteFromInteger(I, 1)]) ^ S[3][getByteFromInteger(I, 0)];
 }
 
 uint32_t CAST128::F3(const uint32_t half_block, const uint8_t index) const
 {
     const uint32_t I = Bits::rotateLeft(subkeys[index] - half_block, subkeys[index + 16] % 32);
+    
     return ((S[0][getByteFromInteger(I, 3)] + S[1][getByteFromInteger(I, 2)])
-            ^ S[2][getByteFromInteger(I, 1)]) -S[3][getByteFromInteger(I, 0)];
+           ^ S[2][getByteFromInteger(I, 1)]) - S[3][getByteFromInteger(I, 0)];
 }
 
 void CAST128::encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
@@ -178,7 +209,7 @@ void CAST128::processEncodingCurrentBlock()
     uint32_t R = current_block & 0xFFFFFFFF;
     encodeFeistelRounds(L, R, 0);
 
-    current_block =  (static_cast<uint64_t> (R) << 32) | L;
+    current_block = (static_cast<uint64_t> (R) << 32) | L;
 }
 
 void CAST128::processDecodingCurrentBlock()

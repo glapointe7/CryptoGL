@@ -25,6 +25,7 @@ namespace CryptoGL
     private:
         void generateSubkeys() override;
         void generateInverseSubkeys() override;
+        
         void processEncodingCurrentBlock() override;
         void processDecodingCurrentBlock() override;
 

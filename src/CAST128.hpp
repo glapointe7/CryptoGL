@@ -22,11 +22,11 @@ namespace CryptoGL
         
         /* Default constructor : default on ECB mode of encryption. */
         explicit CAST128(const BytesVector &key)
-            : CAST128(key, OperationModes::ECB,{}) { }
+            : CAST128(key, OperationModes::ECB, {}) { }
         
         /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
         CAST128(const BytesVector &key, const OperationModes mode)
-            : CAST128(key, mode,{}) { }
+            : CAST128(key, mode, {}) { }
 
         void setKey(const BytesVector &key) override;
 
@@ -38,6 +38,7 @@ namespace CryptoGL
         uint32_t F(const uint32_t half_block, const uint8_t index) const override;
         uint32_t F2(const uint32_t half_block, const uint8_t index) const;
         uint32_t F3(const uint32_t half_block, const uint8_t index) const;
+        
         void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;
         void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;
 

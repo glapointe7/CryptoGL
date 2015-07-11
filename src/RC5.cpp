@@ -21,10 +21,6 @@ void RC5::setKey(const BytesVector &key)
 
 void RC5::generateSubkeys()
 {
-    constexpr uint8_t int_size = 4;
-    const uint8_t key_len = key.size();
-    const uint8_t tmp_key_len = (key_len + int_size - 1) / int_size;
-
     UInt32Vector tmp_key = LittleEndian32::toIntegersVector(key);
 
     // Initialize the expanded key table.
@@ -37,6 +33,9 @@ void RC5::generateSubkeys()
     }
 
     // This step mixes the secret key into the expanded key 'subkeys'.
+    constexpr uint8_t int_size = 4;
+    const uint8_t key_len = key.size();
+    const uint8_t tmp_key_len = (key_len + int_size - 1) / int_size;
     const uint8_t k = 3 * std::max(tmp_key_len, subkeys_len);
     uint32_t L = 0, R = 0;
     for (uint8_t l = 0, i = 0, j = 0; l < k; ++l)

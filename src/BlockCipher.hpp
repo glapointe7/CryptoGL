@@ -45,6 +45,7 @@ namespace CryptoGL
        }
     };
 
+    
     template <class SubkeyType, class DataType, uint8_t InputBlockSize, class EndianType>
     class BlockCipher : public SymmetricCipher
     {   
@@ -133,7 +134,7 @@ namespace CryptoGL
               std::bind(&THIS::decodeCurrentBlock, this, std::placeholders::_1))),
             rounds(rounds) {}
 
-       virtual ~BlockCipher() { delete block_mode; }
+       ~BlockCipher() override { delete block_mode; }
        
        /* Generate sub-keys from the key provided by the user when encoding. */
        virtual void generateSubkeys() = 0;

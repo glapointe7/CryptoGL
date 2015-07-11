@@ -6,8 +6,18 @@
 
 namespace CryptoGL
 {
-    using Coordinates = std::pair<uint8_t, uint8_t>;
-    using Grid = std::vector<ClassicalType>;
+    /* 2D Coordinates (x, y) used for cipher grids. */
+    struct GridCoordinates 
+    {
+        GridCoordinates(const uint8_t x, const uint8_t y)
+            : x(x), y(y) { };
+        
+        uint8_t x = 0; 
+        uint8_t y = 0;
+    };
+    
+    using Coordinates = /*GridCoordinates;*/std::pair<uint8_t, uint8_t>;
+    using Grid = Vector<ClassicalType>;
 
     class CipherGrid
     {
@@ -16,7 +26,6 @@ namespace CryptoGL
 
         CipherGrid(ClassicalType key, const ClassicalType &alpha);
         explicit CipherGrid(const ClassicalType &alpha) : CipherGrid("", alpha) { }
-        virtual ~CipherGrid() { }
 
         /* Build the grid with the string 'chars' and the dimension set given. */
         void setGrid(ClassicalType chars);

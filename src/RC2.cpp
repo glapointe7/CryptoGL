@@ -49,8 +49,13 @@ void RC2::generateSubkeys()
 
 void RC2::mixUp(const uint8_t index, const uint8_t key_index)
 {
+    // 4 + index avoids negative values when subtracting. 
+    // E.g. (2 - 3) % 4 = -1 and not what we expect: 3.
     const uint8_t i = 4 + index;
-    current_block[index] += subkeys[key_index + index] + (current_block[(i - 2) % 4] & current_block[(i - 1) % 4]) + (current_block[(i - 3) % 4] & ~current_block[(i - 1) % 4]);
+    current_block[index] += subkeys[key_index + index] 
+            + (current_block[(i - 2) % 4] & current_block[(i - 1) % 4]) 
+            + (current_block[(i - 3) % 4] & ~current_block[(i - 1) % 4]);
+    
     current_block[index] = Bits::rotateLeft(current_block[index], mixup_rotation[index], 16);
 }
 
@@ -63,7 +68,9 @@ void RC2::inverseMixUp(const uint8_t index, const uint8_t key_index)
 {
     const uint8_t i = 4 + index;
     current_block[index] = Bits::rotateRight(current_block[index], mixup_rotation[index], 16);
-    current_block[index] -= subkeys[key_index + index] + (current_block[(i - 2) % 4] & current_block[(i - 1) % 4]) + (current_block[(i - 3) % 4] & ~current_block[(i - 1) % 4]);
+    current_block[index] -= subkeys[key_index + index] 
+            + (current_block[(i - 2) % 4] & current_block[(i - 1) % 4]) 
+            + (current_block[(i - 3) % 4] & ~current_block[(i - 1) % 4]);
 }
 
 void RC2::inverseMash(const uint8_t index)

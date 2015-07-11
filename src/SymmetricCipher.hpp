@@ -13,8 +13,6 @@ namespace CryptoGL
     class SymmetricCipher : public Cipher<BytesVector>
     {
     protected:
-        virtual ~SymmetricCipher() { }
-
         virtual BytesVector encode(const BytesVector &) override = 0;
         virtual BytesVector decode(const BytesVector &) override = 0;
         

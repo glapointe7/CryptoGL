@@ -22,7 +22,7 @@ namespace CryptoGL
 
     public:
         /* Create an empty vector. */
-        Vector() : std::vector<Type>(0) { }
+        Vector() : VectorType(0) { }
         
         /* Create an empty vector with memory reserved. */
         explicit Vector(const uint64_t &new_size)
@@ -31,19 +31,19 @@ namespace CryptoGL
         }
         
         /* Create a copy of a std::vector in Vector. */
-        explicit Vector(const std::vector<Type> &V) : std::vector<Type>(V) { }
+        explicit Vector(const VectorType &V) : VectorType(V) { }
         
         template <class InputIterator>
-        Vector(InputIterator first, InputIterator last) : std::vector<Type>(first, last) { }
+        Vector(InputIterator first, InputIterator last) : VectorType(first, last) { }
         
         /* Create a Vector filled with 'n' times the value 'value'. */
-        Vector(const uint64_t &n, const Type value) : std::vector<Type>(n, value) { }
+        Vector(const uint64_t &n, const Type value) : VectorType(n, value) { }
         
         /* Create a vector with a list of initialized values. */
-        Vector(std::initializer_list<Type> init_list) : std::vector<Type>(init_list) { }
+        Vector(std::initializer_list<Type> init_list) : VectorType(init_list) { }
         
         /* Move Constructor. */
-        Vector(std::vector<Type>&& V) : std::vector<Type>(V) { }
+        Vector(VectorType&& V) : VectorType(V) { }
         
         /* XOR each element of vector V with the elements of vector W and return the result. */
         Vector<Type> Xor(const Vector &W) const
@@ -75,25 +75,29 @@ namespace CryptoGL
         /* Append the vector W at the end of V. */
         void extend(Vector W)
         {
+            // TODO Check ca en haut, et dans les autres méthodes
+            // TODO Check ca en bas
+            //this->reserve(this->size() + W.size());
             this->insert(this->end(), W.begin(), W.end());
         }
         
         /* Append the range of W given from begin to end at the end. */
         void extend(Vector W, const uint64_t &begin, const uint64_t &end)
         {
+            //this->reserve(this->size() + std::distance(W.begin() + begin, W.begin() + end));
             this->insert(this->end(), W.begin() + begin, W.begin() + end);
         }
         
         /* Append the range of W given from begin to end at the end of V. */
         void extend(Vector W, const uint64_t &begin)
         {
+            //this->reserve(this->size() + std::distance(W.begin() + begin, W.end()));
             this->insert(this->end(), W.begin() + begin, W.end());
         }
        
         /* Add the vector W at the end of V and reserve new capacity. Return the new merged vector. */
         Vector<Type> merge(const Vector &W)
         {
-            this->reserve(this->size() + W.size());
             this->extend(W);
             return Vector<Type>(this->begin(), this->end());
         }
@@ -115,9 +119,7 @@ namespace CryptoGL
         {
             if (this->empty())
             {
-                return
-                {
-                };
+                return {};
             }
 
             const uint64_t V_size = this->size();
@@ -126,7 +128,7 @@ namespace CryptoGL
             Vector<Vector < Type >> result(matrix_size);
             for (uint64_t i = 0; i < V_size; i += vector_size)
             {
-                result.push_back(range(i, i + vector_size));
+                result.emplace_back(range(i, i + vector_size));
             }
 
             return result;
@@ -183,8 +185,6 @@ namespace CryptoGL
             const uint32_t v_size = this->size();
             const uint32_t start = std::min(shift / size_type, v_size);
             Vector result(start, 0);
-            result.reserve(v_size);
-
             result.extend(range(0), 0, v_size - start);
 
             if (shift % size_type == 0 || shift >= size_type * v_size)

@@ -10,7 +10,7 @@ namespace CryptoGL
     template <typename UInteger>
     class Integer
     {
-        static_assert(std::is_integral<UInteger>::value, "Type UInteger must be an integral type.");
+        static_assert(std::is_integral<UInteger>::value, "Integer: The type UInteger must be an integral type.");
 
     public:
         /* Extract the Least Signifiant Bits from value. */
@@ -56,7 +56,7 @@ namespace CryptoGL
             str.reserve(20);
             do
             {
-                str.push_back(static_cast<char> (48 + (value % 10)));
+                str.push_back(static_cast<char> ('0' + (value % 10)));
             }
             while (value /= 10);
             std::reverse(str.begin(), str.end());

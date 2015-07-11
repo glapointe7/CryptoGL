@@ -31,8 +31,6 @@ namespace CryptoGL
         SHA2(const DataTypeVector &IV, const uint8_t rounds, const uint8_t output_size)
             : MerkleDamgardFunctionType(IV, rounds, output_size) { }
         
-        virtual ~SHA2() { }
-        
         void compress(DataTypeVector &state) override
         {
             this->current_block.resize(this->rounds);
@@ -43,8 +41,12 @@ namespace CryptoGL
             DataTypeVector hash(state);
             for (uint8_t j = 0; j < this->rounds; ++j)
             {
-                const DataType tmp1 = hash[7] + A(hash[4], RC::A[0], RC::A[1], RC::A[2]) + ch(hash[4], hash[5], hash[6])
-                        + RC::CubicRootPrimes[j] + this->current_block[j];
+                const DataType tmp1 = hash[7]
+                    + A(hash[4], RC::A[0], RC::A[1], RC::A[2])
+                    + ch(hash[4], hash[5], hash[6])
+                    + RC::CubicRootPrimes[j]
+                    + this->current_block[j];
+                
                 const DataType tmp2 = A(hash[0], RC::A[3], RC::A[4], RC::A[5]) + maj(hash[0], hash[1], hash[2]);
                 swapHash(hash, tmp1, tmp2);
             }
@@ -57,8 +59,9 @@ namespace CryptoGL
         {
             for (uint8_t j = 16; j < this->rounds; ++j)
             {
-                this->current_block[j] = this->current_block[j - 16] + B(this->current_block[j - 15], to_shift[0], to_shift[1], to_shift[2])
-                        + this->current_block[j - 7] + B(this->current_block[j - 2], to_shift[3], to_shift[4], to_shift[5]);
+                this->current_block[j] =    
+                    this->current_block[j - 16] + B(this->current_block[j - 15], to_shift[0], to_shift[1], to_shift[2])
+                    + this->current_block[j - 7] + B(this->current_block[j - 2], to_shift[3], to_shift[4], to_shift[5]);
             }
         }
        
@@ -87,15 +90,15 @@ namespace CryptoGL
         static constexpr DataType A(const DataType &hash, const uint8_t x, const uint8_t y, const uint8_t z)
         {
             return Bits::rotateRight(hash, x, sizeof (DataType) << 3)
-                    ^ Bits::rotateRight(hash, y, sizeof (DataType) << 3)
-                    ^ Bits::rotateRight(hash, z, sizeof (DataType) << 3);
+                 ^ Bits::rotateRight(hash, y, sizeof (DataType) << 3)
+                 ^ Bits::rotateRight(hash, z, sizeof (DataType) << 3);
         }
         
         static constexpr DataType B(const DataType &word, const uint8_t x, const uint8_t y, const uint8_t z)
         {
             return Bits::rotateRight(word, x, sizeof (DataType) << 3)
-                    ^ Bits::rotateRight(word, y, sizeof (DataType) << 3)
-                    ^ (word >> z);
+                 ^ Bits::rotateRight(word, y, sizeof (DataType) << 3)
+                 ^ (word >> z);
         }
     };
 
@@ -104,17 +107,20 @@ namespace CryptoGL
     {
     public:
         SHA224()
-            : SHA2({0xc1059ed8, 0x367cd507, 0x3070dd17, 0xf70e5939,
-            0xffc00b31, 0x68581511, 0x64f98fa7, 0xbefa4fa4}, 64, 28) { }
+            : SHA2({
+                0xc1059ed8, 0x367cd507, 0x3070dd17, 0xf70e5939,
+                0xffc00b31, 0x68581511, 0x64f98fa7, 0xbefa4fa4
+            }, 64, 28) { }
     };
 
     
     class SHA256 : public SHA2<uint32_t, 64>
     {
     public:
-        SHA256()
-            : SHA2({0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
-            0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19}, 64, 32) { }
+        SHA256() : SHA2({
+            0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+            0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+        }, 64, 32) { }
     };
 
     
@@ -146,8 +152,6 @@ namespace CryptoGL
         {
             makeNewIV(code);
         }
-            
-        virtual ~SHA512_t() { }
 
         /* Make a new IV for SHA512 and use it to generate a truncated output. */
         void makeNewIV(const BytesVector &code);
@@ -157,7 +161,7 @@ namespace CryptoGL
     class SHA512_224 : public SHA512_t
     {
     public:
-        SHA512_224() : SHA512_t(28,{0x32, 0x32, 0x34}) { } // code = "224"
+        SHA512_224() : SHA512_t(28, {0x32, 0x32, 0x34}) { } // code = "224"
 
     private:
         BytesVector getOutput(const UInt64Vector &hash) const override;
@@ -167,7 +171,7 @@ namespace CryptoGL
     class SHA512_256 : public SHA512_t
     {
     public:
-        SHA512_256() : SHA512_t(32,{0x32, 0x35, 0x36}) { } // code = "256"
+        SHA512_256() : SHA512_t(32, {0x32, 0x35, 0x36}) { } // code = "256"
     };
 }
 

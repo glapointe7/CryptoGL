@@ -13,8 +13,6 @@ namespace CryptoGL
     class AsymmetricCipher : public Cipher<BigIntVector, BytesVector>
     {   
     protected:  
-       virtual ~AsymmetricCipher() {}
-
        virtual BigIntVector encode(const BytesVector &) = 0;
        virtual BytesVector decode(const BigIntVector &) = 0;
 

@@ -12,7 +12,7 @@ Chao::Chao(const ClassicalType &left_alpha, const ClassicalType &right_alpha)
     checkAlpha(right_alpha);
     if (left_alpha.length() != right_alpha.length())
     {
-        throw BadAlphaLength("Your left alphabet has to have the same length as the right one.", left_alpha.length());
+        throw BadAlphaLength("Chao constructor: Your left alphabet has to have the same length as the right one.", left_alpha.length());
     }
 
     this->left_alpha = left_alpha;
@@ -37,7 +37,8 @@ void Chao::rightShiftAlphabet(const uint8_t index)
 
 ClassicalType Chao::encode(const ClassicalType &clear_text)
 {
-    ClassicalType crypted(clear_text.length());
+    ClassicalType crypted;
+    crypted.reserve(clear_text.length());
 
     for (const auto c : clear_text)
     {
@@ -53,7 +54,8 @@ ClassicalType Chao::encode(const ClassicalType &clear_text)
 
 ClassicalType Chao::decode(const ClassicalType &cipher_text)
 {
-    ClassicalType decrypted(cipher_text.length());
+    ClassicalType decrypted;
+    decrypted.reserve(cipher_text.length());
 
     for (const auto c : cipher_text)
     {

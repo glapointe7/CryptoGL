@@ -28,12 +28,9 @@ void MD4::compress(UInt32Vector &state)
             case 2: f = H(hash[1], hash[2], hash[3]);
                 break;
         }
-
-        const uint32_t tmp = hash[3];
-        hash[3] = hash[2];
-        hash[2] = hash[1];
-        hash[1] = Bits::rotateLeft(hash[0] + f + current_block[word_indexes[j]] + k[index], left_rotation_table[j], 32);
-        hash[0] = tmp;
+        
+        const uint32_t special_value = Bits::rotateLeft(hash[0] + f + current_block[word_indexes[j]] + k[index], left_rotation_table[j], 32);
+        swapHashElements(hash, special_value);
     }
 
     applyDaviesMayerFunction(hash, state);
@@ -55,26 +52,32 @@ void MD5::compress(UInt32Vector &state)
                 
             case 1: 
                 f = G(hash[1], hash[2], hash[3]);
-                k = ((5 * j) + 1) & 0xF;
+                k = ((5 * j) + 1) % 16;
                 break;
                 
             case 2: 
                 f = H(hash[1], hash[2], hash[3]);
-                k = ((3 * j) + 5) & 0xF;
+                k = ((3 * j) + 5) % 16;
                 break;
                 
             case 3: 
                 f = I(hash[1], hash[2], hash[3]);
-                k = (7 * j) & 0xF;
+                k = (7 * j) % 16;
                 break;
         }
 
-        const uint32_t tmp = hash[3];
-        hash[3] = hash[2];
-        hash[2] = hash[1];
-        hash[1] += Bits::rotateLeft(hash[0] + f + current_block[k] + sine_magic_numbers[j], left_rotation_table[j], 32);
-        hash[0] = tmp;
+        const uint32_t special_value = hash[1] + Bits::rotateLeft(hash[0] + f + current_block[k] + sine_magic_numbers[j], left_rotation_table[j], 32);
+        swapHashElements(hash, special_value);
     }
 
     applyDaviesMayerFunction(hash, state);
+}
+
+void MessageDigest::swapHashElements(UInt32Vector &hash, const uint32_t special_value)
+{
+    const uint32_t tmp = hash[3];
+    hash[3] = hash[2];
+    hash[2] = hash[1];
+    hash[1] = special_value;
+    hash[0] = tmp;
 }

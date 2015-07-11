@@ -15,7 +15,6 @@ void SEAL::setKey(const BytesVector &key)
     }
 
     this->key = key;
-    keySetup();
 }
 
 uint32_t SEAL::gamma(SHA1 &G, UInt32Vector &block, const uint32_t index, uint32_t &previous_index)
@@ -56,14 +55,24 @@ void SEAL::keySetup()
     S.reserve(256);
     for (uint16_t i = 0; i < 256; ++i)
     {
-        S.push_back(gamma(G, block, i + 0x1000, previous_index));
+        S.push_back(gamma(G, block, i + 4096, previous_index));
     }
 
     const uint16_t upper_bound = 4 * (output_size / 1024);
     R.reserve(upper_bound);
     for (uint16_t i = 0; i < upper_bound; ++i)
     {
-        R.push_back(gamma(G, block, i + 0x2000, previous_index));
+        R.push_back(gamma(G, block, i + 8192, previous_index));
+    }
+}
+
+void SEAL::applyFourRounds()
+{
+    for (uint8_t j = 0; j < 4; ++j)
+    {
+        const uint16_t P = state[j] & 0x7FC;
+        state[(j + 1) % 4] += T[P / 4];
+        state[j] = Bits::rotateRight(state[j], 9);
     }
 }
 
@@ -74,15 +83,9 @@ void SEAL::initialize()
         state[i] = Bits::rotateRight(seed, i * 8) ^ R[4 * counter + i];
     }
 
-    uint16_t P;
     for (uint8_t i = 0; i < 2; ++i)
     {
-        for (uint8_t j = 0; j < 4; ++j)
-        {
-            P = state[j] & 0x7FC;
-            state[(j + 1) % 4] += T[P / 4];
-            state[j] = Bits::rotateRight(state[j], 9);
-        }
+        applyFourRounds();
     }
 
     state[4] = state[3];
@@ -90,12 +93,7 @@ void SEAL::initialize()
     state[6] = state[0];
     state[7] = state[2];
 
-    for (uint8_t j = 0; j < 4; ++j)
-    {
-        P = state[j] & 0x7FC;
-        state[(j + 1) % 4] += T[P / 4];
-        state[j] = Bits::rotateRight(state[j], 9);
-    }
+    applyFourRounds();
 }
 
 UInt32Vector SEAL::generateKeystream()
@@ -105,44 +103,48 @@ UInt32Vector SEAL::generateKeystream()
     UInt32Vector keystream;
     keystream.reserve(1024);
 
-    uint16_t P, Q;
     counter++;
+    constexpr uint16_t MOD_CONSTANT = 0x7FC;
     for (uint8_t i = 0; i < 64; ++i)
     {
-        P = state[0] & 0x7FC;
+        // P and Q are round numbers as per spec.
+        // 8 rounds are performed. 
+        // Since the operators switch between ^ and + and they are dependencies between each state
+        // it's quite complicated to create a method 'applyRound' to avoid repeating code.
+        uint16_t P = state[0] & MOD_CONSTANT;
         state[1] += T[P / 4];
         state[0] = Bits::rotateRight(state[0], 9);
         state[1] ^= state[0];
 
-        Q = state[1] & 0x7FC;
+        uint16_t Q = state[1] & MOD_CONSTANT;
         state[2] ^= T[Q / 4];
         state[1] = Bits::rotateRight(state[1], 9);
         state[2] += state[1];
 
-        P = (P + state[2]) & 0x7FC;
+        P = (P + state[2]) & MOD_CONSTANT;
         state[3] += T[P / 4];
         state[2] = Bits::rotateRight(state[2], 9);
         state[3] ^= state[2];
 
-        Q = (Q + state[3]) & 0x7FC;
+        Q = (Q + state[3]) & MOD_CONSTANT;
         state[0] ^= T[Q / 4];
         state[3] = Bits::rotateRight(state[3], 9);
         state[0] += state[3];
 
 
-        P = (P + state[0]) & 0x7FC;
+        P = (P + state[0]) & MOD_CONSTANT;
         state[1] ^= T[P / 4];
         state[0] = Bits::rotateRight(state[0], 9);
 
-        Q = (Q + state[1]) & 0x7FC;
+        Q = (Q + state[1]) & MOD_CONSTANT;
         state[2] += T[Q / 4];
         state[1] = Bits::rotateRight(state[1], 9);
 
-        P = (P + state[2]) & 0x7FC;
+        P = (P + state[2]) & MOD_CONSTANT;
         state[3] ^= T[P / 4];
         state[2] = Bits::rotateRight(state[2], 9);
 
-        Q = (Q + state[3]) & 0x7FC;
+        Q = (Q + state[3]) & MOD_CONSTANT;
         state[0] += T[Q / 4];
         state[3] = Bits::rotateRight(state[3], 9);
 

@@ -15,8 +15,6 @@ namespace CryptoGL
     protected:
         Ripemd(const UInt32Vector &IV, const uint8_t rounds, const uint8_t output_size)
             : MerkleDamgardFunction(IV, rounds, output_size) { }
-        
-        virtual ~Ripemd() { }
 
         virtual void compress(UInt32Vector &state) override = 0;
 

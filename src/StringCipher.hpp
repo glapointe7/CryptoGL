@@ -14,7 +14,6 @@ namespace CryptoGL
 
     protected:
         StringCipher() : alpha(ClassicalType::uppercase) { }
-        virtual ~StringCipher() { }
 
         virtual ClassicalType encode(const ClassicalType &) override = 0;
         virtual ClassicalType decode(const ClassicalType &) override = 0;

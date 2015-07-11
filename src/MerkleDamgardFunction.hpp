@@ -31,7 +31,7 @@ namespace CryptoGL
             const uint64_t padded_message_size = padded_message.size();
             for (uint64_t i = 0; i < padded_message_size; i += InputBlockSize)
             {
-                this->current_block = this->getInputBlocks(padded_message, i);
+                this->current_block = this->convertToIntegersBlock(padded_message, i);
                 compress(hash);
             }
 
@@ -43,8 +43,6 @@ namespace CryptoGL
 
         MerkleDamgardFunction(const DataTypeVector &IV, const uint8_t rounds, const uint8_t output_size)
             : HashFunction<DataType, EndianType>(InputBlockSize, output_size, IV), rounds(rounds) { }
-
-        virtual ~MerkleDamgardFunction() { }
 
         /* Process the main algorithm of the hash function. */
         virtual void compress(DataTypeVector &state) override = 0;

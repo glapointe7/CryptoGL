@@ -23,10 +23,10 @@ namespace CryptoGL
         }
 
         explicit AES(const BytesVector &key)
-            : AES(key, OperationModes::ECB,{}) { }
+            : AES(key, OperationModes::ECB, {}) { }
 
         AES(const BytesVector &key, const OperationModes mode)
-            : AES(key, mode,{}) { }
+            : AES(key, mode, {}) { }
 
         void setKey(const BytesVector &key) override;
 

@@ -21,12 +21,6 @@ void RC6::setKey(const BytesVector &key)
 
 void RC6::generateSubkeys()
 {
-    constexpr uint8_t int_size = 4;
-    const uint8_t key_len = key.size();
-    const uint8_t tmp_key_len = (key_len + int_size - 1) / int_size;
-
-    UInt32Vector tmp_key = LittleEndian32::toIntegersVector(key);
-
     // Initialize the expanded key table.
     const uint8_t subkeys_len = (rounds + 2) * 2;
     subkeys.resize(subkeys_len);
@@ -37,7 +31,12 @@ void RC6::generateSubkeys()
     }
 
     // This step mixes the secret key into the expanded key 'subkeys'.
+    constexpr uint8_t int_size = 4;
+    const uint8_t key_len = key.size();
+    const uint8_t tmp_key_len = (key_len + int_size - 1) / int_size;
     const uint8_t k = 3 * std::max(tmp_key_len, subkeys_len);
+    
+    UInt32Vector tmp_key = LittleEndian32::toIntegersVector(key);
     uint32_t L = 0, R = 0;
     for (uint8_t l = 0, i = 0, j = 0; l < k; ++l)
     {
@@ -55,60 +54,64 @@ uint64_t RC6::F(const uint64_t half_block, const uint8_t) const
 
 void RC6::encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
 {
-    uint32_t A = L >> 32;
-    uint32_t B = L & 0xFFFFFFFF;
-    uint32_t C = R >> 32;
-    uint32_t D = R & 0xFFFFFFFF;
+    std::array<uint32_t, 4> encoded_parts = {{
+        static_cast<uint32_t>(L >> 32),
+        static_cast<uint32_t>(L & 0xFFFFFFFF),
+        static_cast<uint32_t>(R >> 32),
+        static_cast<uint32_t>(R & 0xFFFFFFFF)
+    }};
 
-    B += subkeys[0];
-    D += subkeys[1];
+    encoded_parts[1] += subkeys[0];
+    encoded_parts[3] += subkeys[1];
     for (uint8_t i = 1; i <= rounds; ++i)
     {
+        const uint32_t u = F(encoded_parts[3], 0);
+        const uint32_t t = F(encoded_parts[1], 0);
         const uint8_t j = i * 2;
-        uint32_t t = F(B, 0);
-        const uint32_t u = F(D, 0);
-        A = Bits::rotateLeft(A ^ t, u % 32) + subkeys[j];
-        C = Bits::rotateLeft(C ^ u, t % 32) + subkeys[j + 1];
-        t = A;
-        A = B;
-        B = C;
-        C = D;
-        D = t;
+        encoded_parts[0] = Bits::rotateLeft(encoded_parts[0] ^ t, u % 32) + subkeys[j];
+        encoded_parts[2] = Bits::rotateLeft(encoded_parts[2] ^ u, t % 32) + subkeys[j + 1];
+        
+        for(uint8_t j = 0; j < 3; ++j)
+        {
+            std::iter_swap(encoded_parts.begin() + j, encoded_parts.begin() + j + 1);
+        }
     }
-    A += subkeys[(rounds * 2) + 2];
-    C += subkeys[(rounds * 2) + 3];
+    encoded_parts[0] += subkeys[(rounds * 2) + 2];
+    encoded_parts[2] += subkeys[(rounds * 2) + 3];
 
-    L = (static_cast<uint64_t> (A) << 32) | B;
-    R = (static_cast<uint64_t> (C) << 32) | D;
+    L = (static_cast<uint64_t> (encoded_parts[0]) << 32) | encoded_parts[1];
+    R = (static_cast<uint64_t> (encoded_parts[2]) << 32) | encoded_parts[3];
 }
 
 void RC6::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
 {
-    uint32_t A = L >> 32;
-    uint32_t B = L & 0xFFFFFFFF;
-    uint32_t C = R >> 32;
-    uint32_t D = R & 0xFFFFFFFF;
+    std::array<uint32_t, 4> encoded_parts = {{
+        static_cast<uint32_t>(L >> 32),
+        static_cast<uint32_t>(L & 0xFFFFFFFF),
+        static_cast<uint32_t>(R >> 32),
+        static_cast<uint32_t>(R & 0xFFFFFFFF)
+    }};
 
-    C -= subkeys[(rounds * 2) + 3];
-    A -= subkeys[(rounds * 2) + 2];
+    encoded_parts[2] -= subkeys[(rounds * 2) + 3];
+    encoded_parts[0] -= subkeys[(rounds * 2) + 2];
     for (uint8_t i = rounds; i > 0; --i)
     {
+        for(uint8_t j = 0; j < 3; ++j)
+        {
+            std::iter_swap(encoded_parts.rbegin() + j, encoded_parts.rbegin() + j + 1);
+        }
+        
+        const uint32_t u = F(encoded_parts[3], 0);
+        const uint32_t t = F(encoded_parts[1], 0);
         const uint8_t j = i * 2;
-        uint32_t t = A;
-        A = D;
-        D = C;
-        C = B;
-        B = t;
-        const uint32_t u = F(D, 0);
-        t = F(B, 0);
-        C = Bits::rotateRight((C - subkeys[j + 1]) & 0xFFFFFFFF, t % 32) ^ u;
-        A = Bits::rotateRight((A - subkeys[j]) & 0xFFFFFFFF, u % 32) ^ t;
+        encoded_parts[2] = Bits::rotateRight((encoded_parts[2] - subkeys[j + 1]) & 0xFFFFFFFF, t % 32) ^ u;
+        encoded_parts[0] = Bits::rotateRight((encoded_parts[0] - subkeys[j]) & 0xFFFFFFFF, u % 32) ^ t;
     }
-    D -= subkeys[1];
-    B -= subkeys[0];
+    encoded_parts[3] -= subkeys[1];
+    encoded_parts[1] -= subkeys[0];
 
-    L = (static_cast<uint64_t> (A) << 32) | B;
-    R = (static_cast<uint64_t> (C) << 32) | D;
+    L = (static_cast<uint64_t> (encoded_parts[0]) << 32) | encoded_parts[1];
+    R = (static_cast<uint64_t> (encoded_parts[2]) << 32) | encoded_parts[3];
 }
 
 void RC6::processEncodingCurrentBlock()
@@ -117,10 +120,12 @@ void RC6::processEncodingCurrentBlock()
     uint64_t R = (static_cast<uint64_t> (current_block[2]) << 32) | current_block[3];
     encodeFeistelRounds(L, R, 0);
 
-    current_block[0] = L >> 32;
-    current_block[1] = L & 0xFFFFFFFF;
-    current_block[2] = R >> 32;
-    current_block[3] = R & 0xFFFFFFFF;
+    current_block = {
+        static_cast<uint32_t>(L >> 32),
+        static_cast<uint32_t>(L & 0xFFFFFFFF),
+        static_cast<uint32_t>(R >> 32),
+        static_cast<uint32_t>(R & 0xFFFFFFFF)
+    };
 }
 
 void RC6::processDecodingCurrentBlock()
@@ -129,8 +134,10 @@ void RC6::processDecodingCurrentBlock()
     uint64_t R = (static_cast<uint64_t> (current_block[2]) << 32) | current_block[3];
     decodeFeistelRounds(L, R, 0);
 
-    current_block[0] = L >> 32;
-    current_block[1] = L & 0xFFFFFFFF;
-    current_block[2] = R >> 32;
-    current_block[3] = R & 0xFFFFFFFF;
+    current_block = {
+        static_cast<uint32_t>(L >> 32),
+        static_cast<uint32_t>(L & 0xFFFFFFFF),
+        static_cast<uint32_t>(R >> 32),
+        static_cast<uint32_t>(R & 0xFFFFFFFF)
+    };
 }

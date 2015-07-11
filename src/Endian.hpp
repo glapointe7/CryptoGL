@@ -11,7 +11,7 @@ namespace CryptoGL
     template <class Endianess, typename UInteger>
     class Endian
     {
-    static_assert(std::is_integral<UInteger>::value, "Type 'UInteger' must be an integral type.");
+    static_assert(std::is_integral<UInteger>::value, "Endian: The type 'UInteger' must be an integral type.");
     using UIntVector = std::vector<UInteger>;
 
     public:

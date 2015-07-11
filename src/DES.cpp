@@ -28,15 +28,12 @@ void DES::setKey(const BytesVector &key)
 
 void DES::generateSubkeys()
 {
-    const uint64_t key_bits = BigEndian64::toInteger(key);
-
     // We permute with the PC1 table to get a 56-bits key.
-    const uint64_t K56 = getBitsFromTable<56>(key_bits, PC1, 64);
+    const uint64_t K56 = getBitsFromTable<56>(BigEndian64::toInteger(key), PC1, 64);
 
     // Split the 56-bits key in 2 28-bits sub-keys.
-    uint64_t K1, K2;
-    K1 = K56 & 0xFFFFFFF;
-    K2 = (K56 & 0xFFFFFFF0000000) >> 28;
+    uint64_t K1 = K56 & 0xFFFFFFF;
+    uint64_t K2 = (K56 & 0xFFFFFFF0000000) >> 28;
 
     subkeys.reserve(16);
     for (uint8_t i = 0; i < 16; ++i)
@@ -56,22 +53,19 @@ uint64_t DES::getSubstitution(const uint64_t &key_mixed)
     std::array<uint8_t, 8> sboxes;
     for (uint8_t i = 0, j = 42; i < 8; ++i, j -= 6)
     {
-        sboxes[i] = (key_mixed >> j) & 0x3F;
+        sboxes[i] = (key_mixed >> j)  % 64;
     }
 
     uint64_t s_block = 0;
     for (uint8_t i = 0, j = 28; i < 8; ++i, j -= 4)
     {
-        const uint64_t row = (sboxes[i] & 0x1) | ((sboxes[i] >> 5) << 1);
-        const uint64_t col = (sboxes[i] >> 1) & 0xF;
+        const uint64_t row = (sboxes[i] % 2) | ((sboxes[i] >> 5) << 1);
+        const uint64_t col = (sboxes[i] >> 1) % 16;
         s_block |= (S[i][row][col] << j);
     }
 
     return s_block;
 }
-
-// Feistel function F 
-// Param : 32-bits data and a 48-bits sub-key.
 
 uint64_t DES::F(const uint64_t data, const uint8_t round) const
 {

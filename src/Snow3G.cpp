@@ -7,17 +7,6 @@ using namespace CryptoGL;
 constexpr std::array<uint8_t, 256> Snow3G::SQ;
 constexpr std::array<uint8_t, 256> Snow3G::SR;
 
-void Snow3G::setKey(const BytesVector &key)
-{
-    const uint8_t key_size = key.size();
-    if (key_size != 16)
-    {
-        throw BadKeyLength("Your key has to be 128 bits length.", key_size);
-    }
-    this->key = key;
-    keySetup();
-}
-
 void Snow3G::setIV(const BytesVector &IV)
 {
     const uint8_t iv_size = IV.size();
@@ -43,14 +32,22 @@ constexpr uint8_t Snow3G::mulxPow(const uint8_t V, const uint8_t i, const uint8_
 
 uint32_t Snow3G::mulAlpha(const uint8_t c)
 {
-    return BigEndian32::toInteger({mulxPow(c, 23, 0xA9), mulxPow(c, 245, 0xA9),
-        mulxPow(c, 48, 0xA9), mulxPow(c, 239, 0xA9)});
+    return BigEndian32::toInteger({
+        mulxPow(c, 23, 0xA9), 
+        mulxPow(c, 245, 0xA9),
+        mulxPow(c, 48, 0xA9), 
+        mulxPow(c, 239, 0xA9)
+    });
 }
 
 uint32_t Snow3G::divAlpha(const uint8_t c)
 {
-    return BigEndian32::toInteger({mulxPow(c, 16, 0xA9), mulxPow(c, 39, 0xA9),
-        mulxPow(c, 6, 0xA9), mulxPow(c, 64, 0xA9)});
+    return BigEndian32::toInteger({
+        mulxPow(c, 16, 0xA9), 
+        mulxPow(c, 39, 0xA9),
+        mulxPow(c, 6, 0xA9), 
+        mulxPow(c, 64, 0xA9)
+    });
 }
 
 void Snow3G::nextState(const uint32_t v)
@@ -64,8 +61,11 @@ void Snow3G::nextState(const uint32_t v)
 
 uint32_t Snow3G::getv() const
 {
-    return ((state[0] << 8) & 0xFFFFFF00) ^ mulAlpha(state[0] >> 24) ^ state[2]
-            ^ ((state[11] >> 8) & 0x00FFFFFF) ^ divAlpha(state[11] & 0xFF);
+    return ((state[0] << 8) & 0xFFFFFF00) 
+         ^ mulAlpha(state[0] >> 24) 
+         ^ state[2]
+         ^ ((state[11] >> 8) & 0x00FFFFFF) 
+         ^ divAlpha(state[11] & 0xFF);
 }
 
 void Snow3G::initializationMode(const uint32_t F)
@@ -81,8 +81,10 @@ void Snow3G::keystreamMode()
 uint32_t Snow3G::S(const uint32_t w, const std::array<uint8_t, 256> &sbox, const uint8_t c)
 {
     const std::array<uint8_t, 4> SBox = {{
-         sbox[w >> 24], sbox[(w >> 16) & 0xFF],
-         sbox[(w >> 8) & 0xFF], sbox[w & 0xFF]
+         sbox[w >> 24], 
+         sbox[(w >> 16) & 0xFF],
+         sbox[(w >> 8) & 0xFF], 
+         sbox[w & 0xFF]
     }};
 
     const BytesVector r = {

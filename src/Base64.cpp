@@ -1,7 +1,5 @@
 #include "Base64.hpp"
 
-#include "String.hpp"
-
 #include "exceptions/BadChar.hpp"
 
 using namespace CryptoGL;
@@ -9,36 +7,39 @@ using namespace CryptoGL;
 ClassicalType Base64::encode(const BytesVector &clear_data)
 {
     const uint32_t clear_len = clear_data.size();
-    ClassicalType crypted(((clear_len / 3) + (clear_len % 3 > 0)) * 4);
-
-    uint32_t temp;
-    auto cursor = clear_data.begin();
-    for (uint32_t idx = 0; idx < clear_len / 3; ++idx)
+    ClassicalType crypted;
+    crypted.reserve(((clear_len / 3) + (clear_len % 3 > 0)) * 4);
+    
+    for (uint32_t i = 0; i < clear_len - 2; i += 3)
     {
-        temp = (*cursor++) << 16;
-        temp += (*cursor++) << 8;
-        temp += (*cursor++);
+        uint32_t temp = 0;
+        for(int8_t j = 2; j >= 0; --j)
+        {
+            temp += clear_data[i + 2 - j] << (8 * j);
+        }
 
-        crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x00FC0000) >> 18]);
-        crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x0003F000) >> 12]);
-        crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x00000FC0) >> 6 ]);
-        crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x0000003F)]);
+        crypted.push_back(ClassicalType::base64_alphabet[(temp & 0xFC0000) >> 18]);
+        crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x03F000) >> 12]);
+        crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x000FC0) >> 6]);
+        crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x00003F)]);
     }
+    
+    uint32_t temp = 0;
     switch (clear_len % 3)
     {
         case 1:
-            temp = (*cursor++) << 16;
-            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x00FC0000) >> 18]);
-            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x0003F000) >> 12]);
+            temp = clear_data.back() << 16;
+            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0xFC0000) >> 18]);
+            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x03F000) >> 12]);
             crypted.append(2, pad_character);
             break;
 
         case 2:
-            temp = (*cursor++) << 16;
-            temp += (*cursor++) << 8;
-            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x00FC0000) >> 18]);
-            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x0003F000) >> 12]);
-            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x00000FC0) >> 6 ]);
+            temp = clear_data[clear_len - 2] << 16;
+            temp += clear_data.back() << 8;
+            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0xFC0000) >> 18]);
+            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x03F000) >> 12]);
+            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x000FC0) >> 6]);
             crypted.push_back(pad_character);
             break;
     }
@@ -53,35 +54,32 @@ BytesVector Base64::decode(const ClassicalType &cipher_data)
     {
         throw Exception("The cipher must be a multiple of 4 to be a valid base64.");
     }
-    uint32_t padding = 0;
-    if (!cipher_data.empty())
-    {
-        if (cipher_data[cipher_len - 1] == pad_character)
-            padding++;
-        if (cipher_data[cipher_len - 2] == pad_character)
-            padding++;
-    }
-    // Setup a vector to hold the result.
+        
     BytesVector decrypted;
-    decrypted.reserve(((cipher_len / 4) * 3) - padding);
+    decrypted.reserve(((cipher_len / 4) * 3) - countPaddingCharacters(cipher_data));
 
     uint32_t temp = 0;
-    auto cursor = cipher_data.begin();
-    const auto cursor_end = cipher_data.end();
-    while (cursor < cursor_end)
+    for(uint32_t j = 0; j < cipher_len; j += 4)
     {
         for (uint8_t i = 0; i < 4; ++i)
         {
+            const char byte = cipher_data[i + j];
             temp <<= 6;
-            if (*cursor >= 0x41 && *cursor <= 0x5A) // This area will need tweaking if
-                temp |= *cursor - 0x41; // you are using an alternate alphabet
-            else if (*cursor >= 0x61 && *cursor <= 0x7A)
-                temp |= *cursor - 0x47;
-            else if (*cursor >= 0x30 && *cursor <= 0x39)
-                temp |= *cursor + 0x04;
+            if (byte >= 0x41 && byte <= 0x5A) 
+            {
+                temp |= byte - 0x41;
+            }
+            else if (byte >= 0x61 && byte <= 0x7A)
+            {
+                temp |= byte - 0x47;
+            }
+            else if (byte >= 0x30 && byte <= 0x39)
+            {
+                temp |= byte + 0x04;
+            }
             else
             {
-                switch (*cursor)
+                switch (byte)
                 {
                     case 0x2B:
                         temp |= 0x3E; //change to 0x2D for URL alphabet
@@ -93,7 +91,7 @@ BytesVector Base64::decode(const ClassicalType &cipher_data)
 
                     case pad_character:
                     {
-                        switch (cursor_end - cursor)
+                        switch(cipher_len - i - j)
                         {
                             case 1:
                                 decrypted.push_back((temp >> 16) & 0xFF);
@@ -110,14 +108,34 @@ BytesVector Base64::decode(const ClassicalType &cipher_data)
                     }
 
                     default:
-                        throw BadChar("Invalid character in base 64.", *cursor);
+                        throw BadChar("Invalid character in base 64.", byte);
                 }
             }
-            cursor++;
         }
         decrypted.push_back((temp >> 16) & 0xFF);
         decrypted.push_back((temp >> 8) & 0xFF);
         decrypted.push_back((temp) & 0xFF);
     }
+    
     return decrypted;
+}
+
+uint8_t Base64::countPaddingCharacters(const ClassicalType &cipher_data)
+{
+    uint8_t padding = 0;
+    if (!cipher_data.empty())
+    {
+        const uint32_t cipher_len = cipher_data.size();
+        if (cipher_data[cipher_len - 1] == pad_character)
+        {
+            padding++;
+        }
+        
+        if (cipher_data[cipher_len - 2] == pad_character)
+        {
+            padding++;
+        }
+    }
+    
+    return padding;
 }

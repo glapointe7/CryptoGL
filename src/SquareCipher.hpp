@@ -5,10 +5,7 @@
 #define SQUARECIPHER_HPP
 
 #include "StringCipherWithStringKey.hpp"
-#include "String.hpp"
 #include "CipherGrid.hpp"
-
-#include <vector>
 
 namespace CryptoGL
 {
@@ -28,8 +25,6 @@ namespace CryptoGL
 
        /* Default : Create 5X5 grid with unique english uppercase letters with the key. */
        explicit SquareCipher(const KeyType &key) : SquareCipher(key, ClassicalType::grid_uppercase_fr) {}
-
-       virtual ~SquareCipher() {}
 
        virtual ClassicalType encode(const ClassicalType &) = 0;
        virtual ClassicalType decode(const ClassicalType &) = 0;

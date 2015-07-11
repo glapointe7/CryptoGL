@@ -21,8 +21,6 @@ namespace CryptoGL
         {
             setKey(key);
         }
-        
-        virtual ~Transposition() { }
 
         virtual ClassicalType encode(const ClassicalType &) override = 0;
         virtual ClassicalType decode(const ClassicalType &) override = 0;

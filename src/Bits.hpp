@@ -76,7 +76,9 @@ namespace CryptoGL
        }
 
        /* Number of trailing zeros : return the largest integer 'count' such that 
-          2^count divide value. */
+        *  2^count divide value.
+        * 
+        */
        template <typename Integer>
        constexpr uint8_t ntz(const Integer value)
        {

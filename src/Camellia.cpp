@@ -31,8 +31,7 @@ void Camellia::setKey(const BytesVector &key)
 void Camellia::generateSubkeys()
 {
     BytesVector Kr, Kl;
-    Kr.reserve(16);
-    Kl.reserve(16);
+    Kr.reserve(24);
 
     switch (key.size())
     {
@@ -59,23 +58,25 @@ void Camellia::generateSubkeys()
             break;
     }
 
-    BytesVector K = Kl.Xor(Kr);
+    const BytesVector K = Kl.Xor(Kr);
     uint64_t K1 = BigEndian64::toIntegerRange(K, 0, 8);
-    uint64_t K2 = BigEndian64::toIntegerRange(K, 8);
-    K2 ^= F(K1 ^ key_sigma[0], 0);
+    uint64_t K2 = BigEndian64::toIntegerRange(K, 8) ^ F(K1 ^ key_sigma[0], 0);
+    
     K1 ^= F(K2 ^ key_sigma[1], 1);
 
     K1 ^= BigEndian64::toIntegerRange(Kl, 0, 8);
     K2 ^= BigEndian64::toIntegerRange(Kl, 8);
     K2 ^= F(K1 ^ key_sigma[2], 2);
     K1 ^= F(K2 ^ key_sigma[3], 3);
-
+    
     BytesVector Ka = BigEndian64::toBytesVector(K1);
-    Ka.reserve(16);
     Ka.extend(BigEndian64::toBytesVector(K2));
 
-    /* Prewhitening phase. */
-    Kw.reserve(4);
+    processPrewhiteningPhase(Ka, Kl, Kr);
+}
+
+void Camellia::processPrewhiteningPhase(const BytesVector &Ka, const BytesVector &Kl, const BytesVector &Kr)
+{
     Kw.extend(BigEndian64::toIntegersVector(Kl));
     subkeys.reserve(rounds);
 
@@ -85,14 +86,12 @@ void Camellia::generateSubkeys()
     }
     else
     {
-        K = Ka.Xor(Kr);
-        K1 = BigEndian64::toIntegerRange(K, 0, 8);
-        K2 = BigEndian64::toIntegerRange(K, 8);
-        K2 ^= F(K1 ^ key_sigma[4], 4);
+        const BytesVector K = Ka.Xor(Kr);
+        uint64_t K1 = BigEndian64::toIntegerRange(K, 0, 8);
+        const uint64_t K2 = BigEndian64::toIntegerRange(K, 8) ^ F(K1 ^ key_sigma[4], 4);
         K1 ^= F(K2 ^ key_sigma[5], 5);
 
         BytesVector Kb = BigEndian64::toBytesVector(K1);
-        Kb.reserve(16);
         Kb.extend(BigEndian64::toBytesVector(K2));
 
         extendSubKeysNot18Rounds(Ka, Kl, Kr, Kb);
@@ -124,29 +123,39 @@ void Camellia::extendSubKeysNot18Rounds(const BytesVector &Ka, const BytesVector
     subkeys.extend(BigEndian64::toIntegersVector(Kb));
     subkeys.extend(BigEndian64::toIntegersVector(Kr.rotateLeft(15)));
     subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(15)));
+    
     Ke.extend(BigEndian64::toIntegersVector(Kr.rotateLeft(30)));
+    
     subkeys.extend(BigEndian64::toIntegersVector(Kb.rotateLeft(30)));
     subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(45)));
     subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(45)));
+    
     Ke.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(60)));
+    
     subkeys.extend(BigEndian64::toIntegersVector(Kr.rotateLeft(60)));
     subkeys.extend(BigEndian64::toIntegersVector(Kb.rotateLeft(60)));
     subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(77)));
+    
     Ke.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(77)));
+    
     subkeys.extend(BigEndian64::toIntegersVector(Kr.rotateLeft(94)));
     subkeys.extend(BigEndian64::toIntegersVector(Ka.rotateLeft(94)));
     subkeys.extend(BigEndian64::toIntegersVector(Kl.rotateLeft(111)));
+    
     Kw.extend(BigEndian64::toIntegersVector(Kb.rotateLeft(111)));
 }
 
-// Used technic of P.29 from the specs.
 uint64_t Camellia::F(const uint64_t half_block, const uint8_t) const
 {
-    uint32_t D = SP1110[half_block & 0xFF] ^ SP0222[(half_block >> 24) & 0xFF]
-            ^ SP3033[(half_block >> 16) & 0xFF] ^ SP4404[(half_block >> 8) & 0xFF];
+    uint32_t D = SP1110[half_block & 0xFF] 
+               ^ SP0222[(half_block >> 24) & 0xFF]
+               ^ SP3033[(half_block >> 16) & 0xFF] 
+               ^ SP4404[(half_block >> 8) & 0xFF];
 
-    uint32_t U = SP1110[(half_block >> 56) & 0xFF] ^ SP0222[(half_block >> 48) & 0xFF]
-            ^ SP3033[(half_block >> 40) & 0xFF] ^ SP4404[(half_block >> 32) & 0xFF];
+    uint32_t U = SP1110[(half_block >> 56) & 0xFF] 
+               ^ SP0222[(half_block >> 48) & 0xFF]
+               ^ SP3033[(half_block >> 40) & 0xFF] 
+               ^ SP4404[(half_block >> 32) & 0xFF];
 
     D ^= U;
     U = D ^ Bits::rotateRight(U, 8);
@@ -154,27 +163,27 @@ uint64_t Camellia::F(const uint64_t half_block, const uint8_t) const
     return (static_cast<uint64_t> (D) << 32) | U;
 }
 
-uint64_t Camellia::FL(const uint64_t &half_block, const uint64_t &subkey)
+constexpr uint64_t Camellia::FL(const uint64_t &half_block, const uint64_t &subkey)
 {
-    uint32_t Xl = half_block >> 32;
-    uint32_t Xr = half_block & 0xFFFFFFFF;
     const uint32_t Kl = subkey >> 32;
     const uint32_t Kr = subkey & 0xFFFFFFFF;
+    
+    uint32_t Xl = half_block >> 32;
+    const uint32_t Xr = (half_block & 0xFFFFFFFF) ^ Bits::rotateLeft(Xl & Kl, 1);
 
-    Xr ^= Bits::rotateLeft(Xl & Kl, 1);
     Xl ^= Xr | Kr;
 
     return (static_cast<uint64_t> (Xl) << 32) | Xr;
 }
 
-uint64_t Camellia::FLInverse(const uint64_t &half_block, const uint64_t &subkey)
+constexpr uint64_t Camellia::FLInverse(const uint64_t &half_block, const uint64_t &subkey)
 {
-    uint32_t Xl = half_block >> 32;
-    uint32_t Xr = half_block & 0xFFFFFFFF;
-    const uint32_t Kl = subkey >> 32;
     const uint32_t Kr = subkey & 0xFFFFFFFF;
+    const uint32_t Kl = subkey >> 32;
+    
+    uint32_t Xr = half_block & 0xFFFFFFFF;
+    const uint32_t Xl = (half_block >> 32) ^ (Xr | Kr);
 
-    Xl ^= Xr | Kr;
     Xr ^= Bits::rotateLeft(Xl & Kl, 1);
 
     return (static_cast<uint64_t> (Xl) << 32) | Xr;

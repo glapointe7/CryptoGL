@@ -15,7 +15,6 @@ namespace CryptoGL
     {
     public:
         RedefenceZigzag(const KeyType &key, const KeyType &key_levels);
-        virtual ~RedefenceZigzag() { }
 
         ClassicalType encode(const ClassicalType &clear_text) override;
         ClassicalType decode(const ClassicalType &cipher_text) override;

@@ -17,7 +17,6 @@ namespace CryptoGL
 
     protected:
         StringCipherWithPermutationKey() { }
-        virtual ~StringCipherWithPermutationKey() { }
 
         KeyType key;
 

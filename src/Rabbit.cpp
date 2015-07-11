@@ -15,9 +15,9 @@ void Rabbit::setIV(const BytesVector &IV)
         throw BadIVLength("Your IV has to be 8 bytes length.", iv_size);
     }
 
-    this->IV = IV;
+    this->IV = std::move(IV);
 
-    if (!IV.empty())
+    if (!this->IV.empty())
     {
         IVSetup();
     }

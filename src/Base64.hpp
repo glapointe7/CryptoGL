@@ -17,6 +17,8 @@ namespace CryptoGL
 
     private:
         static constexpr uint8_t pad_character = '=';
+        
+        static uint8_t countPaddingCharacters(const ClassicalType &cipher_data);
     };
 }
 

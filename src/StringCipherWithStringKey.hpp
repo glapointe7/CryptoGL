@@ -22,7 +22,6 @@ namespace CryptoGL
 
     protected:
         StringCipherWithStringKey() { }
-        virtual ~StringCipherWithStringKey() { }
 
         void checkKey(const KeyType &key) const;
 

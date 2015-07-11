@@ -174,7 +174,7 @@ namespace CryptoGL
           DataTypeVector hash(this->getIV());
           for (uint64_t i = 0; i < bytes_len; i += InputBlockSize)
           {              
-             this->current_block = this->getInputBlocks(bytes, i);    
+             this->current_block = this->convertToIntegersBlock(bytes, i);    
              compress(hash);
           }
 

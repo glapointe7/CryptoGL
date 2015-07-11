@@ -13,11 +13,8 @@ void CAST256::setKey(const BytesVector &key)
     const uint8_t keylen = key.size();
     constexpr std::array<uint8_t, 5> allowed_key_lengths = {{16, 20, 24, 28, 32}};
 
-    const bool is_valid_length = std::any_of(std::begin(allowed_key_lengths), std::end(allowed_key_lengths), [&](const uint8_t i) {
-        return i == keylen;
-    });
-
-    if (!is_valid_length)
+    const auto it = std::find(allowed_key_lengths.begin(), allowed_key_lengths.end(), keylen); 
+    if (it == allowed_key_lengths.end())
     {
         throw BadKeyLength("Your key length has to be of length 16, 20, 24, 28 or 32 bytes.", keylen);
     }
@@ -62,7 +59,6 @@ void CAST256::generateSubkeys()
     constexpr uint8_t Mr = 17;
     uint32_t Cm = 0x5A827999;
     uint8_t Cr = 19;
-
     for (uint8_t i = 0; i < 192; ++i)
     {
         Tm.push_back(Cm);
@@ -90,22 +86,25 @@ void CAST256::generateSubkeys()
 constexpr uint32_t CAST256::F1(const uint32_t D, const uint32_t Km, const uint32_t Kr)
 {
     const uint32_t I = Bits::rotateLeft(Km + D, Kr);
+    
     return ((S[0][getByteFromInteger<3>(I)] ^ S[1][getByteFromInteger<2>(I)])
-            - S[2][getByteFromInteger<1>(I)]) +S[3][getByteFromInteger<0>(I)];
+           - S[2][getByteFromInteger<1>(I)]) + S[3][getByteFromInteger<0>(I)];
 }
 
 constexpr uint32_t CAST256::F2(const uint32_t D, const uint32_t Km, const uint32_t Kr)
 {
     const uint32_t I = Bits::rotateLeft(Km ^ D, Kr);
+    
     return ((S[0][getByteFromInteger<3>(I)] - S[1][getByteFromInteger<2>(I)])
-            + S[2][getByteFromInteger<1>(I)]) ^ S[3][getByteFromInteger<0>(I)];
+           + S[2][getByteFromInteger<1>(I)]) ^ S[3][getByteFromInteger<0>(I)];
 }
 
 constexpr uint32_t CAST256::F3(const uint32_t D, const uint32_t Km, const uint32_t Kr)
 {
     const uint32_t I = Bits::rotateLeft(Km - D, Kr);
+    
     return ((S[0][getByteFromInteger<3>(I)] + S[1][getByteFromInteger<2>(I)])
-            ^ S[2][getByteFromInteger<1>(I)]) -S[3][getByteFromInteger<0>(I)];
+           ^ S[2][getByteFromInteger<1>(I)]) - S[3][getByteFromInteger<0>(I)];
 }
 
 void CAST256::processEncodingCurrentBlock()
@@ -114,6 +113,7 @@ void CAST256::processEncodingCurrentBlock()
     {
         applyForwardQuadRound(i);
     }
+    
     for (uint8_t i = 6; i < rounds; ++i)
     {
         applyReverseQuadRound(i);
@@ -126,6 +126,7 @@ void CAST256::processDecodingCurrentBlock()
     {
         applyForwardQuadRound(i);
     }
+    
     for (int8_t i = 5; i >= 0; --i)
     {
         applyReverseQuadRound(i);

@@ -22,11 +22,11 @@ namespace CryptoGL
         
         /* Default constructor : default on ECB mode of encryption with no IV. */
         explicit Twofish(const BytesVector &key)
-            : Twofish(key, OperationModes::ECB,{}) { }
+            : Twofish(key, OperationModes::ECB, {}) { }
         
         /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
         Twofish(const BytesVector &key, const OperationModes mode)
-            : Twofish(key, mode,{}) { }
+            : Twofish(key, mode, {}) { }
 
         void setKey(const BytesVector &key) override;
 
@@ -40,6 +40,8 @@ namespace CryptoGL
         void decodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_t) const override;
 
         static uint32_t h(const uint32_t X, const BytesVector &L);
+        
+        void applyWhitening(const uint8_t whitening_const);
 
         /* The 4 key-dependant S-Boxes s_i. */
         BytesVector s;

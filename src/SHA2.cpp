@@ -67,7 +67,6 @@ void SHA512_t::makeNewIV(const BytesVector &code)
 
    // Encode the string 'SHA-512/224' or 'SHA-512/256'.
    BytesVector data = {0x53, 0x48, 0x41, 0x2D, 0x35, 0x31, 0x32, 0x2F};
-   data.reserve(11);
    data.extend(code);
    const BytesVector answer = S.encode(data);
 
@@ -78,7 +77,6 @@ void SHA512_t::makeNewIV(const BytesVector &code)
 BytesVector SHA512_224::getOutput(const UInt64Vector &hash) const
 {
    BytesVector output = BigEndian64::toBytesVector(hash, 3);
-   output.reserve(output_size);
    output.extend(BigEndian64::toBytesVector(hash[3]), 0, 4);
 
    return output;

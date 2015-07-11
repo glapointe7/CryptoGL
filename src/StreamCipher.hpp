@@ -21,8 +21,6 @@ namespace CryptoGL
     protected:
         /* Initial Vector */
         BytesVector IV;
-        
-        virtual ~StreamCipher() { }
 
         virtual BytesVector encode(const BytesVector &) override = 0;
 

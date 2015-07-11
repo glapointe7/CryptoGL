@@ -78,7 +78,7 @@ void Twofish::generateSubkeys()
     BytesVector Me, Mo;
     Me.reserve(k4);
     Mo.reserve(k4);
-    BytesMatrix S(k, BytesVector(4, 0));
+    BytesMatrix S(k, std::move(BytesVector(4, 0)));
 
     // w(x) = x^8 + x^6 + x^3 + x^2 + 1 over GF(2). (101001101)_2 = 0x14D.
     constexpr uint16_t WX = 0x14D;
@@ -128,6 +128,14 @@ UInt32Vector Twofish::F(const UInt32Vector half_block, const uint8_t round) cons
     };
 }
 
+void Twofish::applyWhitening(const uint8_t whitening_const)
+{
+    for (uint8_t i = 0; i < 4; ++i)
+    {
+        current_block[i] ^= subkeys[i + whitening_const];
+    }
+}
+
 void Twofish::encodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_t) const
 {
     for (uint8_t i = 0; i < rounds; ++i)
@@ -135,6 +143,7 @@ void Twofish::encodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_
         const UInt32Vector F_result = F(R, i);
         L[0] = Bits::rotateRight(L[0] ^ F_result[0], 1);
         L[1] = Bits::rotateLeft(L[1], 1) ^ F_result[1];
+        
         std::swap(R[0], L[0]);
         std::swap(R[1], L[1]);
     }
@@ -146,7 +155,8 @@ void Twofish::decodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_
     {
         std::swap(R[0], L[0]);
         std::swap(R[1], L[1]);
-        const UInt32Vector F_result = F(R, i);
+        
+        const UInt32Vector F_result = std::move(F(R, i));
         L[0] = Bits::rotateLeft(L[0], 1) ^ F_result[0];
         L[1] = Bits::rotateRight(L[1] ^ F_result[1], 1);
     }
@@ -155,44 +165,28 @@ void Twofish::decodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_
 void Twofish::processEncodingCurrentBlock()
 {
     // Input whitening.
-    for (uint8_t i = 0; i < 4; ++i)
-    {
-        current_block[i] ^= subkeys[i];
-    }
+    applyWhitening(0);
 
     UInt32Vector R = {current_block[0], current_block[1]};
     UInt32Vector L = {current_block[2], current_block[3]};
     encodeFeistelRounds(L, R, 0);
-    current_block[0] = L[0];
-    current_block[1] = L[1];
-    current_block[2] = R[0];
-    current_block[3] = R[1];
+    
+    current_block = {L[0], L[1], R[0], R[1]};
 
     // Output whitening.
-    for (uint8_t i = 0; i < 4; ++i)
-    {
-        current_block[i] ^= subkeys[i + 4];
-    }
+    applyWhitening(4);
 }
 
 void Twofish::processDecodingCurrentBlock()
 {
     // Input whitening.
-    for (uint8_t i = 0; i < 4; ++i)
-    {
-        current_block[i] ^= subkeys[i + 4];
-    }
+    applyWhitening(4);
 
     UInt32Vector L = {current_block[0], current_block[1]};
     UInt32Vector R = {current_block[2], current_block[3]};
     decodeFeistelRounds(L, R, 0);
-    current_block[0] = R[0];
-    current_block[1] = R[1];
-    current_block[2] = L[0];
-    current_block[3] = L[1];
+    
+    current_block = {R[0], R[1], L[0], L[1]};
 
-    for (uint8_t i = 0; i < 4; ++i)
-    {
-        current_block[i] ^= subkeys[i];
-    }
+    applyWhitening(0);
 }

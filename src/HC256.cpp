@@ -28,12 +28,15 @@ void HC256::setIV(const BytesVector &IV)
 
 constexpr uint32_t HC256::g(const uint32_t x, const uint32_t y, const UInt32Vector &K)
 {
-    return (Bits::rotateRight(x, 10) ^ Bits::rotateRight(y, 23)) +K[(x ^ y) & 0x3FF];
+    return (Bits::rotateRight(x, 10) ^ Bits::rotateRight(y, 23)) + K[(x ^ y) & 0x3FF];
 }
 
 constexpr uint32_t HC256::h(const uint32_t x, const UInt32Vector &K)
 {
-    return K[x & 0xFF] + K[256 + ((x >> 8) & 0xFF)] + K[512 + ((x >> 16) & 0xFF)] + K[768 + (x >> 24)];
+    return K[x & 0xFF] 
+         + K[256 + ((x >> 8) & 0xFF)] 
+         + K[512 + ((x >> 16) & 0xFF)] 
+         + K[768 + (x >> 24)];
 }
 
 void HC256::keySetup()
@@ -46,12 +49,12 @@ void HC256::keySetup()
 
     for (uint8_t i = 0; i < 32; i += 4)
     {
-        W.push_back(BigEndian32::toInteger(BytesVector(key.begin() + i, key.begin() + i + 4)));
+        W.push_back(BigEndian32::toIntegerRange(key, i, i + 4));
     }
 
     for (uint8_t i = 0; i < 32; i += 4)
     {
-        W.push_back(BigEndian32::toInteger(BytesVector(IV.begin() + i, IV.begin() + i + 4)));
+        W.push_back(BigEndian32::toIntegerRange(IV, i, i + 4));
     }
 
     for (uint16_t i = 16; i < 2560; ++i)
