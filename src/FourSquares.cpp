@@ -20,10 +20,10 @@ ClassicalType FourSquares::encode(const ClassicalType &clear_text)
 
     for (uint32_t i = 0; i < clear_len; i += 2)
     {
-        const auto coord_grid1 = grid3.getCharCoordinates(clear_text[i]);
-        const auto coord_grid2 = grid4.getCharCoordinates(clear_text[i + 1]);
-        crypted.push_back(grid.at(coord_grid1.second, coord_grid2.first));
-        crypted.push_back(grid2.at(coord_grid2.second, coord_grid1.first));
+        const Coordinates coords_grid1 = grid3.getCharCoordinates(clear_text[i]);
+        const Coordinates coords_grid2 = grid4.getCharCoordinates(clear_text[i + 1]);
+        crypted.push_back(grid.at(coords_grid1.y, coords_grid2.x));
+        crypted.push_back(grid2.at(coords_grid2.y, coords_grid1.x));
     }
 
     return crypted;
@@ -39,10 +39,10 @@ ClassicalType FourSquares::decode(const ClassicalType &cipher_text)
 
     for (uint32_t i = 0; i < cipher_len; i += 2)
     {
-        const auto coord_grid3 = grid.getCharCoordinates(cipher_text[i]);
-        const auto coord_grid4 = grid2.getCharCoordinates(cipher_text[i + 1]);
-        decrypted.push_back(grid3.at(coord_grid3.second, coord_grid4.first));
-        decrypted.push_back(grid4.at(coord_grid4.second, coord_grid3.first));
+        const Coordinates coords_grid3 = grid.getCharCoordinates(cipher_text[i]);
+        const Coordinates coords_grid4 = grid2.getCharCoordinates(cipher_text[i + 1]);
+        decrypted.push_back(grid3.at(coords_grid3.y, coords_grid4.x));
+        decrypted.push_back(grid4.at(coords_grid4.y, coords_grid3.x));
     }
 
     return decrypted;

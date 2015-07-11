@@ -27,16 +27,16 @@ void CipherGrid::setGrid(ClassicalType chars)
 
 Coordinates CipherGrid::getCharCoordinates(const char c) const
 {
-    Coordinates coords(0, 0);
+    Coordinates coords;
     for (const auto &str : grid)
     {
         const String::size_type found = str.find(c);
         if (found != String::npos)
         {
-            coords.first = found;
+            coords.x = found;
             return coords;
         }
-        coords.second++;
+        coords.y++;
     }
 
     return coords;
@@ -47,7 +47,7 @@ void CipherGrid::setDimension(const ClassicalType &alpha)
     const uint8_t alpha_size = alpha.length();
     if (!Maths::isPerfectSquare(alpha_size))
     {
-        throw BadAlphaLength("The length of your alphabet should be a perfect square.", alpha_size);
+        throw BadAlphaLength("CipherGrid (setDimension): The length of your alphabet should be a perfect square.", alpha_size);
     }
 
     // get grid dimension from alphabet assuming length is a perfect square by the previous IF.

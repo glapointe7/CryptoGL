@@ -6,19 +6,23 @@
 
 namespace CryptoGL
 {
-    /* 2D Coordinates (x, y) used for cipher grids. */
-    struct GridCoordinates 
+    using Grid = Vector<ClassicalType>;
+    
+    /* 2D Coordinates (x, y) used for cipher grids, where x,y < 256 are positive integers. */
+    struct Coordinates 
     {
-        GridCoordinates(const uint8_t x, const uint8_t y)
-            : x(x), y(y) { };
+        Coordinates(const uint8_t x, const uint8_t y)
+            : x(x), y(y) { }
+            
+        Coordinates()
+            : Coordinates(0, 0) { }
         
         uint8_t x = 0; 
         uint8_t y = 0;
     };
     
-    using Coordinates = /*GridCoordinates;*/std::pair<uint8_t, uint8_t>;
-    using Grid = Vector<ClassicalType>;
-
+    
+    /* Class for the creation of a square grid where each cell contains a character. */
     class CipherGrid
     {
     public:

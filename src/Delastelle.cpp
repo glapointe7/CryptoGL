@@ -28,7 +28,7 @@ ClassicalType Delastelle::encode(const ClassicalType &clear_text)
         block.push_back(ClassicalType(full_text.substr(i, block_len)));
     }
 
-    // Under each letter, we note coordinates of letters verticaly.
+    // Under each letter, we note coordinates of letters vertically.
     ClassicalType crypted(clear_len);
     for (const auto &str : block)
     {
@@ -37,9 +37,9 @@ ClassicalType Delastelle::encode(const ClassicalType &clear_text)
         Y.reserve(block_len);
         for (const auto c : str)
         {
-            const auto coords = grid.getCharCoordinates(c);
-            X.push_back(coords.first);
-            Y.push_back(coords.second);
+            const Coordinates coords = grid.getCharCoordinates(c);
+            X.push_back(coords.x);
+            Y.push_back(coords.y);
         }
 
         if ((block_len % 2) == 0)
@@ -81,8 +81,8 @@ ClassicalType Delastelle::decode(const ClassicalType &cipher_text)
     for (const auto c : cipher_text)
     {
         const auto coords = grid.getCharCoordinates(c);
-        chars_coords.push_back(coords.second);
-        chars_coords.push_back(coords.first);
+        chars_coords.push_back(coords.y);
+        chars_coords.push_back(coords.x);
     }
 
     ClassicalType decrypted(cipher_len / 2);

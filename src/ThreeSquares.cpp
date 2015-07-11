@@ -21,13 +21,13 @@ ClassicalType ThreeSquares::encode(const ClassicalType &clear_text)
 
     for (uint32_t i = 0; i < clear_len; i += 2)
     {
-        const auto coord_grid1 = grid.getCharCoordinates(clear_text[i]);
-        const auto coord_grid2 = grid2.getCharCoordinates(clear_text[i + 1]);
+        const Coordinates coords_grid1 = grid.getCharCoordinates(clear_text[i]);
+        const Coordinates coords_grid2 = grid2.getCharCoordinates(clear_text[i + 1]);
         const uint8_t random_index = rand() % grid.getDimension();
 
-        crypted.push_back(grid.at(random_index, coord_grid1.first));
-        crypted.push_back(grid3.at(coord_grid1.second, coord_grid2.first));
-        crypted.push_back(grid2.at(coord_grid2.second, random_index));
+        crypted.push_back(grid.at(random_index, coords_grid1.x));
+        crypted.push_back(grid3.at(coords_grid1.y, coords_grid2.x));
+        crypted.push_back(grid2.at(coords_grid2.y, random_index));
     }
 
     return crypted;
@@ -42,12 +42,12 @@ ClassicalType ThreeSquares::decode(const ClassicalType &cipher_text)
 
     for (uint32_t i = 0; i < cipher_len; i += 3)
     {
-        const auto coord_grid1 = grid.getCharCoordinates(cipher_text[i]);
-        const auto coord_grid2 = grid2.getCharCoordinates(cipher_text[i + 2]);
-        const auto coord_grid3 = grid3.getCharCoordinates(cipher_text[i + 1]);
+        const Coordinates coords_grid1 = grid.getCharCoordinates(cipher_text[i]);
+        const Coordinates coords_grid2 = grid2.getCharCoordinates(cipher_text[i + 2]);
+        const Coordinates coords_grid3 = grid3.getCharCoordinates(cipher_text[i + 1]);
 
-        decrypted.push_back(grid.at(coord_grid3.second, coord_grid1.second));
-        decrypted.push_back(grid2.at(coord_grid2.first, coord_grid3.first));
+        decrypted.push_back(grid.at(coords_grid3.y, coords_grid1.y));
+        decrypted.push_back(grid2.at(coords_grid2.x, coords_grid3.x));
     }
 
     return decrypted;

@@ -22,9 +22,9 @@ ClassicalType Collon::encode(const ClassicalType &clear_text)
     // Each characters in (x,y) is encoded by the digram AB such that A = (a,y) et B = (x,b).
     for (const auto c : clear_text)
     {
-        const auto coords = grid.getCharCoordinates(c);
-        line1.push_back(grid.at(coords.second, 0));
-        line2.push_back(grid.at(grid.getDimension() - 1, coords.first));
+        const Coordinates coords = grid.getCharCoordinates(c);
+        line1.push_back(grid.at(coords.y, 0));
+        line2.push_back(grid.at(grid.getDimension() - 1, coords.x));
     }
 
     // The text is then read in blocks. For exemple, for a block of length 3, we have
@@ -65,9 +65,9 @@ ClassicalType Collon::decode(const ClassicalType &cipher_text)
     ClassicalType decrypted(line_len);
     for (uint32_t i = 0; i < line_len; ++i)
     {
-        const auto A = grid.getCharCoordinates(line1[i]);
-        const auto B = grid.getCharCoordinates(line2[i]);
-        decrypted.push_back(grid.at(A.second, B.first));
+        const Coordinates line1_coords = grid.getCharCoordinates(line1[i]);
+        const Coordinates line2_coords = grid.getCharCoordinates(line2[i]);
+        decrypted.push_back(grid.at(line1_coords.y, line2_coords.x));
     }
 
     return decrypted;

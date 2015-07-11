@@ -17,14 +17,14 @@ ClassicalType TwoSquares::encode(const ClassicalType &clear_text)
 
     for (uint32_t i = 0; i < clear_len; i += 2)
     {
-        const auto coord_grid1 = grid.getCharCoordinates(clear_text[i]);
-        const auto coord_grid2 = grid2.getCharCoordinates(clear_text[i + 1]);
+        const Coordinates coords_grid1 = grid.getCharCoordinates(clear_text[i]);
+        const Coordinates coords_grid2 = grid2.getCharCoordinates(clear_text[i + 1]);
 
         // If the chars are on the same line, then there are encrypted by swapping them.
-        if (coord_grid1.second != coord_grid2.second)
+        if (coords_grid1.y != coords_grid2.y)
         {
-            crypted.push_back(grid2.at(coord_grid1.second, coord_grid2.first));
-            crypted.push_back(grid.at(coord_grid2.second, coord_grid1.first));
+            crypted.push_back(grid2.at(coords_grid1.y, coords_grid2.x));
+            crypted.push_back(grid.at(coords_grid2.y, coords_grid1.x));
         }
         else
         {
@@ -43,14 +43,14 @@ ClassicalType TwoSquares::decode(const ClassicalType &cipher_text)
 
     for (uint32_t i = 0; i < cipher_len; i += 2)
     {
-        const auto coord_grid1 = grid.getCharCoordinates(cipher_text[i + 1]);
-        const auto coord_grid2 = grid2.getCharCoordinates(cipher_text[i]);
+        const Coordinates coords_grid1 = grid.getCharCoordinates(cipher_text[i + 1]);
+        const Coordinates coords_grid2 = grid2.getCharCoordinates(cipher_text[i]);
 
         // If the chars are on the same line, then there are encrypted by swapping them.
-        if (coord_grid1.second != coord_grid2.second)
+        if (coords_grid1.y != coords_grid2.y)
         {
-            decrypted.push_back(grid.at(coord_grid2.second, coord_grid1.first));
-            decrypted.push_back(grid2.at(coord_grid1.second, coord_grid2.first));
+            decrypted.push_back(grid.at(coords_grid2.y, coords_grid1.x));
+            decrypted.push_back(grid2.at(coords_grid1.y, coords_grid2.x));
         }
         else
         {

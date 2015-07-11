@@ -36,8 +36,8 @@ ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
     for (const auto c : clear_text)
     {
         const Coordinates coords = grid_key.getCharCoordinates(c);
-        first_encoding.push_back(code[coords.second]);
-        first_encoding.push_back(code[coords.first]);
+        first_encoding.push_back(code[coords.y]);
+        first_encoding.push_back(code[coords.x]);
     }
 
     TranspositionCompleteColumns TCC(getPermutationKey());

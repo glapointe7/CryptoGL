@@ -7,9 +7,9 @@ ClassicalType Polybius::encode(const ClassicalType &clear_text)
     ClassicalType crypted(clear_text.length() * 2);
     for (const auto c : clear_text)
     {
-        const Coordinates pos = grid.getCharCoordinates(c);
-        crypted.push_back(pos.second + '1');
-        crypted.push_back(pos.first + '1');
+        const Coordinates coords = grid.getCharCoordinates(c);
+        crypted.push_back(coords.y + '1');
+        crypted.push_back(coords.x + '1');
     }
 
     return crypted;
@@ -22,8 +22,8 @@ ClassicalType Polybius::decode(const ClassicalType &cipher_text)
 
     for (uint32_t i = 0; i < cipher_len; i += 2)
     {
-        const Coordinates pos = std::make_pair(cipher_text[i] - '1', cipher_text[i + 1] - '1');
-        decrypted.push_back(grid.at(pos.first, pos.second));
+        const Coordinates coords(cipher_text[i] - '1', cipher_text[i + 1] - '1');
+        decrypted.push_back(grid.at(coords.x, coords.y));
     }
 
     return decrypted;
