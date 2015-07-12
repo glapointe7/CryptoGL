@@ -157,9 +157,7 @@ namespace CryptoGL
 
        /* Default constructor : no salt provided. */
        Blake(const DataTypeVector &IV, const uint8_t rounds, const uint8_t output_size) 
-          : Blake(IV, DataTypeVector(4, 0), rounds, output_size) {}
-
-       virtual ~Blake() {} 
+          : Blake(IV, DataTypeVector(4, 0), rounds, output_size) {} 
 
     public:   
        BytesVector encode(const BytesVector &message) override

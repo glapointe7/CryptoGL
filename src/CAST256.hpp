@@ -1,6 +1,6 @@
 /*
  * Source : http://www.ime.usp.br/~rt/cast256/CAST-256.pdf
- * Should be a generalised Feistel Network.
+ * Should be a generalized Feistel Network.
  */
 #ifndef CAST256_HPP
 #define CAST256_HPP

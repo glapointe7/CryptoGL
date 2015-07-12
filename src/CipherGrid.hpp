@@ -29,7 +29,9 @@ namespace CryptoGL
         CipherGrid() { }
 
         CipherGrid(ClassicalType key, const ClassicalType &alpha);
-        explicit CipherGrid(const ClassicalType &alpha) : CipherGrid("", alpha) { }
+        
+        explicit CipherGrid(const ClassicalType &alpha) 
+            : CipherGrid("", alpha) { }
 
         /* Build the grid with the string 'chars' and the dimension set given. */
         void setGrid(ClassicalType chars);
