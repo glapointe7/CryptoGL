@@ -106,7 +106,7 @@ These algorithms are [using a BigInteger library created by Matt McCutchen](http
 #### Other tools
 
 * Base64
-* Square matrices over the modular integers (Z_n) 
+* Square matrices over the modular integers $\mathbb{Z}_n$
 * Functions composition 
 * Big and little endian conversion 
 * Various mathematical tools
