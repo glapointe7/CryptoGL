@@ -1,8 +1,8 @@
 #include "Scream.hpp"
 
 #include "MathematicalTools.hpp"
-#include "Endian.hpp"
 #include "Bits.hpp"
+#include "Endian.hpp"
 #include "FunctionComposition.hpp"
 
 #include "exceptions/BadKeyLength.hpp"

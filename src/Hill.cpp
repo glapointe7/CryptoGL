@@ -45,7 +45,7 @@ ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix &K) co
         {
             pos.push_back(alpha.find(data[i + j]));
         }
-        const UInt32Vector cipher_pos(std::move(K.multiply(pos)));
+        const UInt32Vector cipher_pos(K.multiply(pos));
 
         for (const auto x : cipher_pos)
         {

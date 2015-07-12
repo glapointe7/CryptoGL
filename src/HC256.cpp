@@ -41,27 +41,18 @@ constexpr uint32_t HC256::h(const uint32_t x, const UInt32Vector &K)
 
 void HC256::keySetup()
 {
-    P.reserve(1024);
-    Q.reserve(1024);
-
-    UInt32Vector W;
+    UInt32Vector W = BigEndian32::toIntegersVector(key); 
     W.reserve(2560);
-
-    for (uint8_t i = 0; i < 32; i += 4)
-    {
-        W.push_back(BigEndian32::toIntegerRange(key, i, i + 4));
-    }
-
-    for (uint8_t i = 0; i < 32; i += 4)
-    {
-        W.push_back(BigEndian32::toIntegerRange(IV, i, i + 4));
-    }
+    
+    W.extend(BigEndian32::toIntegersVector(IV));
 
     for (uint16_t i = 16; i < 2560; ++i)
     {
         W.push_back(F2(W[i - 2]) + W[i - 7] + F1(W[i - 15]) + W[i - 16] + i);
     }
 
+    P.reserve(1024);
+    Q.reserve(1024);
     for (uint16_t i = 512; i < 1536; ++i)
     {
         P.push_back(W[i]);

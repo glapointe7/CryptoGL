@@ -39,12 +39,13 @@ uint32_t SEAL::gamma(SHA1 &G, UInt32Vector &block, const uint32_t index, uint32_
 void SEAL::keySetup()
 {
     // The key is the new IV for SHA-1.
-    IV = BigEndian32::toIntegersVector(key);
+    IV = BigEndian32::toIntegersVector(std::move(key));
     uint32_t previous_index = 0xFFFFFFFF;
     SHA1 G;
 
     /* Block of 16 bytes used by the gamma function. */
-    UInt32Vector block(16);
+    UInt32Vector block;
+    block.reserve(16);
 
     T.reserve(512);
     for (uint16_t i = 0; i < 512; ++i)

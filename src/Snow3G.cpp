@@ -125,18 +125,22 @@ void Snow3G::keySetup()
 
     constexpr uint32_t MAX_UINT32_CONSTANT = std::numeric_limits<uint32_t>::max();
     state.resize(16);
+    
     state[15] = K[3] ^ Iv[0];
     state[14] = K[2];
     state[13] = K[1];
     state[12] = K[0] ^ Iv[1];
+    
     state[11] = K[3] ^ MAX_UINT32_CONSTANT;
     state[10] = K[2] ^ MAX_UINT32_CONSTANT ^ Iv[2];
     state[9] = K[1] ^ MAX_UINT32_CONSTANT ^ Iv[3];
     state[8] = K[0] ^ MAX_UINT32_CONSTANT;
+    
     state[7] = K[3];
     state[6] = K[2];
     state[5] = K[1];
     state[4] = K[0];
+    
     state[3] = K[3] ^ MAX_UINT32_CONSTANT;
     state[2] = K[2] ^ MAX_UINT32_CONSTANT;
     state[1] = K[1] ^ MAX_UINT32_CONSTANT;

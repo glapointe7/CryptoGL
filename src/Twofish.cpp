@@ -78,7 +78,7 @@ void Twofish::generateSubkeys()
     BytesVector Me, Mo;
     Me.reserve(k4);
     Mo.reserve(k4);
-    BytesMatrix S(k, std::move(BytesVector(4, 0)));
+    BytesMatrix S(k, BytesVector(4, 0));
 
     // w(x) = x^8 + x^6 + x^3 + x^2 + 1 over GF(2). (101001101)_2 = 0x14D.
     constexpr uint16_t WX = 0x14D;
@@ -156,7 +156,7 @@ void Twofish::decodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_
         std::swap(R[0], L[0]);
         std::swap(R[1], L[1]);
         
-        const UInt32Vector F_result = std::move(F(R, i));
+        const UInt32Vector F_result = F(R, i);
         L[0] = Bits::rotateLeft(L[0], 1) ^ F_result[0];
         L[1] = Bits::rotateRight(L[1] ^ F_result[1], 1);
     }

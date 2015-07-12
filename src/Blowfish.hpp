@@ -20,10 +20,12 @@ namespace CryptoGL
         {
             setKey(key);
         }
+        
         /* Delegate constructor : default on ECB mode of encryption which requires no IV. */
         explicit Blowfish(const BytesVector &key)
             : Blowfish(key, OperationModes::ECB, {}) { }
-        /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
+        
+            /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
         Blowfish(const BytesVector &key, const OperationModes mode)
             : Blowfish(key, mode,{}) { }
 
@@ -38,17 +40,15 @@ namespace CryptoGL
         void encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;
         void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;
 
-        static constexpr std::array<uint32_t, 18> P = {
-            {0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344, 0xa4093822, 0x299f31d0,
-                0x082efa98, 0xec4e6c89, 0x452821e6, 0x38d01377, 0xbe5466cf, 0x34e90c6c,
-                0xc0ac29b7, 0xc97c50dd, 0x3f84d5b5, 0xb5470917, 0x9216d5d9, 0x8979fb1b}
-        };
+        static constexpr std::array<uint32_t, 18> P = {{
+            0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344, 0xa4093822, 0x299f31d0,
+            0x082efa98, 0xec4e6c89, 0x452821e6, 0x38d01377, 0xbe5466cf, 0x34e90c6c,
+            0xc0ac29b7, 0xc97c50dd, 0x3f84d5b5, 0xb5470917, 0x9216d5d9, 0x8979fb1b
+        }};
 
         // Other following constants from the decimals of PI.
-        std::array<std::array<uint32_t, 256>, 4> sbox = {
-            {
-                {
-                    {0xd1310ba6, 0x98dfb5ac, 0x2ffd72db, 0xd01adfb7, 0xb8e1afed, 0x6a267e96,
+        std::array<std::array<uint32_t, 256>, 4> sbox = {{
+                {{0xd1310ba6, 0x98dfb5ac, 0x2ffd72db, 0xd01adfb7, 0xb8e1afed, 0x6a267e96,
                         0xba7c9045, 0xf12c7f99, 0x24a19947, 0xb3916cf7, 0x0801f2e2, 0x858efc16,
                         0x636920d8, 0x71574e69, 0xa458fea3, 0xf4933d7e, 0x0d95748f, 0x728eb658,
                         0x718bcd58, 0x82154aee, 0x7b54a41d, 0xc25a59b5, 0x9c30d539, 0x2af26013,

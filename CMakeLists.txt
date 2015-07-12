@@ -4,8 +4,8 @@ set (Project_Name CryptoGL)
 
 project (${Project_Name})
 
-#set (CMAKE_CXX_COMPILER             "/usr/clang_3_3/bin/clang++")
-set (CMAKE_CXX_FLAGS                "-Winline -Wall -Werror -pedantic-errors -pthread -std=c++11")
+set (CMAKE_CXX_COMPILER             "/usr/bin/clang++-3.6")
+set (CMAKE_CXX_FLAGS                "-Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z")
 
 # Add the source files code (CPP, HPP and the CMakeLists.txt).
 add_subdirectory (src)
