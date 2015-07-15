@@ -27,7 +27,7 @@ void Hill::setKey(const Int32Matrix &key)
 
     if (!Maths::areCoprimes(this->key.det(), this->key.getModulo()))
     {
-        throw MatrixKeyNotReversible("Your matrix key should be reversible to be able to decode the message.");
+        throw MatrixKeyNotReversible("Your matrix key must be reversible to be able to decode the message.");
     }
 }
 
@@ -45,7 +45,7 @@ ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix &K) co
         {
             pos.push_back(alpha.find(data[i + j]));
         }
-        const UInt32Vector cipher_pos(K.multiply(pos));
+        const UInt32Vector cipher_pos = K.multiply(pos);
 
         for (const auto x : cipher_pos)
         {

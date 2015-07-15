@@ -1,4 +1,4 @@
-# Introduction
+# Summary
 
 CryptoGL is a C++ library containing classical ciphers, symmetric ciphers, asymmetric ciphers, hash functions, sponge functions, checksum functions and some other tools for strings, vectors, grids, manipulation of bits and mathematical purpuses. All the CPP and HPP files are found in the `src` folder.
 

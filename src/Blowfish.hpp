@@ -27,7 +27,7 @@ namespace CryptoGL
         
             /* Constructor with no IV needed : Only ECB and CTR modes are accepted. */
         Blowfish(const BytesVector &key, const OperationModes mode)
-            : Blowfish(key, mode,{}) { }
+            : Blowfish(key, mode, {}) { }
 
         void setKey(const BytesVector &key) override;
 

@@ -70,25 +70,17 @@ void Rabbit::keySetup()
     /* Generate initial state variables */
     constexpr uint8_t SHIFT_CONSTANT = 16;
     constexpr uint32_t HIGH_UINT_MOD_CONSTANT = 0xFFFF0000;
-    constexpr uint32_t LOW_UINT_MOD_CONSTANT = 0xFFFF;
-    states[0] = subkeys[0];
-    states[2] = subkeys[1];
-    states[4] = subkeys[2];
-    states[6] = subkeys[3];
-    states[1] = (subkeys[3] << SHIFT_CONSTANT) | (subkeys[2] >> SHIFT_CONSTANT);
-    states[3] = (subkeys[0] << SHIFT_CONSTANT) | (subkeys[3] >> SHIFT_CONSTANT);
-    states[5] = (subkeys[1] << SHIFT_CONSTANT) | (subkeys[0] >> SHIFT_CONSTANT);
-    states[7] = (subkeys[2] << SHIFT_CONSTANT) | (subkeys[1] >> SHIFT_CONSTANT);
-
-    /* Generate initial counter values */
-    counters[0] = Bits::rotateLeft(subkeys[2], SHIFT_CONSTANT);
-    counters[2] = Bits::rotateLeft(subkeys[3], SHIFT_CONSTANT);
-    counters[4] = Bits::rotateLeft(subkeys[0], SHIFT_CONSTANT);
-    counters[6] = Bits::rotateLeft(subkeys[1], SHIFT_CONSTANT);
-    counters[1] = (subkeys[0] & HIGH_UINT_MOD_CONSTANT) | (subkeys[1] & LOW_UINT_MOD_CONSTANT);
-    counters[3] = (subkeys[1] & HIGH_UINT_MOD_CONSTANT) | (subkeys[2] & LOW_UINT_MOD_CONSTANT);
-    counters[5] = (subkeys[2] & HIGH_UINT_MOD_CONSTANT) | (subkeys[3] & LOW_UINT_MOD_CONSTANT);
-    counters[7] = (subkeys[3] & HIGH_UINT_MOD_CONSTANT) | (subkeys[0] & LOW_UINT_MOD_CONSTANT);
+    constexpr uint16_t LOW_UINT_MOD_CONSTANT = 0xFFFF;
+    
+    for(uint8_t i = 0; i < 4; ++i)
+    {
+        const uint8_t j = 2 * i;
+        states[j] = subkeys[i];
+        states[j + 1] = (subkeys[(i + 3) % 4] << SHIFT_CONSTANT) | (subkeys[(i + 2) % 4] >> SHIFT_CONSTANT);
+        
+        counters[j] = Bits::rotateLeft(subkeys[(i + 2) % 4], SHIFT_CONSTANT);
+        counters[j + 1] = (subkeys[i] & HIGH_UINT_MOD_CONSTANT) | (subkeys[(i + 1) % 4] & LOW_UINT_MOD_CONSTANT);
+    }
 
     counter_carry_bit = 0;
 

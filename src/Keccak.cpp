@@ -16,7 +16,11 @@ void Keccak::applyRound(const uint8_t round_index)
     // Theta step.
     for (uint8_t x = 0; x < 5; ++x)
     {
-        C[x] = state[x][0] ^ state[x][1] ^ state[x][2] ^ state[x][3] ^ state[x][4];
+        C[x] = state[x][0] 
+             ^ state[x][1] 
+             ^ state[x][2] 
+             ^ state[x][3] 
+             ^ state[x][4];
     }
 
     for (uint8_t x = 0; x < 5; ++x)
@@ -67,10 +71,11 @@ void Keccak::applyAbsorbingPhase(const BytesVector &padded_message)
 {
     // If bitrate = 1024, then we iterate on blocks of 128 bytes + 72 bytes of 0.
     const uint64_t pad_len = padded_message.size();
+    const uint16_t capacity_bytes = capacity / 8;
     for (uint64_t i = 0; i < pad_len; i += block_size)
     {
-        BytesVector block(padded_message.begin() + i, padded_message.begin() + i + block_size);
-        block.insert(block.end(), capacity / 8, 0);
+        BytesVector block = padded_message.range(i, i + block_size);
+        block.insert(block.end(), capacity_bytes, 0);
 
         const UInt64Vector Pi = LittleEndian64::toIntegersVector(block);
         for (uint8_t x = 0; x < 5; ++x)
@@ -105,5 +110,5 @@ BytesVector Keccak::applySqueezingPhase()
         }
     }
 
-    return BytesVector(output.begin(), output.begin() + (output_size / 8));
+    return output.range(0, output_size / 8);
 }

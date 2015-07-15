@@ -21,53 +21,54 @@ void Scream::setIV(const BytesVector &IV)
     {
         throw BadIVLength("Your IV has to be 128 bits length.", iv_size);
     }
+    
     this->IV = IV;
 }
 
 void Scream_S::makeS1()
 {
-    S1.reserve(256);
     for (uint16_t x = 0; x < 256; ++x)
     {
-        S1.push_back(composeSBox(16, 16, x));
+        S1[x] = composeSBox(16, 16, x);
     }
 }
 
 void Scream_0::makeS1()
 {
-    S1 = BytesVector(sbox.begin(), sbox.end());
+    S1 = sbox;
 }
 
 void Scream::makeS2()
 {
-    S2.reserve(256);
     for (uint16_t x = 0; x < 256; ++x)
     {
-        S2.push_back(S1[x ^ 0x15]);
+        S2[x] = S1[x ^ 0x15];
     }
 }
 
 void Scream::makeT0()
 {
-    // Value 0x1C3 comes from the polynom x^8 + x^7 + x^6 + x + 1 which belong to GF(2).
+    // Value 0x1C3 comes from the polynomial x^8 + x^7 + x^6 + x + 1 which belong to GF(2).
     constexpr uint16_t GF2_CONSTANT = 0x1C3;
-    T0.reserve(256);
     for (uint16_t x = 0; x < 256; ++x)
     {
-        T0.push_back((S1[x] << 24) | (Maths::GFMultiply(2, S1[x], GF2_CONSTANT) << 16)
-                | (S2[x] << 8) | Maths::GFMultiply(3, S2[x], GF2_CONSTANT));
+        T0[x] = (S1[x] << 24) 
+              | (Maths::GFMultiply(2, S1[x], GF2_CONSTANT) << 16)
+              | (S2[x] << 8) 
+              | Maths::GFMultiply(3, S2[x], GF2_CONSTANT);
     }
 }
 
 void Scream::makeT1()
 {
-    // Value 0x1C3 comes from the polynom x^8 + x^7 + x^6 + x + 1 which belong to GF(2).
+    // Value 0x1C3 comes from the polynomial x^8 + x^7 + x^6 + x + 1 which belong to GF(2).
     constexpr uint16_t GF2_CONSTANT = 0x1C3;
-    T1.reserve(256);
     for (uint16_t x = 0; x < 256; ++x)
     {
-        T1.push_back((Maths::GFMultiply(2, S1[x], GF2_CONSTANT) << 24) | (S1[x] << 16)
-                | (Maths::GFMultiply(3, S2[x], GF2_CONSTANT) << 8) | S2[x]);
+        T1[x] = (Maths::GFMultiply(2, S1[x], GF2_CONSTANT) << 24) 
+              | (S1[x] << 16)
+              | (Maths::GFMultiply(3, S2[x], GF2_CONSTANT) << 8) 
+              | S2[x];
     }
 }
 
@@ -83,15 +84,17 @@ uint8_t Scream::composeSBox(const uint8_t n, const uint8_t max, const uint8_t x)
 
 BytesVector Scream::F(const BytesVector &X)
 {
-    std::array<uint32_t, 4> u = {
-        {T0[X[0]] ^ T1[X[13]], T0[X[4]] ^ T1[X[1]],
-         T0[X[8]] ^ T1[X[5]], T0[X[12]] ^ T1[X[9]]}
-    };
+    std::array<uint32_t, 4> u = {{
+        T0[X[0]] ^ T1[X[13]], T0[X[4]] ^ T1[X[1]],
+        T0[X[8]] ^ T1[X[5]], T0[X[12]] ^ T1[X[9]]
+    }};
 
-    std::array<uint16_t, 4> bytes23 = {
-        {static_cast<uint16_t> (u[0]), static_cast<uint16_t> (u[1]),
-            static_cast<uint16_t> (u[2]), static_cast<uint16_t> (u[3])}
-    };
+    std::array<uint16_t, 4> bytes23 = {{
+        static_cast<uint16_t> (u[0]), 
+        static_cast<uint16_t> (u[1]),
+        static_cast<uint16_t> (u[2]), 
+        static_cast<uint16_t> (u[3])
+    }};
     
     for (uint8_t i = 0; i < 4; ++i)
     {
@@ -102,12 +105,12 @@ BytesVector Scream::F(const BytesVector &X)
     }
 
     // Second half-round.
-    std::array<uint32_t, 4> x = {
-        {T0[u[2] >> 24] ^ T1[(u[1] >> 16) & 0xFF],
-            T0[u[3] >> 24] ^ T1[(u[2] >> 16) & 0xFF],
-            T0[u[0] >> 24] ^ T1[(u[3] >> 16) & 0xFF],
-            T0[u[1] >> 24] ^ T1[(u[0] >> 16) & 0xFF]}
-    };
+    std::array<uint32_t, 4> x = {{
+        T0[u[2] >> 24] ^ T1[(u[1] >> 16) & 0xFF],
+        T0[u[3] >> 24] ^ T1[(u[2] >> 16) & 0xFF],
+        T0[u[0] >> 24] ^ T1[(u[3] >> 16) & 0xFF],
+        T0[u[1] >> 24] ^ T1[(u[0] >> 16) & 0xFF]
+    }};
 
     BytesVector out;
     out.reserve(16);
@@ -130,14 +133,11 @@ void Scream::IVSetup()
     Y = compose<2>(F) (Z.Xor(subkeys[3]));
     const BytesVector A = compose<2>(F) (Y.Xor(subkeys[5]));
     X = F(A.Xor(subkeys[7]));
-    BytesVector B(X);
 
-    for (uint8_t i = 0; i < 8; ++i)
+    for (uint8_t i = 0; i < 16; i += 2)
     {
-        const uint8_t j = i * 2;
-        B = F(B.Xor(subkeys[j]));
-        subkeys[j] = subkeys[j].Xor(A);
-        subkeys[j + 1] = subkeys[j + 1].Xor(B);
+        subkeys[i] = subkeys[i].Xor(A);
+        subkeys[i + 1] = subkeys[i + 1].Xor(F(X.Xor(subkeys[i])));
     }
 }
 
@@ -150,8 +150,8 @@ void Scream::keySetup()
     makeT1();
 
     const BytesVector B = F(key.Xor(BytesVector(pi.begin(), pi.end())));
-    subkeys.reserve(16);
     BytesVector A(key);
+    subkeys.reserve(16);
     for (uint8_t i = 0; i < 16; ++i)
     {
         A = compose<4>(std::bind(&Scream::F, this, std::placeholders::_1))(A).Xor(B);
@@ -169,7 +169,7 @@ BytesVector Scream::generateKeystream()
     for (uint8_t i = 0; i < 16; ++i)
     {
         X = F(X.Xor(Y)).Xor(Z);
-        keystream.extend(X.Xor(subkeys[i % 16]));
+        keystream.extend(X.Xor(subkeys[i]));
 
         switch (i % 4)
         {
@@ -183,7 +183,7 @@ BytesVector Scream::generateKeystream()
                 std::rotate(Y.begin() + 8, Y.begin() + 12, Y.end());
                 break;
 
-            default:
+            case 3:
                 if (i < 15)
                 {
                     std::rotate(Y.begin(), Y.begin() + 5, Y.begin() + 8);
@@ -191,8 +191,8 @@ BytesVector Scream::generateKeystream()
                 }
         }
     }
-    Y = F(Y.Xor(Z));
-    Z = F(Z.Xor(Y));
+    Y = Z = F(Y.Xor(Z));
+
     subkeys[counter] = F(subkeys[counter]);
     counter = (counter + 1) % 16;
 
@@ -205,10 +205,11 @@ BytesVector Scream::encode(const BytesVector &message)
     BytesVector output;
     output.reserve(output_size);
 
-    for (uint64_t j = 0; j < output_size; j += 256)
+    constexpr uint16_t STEP_CONSTANT = 256;
+    for (uint64_t j = 0; j < output_size; j += STEP_CONSTANT)
     {
         const BytesVector keystream = generateKeystream();
-        for (uint16_t i = 0; i < 256; ++i)
+        for (uint16_t i = 0; i < STEP_CONSTANT; ++i)
         {
             const uint64_t sum_indices = i + j;
             if (output_size == sum_indices)

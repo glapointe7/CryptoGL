@@ -93,17 +93,6 @@ namespace UnitTests
 
        compare(hash, V->encode(clear_text.hexToBytes()));
     }
-
-    /*TEST(BlakeTest, encodeHMACText)
-    {
-       const std::string clear_text = "Hi There";
-       const std::vector<uint8_t> key = {0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 
-          0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B};
-       std::string hash = "87AA7CDEA5EF619D4FF0B4241A1D6CB02379F4E2CE4EC2787AD0B30545E1"
-          "7CDEDAA833B7D6B8A702038B274EAEA3F4E4BE9D914EEB61F1702E696C203A126854";
-
-       compare(hash, Vector::toHexString(S->hmacEncode(key, String::toBytes(clear_text))));
-    }*/
 }
 
 #endif

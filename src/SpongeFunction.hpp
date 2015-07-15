@@ -19,7 +19,7 @@ namespace CryptoGL
         /* Constructor with output size, capacity and bitrate given as parameters. */
         SpongeFunction(const uint16_t hash_size, const uint16_t c, const uint16_t r, const uint8_t round)
             : bitrate(r), capacity(c), width(r + c), lane_width((r + c) / 25),
-            block_size(200 * r / (r + c)), output_size(hash_size), rounds(round) { }
+              block_size(200 * r / (r + c)), output_size(hash_size), rounds(round) { }
         
         /* Default constructor : b = 1600 => r = 1024 et c = 576. */
         SpongeFunction() : SpongeFunction(512, 576, 1024, 24) { }

@@ -1,7 +1,6 @@
 #include "Nihilistes.hpp"
 
 #include "MathematicalTools.hpp"
-#include "Integer.hpp"
 
 #include "exceptions/BadChar.hpp"
 #include "exceptions/EmptyKey.hpp"

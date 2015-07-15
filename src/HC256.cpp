@@ -90,7 +90,7 @@ UInt32Vector HC256::generateKeystream()
     keySetup();
     
     UInt32Vector keystream;
-    keystream.reserve(2048);
+    keystream.reserve(4096); // 4096 = 2 * (1024 + 1024)
 
     for (uint8_t j = 0; j < 2; ++j)
     {

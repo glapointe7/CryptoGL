@@ -49,8 +49,8 @@ namespace CryptoGL
 
         BytesVector X, Y, Z;
 
-        BytesVector S1, S2;
-        UInt32Vector T0, T1;
+        std::array<uint8_t, 256> S1, S2;
+        std::array<uint32_t, 256> T0, T1;
 
         /* Constant PI for the key setup. */
         static constexpr std::array<uint8_t, 16> pi = {{

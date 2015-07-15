@@ -1,4 +1,3 @@
-
 #ifndef INTEGER_HPP
 #define INTEGER_HPP
 

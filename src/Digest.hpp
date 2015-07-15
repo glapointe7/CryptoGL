@@ -17,7 +17,7 @@ namespace Digest
         return bigIntegerToString(value);
     }
     
-    String bigIntVectorToString(const std::vector<BigInteger> &V)
+    String bigIntVectorToString(const Vector<BigInteger> &V)
     {
         String str;
         for (const auto &big_value : V)

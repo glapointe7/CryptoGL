@@ -46,10 +46,10 @@ namespace CryptoGL
         Vector(VectorType&& V) : VectorType(V) { }
         
         /* XOR each element of vector V with the elements of vector W and return the result. */
-        Vector<Type> Xor(const Vector &W) const
+        Vector Xor(const Vector &W) const
         {
             const uint64_t size = this->size();
-            Vector<Type> out;
+            Vector out;
             out.reserve(size);
 
             for (uint64_t i = 0; i < size; ++i)
@@ -61,22 +61,20 @@ namespace CryptoGL
         }
         
         /* Return a vector containing a range of values in vector V from begin to end. */
-        VectorType range(const uint64_t &begin, const uint64_t &end) const
+        Vector range(const uint64_t &begin, const uint64_t &end) const
         {
-            return VectorType(this->begin() + begin, this->begin() + end);
+            return Vector(this->begin() + begin, this->begin() + end);
         }
         
         /* Return a vector containing a range of values in vector V from begin to end of V. */
-        VectorType range(const uint64_t &begin) const
+        Vector range(const uint64_t &begin) const
         {
-            return VectorType(this->begin() + begin, this->end());
+            return Vector(this->begin() + begin, this->end());
         }
         
         /* Append the vector W at the end of V. */
         void extend(Vector W)
         {
-            // TODO Check ca en haut, et dans les autres méthodes
-            // TODO Check ca en bas
             //this->reserve(this->size() + W.size());
             this->insert(this->end(), W.begin(), W.end());
         }
@@ -93,13 +91,6 @@ namespace CryptoGL
         {
             //this->reserve(this->size() + std::distance(W.begin() + begin, W.end()));
             this->insert(this->end(), W.begin() + begin, W.end());
-        }
-       
-        /* Add the vector W at the end of V and reserve new capacity. Return the new merged vector. */
-        Vector<Type> merge(const Vector &W)
-        {
-            this->extend(W);
-            return Vector<Type>(this->begin(), this->end());
         }
         
         /* Find a value in the vector and return the position if found, -1 if not. */
@@ -125,7 +116,7 @@ namespace CryptoGL
             const uint64_t V_size = this->size();
             const uint64_t matrix_size = V_size / vector_size;
 
-            Vector<Vector < Type >> result(matrix_size);
+            Vector<Vector<Type>> result(matrix_size);
             for (uint64_t i = 0; i < V_size; i += vector_size)
             {
                 result.emplace_back(range(i, i + vector_size));
@@ -160,7 +151,7 @@ namespace CryptoGL
         /* Shift a vector of integers 'v' to the left of 'shift' bits. */
         Vector leftShift(uint32_t shift) const
         {
-            const uint8_t size_type = sizeof (Type) * 8;
+            const uint8_t size_type = sizeof(Type) * 8;
             const uint32_t v_size = this->size();
             const uint32_t start = std::min(shift / size_type, v_size);
             Vector result(range(start));
@@ -181,7 +172,7 @@ namespace CryptoGL
         
         Vector rightShift(uint32_t shift) const
         {
-            const uint8_t size_type = sizeof (Type) * 8;
+            const uint8_t size_type = sizeof(Type) * 8;
             const uint32_t v_size = this->size();
             const uint32_t start = std::min(shift / size_type, v_size);
             Vector result(start, 0);
@@ -201,7 +192,7 @@ namespace CryptoGL
         /* Rotate a vector of integers 'V' to the left of 'to_rotate' bits. */
         Vector rotateLeft(const uint32_t to_rotate) const
         {
-            const uint8_t size_type = sizeof (Type) * 8;
+            const uint8_t size_type = sizeof(Type) * 8;
             const uint8_t bytes_to_rotate = to_rotate / size_type;
             const uint8_t bits_to_shift = to_rotate % size_type;
             const uint8_t rest = size_type - bits_to_shift;
@@ -220,7 +211,7 @@ namespace CryptoGL
         /* Rotate a vector of integers 'V' to the right of 'to_rotate' bits. */
         Vector rotateRight(const uint32_t to_rotate) const
         {
-            const uint8_t size_type = sizeof (Type) * 8;
+            const uint8_t size_type = sizeof(Type) * 8;
             const uint8_t bytes_to_rotate = to_rotate / size_type;
             const uint8_t bits_to_shift = to_rotate % size_type;
             const uint8_t rest = size_type - bits_to_shift;
@@ -239,7 +230,7 @@ namespace CryptoGL
         /* Transform a vector of integers to a hexadecimal string. */
         String toHexString() const
         {
-            const uint8_t data_size = sizeof (Type) * 8;
+            const uint8_t data_size = sizeof(Type) * 8;
             const uint64_t vect_size = this->size();
             String hex_digest;
             hex_digest.reserve(vect_size * data_size / 4);

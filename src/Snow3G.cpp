@@ -14,6 +14,7 @@ void Snow3G::setIV(const BytesVector &IV)
     {
         throw BadIVLength("Your IV has to be 128 bits length.", iv_size);
     }
+    
     this->IV = IV;
 }
 
@@ -64,7 +65,7 @@ uint32_t Snow3G::getv() const
     return ((state[0] << 8) & 0xFFFFFF00) 
          ^ mulAlpha(state[0] >> 24) 
          ^ state[2]
-         ^ ((state[11] >> 8) & 0x00FFFFFF) 
+         ^ ((state[11] >> 8) & 0xFFFFFF) 
          ^ divAlpha(state[11] & 0xFF);
 }
 

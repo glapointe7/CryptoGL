@@ -12,7 +12,7 @@ namespace CryptoGL
     class Endian
     {
     static_assert(std::is_integral<UInteger>::value, "Endian: The type 'UInteger' must be an integral type.");
-    using UIntVector = std::vector<UInteger>;
+    using UIntVector = Vector<UInteger>;
 
     public:
        static UInteger toInteger(const BytesVector &bytes)

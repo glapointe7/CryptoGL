@@ -72,7 +72,6 @@ uint32_t Twofish::h(const uint32_t X, const BytesVector &L)
 
 void Twofish::generateSubkeys()
 {
-    subkeys.reserve(40);
     const uint8_t k = key.size() / 8;
     const uint8_t k4 = k * 4;
     BytesVector Me, Mo;
@@ -97,21 +96,23 @@ void Twofish::generateSubkeys()
             }
         }
     }
+    
     // s = (s_{k-1}, ..., s_0) => s in little endian and reverse order.
     s.reserve(k4);
     for (uint8_t i = 0; i < k; ++i)
     {
-        s.insert(s.end(), S[i].rbegin(), S[i].rend());
+        s.extend(S[k - i - 1]);
     }
-    std::reverse(s.begin(), s.end());
 
     // Expand the key to get the 40 subkeys.
     constexpr uint32_t rho = 0x01010101;
     constexpr uint32_t rho2 = 0x02020202;
+    subkeys.reserve(40);
     for (uint8_t i = 0; i < 20; ++i)
     {
-        const uint32_t x = h(i * rho2, Me);
-        const uint32_t y = Bits::rotateLeft(h(rho2 * i + rho, Mo), 8);
+        const uint32_t j = i * rho2;
+        const uint32_t x = h(j, Me);
+        const uint32_t y = Bits::rotateLeft(h(j + rho, Mo), 8);
         subkeys.push_back(x + y);
         subkeys.push_back(Bits::rotateLeft(x + 2 * y, 9));
     }
@@ -144,8 +145,7 @@ void Twofish::encodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_
         L[0] = Bits::rotateRight(L[0] ^ F_result[0], 1);
         L[1] = Bits::rotateLeft(L[1], 1) ^ F_result[1];
         
-        std::swap(R[0], L[0]);
-        std::swap(R[1], L[1]);
+        std::swap(R, L);
     }
 }
 
@@ -153,8 +153,7 @@ void Twofish::decodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_
 {
     for (int8_t i = rounds - 1; i >= 0; --i)
     {
-        std::swap(R[0], L[0]);
-        std::swap(R[1], L[1]);
+        std::swap(R, L);
         
         const UInt32Vector F_result = F(R, i);
         L[0] = Bits::rotateLeft(L[0], 1) ^ F_result[0];
