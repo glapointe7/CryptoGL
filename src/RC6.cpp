@@ -4,8 +4,6 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
-#include "Bits.hpp"
-
 using namespace CryptoGL;
 
 void RC6::setKey(const BytesVector &key)
@@ -40,8 +38,8 @@ void RC6::generateSubkeys()
     uint32_t L = 0, R = 0;
     for (uint8_t l = 0, i = 0, j = 0; l < k; ++l)
     {
-        L = subkeys[i] = Bits::rotateLeft((subkeys[i] + L + R) & 0xFFFFFFFF, 3);
-        R = tmp_key[j] = Bits::rotateLeft(tmp_key[j] + L + R, (L + R) % 32);
+        L = subkeys[i] = uint32::rotateLeft((subkeys[i] + L + R) & 0xFFFFFFFF, 3);
+        R = tmp_key[j] = uint32::rotateLeft(tmp_key[j] + L + R, (L + R) % 32);
         i = (i + 1) % subkeys_len;
         j = (j + 1) % tmp_key_len;
     }
@@ -49,7 +47,7 @@ void RC6::generateSubkeys()
 
 uint64_t RC6::F(const uint64_t half_block, const uint8_t) const
 {
-    return Bits::rotateLeft((half_block * ((half_block * 2) + 1)) & 0xFFFFFFFF, 5);
+    return uint32::rotateLeft((half_block * ((half_block * 2) + 1)) & 0xFFFFFFFF, 5);
 }
 
 void RC6::encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
@@ -68,8 +66,8 @@ void RC6::encodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
         const uint32_t u = F(encoded_parts[3], 0);
         const uint32_t t = F(encoded_parts[1], 0);
         const uint8_t j = i * 2;
-        encoded_parts[0] = Bits::rotateLeft(encoded_parts[0] ^ t, u % 32) + subkeys[j];
-        encoded_parts[2] = Bits::rotateLeft(encoded_parts[2] ^ u, t % 32) + subkeys[j + 1];
+        encoded_parts[0] = uint32::rotateLeft(encoded_parts[0] ^ t, u % 32) + subkeys[j];
+        encoded_parts[2] = uint32::rotateLeft(encoded_parts[2] ^ u, t % 32) + subkeys[j + 1];
         
         for(uint8_t j = 0; j < 3; ++j)
         {
@@ -104,8 +102,8 @@ void RC6::decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const
         const uint32_t u = F(encoded_parts[3], 0);
         const uint32_t t = F(encoded_parts[1], 0);
         const uint8_t j = i * 2;
-        encoded_parts[2] = Bits::rotateRight((encoded_parts[2] - subkeys[j + 1]) & 0xFFFFFFFF, t % 32) ^ u;
-        encoded_parts[0] = Bits::rotateRight((encoded_parts[0] - subkeys[j]) & 0xFFFFFFFF, u % 32) ^ t;
+        encoded_parts[2] = uint32::rotateRight((encoded_parts[2] - subkeys[j + 1]) & 0xFFFFFFFF, t % 32) ^ u;
+        encoded_parts[0] = uint32::rotateRight((encoded_parts[0] - subkeys[j]) & 0xFFFFFFFF, u % 32) ^ t;
     }
     encoded_parts[3] -= subkeys[1];
     encoded_parts[1] -= subkeys[0];

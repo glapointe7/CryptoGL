@@ -1,7 +1,5 @@
 #include "SHA1.hpp"
 
-#include "Integer.hpp"
-
 using namespace CryptoGL;
 
 constexpr std::array<uint32_t, 4> SHA1::k;

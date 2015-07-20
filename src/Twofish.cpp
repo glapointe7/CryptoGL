@@ -2,7 +2,6 @@
 
 #include <algorithm>
 
-#include "Bits.hpp"
 #include "MathematicalTools.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
@@ -11,7 +10,7 @@ using namespace CryptoGL;
 
 constexpr std::array<std::array<uint8_t, 8>, 4> Twofish::RS;
 constexpr std::array<std::array<uint8_t, 4>, 4> Twofish::MDS;
-constexpr std::array<std::array<uint8_t, 256>, 4> Twofish::Q;
+constexpr std::array<std::array<uint8_t, 256>, 2> Twofish::Q;
 
 void Twofish::setKey(const BytesVector &key)
 {
@@ -112,16 +111,16 @@ void Twofish::generateSubkeys()
     {
         const uint32_t j = i * rho2;
         const uint32_t x = h(j, Me);
-        const uint32_t y = Bits::rotateLeft(h(j + rho, Mo), 8);
+        const uint32_t y = uint32::rotateLeft(h(j + rho, Mo), 8);
         subkeys.push_back(x + y);
-        subkeys.push_back(Bits::rotateLeft(x + 2 * y, 9));
+        subkeys.push_back(uint32::rotateLeft(x + 2 * y, 9));
     }
 }
 
 UInt32Vector Twofish::F(const UInt32Vector half_block, const uint8_t round) const
 {
     const uint32_t T0 = h(half_block[0], s);
-    const uint32_t T1 = h(Bits::rotateLeft(half_block[1], 8), s);
+    const uint32_t T1 = h(uint32::rotateLeft(half_block[1], 8), s);
 
     return {
         T0 + T1 + subkeys[2 * round + 8], 
@@ -142,8 +141,8 @@ void Twofish::encodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_
     for (uint8_t i = 0; i < rounds; ++i)
     {
         const UInt32Vector F_result = F(R, i);
-        L[0] = Bits::rotateRight(L[0] ^ F_result[0], 1);
-        L[1] = Bits::rotateLeft(L[1], 1) ^ F_result[1];
+        L[0] = uint32::rotateRight(L[0] ^ F_result[0], 1);
+        L[1] = uint32::rotateLeft(L[1], 1) ^ F_result[1];
         
         std::swap(R, L);
     }
@@ -156,8 +155,8 @@ void Twofish::decodeFeistelRounds(UInt32Vector &L, UInt32Vector &R, const uint8_
         std::swap(R, L);
         
         const UInt32Vector F_result = F(R, i);
-        L[0] = Bits::rotateLeft(L[0], 1) ^ F_result[0];
-        L[1] = Bits::rotateRight(L[1] ^ F_result[1], 1);
+        L[0] = uint32::rotateLeft(L[0], 1) ^ F_result[0];
+        L[1] = uint32::rotateRight(L[1] ^ F_result[1], 1);
     }
 }
 

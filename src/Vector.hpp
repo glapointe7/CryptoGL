@@ -148,6 +148,16 @@ namespace CryptoGL
             this->at(j) = tmp;
         }
         
+        Type msb() const
+        {
+            return *(this->begin()) & 0x80;
+        }
+        
+        Type lsb() const
+        {
+            return *(this->rbegin()) & 0x01;
+        }
+        
         /* Shift a vector of integers 'v' to the left of 'shift' bits. */
         Vector leftShift(uint32_t shift) const
         {

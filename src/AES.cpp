@@ -1,7 +1,6 @@
 #include "AES.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
-#include "Bits.hpp"
 
 #include <algorithm>
 
@@ -30,9 +29,12 @@ void AES::setKey(const BytesVector &key)
 
     switch (key_len)
     {
-        case 24: rounds = 12;
+        case 24: 
+            rounds = 12;
             break;
-        case 32: rounds = 14;
+            
+        case 32: 
+            rounds = 14;
             break;
     }
     this->key = key;
@@ -162,18 +164,17 @@ constexpr uint32_t AES::subWord(const uint32_t word)
 
 void AES::generateSubkeys()
 {
-    // A confirmer qu'un 2eme reserve plus petit ne fait rien
-    //subkeys.reserve(max_round);
-    subkeys.extend(BigEndian32::toIntegersVector(key));
+    const uint8_t max_round = (rounds + 1) * 4;
+    subkeys.reserve(max_round);
+    subkeys = BigEndian32::toIntegersVector(key);
 
     const uint8_t Nk = key.size() / 4;
-    const uint8_t max_round = (rounds + 1) * 4;
     for (uint8_t i = Nk; i < max_round; ++i)
     {
         uint32_t tmp = subkeys[i - 1];
         if (!(i % Nk))
         {
-            tmp = subWord(Bits::rotateLeft(tmp, 8)) ^ round_constants[(i / Nk) - 1];
+            tmp = subWord(uint32::rotateLeft(tmp, 8)) ^ round_constants[(i / Nk) - 1];
         }
         else if (Nk > 6 && i % Nk == 4)
         {

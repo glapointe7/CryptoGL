@@ -1,7 +1,5 @@
 #include "Ripemd.hpp"
 
-#include "Bits.hpp"
-
 #include <algorithm>
 
 using namespace CryptoGL;
@@ -41,13 +39,13 @@ void Ripemd::process128_256(UInt32Vector &hash, const uint8_t j) const
             break;
     }
 
-    uint32_t tmp = Bits::rotateLeft(hash[0] + f1 + current_block[word_selection1[j]] + magic_numbers1[index], left_shift1[j], 32);
+    uint32_t tmp = uint32::rotateLeft(hash[0] + f1 + current_block[word_selection1[j]] + magic_numbers1[index], left_shift1[j], 32);
     hash[0] = hash[3];
     hash[3] = hash[2];
     hash[2] = hash[1];
     hash[1] = tmp;
 
-    tmp = Bits::rotateLeft(hash[4] + f2 + current_block[word_selection2[j]] + magic_numbers2[index], left_shift2[j], 32);
+    tmp = uint32::rotateLeft(hash[4] + f2 + current_block[word_selection2[j]] + magic_numbers2[index], left_shift2[j], 32);
     hash[4] = hash[7];
     hash[7] = hash[6];
     hash[6] = hash[5];
@@ -86,17 +84,17 @@ void Ripemd::process160_320(UInt32Vector &hash, const uint8_t j) const
             break;
     }
 
-    uint32_t tmp = Bits::rotateLeft(hash[0] + f1 + current_block[word_selection1[j]] + magic_numbers1[index], left_shift1[j], 32) + hash[4];
+    uint32_t tmp = uint32::rotateLeft(hash[0] + f1 + current_block[word_selection1[j]] + magic_numbers1[index], left_shift1[j], 32) + hash[4];
     hash[0] = hash[4];
     hash[4] = hash[3];
-    hash[3] = Bits::rotateLeft(hash[2], 10, 32);
+    hash[3] = uint32::rotateLeft(hash[2], 10, 32);
     hash[2] = hash[1];
     hash[1] = tmp;
 
-    tmp = Bits::rotateLeft(hash[5] + f2 + current_block[word_selection2[j]] + magic_numbers_big2[index], left_shift2[j], 32) + hash[9];
+    tmp = uint32::rotateLeft(hash[5] + f2 + current_block[word_selection2[j]] + magic_numbers_big2[index], left_shift2[j], 32) + hash[9];
     hash[5] = hash[9];
     hash[9] = hash[8];
-    hash[8] = Bits::rotateLeft(hash[7], 10, 32);
+    hash[8] = uint32::rotateLeft(hash[7], 10, 32);
     hash[7] = hash[6];
     hash[6] = tmp;
 }
@@ -105,7 +103,7 @@ void Ripemd128::compress(UInt32Vector &state)
 {
     UInt32Vector hash(state);
     hash.reserve(8);
-    hash.insert(hash.end(), state.begin(), state.end());
+    hash.extend(state);
     for (uint8_t j = 0; j < rounds; ++j)
     {
         process128_256(hash, j);
@@ -122,7 +120,7 @@ void Ripemd160::compress(UInt32Vector &state)
 {
     UInt32Vector hash(state);
     hash.reserve(10);
-    hash.insert(hash.end(), state.begin(), state.end());
+    hash.extend(state);
     for (uint8_t j = 0; j < rounds; ++j)
     {
         process160_320(hash, j);

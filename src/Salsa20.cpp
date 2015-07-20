@@ -1,6 +1,5 @@
 #include "Salsa20.hpp"
 
-#include "Bits.hpp"
 #include "FunctionComposition.hpp"
 #include "exceptions/BadKeyLength.hpp"
 
@@ -23,10 +22,10 @@ void Salsa20::setKey(const BytesVector &key)
 UInt32Vector Salsa20::quarterRound(const UInt32Vector &Y)
 {
     UInt32Vector Z(4, 0);
-    Z[1] = Y[1] ^ Bits::rotateLeft(Y[0] + Y[3], 7);
-    Z[2] = Y[2] ^ Bits::rotateLeft(Z[1] + Y[0], 9);
-    Z[3] = Y[3] ^ Bits::rotateLeft(Z[2] + Z[1], 13);
-    Z[0] = Y[0] ^ Bits::rotateLeft(Z[3] + Z[2], 18);
+    Z[1] = Y[1] ^ uint32::rotateLeft(Y[0] + Y[3], 7);
+    Z[2] = Y[2] ^ uint32::rotateLeft(Z[1] + Y[0], 9);
+    Z[3] = Y[3] ^ uint32::rotateLeft(Z[2] + Z[1], 13);
+    Z[0] = Y[0] ^ uint32::rotateLeft(Z[3] + Z[2], 18);
 
     return Z;
 }
@@ -121,13 +120,13 @@ UInt32Vector Salsa20::generateKeystream()
     keySetup();
     counter++;
     const UInt32Vector x = LittleEndian32::toIntegersVector(subkeys);
-    const UInt32Vector z = compose<10>(doubleRound) (x);
+    const UInt32Vector z = compose<10>(doubleRound)(x);
 
     UInt32Vector result;
     result.reserve(16);
     for (uint8_t i = 0; i < 16; ++i)
     {
-        result.push_back(Bits::bytesSwap(z[i] + x[i]));
+        result.push_back(uint32::bytesSwap(z[i] + x[i]));
     }
 
     return result;

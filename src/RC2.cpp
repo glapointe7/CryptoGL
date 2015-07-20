@@ -1,7 +1,5 @@
 #include "RC2.hpp"
 
-#include "Bits.hpp"
-
 using namespace CryptoGL;
 
 constexpr std::array<uint8_t, 256> RC2::pi_table;
@@ -22,8 +20,8 @@ void RC2::generateSubkeys()
 {
     BytesVector tmp_subkeys(key);
     tmp_subkeys.reserve(128);
+    
     const uint8_t key_len = key.size();
-
     for (uint8_t i = key_len; i < 128; ++i)
     {
         tmp_subkeys[i] = pi_table[(tmp_subkeys[i - key_len] + tmp_subkeys[i - 1]) & 0xFF];
@@ -56,7 +54,7 @@ void RC2::mixUp(const uint8_t index, const uint8_t key_index)
             + (current_block[(i - 2) % 4] & current_block[(i - 1) % 4]) 
             + (current_block[(i - 3) % 4] & ~current_block[(i - 1) % 4]);
     
-    current_block[index] = Bits::rotateLeft(current_block[index], mixup_rotation[index], 16);
+    current_block[index] = uint16::rotateLeft(current_block[index], mixup_rotation[index], 16);
 }
 
 void RC2::mash(const uint8_t index)
@@ -67,7 +65,7 @@ void RC2::mash(const uint8_t index)
 void RC2::inverseMixUp(const uint8_t index, const uint8_t key_index)
 {
     const uint8_t i = 4 + index;
-    current_block[index] = Bits::rotateRight(current_block[index], mixup_rotation[index], 16);
+    current_block[index] = uint16::rotateRight(current_block[index], mixup_rotation[index], 16);
     current_block[index] -= subkeys[key_index + index] 
             + (current_block[(i - 2) % 4] & current_block[(i - 1) % 4]) 
             + (current_block[(i - 3) % 4] & ~current_block[(i - 1) % 4]);

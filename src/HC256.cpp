@@ -28,7 +28,7 @@ void HC256::setIV(const BytesVector &IV)
 
 constexpr uint32_t HC256::g(const uint32_t x, const uint32_t y, const UInt32Vector &K)
 {
-    return (Bits::rotateRight(x, 10) ^ Bits::rotateRight(y, 23)) + K[(x ^ y) & 0x3FF];
+    return (uint32::rotateRight(x, 10) ^ uint32::rotateRight(y, 23)) + K[(x ^ y) % 1024];
 }
 
 constexpr uint32_t HC256::h(const uint32_t x, const UInt32Vector &K)
@@ -51,14 +51,8 @@ void HC256::keySetup()
         W.push_back(F2(W[i - 2]) + W[i - 7] + F1(W[i - 15]) + W[i - 16] + i);
     }
 
-    P.reserve(1024);
-    Q.reserve(1024);
-    for (uint16_t i = 512; i < 1536; ++i)
-    {
-        P.push_back(W[i]);
-        Q.push_back(W[i + 1024]);
-    }
-
+    P = W.range(512, 1536);
+    Q = W.range(1536);
     for (uint8_t i = 0; i < 2; ++i)
     {
         for (uint16_t j = 0; j < 1024; ++j)
@@ -73,16 +67,18 @@ void HC256::keySetup()
     }
 }
 
+// We use & 0x3FF instead of % 1024 because the mod operator % work only with positive numbers.
+// The binary AND operator will work with negative and positive numbers. 
 constexpr uint32_t HC256::calculateKey(const UInt32Vector &PQ, const UInt32Vector &QP, const uint16_t i)
 {
     return PQ[(i - 10) & 0x3FF] + g(PQ[(i - 3) & 0x3FF], PQ[(i - 1023) & 0x3FF], QP);
 }
 
-constexpr uint32_t HC256::updateSubkeys(UInt32Vector &K, const UInt32Vector &S, const uint16_t index)
+constexpr uint32_t HC256::updateSubkeys(UInt32Vector &K, const UInt32Vector &S, const uint16_t i)
 {
-    K[index] += calculateKey(K, S, index);
+    K[i] += calculateKey(K, S, i);
 
-    return h(K[(index - 12) & 0x3FF], S) ^ K[index];
+    return h(K[(i - 12) & 0x3FF], S) ^ K[i];
 }
 
 UInt32Vector HC256::generateKeystream()

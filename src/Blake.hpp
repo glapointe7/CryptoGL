@@ -5,7 +5,6 @@
 #define BLAKE_HPP
 
 #include "HashFunction.hpp"
-#include "Bits.hpp"
 
 #include <array>
 
@@ -13,12 +12,12 @@ namespace CryptoGL
 {
     /*
      * Since we cannot override static members like constants for 32 and 64 bits integer, 
-     * we have to define specialized templated classes that will return our constants.
+     * we have to define specialized template classes that will return our constants.
      */
-    template <typename VectorType>
-    struct VectorGetter
+    template <typename Type>
+    struct ArrayGetter
     {
-       static const VectorType G;
+       static const std::array<Type, 16> G;
     };
 
     template <typename Integer, uint8_t Index>
@@ -33,7 +32,7 @@ namespace CryptoGL
        static constexpr uint64_t G(const uint64_t &value)
        {
           constexpr std::array<uint8_t, 4> shifts = {{32, 25, 16, 11}};
-          return Bits::rotateRight64(value, shifts[Index]);
+          return uint64::rotateRight(value, shifts[Index]);
        }
     };
 
@@ -43,7 +42,7 @@ namespace CryptoGL
        static constexpr uint32_t G(const uint32_t &value)
        {
           constexpr std::array<uint8_t, 4> shifts = {{16, 12, 8, 7}};
-          return Bits::rotateRight(value, shifts[Index]);
+          return uint32::rotateRight(value, shifts[Index]);
        }
     };
 
@@ -56,7 +55,7 @@ namespace CryptoGL
     private:
        using HashFunctionType = HashFunction<DataType, Endian<BigEndian<DataType>, DataType>>;
        using DataTypeVector = typename HashFunctionType::DataTypeVector;
-       using GVector = VectorGetter<DataTypeVector>;
+       using GArray = ArrayGetter<DataType>;
 
        const DataTypeVector salt;
        uint64_t counter;
@@ -80,7 +79,7 @@ namespace CryptoGL
 
        void G(const std::array<uint8_t, 4> &I, const uint8_t k, const uint8_t i)
        {
-          const DataTypeVector C = GVector::G;
+          const std::array<DataType, 16> C = GArray::G;
           registers[I[0]] += registers[I[1]] + (this->current_block[sigma[k][i]] ^ C[sigma[k][i + 1]]);
           registers[I[3]] = ShiftingGetter<DataType, 0>::G(registers[I[3]] ^ registers[I[0]]);
           registers[I[2]] += registers[I[3]];
@@ -94,7 +93,7 @@ namespace CryptoGL
 
        void compress(DataTypeVector &hash) override
        {
-          this->initialize(hash, GVector::G);
+          this->initialize(hash, GArray::G);
           for(uint8_t j = 0; j < rounds; ++j)
           {
               const uint8_t k = j % 10;
@@ -113,10 +112,10 @@ namespace CryptoGL
           this->finalize(hash);
        }
 
-       void initialize(const DataTypeVector &hash, const DataTypeVector &C)
+       void initialize(const DataTypeVector &hash, const std::array<DataType, 16> &C)
        {
            registers.reserve(16);
-           registers.extend(hash);
+           registers = hash;
            for(uint8_t i = 0; i < 4; ++i)
            {
              registers.push_back(salt[i] ^ C[i]);
@@ -153,7 +152,7 @@ namespace CryptoGL
        /* Constructor with a salt provided. */
        Blake(const DataTypeVector &IV, const DataTypeVector &salt, const uint8_t rounds, const uint8_t output_size) 
           : HashFunctionType(InputBlockSize, output_size, IV), 
-               salt(salt), rounds(rounds) {}
+            salt(salt), rounds(rounds) {}
 
        /* Default constructor : no salt provided. */
        Blake(const DataTypeVector &IV, const uint8_t rounds, const uint8_t output_size) 
@@ -184,14 +183,14 @@ namespace CryptoGL
     {
     public:
        Blake224() : Blake({0xC1059ED8, 0x367CD507, 0x3070DD17, 0xF70E5939,
-                    0xFFC00B31, 0x68581511, 0x64F98FA7, 0xBEFA4FA4}, 14, 28) {}
+                           0xFFC00B31, 0x68581511, 0x64F98FA7, 0xBEFA4FA4}, 14, 28) {}
     };
 
     class Blake256 : public Blake<uint32_t, 64>
     {
     public:
        Blake256() : Blake({0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A,
-                    0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19}, 14, 32) {}
+                           0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19}, 14, 32) {}
 
     private:
        BytesVector pad(BytesVector message) const override;
@@ -201,14 +200,14 @@ namespace CryptoGL
     {
     public:
        Blake384() : Blake({0xCBBB9D5DC1059ED8, 0x629A292A367CD507, 0x9159015A3070DD17, 0x152FECD8F70E5939,
-                    0x67332667FFC00B31, 0x8EB44A8768581511, 0xDB0C2E0D64F98FA7, 0x47B5481DBEFA4FA4}, 16, 48) {}   
+                           0x67332667FFC00B31, 0x8EB44A8768581511, 0xDB0C2E0D64F98FA7, 0x47B5481DBEFA4FA4}, 16, 48) {}   
     };
 
     class Blake512 : public Blake<uint64_t, 128>
     {
     public:
        Blake512() : Blake({0x6A09E667F3BCC908, 0xBB67AE8584CAA73B, 0x3C6EF372FE94F82B, 0xA54FF53A5F1D36F1,
-                    0x510E527FADE682D1, 0x9B05688C2B3E6C1F, 0x1F83D9ABFB41BD6B, 0x5BE0CD19137E2179}, 16, 64) {}
+                           0x510E527FADE682D1, 0x9B05688C2B3E6C1F, 0x1F83D9ABFB41BD6B, 0x5BE0CD19137E2179}, 16, 64) {}
 
     private:
        BytesVector pad(BytesVector message) const override;

@@ -1,7 +1,6 @@
 #include "HellmanMerkleKnapsack.hpp"
 
 #include "MathematicalTools.hpp"
-#include "Bits.hpp"
 
 #include <algorithm>
 
@@ -76,7 +75,7 @@ uint8_t HellmanMerkleKnapsack::makePlainByte(BigInteger value) const
         {
             pos--;
         }
-        byte = Bits::setBitAtPosition(7 - pos, byte);
+        byte = uint8::setBitAtPosition(byte, 7 - pos);
         value -= sequence[pos];
     }
 
@@ -94,7 +93,7 @@ BigIntVector HellmanMerkleKnapsack::encode(const BytesVector &message)
         BigInteger sum;
         for (uint8_t i = 0; i < 8; ++i)
         {
-            sum += static_cast<BigInteger> (Bits::getBitAtPosition(7 - i, byte)) * public_key[i];
+            sum += static_cast<BigInteger> (uint8::getBitAtPosition(byte, 7 - i)) * public_key[i];
         }
         crypted.push_back(sum);
     }

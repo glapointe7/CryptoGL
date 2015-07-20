@@ -1,11 +1,14 @@
 #include "SEAL.hpp"
 
-#include "Bits.hpp"
 #include "Endian.hpp"
 
 #include "exceptions/BadKeyLength.hpp"
 
 using namespace CryptoGL;
+
+std::array<uint32_t, 256> SEAL::S = {};
+std::array<uint32_t, 512> SEAL::T = {};
+UInt32Vector SEAL::R;
 
 void SEAL::setKey(const BytesVector &key)
 {
@@ -22,7 +25,7 @@ uint32_t SEAL::gamma(SHA1 &G, UInt32Vector &block, const uint32_t index, uint32_
     const uint32_t current_index = index / 5;
     if (current_index != previous_index)
     {
-        // Get the block = (i/5) || 0^{60}.
+        // Get the block = (i/5) concatenated with 60 zeros.
         block.front() = current_index;
 
         // Apply G_a(i) to the block.
@@ -39,31 +42,30 @@ uint32_t SEAL::gamma(SHA1 &G, UInt32Vector &block, const uint32_t index, uint32_
 void SEAL::keySetup()
 {
     // The key is the new IV for SHA-1.
-    IV = BigEndian32::toIntegersVector(std::move(key));
-    uint32_t previous_index = 0xFFFFFFFF;
+    IV = BigEndian32::toIntegersVector(key);
+    uint32_t previous_index = std::numeric_limits<uint32_t>::max();
     SHA1 G;
 
-    /* Block of 16 bytes used by the gamma function. */
+    /* Block of 16 bytes will be used by the gamma function. */
     UInt32Vector block;
     block.reserve(16);
 
-    T.reserve(512);
+    // Initialize tables R, S and T.
     for (uint16_t i = 0; i < 512; ++i)
     {
-        T.push_back(gamma(G, block, i, previous_index));
+        T[i] = gamma(G, block, i, previous_index);
     }
 
-    S.reserve(256);
     for (uint16_t i = 0; i < 256; ++i)
     {
-        S.push_back(gamma(G, block, i + 4096, previous_index));
+        S[i] = gamma(G, block, i + 4096, previous_index);
     }
 
     const uint16_t upper_bound = 4 * (output_size / 1024);
-    R.reserve(upper_bound);
+    R.resize(upper_bound);
     for (uint16_t i = 0; i < upper_bound; ++i)
     {
-        R.push_back(gamma(G, block, i + 8192, previous_index));
+        R[i] = gamma(G, block, i + 8192, previous_index);
     }
 }
 
@@ -73,7 +75,7 @@ void SEAL::applyFourRounds()
     {
         const uint16_t P = state[j] & 0x7FC;
         state[(j + 1) % 4] += T[P / 4];
-        state[j] = Bits::rotateRight(state[j], 9);
+        state[j] = uint32::rotateRight(state[j], 9);
     }
 }
 
@@ -81,7 +83,7 @@ void SEAL::initialize()
 {
     for (uint8_t i = 0; i < 4; ++i)
     {
-        state[i] = Bits::rotateRight(seed, i * 8) ^ R[4 * counter + i];
+        state[i] = uint32::rotateRight(seed, i * 8) ^ R[4 * counter + i];
     }
 
     for (uint8_t i = 0; i < 2; ++i)
@@ -114,40 +116,40 @@ UInt32Vector SEAL::generateKeystream()
         // it's quite complicated to create a method 'applyRound' to avoid repeating code.
         uint16_t P = state[0] & MOD_CONSTANT;
         state[1] += T[P / 4];
-        state[0] = Bits::rotateRight(state[0], 9);
+        state[0] = uint32::rotateRight(state[0], 9);
         state[1] ^= state[0];
 
         uint16_t Q = state[1] & MOD_CONSTANT;
         state[2] ^= T[Q / 4];
-        state[1] = Bits::rotateRight(state[1], 9);
+        state[1] = uint32::rotateRight(state[1], 9);
         state[2] += state[1];
 
         P = (P + state[2]) & MOD_CONSTANT;
         state[3] += T[P / 4];
-        state[2] = Bits::rotateRight(state[2], 9);
+        state[2] = uint32::rotateRight(state[2], 9);
         state[3] ^= state[2];
 
         Q = (Q + state[3]) & MOD_CONSTANT;
         state[0] ^= T[Q / 4];
-        state[3] = Bits::rotateRight(state[3], 9);
+        state[3] = uint32::rotateRight(state[3], 9);
         state[0] += state[3];
 
 
         P = (P + state[0]) & MOD_CONSTANT;
         state[1] ^= T[P / 4];
-        state[0] = Bits::rotateRight(state[0], 9);
+        state[0] = uint32::rotateRight(state[0], 9);
 
         Q = (Q + state[1]) & MOD_CONSTANT;
         state[2] += T[Q / 4];
-        state[1] = Bits::rotateRight(state[1], 9);
+        state[1] = uint32::rotateRight(state[1], 9);
 
         P = (P + state[2]) & MOD_CONSTANT;
         state[3] ^= T[P / 4];
-        state[2] = Bits::rotateRight(state[2], 9);
+        state[2] = uint32::rotateRight(state[2], 9);
 
         Q = (Q + state[3]) & MOD_CONSTANT;
         state[0] += T[Q / 4];
-        state[3] = Bits::rotateRight(state[3], 9);
+        state[3] = uint32::rotateRight(state[3], 9);
 
         const uint8_t j = 4 * i;
         keystream.push_back(state[1] + S[j]);

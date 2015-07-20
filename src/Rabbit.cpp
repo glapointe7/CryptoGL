@@ -1,6 +1,5 @@
 #include "Rabbit.hpp"
 
-#include "Bits.hpp"
 #include "exceptions/BadKeyLength.hpp"
 
 using namespace CryptoGL;
@@ -57,8 +56,8 @@ void Rabbit::nextState()
     // Calculate new state values.
     for (uint8_t i = 0; i < 8; i += 2)
     {
-        states[i] = G[i] + Bits::rotateLeft(G[(i + 7) % 8], 16) + Bits::rotateLeft(G[(i + 6) % 8], 16);
-        states[i + 1] = G[i + 1] + Bits::rotateLeft(G[i], 8) + G[(i + 7) % 8];
+        states[i] = G[i] + uint32::rotateLeft(G[(i + 7) % 8], 16) + uint32::rotateLeft(G[(i + 6) % 8], 16);
+        states[i + 1] = G[i + 1] + uint32::rotateLeft(G[i], 8) + G[(i + 7) % 8];
     }
 }
 
@@ -78,7 +77,7 @@ void Rabbit::keySetup()
         states[j] = subkeys[i];
         states[j + 1] = (subkeys[(i + 3) % 4] << SHIFT_CONSTANT) | (subkeys[(i + 2) % 4] >> SHIFT_CONSTANT);
         
-        counters[j] = Bits::rotateLeft(subkeys[(i + 2) % 4], SHIFT_CONSTANT);
+        counters[j] = uint32::rotateLeft(subkeys[(i + 2) % 4], SHIFT_CONSTANT);
         counters[j + 1] = (subkeys[i] & HIGH_UINT_MOD_CONSTANT) | (subkeys[(i + 1) % 4] & LOW_UINT_MOD_CONSTANT);
     }
 

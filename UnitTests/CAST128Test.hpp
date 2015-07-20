@@ -80,7 +80,7 @@ namespace UnitTests
        const StringTest code = "EA024714AD5C4D84";
        const auto F = std::bind(&CAST128::encode, C1, std::placeholders::_1);
 
-       compare("7529850332BEF387", compose<100>(F)(BytesVector(std::move(code.hexToBytes()))));
+       compare("7529850332BEF387", compose<100>(F)(BytesVector(code.hexToBytes())));
     }
     
     TEST(CAST128Encode128Bits1000Iterations, CAST128Test)
@@ -88,7 +88,7 @@ namespace UnitTests
        const StringTest code = "EA024714AD5C4D84";
        const auto F = std::bind(&CAST128::encode, C1, std::placeholders::_1);
 
-       compare("74790E102AE5AACC", compose<1000>(F)(BytesVector(std::move(code.hexToBytes()))));
+       compare("74790E102AE5AACC", compose<1000>(F)(BytesVector(code.hexToBytes())));
     }
 }
 

@@ -12,7 +12,6 @@ set(SRC
    MathematicalTools.cpp
 	Tools.cpp
    String.cpp
-   Bits.cpp
    Padding.cpp
 
 # Cryptanalysis section

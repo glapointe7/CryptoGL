@@ -20,10 +20,10 @@ namespace CryptoGL
         }
         
         explicit RC5(const BytesVector &key)
-            : RC5(key, OperationModes::ECB,{}) { }
+            : RC5(key, OperationModes::ECB, {}) { }
         
         RC5(const BytesVector &key, const OperationModes mode)
-            : RC5(key, mode,{}) { }
+            : RC5(key, mode, {}) { }
 
         void setKey(const BytesVector &key) override;
 

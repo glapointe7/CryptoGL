@@ -1,7 +1,5 @@
 #include "DES.hpp"
 
-#include "Bits.hpp"
-
 #include "exceptions/BadKeyLength.hpp"
 #include "exceptions/EmptyKey.hpp"
 
@@ -38,8 +36,8 @@ void DES::generateSubkeys()
     subkeys.reserve(16);
     for (uint8_t i = 0; i < 16; ++i)
     {
-        const uint64_t KR = Bits::rotateLeft(K1, rot_table[i], 28);
-        const uint64_t KL = Bits::rotateLeft(K2, rot_table[i], 28);
+        const uint64_t KR = uint64::rotateLeft(K1, rot_table[i], 28);
+        const uint64_t KL = uint64::rotateLeft(K2, rot_table[i], 28);
         K1 = KR;
         K2 = KL;
 
@@ -53,7 +51,7 @@ uint64_t DES::getSubstitution(const uint64_t &key_mixed)
     std::array<uint8_t, 8> sboxes;
     for (uint8_t i = 0, j = 42; i < 8; ++i, j -= 6)
     {
-        sboxes[i] = (key_mixed >> j)  % 64;
+        sboxes[i] = (key_mixed >> j) % 64;
     }
 
     uint64_t s_block = 0;

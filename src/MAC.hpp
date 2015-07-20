@@ -1,5 +1,5 @@
 /*
- * Message Authentification Code.
+ * Message Authentication Code.
  */
 #ifndef MAC_HPP
 #define MAC_HPP
@@ -7,7 +7,6 @@
 #include "Types.hpp"
 #include "exceptions/BadKeyLength.hpp"
 
-#include "Bits.hpp"
 #include "Padding.hpp"
 
 /* Include all block ciphers. */
@@ -60,10 +59,10 @@ namespace CryptoGL
     {
         static BytesVector getValue(const BytesVector &L)
         {
-            if (Bits::msb(L) == 0)
-                return Lu < BlockSize, n - 1 > ::getValue(L.leftShift(1));
+            if (L.msb() == 0)
+                return Lu <BlockSize, n - 1>::getValue(L.leftShift(1));
 
-            return Lu<BlockSize, n - 1 > ::getValue(L.leftShift(1)).Xor(Constant<BlockSize>::msb_value);
+            return Lu<BlockSize, n - 1>::getValue(L.leftShift(1)).Xor(Constant<BlockSize>::msb_value);
         }
     };
 
@@ -87,7 +86,7 @@ namespace CryptoGL
     {
         static BytesVector getValue(const BytesVector &L)
         {
-            if (Bits::lsb(L) == 0)
+            if (L.lsb() == 0)
             {
                 return L.rightShift(1);
             }
@@ -145,7 +144,7 @@ namespace CryptoGL
             const BytesVector C(Block.encode(message));
 
             // We keep only the last block of the encryption.
-            return BytesVector(C.begin() + C.size() - BlockSize, C.end());
+            return C.range(C.size() - BlockSize);
         }
     };
 
@@ -163,9 +162,9 @@ namespace CryptoGL
             AES Block(key);
 
             /* Encode 3 keys derived from the main key with specific constants for each one. */
-            const BytesVector K1 = Block.encodeCurrentBlock(BytesVector(16, 0x01));
-            const BytesVector K2 = Block.encodeCurrentBlock(BytesVector(16, 0x02));
-            const BytesVector K3 = Block.encodeCurrentBlock(BytesVector(16, 0x03));
+            const BytesVector K1 = Block.encodeCurrentBlock(BytesVector(16, 1));
+            const BytesVector K2 = Block.encodeCurrentBlock(BytesVector(16, 2));
+            const BytesVector K3 = Block.encodeCurrentBlock(BytesVector(16, 3));
             const uint64_t message_size = message.size();
 
             /* Pad the message if empty or not multiple of 16 since AES works with block of 16 bytes. */
@@ -264,7 +263,7 @@ namespace CryptoGL
             if (message_size == 0 || message_size % BlockSize)
             {
                 message = Padding::_10Star(message, BlockSize);
-                L_u = Lu<BlockSize, -1 > ::getValue(L);
+                L_u = Lu<BlockSize, -1>::getValue(L);
             }
 
             const BytesMatrix M = message.chunk(BlockSize);
@@ -329,10 +328,10 @@ namespace CryptoGL
         /* Get L.u^n from the specs. */
         static BytesVector getLuNValue(const BytesVector &L, const uint64_t &n)
         {
-            if (Bits::msb(L) == 0)
+            if (L.msb() == 0)
                 return getLuNValue(L.leftShift(1), n - 1);
 
-            return getLuNValue(L.leftShift(1), n - 1).Xor(Constant < BlockCipherType::getBlockSize()>::msb_value);
+            return getLuNValue(L.leftShift(1), n - 1).Xor(Constant <BlockCipherType::getBlockSize()>::msb_value);
         }
     };
 

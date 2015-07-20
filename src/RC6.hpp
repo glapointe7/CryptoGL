@@ -19,10 +19,10 @@ namespace CryptoGL
         }
         
         explicit RC6(const BytesVector &key)
-            : RC6(key, OperationModes::ECB,{}) { }
+            : RC6(key, OperationModes::ECB, {}) { }
         
         RC6(const BytesVector &key, const OperationModes mode)
-            : RC6(key, mode,{}) { }
+            : RC6(key, mode, {}) { }
 
         void setKey(const BytesVector &key) override;
 

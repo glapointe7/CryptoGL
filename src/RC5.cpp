@@ -4,8 +4,6 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
-#include "Bits.hpp"
-
 using namespace CryptoGL;
 
 void RC5::setKey(const BytesVector &key)
@@ -40,8 +38,8 @@ void RC5::generateSubkeys()
     uint32_t L = 0, R = 0;
     for (uint8_t l = 0, i = 0, j = 0; l < k; ++l)
     {
-        L = subkeys[i] = Bits::rotateLeft(subkeys[i] + L + R, 3);
-        R = tmp_key[j] = Bits::rotateLeft(tmp_key[j] + L + R, (L + R) % 32);
+        L = subkeys[i] = uint32::rotateLeft(subkeys[i] + L + R, 3);
+        R = tmp_key[j] = uint32::rotateLeft(tmp_key[j] + L + R, (L + R) % 32);
         i = (i + 1) % subkeys_len;
         j = (j + 1) % tmp_key_len;
     }
@@ -54,8 +52,8 @@ void RC5::encodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
     for (uint8_t i = 1; i <= rounds; ++i)
     {
         const uint8_t j = i * 2;
-        L = Bits::rotateLeft(L ^ R, R % 32) + subkeys[j];
-        R = Bits::rotateLeft(R ^ L, L % 32) + subkeys[j + 1];
+        L = uint32::rotateLeft(L ^ R, R % 32) + subkeys[j];
+        R = uint32::rotateLeft(R ^ L, L % 32) + subkeys[j + 1];
     }
 }
 
@@ -64,8 +62,8 @@ void RC5::decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const
     for (uint8_t i = rounds; i > 0; --i)
     {
         const uint8_t j = i * 2;
-        R = Bits::rotateRight(R - subkeys[j + 1], L % 32) ^ L;
-        L = Bits::rotateRight(L - subkeys[j], R % 32) ^ R;
+        R = uint32::rotateRight(R - subkeys[j + 1], L % 32) ^ L;
+        L = uint32::rotateRight(L - subkeys[j], R % 32) ^ R;
     }
     R -= subkeys[1];
     L -= subkeys[0];

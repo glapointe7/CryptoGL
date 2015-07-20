@@ -21,24 +21,23 @@ namespace CryptoGL
         void compress(UInt64Vector &state) override;
 
         /* Round constants. */
-        static constexpr std::array<uint64_t, 10> RC = {
-            {0x1823c6e887b8014f,
-                0x36a6d2f5796f9152,
-                0x60bc9b8ea30c7b35,
-                0x1de0d7c22e4bfe57,
-                0x157737e59ff04ada,
-                0x58c9290ab1a06b85,
-                0xbd5d10f4cb3e0567,
-                0xe427418ba77d95d8,
-                0xfbee7c66dd17479e,
-                0xca2dbf07ad5a8333}
-        };
+        static constexpr std::array<uint64_t, 10> RC = {{
+            0x1823c6e887b8014f,
+            0x36a6d2f5796f9152,
+            0x60bc9b8ea30c7b35,
+            0x1de0d7c22e4bfe57,
+            0x157737e59ff04ada,
+            0x58c9290ab1a06b85,
+            0xbd5d10f4cb3e0567,
+            0xe427418ba77d95d8,
+            0xfbee7c66dd17479e,
+            0xca2dbf07ad5a8333
+        }};
 
         /* The 64-bit lookup tables. */
-        static constexpr std::array<std::array<uint64_t, 256>, 8> sbox = {
-            {
-                {
-                    {0x18186018c07830d8, 0x23238c2305af4626, 0xc6c63fc67ef991b8, 0xe8e887e8136fcdfb,
+        static constexpr std::array<std::array<uint64_t, 256>, 8> sbox = {{
+                {{
+                    0x18186018c07830d8, 0x23238c2305af4626, 0xc6c63fc67ef991b8, 0xe8e887e8136fcdfb,
                         0x878726874ca113cb, 0xb8b8dab8a9626d11, 0x0101040108050209, 0x4f4f214f426e9e0d,
                         0x3636d836adee6c9b, 0xa6a6a2a6590451ff, 0xd2d26fd2debdb90c, 0xf5f5f3f5fb06f70e,
                         0x7979f979ef80f296, 0x6f6fa16f5fcede30, 0x91917e91fcef3f6d, 0x52525552aa07a4f8,

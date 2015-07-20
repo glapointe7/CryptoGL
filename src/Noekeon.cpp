@@ -2,8 +2,6 @@
 
 #include <algorithm>
 
-#include "Bits.hpp"
-
 #include "exceptions/BadKeyLength.hpp"
 
 using namespace CryptoGL;
@@ -36,7 +34,7 @@ void Noekeon::applyGamma()
 void Noekeon::setClassVector(const std::array<uint8_t, 4> &indices, UInt32Vector &V)
 {
     uint32_t temp = V[indices[0]] ^ V[indices[1]];
-    temp ^= Bits::rotateRight(temp, 8) ^ Bits::rotateLeft(temp, 8);
+    temp ^= uint32::rotateRight(temp, 8) ^ uint32::rotateLeft(temp, 8);
     V[indices[2]] ^= temp;
     V[indices[3]] ^= temp;
 }
@@ -61,16 +59,16 @@ void Noekeon::applyThetaToState()
 
 void Noekeon::applyPiLeft()
 {
-    current_block[1] = Bits::rotateLeft(current_block[1], 1);
-    current_block[2] = Bits::rotateLeft(current_block[2], 5);
-    current_block[3] = Bits::rotateLeft(current_block[3], 2);
+    current_block[1] = uint32::rotateLeft(current_block[1], 1);
+    current_block[2] = uint32::rotateLeft(current_block[2], 5);
+    current_block[3] = uint32::rotateLeft(current_block[3], 2);
 }
 
 void Noekeon::applyPiRight()
 {
-    current_block[1] = Bits::rotateRight(current_block[1], 1);
-    current_block[2] = Bits::rotateRight(current_block[2], 5);
-    current_block[3] = Bits::rotateRight(current_block[3], 2);
+    current_block[1] = uint32::rotateRight(current_block[1], 1);
+    current_block[2] = uint32::rotateRight(current_block[2], 5);
+    current_block[3] = uint32::rotateRight(current_block[3], 2);
 }
 
 void Noekeon::applyRound(const uint8_t constant1, const uint8_t constant2)

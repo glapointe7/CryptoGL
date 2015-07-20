@@ -1,12 +1,14 @@
 #include "CAST256.hpp"
 
-#include "Bits.hpp"
 #include "Padding.hpp"
 
 using namespace CryptoGL;
 
 constexpr std::array<std::array<uint32_t, 256>, 4> CAST256::S;
 const std::array<Function, 3> CAST256::F = {{F1, F2, F3}};
+std::array<uint32_t, 192> CAST256::Tm = {};
+std::array<uint32_t, 192> CAST256::Tr = {};
+std::array<uint32_t, 48> CAST256::Kr = {};
 
 void CAST256::setKey(const BytesVector &key)
 {
@@ -52,23 +54,19 @@ void CAST256::applyForwardOctave(UInt32Vector &kappa, const uint8_t round) const
 
 void CAST256::generateSubkeys()
 {
-    Tm.reserve(192);
-    Tr.reserve(192);
-
     constexpr uint32_t Mm = 0x6ED9EBA1;
     constexpr uint8_t Mr = 17;
     uint32_t Cm = 0x5A827999;
     uint8_t Cr = 19;
     for (uint8_t i = 0; i < 192; ++i)
     {
-        Tm.push_back(Cm);
+        Tm[i] = Cm;
         Cm += Mm;
-        Tr.push_back(Cr);
+        Tr[i] = Cr;
         Cr = (Cr + Mr) % 32;
     }
 
     subkeys.reserve(48);
-    Kr.reserve(48);
     UInt32Vector kappa = BigEndian32::toIntegersVector(key);
     for (uint8_t i = 0; i < rounds; ++i)
     {
@@ -77,7 +75,7 @@ void CAST256::generateSubkeys()
         applyForwardOctave(kappa, k + 1);
         for (uint8_t j = 0; j < 8; j += 2)
         {
-            Kr.push_back(kappa[j] % 32);
+            Kr[(4 * i) + (j / 2)] = kappa[j] % 32;
             subkeys.push_back(kappa[7 - j]);
         }
     }
@@ -85,26 +83,26 @@ void CAST256::generateSubkeys()
 
 constexpr uint32_t CAST256::F1(const uint32_t D, const uint32_t Km, const uint32_t Kr)
 {
-    const uint32_t I = Bits::rotateLeft(Km + D, Kr);
+    const uint32_t I = uint32::rotateLeft(Km + D, Kr);
     
-    return ((S[0][getByteFromInteger<3>(I)] ^ S[1][getByteFromInteger<2>(I)])
-           - S[2][getByteFromInteger<1>(I)]) + S[3][getByteFromInteger<0>(I)];
+    return ((S[0][uint32::getByteAtPosition(I, 3)] ^ S[1][uint32::getByteAtPosition(I, 2)])
+           - S[2][uint32::getByteAtPosition(I, 1)]) + S[3][uint32::getByteAtPosition(I, 0)];
 }
 
 constexpr uint32_t CAST256::F2(const uint32_t D, const uint32_t Km, const uint32_t Kr)
 {
-    const uint32_t I = Bits::rotateLeft(Km ^ D, Kr);
+    const uint32_t I = uint32::rotateLeft(Km ^ D, Kr);
     
-    return ((S[0][getByteFromInteger<3>(I)] - S[1][getByteFromInteger<2>(I)])
-           + S[2][getByteFromInteger<1>(I)]) ^ S[3][getByteFromInteger<0>(I)];
+    return ((S[0][uint32::getByteAtPosition(I, 3)] - S[1][uint32::getByteAtPosition(I, 2)])
+           + S[2][uint32::getByteAtPosition(I, 1)]) ^ S[3][uint32::getByteAtPosition(I, 0)];
 }
 
 constexpr uint32_t CAST256::F3(const uint32_t D, const uint32_t Km, const uint32_t Kr)
 {
-    const uint32_t I = Bits::rotateLeft(Km - D, Kr);
+    const uint32_t I = uint32::rotateLeft(Km - D, Kr);
     
-    return ((S[0][getByteFromInteger<3>(I)] + S[1][getByteFromInteger<2>(I)])
-           ^ S[2][getByteFromInteger<1>(I)]) - S[3][getByteFromInteger<0>(I)];
+    return ((S[0][uint32::getByteAtPosition(I, 3)] + S[1][uint32::getByteAtPosition(I, 2)])
+           ^ S[2][uint32::getByteAtPosition(I, 1)]) - S[3][uint32::getByteAtPosition(I, 0)];
 }
 
 void CAST256::processEncodingCurrentBlock()

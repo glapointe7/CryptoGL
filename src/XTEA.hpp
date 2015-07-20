@@ -19,10 +19,10 @@ namespace CryptoGL
         }
         
         explicit XTEA(const BytesVector &key)
-            : XTEA(key, OperationModes::ECB,{}) { }
+            : XTEA(key, OperationModes::ECB, {}) { }
         
         XTEA(const BytesVector &key, const OperationModes mode)
-            : XTEA(key, mode,{}) { }
+            : XTEA(key, mode, {}) { }
 
     private:
         static constexpr uint32_t delta = 0x9E3779B9;

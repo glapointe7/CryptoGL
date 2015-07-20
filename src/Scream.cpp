@@ -1,7 +1,6 @@
 #include "Scream.hpp"
 
 #include "MathematicalTools.hpp"
-#include "Bits.hpp"
 #include "Endian.hpp"
 #include "FunctionComposition.hpp"
 

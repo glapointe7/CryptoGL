@@ -1,7 +1,5 @@
 #include "MessageDigest.hpp"
 
-#include "Bits.hpp"
-
 using namespace CryptoGL;
 
 constexpr std::array<uint8_t, 48> MD4::left_rotation_table;
@@ -29,7 +27,7 @@ void MD4::compress(UInt32Vector &state)
                 break;
         }
         
-        const uint32_t special_value = Bits::rotateLeft(hash[0] + f + current_block[word_indexes[j]] + k[index], left_rotation_table[j], 32);
+        const uint32_t special_value = uint32::rotateLeft(hash[0] + f + current_block[word_indexes[j]] + k[index], left_rotation_table[j], 32);
         swapHashElements(hash, special_value);
     }
 
@@ -66,7 +64,7 @@ void MD5::compress(UInt32Vector &state)
                 break;
         }
 
-        const uint32_t special_value = hash[1] + Bits::rotateLeft(hash[0] + f + current_block[k] + sine_magic_numbers[j], left_rotation_table[j], 32);
+        const uint32_t special_value = hash[1] + uint32::rotateLeft(hash[0] + f + current_block[k] + sine_magic_numbers[j], left_rotation_table[j], 32);
         swapHashElements(hash, special_value);
     }
 

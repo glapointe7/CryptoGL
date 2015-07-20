@@ -3,6 +3,7 @@
 
 #include "String.hpp"
 #include <algorithm>
+#include <assert.h>
 
 namespace CryptoGL
 {
@@ -12,40 +13,78 @@ namespace CryptoGL
         static_assert(std::is_integral<UInteger>::value, "Integer: The type UInteger must be an integral type.");
 
     public:
-        /* Extract the Least Signifiant Bits from value. */
+        /* Extract the Least Significant Bits from value. */
         static constexpr UInteger lsb(const UInteger value, const uint8_t bits_to_extract)
         {
+            assert(bits_to_extract <= sizeof(UInteger) * 8 && "Integer (lsb): The argument 'bits_to_extract' has to be between 0 and 63.");
             return value & (static_cast<UInteger> (1) << bits_to_extract);
         }
         
-        /* Extract the Most Signifiant Bits from value. */
+        /* Extract the Most Significant Bits from value. */
         static constexpr UInteger msb(const UInteger value, const uint8_t bits_to_extract)
         {
+            assert(bits_to_extract <= sizeof(UInteger) * 8 && "Integer (msb): The argument 'bits_to_extract' has to be between 0 and 63.");
             return value >> ((sizeof (UInteger) * 8) - bits_to_extract);
         }
         
-        /* Rotate left 'value' of 'shift' bits with 'max' in {1,...,63}. */
-        static constexpr UInteger rotateLeft(const UInteger value, const uint8_t shift, const uint8_t max = 32)
+        /* Rotate left 'value' of 'shift' bits. 
+         */
+        static constexpr UInteger rotateLeft(const UInteger value, const uint8_t shift)
         {
-            return ((value << shift) | (value >> (max - shift)));
+            constexpr uint8_t uint_size = sizeof(UInteger) * 8;
+            assert(shift <= uint_size && "Integer (rotateLeft): The argument 'shift' has to be between less or equals to uint_size.");
+            return ((value << shift) | (value >> (uint_size - shift)));
         }
         
-        /* Rotate left 'value' of 'shift' bits with 'max' in {1,...,63}. */
-        static constexpr UInteger rotateRight(const UInteger value, const uint8_t shift, const uint8_t max = 32)
+        /* Rotate left 'value' of 'shift' bits with 'max' in {1,...,64}. */
+        static constexpr UInteger rotateLeft(const UInteger value, const uint8_t shift, const uint8_t max)
         {
+            constexpr uint8_t uint_size = sizeof(UInteger) * 8;
+            assert((shift <= uint_size && max <= uint_size) && "Integer (rotateLeft): The argument 'shift' has to be between less or equals to uint_size.");
+            return ((value << shift) | (value >> (max - shift))) & ((1ull << max) - 1);
+        }
+        
+        /* Rotate right 'value' of 'shift' bits with 'max' in {1,...,64}. 
+         * Default value will be adjusted with the type of integer (e.g. uint32 => max = 32).
+         */
+        static constexpr UInteger rotateRight(const UInteger value, const uint8_t shift, const uint8_t max = sizeof(UInteger) * 8)
+        {
+            assert(max <= sizeof(UInteger) * 8 && "Integer (rotateRight): The argument 'max' has to be between 1 and 64.");
             return ((value >> shift) | (value << (max - shift)));
         }
         
         /* Test a bit at a 'pos' in 'value'. */
         static constexpr bool getBitAtPosition(const UInteger value, const uint8_t pos)
         {
+            assert(pos < 8 * sizeof(UInteger) && "Integer (getBitAtPosition): The argument 'pos' has to be between 0 and 7.");
             return (value & (1ull << pos)) > 0;
         }
         
         /* Set a bit at 'pos' in 'value'. */
         static constexpr UInteger setBitAtPosition(const UInteger value, const uint8_t pos)
         {
+            assert(pos < 8 * sizeof(UInteger) && "Integer (setBitAtPosition): The argument 'pos' has to be between 0 and 7.");
             return value | (1ull << pos);
+        }
+        
+        /* Extract a byte in value at position 'pos'. */
+        static constexpr uint8_t getByteAtPosition(const UInteger value, const uint8_t pos)
+        {
+            assert(pos < sizeof(UInteger) && "Integer (getByteAtPosition): The argument 'pos' has to be between 0 and 7.");
+            return (value >> (pos * 8)) & 0xFF;
+        }
+        
+        /* Swap every byte in the integer 'value'. */
+        static UInteger bytesSwap(const UInteger value)
+        {
+            constexpr uint8_t uint_size = sizeof(UInteger);
+            uint32_t retval = value & 0xFF;
+            for(uint8_t i = 1; i < uint_size; ++i)
+            {
+                retval = (retval << 8) | ((value >> (8 * i)) & 0xFF);
+            }
+            
+            return retval;
         }
         
         /* Convert an integer 'value' to a string. */

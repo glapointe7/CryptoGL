@@ -12,7 +12,7 @@
 namespace CryptoGL
 {
     class SEAL : public SynchronousStreamCipher<UInt32Vector, BigEndian32, 1024>,
-    PseudoRandomFunction<uint32_t, UInt32Vector>
+                        PseudoRandomFunction<uint32_t, UInt32Vector>
     {
     public:
         /* Constructor (Pseudo-random): receives the 160-bit key, a seed and the output size desired in bytes. */
@@ -42,7 +42,9 @@ namespace CryptoGL
         uint32_t gamma(SHA1 &G, UInt32Vector &block, const uint32_t current_index, uint32_t &previous_index);
 
         /* Subkeys tables : T is 2048 bytes, S is 1024 bytes and R is 16 * (L / 1024) bytes. */
-        UInt32Vector R, S, T;
+        static std::array<uint32_t, 256> S;
+        static std::array<uint32_t, 512> T;
+        static UInt32Vector R;
 
         /* IV defined by the 160-bit key for the SHA-1 encryption. */
         UInt32Vector IV;
@@ -53,7 +55,7 @@ namespace CryptoGL
         /* States to update. */
         UInt32Vector state{0, 0, 0, 0, 0, 0, 0, 0};
 
-        uint64_t output_size;
+        const uint64_t output_size;
 
         uint8_t counter = 0;
     };

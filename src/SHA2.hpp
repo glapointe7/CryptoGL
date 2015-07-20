@@ -5,7 +5,6 @@
 #define SHA2_HPP
 
 #include "MerkleDamgardFunction.hpp"
-#include "Bits.hpp"
 
 #include <array>
 
@@ -61,7 +60,7 @@ namespace CryptoGL
             {
                 this->current_block[j] =    
                     this->current_block[j - 16] + B(this->current_block[j - 15], to_shift[0], to_shift[1], to_shift[2])
-                    + this->current_block[j - 7] + B(this->current_block[j - 2], to_shift[3], to_shift[4], to_shift[5]);
+                  + this->current_block[j - 7] + B(this->current_block[j - 2], to_shift[3], to_shift[4], to_shift[5]);
             }
         }
        
@@ -89,15 +88,15 @@ namespace CryptoGL
         
         static constexpr DataType A(const DataType &hash, const uint8_t x, const uint8_t y, const uint8_t z)
         {
-            return Bits::rotateRight(hash, x, sizeof (DataType) << 3)
-                 ^ Bits::rotateRight(hash, y, sizeof (DataType) << 3)
-                 ^ Bits::rotateRight(hash, z, sizeof (DataType) << 3);
+            return Integer<DataType>::rotateRight(hash, x, sizeof (DataType) << 3)
+                 ^ Integer<DataType>::rotateRight(hash, y, sizeof (DataType) << 3)
+                 ^ Integer<DataType>::rotateRight(hash, z, sizeof (DataType) << 3);
         }
         
         static constexpr DataType B(const DataType &word, const uint8_t x, const uint8_t y, const uint8_t z)
         {
-            return Bits::rotateRight(word, x, sizeof (DataType) << 3)
-                 ^ Bits::rotateRight(word, y, sizeof (DataType) << 3)
+            return Integer<DataType>::rotateRight(word, x, sizeof (DataType) << 3)
+                 ^ Integer<DataType>::rotateRight(word, y, sizeof (DataType) << 3)
                  ^ (word >> z);
         }
     };
