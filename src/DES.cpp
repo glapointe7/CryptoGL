@@ -5,9 +5,9 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<uint8_t, 16> DES::rot_table;
+constexpr std::array<uint8_t, 16> DES::ROTATIONS_TABLE;
 constexpr std::array<uint8_t, 64> DES::IP;
-constexpr std::array<uint8_t, 64> DES::IP_inverse;
+constexpr std::array<uint8_t, 64> DES::INVERSE_IP;
 constexpr std::array<uint8_t, 48> DES::E;
 constexpr std::array<uint8_t, 32> DES::P;
 constexpr std::array<std::array<std::array<uint8_t, 16>, 4>, 8> DES::S;
@@ -36,8 +36,8 @@ void DES::generateSubkeys()
     subkeys.reserve(16);
     for (uint8_t i = 0; i < 16; ++i)
     {
-        const uint64_t KR = uint64::rotateLeft(K1, rot_table[i], 28);
-        const uint64_t KL = uint64::rotateLeft(K2, rot_table[i], 28);
+        const uint64_t KR = uint64::rotateLeft(K1, ROTATIONS_TABLE[i], 28);
+        const uint64_t KL = uint64::rotateLeft(K2, ROTATIONS_TABLE[i], 28);
         K1 = KR;
         K2 = KL;
 
@@ -110,7 +110,7 @@ void DES::processEncodingCurrentBlock()
 
     // Final permutation of R16.L16. with the IP_inverse table.
     const uint64_t RL = (R << 32) | L;
-    current_block = getBitsFromTable<64>(RL, IP_inverse, 64);
+    current_block = getBitsFromTable<64>(RL, INVERSE_IP, 64);
 }
 
 void DES::processDecodingCurrentBlock()
@@ -125,5 +125,5 @@ void DES::processDecodingCurrentBlock()
 
     // Final permutation of R16.L16. with the IP_inverse table.
     const uint64_t RL = (R << 32) | L;
-    current_block = getBitsFromTable<64>(RL, IP_inverse, 64);
+    current_block = getBitsFromTable<64>(RL, INVERSE_IP, 64);
 }

@@ -24,7 +24,7 @@ namespace CryptoGL
        }
 
        /* Default : Create 5X5 grid with unique english uppercase letters with the key. */
-       explicit SquareCipher(const KeyType &key) : SquareCipher(key, ClassicalType::grid_uppercase_fr) {}
+       explicit SquareCipher(const KeyType &key) : SquareCipher(key, ClassicalType::GRID_UPPERCASE_FR) {}
 
        virtual ClassicalType encode(const ClassicalType &) = 0;
        virtual ClassicalType decode(const ClassicalType &) = 0;

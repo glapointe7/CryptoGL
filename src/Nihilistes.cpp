@@ -23,8 +23,8 @@ ClassicalType Nihilistes::encode(const ClassicalType &clear_text)
     uint32_t i = 0;
     for (const auto c : clear_text)
     {
-        const Coordinates coords_c = grid.getCharCoordinates(c);
-        const Coordinates coords_key = grid.getCharCoordinates(second_key[i]);
+        const auto coords_c = grid.getCharCoordinates(c);
+        const auto coords_key = grid.getCharCoordinates(second_key[i]);
 
         const uint16_t final_value = (
             ((coords_c.y + 1) * 10) 
@@ -55,9 +55,9 @@ ClassicalType Nihilistes::decode(const ClassicalType &cipher_text)
     uint32_t j = 0;
     for (uint32_t i = 0; i < cipher_len; i += 2)
     {
-        const Coordinates coords_key = grid.getCharCoordinates(second_key[j]);
+        const auto coords_key = grid.getCharCoordinates(second_key[j]);
         const uint8_t key_value = ((coords_key.y + 1) * 10) + coords_key.x + 1;
-        const uint8_t value = Maths::mod(atoi(cipher_text.substr(i, 2).c_str()) - key_value, 100);
+        const auto value = Maths::mod(atoi(cipher_text.substr(i, 2).c_str()) - key_value, 100);
         const uint8_t last_digit = value % 10;
         decrypted.push_back(grid.at(((value - last_digit) / 10) - 1, last_digit - 1));
         j = (j + 1) % second_key_len;

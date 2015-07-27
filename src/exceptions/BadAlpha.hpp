@@ -4,12 +4,15 @@
 
 #include "Exception.hpp"
 
-class BadAlpha : public Exception
+namespace CryptoGL
 {
-public:
-   BadAlpha() {}
-   explicit BadAlpha(const ErrorType &text) : Exception(text) {}
-   virtual ~BadAlpha() {};
-};
+    class BadAlpha : public Exception
+    {
+    public:
+       BadAlpha() {}
+       explicit BadAlpha(const ErrorType &text) : Exception(text) {}
+       virtual ~BadAlpha() {};
+    };
+}
 
 #endif

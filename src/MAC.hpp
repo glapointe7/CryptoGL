@@ -34,22 +34,22 @@ namespace CryptoGL
     template <uint8_t BlockSize>
     struct Constant
     {
-        static_assert(BlockSize == 8 || BlockSize == 16, "'BlockSize' has to be 8 or 16.");
-        static const BytesVector msb_value;
-        static const BytesVector lsb_value;
+        static_assert(BlockSize == 8 || BlockSize == 16, "MAC (Constant): 'BlockSize' has to be 8 or 16 bytes.");
+        static const BytesVector MSB_VALUE;
+        static const BytesVector LSB_VALUE;
     };
 
     template<>
-    const BytesVector Constant<8>::msb_value = {0, 0, 0, 0, 0, 0, 0, 0x1B};
+    const BytesVector Constant<8>::MSB_VALUE = {0, 0, 0, 0, 0, 0, 0, 0x1B};
 
     template <>
-    const BytesVector Constant<16>::msb_value = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x87};
+    const BytesVector Constant<16>::MSB_VALUE = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x87};
 
     template<>
-    const BytesVector Constant<8>::lsb_value = {0x80, 0, 0, 0, 0, 0, 0, 0x0D};
+    const BytesVector Constant<8>::LSB_VALUE = {0x80, 0, 0, 0, 0, 0, 0, 0x0D};
 
     template <>
-    const BytesVector Constant<16>::lsb_value = {0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x43};
+    const BytesVector Constant<16>::LSB_VALUE = {0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x43};
 
     /*
      * Calculate L.u^n for any n > 0.
@@ -62,7 +62,7 @@ namespace CryptoGL
             if (L.msb() == 0)
                 return Lu <BlockSize, n - 1>::getValue(L.leftShift(1));
 
-            return Lu<BlockSize, n - 1>::getValue(L.leftShift(1)).Xor(Constant<BlockSize>::msb_value);
+            return Lu<BlockSize, n - 1>::getValue(L.leftShift(1)).Xor(Constant<BlockSize>::MSB_VALUE);
         }
     };
 
@@ -91,7 +91,7 @@ namespace CryptoGL
                 return L.rightShift(1);
             }
 
-            return L.rightShift(1).Xor(Constant<BlockSize>::lsb_value);
+            return L.rightShift(1).Xor(Constant<BlockSize>::LSB_VALUE);
         }
     };
 
@@ -331,7 +331,7 @@ namespace CryptoGL
             if (L.msb() == 0)
                 return getLuNValue(L.leftShift(1), n - 1);
 
-            return getLuNValue(L.leftShift(1), n - 1).Xor(Constant <BlockCipherType::getBlockSize()>::msb_value);
+            return getLuNValue(L.leftShift(1), n - 1).Xor(Constant <BlockCipherType::getBlockSize()>::MSB_VALUE);
         }
     };
 

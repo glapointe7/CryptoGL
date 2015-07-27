@@ -4,7 +4,7 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<uint8_t, 256> MD2::digits_of_pi;
+constexpr std::array<uint8_t, 256> MD2::DIGITS_OF_PI;
 
 void MD2::process(const BytesVector &data, BytesVector &hash) const
 {
@@ -20,7 +20,7 @@ void MD2::process(const BytesVector &data, BytesVector &hash) const
     {
         for (uint8_t k = 0; k < 48; ++k)
         {
-            t = hash[k] ^= digits_of_pi[t];
+            t = hash[k] ^= DIGITS_OF_PI[t];
         }
         t = (t + j) & 0xFF;
     }
@@ -34,7 +34,7 @@ void MD2::compress(BytesVector &state)
     uint8_t t = checksum[15];
     for (uint8_t j = 0; j < input_block_size; ++j)
     {
-        t = checksum[j] ^= digits_of_pi[current_block[j] ^ t];
+        t = checksum[j] ^= DIGITS_OF_PI[current_block[j] ^ t];
     }
 }
 

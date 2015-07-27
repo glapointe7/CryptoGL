@@ -78,6 +78,7 @@
 
 #include "../UnitTests/StringMethodsTest.hpp"
 #include "../UnitTests/VectorMethodsTest.hpp"
+#include "../UnitTests/SquareMatrixTest.hpp"
 
 
 int main(int argc, char **argv)

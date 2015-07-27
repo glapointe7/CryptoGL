@@ -39,19 +39,19 @@ namespace CryptoGL
     private:
         void compress(UInt32Vector &state) override;
 
-        static constexpr std::array<uint8_t, 48> left_rotation_table = {{
+        static constexpr std::array<uint8_t, 48> LEFT_ROTATIONS = {{
             3, 7, 11, 19, 3, 7, 11, 19, 3, 7, 11, 19, 3, 7, 11, 19,
             3, 5, 9, 13, 3, 5, 9, 13, 3, 5, 9, 13, 3, 5, 9, 13,
             3, 9, 11, 15, 3, 9, 11, 15, 3, 9, 11, 15, 3, 9, 11, 15
         }};
 
-        static constexpr std::array<uint8_t, 48> word_indexes = {{
+        static constexpr std::array<uint8_t, 48> WORD_INDICES = {{
             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
             0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15,
             0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15
         }};
 
-        static constexpr std::array<uint32_t, 3> k = {{0, 0x5A827999, 0x6ED9EBA1}};
+        static constexpr std::array<uint32_t, 3> K = {{0, 0x5A827999, 0x6ED9EBA1}};
         
         static constexpr uint32_t G(const uint32_t x, const uint32_t y, const uint32_t z)
         {
@@ -67,7 +67,7 @@ namespace CryptoGL
     private:
         void compress(UInt32Vector &state) override;
 
-        static constexpr std::array<uint8_t, 64> left_rotation_table = {{
+        static constexpr std::array<uint8_t, 64> LEFT_ROTATIONS = {{
             7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
             5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
             4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
@@ -75,7 +75,7 @@ namespace CryptoGL
         }};
 
         /* Constants obtained from the formula k(i) = sin(i + 1) * 2^32 for i = 0,...,63. */
-        static constexpr std::array<uint32_t, 64> sine_magic_numbers = {{
+        static constexpr std::array<uint32_t, 64> SINE_MAGIC_NUMBERS = {{
             0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
             0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
             0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,

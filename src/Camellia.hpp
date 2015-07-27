@@ -53,7 +53,7 @@ namespace CryptoGL
         static constexpr uint64_t FL(const uint64_t &half_block, const uint64_t &subkey);
         static constexpr uint64_t FLInverse(const uint64_t &half_block, const uint64_t &subkey);
         
-        static constexpr std::array<uint64_t, 6> key_sigma = {{
+        static constexpr std::array<uint64_t, 6> KEY_SIGMA = {{
             0xA09E667F3BCC908B, 0xB67AE8584CAA73B2, 0xC6EF372FE94F82BE,
             0x54FF53A5F1D36F1C, 0x10E527FADE682D1D, 0xB05688C2B3E6C1FD
         }};

@@ -4,13 +4,13 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<uint32_t, 5> Ripemd::magic_numbers1;
-constexpr std::array<uint32_t, 5> Ripemd::magic_numbers_big2;
-constexpr std::array<uint32_t, 4> Ripemd::magic_numbers2;
-constexpr std::array<uint8_t, 80> Ripemd::word_selection1;
-constexpr std::array<uint8_t, 80> Ripemd::word_selection2;
-constexpr std::array<uint8_t, 80> Ripemd::left_shift1;
-constexpr std::array<uint8_t, 80> Ripemd::left_shift2;
+constexpr std::array<uint32_t, 5> Ripemd::MAGIC_NUMBERS_1;
+constexpr std::array<uint32_t, 5> Ripemd::MAGIC_NUMBERS_3;
+constexpr std::array<uint32_t, 4> Ripemd::MAGIC_NUMBERS_2;
+constexpr std::array<uint8_t, 80> Ripemd::WORD_SELECTIONS_1;
+constexpr std::array<uint8_t, 80> Ripemd::WORD_SELECTIONS_2;
+constexpr std::array<uint8_t, 80> Ripemd::LEFT_SHIFTS_1;
+constexpr std::array<uint8_t, 80> Ripemd::LEFT_SHIFTS_2;
 
 void Ripemd::process128_256(UInt32Vector &hash, const uint8_t j) const
 {
@@ -39,13 +39,13 @@ void Ripemd::process128_256(UInt32Vector &hash, const uint8_t j) const
             break;
     }
 
-    uint32_t tmp = uint32::rotateLeft(hash[0] + f1 + current_block[word_selection1[j]] + magic_numbers1[index], left_shift1[j], 32);
+    uint32_t tmp = uint32::rotateLeft(hash[0] + f1 + current_block[WORD_SELECTIONS_1[j]] + MAGIC_NUMBERS_1[index], LEFT_SHIFTS_1[j], 32);
     hash[0] = hash[3];
     hash[3] = hash[2];
     hash[2] = hash[1];
     hash[1] = tmp;
 
-    tmp = uint32::rotateLeft(hash[4] + f2 + current_block[word_selection2[j]] + magic_numbers2[index], left_shift2[j], 32);
+    tmp = uint32::rotateLeft(hash[4] + f2 + current_block[WORD_SELECTIONS_2[j]] + MAGIC_NUMBERS_2[index], LEFT_SHIFTS_2[j], 32);
     hash[4] = hash[7];
     hash[7] = hash[6];
     hash[6] = hash[5];
@@ -84,14 +84,14 @@ void Ripemd::process160_320(UInt32Vector &hash, const uint8_t j) const
             break;
     }
 
-    uint32_t tmp = uint32::rotateLeft(hash[0] + f1 + current_block[word_selection1[j]] + magic_numbers1[index], left_shift1[j], 32) + hash[4];
+    uint32_t tmp = uint32::rotateLeft(hash[0] + f1 + current_block[WORD_SELECTIONS_1[j]] + MAGIC_NUMBERS_1[index], LEFT_SHIFTS_1[j], 32) + hash[4];
     hash[0] = hash[4];
     hash[4] = hash[3];
     hash[3] = uint32::rotateLeft(hash[2], 10, 32);
     hash[2] = hash[1];
     hash[1] = tmp;
 
-    tmp = uint32::rotateLeft(hash[5] + f2 + current_block[word_selection2[j]] + magic_numbers_big2[index], left_shift2[j], 32) + hash[9];
+    tmp = uint32::rotateLeft(hash[5] + f2 + current_block[WORD_SELECTIONS_2[j]] + MAGIC_NUMBERS_3[index], LEFT_SHIFTS_2[j], 32) + hash[9];
     hash[5] = hash[9];
     hash[9] = hash[8];
     hash[8] = uint32::rotateLeft(hash[7], 10, 32);

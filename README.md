@@ -72,7 +72,7 @@ For each block cipher, the ECB, CBC, CFB, OFB and CTR modes of operation are imp
 
 * Hellman-Merkle Knapsack cryptosystem, RSA (to come)
 
-These algorithms are [using a BigInteger library created by Matt McCutchen](https://mattmccutchen.net/bigint/)
+These algorithms are using a [BigInteger library created by Matt McCutchen](https://mattmccutchen.net/bigint/)
 
 #### Hash functions
 
@@ -114,7 +114,7 @@ These algorithms are [using a BigInteger library created by Matt McCutchen](http
 * Vectors extending the STL vectors
 * Strings extending the STL strings
 * Padding Schemes 
-* Bits manipulation tools
+* Integer manipulations class
 
 
 # Execution with CMake

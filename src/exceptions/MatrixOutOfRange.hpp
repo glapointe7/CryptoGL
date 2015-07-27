@@ -4,11 +4,14 @@
 
 #include "BadMatrix.hpp"
 
-class MatrixOutOfRange : public BadMatrix
+namespace CryptoGL
 {
-public:
-   MatrixOutOfRange() {}
-   explicit MatrixOutOfRange(const ErrorType &message) : BadMatrix(message) {}
-};
+    class MatrixOutOfRange : public BadMatrix
+    {
+    public:
+       MatrixOutOfRange() {}
+       explicit MatrixOutOfRange(const ErrorType &message) : BadMatrix(message) {}
+    };
+}
 
 #endif

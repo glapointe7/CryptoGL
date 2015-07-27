@@ -10,7 +10,8 @@ namespace CryptoGL
     {
     public:
         Playfair(const KeyType &key, const ClassicalType &alpha) : SquareCipher(key, alpha) { }
-        explicit Playfair(const KeyType &key) : Playfair(key, ClassicalType::grid_uppercase_fr) { }
+        
+        explicit Playfair(const KeyType &key) : Playfair(key, ClassicalType::GRID_UPPERCASE_FR) { }
 
         ClassicalType encode(const ClassicalType &clear_text) override;
         ClassicalType decode(const ClassicalType &cipher_text) override;

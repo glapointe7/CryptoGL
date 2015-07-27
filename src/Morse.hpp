@@ -17,7 +17,7 @@ namespace CryptoGL
         ClassicalType decode(const ClassicalType &) override;
 
     private:
-        static const std::array<ClassicalType, 36> morse;
+        static const std::array<ClassicalType, 36> MORSE_CODES;
     };
 }
 

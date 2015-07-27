@@ -40,8 +40,7 @@ namespace CryptoGL
         UInt32Vector keystream;
 
         /* Shift constants used in shuffle. */
-        static constexpr std::array<uint8_t, 8> shift = {
-            {11, 8, 10, 8, 2, 16, 4, 9}};
+        static constexpr std::array<uint8_t, 8> SHIFTS = {{11, 8, 10, 8, 2, 16, 4, 9}};
     };
 }
 

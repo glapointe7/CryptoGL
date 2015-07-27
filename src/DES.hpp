@@ -58,7 +58,7 @@ namespace CryptoGL
         }
 
         /* Left rotation table for the 16 rounds. */
-        static constexpr std::array<uint8_t, 16> rot_table = {{
+        static constexpr std::array<uint8_t, 16> ROTATIONS_TABLE = {{
             1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1
         }};
 
@@ -75,7 +75,7 @@ namespace CryptoGL
         }};
 
         /* 2nd table : inverse initial permutation. */
-        static constexpr std::array<uint8_t, 64> IP_inverse = {{
+        static constexpr std::array<uint8_t, 64> INVERSE_IP = {{
             40, 8, 48, 16, 56, 24, 64, 32,
             39, 7, 47, 15, 55, 23, 63, 31,
             38, 6, 46, 14, 54, 22, 62, 30,

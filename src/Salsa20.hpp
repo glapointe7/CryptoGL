@@ -33,11 +33,11 @@ namespace CryptoGL
         BytesVector subkeys;
         uint64_t counter = 0;
 
-        static constexpr std::array<std::array<uint8_t, 4>, 4> sigma = {{
+        static constexpr std::array<std::array<uint8_t, 4>, 4> SIGMA = {{
             {{101, 120, 112, 97}}, {{110, 100, 32, 51}}, {{50, 45, 98, 121}}, {{116, 101, 32, 107}}
         }};
 
-        static constexpr std::array<std::array<uint8_t, 4>, 4> tau = {{
+        static constexpr std::array<std::array<uint8_t, 4>, 4> TAU = {{
             {{101, 120, 112, 97}}, {{110, 100, 32, 49}}, {{54, 45, 98, 121}}, {{116, 101, 32, 107}}
         }};
     };

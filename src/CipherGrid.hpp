@@ -8,17 +8,23 @@ namespace CryptoGL
 {
     using Grid = Vector<ClassicalType>;
     
-    /* 2D Coordinates (x, y) used for cipher grids, where x,y < 256 are positive integers. */
+    /* 2D Coordinates (x, y) used for cipher grids, where x,y are 32-bit positive integers. */
     struct Coordinates 
     {
-        Coordinates(const uint8_t x, const uint8_t y)
+        Coordinates(const uint32_t x, const uint32_t y)
             : x(x), y(y) { }
             
         Coordinates()
             : Coordinates(0, 0) { }
         
-        uint8_t x = 0; 
-        uint8_t y = 0;
+        // Can be used in std::set to keep the order.
+        bool operator < (const Coordinates &coord) const 
+        {
+           return x < coord.x || (x == coord.x && y < coord.y);
+        }
+        
+        uint32_t x = 0; 
+        uint32_t y = 0;
     };
     
     

@@ -75,7 +75,7 @@ namespace CryptoGL
         }
         
         /* Swap every byte in the integer 'value'. */
-        static UInteger bytesSwap(const UInteger value)
+        static constexpr UInteger bytesSwap(const UInteger value)
         {
             constexpr uint8_t uint_size = sizeof(UInteger);
             uint32_t retval = value & 0xFF;

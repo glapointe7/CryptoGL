@@ -4,11 +4,14 @@
 
 #include "BadKey.hpp"
 
-class EmptyKey : public BadKey
+namespace CryptoGL
 {
-public:
-   EmptyKey() {}
-   explicit EmptyKey(const ErrorType &message) : BadKey(message) {}
-};
+    class EmptyKey : public BadKey
+    {
+    public:
+       EmptyKey() {}
+       explicit EmptyKey(const ErrorType &message) : BadKey(message) {}
+    };
+}
 
 #endif

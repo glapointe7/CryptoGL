@@ -4,7 +4,7 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<uint64_t, 6> Camellia::key_sigma;
+constexpr std::array<uint64_t, 6> Camellia::KEY_SIGMA;
 constexpr std::array<uint32_t, 256> Camellia::SP1110;
 constexpr std::array<uint32_t, 256> Camellia::SP0222;
 constexpr std::array<uint32_t, 256> Camellia::SP3033;
@@ -58,13 +58,13 @@ void Camellia::generateSubkeys()
 
     const BytesVector key_xored = key_left.Xor(key_right);
     uint64_t key_xored_left = BigEndian64::toIntegerRange(key_xored, 0, 8);
-    uint64_t key_xored_right = BigEndian64::toIntegerRange(key_xored, 8) ^ F(key_xored_left ^ key_sigma[0], 0);
+    uint64_t key_xored_right = BigEndian64::toIntegerRange(key_xored, 8) ^ F(key_xored_left ^ KEY_SIGMA[0], 0);
     
-    key_xored_left ^= F(key_xored_right ^ key_sigma[1], 1)
+    key_xored_left ^= F(key_xored_right ^ KEY_SIGMA[1], 1)
                     ^ BigEndian64::toIntegerRange(key_left, 0, 8);
     key_xored_right ^= BigEndian64::toIntegerRange(key_left, 8)
-                    ^ F(key_xored_left ^ key_sigma[2], 2);
-    key_xored_left ^= F(key_xored_right ^ key_sigma[3], 3);
+                    ^ F(key_xored_left ^ KEY_SIGMA[2], 2);
+    key_xored_left ^= F(key_xored_right ^ KEY_SIGMA[3], 3);
     
     BytesVector Ka = BigEndian64::toBytesVector(key_xored_left);
     Ka.extend(BigEndian64::toBytesVector(key_xored_right));
@@ -85,8 +85,8 @@ void Camellia::processPrewhiteningPhase(const BytesVector &Ka, const BytesVector
     {
         const BytesVector K = Ka.Xor(key_right);
         uint64_t K1 = BigEndian64::toIntegerRange(K, 0, 8);
-        const uint64_t K2 = BigEndian64::toIntegerRange(K, 8) ^ F(K1 ^ key_sigma[4], 4);
-        K1 ^= F(K2 ^ key_sigma[5], 5);
+        const uint64_t K2 = BigEndian64::toIntegerRange(K, 8) ^ F(K1 ^ KEY_SIGMA[4], 4);
+        K1 ^= F(K2 ^ KEY_SIGMA[5], 5);
 
         BytesVector Kb = BigEndian64::toBytesVector(K1);
         Kb.extend(BigEndian64::toBytesVector(K2));

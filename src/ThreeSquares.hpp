@@ -11,7 +11,7 @@ namespace CryptoGL
     public:
         ThreeSquares(const KeyType &key1, const KeyType &key2, const KeyType &key3, const ClassicalType &alpha);
         ThreeSquares(const KeyType &key1, const KeyType &key2, const KeyType &key3)
-            : ThreeSquares(key1, key2, key3, ClassicalType::grid_uppercase_fr) { }
+            : ThreeSquares(key1, key2, key3, ClassicalType::GRID_UPPERCASE_FR) { }
 
         ClassicalType encode(const ClassicalType &clear_text) override;
         ClassicalType decode(const ClassicalType &cipher_text) override;

@@ -35,7 +35,7 @@ namespace CryptoGL
         }};
 
         /* The 64-bit lookup tables. */
-        static constexpr std::array<std::array<uint64_t, 256>, 8> sbox = {{
+        static constexpr std::array<std::array<uint64_t, 256>, 8> SBOX = {{
                 {{
                     0x18186018c07830d8, 0x23238c2305af4626, 0xc6c63fc67ef991b8, 0xe8e887e8136fcdfb,
                         0x878726874ca113cb, 0xb8b8dab8a9626d11, 0x0101040108050209, 0x4f4f214f426e9e0d,

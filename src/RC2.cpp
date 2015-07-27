@@ -2,8 +2,8 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<uint8_t, 256> RC2::pi_table;
-constexpr std::array<uint8_t, 4> RC2::mixup_rotation;
+constexpr std::array<uint8_t, 256> RC2::PI_TABLE;
+constexpr std::array<uint8_t, 4> RC2::MIXUP_ROTATIONS;
 
 void RC2::setKey(const BytesVector &key)
 {
@@ -24,17 +24,17 @@ void RC2::generateSubkeys()
     const uint8_t key_len = key.size();
     for (uint8_t i = key_len; i < 128; ++i)
     {
-        tmp_subkeys[i] = pi_table[(tmp_subkeys[i - key_len] + tmp_subkeys[i - 1]) & 0xFF];
+        tmp_subkeys[i] = PI_TABLE[(tmp_subkeys[i - key_len] + tmp_subkeys[i - 1]) & 0xFF];
     }
 
     const uint8_t T1 = key_len * 8;
     const uint8_t TM = 0xFF >> (7 & -T1);
     const uint8_t T8 = (T1 + 7) / 8;
 
-    tmp_subkeys[128 - T8] = pi_table[tmp_subkeys[128 - T8] & TM];
+    tmp_subkeys[128 - T8] = PI_TABLE[tmp_subkeys[128 - T8] & TM];
     for (int8_t i = 127 - T8; i >= 0; --i)
     {
-        tmp_subkeys[i] = pi_table[tmp_subkeys[i + 1] ^ tmp_subkeys[i + T8]];
+        tmp_subkeys[i] = PI_TABLE[tmp_subkeys[i + 1] ^ tmp_subkeys[i + T8]];
     }
 
     // Get the 16-bits subkeys in little-endian.
@@ -54,7 +54,7 @@ void RC2::mixUp(const uint8_t index, const uint8_t key_index)
             + (current_block[(i - 2) % 4] & current_block[(i - 1) % 4]) 
             + (current_block[(i - 3) % 4] & ~current_block[(i - 1) % 4]);
     
-    current_block[index] = uint16::rotateLeft(current_block[index], mixup_rotation[index], 16);
+    current_block[index] = uint16::rotateLeft(current_block[index], MIXUP_ROTATIONS[index], 16);
 }
 
 void RC2::mash(const uint8_t index)
@@ -65,7 +65,7 @@ void RC2::mash(const uint8_t index)
 void RC2::inverseMixUp(const uint8_t index, const uint8_t key_index)
 {
     const uint8_t i = 4 + index;
-    current_block[index] = uint16::rotateRight(current_block[index], mixup_rotation[index], 16);
+    current_block[index] = uint16::rotateRight(current_block[index], MIXUP_ROTATIONS[index], 16);
     current_block[index] -= subkeys[key_index + index] 
             + (current_block[(i - 2) % 4] & current_block[(i - 1) % 4]) 
             + (current_block[(i - 3) % 4] & ~current_block[(i - 1) % 4]);

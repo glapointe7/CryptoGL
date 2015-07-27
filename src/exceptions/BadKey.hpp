@@ -4,12 +4,15 @@
 
 #include "Exception.hpp"
 
-class BadKey : public Exception
+namespace CryptoGL
 {
-public:
-   BadKey() {}
-   explicit BadKey(const ErrorType &message) : Exception(message) {}
-   virtual ~BadKey() {};
-};
+    class BadKey : public Exception
+    {
+    public:
+       BadKey() {}
+       explicit BadKey(const ErrorType &message) : Exception(message) {}
+       virtual ~BadKey() {};
+    };
+}
 
 #endif

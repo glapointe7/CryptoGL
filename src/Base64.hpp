@@ -16,7 +16,7 @@ namespace CryptoGL
         BytesVector decode(const ClassicalType &cipher_data) override;
 
     private:
-        static constexpr uint8_t pad_character = '=';
+        static constexpr uint8_t PADDING_CHARACTER = '=';
         
         static uint8_t countPaddingCharacters(const ClassicalType &cipher_data);
     };

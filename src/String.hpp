@@ -18,37 +18,48 @@ namespace CryptoGL
         {
             this->reserve(to_reserve);
         }
+        
         /* Constructor that converts char* to a std::string. */
         String(const char* str) : std::string(str) { }
+        
         /* Constructor that converts String to std::string. */
         explicit String(const std::string &str) : std::string(str) { }
+        
         /* Constructor that fill a string with character 'c' 'n' times. */
         String(const uint64_t &n, const uint8_t c) : std::string(n, c) { }
+        
         /* Move constructor. */
         String(std::string &&str) : std::string(str) { }
+        
         /* Copies the sequence of characters in the range [first,last), in the same order. */
         template <class InputIterator>
         String(InputIterator first, InputIterator last) : std::string(first, last) { }
+        
+        /* Like the copy constructor. */
+        String operator = (const std::string &str) 
+        { 
+            return String(str); 
+        }
 
         // Useful constants for alpha string.
-        static const String letters;
-        static const String uppercase;
-        static const String lowercase;
-        static const String grid_uppercase_fr;
-        static const String grid_lowercase_fr;
-        static const String grid_uppercase_en;
-        static const String grid_lowercase_en;
-        static const String digits;
-        static const String uppercase_digits;
-        static const String lowercase_digits;
-        static const String hex_digits;
-        static const String alpha_numeric;
-        static const String ascii_ordered_alpha_numeric;
-        static const String lower_ordered_alpha_numeric;
-        static const String base64_alphabet;
-        static const String printable;
-        static const String punctuation;
-        static const String white_space;
+        static const String LETTERS;
+        static const String UPPERCASE;
+        static const String LOWERCASE;
+        static const String GRID_UPPERCASE_FR;
+        static const String GRID_LOWERCASE_FR;
+        static const String GRID_UPPERCASE_EN;
+        static const String GRID_LOWERCASE_EN;
+        static const String DIGITS;
+        static const String UPPERCASE_DIGITS;
+        static const String LOWERCASE_DIGITS;
+        static const String HEX_DIGITS;
+        static const String ALPHA_NUMERIC;
+        static const String ASCII_ORDERED_ALPHA_NUMERIC;
+        static const String LOWER_ORDERED_ALPHA_NUMERIC;
+        static const String BASE64_ALPHABET;
+        static const String PRINTABLE;
+        static const String PUNCTUATION;
+        static const String WHITE_SPACE;
 
         /* Uppercase the text. */
         void toUpperCase();

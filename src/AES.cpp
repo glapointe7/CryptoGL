@@ -6,18 +6,16 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<uint8_t, 16> AES::shift_indexes;
-constexpr std::array<uint8_t, 16> AES::inverse_shift_indexes;
-constexpr std::array<uint32_t, 15> AES::round_constants;
-constexpr std::array<uint8_t, 256> AES::sbox;
-constexpr std::array<uint8_t, 256> AES::inverse_sbox;
+constexpr std::array<uint32_t, 15> AES::ROUND_CONSTANTS;
+constexpr std::array<uint8_t, 256> AES::SBOX;
+constexpr std::array<uint8_t, 256> AES::INVERSE_SBOX;
 
-constexpr std::array<uint8_t, 256> AES::table_2;
-constexpr std::array<uint8_t, 256> AES::table_3;
-constexpr std::array<uint8_t, 256> AES::table_9;
-constexpr std::array<uint8_t, 256> AES::table_11;
-constexpr std::array<uint8_t, 256> AES::table_13;
-constexpr std::array<uint8_t, 256> AES::table_14;
+constexpr std::array<uint8_t, 256> AES::TABLE_2;
+constexpr std::array<uint8_t, 256> AES::TABLE_3;
+constexpr std::array<uint8_t, 256> AES::TABLE_9;
+constexpr std::array<uint8_t, 256> AES::TABLE_11;
+constexpr std::array<uint8_t, 256> AES::TABLE_13;
+constexpr std::array<uint8_t, 256> AES::TABLE_14;
 
 void AES::setKey(const BytesVector &key)
 {
@@ -106,25 +104,25 @@ void AES::mixColumns()
 {
     for (uint8_t i = 0; i < 4; ++i)
     {
-        current_block[i] = ((table_2[(current_block[i] >> 24) & 0xFF]
-                         ^ table_3[(current_block[i] >> 16) & 0xFF]
+        current_block[i] = ((TABLE_2[(current_block[i] >> 24) & 0xFF]
+                         ^ TABLE_3[(current_block[i] >> 16) & 0xFF]
                          ^ ((current_block[i] >> 8) & 0xFF)
                          ^ (current_block[i] & 0xFF)) << 24)
 
                      |     ((((current_block[i] >> 24) & 0xFF)
-                         ^ table_2[(current_block[i] >> 16) & 0xFF]
-                         ^ table_3[(current_block[i] >> 8) & 0xFF]
+                         ^ TABLE_2[(current_block[i] >> 16) & 0xFF]
+                         ^ TABLE_3[(current_block[i] >> 8) & 0xFF]
                          ^ (current_block[i] & 0xFF)) << 16)
 
                      |     ((((current_block[i] >> 24) & 0xFF)
                          ^ ((current_block[i] >> 16) & 0xFF)
-                         ^ table_2[(current_block[i] >> 8) & 0xFF]
-                         ^ table_3[current_block[i] & 0xFF]) << 8)
+                         ^ TABLE_2[(current_block[i] >> 8) & 0xFF]
+                         ^ TABLE_3[current_block[i] & 0xFF]) << 8)
 
-                     |     (table_3[(current_block[i] >> 24) & 0xFF]
+                     |     (TABLE_3[(current_block[i] >> 24) & 0xFF]
                          ^ ((current_block[i] >> 16) & 0xFF)
                          ^ ((current_block[i] >> 8) & 0xFF)
-                         ^ table_2[current_block[i] & 0xFF]);
+                         ^ TABLE_2[current_block[i] & 0xFF]);
     }
 }
 
@@ -132,34 +130,34 @@ void AES::inverseMixColumns()
 {
     for (uint8_t i = 0; i < 4; ++i)
     {
-        current_block[i] = ((table_14[(current_block[i] >> 24) & 0xFF]
-                         ^ table_11[(current_block[i] >> 16) & 0xFF]
-                         ^ table_13[(current_block[i] >> 8) & 0xFF]
-                         ^ table_9[current_block[i] & 0xFF]) << 24)
+        current_block[i] = ((TABLE_14[(current_block[i] >> 24) & 0xFF]
+                         ^ TABLE_11[(current_block[i] >> 16) & 0xFF]
+                         ^ TABLE_13[(current_block[i] >> 8) & 0xFF]
+                         ^ TABLE_9[current_block[i] & 0xFF]) << 24)
 
-                     |     ((table_9[(current_block[i] >> 24) & 0xFF]
-                         ^ table_14[(current_block[i] >> 16) & 0xFF]
-                         ^ table_11[(current_block[i] >> 8) & 0xFF]
-                         ^ table_13[current_block[i] & 0xFF]) << 16)
+                     |     ((TABLE_9[(current_block[i] >> 24) & 0xFF]
+                         ^ TABLE_14[(current_block[i] >> 16) & 0xFF]
+                         ^ TABLE_11[(current_block[i] >> 8) & 0xFF]
+                         ^ TABLE_13[current_block[i] & 0xFF]) << 16)
 
-                     |     ((table_13[(current_block[i] >> 24) & 0xFF]
-                         ^ table_9[(current_block[i] >> 16) & 0xFF]
-                         ^ table_14[(current_block[i] >> 8) & 0xFF]
-                         ^ table_11[current_block[i] & 0xFF]) << 8)
+                     |     ((TABLE_13[(current_block[i] >> 24) & 0xFF]
+                         ^ TABLE_9[(current_block[i] >> 16) & 0xFF]
+                         ^ TABLE_14[(current_block[i] >> 8) & 0xFF]
+                         ^ TABLE_11[current_block[i] & 0xFF]) << 8)
 
-                     |     (table_11[(current_block[i] >> 24) & 0xFF]
-                         ^ table_13[(current_block[i] >> 16) & 0xFF]
-                         ^ table_9[(current_block[i] >> 8) & 0xFF]
-                         ^ table_14[current_block[i] & 0xFF]);
+                     |     (TABLE_11[(current_block[i] >> 24) & 0xFF]
+                         ^ TABLE_13[(current_block[i] >> 16) & 0xFF]
+                         ^ TABLE_9[(current_block[i] >> 8) & 0xFF]
+                         ^ TABLE_14[current_block[i] & 0xFF]);
     }
 }
 
 constexpr uint32_t AES::subWord(const uint32_t word)
 {
-    return sbox[word & 0xFF]
-        | (sbox[(word >> 8) & 0xFF]) << 8
-        | (sbox[(word >> 16) & 0xFF]) << 16
-        | (sbox[(word >> 24) & 0xFF]) << 24;
+    return SBOX[word & 0xFF]
+        | (SBOX[(word >> 8) & 0xFF]) << 8
+        | (SBOX[(word >> 16) & 0xFF]) << 16
+        | (SBOX[(word >> 24) & 0xFF]) << 24;
 }
 
 void AES::generateSubkeys()
@@ -174,7 +172,7 @@ void AES::generateSubkeys()
         uint32_t tmp = subkeys[i - 1];
         if (!(i % Nk))
         {
-            tmp = subWord(uint32::rotateLeft(tmp, 8)) ^ round_constants[(i / Nk) - 1];
+            tmp = subWord(uint32::rotateLeft(tmp, 8)) ^ ROUND_CONSTANTS[(i / Nk) - 1];
         }
         else if (Nk > 6 && i % Nk == 4)
         {
@@ -199,14 +197,14 @@ void AES::processEncodingCurrentBlock()
 
     for (uint8_t i = 1; i < rounds; ++i)
     {
-        subBytes(sbox);
+        subBytes(SBOX);
         shiftRows();
         mixColumns();
         addRoundKey(i);
     }
 
     // Last round : no mixColumns.
-    subBytes(sbox);
+    subBytes(SBOX);
     shiftRows();
     addRoundKey(rounds);
 }
@@ -218,12 +216,12 @@ void AES::processDecodingCurrentBlock()
     for (uint8_t i = rounds - 1; i >= 1; --i)
     {
         inverseShiftRows();
-        subBytes(inverse_sbox);
+        subBytes(INVERSE_SBOX);
         addRoundKey(i);
         inverseMixColumns();
     }
 
     inverseShiftRows();
-    subBytes(inverse_sbox);
+    subBytes(INVERSE_SBOX);
     addRoundKey(0);
 }

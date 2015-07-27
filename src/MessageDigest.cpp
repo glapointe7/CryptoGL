@@ -2,11 +2,11 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<uint8_t, 48> MD4::left_rotation_table;
-constexpr std::array<uint8_t, 48> MD4::word_indexes;
-constexpr std::array<uint32_t, 3> MD4::k;
-constexpr std::array<uint8_t, 64> MD5::left_rotation_table;
-constexpr std::array<uint32_t, 64> MD5::sine_magic_numbers;
+constexpr std::array<uint8_t, 48> MD4::LEFT_ROTATIONS;
+constexpr std::array<uint8_t, 48> MD4::WORD_INDICES;
+constexpr std::array<uint32_t, 3> MD4::K;
+constexpr std::array<uint8_t, 64> MD5::LEFT_ROTATIONS;
+constexpr std::array<uint32_t, 64> MD5::SINE_MAGIC_NUMBERS;
 
 void MD4::compress(UInt32Vector &state)
 {
@@ -27,7 +27,7 @@ void MD4::compress(UInt32Vector &state)
                 break;
         }
         
-        const uint32_t special_value = uint32::rotateLeft(hash[0] + f + current_block[word_indexes[j]] + k[index], left_rotation_table[j], 32);
+        const uint32_t special_value = uint32::rotateLeft(hash[0] + f + current_block[WORD_INDICES[j]] + K[index], LEFT_ROTATIONS[j], 32);
         swapHashElements(hash, special_value);
     }
 
@@ -64,7 +64,7 @@ void MD5::compress(UInt32Vector &state)
                 break;
         }
 
-        const uint32_t special_value = hash[1] + uint32::rotateLeft(hash[0] + f + current_block[k] + sine_magic_numbers[j], left_rotation_table[j], 32);
+        const uint32_t special_value = hash[1] + uint32::rotateLeft(hash[0] + f + current_block[k] + SINE_MAGIC_NUMBERS[j], LEFT_ROTATIONS[j], 32);
         swapHashElements(hash, special_value);
     }
 

@@ -4,7 +4,7 @@
 
 using namespace CryptoGL;
 
-const std::array<ClassicalType, 36> Morse::morse = {
+const std::array<ClassicalType, 36> Morse::MORSE_CODES = {
     {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..",
         ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.",
         "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", "-----",
@@ -14,7 +14,7 @@ const std::array<ClassicalType, 36> Morse::morse = {
 
 Morse::Morse()
 {
-    setAlpha(ClassicalType::uppercase_digits);
+    setAlpha(ClassicalType::UPPERCASE_DIGITS);
 }
 
 ClassicalType Morse::encode(const ClassicalType &clear_text)
@@ -23,7 +23,7 @@ ClassicalType Morse::encode(const ClassicalType &clear_text)
     for (const auto c : clear_text)
     {
         const uint32_t found = alpha.find(c);
-        crypted.append(morse[found]);
+        crypted.append(MORSE_CODES[found]);
         crypted.push_back(' ');
     }
 
@@ -37,7 +37,7 @@ ClassicalType Morse::decode(const ClassicalType &cipher_text)
 
     for (const auto &str : cipher_word)
     {
-        const uint32_t pos = std::distance(morse.begin(), std::find(morse.begin(), morse.end(), str));
+        const uint32_t pos = std::distance(MORSE_CODES.begin(), std::find(MORSE_CODES.begin(), MORSE_CODES.end(), str));
         decrypted.push_back(alpha[pos]);
     }
 

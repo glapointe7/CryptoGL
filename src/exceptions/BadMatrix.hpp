@@ -4,12 +4,15 @@
 
 #include "Exception.hpp"
 
-class BadMatrix : public Exception
+namespace CryptoGL
 {
-public:
-   BadMatrix() {}
-   explicit BadMatrix(const ErrorType &message) : Exception(message) {}
-   virtual ~BadMatrix() {}
-};
+    class BadMatrix : public Exception
+    {
+    public:
+       BadMatrix() {}
+       explicit BadMatrix(const ErrorType &message) : Exception(message) {}
+       virtual ~BadMatrix() {}
+    };
+}
 
 #endif

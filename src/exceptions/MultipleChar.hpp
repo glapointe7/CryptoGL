@@ -4,11 +4,14 @@
 
 #include "BadAlpha.hpp"
 
-class MultipleChar : public BadAlpha
+namespace CryptoGL
 {
-public:
-   MultipleChar();
-   explicit MultipleChar(const ErrorType &message) : BadAlpha(message) {}
-};
+    class MultipleChar : public BadAlpha
+    {
+    public:
+       MultipleChar();
+       explicit MultipleChar(const ErrorType &message) : BadAlpha(message) {}
+    };
+}
 
 #endif

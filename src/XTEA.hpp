@@ -25,8 +25,6 @@ namespace CryptoGL
             : XTEA(key, mode, {}) { }
 
     private:
-        static constexpr uint32_t delta = 0x9E3779B9;
-
         void generateSubkeys() override;
         void processEncodingCurrentBlock() override;
         void processDecodingCurrentBlock() override;

@@ -13,7 +13,7 @@ namespace CryptoGL
     class Vigenere : public StringCipherWithStringKey
     {
     private:
-        using GetCharFunction = std::function<ClassicalType(const ClassicalType &, const char, const char)>;
+        using GetCharFunction = std::function<char(const ClassicalType &, const char, const char)>;
 
         const GetCharFunction charEncode, charDecode;
         ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
@@ -28,28 +28,28 @@ namespace CryptoGL
         Vigenere(const GetCharFunction &charEncode, const GetCharFunction &charDecode)
             : charEncode(charEncode), charDecode(charDecode) { }
         
-        static ClassicalType clearPlusKey(const ClassicalType &alpha, const char c, const char key_pos)
+        static char clearPlusKey(const ClassicalType &alpha, const char c, const char key_pos)
         {
-            const uint32_t x = (alpha.find(c) + alpha.find(key_pos)) % alpha.length();
-            return ClassicalType(1, alpha[x]);
+            const int64_t x = (alpha.find(c) + alpha.find(key_pos)) % alpha.length();
+            return alpha[x];
         }
         
-        static ClassicalType clearMinusKey(const ClassicalType &alpha, const char c, const char key_pos)
+        static char clearMinusKey(const ClassicalType &alpha, const char c, const char key_pos)
         {
-            const uint32_t x = Maths::mod(alpha.find(c) - alpha.find(key_pos), alpha.length());
-            return ClassicalType(1, alpha[x]);
+            const int64_t x = Maths::mod(alpha.find(c) - alpha.find(key_pos), alpha.length());
+            return alpha[x];
         }
         
-        static ClassicalType keyMinusClear(const ClassicalType &alpha, const char c, const char key_pos)
+        static char keyMinusClear(const ClassicalType &alpha, const char c, const char key_pos)
         {
-            return ClassicalType(1, alpha[Maths::mod(alpha.find(key_pos) - alpha.find(c), alpha.length())]);
+            return alpha[Maths::mod(alpha.find(key_pos) - alpha.find(c), alpha.length())];
         }
 
     public:
         explicit Vigenere(const KeyType &key)
             : Vigenere(clearPlusKey, clearMinusKey, key) { }
 
-        ClassicalType encode(const ClassicalType &clear_text) override;
+        virtual ClassicalType encode(const ClassicalType &clear_text) override;
         virtual ClassicalType decode(const ClassicalType &cipher_text) override;
     };
 
@@ -85,11 +85,11 @@ namespace CryptoGL
         /* Specific to Rozier cipher : the rozier_key is a string. */
         void setKey(const ClassicalType &rozier_key) override
         {
-            const uint32_t key_length = rozier_key.length() - 1;
-            const uint8_t alpha_len = alpha.length();
+            const int64_t key_length = rozier_key.length() - 1;
+            const int64_t alpha_len = alpha.length();
             KeyType new_key(key_length + 1);
 
-            for (uint32_t i = 0; i < key_length; ++i)
+            for (uint64_t i = 0; i < key_length; ++i)
             {
                 new_key.push_back(alpha[Maths::mod(alpha.find(rozier_key[i + 1]) - alpha.find(rozier_key[i]), alpha_len)]);
             }
@@ -117,8 +117,7 @@ namespace CryptoGL
         /* Specific to Caesar cipher : the caesar_key is a byte. */
         void setKey(const int8_t caesar_key)
         {
-            const uint8_t alpha_len = alpha.length();
-            const int8_t the_key = Maths::mod(caesar_key % alpha_len, alpha_len);
+            const int8_t the_key = Maths::mod(caesar_key, alpha.length());
             StringCipherWithStringKey::setKey(KeyType(1, alpha[the_key]));
         }
     };
@@ -138,22 +137,23 @@ namespace CryptoGL
             return buffer;
         }
         
-        static ClassicalType keyDivideCipher(const ClassicalType &alpha, const uint16_t c, const uint8_t key_pos)
+        static char keyDivideCipher(const ClassicalType &alpha, const uint16_t c, const uint8_t key_pos)
         {
             const uint8_t x = (c / (alpha.find(key_pos) + 1)) - 1;
-            return ClassicalType(1, alpha[x]);
+            return alpha[x];
         }
 
     public:
         explicit VigenereMult(const KeyType &key)
-            : Vigenere(clearMultKey, keyDivideCipher, key) { }
+            : Vigenere(key) { }
         
         ClassicalType encode(const ClassicalType &clear_text) override
         {
             const KeyType my_key = getKey();
             const uint32_t key_length = my_key.length();
 
-            ClassicalType cipher_text(clear_text.length() * 4);
+            ClassicalType cipher_text;
+            cipher_text.reserve(clear_text.length() * 4);
             uint32_t idx = 0;
             for (const auto c : clear_text)
             {
@@ -171,17 +171,18 @@ namespace CryptoGL
             const KeyType my_key = getKey();
             const uint32_t key_length = my_key.length();
 
-            ClassicalType toReturn(cipher_text.trimEnd().length());
+            ClassicalType clear_text;
+            clear_text.reserve(cipher_text.trimEnd().length());
             const Vector<ClassicalType> cipher_numbers = cipher_text.split(' ');
 
             uint32_t idx = 0;
             for (const auto &number : cipher_numbers)
             {
-                toReturn.push_back(keyDivideCipher(alpha, atoi(number.c_str()), my_key[idx]).front());
+                clear_text.push_back(keyDivideCipher(alpha, atoi(number.c_str()), my_key[idx]));
                 idx = (idx + 1) % key_length;
             }
 
-            return toReturn;
+            return clear_text;
         }
     };
 
@@ -197,15 +198,16 @@ namespace CryptoGL
 
         // Tell the compiler we want both the 'setKey' from Vigenere and ours. 
         using Vigenere::setKey;
+        
         /* Specific to Gronsfeld cipher : the grons_key is a vector of integers. */
         void setKey(const UInt32Vector &grons_key)
         {
-            const uint8_t alpha_len = alpha.length();
+            const int64_t alpha_len = alpha.length();
             KeyType new_key(grons_key.size());
 
             for (const auto &number : grons_key)
             {
-                const uint8_t x = Maths::mod(number % alpha_len, alpha_len);
+                const auto x = Maths::mod(number, alpha_len);
                 new_key.push_back(alpha[x]);
             }
             StringCipherWithStringKey::setKey(new_key);

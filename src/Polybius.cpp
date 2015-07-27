@@ -7,7 +7,7 @@ ClassicalType Polybius::encode(const ClassicalType &clear_text)
     ClassicalType crypted(clear_text.length() * 2);
     for (const auto c : clear_text)
     {
-        const Coordinates coords = grid.getCharCoordinates(c);
+        const auto coords = grid.getCharCoordinates(c);
         crypted.push_back(coords.y + '1');
         crypted.push_back(coords.x + '1');
     }

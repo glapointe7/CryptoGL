@@ -9,10 +9,11 @@ void XTEA::generateSubkeys()
     const UInt32Vector tmp_key = BigEndian32::toIntegersVector(key);
     uint32_t sum = 0;
     subkeys.resize(64);
+    constexpr uint32_t DELTA = 0x9E3779B9;
     for (uint8_t i = 0; i < 32; ++i)
     {
         subkeys[i] = sum + tmp_key[sum % 4];
-        sum += delta;
+        sum += DELTA;
         subkeys[32 + i] = sum + tmp_key[(sum >> 11) % 4];
     }
 }

@@ -4,7 +4,7 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<std::array<uint64_t, 256>, 4> Tiger::sbox;
+constexpr std::array<std::array<uint64_t, 256>, 4> Tiger::SBOX;
 
 void Tiger::applyKeySchedule()
 {
@@ -30,11 +30,11 @@ void Tiger::applyKeySchedule()
 void Tiger::applyRound(const uint64_t &word, const uint8_t mult)
 {
     registers[2] ^= word;
-    registers[0] -= sbox[0][registers[2] & 0xFF] ^ sbox[1][(registers[2] >> 16) & 0xFF] ^
-            sbox[2][(registers[2] >> 32) & 0xFF] ^ sbox[3][(registers[2] >> 48) & 0xFF];
+    registers[0] -= SBOX[0][registers[2] & 0xFF] ^ SBOX[1][(registers[2] >> 16) & 0xFF] ^
+            SBOX[2][(registers[2] >> 32) & 0xFF] ^ SBOX[3][(registers[2] >> 48) & 0xFF];
 
-    registers[1] += sbox[3][(registers[2] >> 8) & 0xFF] ^ sbox[2][(registers[2] >> 24) & 0xFF] ^
-            sbox[1][(registers[2] >> 40) & 0xFF] ^ sbox[0][(registers[2] >> 56) & 0xFF];
+    registers[1] += SBOX[3][(registers[2] >> 8) & 0xFF] ^ SBOX[2][(registers[2] >> 24) & 0xFF] ^
+            SBOX[1][(registers[2] >> 40) & 0xFF] ^ SBOX[0][(registers[2] >> 56) & 0xFF];
 
     registers[1] *= mult;
 }
@@ -91,7 +91,7 @@ BytesVector Tiger::getOutput(const UInt64Vector &hash) const
     if (output_size % 8)
     {
         const BytesVector bytes = LittleEndian64::toBytesVector(hash[out_data_size]);
-        output.insert(output.end(), bytes.begin(), bytes.begin() + 4);
+        output.extend(bytes, 0, 4);
     }
 
     return output;

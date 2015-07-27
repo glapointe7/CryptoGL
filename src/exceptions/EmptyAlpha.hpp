@@ -4,11 +4,14 @@
 
 #include "BadAlpha.hpp"
 
-class EmptyAlpha : public BadAlpha
+namespace CryptoGL
 {
-public:
-   EmptyAlpha() {}
-   explicit EmptyAlpha(const ErrorType &message) : BadAlpha(message) {}
-};
+    class EmptyAlpha : public BadAlpha
+    {
+    public:
+       EmptyAlpha() {}
+       explicit EmptyAlpha(const ErrorType &message) : BadAlpha(message) {}
+    };
+}
 
 #endif

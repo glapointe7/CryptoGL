@@ -41,13 +41,14 @@ void UnsortAlpha::setVerticalAlpha()
 
 ClassicalType UnsortAlpha::process(const ClassicalType &text, const GetCharFunction &getNextChar)
 {
-    ClassicalType toReturn(text.length());
+    ClassicalType output;
+    output.reserve(text.length());
     for (const auto c : text)
     {
-        toReturn.push_back(getNextChar(alpha, unsort_alpha, c));
+        output.push_back(getNextChar(alpha, unsort_alpha, c));
     }
 
-    return toReturn;
+    return output;
 }
 
 ClassicalType UnsortAlpha::encode(const ClassicalType &clear_text)

@@ -4,8 +4,8 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<uint64_t, 24> Keccak::round_constants;
-constexpr std::array<std::array<uint8_t, 5>, 5> Keccak::rho_offsets;
+constexpr std::array<uint64_t, 24> Keccak::ROUND_CONSTANTS;
+constexpr std::array<std::array<uint8_t, 5>, 5> Keccak::RHO_OFFSETS_TABLE;
 
 void Keccak::applyRound(const uint8_t round_index)
 {
@@ -41,7 +41,7 @@ void Keccak::applyRound(const uint8_t round_index)
     {
         for (uint8_t y = 0; y < 5; ++y)
         {
-            B[y][(2 * x + 3 * y) % 5] = uint64::rotateLeft(state[x][y], rho_offsets[x][y]);
+            B[y][(2 * x + 3 * y) % 5] = uint64::rotateLeft(state[x][y], RHO_OFFSETS_TABLE[x][y]);
         }
     }
 
@@ -55,7 +55,7 @@ void Keccak::applyRound(const uint8_t round_index)
     }
 
     // Iota step.
-    state[0][0] ^= round_constants[round_index];
+    state[0][0] ^= ROUND_CONSTANTS[round_index];
 }
 
 void Keccak::F()

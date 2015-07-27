@@ -44,7 +44,7 @@ namespace CryptoGL
         void applyPiRight();
         void applyRound(const uint8_t constant1, const uint8_t constant2);
         
-        static constexpr std::array<uint32_t, 17> round_constants = {{
+        static constexpr std::array<uint32_t, 17> ROUND_CONSTANTS = {{
             0x00000080, 0x0000001b, 0x00000036, 0x0000006c,
             0x000000d8, 0x000000ab, 0x0000004d, 0x0000009a,
             0x0000002f, 0x0000005e, 0x000000bc, 0x00000063,

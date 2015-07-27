@@ -40,7 +40,8 @@ Transposition::Table Transposition::createIncompleteTable(const ClassicalType &d
 
 ClassicalType Transposition::readPermutedTable(const Table &table)
 {
-    ClassicalType data(table.size() * key.size());
+    ClassicalType data;
+    data.reserve(table.size() * key.size());
     for (const auto &str : table)
     {
         data.append(str);
@@ -51,7 +52,8 @@ ClassicalType Transposition::readPermutedTable(const Table &table)
 
 ClassicalType TranspositionCompleteRows::readPermutedTable(const Table &table)
 {
-    ClassicalType data(table.size() * key.size());
+    ClassicalType data;
+    data.reserve(table.size() * key.size());
     for (const auto &str : table)
     {
         for (const auto k : key)
@@ -67,7 +69,8 @@ ClassicalType TranspositionIncompleteRows::readPermutedTable(const Table &table)
 {
     const uint32_t key_len = key.size();
     const uint32_t rows = table.size();
-    ClassicalType data(rows * key_len);
+    ClassicalType data;
+    data.reserve(rows * key_len);
 
     for (uint32_t i = 0; i < rows - 1; ++i)
     {
@@ -82,7 +85,7 @@ ClassicalType TranspositionIncompleteRows::readPermutedTable(const Table &table)
     for (uint32_t j = 0; j < rest; ++j)
     {
         const auto it = std::next(last_row_sorted.begin(), key[j]);
-        const uint32_t pos = std::distance(key.begin(), std::find(key.begin(), key.end(), *it));
+        const auto pos = std::distance(key.begin(), std::find(key.begin(), key.end(), *it));
         data.push_back(table[rows - 1][pos]);
     }
 
@@ -103,7 +106,7 @@ Transposition::Table TranspositionCompleteColumns::createTable(ClassicalType dat
     {
         for (uint32_t j = i; j < data_len; j += rows)
         {
-            const uint32_t pos = std::distance(key.begin(), std::find(key.begin(), key.end(), k));
+            const auto pos = std::distance(key.begin(), std::find(key.begin(), key.end(), k));
             table[i][pos] = data[j];
             k = (k + 1) % key_len;
         }
@@ -116,11 +119,12 @@ ClassicalType TranspositionCompleteColumns::readPermutedTable(const Table &table
 {
     const uint32_t key_len = key.size();
     const uint32_t rows = table.size();
-    ClassicalType data(rows * key_len);
+    ClassicalType data;
+    data.reserve(rows * key_len);
 
     for (uint32_t i = 0; i < key_len; ++i)
     {
-        const uint32_t pos = std::distance(key.begin(), std::find(key.begin(), key.end(), i));
+        const auto pos = std::distance(key.begin(), std::find(key.begin(), key.end(), i));
         for (uint32_t j = 0; j < rows; ++j)
         {
             data.push_back(table[j][pos]);
@@ -145,7 +149,7 @@ TranspositionIncompleteColumns::createIncompleteTable(const ClassicalType &data)
     uint32_t k = 0;
     for (uint32_t i = 0; i < key_len; ++i)
     {
-        const uint32_t pos = std::distance(key.begin(), std::find(key.begin(), key.end(), i));
+        const auto pos = std::distance(key.begin(), std::find(key.begin(), key.end(), i));
         uint32_t total = rows;
         if (pos >= rest)
         {
@@ -166,12 +170,13 @@ TranspositionIncompleteColumns::readPermutedTable(const Table &table)
     const uint32_t key_len = key.size();
     const uint32_t rows = table.size();
     const uint32_t last_row = table[rows - 1].length();
-    ClassicalType data(rows * key_len);
+    ClassicalType data;
+    data.reserve(rows * key_len);
 
     for (uint32_t i = 0; i < key_len; ++i)
     {
         uint32_t total = rows;
-        const uint32_t pos = std::distance(key.begin(), std::find(key.begin(), key.end(), i));
+        const auto pos = std::distance(key.begin(), std::find(key.begin(), key.end(), i));
         if (pos >= last_row)
         {
             total = rows - 1;

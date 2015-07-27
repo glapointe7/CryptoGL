@@ -4,14 +4,17 @@
 
 #include "BadAlpha.hpp"
 
-class BadChar : public BadAlpha
+namespace CryptoGL
 {
-public:
+    class BadChar : public BadAlpha
+    {
+    public:
 
-   BadChar() {}
+       BadChar() {}
 
-   BadChar(const ErrorType &message, const char c)
-    : BadAlpha(message + " The bad character is : '" + c + "'.") {}
-};
+       BadChar(const ErrorType &message, const char c)
+        : BadAlpha(message + " The bad character is : '" + c + "'.") {}
+    };
+}
 
 #endif

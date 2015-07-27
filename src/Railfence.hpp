@@ -18,6 +18,7 @@ namespace CryptoGL
 
         ClassicalType encode(const ClassicalType &clear_text) override;
         ClassicalType decode(const ClassicalType &cipher_text) override;
+        
         void setOffset(const uint32_t offset)
         {
             this->offset = offset;

@@ -24,7 +24,7 @@ void Chao::leftShiftAlphabet(const uint8_t index)
     left_alpha.rotateLeft(index);
     const char tmp = left_alpha[1];
     left_alpha.erase(left_alpha.begin() + 1);
-    left_alpha.insert(left_alpha.begin() + nadir, tmp);
+    left_alpha.insert(left_alpha.begin() + NADIR, tmp);
 }
 
 void Chao::rightShiftAlphabet(const uint8_t index)
@@ -32,7 +32,7 @@ void Chao::rightShiftAlphabet(const uint8_t index)
     right_alpha.rotateLeft(index + 1);
     const char tmp = right_alpha[2];
     right_alpha.erase(right_alpha.begin() + 2);
-    right_alpha.insert(right_alpha.begin() + nadir, tmp);
+    right_alpha.insert(right_alpha.begin() + NADIR, tmp);
 }
 
 ClassicalType Chao::encode(const ClassicalType &clear_text)

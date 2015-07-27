@@ -18,10 +18,10 @@ ClassicalType Base64::encode(const BytesVector &clear_data)
             temp += clear_data[i + 2 - j] << (8 * j);
         }
 
-        crypted.push_back(ClassicalType::base64_alphabet[(temp & 0xFC0000) >> 18]);
-        crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x03F000) >> 12]);
-        crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x000FC0) >> 6]);
-        crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x00003F)]);
+        crypted.push_back(ClassicalType::BASE64_ALPHABET[(temp & 0xFC0000) >> 18]);
+        crypted.push_back(ClassicalType::BASE64_ALPHABET[(temp & 0x03F000) >> 12]);
+        crypted.push_back(ClassicalType::BASE64_ALPHABET[(temp & 0x000FC0) >> 6]);
+        crypted.push_back(ClassicalType::BASE64_ALPHABET[(temp & 0x00003F)]);
     }
     
     uint32_t temp = 0;
@@ -29,18 +29,18 @@ ClassicalType Base64::encode(const BytesVector &clear_data)
     {
         case 1:
             temp = clear_data.back() << 16;
-            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0xFC0000) >> 18]);
-            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x03F000) >> 12]);
-            crypted.append(2, pad_character);
+            crypted.push_back(ClassicalType::BASE64_ALPHABET[(temp & 0xFC0000) >> 18]);
+            crypted.push_back(ClassicalType::BASE64_ALPHABET[(temp & 0x03F000) >> 12]);
+            crypted.append(2, PADDING_CHARACTER);
             break;
 
         case 2:
             temp = clear_data[clear_len - 2] << 16;
             temp += clear_data.back() << 8;
-            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0xFC0000) >> 18]);
-            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x03F000) >> 12]);
-            crypted.push_back(ClassicalType::base64_alphabet[(temp & 0x000FC0) >> 6]);
-            crypted.push_back(pad_character);
+            crypted.push_back(ClassicalType::BASE64_ALPHABET[(temp & 0xFC0000) >> 18]);
+            crypted.push_back(ClassicalType::BASE64_ALPHABET[(temp & 0x03F000) >> 12]);
+            crypted.push_back(ClassicalType::BASE64_ALPHABET[(temp & 0x000FC0) >> 6]);
+            crypted.push_back(PADDING_CHARACTER);
             break;
     }
 
@@ -89,7 +89,7 @@ BytesVector Base64::decode(const ClassicalType &cipher_data)
                         temp |= 0x3F; //change to 0x5F for URL alphabet
                         break;
 
-                    case pad_character:
+                    case PADDING_CHARACTER:
                     {
                         switch(cipher_len - i - j)
                         {
@@ -126,12 +126,12 @@ uint8_t Base64::countPaddingCharacters(const ClassicalType &cipher_data)
     if (!cipher_data.empty())
     {
         const uint32_t cipher_len = cipher_data.size();
-        if (cipher_data[cipher_len - 1] == pad_character)
+        if (cipher_data[cipher_len - 1] == PADDING_CHARACTER)
         {
             padding++;
         }
         
-        if (cipher_data[cipher_len - 2] == pad_character)
+        if (cipher_data[cipher_len - 2] == PADDING_CHARACTER)
         {
             padding++;
         }

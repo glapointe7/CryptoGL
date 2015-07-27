@@ -5,8 +5,8 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<std::array<uint8_t, 4>, 4> Salsa20::sigma;
-constexpr std::array<std::array<uint8_t, 4>, 4> Salsa20::tau;
+constexpr std::array<std::array<uint8_t, 4>, 4> Salsa20::SIGMA;
+constexpr std::array<std::array<uint8_t, 4>, 4> Salsa20::TAU;
 
 void Salsa20::setKey(const BytesVector &key)
 {
@@ -88,25 +88,25 @@ void Salsa20::keySetup()
     subkeys.reserve(64);
     if (key.size() == 32)
     {
-        subkeys.insert(subkeys.end(), std::begin(sigma[0]), std::end(sigma[0]));
+        subkeys.insert(subkeys.end(), std::begin(SIGMA[0]), std::end(SIGMA[0]));
         subkeys.extend(key, 0, 16);
-        subkeys.insert(subkeys.end(), std::begin(sigma[1]), std::end(sigma[1]));
+        subkeys.insert(subkeys.end(), std::begin(SIGMA[1]), std::end(SIGMA[1]));
         IVSetup();
         subkeys.extend(LittleEndian64::toBytesVector(counter));
-        subkeys.insert(subkeys.end(), std::begin(sigma[2]), std::end(sigma[2]));
+        subkeys.insert(subkeys.end(), std::begin(SIGMA[2]), std::end(SIGMA[2]));
         subkeys.extend(key, 16);
-        subkeys.insert(subkeys.end(), std::begin(sigma[3]), std::end(sigma[3]));
+        subkeys.insert(subkeys.end(), std::begin(SIGMA[3]), std::end(SIGMA[3]));
     }
     else
     {
-        subkeys.insert(subkeys.end(), std::begin(tau[0]), std::end(tau[0]));
+        subkeys.insert(subkeys.end(), std::begin(TAU[0]), std::end(TAU[0]));
         subkeys.extend(key);
-        subkeys.insert(subkeys.end(), std::begin(tau[1]), std::end(tau[1]));
+        subkeys.insert(subkeys.end(), std::begin(TAU[1]), std::end(TAU[1]));
         IVSetup();
         subkeys.extend(LittleEndian64::toBytesVector(counter));
-        subkeys.insert(subkeys.end(), std::begin(tau[2]), std::end(tau[2]));
+        subkeys.insert(subkeys.end(), std::begin(TAU[2]), std::end(TAU[2]));
         subkeys.extend(key);
-        subkeys.insert(subkeys.end(), std::begin(tau[3]), std::end(tau[3]));
+        subkeys.insert(subkeys.end(), std::begin(TAU[3]), std::end(TAU[3]));
     }
 }
 

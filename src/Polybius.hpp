@@ -10,7 +10,8 @@ namespace CryptoGL
     {
     public:
         Polybius(const KeyType &key, const ClassicalType &alpha) : SquareCipher(key, alpha) { }
-        explicit Polybius(const KeyType &key) : Polybius(key, ClassicalType::grid_uppercase_fr) { }
+        
+        explicit Polybius(const KeyType &key) : Polybius(key, ClassicalType::GRID_UPPERCASE_FR) { }
 
         ClassicalType encode(const ClassicalType &clear_text) override;
         ClassicalType decode(const ClassicalType &cipher_text) override;

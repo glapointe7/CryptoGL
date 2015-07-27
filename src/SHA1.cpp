@@ -2,7 +2,7 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<uint32_t, 4> SHA1::k;
+constexpr std::array<uint32_t, 4> SHA1::K;
 
 void SHA1::compress(UInt32Vector &state)
 {
@@ -34,7 +34,7 @@ void SHA1::compress(UInt32Vector &state)
         }
 
         // Special swapping of the hash.
-        const uint32_t tmp = uint32::rotateLeft(hash[0], 5) + f + hash[4] + k[index] + current_block[j];
+        const uint32_t tmp = uint32::rotateLeft(hash[0], 5) + f + hash[4] + K[index] + current_block[j];
         hash[4] = hash[3];
         hash[3] = hash[2];
         hash[2] = uint32::rotateLeft(hash[1], 30);

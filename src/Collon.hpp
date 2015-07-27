@@ -13,7 +13,7 @@ namespace CryptoGL
             : SquareCipher(key, alpha), block_len(block_length) { }
         
         Collon(const KeyType &key, const uint32_t block_length)
-            : Collon(key, ClassicalType::grid_uppercase_fr, block_length) { }
+            : Collon(key, ClassicalType::GRID_UPPERCASE_FR, block_length) { }
         
         explicit Collon(const KeyType &key)
             : Collon(key, 5) { }

@@ -3,7 +3,7 @@
 using namespace CryptoGL;
 
 template <>
-const UInt32Vector RoundConstants<uint32_t>::CubicRootPrimes = {{
+const UInt32Vector RoundConstants<uint32_t>::CUBIC_ROOT_PRIMES = {{
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
     0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
     0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
@@ -15,7 +15,7 @@ const UInt32Vector RoundConstants<uint32_t>::CubicRootPrimes = {{
 }};
 
 template <>
-const UInt64Vector RoundConstants<uint64_t>::CubicRootPrimes = {{
+const UInt64Vector RoundConstants<uint64_t>::CUBIC_ROOT_PRIMES = {{
     0x428A2F98D728AE22, 0x7137449123EF65CD, 0xB5C0FBCFEC4D3B2F, 0xE9B5DBA58189DBBC,
     0x3956C25BF348B538, 0x59F111F1B605D019, 0x923F82A4AF194F9B, 0xAB1C5ED5DA6D8118,
     0xD807AA98A3030242, 0x12835B0145706FBE, 0x243185BE4EE4B28C, 0x550C7DC3D5FFB4E2,
@@ -39,10 +39,10 @@ const UInt64Vector RoundConstants<uint64_t>::CubicRootPrimes = {{
 }};
 
 template <>
-const std::array<uint8_t, 6> RoundConstants<uint32_t>::Shifters = {{7, 18, 3, 19, 17, 10}};
+const std::array<uint8_t, 6> RoundConstants<uint32_t>::SHIFTERS = {{7, 18, 3, 19, 17, 10}};
 
 template <>
-const std::array<uint8_t, 6> RoundConstants<uint64_t>::Shifters = {{1, 8, 7, 19, 61, 6}};
+const std::array<uint8_t, 6> RoundConstants<uint64_t>::SHIFTERS = {{1, 8, 7, 19, 61, 6}};
 
 template <>
 const std::array<uint8_t, 6> RoundConstants<uint32_t>::A = {{6, 11, 25, 2, 13, 22}};

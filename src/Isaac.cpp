@@ -2,7 +2,7 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<uint8_t, 8> Isaac::shift;
+constexpr std::array<uint8_t, 8> Isaac::SHIFTS;
 
 uint32_t Isaac::applyRound(const uint32_t accum_shifted, const uint16_t index)
 {
@@ -36,11 +36,11 @@ void Isaac::shuffle(std::array<uint32_t, 8> &tmp)
 {
     for (uint8_t i = 0; i < 8; i += 2)
     {
-        tmp[i] ^= tmp[i + 1] << shift[i];
+        tmp[i] ^= tmp[i + 1] << SHIFTS[i];
         tmp[(i + 3) & 7] += tmp[i];
         tmp[i + 1] += tmp[(i + 2) & 7];
 
-        tmp[i + 1] ^= tmp[(i + 2) & 7] >> shift[i + 1];
+        tmp[i + 1] ^= tmp[(i + 2) & 7] >> SHIFTS[i + 1];
         tmp[(i + 4) & 7] += tmp[i + 1];
         tmp[(i + 2) & 7] += tmp[(i + 3) & 7];
     }

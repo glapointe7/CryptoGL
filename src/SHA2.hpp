@@ -13,8 +13,8 @@ namespace CryptoGL
     template <typename Integer>
     struct RoundConstants
     {
-        static const Vector<Integer> CubicRootPrimes;
-        static const std::array<uint8_t, 6> Shifters;
+        static const Vector<Integer> CUBIC_ROOT_PRIMES;
+        static const std::array<uint8_t, 6> SHIFTERS;
         static const std::array<uint8_t, 6> A;
     };
 
@@ -35,7 +35,7 @@ namespace CryptoGL
             this->current_block.resize(this->rounds);
 
             // Extention of the 32-bit 16 blocks in 64 blocks of 32 bits.
-            extendWords(RC::Shifters);
+            extendWords(RC::SHIFTERS);
 
             DataTypeVector hash(state);
             for (uint8_t j = 0; j < this->rounds; ++j)
@@ -43,7 +43,7 @@ namespace CryptoGL
                 const DataType tmp1 = hash[7]
                     + A(hash[4], RC::A[0], RC::A[1], RC::A[2])
                     + ch(hash[4], hash[5], hash[6])
-                    + RC::CubicRootPrimes[j]
+                    + RC::CUBIC_ROOT_PRIMES[j]
                     + this->current_block[j];
                 
                 const DataType tmp2 = A(hash[0], RC::A[3], RC::A[4], RC::A[5]) + maj(hash[0], hash[1], hash[2]);

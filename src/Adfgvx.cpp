@@ -7,7 +7,7 @@
 
 using namespace CryptoGL;
 
-const ClassicalType Adfgvx::code = "ADFGVX";
+const ClassicalType Adfgvx::CODE = "ADFGVX";
 
 Int32Vector Adfgvx::getPermutationKey() const
 {
@@ -36,8 +36,8 @@ ClassicalType Adfgvx::encode(const ClassicalType &clear_text)
     for (const auto c : clear_text)
     {
         const Coordinates coords = grid_key.getCharCoordinates(c);
-        first_encoding.push_back(code[coords.y]);
-        first_encoding.push_back(code[coords.x]);
+        first_encoding.push_back(CODE[coords.y]);
+        first_encoding.push_back(CODE[coords.x]);
     }
 
     TranspositionCompleteColumns TCC(getPermutationKey());
@@ -55,7 +55,7 @@ ClassicalType Adfgvx::decode(const ClassicalType &cipher_text)
 
     for (uint32_t i = 0; i < cipher_len; i += 2)
     {
-        const auto coords = std::make_pair(code.find(first_decoding[i]), code.find(first_decoding[i + 1]));
+        const auto coords = std::make_pair(CODE.find(first_decoding[i]), CODE.find(first_decoding[i + 1]));
         decrypted.push_back(grid_key.at(coords.first, coords.second));
     }
 

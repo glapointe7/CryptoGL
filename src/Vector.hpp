@@ -127,7 +127,7 @@ namespace CryptoGL
         
         /* Take the contain of this vector and transform it to String.
          * Example: {12, 11, 3, 434} with separator '-' will give the String "12-11-3-434". */
-        String join(const char separator)
+        String join(const char separator) const
         {
             const uint64_t length = this->size();
             String result = Integer<Type>::toString(this->at(0));
@@ -248,7 +248,7 @@ namespace CryptoGL
             {
                 for (int8_t j = data_size - 4; j >= 0; j -= 4)
                 {
-                    hex_digest.push_back(String::hex_digits[(this->at(i) >> j) & 0xF]);
+                    hex_digest.push_back(String::HEX_DIGITS[(this->at(i) >> j) & 0xF]);
                 }
             }
 

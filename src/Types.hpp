@@ -21,11 +21,13 @@ namespace CryptoGL
     using UInt64Vector = Vector<uint64_t>;
 
     using Int32Vector = Vector<int32_t>;
+    using Int64Vector = Vector<int64_t>;
 
     using BytesMatrix = Vector<BytesVector>;
     using UInt16Matrix = Vector<UInt16Vector>;
     using Int32Matrix = Vector<Int32Vector>;
     using UInt32Matrix = Vector<UInt32Vector>;
+    using Int64Matrix = Vector<Int64Vector>;
     using UInt64Matrix = Vector<UInt64Vector>;
 
     using IV_Vector = BytesMatrix;

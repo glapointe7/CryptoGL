@@ -2,7 +2,7 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<uint8_t, 256> Skipjack::f_table;
+constexpr std::array<uint8_t, 256> Skipjack::F_TABLE;
 
 void Skipjack::setKey(const BytesVector &key)
 {
@@ -22,7 +22,7 @@ void Skipjack::generateSubkeys()
 
 uint8_t Skipjack::F(const uint8_t half_block, const uint8_t round) const
 {
-    return f_table[half_block ^ subkeys[round]];
+    return F_TABLE[half_block ^ subkeys[round]];
 }
 
 void Skipjack::encodeFeistelRounds(uint8_t& L, uint8_t& R, const uint8_t round) const

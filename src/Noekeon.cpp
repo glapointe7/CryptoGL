@@ -6,7 +6,7 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<uint32_t, 17> Noekeon::round_constants;
+constexpr std::array<uint32_t, 17> Noekeon::ROUND_CONSTANTS;
 
 void Noekeon::generateSubkeys()
 {
@@ -85,9 +85,9 @@ void Noekeon::processEncodingCurrentBlock()
 {
     for (uint8_t i = 0; i < rounds; ++i)
     {
-        applyRound(round_constants[i], 0);
+        applyRound(ROUND_CONSTANTS[i], 0);
     }
-    current_block[0] ^= round_constants[rounds];
+    current_block[0] ^= ROUND_CONSTANTS[rounds];
     applyThetaToState();
 
 }
@@ -96,9 +96,9 @@ void Noekeon::processDecodingCurrentBlock()
 {
     for (uint8_t i = rounds; i > 0; --i)
     {
-        applyRound(0, round_constants[i]);
+        applyRound(0, ROUND_CONSTANTS[i]);
     }
     applyThetaToState();
-    current_block[0] ^= round_constants[0];
+    current_block[0] ^= ROUND_CONSTANTS[0];
 
 }

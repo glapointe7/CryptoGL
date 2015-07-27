@@ -4,11 +4,14 @@
 
 #include "BadMatrix.hpp"
 
-class MatrixNotSquare : public BadMatrix
+namespace CryptoGL
 {
-public:
-   MatrixNotSquare() {}
-   explicit MatrixNotSquare(const ErrorType &message) : BadMatrix(message) {}
-};
-
+    class MatrixNotSquare : public BadMatrix
+    {
+    public:
+       MatrixNotSquare() {}
+       explicit MatrixNotSquare(const ErrorType &message) : BadMatrix(message) {}
+    };
+}
+    
 #endif

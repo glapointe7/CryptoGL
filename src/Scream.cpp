@@ -10,8 +10,8 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<uint8_t, 16> Scream::pi;
-constexpr std::array<uint8_t, 256> Scream::sbox;
+constexpr std::array<uint8_t, 16> Scream::PI;
+constexpr std::array<uint8_t, 256> Scream::SBOX;
 
 void Scream::setIV(const BytesVector &IV)
 {
@@ -34,7 +34,7 @@ void Scream_S::makeS1()
 
 void Scream_0::makeS1()
 {
-    S1 = sbox;
+    S1 = SBOX;
 }
 
 void Scream::makeS2()
@@ -75,10 +75,10 @@ uint8_t Scream::composeSBox(const uint8_t n, const uint8_t max, const uint8_t x)
 {
     if (n > 1)
     {
-        return composeSBox(n - 1, max, sbox[(x + key[max - n]) & 0xFF]);
+        return composeSBox(n - 1, max, SBOX[(x + key[max - n]) & 0xFF]);
     }
 
-    return sbox[(x + key[max - 1]) & 0xFF];
+    return SBOX[(x + key[max - 1]) & 0xFF];
 }
 
 BytesVector Scream::F(const BytesVector &X)
@@ -148,7 +148,7 @@ void Scream::keySetup()
     makeT0();
     makeT1();
 
-    const BytesVector B = F(key.Xor(BytesVector(pi.begin(), pi.end())));
+    const BytesVector B = F(key.Xor(BytesVector(PI.begin(), PI.end())));
     BytesVector A(key);
     subkeys.reserve(16);
     for (uint8_t i = 0; i < 16; ++i)

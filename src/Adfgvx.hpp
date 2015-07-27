@@ -26,7 +26,7 @@ namespace CryptoGL
 
         const CipherGrid grid_key;
 
-        static const ClassicalType code;
+        static const ClassicalType CODE;
     };
 }
 

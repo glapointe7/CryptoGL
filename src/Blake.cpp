@@ -19,7 +19,7 @@ const std::array<uint32_t, 16> ArrayGetter<uint32_t>::G = {{
 }};
 
 template <typename DataType, uint8_t InputBlockSize>
-constexpr std::array<std::array<uint8_t, 16>, 10> Blake<DataType, InputBlockSize>::sigma;
+constexpr std::array<std::array<uint8_t, 16>, 10> Blake<DataType, InputBlockSize>::SIGMA;
 
 BytesVector Blake256::pad(BytesVector message) const
 {

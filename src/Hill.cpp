@@ -9,7 +9,7 @@
 
 using namespace CryptoGL;
 
-void Hill::setKey(const Int32Matrix &key)
+void Hill::setKey(const Int64Matrix &key)
 {
     try
     {
@@ -31,12 +31,12 @@ void Hill::setKey(const Int32Matrix &key)
     }
 }
 
-ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix &K) const
+ClassicalType Hill::process(const ClassicalType &data) const
 {
-    const uint32_t key_dim = K.getDimension();
+    const uint32_t key_dim = key.getDimension();
     const uint32_t data_len = data.length();
     ClassicalType message(data_len + key_dim);
-    UInt32Vector pos;
+    Int64Vector pos;
     pos.reserve(key_dim);
 
     for (uint32_t i = 0; i < data_len; i += key_dim)
@@ -45,7 +45,7 @@ ClassicalType Hill::process(const ClassicalType &data, const SquareMatrix &K) co
         {
             pos.push_back(alpha.find(data[i + j]));
         }
-        const UInt32Vector cipher_pos = K.multiply(pos);
+        const Int64Vector cipher_pos = key.multiplyByVector(pos);
 
         for (const auto x : cipher_pos)
         {
@@ -61,10 +61,11 @@ ClassicalType Hill::encode(const ClassicalType &clear_text)
 {
     const ClassicalType full_text = appendChars(clear_text, key.getDimension(), 'X');
 
-    return process(full_text, key);
+    return process(full_text);
 }
 
 ClassicalType Hill::decode(const ClassicalType &cipher_text)
 {
-    return process(cipher_text, key.inverse());
+    key.inverse();
+    return process(cipher_text);
 }

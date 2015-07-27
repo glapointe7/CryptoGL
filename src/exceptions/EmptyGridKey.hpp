@@ -4,11 +4,14 @@
 
 #include "EmptyKey.hpp"
 
-class EmptyGridKey : public EmptyKey
+namespace CryptoGL
 {
-public:
-   EmptyGridKey() {}
-   explicit EmptyGridKey(const ErrorType &message) : EmptyKey(message) {}
-};
+    class EmptyGridKey : public EmptyKey
+    {
+    public:
+       EmptyGridKey() {}
+       explicit EmptyGridKey(const ErrorType &message) : EmptyKey(message) {}
+    };
+}
 
 #endif

@@ -9,11 +9,11 @@ namespace CryptoGL
     class StringCipher : public Cipher<ClassicalType>
     {
     public:
-        virtual void setAlpha(const ClassicalType &alpha);
+        void setAlpha(const ClassicalType &alpha);
         ClassicalType getAlpha() const;
 
     protected:
-        StringCipher() : alpha(ClassicalType::uppercase) { }
+        StringCipher() : alpha(ClassicalType::UPPERCASE) { }
 
         virtual ClassicalType encode(const ClassicalType &) override = 0;
         virtual ClassicalType decode(const ClassicalType &) override = 0;

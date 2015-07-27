@@ -45,14 +45,14 @@ namespace UnitTests
 
     TEST(CaesarEncodeKey32AlphaNum, CaesarTest)
     {
-       C->setAlpha(StringTest::uppercase_digits);
+       C->setAlpha(StringTest::UPPERCASE_DIGITS);
        C->setKey(32);
        compare("O6HQPJEHEHL6N6EPMQAPQ8KJJ6EOH6LNKCN6II6PEKJKNEAJPAAK7FAPOQNHA7KQP9AO9KECPO", C->encode(clear_text));
     }
 
     TEST(CaesarEncodeKeyMinus71AlphaNum, CaesarTest)
     {
-       C->setAlpha(StringTest::alpha_numeric);
+       C->setAlpha(StringTest::ALPHA_NUMERIC);
        C->setKey(-71);
        compare("J1CLKE9C9CG1I19KHL5KL3FEE19JC1GIF7I1DD1K9FEFI95EK55F2A5KJLIC52FLK45J4F97KJ", C->encode(clear_text));
     }
@@ -81,14 +81,14 @@ namespace UnitTests
 
     TEST(CaesarDecodeKey32AlphaNum, CaesarTest)
     {
-       C->setAlpha(ClassicalType::uppercase_digits);
+       C->setAlpha(ClassicalType::UPPERCASE_DIGITS);
        C->setKey(32);
        compare(clear_text, C->decode("O6HQPJEHEHL6N6EPMQAPQ8KJJ6EOH6LNKCN6II6PEKJKNEAJPAAK7FAPOQNHA7KQP9AO9KECPO"));
     }
 
     TEST(CaesarDecodeKeyMinus71AlphaNum, CaesarTest)
     {
-       C->setAlpha(ClassicalType::alpha_numeric);
+       C->setAlpha(ClassicalType::ALPHA_NUMERIC);
        C->setKey(-71);
        compare(clear_text, C->decode("J1CLKE9C9CG1I19KHL5KL3FEE19JC1GIF7I1DD1K9FEFI95EK55F2A5KJLIC52FLK45J4F97KJ"));
     }

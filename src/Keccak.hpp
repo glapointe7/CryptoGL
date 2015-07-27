@@ -45,7 +45,7 @@ namespace CryptoGL
         void applyRound(const uint8_t round_index);
 
         /* Round constants. */
-        static constexpr std::array<uint64_t, 24> round_constants = {{
+        static constexpr std::array<uint64_t, 24> ROUND_CONSTANTS = {{
             0x0000000000000001, 0x0000000000008082, 0x800000000000808A, 0x8000000080008000,
             0x000000000000808B, 0x0000000080000001, 0x8000000080008081, 0x8000000000008009,
             0x000000000000008A, 0x0000000000000088, 0x0000000080008009, 0x000000008000000A,
@@ -55,7 +55,7 @@ namespace CryptoGL
         }};
 
         /* For the rho step. */
-        static constexpr std::array<std::array<uint8_t, 5>, 5> rho_offsets = {{
+        static constexpr std::array<std::array<uint8_t, 5>, 5> RHO_OFFSETS_TABLE = {{
             {{0, 36, 3, 41, 18}},
             {{1, 44, 10, 45, 2}},
             {{62, 6, 43, 15, 61}},

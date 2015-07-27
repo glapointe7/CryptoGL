@@ -32,14 +32,14 @@ namespace UnitTests
 
     TEST(VigenereEncodeAlphaNum, VigenereTest) 
     {
-      V->setAlpha(StringTest::alpha_numeric);
+      V->setAlpha(StringTest::ALPHA_NUMERIC);
       V->setKey("V1Gen3rE");
       compare("n1Ry6GzPdCVe43zXlLKx755Ri1Owy36Vj7XezFrXdFTs4BvRo5KsoCvXnLXpr45Yo4KwqHzKoJ", V->encode(clear_text));
     }
 
     TEST(VigenereEncodeLetters, VigenereTest) 
     {
-      V->setAlpha(StringTest::letters);
+      V->setAlpha(StringTest::LETTERS);
       V->setKey("vvvvvvvv");
       compare("NvGPOIDGDGKvMvDOLPzOPxJIIvDNGvKMJBMvHHvODJIJMDzIOzzJwEzONPMGzwJPOyzNyJDBON", V->encode(clear_text));
     }
@@ -52,14 +52,14 @@ namespace UnitTests
 
     TEST(VigenereDecodeAlphaNum, VigenereTest) 
     {
-      V->setAlpha(ClassicalType::alpha_numeric);
+      V->setAlpha(ClassicalType::ALPHA_NUMERIC);
       V->setKey("V1Gen3rE");
       compare(clear_text, V->decode("n1Ry6GzPdCVe43zXlLKx755Ri1Owy36Vj7XezFrXdFTs4BvRo5KsoCvXnLXpr45Yo4KwqHzKoJ"));
     }
 
     TEST(VigenereDecodeLetters, VigenereTest) 
     {
-      V->setAlpha(ClassicalType::letters);
+      V->setAlpha(ClassicalType::LETTERS);
       V->setKey("vvvvvvvv");
       compare(clear_text, V->decode("NvGPOIDGDGKvMvDOLPzOPxJIIvDNGvKMJBMvHHvODJIJMDzIOzzJwEzONPMGzwJPOyzNyJDBON"));
     }

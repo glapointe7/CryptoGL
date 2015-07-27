@@ -30,7 +30,7 @@ Coordinates CipherGrid::getCharCoordinates(const char c) const
     Coordinates coords;
     for (const auto &str : grid)
     {
-        const String::size_type found = str.find(c);
+        const auto found = str.find(c);
         if (found != String::npos)
         {
             coords.x = found;
@@ -51,5 +51,5 @@ void CipherGrid::setDimension(const ClassicalType &alpha)
     }
 
     // get grid dimension from alphabet assuming length is a perfect square by the previous IF.
-    dim = getByteSqrt(alpha_size);
+    dim = Maths::getByteSqrt(alpha_size);
 }

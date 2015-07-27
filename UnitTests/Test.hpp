@@ -103,6 +103,28 @@ namespace UnitTests
         {            
             compare(expected_value.toHexString(), input_value.toHexString());
         }
+        
+        void compare(const Int64Matrix &expected_value, const Int64Matrix &input_value)
+        {    
+            const uint64_t expected_value_size = expected_value.size();
+            if(expected_value_size == input_value.size())
+            {
+                String input = "", output = "";
+                for(uint64_t i = 0; i < expected_value_size; ++i)
+                {
+                    input.push_back('{');
+                    output.push_back('{');
+                    
+                    input.append(input_value[i].join(','));
+                    output.append(expected_value[i].join(','));
+                    
+                    input.append("} ");
+                    output.append("} ");
+                }
+                
+                compare(output, input);
+            }
+        }
                
     private:
         String expected_value;

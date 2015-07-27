@@ -18,7 +18,7 @@ namespace CryptoGL
 
     private:
         /* largest prime smaller than 65536. */
-        static constexpr uint16_t mod_prime = 65521;
+        static constexpr uint16_t MOD_PRIME = 65521;
     };
 }
 

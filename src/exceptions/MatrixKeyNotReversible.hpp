@@ -4,11 +4,14 @@
 
 #include "BadKey.hpp"
 
-class MatrixKeyNotReversible : public BadKey
+namespace CryptoGL
 {
-public:
-   MatrixKeyNotReversible() {}
-   explicit MatrixKeyNotReversible(const ErrorType &message) : BadKey(message) {}
-};
+    class MatrixKeyNotReversible : public BadKey
+    {
+    public:
+       MatrixKeyNotReversible() {}
+       explicit MatrixKeyNotReversible(const ErrorType &message) : BadKey(message) {}
+    };
+}
 
 #endif

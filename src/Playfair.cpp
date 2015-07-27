@@ -14,8 +14,8 @@ ClassicalType Playfair::encode(const ClassicalType &clear_text)
     for (uint32_t i = 0; i < clear_len; i += 2)
     {
         // Get the coordinates (x,y) and (a,b) of the digram's letters from the cipher grid.
-        const Coordinates X = grid.getCharCoordinates(full_text[i]);
-        const Coordinates A = grid.getCharCoordinates(full_text[i + 1]);
+        const auto X = grid.getCharCoordinates(full_text[i]);
+        const auto A = grid.getCharCoordinates(full_text[i + 1]);
 
         // Let X = (x,y) and A = (a,b).
         // Rule 1 : If x != a AND y != b, then X = (x,b) and A = (a,y).
@@ -61,8 +61,8 @@ ClassicalType Playfair::decode(const ClassicalType &cipher_text)
     for (uint32_t i = 0; i < cipher_len; i += 2)
     {
         // Get the coordinates (x,y) and (a,b) of the digram letters from the cipher grid.
-        const Coordinates X = grid.getCharCoordinates(cipher_text[i]);
-        const Coordinates A = grid.getCharCoordinates(cipher_text[i + 1]);
+        const auto X = grid.getCharCoordinates(cipher_text[i]);
+        const auto A = grid.getCharCoordinates(cipher_text[i + 1]);
 
         // Let A = (x,y) and B = (a,b)
         // Rule 1 : If x != a AND y != b, then A = (x,b) and B = (a,y).

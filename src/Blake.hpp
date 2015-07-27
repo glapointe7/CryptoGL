@@ -64,7 +64,7 @@ namespace CryptoGL
        
        DataTypeVector registers;
 
-       static constexpr std::array<std::array<uint8_t, 16>, 10> sigma = {{
+       static constexpr std::array<std::array<uint8_t, 16>, 10> SIGMA = {{
            {{0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15}},
            {{14, 10,  4,  8,  9, 15, 13,  6,  1, 12,  0,  2, 11,  7,  5,  3}},
            {{11,  8, 12,  0,  5,  2, 15, 13, 10, 14,  3,  6,  7,  1,  9,  4}},
@@ -80,12 +80,12 @@ namespace CryptoGL
        void G(const std::array<uint8_t, 4> &I, const uint8_t k, const uint8_t i)
        {
           const std::array<DataType, 16> C = GArray::G;
-          registers[I[0]] += registers[I[1]] + (this->current_block[sigma[k][i]] ^ C[sigma[k][i + 1]]);
+          registers[I[0]] += registers[I[1]] + (this->current_block[SIGMA[k][i]] ^ C[SIGMA[k][i + 1]]);
           registers[I[3]] = ShiftingGetter<DataType, 0>::G(registers[I[3]] ^ registers[I[0]]);
           registers[I[2]] += registers[I[3]];
           registers[I[1]] = ShiftingGetter<DataType, 1>::G(registers[I[1]] ^ registers[I[2]]);
 
-          registers[I[0]] += registers[I[1]] + (this->current_block[sigma[k][i + 1]] ^ C[sigma[k][i]]);
+          registers[I[0]] += registers[I[1]] + (this->current_block[SIGMA[k][i + 1]] ^ C[SIGMA[k][i]]);
           registers[I[3]] = ShiftingGetter<DataType, 2>::G(registers[I[3]] ^ registers[I[0]]);
           registers[I[2]] += registers[I[3]];
           registers[I[1]] = ShiftingGetter<DataType, 3>::G(registers[I[1]] ^ registers[I[2]]);

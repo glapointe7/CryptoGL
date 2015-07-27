@@ -4,7 +4,7 @@
 
 using namespace CryptoGL;
 
-constexpr std::array<std::array<uint64_t, 256>, 8> Whirlpool::sbox;
+constexpr std::array<std::array<uint64_t, 256>, 8> Whirlpool::SBOX;
 constexpr std::array<uint64_t, 10> Whirlpool::RC;
 
 uint64_t Whirlpool::applyGammaPiTheta(UInt64Vector &key, const uint8_t index)
@@ -12,7 +12,7 @@ uint64_t Whirlpool::applyGammaPiTheta(UInt64Vector &key, const uint8_t index)
     uint64_t tmp_key = 0;
     for (uint8_t i = 0; i < 8; ++i)
     {
-        tmp_key ^= sbox[i][(key[(index - i) & 7] >> ((7 - i) * 8)) & 0xFF];
+        tmp_key ^= SBOX[i][(key[(index - i) & 7] >> ((7 - i) * 8)) & 0xFF];
     }
 
     return tmp_key;
