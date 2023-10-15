@@ -1,10 +1,10 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.8)
 
 set (Project_Name CryptoGL)
 
 project (${Project_Name})
 
-set (CMAKE_CXX_COMPILER             "/usr/bin/clang++-3.6")
+set (CMAKE_CXX_COMPILER             "/usr/bin/g++-11")
 set (CMAKE_CXX_FLAGS                "-Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z")
 
 # Add the source files code (CPP, HPP and the CMakeLists.txt).

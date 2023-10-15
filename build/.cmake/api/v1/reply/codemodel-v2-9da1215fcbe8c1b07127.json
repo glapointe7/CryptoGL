@@ -1,0 +1,116 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "src",
+					"childIndexes" : 
+					[
+						2
+					],
+					"jsonFile" : "directory-src-Debug-b6cf2213fc5053b67c22.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "src/big_integers",
+					"jsonFile" : "directory-src.big_integers-Debug-ef9126036a914e2eca47.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "src/big_integers",
+					"targetIndexes" : 
+					[
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2
+					],
+					"name" : "CryptoGL",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "CryptoGL::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-CryptoGL-Debug-cc39989fd7fff8914fe5.json",
+					"name" : "CryptoGL",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "big_integers::@9d748f9b1bd66345d8c8",
+					"jsonFile" : "target-big_integers-Debug-627c1fa8e4098328063d.json",
+					"name" : "big_integers",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "cryptoGL::@145eef247bfb46b6828c",
+					"jsonFile" : "target-cryptoGL-Debug-22e39559632335733046.json",
+					"name" : "cryptoGL",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/gabriel/Documents/Projects/CryptoGL/build",
+		"source" : "/home/gabriel/Documents/Projects/CryptoGL"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

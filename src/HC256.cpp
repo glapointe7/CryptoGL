@@ -26,12 +26,12 @@ void HC256::setIV(const BytesVector &IV)
     this->IV = IV;
 }
 
-constexpr uint32_t HC256::g(const uint32_t x, const uint32_t y, const UInt32Vector &K)
+uint32_t HC256::g(const uint32_t x, const uint32_t y, const UInt32Vector &K)
 {
     return (uint32::rotateRight(x, 10) ^ uint32::rotateRight(y, 23)) + K[(x ^ y) % 1024];
 }
 
-constexpr uint32_t HC256::h(const uint32_t x, const UInt32Vector &K)
+uint32_t HC256::h(const uint32_t x, const UInt32Vector &K)
 {
     return K[x & 0xFF] 
          + K[256 + ((x >> 8) & 0xFF)] 
@@ -69,12 +69,12 @@ void HC256::keySetup()
 
 // We use & 0x3FF instead of % 1024 because the mod operator % work only with positive numbers.
 // The binary AND operator will work with negative and positive numbers. 
-constexpr uint32_t HC256::calculateKey(const UInt32Vector &PQ, const UInt32Vector &QP, const uint16_t i)
+uint32_t HC256::calculateKey(const UInt32Vector &PQ, const UInt32Vector &QP, const uint16_t i)
 {
     return PQ[(i - 10) & 0x3FF] + g(PQ[(i - 3) & 0x3FF], PQ[(i - 1023) & 0x3FF], QP);
 }
 
-constexpr uint32_t HC256::updateSubkeys(UInt32Vector &K, const UInt32Vector &S, const uint16_t i)
+uint32_t HC256::updateSubkeys(UInt32Vector &K, const UInt32Vector &S, const uint16_t i)
 {
     K[i] += calculateKey(K, S, i);
 

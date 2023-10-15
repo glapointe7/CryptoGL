@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.8)
 
 # All CPP and HPP source files.
 set(SRC

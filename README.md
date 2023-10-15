@@ -2,18 +2,13 @@
 
 CryptoGL is a C++ library containing classical ciphers, symmetric ciphers, asymmetric ciphers, hash functions, sponge functions, checksum functions and some other tools for strings, vectors, grids, manipulation of bits and mathematical purpuses. All the CPP and HPP files are found in the `src` folder.
 
-The `UML` folder contains the UML class diagrams of this library. Each DIA file is represented by a main classes to make the UML diagram more readable. The DIA files have to be open with DIA (free Open Source) found [here](http://dia-installer.de/) for Windows users. For linux users, `sudo apt-get install dia` and it's done.
-
-The `UnitTests` folder contains the unit tests framework and all tests done for the cryptographic algorithms and some other tools. Each algorithm contains tests in a HPP file and each test is a child class. You will see many examples on how to use them. A report is generated for all tests performed (have a look in main.cpp file).
+The `UnitTests` folder contains the unit tests framework and all tests done for the cryptographic algorithms and some other tools. Each algorithm contains tests in a HPP file. A report is generated for all tests performed (have a look in main.cpp file).
 
 # Compilation
 
-CryptoGL has been compiled successfully using netbeans 8.0.2 with clang++ 3.6 which is using features of C++11 and C++14.
+CryptoGL has been compiled successfully with g++11 in VSCode.
 
 CryptoGL can also be compiled using `cmake`. Have a look at the last section of this readme file (Execution with CMake). 
-
-To compile with Clang++ 3.6 and using c++14, use the option `-std=c++1z`.
-Also, in the cstdio file, replace `using ::gets` by `#if !_ISOC11_SOURCE using ::gets; #endif`.
 
 
 # Cryptographic algorithms

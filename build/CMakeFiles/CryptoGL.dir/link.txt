@@ -1,0 +1,1 @@
+/usr/bin/g++-11 -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g CMakeFiles/CryptoGL.dir/src/main.cpp.o -o CryptoGL  src/libcryptoGL.a src/big_integers/libbig_integers.a 

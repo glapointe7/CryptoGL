@@ -4,6 +4,8 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
+#include <limits>
+
 using namespace CryptoGL;
 
 std::array<uint32_t, 256> SEAL::S = {};

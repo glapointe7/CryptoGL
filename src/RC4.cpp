@@ -1,6 +1,7 @@
 #include "RC4.hpp"
 
 #include <algorithm>
+#include <numeric>
 
 #include "exceptions/BadKeyLength.hpp"
 

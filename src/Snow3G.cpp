@@ -2,6 +2,8 @@
 
 #include "exceptions/BadKeyLength.hpp"
 
+#include <limits>
+
 using namespace CryptoGL;
 
 constexpr std::array<uint8_t, 256> Snow3G::SQ;

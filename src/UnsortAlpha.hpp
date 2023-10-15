@@ -28,12 +28,12 @@ namespace CryptoGL
         const GetCharFunction charEncode, charDecode;
         ClassicalType unsort_alpha;
         
-        static constexpr char sortAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
+        static char sortAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
         {
             return unsort_alpha[alpha.find(c)];
         }
         
-        static constexpr char unorderedAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
+        static char unorderedAlpha(const ClassicalType &alpha, const ClassicalType &unsort_alpha, const char c)
         {
             return alpha[unsort_alpha.find(c)];
         }
