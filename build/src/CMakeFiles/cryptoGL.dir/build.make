@@ -587,10 +587,24 @@ src/CMakeFiles/cryptoGL.dir/RC2.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cryptoGL.dir/RC2.cpp.s"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gabriel/Documents/Projects/CryptoGL/src/RC2.cpp -o CMakeFiles/cryptoGL.dir/RC2.cpp.s
 
+src/CMakeFiles/cryptoGL.dir/Serpent.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
+src/CMakeFiles/cryptoGL.dir/Serpent.cpp.o: ../src/Serpent.cpp
+src/CMakeFiles/cryptoGL.dir/Serpent.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object src/CMakeFiles/cryptoGL.dir/Serpent.cpp.o"
+	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Serpent.cpp.o -MF CMakeFiles/cryptoGL.dir/Serpent.cpp.o.d -o CMakeFiles/cryptoGL.dir/Serpent.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Serpent.cpp
+
+src/CMakeFiles/cryptoGL.dir/Serpent.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cryptoGL.dir/Serpent.cpp.i"
+	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gabriel/Documents/Projects/CryptoGL/src/Serpent.cpp > CMakeFiles/cryptoGL.dir/Serpent.cpp.i
+
+src/CMakeFiles/cryptoGL.dir/Serpent.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cryptoGL.dir/Serpent.cpp.s"
+	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gabriel/Documents/Projects/CryptoGL/src/Serpent.cpp -o CMakeFiles/cryptoGL.dir/Serpent.cpp.s
+
 src/CMakeFiles/cryptoGL.dir/Skipjack.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Skipjack.cpp.o: ../src/Skipjack.cpp
 src/CMakeFiles/cryptoGL.dir/Skipjack.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object src/CMakeFiles/cryptoGL.dir/Skipjack.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object src/CMakeFiles/cryptoGL.dir/Skipjack.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Skipjack.cpp.o -MF CMakeFiles/cryptoGL.dir/Skipjack.cpp.o.d -o CMakeFiles/cryptoGL.dir/Skipjack.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Skipjack.cpp
 
 src/CMakeFiles/cryptoGL.dir/Skipjack.cpp.i: cmake_force
@@ -604,7 +618,7 @@ src/CMakeFiles/cryptoGL.dir/Skipjack.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Blowfish.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Blowfish.cpp.o: ../src/Blowfish.cpp
 src/CMakeFiles/cryptoGL.dir/Blowfish.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object src/CMakeFiles/cryptoGL.dir/Blowfish.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object src/CMakeFiles/cryptoGL.dir/Blowfish.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Blowfish.cpp.o -MF CMakeFiles/cryptoGL.dir/Blowfish.cpp.o.d -o CMakeFiles/cryptoGL.dir/Blowfish.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Blowfish.cpp
 
 src/CMakeFiles/cryptoGL.dir/Blowfish.cpp.i: cmake_force
@@ -618,7 +632,7 @@ src/CMakeFiles/cryptoGL.dir/Blowfish.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/DES.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/DES.cpp.o: ../src/DES.cpp
 src/CMakeFiles/cryptoGL.dir/DES.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object src/CMakeFiles/cryptoGL.dir/DES.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object src/CMakeFiles/cryptoGL.dir/DES.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/DES.cpp.o -MF CMakeFiles/cryptoGL.dir/DES.cpp.o.d -o CMakeFiles/cryptoGL.dir/DES.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/DES.cpp
 
 src/CMakeFiles/cryptoGL.dir/DES.cpp.i: cmake_force
@@ -632,7 +646,7 @@ src/CMakeFiles/cryptoGL.dir/DES.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/RC5.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/RC5.cpp.o: ../src/RC5.cpp
 src/CMakeFiles/cryptoGL.dir/RC5.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object src/CMakeFiles/cryptoGL.dir/RC5.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object src/CMakeFiles/cryptoGL.dir/RC5.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/RC5.cpp.o -MF CMakeFiles/cryptoGL.dir/RC5.cpp.o.d -o CMakeFiles/cryptoGL.dir/RC5.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/RC5.cpp
 
 src/CMakeFiles/cryptoGL.dir/RC5.cpp.i: cmake_force
@@ -646,7 +660,7 @@ src/CMakeFiles/cryptoGL.dir/RC5.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/RC6.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/RC6.cpp.o: ../src/RC6.cpp
 src/CMakeFiles/cryptoGL.dir/RC6.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object src/CMakeFiles/cryptoGL.dir/RC6.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object src/CMakeFiles/cryptoGL.dir/RC6.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/RC6.cpp.o -MF CMakeFiles/cryptoGL.dir/RC6.cpp.o.d -o CMakeFiles/cryptoGL.dir/RC6.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/RC6.cpp
 
 src/CMakeFiles/cryptoGL.dir/RC6.cpp.i: cmake_force
@@ -660,7 +674,7 @@ src/CMakeFiles/cryptoGL.dir/RC6.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/XTEA.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/XTEA.cpp.o: ../src/XTEA.cpp
 src/CMakeFiles/cryptoGL.dir/XTEA.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object src/CMakeFiles/cryptoGL.dir/XTEA.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object src/CMakeFiles/cryptoGL.dir/XTEA.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/XTEA.cpp.o -MF CMakeFiles/cryptoGL.dir/XTEA.cpp.o.d -o CMakeFiles/cryptoGL.dir/XTEA.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/XTEA.cpp
 
 src/CMakeFiles/cryptoGL.dir/XTEA.cpp.i: cmake_force
@@ -674,7 +688,7 @@ src/CMakeFiles/cryptoGL.dir/XTEA.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/CAST128.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/CAST128.cpp.o: ../src/CAST128.cpp
 src/CMakeFiles/cryptoGL.dir/CAST128.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object src/CMakeFiles/cryptoGL.dir/CAST128.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object src/CMakeFiles/cryptoGL.dir/CAST128.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/CAST128.cpp.o -MF CMakeFiles/cryptoGL.dir/CAST128.cpp.o.d -o CMakeFiles/cryptoGL.dir/CAST128.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/CAST128.cpp
 
 src/CMakeFiles/cryptoGL.dir/CAST128.cpp.i: cmake_force
@@ -688,7 +702,7 @@ src/CMakeFiles/cryptoGL.dir/CAST128.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/CAST256.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/CAST256.cpp.o: ../src/CAST256.cpp
 src/CMakeFiles/cryptoGL.dir/CAST256.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object src/CMakeFiles/cryptoGL.dir/CAST256.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object src/CMakeFiles/cryptoGL.dir/CAST256.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/CAST256.cpp.o -MF CMakeFiles/cryptoGL.dir/CAST256.cpp.o.d -o CMakeFiles/cryptoGL.dir/CAST256.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/CAST256.cpp
 
 src/CMakeFiles/cryptoGL.dir/CAST256.cpp.i: cmake_force
@@ -702,7 +716,7 @@ src/CMakeFiles/cryptoGL.dir/CAST256.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Twofish.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Twofish.cpp.o: ../src/Twofish.cpp
 src/CMakeFiles/cryptoGL.dir/Twofish.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object src/CMakeFiles/cryptoGL.dir/Twofish.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object src/CMakeFiles/cryptoGL.dir/Twofish.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Twofish.cpp.o -MF CMakeFiles/cryptoGL.dir/Twofish.cpp.o.d -o CMakeFiles/cryptoGL.dir/Twofish.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Twofish.cpp
 
 src/CMakeFiles/cryptoGL.dir/Twofish.cpp.i: cmake_force
@@ -716,7 +730,7 @@ src/CMakeFiles/cryptoGL.dir/Twofish.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Camellia.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Camellia.cpp.o: ../src/Camellia.cpp
 src/CMakeFiles/cryptoGL.dir/Camellia.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object src/CMakeFiles/cryptoGL.dir/Camellia.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object src/CMakeFiles/cryptoGL.dir/Camellia.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Camellia.cpp.o -MF CMakeFiles/cryptoGL.dir/Camellia.cpp.o.d -o CMakeFiles/cryptoGL.dir/Camellia.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Camellia.cpp
 
 src/CMakeFiles/cryptoGL.dir/Camellia.cpp.i: cmake_force
@@ -730,7 +744,7 @@ src/CMakeFiles/cryptoGL.dir/Camellia.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Mysty1.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Mysty1.cpp.o: ../src/Mysty1.cpp
 src/CMakeFiles/cryptoGL.dir/Mysty1.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object src/CMakeFiles/cryptoGL.dir/Mysty1.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object src/CMakeFiles/cryptoGL.dir/Mysty1.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Mysty1.cpp.o -MF CMakeFiles/cryptoGL.dir/Mysty1.cpp.o.d -o CMakeFiles/cryptoGL.dir/Mysty1.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Mysty1.cpp
 
 src/CMakeFiles/cryptoGL.dir/Mysty1.cpp.i: cmake_force
@@ -744,7 +758,7 @@ src/CMakeFiles/cryptoGL.dir/Mysty1.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/RC4.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/RC4.cpp.o: ../src/RC4.cpp
 src/CMakeFiles/cryptoGL.dir/RC4.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object src/CMakeFiles/cryptoGL.dir/RC4.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object src/CMakeFiles/cryptoGL.dir/RC4.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/RC4.cpp.o -MF CMakeFiles/cryptoGL.dir/RC4.cpp.o.d -o CMakeFiles/cryptoGL.dir/RC4.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/RC4.cpp
 
 src/CMakeFiles/cryptoGL.dir/RC4.cpp.i: cmake_force
@@ -758,7 +772,7 @@ src/CMakeFiles/cryptoGL.dir/RC4.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Rabbit.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Rabbit.cpp.o: ../src/Rabbit.cpp
 src/CMakeFiles/cryptoGL.dir/Rabbit.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object src/CMakeFiles/cryptoGL.dir/Rabbit.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Building CXX object src/CMakeFiles/cryptoGL.dir/Rabbit.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Rabbit.cpp.o -MF CMakeFiles/cryptoGL.dir/Rabbit.cpp.o.d -o CMakeFiles/cryptoGL.dir/Rabbit.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Rabbit.cpp
 
 src/CMakeFiles/cryptoGL.dir/Rabbit.cpp.i: cmake_force
@@ -772,7 +786,7 @@ src/CMakeFiles/cryptoGL.dir/Rabbit.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/HC256.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/HC256.cpp.o: ../src/HC256.cpp
 src/CMakeFiles/cryptoGL.dir/HC256.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Building CXX object src/CMakeFiles/cryptoGL.dir/HC256.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_52) "Building CXX object src/CMakeFiles/cryptoGL.dir/HC256.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/HC256.cpp.o -MF CMakeFiles/cryptoGL.dir/HC256.cpp.o.d -o CMakeFiles/cryptoGL.dir/HC256.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/HC256.cpp
 
 src/CMakeFiles/cryptoGL.dir/HC256.cpp.i: cmake_force
@@ -786,7 +800,7 @@ src/CMakeFiles/cryptoGL.dir/HC256.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/SEAL.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/SEAL.cpp.o: ../src/SEAL.cpp
 src/CMakeFiles/cryptoGL.dir/SEAL.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_52) "Building CXX object src/CMakeFiles/cryptoGL.dir/SEAL.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_53) "Building CXX object src/CMakeFiles/cryptoGL.dir/SEAL.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/SEAL.cpp.o -MF CMakeFiles/cryptoGL.dir/SEAL.cpp.o.d -o CMakeFiles/cryptoGL.dir/SEAL.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/SEAL.cpp
 
 src/CMakeFiles/cryptoGL.dir/SEAL.cpp.i: cmake_force
@@ -800,7 +814,7 @@ src/CMakeFiles/cryptoGL.dir/SEAL.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Isaac.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Isaac.cpp.o: ../src/Isaac.cpp
 src/CMakeFiles/cryptoGL.dir/Isaac.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_53) "Building CXX object src/CMakeFiles/cryptoGL.dir/Isaac.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_54) "Building CXX object src/CMakeFiles/cryptoGL.dir/Isaac.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Isaac.cpp.o -MF CMakeFiles/cryptoGL.dir/Isaac.cpp.o.d -o CMakeFiles/cryptoGL.dir/Isaac.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Isaac.cpp
 
 src/CMakeFiles/cryptoGL.dir/Isaac.cpp.i: cmake_force
@@ -814,7 +828,7 @@ src/CMakeFiles/cryptoGL.dir/Isaac.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Scream.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Scream.cpp.o: ../src/Scream.cpp
 src/CMakeFiles/cryptoGL.dir/Scream.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_54) "Building CXX object src/CMakeFiles/cryptoGL.dir/Scream.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_55) "Building CXX object src/CMakeFiles/cryptoGL.dir/Scream.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Scream.cpp.o -MF CMakeFiles/cryptoGL.dir/Scream.cpp.o.d -o CMakeFiles/cryptoGL.dir/Scream.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Scream.cpp
 
 src/CMakeFiles/cryptoGL.dir/Scream.cpp.i: cmake_force
@@ -828,7 +842,7 @@ src/CMakeFiles/cryptoGL.dir/Scream.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Salsa20.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Salsa20.cpp.o: ../src/Salsa20.cpp
 src/CMakeFiles/cryptoGL.dir/Salsa20.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_55) "Building CXX object src/CMakeFiles/cryptoGL.dir/Salsa20.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_56) "Building CXX object src/CMakeFiles/cryptoGL.dir/Salsa20.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Salsa20.cpp.o -MF CMakeFiles/cryptoGL.dir/Salsa20.cpp.o.d -o CMakeFiles/cryptoGL.dir/Salsa20.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Salsa20.cpp
 
 src/CMakeFiles/cryptoGL.dir/Salsa20.cpp.i: cmake_force
@@ -842,7 +856,7 @@ src/CMakeFiles/cryptoGL.dir/Salsa20.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Snow3G.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Snow3G.cpp.o: ../src/Snow3G.cpp
 src/CMakeFiles/cryptoGL.dir/Snow3G.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_56) "Building CXX object src/CMakeFiles/cryptoGL.dir/Snow3G.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_57) "Building CXX object src/CMakeFiles/cryptoGL.dir/Snow3G.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Snow3G.cpp.o -MF CMakeFiles/cryptoGL.dir/Snow3G.cpp.o.d -o CMakeFiles/cryptoGL.dir/Snow3G.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Snow3G.cpp
 
 src/CMakeFiles/cryptoGL.dir/Snow3G.cpp.i: cmake_force
@@ -856,7 +870,7 @@ src/CMakeFiles/cryptoGL.dir/Snow3G.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/MessageDigest.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/MessageDigest.cpp.o: ../src/MessageDigest.cpp
 src/CMakeFiles/cryptoGL.dir/MessageDigest.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_57) "Building CXX object src/CMakeFiles/cryptoGL.dir/MessageDigest.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_58) "Building CXX object src/CMakeFiles/cryptoGL.dir/MessageDigest.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/MessageDigest.cpp.o -MF CMakeFiles/cryptoGL.dir/MessageDigest.cpp.o.d -o CMakeFiles/cryptoGL.dir/MessageDigest.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/MessageDigest.cpp
 
 src/CMakeFiles/cryptoGL.dir/MessageDigest.cpp.i: cmake_force
@@ -870,7 +884,7 @@ src/CMakeFiles/cryptoGL.dir/MessageDigest.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/MD2.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/MD2.cpp.o: ../src/MD2.cpp
 src/CMakeFiles/cryptoGL.dir/MD2.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_58) "Building CXX object src/CMakeFiles/cryptoGL.dir/MD2.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_59) "Building CXX object src/CMakeFiles/cryptoGL.dir/MD2.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/MD2.cpp.o -MF CMakeFiles/cryptoGL.dir/MD2.cpp.o.d -o CMakeFiles/cryptoGL.dir/MD2.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/MD2.cpp
 
 src/CMakeFiles/cryptoGL.dir/MD2.cpp.i: cmake_force
@@ -884,7 +898,7 @@ src/CMakeFiles/cryptoGL.dir/MD2.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/SHA2.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/SHA2.cpp.o: ../src/SHA2.cpp
 src/CMakeFiles/cryptoGL.dir/SHA2.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_59) "Building CXX object src/CMakeFiles/cryptoGL.dir/SHA2.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_60) "Building CXX object src/CMakeFiles/cryptoGL.dir/SHA2.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/SHA2.cpp.o -MF CMakeFiles/cryptoGL.dir/SHA2.cpp.o.d -o CMakeFiles/cryptoGL.dir/SHA2.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/SHA2.cpp
 
 src/CMakeFiles/cryptoGL.dir/SHA2.cpp.i: cmake_force
@@ -898,7 +912,7 @@ src/CMakeFiles/cryptoGL.dir/SHA2.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/SHA1.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/SHA1.cpp.o: ../src/SHA1.cpp
 src/CMakeFiles/cryptoGL.dir/SHA1.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_60) "Building CXX object src/CMakeFiles/cryptoGL.dir/SHA1.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_61) "Building CXX object src/CMakeFiles/cryptoGL.dir/SHA1.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/SHA1.cpp.o -MF CMakeFiles/cryptoGL.dir/SHA1.cpp.o.d -o CMakeFiles/cryptoGL.dir/SHA1.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/SHA1.cpp
 
 src/CMakeFiles/cryptoGL.dir/SHA1.cpp.i: cmake_force
@@ -912,7 +926,7 @@ src/CMakeFiles/cryptoGL.dir/SHA1.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Ripemd.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Ripemd.cpp.o: ../src/Ripemd.cpp
 src/CMakeFiles/cryptoGL.dir/Ripemd.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_61) "Building CXX object src/CMakeFiles/cryptoGL.dir/Ripemd.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_62) "Building CXX object src/CMakeFiles/cryptoGL.dir/Ripemd.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Ripemd.cpp.o -MF CMakeFiles/cryptoGL.dir/Ripemd.cpp.o.d -o CMakeFiles/cryptoGL.dir/Ripemd.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Ripemd.cpp
 
 src/CMakeFiles/cryptoGL.dir/Ripemd.cpp.i: cmake_force
@@ -926,7 +940,7 @@ src/CMakeFiles/cryptoGL.dir/Ripemd.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Tiger.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Tiger.cpp.o: ../src/Tiger.cpp
 src/CMakeFiles/cryptoGL.dir/Tiger.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_62) "Building CXX object src/CMakeFiles/cryptoGL.dir/Tiger.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_63) "Building CXX object src/CMakeFiles/cryptoGL.dir/Tiger.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Tiger.cpp.o -MF CMakeFiles/cryptoGL.dir/Tiger.cpp.o.d -o CMakeFiles/cryptoGL.dir/Tiger.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Tiger.cpp
 
 src/CMakeFiles/cryptoGL.dir/Tiger.cpp.i: cmake_force
@@ -940,7 +954,7 @@ src/CMakeFiles/cryptoGL.dir/Tiger.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Whirlpool.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Whirlpool.cpp.o: ../src/Whirlpool.cpp
 src/CMakeFiles/cryptoGL.dir/Whirlpool.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_63) "Building CXX object src/CMakeFiles/cryptoGL.dir/Whirlpool.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_64) "Building CXX object src/CMakeFiles/cryptoGL.dir/Whirlpool.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Whirlpool.cpp.o -MF CMakeFiles/cryptoGL.dir/Whirlpool.cpp.o.d -o CMakeFiles/cryptoGL.dir/Whirlpool.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Whirlpool.cpp
 
 src/CMakeFiles/cryptoGL.dir/Whirlpool.cpp.i: cmake_force
@@ -954,7 +968,7 @@ src/CMakeFiles/cryptoGL.dir/Whirlpool.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Blake.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Blake.cpp.o: ../src/Blake.cpp
 src/CMakeFiles/cryptoGL.dir/Blake.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_64) "Building CXX object src/CMakeFiles/cryptoGL.dir/Blake.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_65) "Building CXX object src/CMakeFiles/cryptoGL.dir/Blake.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Blake.cpp.o -MF CMakeFiles/cryptoGL.dir/Blake.cpp.o.d -o CMakeFiles/cryptoGL.dir/Blake.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Blake.cpp
 
 src/CMakeFiles/cryptoGL.dir/Blake.cpp.i: cmake_force
@@ -968,7 +982,7 @@ src/CMakeFiles/cryptoGL.dir/Blake.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Keccak.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Keccak.cpp.o: ../src/Keccak.cpp
 src/CMakeFiles/cryptoGL.dir/Keccak.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_65) "Building CXX object src/CMakeFiles/cryptoGL.dir/Keccak.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_66) "Building CXX object src/CMakeFiles/cryptoGL.dir/Keccak.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Keccak.cpp.o -MF CMakeFiles/cryptoGL.dir/Keccak.cpp.o.d -o CMakeFiles/cryptoGL.dir/Keccak.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Keccak.cpp
 
 src/CMakeFiles/cryptoGL.dir/Keccak.cpp.i: cmake_force
@@ -982,7 +996,7 @@ src/CMakeFiles/cryptoGL.dir/Keccak.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/LRC.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/LRC.cpp.o: ../src/LRC.cpp
 src/CMakeFiles/cryptoGL.dir/LRC.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_66) "Building CXX object src/CMakeFiles/cryptoGL.dir/LRC.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_67) "Building CXX object src/CMakeFiles/cryptoGL.dir/LRC.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/LRC.cpp.o -MF CMakeFiles/cryptoGL.dir/LRC.cpp.o.d -o CMakeFiles/cryptoGL.dir/LRC.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/LRC.cpp
 
 src/CMakeFiles/cryptoGL.dir/LRC.cpp.i: cmake_force
@@ -996,7 +1010,7 @@ src/CMakeFiles/cryptoGL.dir/LRC.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/Adler32.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/Adler32.cpp.o: ../src/Adler32.cpp
 src/CMakeFiles/cryptoGL.dir/Adler32.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_67) "Building CXX object src/CMakeFiles/cryptoGL.dir/Adler32.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_68) "Building CXX object src/CMakeFiles/cryptoGL.dir/Adler32.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/Adler32.cpp.o -MF CMakeFiles/cryptoGL.dir/Adler32.cpp.o.d -o CMakeFiles/cryptoGL.dir/Adler32.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Adler32.cpp
 
 src/CMakeFiles/cryptoGL.dir/Adler32.cpp.i: cmake_force
@@ -1010,7 +1024,7 @@ src/CMakeFiles/cryptoGL.dir/Adler32.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/AsymmetricCipher.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/AsymmetricCipher.cpp.o: ../src/AsymmetricCipher.cpp
 src/CMakeFiles/cryptoGL.dir/AsymmetricCipher.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_68) "Building CXX object src/CMakeFiles/cryptoGL.dir/AsymmetricCipher.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_69) "Building CXX object src/CMakeFiles/cryptoGL.dir/AsymmetricCipher.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/AsymmetricCipher.cpp.o -MF CMakeFiles/cryptoGL.dir/AsymmetricCipher.cpp.o.d -o CMakeFiles/cryptoGL.dir/AsymmetricCipher.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/AsymmetricCipher.cpp
 
 src/CMakeFiles/cryptoGL.dir/AsymmetricCipher.cpp.i: cmake_force
@@ -1024,7 +1038,7 @@ src/CMakeFiles/cryptoGL.dir/AsymmetricCipher.cpp.s: cmake_force
 src/CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o: src/CMakeFiles/cryptoGL.dir/flags.make
 src/CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o: ../src/HellmanMerkleKnapsack.cpp
 src/CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o: src/CMakeFiles/cryptoGL.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_69) "Building CXX object src/CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_70) "Building CXX object src/CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && /usr/bin/g++-11 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o -MF CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o.d -o CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/HellmanMerkleKnapsack.cpp
 
 src/CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.i: cmake_force
@@ -1074,6 +1088,7 @@ cryptoGL_OBJECTS = \
 "CMakeFiles/cryptoGL.dir/IDEA.cpp.o" \
 "CMakeFiles/cryptoGL.dir/Noekeon.cpp.o" \
 "CMakeFiles/cryptoGL.dir/RC2.cpp.o" \
+"CMakeFiles/cryptoGL.dir/Serpent.cpp.o" \
 "CMakeFiles/cryptoGL.dir/Skipjack.cpp.o" \
 "CMakeFiles/cryptoGL.dir/Blowfish.cpp.o" \
 "CMakeFiles/cryptoGL.dir/DES.cpp.o" \
@@ -1147,6 +1162,7 @@ src/libcryptoGL.a: src/CMakeFiles/cryptoGL.dir/AES.cpp.o
 src/libcryptoGL.a: src/CMakeFiles/cryptoGL.dir/IDEA.cpp.o
 src/libcryptoGL.a: src/CMakeFiles/cryptoGL.dir/Noekeon.cpp.o
 src/libcryptoGL.a: src/CMakeFiles/cryptoGL.dir/RC2.cpp.o
+src/libcryptoGL.a: src/CMakeFiles/cryptoGL.dir/Serpent.cpp.o
 src/libcryptoGL.a: src/CMakeFiles/cryptoGL.dir/Skipjack.cpp.o
 src/libcryptoGL.a: src/CMakeFiles/cryptoGL.dir/Blowfish.cpp.o
 src/libcryptoGL.a: src/CMakeFiles/cryptoGL.dir/DES.cpp.o
@@ -1181,7 +1197,7 @@ src/libcryptoGL.a: src/CMakeFiles/cryptoGL.dir/AsymmetricCipher.cpp.o
 src/libcryptoGL.a: src/CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o
 src/libcryptoGL.a: src/CMakeFiles/cryptoGL.dir/build.make
 src/libcryptoGL.a: src/CMakeFiles/cryptoGL.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_70) "Linking CXX static library libcryptoGL.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_71) "Linking CXX static library libcryptoGL.a"
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && $(CMAKE_COMMAND) -P CMakeFiles/cryptoGL.dir/cmake_clean_target.cmake
 	cd /home/gabriel/Documents/Projects/CryptoGL/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/cryptoGL.dir/link.txt --verbose=$(VERBOSE)
 

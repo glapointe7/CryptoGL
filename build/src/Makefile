@@ -1306,6 +1306,30 @@ Scream.cpp.s:
 	cd /home/gabriel/Documents/Projects/CryptoGL/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/cryptoGL.dir/build.make src/CMakeFiles/cryptoGL.dir/Scream.cpp.s
 .PHONY : Scream.cpp.s
 
+Serpent.o: Serpent.cpp.o
+.PHONY : Serpent.o
+
+# target to build an object file
+Serpent.cpp.o:
+	cd /home/gabriel/Documents/Projects/CryptoGL/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/cryptoGL.dir/build.make src/CMakeFiles/cryptoGL.dir/Serpent.cpp.o
+.PHONY : Serpent.cpp.o
+
+Serpent.i: Serpent.cpp.i
+.PHONY : Serpent.i
+
+# target to preprocess a source file
+Serpent.cpp.i:
+	cd /home/gabriel/Documents/Projects/CryptoGL/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/cryptoGL.dir/build.make src/CMakeFiles/cryptoGL.dir/Serpent.cpp.i
+.PHONY : Serpent.cpp.i
+
+Serpent.s: Serpent.cpp.s
+.PHONY : Serpent.s
+
+# target to generate assembly for a file
+Serpent.cpp.s:
+	cd /home/gabriel/Documents/Projects/CryptoGL/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/cryptoGL.dir/build.make src/CMakeFiles/cryptoGL.dir/Serpent.cpp.s
+.PHONY : Serpent.cpp.s
+
 Skipjack.o: Skipjack.cpp.o
 .PHONY : Skipjack.o
 
@@ -1942,6 +1966,9 @@ help:
 	@echo "... Scream.o"
 	@echo "... Scream.i"
 	@echo "... Scream.s"
+	@echo "... Serpent.o"
+	@echo "... Serpent.i"
+	@echo "... Serpent.s"
 	@echo "... Skipjack.o"
 	@echo "... Skipjack.i"
 	@echo "... Skipjack.s"

@@ -42,6 +42,7 @@ namespace CryptoGL
         
         uint32_t F(const uint32_t half_block, const uint8_t) const override
         {
+            (void) half_block;
             return 0;
         }
         

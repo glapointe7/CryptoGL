@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions
 
-CXX_FLAGS = -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g
+CXX_FLAGS = -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17
 

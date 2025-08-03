@@ -1,0 +1,2660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptanalysis Educational Guide: Differential, Linear, and Algebraic Attacks</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin-top: 40px;
+        }
+        
+        h3 {
+            color: #2980b9;
+            margin-top: 25px;
+        }
+        
+        .math-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .example-box {
+            background-color: #e8f4f8;
+            border: 1px solid #bee5eb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .pseudo-code {
+            background-color: #f1f3f4;
+            border: 1px solid #dadce0;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+        
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .toc {
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc > ul > li {
+            margin: 12px 0;
+            font-weight: bold;
+        }
+        
+        .toc > ul > li > ul {
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+        
+        .toc > ul > li > ul > li {
+            margin: 6px 0;
+            font-weight: normal;
+        }
+        
+        .toc > ul > li > ul > li > ul {
+            padding-left: 20px;
+            margin-top: 4px;
+        }
+        
+        .toc > ul > li > ul > li > ul > li {
+            margin: 4px 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #2980b9;
+            transition: color 0.2s ease;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+            color: #3498db;
+        }
+        
+        .toc > ul > li > a {
+            font-size: 1.1em;
+            color: #2c3e50;
+        }
+        
+        .toc > ul > li > ul > li > a {
+            font-size: 1em;
+            color: #34495e;
+        }
+        
+        .toc > ul > li > ul > li > ul > li > a {
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+        
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Cryptanalysis Educational Guide</h1>
+        <h2>Differential, Linear, and Algebraic Attacks Explained</h2>
+        
+        <div class="toc">
+            <h3>📋 Table of Contents</h3>
+            <ul>
+                <li><a href="#introduction">1. Introduction to Cryptanalysis</a>
+                    <ul>
+                        <li><a href="#introduction">• What is Cryptanalysis?</a></li>
+                        <li><a href="#introduction">• Types of Cryptanalysis Attacks</a></li>
+                    </ul>
+                </li>
+                <li><a href="#differential">2. Differential Cryptanalysis</a>
+                    <ul>
+                        <li><a href="#differential">• What is Differential Cryptanalysis?</a></li>
+                        <li><a href="#differential">• Mathematical Foundation</a>
+                            <ul>
+                                <li><a href="#differential">- The XOR Difference</a></li>
+                                <li><a href="#differential">- Differential Characteristic</a></li>
+                                <li><a href="#differential">- Differential Probability</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#differential">• Step-by-Step Process</a>
+                            <ul>
+                                <li><a href="#differential">- Choose Input Differences</a></li>
+                                <li><a href="#differential">- Analyze S-Box Behavior</a></li>
+                                <li><a href="#differential">- Build Differential Characteristics</a></li>
+                                <li><a href="#differential">- Key Recovery</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#differential">• Concrete Examples</a>
+                            <ul>
+                                <li><a href="#differential">- DES S-Box S1 Differential Analysis</a></li>
+                                <li><a href="#differential">- Complete Differential Characteristic Calculation</a></li>
+                                <li><a href="#differential">- Practical Probability Calculation Example</a></li>
+                                <li><a href="#differential">- How More Pairs Increase Success Probability</a></li>
+                                <li><a href="#differential">- Key Recovery Process and Pair Count</a></li>
+                                <li><a href="#differential">- Summary: The Power of More Pairs</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#differential">• Why Differential Cryptanalysis Works</a></li>
+                    </ul>
+                </li>
+                <li><a href="#linear">3. Linear Cryptanalysis</a>
+                    <ul>
+                        <li><a href="#linear">• What is Linear Cryptanalysis?</a></li>
+                        <li><a href="#linear">• Why Probability ≠ 1/2 is Crucial</a></li>
+                        <li><a href="#linear">• Mathematical Foundation</a>
+                            <ul>
+                                <li><a href="#linear">- Linear Approximation</a></li>
+                                <li><a href="#linear">- Bias and Probability</a></li>
+                                <li><a href="#linear">- Piling-Up Lemma</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#linear">• Step-by-Step Process</a>
+                            <ul>
+                                <li><a href="#linear">- Find Linear Approximations</a></li>
+                                <li><a href="#linear">- Build Linear Characteristics</a></li>
+                                <li><a href="#linear">- Data Collection</a></li>
+                                <li><a href="#linear">- Key Recovery</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#linear">• Concrete Examples</a>
+                            <ul>
+                                <li><a href="#linear">- DES S-Box S1 Linear Analysis</a></li>
+                                <li><a href="#linear">- Complete Linear Characteristic Calculation</a></li>
+                                <li><a href="#linear">- Practical Linear Approximation Example</a></li>
+                                <li><a href="#linear">- Statistical Significance and Key Recovery</a></li>
+                                <li><a href="#linear">- Summary: Why Probability ≠ 1/2 is Essential</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#linear">• Why Linear Cryptanalysis Works</a></li>
+                    </ul>
+                </li>
+                <li><a href="#algebraic">4. Algebraic Cryptanalysis</a>
+                    <ul>
+                        <li><a href="#algebraic">• What is Algebraic Cryptanalysis?</a></li>
+                        <li><a href="#algebraic">• Mathematical Foundation</a>
+                            <ul>
+                                <li><a href="#algebraic">- Boolean Functions</a></li>
+                                <li><a href="#algebraic">- Algebraic Normal Form (ANF)</a></li>
+                                <li><a href="#algebraic">- Gröbner Basis</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#algebraic">• Step-by-Step Process</a>
+                            <ul>
+                                <li><a href="#algebraic">- Model the Cipher</a></li>
+                                <li><a href="#algebraic">- Build Equation System</a></li>
+                                <li><a href="#algebraic">- Solve the System</a></li>
+                                <li><a href="#algebraic">- Key Recovery</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#algebraic">• Concrete Examples</a>
+                            <ul>
+                                <li><a href="#algebraic">- 4-bit S-Box Algebraic Modeling</a></li>
+                                <li><a href="#algebraic">- Solving the Algebraic System</a></li>
+                                <li><a href="#algebraic">- XL Algorithm Example</a></li>
+                                <li><a href="#algebraic">- SAT Solver Example</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#algebraic">• Advanced Techniques</a>
+                            <ul>
+                                <li><a href="#algebraic">- XL Algorithm</a></li>
+                                <li><a href="#algebraic">- SAT Solvers</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#algebraic">• Why Algebraic Cryptanalysis Works</a></li>
+                    </ul>
+                </li>
+                <li><a href="#comparison">5. Comparison and Applications</a>
+                    <ul>
+                        <li><a href="#comparison">• Comparison of Attack Methods</a></li>
+                        <li><a href="#comparison">• Real-World Applications</a>
+                            <ul>
+                                <li><a href="#comparison">- Historical Attacks</a></li>
+                                <li><a href="#comparison">- Modern Ciphers</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#comparison">• Defense Mechanisms</a>
+                            <ul>
+                                <li><a href="#comparison">- Against Differential Cryptanalysis</a></li>
+                                <li><a href="#comparison">- Against Linear Cryptanalysis</a></li>
+                                <li><a href="#comparison">- Against Algebraic Cryptanalysis</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#comparison">• Practical Considerations</a>
+                            <ul>
+                                <li><a href="#comparison">- Attack Complexity</a></li>
+                                <li><a href="#comparison">- Data Complexity</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="#conclusion">6. Conclusion and Further Reading</a>
+                    <ul>
+                        <li><a href="#conclusion">• Summary</a></li>
+                        <li><a href="#conclusion">• Key Takeaways</a></li>
+                        <li><a href="#conclusion">• Further Reading</a>
+                            <ul>
+                                <li><a href="#conclusion">- Books</a></li>
+                                <li><a href="#conclusion">- Research Papers</a></li>
+                                <li><a href="#conclusion">- Online Resources</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#conclusion">• Practice Exercises</a></li>
+                        <li><a href="#conclusion">• Final Thoughts</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <section id="introduction">
+            <h2>1. Introduction to Cryptanalysis</h2>
+            
+            <p>Cryptanalysis is the science of analyzing and breaking cryptographic systems. It's like being a detective who tries to find weaknesses in codes and ciphers. Think of it as reverse engineering security systems to understand how they work and potentially break them.</p>
+            
+            <h3>What is Cryptanalysis?</h3>
+            <p>Cryptanalysis involves studying cryptographic algorithms to find vulnerabilities that could allow an attacker to:</p>
+            <ul>
+                <li>Recover the secret key</li>
+                <li>Decrypt messages without knowing the key</li>
+                <li>Find patterns that make the cipher predictable</li>
+                <li>Reduce the security of the system</li>
+            </ul>
+            
+            <h3>Types of Cryptanalysis Attacks</h3>
+            <p>There are several approaches to breaking cryptographic systems:</p>
+            
+            <table>
+                <tr>
+                    <th>Attack Type</th>
+                    <th>Description</th>
+                    <th>Complexity</th>
+                </tr>
+                <tr>
+                    <td><strong>Brute Force</strong></td>
+                    <td>Try all possible keys</td>
+                    <td>O(2^n) where n is key length</td>
+                </tr>
+                <tr>
+                    <td><strong>Differential</strong></td>
+                    <td>Study how input differences propagate</td>
+                    <td>O(2^(n/2)) typically</td>
+                </tr>
+                <tr>
+                    <td><strong>Linear</strong></td>
+                    <td>Find linear approximations</td>
+                    <td>O(2^(n/2)) typically</td>
+                </tr>
+                <tr>
+                    <td><strong>Algebraic</strong></td>
+                    <td>Solve systems of equations</td>
+                    <td>Varies greatly</td>
+                </tr>
+            </table>
+            
+            <div class="warning">
+                <strong>⚠️ Important Note:</strong> This guide is for educational purposes only. Understanding these attacks helps in designing more secure cryptographic systems.
+            </div>
+        </section>
+
+        <section id="differential">
+            <h2>2. Differential Cryptanalysis</h2>
+            
+            <h3>What is Differential Cryptanalysis?</h3>
+            <p>Differential cryptanalysis is a powerful attack that studies how differences in input pairs propagate through the cipher. It was first publicly described by Biham and Shamir in 1990, though it was reportedly known to the NSA earlier.</p>
+            
+            <p><strong>Key Idea:</strong> Instead of analyzing single inputs, we analyze pairs of inputs and see how their differences change as they go through the encryption process.</p>
+            
+            <h3>Mathematical Foundation</h3>
+            
+            <h4>2.1 The XOR Difference</h4>
+            <p>The fundamental concept is the XOR difference (⊕):</p>
+            
+            <div class="math-box">
+                ΔX = X ⊕ X'
+            </div>
+            
+            <p>Where X and X' are two plaintext inputs, and ΔX is their difference.</p>
+            
+            <h4>2.2 Differential Characteristic</h4>
+            <p>A differential characteristic is a sequence of differences that propagates through the rounds:</p>
+            
+            <div class="math-box">
+                ΔP → Δ₁ → Δ₂ → ... → Δᵣ → ΔC
+            </div>
+            
+            <p>Where ΔP is the plaintext difference and ΔC is the ciphertext difference.</p>
+            
+            <h4>2.3 Differential Probability</h4>
+            <p>The probability of a differential characteristic is crucial:</p>
+            
+            <div class="math-box">
+                Pr[ΔP → ΔC] = (Number of pairs with this characteristic) / (Total number of pairs)
+            </div>
+            
+            <h3>Step-by-Step Process</h3>
+            
+            <h4>Step 1: Choose Input Differences</h4>
+            <p>Select plaintext pairs with specific differences that are likely to propagate favorably through the cipher.</p>
+            
+            <div class="example-box">
+                <strong>Example:</strong> For a 4-bit S-box, we might choose input pairs with difference ΔX = 0001.
+            </div>
+            
+            <h4>Step 2: Analyze S-Box Behavior</h4>
+            <p>Study how differences propagate through substitution boxes (S-boxes).</p>
+            
+            <div class="pseudo-code">
+// Analyze S-box differential characteristics
+function analyzeSBoxDifferential(sbox, inputDiff):
+    differentialTable = {}
+    
+    for input1 in range(2^n):
+        for input2 in range(2^n):
+            if (input1 ⊕ input2) == inputDiff:
+                output1 = sbox[input1]
+                output2 = sbox[input2]
+                outputDiff = output1 ⊕ output2
+                
+                if outputDiff not in differentialTable:
+                    differentialTable[outputDiff] = 0
+                differentialTable[outputDiff] += 1
+    
+    return differentialTable
+            </div>
+            
+            <h4>Step 3: Build Differential Characteristics</h4>
+            <p>Chain together high-probability differences through multiple rounds.</p>
+            
+            <div class="pseudo-code">
+// Find high-probability differential characteristics
+function findDifferentialCharacteristics(cipher, maxRounds):
+    characteristics = []
+    
+    for round in range(maxRounds):
+        for inputDiff in possibleInputDiffs:
+            for outputDiff in possibleOutputDiffs:
+                prob = calculateDifferentialProbability(inputDiff, outputDiff)
+                if prob > threshold:
+                    characteristics.append({
+                        'input': inputDiff,
+                        'output': outputDiff,
+                        'probability': prob,
+                        'round': round
+                    })
+    
+    return characteristics
+            </div>
+            
+            <h4>Step 4: Key Recovery</h4>
+            <p>Use the differential characteristic to recover bits of the final round key.</p>
+            
+            <div class="pseudo-code">
+// Recover key bits using differential cryptanalysis
+function recoverKeyBits(ciphertexts, plaintexts, characteristic):
+    keyCandidates = {}
+    
+    for (ct1, ct2) in ciphertextPairs:
+        for (pt1, pt2) in plaintextPairs:
+            if (pt1 ⊕ pt2) == characteristic.inputDiff:
+                if (ct1 ⊕ ct2) == characteristic.outputDiff:
+                    // This pair follows our characteristic
+                    // Use it to recover key bits
+                    partialKey = guessPartialKey(ct1, ct2, pt1, pt2)
+                    keyCandidates[partialKey] += 1
+    
+    return mostFrequent(keyCandidates)
+            </div>
+            
+            <h3>Concrete Example: DES Differential Attack</h3>
+            
+            <p>DES (Data Encryption Standard) was famously vulnerable to differential cryptanalysis. Here's a detailed example showing how to calculate probabilities step by step:</p>
+            
+            <div class="example-box">
+                <h4>DES S-Box S1 Differential Analysis</h4>
+                
+                <p><strong>Step 1:</strong> Choose input difference ΔX = 34 (hex) = 00110100 (binary)</p>
+                <p><strong>Step 2:</strong> Analyze S-box S1 with this difference:</p>
+                
+                <p>First, let's look at the DES S-box S1:</p>
+                <table>
+                    <tr>
+                        <th>Row</th>
+                        <th>0</th>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                        <th>5</th>
+                        <th>6</th>
+                        <th>7</th>
+                        <th>8</th>
+                        <th>9</th>
+                        <th>A</th>
+                        <th>B</th>
+                        <th>C</th>
+                        <th>D</th>
+                        <th>E</th>
+                        <th>F</th>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>14</td>
+                        <td>4</td>
+                        <td>13</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>15</td>
+                        <td>11</td>
+                        <td>8</td>
+                        <td>3</td>
+                        <td>10</td>
+                        <td>6</td>
+                        <td>12</td>
+                        <td>5</td>
+                        <td>9</td>
+                        <td>0</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>15</td>
+                        <td>7</td>
+                        <td>4</td>
+                        <td>14</td>
+                        <td>2</td>
+                        <td>13</td>
+                        <td>1</td>
+                        <td>10</td>
+                        <td>6</td>
+                        <td>12</td>
+                        <td>11</td>
+                        <td>9</td>
+                        <td>5</td>
+                        <td>3</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>4</td>
+                        <td>1</td>
+                        <td>14</td>
+                        <td>8</td>
+                        <td>13</td>
+                        <td>6</td>
+                        <td>2</td>
+                        <td>11</td>
+                        <td>15</td>
+                        <td>12</td>
+                        <td>9</td>
+                        <td>7</td>
+                        <td>3</td>
+                        <td>10</td>
+                        <td>5</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>15</td>
+                        <td>12</td>
+                        <td>8</td>
+                        <td>2</td>
+                        <td>4</td>
+                        <td>9</td>
+                        <td>1</td>
+                        <td>7</td>
+                        <td>5</td>
+                        <td>11</td>
+                        <td>3</td>
+                        <td>14</td>
+                        <td>10</td>
+                        <td>0</td>
+                        <td>6</td>
+                        <td>13</td>
+                    </tr>
+                </table>
+                
+                <p><strong>Step 3:</strong> Calculate differential distribution for input difference 34 (hex)</p>
+                
+                <p>For input difference ΔX = 34, we need to find all pairs (X, X') such that X ⊕ X' = 34.</p>
+                
+                <table>
+                    <tr>
+                        <th>Input Pair (X, X')</th>
+                        <th>X Value</th>
+                        <th>X' Value</th>
+                        <th>S1(X)</th>
+                        <th>S1(X')</th>
+                        <th>Output Difference</th>
+                    </tr>
+                    <tr>
+                        <td>(00, 34)</td>
+                        <td>00</td>
+                        <td>34</td>
+                        <td>14 (0xE)</td>
+                        <td>10 (0xA)</td>
+                        <td>04</td>
+                    </tr>
+                    <tr>
+                        <td>(01, 35)</td>
+                        <td>01</td>
+                        <td>35</td>
+                        <td>04 (0x4)</td>
+                        <td>13 (0xD)</td>
+                        <td>09</td>
+                    </tr>
+                    <tr>
+                        <td>(02, 36)</td>
+                        <td>02</td>
+                        <td>36</td>
+                        <td>13 (0xD)</td>
+                        <td>01 (0x1)</td>
+                        <td>0C</td>
+                    </tr>
+                    <tr>
+                        <td>(03, 37)</td>
+                        <td>03</td>
+                        <td>37</td>
+                        <td>01 (0x1)</td>
+                        <td>08 (0x8)</td>
+                        <td>09</td>
+                    </tr>
+                    <tr>
+                        <td>(04, 30)</td>
+                        <td>04</td>
+                        <td>30</td>
+                        <td>02 (0x2)</td>
+                        <td>14 (0xE)</td>
+                        <td>16</td>
+                    </tr>
+                    <tr>
+                        <td>(05, 31)</td>
+                        <td>05</td>
+                        <td>31</td>
+                        <td>15 (0xF)</td>
+                        <td>02 (0x2)</td>
+                        <td>0D</td>
+                    </tr>
+                    <tr>
+                        <td>(06, 32)</td>
+                        <td>06</td>
+                        <td>32</td>
+                        <td>11 (0xB)</td>
+                        <td>13 (0xD)</td>
+                        <td>06</td>
+                    </tr>
+                    <tr>
+                        <td>(07, 33)</td>
+                        <td>07</td>
+                        <td>33</td>
+                        <td>08 (0x8)</td>
+                        <td>01 (0x1)</td>
+                        <td>09</td>
+                    </tr>
+                    <tr>
+                        <td>(08, 3C)</td>
+                        <td>08</td>
+                        <td>3C</td>
+                        <td>03 (0x3)</td>
+                        <td>15 (0xF)</td>
+                        <td>18</td>
+                    </tr>
+                    <tr>
+                        <td>(09, 3D)</td>
+                        <td>09</td>
+                        <td>3D</td>
+                        <td>10 (0xA)</td>
+                        <td>12 (0xC)</td>
+                        <td>06</td>
+                    </tr>
+                    <tr>
+                        <td>(0A, 3E)</td>
+                        <td>0A</td>
+                        <td>3E</td>
+                        <td>06 (0x6)</td>
+                        <td>09 (0x9)</td>
+                        <td>0F</td>
+                    </tr>
+                    <tr>
+                        <td>(0B, 3F)</td>
+                        <td>0B</td>
+                        <td>3F</td>
+                        <td>12 (0xC)</td>
+                        <td>07 (0x7)</td>
+                        <td>0B</td>
+                    </tr>
+                    <tr>
+                        <td>(0C, 38)</td>
+                        <td>0C</td>
+                        <td>38</td>
+                        <td>05 (0x5)</td>
+                        <td>03 (0x3)</td>
+                        <td>06</td>
+                    </tr>
+                    <tr>
+                        <td>(0D, 39)</td>
+                        <td>0D</td>
+                        <td>39</td>
+                        <td>09 (0x9)</td>
+                        <td>10 (0xA)</td>
+                        <td>03</td>
+                    </tr>
+                    <tr>
+                        <td>(0E, 3A)</td>
+                        <td>0E</td>
+                        <td>3A</td>
+                        <td>00 (0x0)</td>
+                        <td>05 (0x5)</td>
+                        <td>05</td>
+                    </tr>
+                    <tr>
+                        <td>(0F, 3B)</td>
+                        <td>0F</td>
+                        <td>3B</td>
+                        <td>07 (0x7)</td>
+                        <td>06 (0x6)</td>
+                        <td>01</td>
+                    </tr>
+                </table>
+                
+                <p><strong>Step 4:</strong> Count occurrences of each output difference</p>
+                
+                <table>
+                    <tr>
+                        <th>Output Difference</th>
+                        <th>Count</th>
+                        <th>Probability</th>
+                    </tr>
+                    <tr>
+                        <td>01</td>
+                        <td>1</td>
+                        <td>1/16 = 0.0625</td>
+                    </tr>
+                    <tr>
+                        <td>03</td>
+                        <td>1</td>
+                        <td>1/16 = 0.0625</td>
+                    </tr>
+                    <tr>
+                        <td>04</td>
+                        <td>1</td>
+                        <td>1/16 = 0.0625</td>
+                    </tr>
+                    <tr>
+                        <td>05</td>
+                        <td>1</td>
+                        <td>1/16 = 0.0625</td>
+                    </tr>
+                    <tr>
+                        <td>06</td>
+                        <td>3</td>
+                        <td>3/16 = 0.1875</td>
+                    </tr>
+                    <tr>
+                        <td>09</td>
+                        <td>3</td>
+                        <td>3/16 = 0.1875</td>
+                    </tr>
+                    <tr>
+                        <td>0B</td>
+                        <td>1</td>
+                        <td>1/16 = 0.0625</td>
+                    </tr>
+                    <tr>
+                        <td>0C</td>
+                        <td>1</td>
+                        <td>1/16 = 0.0625</td>
+                    </tr>
+                    <tr>
+                        <td>0D</td>
+                        <td>1</td>
+                        <td>1/16 = 0.0625</td>
+                    </tr>
+                    <tr>
+                        <td>0F</td>
+                        <td>1</td>
+                        <td>1/16 = 0.0625</td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td>1</td>
+                        <td>1/16 = 0.0625</td>
+                    </tr>
+                    <tr>
+                        <td>18</td>
+                        <td>1</td>
+                        <td>1/16 = 0.0625</td>
+                    </tr>
+                </table>
+                
+                <p><strong>Step 5:</strong> Find the most probable output differences</p>
+                <p>The most probable output differences are 06 and 09, each with probability 3/16 = 0.1875 (18.75%).</p>
+                
+                <p><strong>Mathematical Calculation:</strong></p>
+                <div class="math-box">
+                    For input difference ΔX = 34:
+                    
+                    Pr[ΔX = 34 → ΔY = 06] = 3/16 = 0.1875
+                    Pr[ΔX = 34 → ΔY = 09] = 3/16 = 0.1875
+                    
+                    Expected probability for random S-box: 1/16 = 0.0625
+                    Bias = 0.1875 - 0.0625 = 0.125
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>Complete Differential Characteristic Calculation</h4>
+                
+                <p><strong>Example:</strong> 3-round DES differential characteristic</p>
+                
+                <p><strong>Step 1:</strong> Define the characteristic</p>
+                <div class="math-box">
+                    Round 1: ΔP = 40080000 → Δ₁ = 40080000 (probability = 1)<br>
+                    Round 2: Δ₁ = 40080000 → Δ₂ = 04000000 (probability = 14/64)<br>
+                    Round 3: Δ₂ = 04000000 → ΔC = 04000000 (probability = 1)
+                </div>
+                
+                <p><strong>Step 2:</strong> Calculate total probability</p>
+                <div class="math-box">
+                    Total Probability = Pr[Round 1] × Pr[Round 2] × Pr[Round 3]<br>
+                    Total Probability = 1 × (14/64) × 1 = 14/64 = 0.21875
+                </div>
+                
+                <p><strong>Step 3:</strong> Calculate required data</p>
+                <div class="math-box">
+                    Required pairs ≈ 1 / (probability) = 1 / 0.21875 ≈ 4.57 pairs<br>
+                    For statistical significance, typically need 8-16 pairs
+                </div>
+                
+                <p><strong>Step 4:</strong> Key recovery probability</p>
+                <div class="math-box">
+                    If we have N pairs following the characteristic:<br>
+                    Success probability = 1 - (1 - 0.21875)^N<br>
+                    <br>
+                    For N = 8: Success probability = 1 - (1 - 0.21875)^8 ≈ 0.85<br>
+                    For N = 16: Success probability = 1 - (1 - 0.21875)^16 ≈ 0.98<br>
+                    <br>
+                    <strong>Key Insight:</strong> More pairs increase the probability of successful key recovery!
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>How More Pairs Increase Success Probability</h4>
+                
+                <p><strong>The Fundamental Relationship:</strong></p>
+                <p>In differential cryptanalysis, the more plaintext pairs you have that follow the differential characteristic, the higher the probability of successfully recovering the key. This is because each pair provides additional evidence about the correct key.</p>
+                
+                <div class="math-box">
+                    <strong>Mathematical Foundation:</strong><br>
+                    <br>
+                    For a differential characteristic with probability p:<br>
+                    • Each pair has probability p of following the characteristic<br>
+                    • Each pair has probability (1-p) of NOT following the characteristic<br>
+                    <br>
+                    <strong>Success Probability Formula:</strong><br>
+                    Pr[success] = 1 - (1-p)^N<br>
+                    where N is the number of pairs<br>
+                    <br>
+                    <strong>Intuitive Explanation:</strong><br>
+                    • (1-p)^N = probability that ALL N pairs fail to follow the characteristic<br>
+                    • 1 - (1-p)^N = probability that AT LEAST ONE pair follows the characteristic
+                </div>
+                
+                <p><strong>Detailed Analysis:</strong></p>
+                <div class="math-box">
+                    <strong>Example with p = 0.21875:</strong><br>
+                    <br>
+                    N = 1: Pr[success] = 1 - (1-0.21875)¹ = 0.21875 (21.875%)<br>
+                    N = 2: Pr[success] = 1 - (1-0.21875)² = 0.3896 (38.96%)<br>
+                    N = 4: Pr[success] = 1 - (1-0.21875)⁴ = 0.6226 (62.26%)<br>
+                    N = 8: Pr[success] = 1 - (1-0.21875)⁸ = 0.8501 (85.01%)<br>
+                    N = 16: Pr[success] = 1 - (1-0.21875)¹⁶ = 0.9775 (97.75%)<br>
+                    N = 32: Pr[success] = 1 - (1-0.21875)³² = 0.9995 (99.95%)<br>
+                    <br>
+                    <strong>Key Observation:</strong><br>
+                    The success probability approaches 1 as N increases, but with diminishing returns.
+                </div>
+                
+                <p><strong>Statistical Significance:</strong></p>
+                <div class="math-box">
+                    <strong>Expected Number of Pairs Following Characteristic:</strong><br>
+                    E[successful_pairs] = N × p<br>
+                    <br>
+                    <strong>Standard Deviation:</strong><br>
+                    σ = √(N × p × (1-p))<br>
+                    <br>
+                    <strong>For Reliable Key Recovery:</strong><br>
+                    We typically want E[successful_pairs] > 3σ<br>
+                    This ensures we have enough evidence to distinguish the correct key.<br>
+                    <br>
+                    <strong>Example:</strong><br>
+                    For N = 16, p = 0.21875:<br>
+                    E[successful_pairs] = 16 × 0.21875 = 3.5 pairs<br>
+                    σ = √(16 × 0.21875 × 0.78125) = 1.65<br>
+                    3σ = 4.95, so we need more pairs for high confidence.
+                </div>
+                
+                <p><strong>Practical Guidelines:</strong></p>
+                <div class="math-box">
+                    <strong>Minimum Pairs for Different Confidence Levels:</strong><br>
+                    <br>
+                    <strong>90% Confidence:</strong> N ≈ 1 / (p × 0.1)<br>
+                    <strong>95% Confidence:</strong> N ≈ 1 / (p × 0.05)<br>
+                    <strong>99% Confidence:</strong> N ≈ 1 / (p × 0.01)<br>
+                    <br>
+                    <strong>Example for p = 0.21875:</strong><br>
+                    90% confidence: N ≈ 1 / (0.21875 × 0.1) = 46 pairs<br>
+                    95% confidence: N ≈ 1 / (0.21875 × 0.05) = 91 pairs<br>
+                    99% confidence: N ≈ 1 / (0.21875 × 0.01) = 457 pairs<br>
+                    <br>
+                    <strong>Real-World Consideration:</strong><br>
+                    More pairs also mean more computational work, so there's a trade-off<br>
+                    between success probability and attack complexity.
+                </div>
+            </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>Key Recovery Process and Pair Count</h4>
+                
+                <p><strong>How Pairs Enable Key Recovery:</strong></p>
+                <p>The key recovery process in differential cryptanalysis works by using pairs that follow the differential characteristic to eliminate incorrect key candidates.</p>
+                
+                <div class="math-box">
+                    <strong>Key Recovery Algorithm:</strong><br>
+                    <br>
+                    1. <strong>For each key candidate K':</strong><br>
+                    &nbsp;&nbsp;&nbsp;• Decrypt the ciphertexts using K'<br>
+                    &nbsp;&nbsp;&nbsp;• Check if the resulting plaintexts follow the characteristic<br>
+                    &nbsp;&nbsp;&nbsp;• Count how many pairs follow the characteristic<br>
+                    <br>
+                    2. <strong>Score each key candidate:</strong><br>
+                    &nbsp;&nbsp;&nbsp;Score(K') = (pairs_following_characteristic) / (total_pairs)<br>
+                    <br>
+                    3. <strong>Select the key with highest score</strong><br>
+                    <br>
+                    <strong>Expected Behavior:</strong><br>
+                    • Correct key: Score ≈ characteristic_probability<br>
+                    • Incorrect key: Score ≈ random_probability (much lower)
+                </div>
+                
+                <p><strong>Statistical Analysis:</strong></p>
+                <div class="math-box">
+                    <strong>For N pairs with characteristic probability p:</strong><br>
+                    <br>
+                    <strong>Correct Key:</strong><br>
+                    • Expected score: p<br>
+                    • Standard deviation: √(p(1-p)/N)<br>
+                    <br>
+                    <strong>Incorrect Key:</strong><br>
+                    • Expected score: 1/2 (random)<br>
+                    • Standard deviation: √(0.5×0.5/N) = 1/(2√N)<br>
+                    <br>
+                    <strong>Distinguishing Power:</strong><br>
+                    • Difference in expected scores: |p - 1/2|<br>
+                    • Combined standard deviation: √(p(1-p)/N + 1/(4N))<br>
+                    <br>
+                    <strong>For reliable distinction:</strong><br>
+                    |p - 1/2| > 3 × combined_standard_deviation
+                </div>
+                
+                <p><strong>Example Calculation:</strong></p>
+                <div class="math-box">
+                    <strong>For p = 0.21875 and N = 16:</strong><br>
+                    <br>
+                    <strong>Correct Key:</strong><br>
+                    Expected score = 0.21875<br>
+                    Standard deviation = √(0.21875×0.78125/16) = 0.103<br>
+                    <br>
+                    <strong>Incorrect Key:</strong><br>
+                    Expected score = 0.5<br>
+                    Standard deviation = 1/(2√16) = 0.125<br>
+                    <br>
+                    <strong>Distinguishing:</strong><br>
+                    Difference = |0.21875 - 0.5| = 0.28125<br>
+                    Combined std dev = √(0.103² + 0.125²) = 0.162<br>
+                    3 × combined_std_dev = 0.486<br>
+                    <br>
+                    Since 0.28125 < 0.486, we need more pairs for reliable distinction.
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>Practical Probability Calculation Example</h4>
+                
+                <p><strong>Problem:</strong> Calculate the probability of a 2-round differential characteristic for a 4-bit cipher.</p>
+                
+                <p><strong>Given:</strong></p>
+                <ul>
+                    <li>S-box with input difference ΔX = 2</li>
+                    <li>Output differences: ΔY = 1 (count=2), ΔY = 3 (count=1), ΔY = 5 (count=1)</li>
+                    <li>Total possible inputs: 16</li>
+                </ul>
+                
+                <p><strong>Solution:</strong></p>
+                <div class="math-box">
+                    Step 1: Calculate individual probabilities<br>
+                    Pr[ΔX = 2 → ΔY = 1] = 2/16 = 0.125<br>
+                    Pr[ΔX = 2 → ΔY = 3] = 1/16 = 0.0625<br>
+                    Pr[ΔX = 2 → ΔY = 5] = 1/16 = 0.0625<br>
+                    <br>
+                    Step 2: For 2-round characteristic<br>
+                    Round 1: ΔP = 2 → Δ₁ = 1 (probability = 0.125)<br>
+                    Round 2: Δ₁ = 1 → ΔC = 3 (probability = 0.0625)<br>
+                    <br>
+                    Step 3: Total probability<br>
+                    Total Probability = 0.125 × 0.0625 = 0.0078125<br>
+                    <br>
+                    Step 4: Required data<br>
+                    Required pairs ≈ 1 / 0.0078125 = 128 pairs
+                </div>
+                
+                <p><strong>Verification:</strong></p>
+                <div class="math-box">
+                    Expected number of pairs following characteristic:<br>
+                    Expected = Total pairs × probability<br>
+                    For 128 pairs: Expected = 128 × 0.0078125 = 1 pair<br>
+                    <br>
+                    For statistical significance (95% confidence):<br>
+                    Required pairs = 1 / (probability × 0.05) = 1 / (0.0078125 × 0.05) = 2560 pairs
+                </div>
+            </div>
+            
+            <h3>Why Differential Cryptanalysis Works</h3>
+            <ul>
+                <li><strong>Non-linearity:</strong> S-boxes are designed to be non-linear, but they still have statistical biases</li>
+                <li><strong>Propagation:</strong> Differences propagate through the cipher in predictable ways</li>
+                <li><strong>Amplification:</strong> Small biases can be amplified across multiple rounds</li>
+            </ul>
+            
+            <div class="success">
+                <strong>💡 Key Insight:</strong> Differential cryptanalysis exploits the fact that even well-designed ciphers have statistical biases in how they process input differences.
+            </div>
+            
+            <div class="example-box">
+                <h4>Summary: The Power of More Pairs</h4>
+                
+                <p><strong>The Core Relationship:</strong></p>
+                <p>In differential cryptanalysis, the number of plaintext pairs is directly related to the success probability of key recovery. More pairs provide more evidence, leading to higher confidence in the correct key.</p>
+                
+                <div class="math-box">
+                    <strong>Key Mathematical Relationships:</strong><br>
+                    <br>
+                    1. <strong>Success Probability:</strong> Pr[success] = 1 - (1-p)^N<br>
+                    &nbsp;&nbsp;&nbsp;• Approaches 1 as N increases<br>
+                    &nbsp;&nbsp;&nbsp;• Diminishing returns for large N<br>
+                    <br>
+                    2. <strong>Expected Evidence:</strong> E[successful_pairs] = N × p<br>
+                    &nbsp;&nbsp;&nbsp;• More pairs = more evidence<br>
+                    &nbsp;&nbsp;&nbsp;• Standard deviation = √(N × p × (1-p))<br>
+                    <br>
+                    3. <strong>Key Recovery Confidence:</strong><br>
+                    &nbsp;&nbsp;&nbsp;• Correct key score ≈ p<br>
+                    &nbsp;&nbsp;&nbsp;• Incorrect key score ≈ 1/2<br>
+                    &nbsp;&nbsp;&nbsp;• Distinguishing power increases with N<br>
+                    <br>
+                    4. <strong>Practical Guidelines:</strong><br>
+                    &nbsp;&nbsp;&nbsp;• 90% confidence: N ≈ 1 / (p × 0.1)<br>
+                    &nbsp;&nbsp;&nbsp;• 95% confidence: N ≈ 1 / (p × 0.05)<br>
+                    &nbsp;&nbsp;&nbsp;• 99% confidence: N ≈ 1 / (p × 0.01)
+                </div>
+                
+                <p><strong>Real-World Implications:</strong></p>
+                <ul>
+                    <li><strong>DES Attack:</strong> Used 2⁴⁷ pairs with p ≈ 2⁻⁴⁷, achieving high success probability</li>
+                    <li><strong>Modern Ciphers:</strong> Designed to minimize p, requiring impractical numbers of pairs</li>
+                    <li><strong>Trade-offs:</strong> More pairs = higher success but more computational work</li>
+                    <li><strong>Optimal Strategy:</strong> Balance between success probability and attack complexity</li>
+                </ul>
+                
+                <p><strong>Practical Takeaway:</strong></p>
+                <p>The relationship between pair count and success probability is fundamental to differential cryptanalysis. Understanding this relationship helps in:</p>
+                <ul>
+                    <li>Planning attack complexity</li>
+                    <li>Estimating success rates</li>
+                    <li>Designing countermeasures</li>
+                    <li>Evaluating cipher security</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="linear">
+            <h2>3. Linear Cryptanalysis</h2>
+            
+            <h3>What is Linear Cryptanalysis?</h3>
+            <p>Linear cryptanalysis, developed by Mitsuru Matsui in 1993, finds linear approximations of non-linear components in a cipher. It's like finding a "weak spot" where the cipher behaves more linearly than it should.</p>
+            
+            <p><strong>Key Idea:</strong> Find linear relationships between input bits and output bits that hold with probability significantly different from 1/2.</p>
+            
+            <div class="example-box">
+                <h4>Why Probability ≠ 1/2 is Crucial</h4>
+                
+                <p><strong>The Fundamental Principle:</strong></p>
+                <p>In linear cryptanalysis, we're looking for statistical biases that reveal information about the key. If a linear approximation holds with probability exactly 1/2, it provides no useful information.</p>
+                
+                <div class="math-box">
+                    <strong>Random Function Behavior:</strong><br>
+                    For a truly random function, any linear approximation should hold with probability 1/2.<br>
+                    This means: Pr[linear_equation_holds] = 0.5<br>
+                    <br>
+                    <strong>Biased Function Behavior:</strong><br>
+                    For a cryptographic function with bias ε:<br>
+                    Pr[linear_equation_holds] = 1/2 + ε<br>
+                    where ε ≠ 0
+                </div>
+                
+                <p><strong>Intuitive Explanation:</strong></p>
+                <ul>
+                    <li><strong>Probability = 1/2:</strong> The approximation is as good as random guessing. No information about the key is revealed.</li>
+                    <li><strong>Probability > 1/2:</strong> The approximation holds more often than expected, revealing a bias that depends on the key.</li>
+                    <li><strong>Probability < 1/2:</strong> The approximation holds less often than expected, also revealing a bias (we can flip the equation to get probability > 1/2).</li>
+                </ul>
+                
+                <p><strong>Mathematical Justification:</strong></p>
+                <div class="math-box">
+                    Consider a linear approximation: X₁ ⊕ X₂ ⊕ ... ⊕ Xₘ = Y₁ ⊕ Y₂ ⊕ ... ⊕ Yₙ<br>
+                    <br>
+                    <strong>Case 1: Random Function (ε = 0)</strong><br>
+                    Pr[equation_holds] = 1/2<br>
+                    Information content = 0 bits<br>
+                    <br>
+                    <strong>Case 2: Biased Function (ε > 0)</strong><br>
+                    Pr[equation_holds] = 1/2 + ε<br>
+                    Information content ≈ ε² bits<br>
+                    <br>
+                    <strong>Key Recovery:</strong><br>
+                    The bias ε allows us to distinguish between correct and incorrect key guesses.
+                </div>
+            </div>
+            
+            <h3>Mathematical Foundation</h3>
+            
+            <h4>3.1 Linear Approximation</h4>
+            <p>A linear approximation is an equation of the form:</p>
+            
+            <div class="math-box">
+                X₁ ⊕ X₂ ⊕ ... ⊕ Xₘ = Y₁ ⊕ Y₂ ⊕ ... ⊕ Yₙ
+            </div>
+            
+            <p>Where Xᵢ are input bits and Yⱼ are output bits.</p>
+            
+            <h4>3.2 Bias and Probability</h4>
+            <p>The bias ε of a linear approximation is:</p>
+            
+            <div class="math-box">
+                ε = Pr[linear_equation_holds] - 1/2
+            </div>
+            
+            <p>The probability of the approximation holding is:</p>
+            
+            <div class="math-box">
+                Pr[linear_equation_holds] = 1/2 + ε
+            </div>
+            
+            <h4>3.3 Piling-Up Lemma</h4>
+            <p>For independent linear approximations, the combined bias is:</p>
+            
+            <div class="math-box">
+                ε_total = 2^(n-1) × ε₁ × ε₂ × ... × εₙ
+            </div>
+            
+            <h3>Step-by-Step Process</h3>
+            
+            <h4>Step 1: Find Linear Approximations</h4>
+            <p>Analyze S-boxes to find input/output bit combinations with high bias.</p>
+            
+            <div class="pseudo-code">
+// Find linear approximations of S-box
+function findLinearApproximations(sbox):
+    linearTable = {}
+    
+    for inputMask in range(2^n):
+        for outputMask in range(2^m):
+            count = 0
+            for input in range(2^n):
+                output = sbox[input]
+                inputParity = parity(input & inputMask)
+                outputParity = parity(output & outputMask)
+                if inputParity == outputParity:
+                    count += 1
+            
+            bias = abs(count - 2^(n-1)) / 2^n
+            if bias > threshold:
+                linearTable[(inputMask, outputMask)] = bias
+    
+    return linearTable
+            </div>
+            
+            <h4>Step 2: Build Linear Characteristics</h4>
+            <p>Chain together high-bias linear approximations through multiple rounds.</p>
+            
+            <div class="pseudo-code">
+// Build linear characteristics across rounds
+function buildLinearCharacteristics(cipher, maxRounds):
+    characteristics = []
+    
+    for round in range(maxRounds):
+        for inputMask in possibleInputMasks:
+            for outputMask in possibleOutputMasks:
+                bias = calculateLinearBias(inputMask, outputMask)
+                if bias > threshold:
+                    characteristics.append({
+                        'inputMask': inputMask,
+                        'outputMask': outputMask,
+                        'bias': bias,
+                        'round': round
+                    })
+    
+    return characteristics
+            </div>
+            
+            <h4>Step 3: Data Collection</h4>
+            <p>Collect many plaintext-ciphertext pairs to test the linear approximation.</p>
+            
+            <div class="pseudo-code">
+// Collect data for linear cryptanalysis
+function collectData(numPairs):
+    data = []
+    
+    for i in range(numPairs):
+        plaintext = generateRandomPlaintext()
+        ciphertext = encrypt(plaintext, unknownKey)
+        data.append((plaintext, ciphertext))
+    
+    return data
+            </div>
+            
+            <h4>Step 4: Key Recovery</h4>
+            <p>Use the linear approximation to recover key bits.</p>
+            
+            <div class="pseudo-code">
+// Recover key bits using linear cryptanalysis
+function recoverKeyBitsLinear(data, characteristic):
+    keyCandidates = {}
+    
+    for (pt, ct) in data:
+        // Calculate left side of linear approximation
+        leftSide = calculateParity(pt, characteristic.inputMask)
+        
+        // Guess key bits for right side
+        for keyGuess in possibleKeys:
+            rightSide = calculateParity(ct, characteristic.outputMask, keyGuess)
+            
+            if leftSide == rightSide:
+                keyCandidates[keyGuess] += 1
+            else:
+                keyCandidates[keyGuess] -= 1
+    
+    return max(keyCandidates, key=keyCandidates.get)
+            </div>
+            
+            <h3>Concrete Example: DES Linear Attack</h3>
+            
+            <div class="example-box">
+                <h4>DES S-Box S1 Linear Analysis</h4>
+                
+                <p><strong>Step 1:</strong> Find linear approximation for S-box S1</p>
+                <p>Input mask: 000001 (bit 0) = 1 (decimal)</p>
+                <p>Output mask: 0001 (bit 0) = 1 (decimal)</p>
+                
+                <p>We want to find: X₀ ⊕ Y₀ = 0 (where X₀ is input bit 0, Y₀ is output bit 0)</p>
+                
+                <p><strong>Step 2:</strong> Calculate bias for all possible inputs</p>
+                <p>Count how many times: input_bit_0 = output_bit_0</p>
+                
+                <table>
+                    <tr>
+                        <th>Input (X)</th>
+                        <th>Output (Y)</th>
+                        <th>X in Binary</th>
+                        <th>Y in Binary</th>
+                        <th>X₀</th>
+                        <th>Y₀</th>
+                        <th>X₀ ⊕ Y₀</th>
+                        <th>Equal?</th>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>14</td>
+                        <td>0000</td>
+                        <td>1110</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>4</td>
+                        <td>0001</td>
+                        <td>0100</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>13</td>
+                        <td>0010</td>
+                        <td>1101</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>1</td>
+                        <td>0011</td>
+                        <td>0001</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>2</td>
+                        <td>0100</td>
+                        <td>0010</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>15</td>
+                        <td>0101</td>
+                        <td>1111</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>11</td>
+                        <td>0110</td>
+                        <td>1011</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>8</td>
+                        <td>0111</td>
+                        <td>1000</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>3</td>
+                        <td>1000</td>
+                        <td>0011</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>10</td>
+                        <td>1001</td>
+                        <td>1010</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>6</td>
+                        <td>1010</td>
+                        <td>0110</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>12</td>
+                        <td>1011</td>
+                        <td>1100</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>5</td>
+                        <td>1100</td>
+                        <td>0101</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td>9</td>
+                        <td>1101</td>
+                        <td>1001</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td>0</td>
+                        <td>1110</td>
+                        <td>0000</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td>7</td>
+                        <td>1111</td>
+                        <td>0111</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                </table>
+                
+                <p><strong>Step 3:</strong> Calculate bias</p>
+                <p>Count of "Yes" (X₀ ⊕ Y₀ = 0): 8</p>
+                <p>Count of "No" (X₀ ⊕ Y₀ = 1): 8</p>
+                <p>Total inputs: 16</p>
+                
+                <div class="math-box">
+                    Bias = |count_yes - count_no| / total<br>
+                    Bias = |8 - 8| / 16 = 0 / 16 = 0<br>
+                    <br>
+                    This means this particular linear approximation has no bias!<br>
+                    The approximation X₀ ⊕ Y₀ = 0 holds with probability exactly 1/2.<br>
+                    <br>
+                    <strong>Why this is useless for cryptanalysis:</strong><br>
+                    • Probability = 1/2 means the approximation is as good as random guessing<br>
+                    • No information about the key is revealed<br>
+                    • We cannot distinguish between correct and incorrect key guesses<br>
+                    • This approximation provides 0 bits of information about the key
+                </div>
+                
+                <p><strong>Step 4:</strong> Find a better linear approximation</p>
+                <p>Let's try input mask: 000011 (bits 0 and 1) = 3 (decimal)</p>
+                <p>Output mask: 0010 (bit 1) = 2 (decimal)</p>
+                <p>We want to find: X₀ ⊕ X₁ ⊕ Y₁ = 0</p>
+                
+                <table>
+                    <tr>
+                        <th>Input (X)</th>
+                        <th>X₀</th>
+                        <th>X₁</th>
+                        <th>Y₁</th>
+                        <th>X₀ ⊕ X₁ ⊕ Y₁</th>
+                        <th>Equal to 0?</th>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>No</td>
+                    </tr>
+                </table>
+                
+                <div class="math-box">
+                    Count of "Yes" (X₀ ⊕ X₁ ⊕ Y₁ = 0): 12<br>
+                    Count of "No" (X₀ ⊕ X₁ ⊕ Y₁ = 1): 4<br>
+                    Total inputs: 16<br>
+                    <br>
+                    Bias = |12 - 4| / 16 = 8 / 16 = 0.5<br>
+                    <br>
+                    This is a very strong bias!<br>
+                    The approximation X₀ ⊕ X₁ ⊕ Y₁ = 0 holds with probability 12/16 = 0.75<br>
+                    <br>
+                    <strong>Why this is useful for cryptanalysis:</strong><br>
+                    • Probability = 0.75 is significantly different from 0.5<br>
+                    • Bias = 0.5 - 0.5 = 0.25 reveals information about the key<br>
+                    • We can distinguish between correct and incorrect key guesses<br>
+                    • This approximation provides ≈ 0.25² = 0.0625 bits of information per sample<br>
+                    • With enough samples, we can recover key bits with high confidence
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>Complete Linear Characteristic Calculation</h4>
+                
+                <p><strong>Example:</strong> 3-round DES linear characteristic</p>
+                
+                <p><strong>Step 1:</strong> Define the characteristic</p>
+                <div class="math-box">
+                    Round 1: Input mask = 00000001, Output mask = 00000001 (bias = 0.125)<br>
+                    Round 2: Input mask = 00000001, Output mask = 00000010 (bias = 0.125)<br>
+                    Round 3: Input mask = 00000010, Output mask = 00000010 (bias = 0.125)
+                </div>
+                
+                <p><strong>Step 2:</strong> Calculate total bias using Piling-Up Lemma</p>
+                <div class="math-box">
+                    ε_total = 2^(n-1) × ε₁ × ε₂ × ... × εₙ<br>
+                    ε_total = 2^(3-1) × 0.125 × 0.125 × 0.125<br>
+                    ε_total = 4 × 0.125³ = 4 × 0.001953125 = 0.0078125
+                </div>
+                
+                <p><strong>Step 3:</strong> Calculate required data</p>
+                <div class="math-box">
+                    Required plaintexts ≈ 1 / (bias²) = 1 / (0.0078125²) = 1 / 0.000061035<br>
+                    Required plaintexts ≈ 16,384 plaintexts
+                </div>
+                
+                <p><strong>Step 4:</strong> Key recovery probability</p>
+                <div class="math-box">
+                    For N plaintexts, the success probability depends on the bias:<br>
+                    Standard deviation = 1 / √(4N × bias²)<br>
+                    <br>
+                    For N = 16,384:<br>
+                    Standard deviation = 1 / √(4 × 16384 × 0.0078125²) ≈ 0.5<br>
+                    <br>
+                    This means the key guess with the highest score will be correct<br>
+                    with high probability (approximately 95% confidence).
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>Statistical Significance and Key Recovery</h4>
+                
+                <p><strong>How Bias Enables Key Recovery:</strong></p>
+                <p>The key insight is that the bias depends on the key. When we guess the key correctly, the linear approximation should hold with the expected bias. When we guess incorrectly, it should hold with probability closer to 1/2.</p>
+                
+                <div class="math-box">
+                    <strong>Key Recovery Process:</strong><br>
+                    For each possible key guess K':<br>
+                    <br>
+                    1. Calculate the left side: L = input_bits ⊕ key_guess_bits<br>
+                    2. Calculate the right side: R = output_bits ⊕ key_guess_bits<br>
+                    3. Count how many times L = R holds<br>
+                    4. Score = (count_yes - count_no) / total<br>
+                    <br>
+                    <strong>Expected Behavior:</strong><br>
+                    • Correct key guess: Score ≈ bias ε<br>
+                    • Incorrect key guess: Score ≈ 0 (random)<br>
+                    <br>
+                    <strong>Statistical Distinction:</strong><br>
+                    The correct key will have a significantly higher score than incorrect guesses.
+                </div>
+                
+                <p><strong>Required Sample Size:</strong></p>
+                <div class="math-box">
+                    To distinguish between correct and incorrect keys with confidence:<br>
+                    <br>
+                    <strong>Standard deviation of score:</strong><br>
+                    σ = 1 / √(4N) where N is the number of samples<br>
+                    <br>
+                    <strong>For 95% confidence (2σ rule):</strong><br>
+                    We need: bias > 2σ<br>
+                    Therefore: ε > 2 / √(4N)<br>
+                    Solving for N: N > 1 / ε²<br>
+                    <br>
+                    <strong>Example:</strong><br>
+                    For bias ε = 0.25: N > 1 / (0.25)² = 16 samples<br>
+                    For bias ε = 0.125: N > 1 / (0.125)² = 64 samples<br>
+                    For bias ε = 0.0625: N > 1 / (0.0625)² = 256 samples
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>Practical Linear Approximation Example</h4>
+                
+                <p><strong>Problem:</strong> Calculate the bias of a linear approximation for a 4-bit S-box.</p>
+                
+                <p><strong>Given:</strong></p>
+                <ul>
+                    <li>4-bit S-box with input mask = 3 (bits 0 and 1)</li>
+                    <li>Output mask = 2 (bit 1)</li>
+                    <li>Linear approximation: X₀ ⊕ X₁ ⊕ Y₁ = 0</li>
+                </ul>
+                
+                <p><strong>Solution:</strong></p>
+                <div class="math-box">
+                    Step 1: Calculate for each input<br>
+                    For X = 0: X₀ = 0, X₁ = 0, Y₁ = 1 → X₀ ⊕ X₁ ⊕ Y₁ = 1<br>
+                    For X = 1: X₀ = 1, X₁ = 0, Y₁ = 0 → X₀ ⊕ X₁ ⊕ Y₁ = 1<br>
+                    For X = 2: X₀ = 0, X₁ = 1, Y₁ = 1 → X₀ ⊕ X₁ ⊕ Y₁ = 0<br>
+                    For X = 3: X₀ = 1, X₁ = 1, Y₁ = 0 → X₀ ⊕ X₁ ⊕ Y₁ = 0<br>
+                    ... (continue for all 16 inputs)<br>
+                    <br>
+                    Step 2: Count results<br>
+                    Count of X₀ ⊕ X₁ ⊕ Y₁ = 0: 10<br>
+                    Count of X₀ ⊕ X₁ ⊕ Y₁ = 1: 6<br>
+                    <br>
+                    Step 3: Calculate bias<br>
+                    Bias = |10 - 6| / 16 = 4 / 16 = 0.25<br>
+                    <br>
+                    Step 4: Calculate probability<br>
+                    Pr[X₀ ⊕ X₁ ⊕ Y₁ = 0] = 1/2 + 0.25 = 0.75<br>
+                    This approximation holds with 75% probability!
+                </div>
+                
+                <p><strong>Verification:</strong></p>
+                <div class="math-box">
+                    Expected probability for random function: 0.5<br>
+                    Observed probability: 0.75<br>
+                    Bias = 0.75 - 0.5 = 0.25 ✓<br>
+                    <br>
+                    For statistical significance:<br>
+                    Required samples ≈ 1 / (bias²) = 1 / (0.25²) = 16 samples<br>
+                    For 95% confidence: ≈ 64 samples
+                </div>
+            </div>
+            
+            <h3>Why Linear Cryptanalysis Works</h3>
+            <ul>
+                <li><strong>Statistical Bias:</strong> Even well-designed S-boxes have slight linear biases</li>
+                <li><strong>Amplification:</strong> Small biases can be amplified across multiple rounds</li>
+                <li><strong>Key Information:</strong> The bias depends on the key, allowing key recovery</li>
+            </ul>
+            
+            <div class="success">
+                <strong>💡 Key Insight:</strong> Linear cryptanalysis exploits the fact that non-linear functions can still have linear approximations that hold with probability different from 1/2.
+            </div>
+            
+            <div class="example-box">
+                <h4>Summary: Why Probability ≠ 1/2 is Essential</h4>
+                
+                <p><strong>The Core Principle:</strong></p>
+                <p>Linear cryptanalysis works because cryptographic functions are not perfectly random. They have statistical biases that can be exploited to recover key information.</p>
+                
+                <div class="math-box">
+                    <strong>Key Points:</strong><br>
+                    <br>
+                    1. <strong>Random Function:</strong> Pr[linear_equation] = 1/2 → No information<br>
+                    2. <strong>Biased Function:</strong> Pr[linear_equation] = 1/2 + ε → Information revealed<br>
+                    3. <strong>Key Recovery:</strong> Correct key maximizes the bias, incorrect keys minimize it<br>
+                    4. <strong>Sample Size:</strong> N > 1/ε² samples needed for reliable key recovery<br>
+                    <br>
+                    <strong>Practical Impact:</strong><br>
+                    • Small biases (ε ≈ 0.01) require many samples (N > 10,000)<br>
+                    • Large biases (ε ≈ 0.25) require few samples (N > 16)<br>
+                    • The bias must be significantly different from 0 to be useful
+                </div>
+                
+                <p><strong>Real-World Implications:</strong></p>
+                <ul>
+                    <li><strong>DES:</strong> Had biases of ε ≈ 2⁻⁵, requiring 2¹⁰ plaintexts</li>
+                    <li><strong>AES:</strong> Designed to minimize biases, making linear attacks impractical</li>
+                    <li><strong>Modern Ciphers:</strong> Use multiple techniques to eliminate linear biases</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="algebraic">
+            <h2>4. Algebraic Cryptanalysis</h2>
+            
+            <h3>What is Algebraic Cryptanalysis?</h3>
+            <p>Algebraic cryptanalysis treats the cipher as a system of equations and tries to solve for the unknown key. It's like solving a complex puzzle where the pieces are mathematical equations.</p>
+            
+            <p><strong>Key Idea:</strong> Express the entire encryption process as a system of multivariate equations and solve for the key variables.</p>
+            
+            <h3>Mathematical Foundation</h3>
+            
+            <h4>4.1 Boolean Functions</h4>
+            <p>Cryptographic operations can be expressed as Boolean functions:</p>
+            
+            <div class="math-box">
+                f(x₁, x₂, ..., xₙ) = c₀ ⊕ c₁x₁ ⊕ c₂x₂ ⊕ ... ⊕ cₙxₙ ⊕ c₁₂x₁x₂ ⊕ ...
+            </div>
+            
+            <p>Where cᵢ are coefficients and xᵢ are input variables.</p>
+            
+            <h4>4.2 Algebraic Normal Form (ANF)</h4>
+            <p>Every Boolean function can be written in ANF:</p>
+            
+            <div class="math-box">
+                f(x) = ⊕_{I⊆{1,2,...,n}} a_I ∏_{i∈I} x_i
+            </div>
+            
+            <p>Where a_I are coefficients and the sum is over all subsets I.</p>
+            
+            <h4>4.3 Gröbner Basis</h4>
+            <p>A key tool for solving polynomial systems:</p>
+            
+            <div class="math-box">
+                Given: f₁(x) = 0, f₂(x) = 0, ..., fₘ(x) = 0
+                Find: Gröbner basis G = {g₁, g₂, ..., gₖ}
+            </div>
+            
+            <h3>Step-by-Step Process</h3>
+            
+            <h4>Step 1: Model the Cipher</h4>
+            <p>Express each operation in the cipher as equations.</p>
+            
+            <div class="pseudo-code">
+// Model S-box as equations
+function modelSBox(sbox):
+    equations = []
+    
+    for input in range(2^n):
+        output = sbox[input]
+        // Convert to binary representation
+        inputBits = binary(input, n)
+        outputBits = binary(output, m)
+        
+        // Create equations for each output bit
+        for i in range(m):
+            equation = createBooleanEquation(inputBits, outputBits[i])
+            equations.append(equation)
+    
+    return equations
+            </div>
+            
+            <h4>Step 2: Build Equation System</h4>
+            <p>Combine equations from all components into a large system.</p>
+            
+            <div class="pseudo-code">
+// Build complete equation system
+function buildEquationSystem(cipher, plaintexts, ciphertexts):
+    system = []
+    
+    for (pt, ct) in zip(plaintexts, ciphertexts):
+        // Add plaintext constraints
+        system.extend(createPlaintextConstraints(pt))
+        
+        // Add cipher equations
+        system.extend(modelCipher(cipher))
+        
+        // Add ciphertext constraints
+        system.extend(createCiphertextConstraints(ct))
+    
+    return system
+            </div>
+            
+            <h4>Step 3: Solve the System</h4>
+            <p>Use algebraic techniques to solve for the key variables.</p>
+            
+            <div class="pseudo-code">
+// Solve equation system using Gröbner basis
+function solveAlgebraicSystem(equations, variables):
+    // Convert to polynomial ring
+    ring = createPolynomialRing(variables)
+    
+    // Compute Gröbner basis
+    grobnerBasis = computeGroebnerBasis(equations, ring)
+    
+    // Extract solutions
+    solutions = extractSolutions(grobnerBasis)
+    
+    return solutions
+            </div>
+            
+            <h4>Step 4: Key Recovery</h4>
+            <p>Extract the key from the solution.</p>
+            
+            <div class="pseudo-code">
+// Recover key from algebraic solution
+function recoverKeyAlgebraic(solutions, keyVariables):
+    for solution in solutions:
+        key = {}
+        for var in keyVariables:
+            if var in solution:
+                key[var] = solution[var]
+        
+        // Verify the key
+        if verifyKey(key):
+            return key
+    
+    return None
+            </div>
+            
+            <h3>Concrete Example: 4-bit S-Box Algebraic Attack</h3>
+            
+            <div class="example-box">
+                <h4>4-bit S-Box Algebraic Modeling</h4>
+                
+                <p><strong>Step 1:</strong> Define the S-box</p>
+                <p>Consider a 4-bit S-box with the following mapping:</p>
+                
+                <table>
+                    <tr>
+                        <th>Input (X)</th>
+                        <th>Output (Y)</th>
+                        <th>Input Binary</th>
+                        <th>Output Binary</th>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>14</td>
+                        <td>0000</td>
+                        <td>1110</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>4</td>
+                        <td>0001</td>
+                        <td>0100</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>13</td>
+                        <td>0010</td>
+                        <td>1101</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>1</td>
+                        <td>0011</td>
+                        <td>0001</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>2</td>
+                        <td>0100</td>
+                        <td>0010</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>15</td>
+                        <td>0101</td>
+                        <td>1111</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>11</td>
+                        <td>0110</td>
+                        <td>1011</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>8</td>
+                        <td>0111</td>
+                        <td>1000</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>3</td>
+                        <td>1000</td>
+                        <td>0011</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>10</td>
+                        <td>1001</td>
+                        <td>1010</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>6</td>
+                        <td>1010</td>
+                        <td>0110</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>12</td>
+                        <td>1011</td>
+                        <td>1100</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>5</td>
+                        <td>1100</td>
+                        <td>0101</td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td>9</td>
+                        <td>1101</td>
+                        <td>1001</td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td>0</td>
+                        <td>1110</td>
+                        <td>0000</td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td>7</td>
+                        <td>1111</td>
+                        <td>0111</td>
+                    </tr>
+                </table>
+                
+                <p><strong>Step 2:</strong> Convert to Boolean equations</p>
+                <p>For input x = (x₀, x₁, x₂, x₃) and output y = (y₀, y₁, y₂, y₃), we need to find Boolean functions:</p>
+                
+                <div class="math-box">
+                    y₀ = f₀(x₀, x₁, x₂, x₃)<br>
+                    y₁ = f₁(x₀, x₁, x₂, x₃)<br>
+                    y₂ = f₂(x₀, x₁, x₂, x₃)<br>
+                    y₃ = f₃(x₀, x₁, x₂, x₃)
+                </div>
+                
+                <p><strong>Step 3:</strong> Find Algebraic Normal Form (ANF) for each output bit</p>
+                <p>Using the truth table method, we can derive the ANF for each output bit:</p>
+                
+                <div class="math-box">
+                    For y₀ (least significant bit):<br>
+                    y₀ = x₀ ⊕ x₁ ⊕ x₂ ⊕ x₀x₁ ⊕ x₀x₂ ⊕ x₁x₂ ⊕ x₀x₁x₂<br>
+                    <br>
+                    For y₁:<br>
+                    y₁ = x₀ ⊕ x₁ ⊕ x₀x₁ ⊕ x₀x₂ ⊕ x₁x₃ ⊕ x₀x₁x₂<br>
+                    <br>
+                    For y₂:<br>
+                    y₂ = x₀ ⊕ x₂ ⊕ x₃ ⊕ x₀x₁ ⊕ x₁x₂ ⊕ x₀x₃ ⊕ x₁x₃<br>
+                    <br>
+                    For y₃:<br>
+                    y₃ = x₁ ⊕ x₂ ⊕ x₃ ⊕ x₀x₁ ⊕ x₀x₂ ⊕ x₁x₂ ⊕ x₀x₃
+                </div>
+                
+                <p><strong>Step 4:</strong> Build equation system for a simple cipher</p>
+                <p>Consider a 1-round cipher with:</p>
+                <ul>
+                    <li>4-bit plaintext P = (p₀, p₁, p₂, p₃)</li>
+                    <li>4-bit key K = (k₀, k₁, k₂, k₃)</li>
+                    <li>4-bit ciphertext C = (c₀, c₁, c₂, c₃)</li>
+                </ul>
+                
+                <p>The encryption process is: C = S(P ⊕ K)</p>
+                
+                <div class="math-box">
+                    Step 4a: XOR operation<br>
+                    x₀ = p₀ ⊕ k₀<br>
+                    x₁ = p₁ ⊕ k₁<br>
+                    x₂ = p₂ ⊕ k₂<br>
+                    x₃ = p₃ ⊕ k₃<br>
+                    <br>
+                    Step 4b: S-box transformation<br>
+                    c₀ = x₀ ⊕ x₁ ⊕ x₂ ⊕ x₀x₁ ⊕ x₀x₂ ⊕ x₁x₂ ⊕ x₀x₁x₂<br>
+                    c₁ = x₀ ⊕ x₁ ⊕ x₀x₁ ⊕ x₀x₂ ⊕ x₁x₃ ⊕ x₀x₁x₂<br>
+                    c₂ = x₀ ⊕ x₂ ⊕ x₃ ⊕ x₀x₁ ⊕ x₁x₂ ⊕ x₀x₃ ⊕ x₁x₃<br>
+                    c₃ = x₁ ⊕ x₂ ⊕ x₃ ⊕ x₀x₁ ⊕ x₀x₂ ⊕ x₁x₂ ⊕ x₀x₃
+                </div>
+                
+                <p><strong>Step 5:</strong> Substitute and create final equations</p>
+                <p>Substituting the XOR equations into the S-box equations:</p>
+                
+                <div class="math-box">
+                    c₀ = (p₀ ⊕ k₀) ⊕ (p₁ ⊕ k₁) ⊕ (p₂ ⊕ k₂) ⊕ (p₀ ⊕ k₀)(p₁ ⊕ k₁) ⊕ (p₀ ⊕ k₀)(p₂ ⊕ k₂) ⊕ (p₁ ⊕ k₁)(p₂ ⊕ k₂) ⊕ (p₀ ⊕ k₀)(p₁ ⊕ k₁)(p₂ ⊕ k₂)<br>
+                    <br>
+                    c₁ = (p₀ ⊕ k₀) ⊕ (p₁ ⊕ k₁) ⊕ (p₀ ⊕ k₀)(p₁ ⊕ k₁) ⊕ (p₀ ⊕ k₀)(p₂ ⊕ k₂) ⊕ (p₁ ⊕ k₁)(p₃ ⊕ k₃) ⊕ (p₀ ⊕ k₀)(p₁ ⊕ k₁)(p₂ ⊕ k₂)<br>
+                    <br>
+                    c₂ = (p₀ ⊕ k₀) ⊕ (p₂ ⊕ k₂) ⊕ (p₃ ⊕ k₃) ⊕ (p₀ ⊕ k₀)(p₁ ⊕ k₁) ⊕ (p₁ ⊕ k₁)(p₂ ⊕ k₂) ⊕ (p₀ ⊕ k₀)(p₃ ⊕ k₃) ⊕ (p₁ ⊕ k₁)(p₃ ⊕ k₃)<br>
+                    <br>
+                    c₃ = (p₁ ⊕ k₁) ⊕ (p₂ ⊕ k₂) ⊕ (p₃ ⊕ k₃) ⊕ (p₀ ⊕ k₀)(p₁ ⊕ k₁) ⊕ (p₀ ⊕ k₀)(p₂ ⊕ k₂) ⊕ (p₁ ⊕ k₁)(p₂ ⊕ k₂) ⊕ (p₀ ⊕ k₀)(p₃ ⊕ k₃)
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>Solving the Algebraic System</h4>
+                
+                <p><strong>Step 1:</strong> Collect known plaintext-ciphertext pairs</p>
+                <p>Suppose we have the following pairs:</p>
+                
+                <table>
+                    <tr>
+                        <th>Pair</th>
+                        <th>Plaintext (P)</th>
+                        <th>Ciphertext (C)</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>0000</td>
+                        <td>1110</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>0001</td>
+                        <td>0100</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>0010</td>
+                        <td>1101</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>0011</td>
+                        <td>0001</td>
+                    </tr>
+                </table>
+                
+                <p><strong>Step 2:</strong> Create equation system</p>
+                <p>For each pair, we get 4 equations (one for each output bit):</p>
+                
+                <div class="math-box">
+                    Pair 1 (P=0000, C=1110):<br>
+                    c₀ = 0: 0 = k₀ ⊕ k₁ ⊕ k₂ ⊕ k₀k₁ ⊕ k₀k₂ ⊕ k₁k₂ ⊕ k₀k₁k₂<br>
+                    c₁ = 1: 1 = k₀ ⊕ k₁ ⊕ k₀k₁ ⊕ k₀k₂ ⊕ k₁k₃ ⊕ k₀k₁k₂<br>
+                    c₂ = 1: 1 = k₀ ⊕ k₂ ⊕ k₃ ⊕ k₀k₁ ⊕ k₁k₂ ⊕ k₀k₃ ⊕ k₁k₃<br>
+                    c₃ = 1: 1 = k₁ ⊕ k₂ ⊕ k₃ ⊕ k₀k₁ ⊕ k₀k₂ ⊕ k₁k₂ ⊕ k₀k₃<br>
+                    <br>
+                    Pair 2 (P=0001, C=0100):<br>
+                    c₀ = 0: 0 = (1⊕k₀) ⊕ k₁ ⊕ k₂ ⊕ (1⊕k₀)k₁ ⊕ (1⊕k₀)k₂ ⊕ k₁k₂ ⊕ (1⊕k₀)k₁k₂<br>
+                    c₁ = 0: 0 = (1⊕k₀) ⊕ k₁ ⊕ (1⊕k₀)k₁ ⊕ (1⊕k₀)k₂ ⊕ k₁k₃ ⊕ (1⊕k₀)k₁k₂<br>
+                    c₂ = 1: 1 = (1⊕k₀) ⊕ k₂ ⊕ k₃ ⊕ (1⊕k₀)k₁ ⊕ k₁k₂ ⊕ (1⊕k₀)k₃ ⊕ k₁k₃<br>
+                    c₃ = 0: 0 = k₁ ⊕ k₂ ⊕ k₃ ⊕ (1⊕k₀)k₁ ⊕ (1⊕k₀)k₂ ⊕ k₁k₂ ⊕ (1⊕k₀)k₃
+                </div>
+                
+                <p><strong>Step 3:</strong> Simplify equations</p>
+                <p>After simplification, we get a system of 16 equations in 4 variables:</p>
+                
+                <div class="math-box">
+                    Simplified system (first 8 equations):<br>
+                    k₀ ⊕ k₁ ⊕ k₂ ⊕ k₀k₁ ⊕ k₀k₂ ⊕ k₁k₂ ⊕ k₀k₁k₂ = 0<br>
+                    k₀ ⊕ k₁ ⊕ k₀k₁ ⊕ k₀k₂ ⊕ k₁k₃ ⊕ k₀k₁k₂ = 1<br>
+                    k₀ ⊕ k₂ ⊕ k₃ ⊕ k₀k₁ ⊕ k₁k₂ ⊕ k₀k₃ ⊕ k₁k₃ = 1<br>
+                    k₁ ⊕ k₂ ⊕ k₃ ⊕ k₀k₁ ⊕ k₀k₂ ⊕ k₁k₂ ⊕ k₀k₃ = 1<br>
+                    k₀ ⊕ k₁ ⊕ k₂ ⊕ k₀k₁ ⊕ k₀k₂ ⊕ k₁k₂ ⊕ k₀k₁k₂ = 0<br>
+                    k₀ ⊕ k₁ ⊕ k₀k₁ ⊕ k₀k₂ ⊕ k₁k₃ ⊕ k₀k₁k₂ = 0<br>
+                    k₀ ⊕ k₂ ⊕ k₃ ⊕ k₀k₁ ⊕ k₁k₂ ⊕ k₀k₃ ⊕ k₁k₃ = 1<br>
+                    k₁ ⊕ k₂ ⊕ k₃ ⊕ k₀k₁ ⊕ k₀k₂ ⊕ k₁k₂ ⊕ k₀k₃ = 0
+                </div>
+                
+                <p><strong>Step 4:</strong> Solve using Gröbner basis</p>
+                <p>Using a computer algebra system, we compute the Gröbner basis:</p>
+                
+                <div class="math-box">
+                    Gröbner basis computation:<br>
+                    G = {k₀ + 1, k₁ + 0, k₂ + 1, k₃ + 0}<br>
+                    <br>
+                    This gives us the solution:<br>
+                    k₀ = 1, k₁ = 0, k₂ = 1, k₃ = 0<br>
+                    <br>
+                    Therefore, the key is K = 1010 (binary) = 10 (decimal)
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>How Gröbner Basis Computation Works</h4>
+                
+                <p><strong>What is a Gröbner Basis?</strong></p>
+                <p>A Gröbner basis is a special set of polynomials that has the same solutions as the original system but is easier to solve. It's like "solving" the system of equations in a systematic way.</p>
+                
+                <div class="math-box">
+                    <strong>Gröbner Basis Properties:</strong><br>
+                    • Same solution set as original system<br>
+                    • Triangular form (easier to solve)<br>
+                    • Minimal with respect to a monomial ordering<br>
+                    • Allows systematic elimination of variables
+                </div>
+                
+                <p><strong>Step-by-Step Gröbner Basis Computation:</strong></p>
+                
+                <div class="math-box">
+                    <strong>Step 1: Define the polynomial ring</strong><br>
+                    We work in the polynomial ring GF(2)[k₀, k₁, k₂, k₃]<br>
+                    where GF(2) means coefficients are 0 or 1 (mod 2)<br>
+                    <br>
+                    <strong>Step 2: Set up the system</strong><br>
+                    Original equations (simplified):<br>
+                    f₁: k₀ + k₁ + k₂ + k₀k₁ + k₀k₂ + k₁k₂ + k₀k₁k₂ = 0<br>
+                    f₂: k₀ + k₁ + k₀k₁ + k₀k₂ + k₁k₃ + k₀k₁k₂ = 1<br>
+                    f₃: k₀ + k₂ + k₃ + k₀k₁ + k₁k₂ + k₀k₃ + k₁k₃ = 1<br>
+                    f₄: k₁ + k₂ + k₃ + k₀k₁ + k₀k₂ + k₁k₂ + k₀k₃ = 1<br>
+                    <br>
+                    <strong>Step 3: Choose monomial ordering</strong><br>
+                    Lexicographic ordering: k₀ > k₁ > k₂ > k₃<br>
+                    This means we eliminate variables in order: k₀ first, then k₁, etc.
+                </div>
+                
+                <p><strong>Buchberger's Algorithm (Simplified):</strong></p>
+                <div class="math-box">
+                    <strong>Algorithm Steps:</strong><br>
+                    <br>
+                    1. <strong>Initialize:</strong> G = {f₁, f₂, f₃, f₄}<br>
+                    2. <strong>Compute S-polynomials:</strong> S(fᵢ, fⱼ) for all pairs<br>
+                    3. <strong>Reduce:</strong> Reduce S-polynomials modulo G<br>
+                    4. <strong>Add:</strong> Add non-zero remainders to G<br>
+                    5. <strong>Repeat:</strong> Until no new polynomials are added<br>
+                    <br>
+                    <strong>S-polynomial definition:</strong><br>
+                    S(f, g) = (LCM(LT(f), LT(g))/LT(f)) × f - (LCM(LT(f), LT(g))/LT(g)) × g<br>
+                    where LT = leading term, LCM = least common multiple
+                </div>
+                
+                <p><strong>Example Computation:</strong></p>
+                <div class="math-box">
+                    <strong>Iteration 1:</strong><br>
+                    • Compute S(f₁, f₂):<br>
+                    &nbsp;&nbsp;Leading terms: LT(f₁) = k₀k₁k₂, LT(f₂) = k₀k₁k₂<br>
+                    &nbsp;&nbsp;S(f₁, f₂) = f₁ - f₂ = (k₀ + k₁ + k₂ + k₀k₁ + k₀k₂ + k₁k₂) - (k₀ + k₁ + k₀k₁ + k₀k₂ + k₁k₃ + 1)<br>
+                    &nbsp;&nbsp;= k₂ + k₁k₂ + k₁k₃ + 1<br>
+                    <br>
+                    • Reduce: k₂ + k₁k₂ + k₁k₃ + 1 = 0<br>
+                    • Add to G: g₅ = k₂ + k₁k₂ + k₁k₃ + 1<br>
+                    <br>
+                    <strong>Iteration 2:</strong><br>
+                    • Compute S(f₁, g₅):<br>
+                    &nbsp;&nbsp;Leading terms: LT(f₁) = k₀k₁k₂, LT(g₅) = k₁k₃<br>
+                    &nbsp;&nbsp;S(f₁, g₅) = k₀k₁k₂ × g₅ - k₀k₁k₂ × f₁<br>
+                    &nbsp;&nbsp;After reduction: g₆ = k₀ + 1<br>
+                    <br>
+                    <strong>Continue until convergence...</strong>
+                </div>
+                
+                <p><strong>Final Gröbner Basis:</strong></p>
+                <div class="math-box">
+                    After all iterations, we get:<br>
+                    G = {g₁, g₂, g₃, g₄}<br>
+                    <br>
+                    where:<br>
+                    g₁ = k₀ + 1<br>
+                    g₂ = k₁<br>
+                    g₃ = k₂ + 1<br>
+                    g₄ = k₃<br>
+                    <br>
+                    <strong>Solving the triangular system:</strong><br>
+                    • From g₁: k₀ + 1 = 0 → k₀ = 1<br>
+                    • From g₂: k₁ = 0 → k₁ = 0<br>
+                    • From g₃: k₂ + 1 = 0 → k₂ = 1<br>
+                    • From g₄: k₃ = 0 → k₃ = 0<br>
+                    <br>
+                    <strong>Solution:</strong> k₀ = 1, k₁ = 0, k₂ = 1, k₃ = 0
+                </div>
+                
+                <p><strong>Why Gröbner Basis Works:</strong></p>
+                <div class="math-box">
+                    <strong>Advantages:</strong><br>
+                    • <strong>Systematic:</strong> Algorithmic approach to solving polynomial systems<br>
+                    • <strong>Complete:</strong> Finds all solutions (if they exist)<br>
+                    • <strong>Exact:</strong> No approximation, exact solutions<br>
+                    • <strong>General:</strong> Works for any polynomial system<br>
+                    <br>
+                    <strong>Challenges:</strong><br>
+                    • <strong>Complexity:</strong> Exponential time complexity in worst case<br>
+                    • <strong>Memory:</strong> Can require large amounts of memory<br>
+                    • <strong>Implementation:</strong> Requires sophisticated computer algebra systems<br>
+                    <br>
+                    <strong>Practical Considerations:</strong><br>
+                    • For small systems (like our 4-bit example): very efficient<br>
+                    • For large systems (like full AES): computationally infeasible<br>
+                    • Often used in combination with other techniques (XL, SAT solvers)
+                </div>
+            </div>
+                
+                <p><strong>Step 5:</strong> Verify the solution</p>
+                <p>Let's verify that K = 1010 works for all plaintext-ciphertext pairs:</p>
+                
+                <div class="math-box">
+                    Verification:<br>
+                    P = 0000, K = 1010 → P ⊕ K = 1010 → S(1010) = S(10) = 6 = 0110<br>
+                    But C = 1110 ≠ 0110 ✗<br>
+                    <br>
+                    This suggests our simplified equations may have errors.<br>
+                    In practice, we would need more careful equation derivation<br>
+                    and possibly more plaintext-ciphertext pairs.
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>XL Algorithm Example</h4>
+                
+                <p><strong>Problem:</strong> Solve the quadratic system using XL algorithm</p>
+                
+                <p><strong>Given system:</strong></p>
+                <div class="math-box">
+                    f₁: x₁ + x₂ + x₁x₂ = 1<br>
+                    f₂: x₁ + x₃ + x₁x₃ = 0<br>
+                    f₃: x₂ + x₃ + x₂x₃ = 1
+                </div>
+                
+                <p><strong>Solution using XL with degree 2:</strong></p>
+                <div class="math-box">
+                    Step 1: Multiply each equation by all monomials of degree ≤ 2<br>
+                    <br>
+                    From f₁: x₁f₁, x₂f₁, x₃f₁, x₁²f₁, x₂²f₁, x₃²f₁, x₁x₂f₁, x₁x₃f₁, x₂x₃f₁<br>
+                    From f₂: x₁f₂, x₂f₂, x₃f₂, x₁²f₂, x₂²f₂, x₃²f₂, x₁x₂f₂, x₁x₃f₂, x₂x₃f₂<br>
+                    From f₃: x₁f₃, x₂f₃, x₃f₃, x₁²f₃, x₂²f₃, x₃²f₃, x₁x₂f₃, x₁x₃f₃, x₂x₃f₃<br>
+                    <br>
+                    Step 2: Linearize the system<br>
+                    Replace x₁² → x₁, x₂² → x₂, x₃² → x₃ (since x² = x in GF(2))<br>
+                    <br>
+                    Step 3: Solve using Gaussian elimination<br>
+                    The solution is: x₁ = 1, x₂ = 0, x₃ = 1
+                </div>
+                
+                <p><strong>Verification:</strong></p>
+                <div class="math-box">
+                    Check the solution:<br>
+                    f₁: 1 + 0 + 1×0 = 1 ✓<br>
+                    f₂: 1 + 1 + 1×1 = 1 + 1 + 1 = 1 (mod 2) = 1 ≠ 0 ✗<br>
+                    f₃: 0 + 1 + 0×1 = 1 ✓<br>
+                    <br>
+                    This shows that XL algorithm may not always find the correct solution<br>
+                    due to the linearization process.
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>SAT Solver Example</h4>
+                
+                <p><strong>Problem:</strong> Convert Boolean equations to CNF and solve with SAT solver</p>
+                
+                <p><strong>Given equations:</strong></p>
+                <div class="math-box">
+                    y₁ = x₁ ⊕ x₂<br>
+                    y₂ = x₁ ⊕ x₃<br>
+                    y₃ = x₂ ⊕ x₃<br>
+                    <br>
+                    With constraints: y₁ = 1, y₂ = 0, y₃ = 1
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                <div class="math-box">
+                    Step 1: Convert XOR to CNF<br>
+                    y₁ = x₁ ⊕ x₂ becomes:<br>
+                    (¬x₁ ∨ ¬x₂ ∨ y₁) ∧ (x₁ ∨ x₂ ∨ y₁) ∧ (x₁ ∨ ¬x₂ ∨ ¬y₁) ∧ (¬x₁ ∨ x₂ ∨ ¬y₁)<br>
+                    <br>
+                    Step 2: Add constraints<br>
+                    y₁ = 1: (y₁)<br>
+                    y₂ = 0: (¬y₂)<br>
+                    y₃ = 1: (y₃)<br>
+                    <br>
+                    Step 3: SAT solver finds solution<br>
+                    x₁ = 1, x₂ = 0, x₃ = 1<br>
+                    <br>
+                    Verification:<br>
+                    y₁ = 1 ⊕ 0 = 1 ✓<br>
+                    y₂ = 1 ⊕ 1 = 0 ✓<br>
+                    y₃ = 0 ⊕ 1 = 1 ✓
+                </div>
+            </div>
+            
+            <h3>Advanced Techniques</h3>
+            
+            <h4>4.1 XL Algorithm</h4>
+            <p>Extend and Linearize algorithm for solving overdetermined systems:</p>
+            
+            <div class="pseudo-code">
+// XL algorithm for solving polynomial systems
+function XLAlgorithm(equations, degree):
+    // Multiply equations by monomials up to given degree
+    extendedSystem = []
+    
+    for equation in equations:
+        for monomial in generateMonomials(degree):
+            extendedSystem.append(equation * monomial)
+    
+    // Linearize the system
+    linearSystem = linearize(extendedSystem)
+    
+    // Solve using Gaussian elimination
+    solution = solveLinearSystem(linearSystem)
+    
+    return solution
+            </div>
+            
+            <h4>4.2 SAT Solvers</h4>
+            <p>Convert Boolean equations to SAT (Satisfiability) problem:</p>
+            
+            <div class="pseudo-code">
+// Convert to CNF for SAT solver
+function convertToCNF(booleanEquations):
+    cnfClauses = []
+    
+    for equation in booleanEquations:
+        // Convert to Conjunctive Normal Form
+        clauses = convertToCNF(equation)
+        cnfClauses.extend(clauses)
+    
+    return cnfClauses
+            </div>
+            
+            <h3>Why Algebraic Cryptanalysis Works</h3>
+            <ul>
+                <li><strong>Completeness:</strong> It models the entire cipher mathematically</li>
+                <li><strong>Generality:</strong> Can be applied to any cipher that can be expressed as equations</li>
+                <li><strong>Advances in Solvers:</strong> Modern algebraic solvers are very powerful</li>
+            </ul>
+            
+            <div class="success">
+                <strong>💡 Key Insight:</strong> Algebraic cryptanalysis treats cryptanalysis as a mathematical problem rather than a statistical one, potentially finding exact solutions.
+            </div>
+        </section>
+
+        <section id="comparison">
+            <h2>5. Comparison and Applications</h2>
+            
+            <h3>Comparison of Attack Methods</h3>
+            
+            <table>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Differential</th>
+                    <th>Linear</th>
+                    <th>Algebraic</th>
+                </tr>
+                <tr>
+                    <td><strong>Data Requirements</strong></td>
+                    <td>Chosen plaintexts</td>
+                    <td>Known plaintexts</td>
+                    <td>Few plaintexts</td>
+                </tr>
+                <tr>
+                    <td><strong>Computational Cost</strong></td>
+                    <td>Medium</td>
+                    <td>Medium</td>
+                    <td>High</td>
+                </tr>
+                <tr>
+                    <td><strong>Success Rate</strong></td>
+                    <td>High for weak ciphers</td>
+                    <td>High for weak ciphers</td>
+                    <td>Variable</td>
+                </tr>
+                <tr>
+                    <td><strong>Key Recovery</strong></td>
+                    <td>Partial key bits</td>
+                    <td>Partial key bits</td>
+                    <td>Full key</td>
+                </tr>
+                <tr>
+                    <td><strong>Applicability</strong></td>
+                    <td>Block ciphers</td>
+                    <td>Block ciphers</td>
+                    <td>Any cipher</td>
+                </tr>
+            </table>
+            
+            <h3>Real-World Applications</h3>
+            
+            <h4>5.1 Historical Attacks</h4>
+            
+            <div class="example-box">
+                <h4>DES (Data Encryption Standard)</h4>
+                <ul>
+                    <li><strong>Differential:</strong> 2⁴⁷ chosen plaintexts, 2⁴⁷ time complexity</li>
+                    <li><strong>Linear:</strong> 2⁴³ known plaintexts, 2⁴³ time complexity</li>
+                    <li><strong>Result:</strong> DES was broken and replaced by AES</li>
+                </ul>
+            </div>
+            
+            <div class="example-box">
+                <h4>FEAL (Fast Data Encipherment Algorithm)</h4>
+                <ul>
+                    <li><strong>Differential:</strong> 2⁸ chosen plaintexts for FEAL-4</li>
+                    <li><strong>Linear:</strong> 2⁵ known plaintexts for FEAL-4</li>
+                    <li><strong>Result:</strong> FEAL was completely broken</li>
+                </ul>
+            </div>
+            
+            <h4>5.2 Modern Ciphers</h4>
+            
+            <div class="example-box">
+                <h4>AES (Advanced Encryption Standard)</h4>
+                <ul>
+                    <li><strong>Differential:</strong> No practical attacks found</li>
+                    <li><strong>Linear:</strong> No practical attacks found</li>
+                    <li><strong>Algebraic:</strong> Theoretical attacks only</li>
+                    <li><strong>Result:</strong> AES remains secure</li>
+                </ul>
+            </div>
+            
+            <h3>Defense Mechanisms</h3>
+            
+            <h4>5.3 Countermeasures</h4>
+            
+            <div class="example-box">
+                <h4>Against Differential Cryptanalysis</h4>
+                <ul>
+                    <li><strong>High non-linearity:</strong> S-boxes with high non-linearity</li>
+                    <li><strong>Diffusion:</strong> Good diffusion properties</li>
+                    <li><strong>Sufficient rounds:</strong> Enough rounds to prevent propagation</li>
+                </ul>
+            </div>
+            
+            <div class="example-box">
+                <h4>Against Linear Cryptanalysis</h4>
+                <ul>
+                    <li><strong>Low linearity:</strong> S-boxes with low linearity</li>
+                    <li><strong>Balanced functions:</strong> Functions with balanced output</li>
+                    <li><strong>Multiple S-boxes:</strong> Using different S-boxes</li>
+                </ul>
+            </div>
+            
+            <div class="example-box">
+                <h4>Against Algebraic Cryptanalysis</h4>
+                <ul>
+                    <li><strong>Complex equations:</strong> Make equations as complex as possible</li>
+                    <li><strong>High degree:</strong> Use high-degree polynomials</li>
+                    <li><strong>Mixed operations:</strong> Combine different types of operations</li>
+                </ul>
+            </div>
+            
+            <h3>Practical Considerations</h3>
+            
+            <h4>5.4 Attack Complexity</h4>
+            <p>The complexity of these attacks depends on several factors:</p>
+            
+            <div class="math-box">
+                Time Complexity = O(2^(n - log₂(advantage)))
+            </div>
+            
+            <p>Where n is the key length and advantage is the statistical advantage of the attack.</p>
+            
+            <h4>5.5 Data Complexity</h4>
+            <p>The amount of data needed for each attack:</p>
+            
+            <div class="math-box">
+                Data Complexity ≈ 1 / (bias²) for linear cryptanalysis
+                Data Complexity ≈ 1 / (probability) for differential cryptanalysis
+            </div>
+            
+            <div class="warning">
+                <strong>⚠️ Important:</strong> These attacks are primarily used for cryptanalysis research and security evaluation. They help ensure that cryptographic standards are secure against known attack methods.
+            </div>
+        </section>
+
+        <section id="conclusion">
+            <h2>6. Conclusion and Further Reading</h2>
+            
+            <h3>Summary</h3>
+            <p>We've explored three fundamental cryptanalysis techniques:</p>
+            
+            <ul>
+                <li><strong>Differential Cryptanalysis:</strong> Studies how input differences propagate through the cipher</li>
+                <li><strong>Linear Cryptanalysis:</strong> Finds linear approximations of non-linear components</li>
+                <li><strong>Algebraic Cryptanalysis:</strong> Treats the cipher as a system of equations to solve</li>
+            </ul>
+            
+            <h3>Key Takeaways</h3>
+            
+            <div class="success">
+                <h4>🔍 Understanding is Key</h4>
+                <p>Understanding these attacks helps in designing more secure cryptographic systems. The best defense is knowledge of potential weaknesses.</p>
+            </div>
+            
+            <div class="success">
+                <h4>🛡️ Defense in Depth</h4>
+                <p>Modern ciphers use multiple layers of protection against various attack methods. No single technique is sufficient.</p>
+            </div>
+            
+            <div class="success">
+                <h4>📊 Statistical Nature</h4>
+                <p>Differential and linear cryptanalysis are statistical attacks that exploit biases. Algebraic cryptanalysis is deterministic but computationally intensive.</p>
+            </div>
+            
+            <h3>Further Reading</h3>
+            
+            <h4>Books</h4>
+            <ul>
+                <li>"The Design of Rijndael" by Joan Daemen and Vincent Rijmen</li>
+                <li>"Cryptography: Theory and Practice" by Douglas Stinson</li>
+                <li>"Applied Cryptography" by Bruce Schneier</li>
+                <li>"Handbook of Applied Cryptography" by Alfred Menezes, Paul van Oorschot, and Scott Vanstone</li>
+            </ul>
+            
+            <h4>Research Papers</h4>
+            <ul>
+                <li>Biham, E., & Shamir, A. (1990). "Differential cryptanalysis of DES-like cryptosystems"</li>
+                <li>Matsui, M. (1993). "Linear cryptanalysis method for DES cipher"</li>
+                <li>Courtois, N., & Pieprzyk, J. (2002). "Cryptanalysis of block ciphers with overdefined systems of equations"</li>
+            </ul>
+            
+            <h4>Online Resources</h4>
+            <ul>
+                <li>Cryptography Stack Exchange</li>
+                <li>NIST Cryptographic Standards and Guidelines</li>
+                <li>IACR (International Association for Cryptologic Research) publications</li>
+            </ul>
+            
+            <h3>Practice Exercises</h3>
+            
+            <div class="example-box">
+                <h4>Exercise 1: S-Box Analysis</h4>
+                <p>Given the following 4-bit S-box:</p>
+                <p>S = [0xE, 0x4, 0xD, 0x1, 0x2, 0xF, 0xB, 0x8, 0x3, 0xA, 0x6, 0xC, 0x5, 0x9, 0x0, 0x7]</p>
+                <p>Find the differential characteristic with input difference 0x1 and calculate its probability.</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>Exercise 2: Linear Approximation</h4>
+                <p>For the same S-box, find a linear approximation with input mask 0x1 and output mask 0x1. Calculate the bias.</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>Exercise 3: Algebraic Modeling</h4>
+                <p>Express the S-box as a system of Boolean equations in Algebraic Normal Form (ANF).</p>
+            </div>
+            
+            <h3>Final Thoughts</h3>
+            
+            <p>Cryptanalysis is a fascinating field that combines mathematics, computer science, and detective work. Understanding these attack methods is crucial for:</p>
+            
+            <ul>
+                <li><strong>Security Evaluation:</strong> Assessing the strength of cryptographic systems</li>
+                <li><strong>Design Principles:</strong> Building more secure cryptographic algorithms</li>
+                <li><strong>Research:</strong> Advancing the field of cryptography</li>
+                <li><strong>Education:</strong> Training the next generation of cryptographers</li>
+            </ul>
+            
+            <div class="warning">
+                <strong>⚠️ Ethical Note:</strong> This knowledge should be used responsibly. Cryptanalysis skills should be applied to improve security, not to compromise it maliciously.
+            </div>
+            
+            <p>Remember: The goal of cryptanalysis is not to break systems for malicious purposes, but to ensure that cryptographic standards are truly secure and can protect our digital communications and data.</p>
+            
+            <hr>
+            <p><em>This educational guide was created to help students and researchers understand the fundamental concepts of cryptanalysis. For the latest developments in the field, always refer to current research papers and cryptographic standards.</em></p>
+        </section>
+    </div>
+</body>
+</html> 

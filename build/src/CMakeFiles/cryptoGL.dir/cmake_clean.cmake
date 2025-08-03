@@ -97,6 +97,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/cryptoGL.dir/Salsa20.cpp.o.d"
   "CMakeFiles/cryptoGL.dir/Scream.cpp.o"
   "CMakeFiles/cryptoGL.dir/Scream.cpp.o.d"
+  "CMakeFiles/cryptoGL.dir/Serpent.cpp.o"
+  "CMakeFiles/cryptoGL.dir/Serpent.cpp.o.d"
   "CMakeFiles/cryptoGL.dir/Skipjack.cpp.o"
   "CMakeFiles/cryptoGL.dir/Skipjack.cpp.o.d"
   "CMakeFiles/cryptoGL.dir/Snow3G.cpp.o"

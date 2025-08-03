@@ -1,377 +1,382 @@
 [
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/UnitTests -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/CryptoGL.dir/src/main.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/main.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/UnitTests -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/CryptoGL.dir/src/main.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/main.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/main.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/main.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/main.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/main.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/main.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/main.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/BlockCipherModes.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/BlockCipherModes.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Base64.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Base64.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Base64.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Base64.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Base64.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/SquareMatrix.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/SquareMatrix.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/SquareMatrix.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/SquareMatrix.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/SquareMatrix.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/CipherGrid.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/CipherGrid.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/CipherGrid.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/CipherGrid.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/CipherGrid.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/MathematicalTools.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/MathematicalTools.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/MathematicalTools.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/MathematicalTools.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/MathematicalTools.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Tools.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Tools.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Tools.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Tools.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Tools.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/String.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/String.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/String.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/String.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/String.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Padding.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Padding.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Padding.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Padding.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Padding.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/StringCipher.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/StringCipher.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/StringCipher.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/StringCipher.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/StringCipher.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/StringCipherWithStringKey.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/StringCipherWithStringKey.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/StringCipherWithStringKey.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/StringCipherWithStringKey.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/StringCipherWithStringKey.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/StringCipherWithPermutationKey.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/StringCipherWithPermutationKey.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/StringCipherWithPermutationKey.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/StringCipherWithPermutationKey.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/StringCipherWithPermutationKey.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Adfgvx.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Adfgvx.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Adfgvx.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Adfgvx.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Adfgvx.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Collon.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Collon.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Collon.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Collon.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Collon.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Delastelle.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Delastelle.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Delastelle.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Delastelle.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Delastelle.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Fleissner.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Fleissner.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Fleissner.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Fleissner.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Fleissner.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Hill.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Hill.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Hill.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Hill.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Hill.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Transposition.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Transposition.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Transposition.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Transposition.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Transposition.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Morse.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Morse.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Morse.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Morse.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Morse.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Playfair.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Playfair.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Playfair.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Playfair.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Playfair.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Polybius.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Polybius.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Polybius.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Polybius.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Polybius.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Railfence.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Railfence.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Railfence.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Railfence.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Railfence.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/UnsortAlpha.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/UnsortAlpha.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/UnsortAlpha.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/UnsortAlpha.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/UnsortAlpha.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Vigenere.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Vigenere.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Vigenere.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Vigenere.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Vigenere.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Wolseley.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Wolseley.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Wolseley.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Wolseley.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Wolseley.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Affine.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Affine.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Affine.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Affine.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Affine.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/MonoalphabeticSubstitution.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/MonoalphabeticSubstitution.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/MonoalphabeticSubstitution.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/MonoalphabeticSubstitution.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/MonoalphabeticSubstitution.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Nihilistes.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Nihilistes.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Nihilistes.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Nihilistes.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Nihilistes.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Chao.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Chao.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Chao.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Chao.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Chao.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/TwoSquares.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/TwoSquares.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/TwoSquares.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/TwoSquares.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/TwoSquares.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/ThreeSquares.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/ThreeSquares.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/ThreeSquares.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/ThreeSquares.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/ThreeSquares.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/FourSquares.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/FourSquares.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/FourSquares.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/FourSquares.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/FourSquares.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/TripleDES.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/TripleDES.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/TripleDES.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/TripleDES.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/TripleDES.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/AES.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/AES.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/AES.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/AES.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/AES.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/IDEA.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/IDEA.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/IDEA.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/IDEA.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/IDEA.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Noekeon.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Noekeon.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Noekeon.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Noekeon.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Noekeon.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/RC2.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/RC2.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/RC2.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/RC2.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/RC2.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Skipjack.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Skipjack.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Serpent.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Serpent.cpp",
+  "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Serpent.cpp"
+},
+{
+  "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Skipjack.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Skipjack.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Skipjack.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Blowfish.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Blowfish.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Blowfish.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Blowfish.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Blowfish.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/DES.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/DES.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/DES.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/DES.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/DES.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/RC5.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/RC5.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/RC5.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/RC5.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/RC5.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/RC6.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/RC6.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/RC6.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/RC6.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/RC6.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/XTEA.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/XTEA.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/XTEA.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/XTEA.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/XTEA.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/CAST128.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/CAST128.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/CAST128.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/CAST128.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/CAST128.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/CAST256.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/CAST256.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/CAST256.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/CAST256.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/CAST256.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Twofish.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Twofish.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Twofish.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Twofish.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Twofish.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Camellia.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Camellia.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Camellia.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Camellia.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Camellia.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Mysty1.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Mysty1.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Mysty1.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Mysty1.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Mysty1.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/RC4.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/RC4.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/RC4.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/RC4.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/RC4.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Rabbit.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Rabbit.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Rabbit.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Rabbit.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Rabbit.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/HC256.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/HC256.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/HC256.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/HC256.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/HC256.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/SEAL.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/SEAL.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/SEAL.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/SEAL.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/SEAL.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Isaac.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Isaac.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Isaac.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Isaac.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Isaac.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Scream.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Scream.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Scream.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Scream.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Scream.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Salsa20.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Salsa20.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Salsa20.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Salsa20.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Salsa20.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Snow3G.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Snow3G.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Snow3G.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Snow3G.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Snow3G.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/MessageDigest.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/MessageDigest.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/MessageDigest.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/MessageDigest.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/MessageDigest.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/MD2.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/MD2.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/MD2.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/MD2.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/MD2.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/SHA2.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/SHA2.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/SHA2.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/SHA2.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/SHA2.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/SHA1.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/SHA1.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/SHA1.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/SHA1.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/SHA1.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Ripemd.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Ripemd.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Ripemd.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Ripemd.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Ripemd.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Tiger.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Tiger.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Tiger.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Tiger.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Tiger.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Whirlpool.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Whirlpool.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Whirlpool.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Whirlpool.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Whirlpool.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Blake.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Blake.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Blake.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Blake.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Blake.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Keccak.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Keccak.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Keccak.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Keccak.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Keccak.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/LRC.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/LRC.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/LRC.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/LRC.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/LRC.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/Adler32.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Adler32.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/Adler32.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/Adler32.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/Adler32.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/AsymmetricCipher.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/AsymmetricCipher.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/AsymmetricCipher.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/AsymmetricCipher.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/AsymmetricCipher.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/HellmanMerkleKnapsack.cpp",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o -c /home/gabriel/Documents/Projects/CryptoGL/src/HellmanMerkleKnapsack.cpp",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/HellmanMerkleKnapsack.cpp"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src/big_integers",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/big_integers.dir/BigUnsigned.cc.o -c /home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigUnsigned.cc",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/big_integers.dir/BigUnsigned.cc.o -c /home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigUnsigned.cc",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigUnsigned.cc"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src/big_integers",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/big_integers.dir/BigInteger.cc.o -c /home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigInteger.cc",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/big_integers.dir/BigInteger.cc.o -c /home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigInteger.cc",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigInteger.cc"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src/big_integers",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/big_integers.dir/BigIntegerAlgorithms.cc.o -c /home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigIntegerAlgorithms.cc",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/big_integers.dir/BigIntegerAlgorithms.cc.o -c /home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigIntegerAlgorithms.cc",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigIntegerAlgorithms.cc"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src/big_integers",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/big_integers.dir/BigUnsignedInABase.cc.o -c /home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigUnsignedInABase.cc",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/big_integers.dir/BigUnsignedInABase.cc.o -c /home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigUnsignedInABase.cc",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigUnsignedInABase.cc"
 },
 {
   "directory": "/home/gabriel/Documents/Projects/CryptoGL/build/src/big_integers",
-  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g -o CMakeFiles/big_integers.dir/BigIntegerUtils.cc.o -c /home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigIntegerUtils.cc",
+  "command": "/usr/bin/g++-11  -I/home/gabriel/Documents/Projects/CryptoGL/src/exceptions -g -Wall -Wextra -Wpedantic -Werror -pthread -std=c++17 -o CMakeFiles/big_integers.dir/BigIntegerUtils.cc.o -c /home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigIntegerUtils.cc",
   "file": "/home/gabriel/Documents/Projects/CryptoGL/src/big_integers/BigIntegerUtils.cc"
 }
 ]

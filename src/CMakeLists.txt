@@ -48,7 +48,7 @@ set(SRC
    IDEA.cpp
    Noekeon.cpp
    RC2.cpp
-   #Serpent.cpp
+   Serpent.cpp
    Skipjack.cpp
    Blowfish.cpp
    DES.cpp
@@ -101,5 +101,3 @@ add_subdirectory (big_integers)
 
 # Create libCryptoGL.a with all the source files provided by SRC.
 add_library(cryptoGL ${SRC})
-
-

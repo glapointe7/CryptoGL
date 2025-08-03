@@ -4,6 +4,7 @@
 #include "String.hpp"
 #include <algorithm>
 #include <assert.h>
+#include <limits>
 
 namespace CryptoGL
 {
@@ -85,6 +86,20 @@ namespace CryptoGL
             }
             
             return retval;
+        }
+
+        static constexpr UInteger reverse_bits(UInteger n) {
+            static_assert(std::is_unsigned<UInteger>::value, "reverse_bits requires unsigned integer types");
+
+            constexpr int num_bits = std::numeric_limits<UInteger>::digits;
+            UInteger result = 0;
+            for (int i = 0; i < num_bits; ++i) {
+                result <<= 1;
+                result |= (n & 1);
+                n >>= 1;
+            }
+
+            return result;
         }
         
         /* Convert an integer 'value' to a string. */

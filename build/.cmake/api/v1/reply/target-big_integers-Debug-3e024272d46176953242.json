@@ -12,11 +12,13 @@
 		"commands" : 
 		[
 			"add_library",
+			"add_compile_options",
 			"include_directories"
 		],
 		"files" : 
 		[
 			"src/big_integers/CMakeLists.txt",
+			"CMakeLists.txt",
 			"src/CMakeLists.txt"
 		],
 		"nodes" : 
@@ -36,8 +38,17 @@
 			{
 				"command" : 1,
 				"file" : 1,
-				"line" : 97,
+				"line" : 15,
 				"parent" : 2
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 97,
+				"parent" : 4
 			}
 		]
 	},
@@ -47,17 +58,48 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z -g"
+					"fragment" : "-g"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-Wextra"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-Wpedantic"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-Werror"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-pthread"
+				},
+				{
+					"fragment" : "-std=c++17"
 				}
 			],
 			"includes" : 
 			[
 				{
-					"backtrace" : 3,
+					"backtrace" : 5,
 					"path" : "/home/gabriel/Documents/Projects/CryptoGL/src/exceptions"
 				}
 			],
 			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "17"
+			},
 			"sourceIndexes" : 
 			[
 				2,

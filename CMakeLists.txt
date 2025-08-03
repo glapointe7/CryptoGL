@@ -1,30 +1,36 @@
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required(VERSION 3.8)
 
-set (Project_Name CryptoGL)
+# Project name and language
+project(CryptoGL VERSION 1.0 LANGUAGES CXX)
 
-project (${Project_Name})
+# Optional: specify compiler (only if needed)
+set(CMAKE_CXX_COMPILER "/usr/bin/g++-11")
 
-set (CMAKE_CXX_COMPILER             "/usr/bin/g++-11")
-set (CMAKE_CXX_FLAGS                "-Winline -Wall -Werror -pedantic-errors -pthread -std=c++1z")
+# Use C++17 standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Add the source files code (CPP, HPP and the CMakeLists.txt).
-add_subdirectory (src)
+# Common compile options
+add_compile_options(-Wall -Wextra -Wpedantic -Werror -pthread)
 
-#Include the unit test source file headers.
-#enable_testing()
-include_directories (UnitTests)
+# Add the source library directory
+add_subdirectory(src)
 
-# Target the project name to be built.
-add_executable(${Project_Name} src/main.cpp)
+# Include headers for unit tests (if needed)
+include_directories(UnitTests)
 
-# Link the src librairy to the project.
-target_link_libraries (${Project_Name} cryptoGL)
+# Define the main executable
+add_executable(${PROJECT_NAME} src/main.cpp)
 
-# Link the big_integers librairy to the project.
-target_link_libraries (${Project_Name} big_integers)
+# Link internal libraries to the main executable
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+    cryptoGL
+    big_integers
+)
 
-# Link the UnitTests librairy to the project.
-#target_link_libraries (${Project_Name} CryptoGL_UnitTests)
-
-#add_test(CryptoGL_UnitTests ${Project_Name})
-
+# Optional: add test library if needed later
+# target_link_libraries(${PROJECT_NAME} CryptoGL_UnitTests)
+# enable_testing()
+# add_test(NAME CryptoGL_UnitTests COMMAND ${PROJECT_NAME})

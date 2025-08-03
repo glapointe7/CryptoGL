@@ -1,0 +1,886 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage{forloop}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{bookmark}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{breakurl}
+
+\geometry{margin=1in}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={CryptoGL Cryptographic Algorithms Specifications},
+    pdfauthor={CryptoGL Project},
+    pdfsubject={Cryptographic Algorithms Documentation},
+    pdfkeywords={cryptography, algorithms, specifications, test vectors}
+}
+
+\title{\textbf{CryptoGL Cryptographic Algorithms Specifications}}
+\author{CryptoGL Project Documentation}
+\date{\today}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{CryptoGL Specifications}
+\lhead{\thepage}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+This document provides comprehensive specifications, official links, test vectors, and detailed attack specifications for all cryptographic algorithms implemented in the CryptoGL project. The project includes a wide range of cryptographic primitives including block ciphers, stream ciphers, hash functions, MAC algorithms, and classical ciphers.
+
+\section{Attack Specifications}
+
+\subsection{Differential Cryptanalysis}
+\textbf{Description}: A chosen-plaintext attack that analyzes how differences in input affect differences in output.
+\textbf{Complexity}: Typically requires $2^{n+1}$ chosen plaintexts for n-bit block ciphers.
+\textbf{Method}: 
+\begin{enumerate}
+    \item Choose plaintext pairs with specific differences
+    \item Analyze ciphertext differences through the cipher rounds
+    \item Use differential characteristics to recover key bits
+    \item Apply statistical analysis to distinguish correct key guesses
+\end{enumerate}
+\textbf{References}: \url{https://en.wikipedia.org/wiki/Differential_cryptanalysis}
+
+\subsection{Linear Cryptanalysis}
+\textbf{Description}: A known-plaintext attack that exploits linear approximations of the cipher.
+\textbf{Complexity}: Requires approximately $2^{n/2}$ known plaintexts.
+\textbf{Method}:
+\begin{enumerate}
+    \item Find linear approximations of S-boxes and round functions
+    \item Construct linear expressions involving plaintext, ciphertext, and key bits
+    \item Collect many plaintext-ciphertext pairs
+    \item Use statistical analysis to determine key bits
+\end{enumerate}
+\textbf{References}: \url{https://en.wikipedia.org/wiki/Linear_cryptanalysis}
+
+\subsection{Brute Force Attack}
+\textbf{Description}: Exhaustive search through all possible keys.
+\textbf{Complexity}: $2^k$ operations where k is the key length in bits.
+\textbf{Method}:
+\begin{enumerate}
+    \item Try all possible key values systematically
+    \item For each key, encrypt known plaintext and compare with ciphertext
+    \item Stop when correct key is found
+\end{enumerate}
+
+\subsection{Collision Attack (Hash Functions)}
+\textbf{Description}: Finding two different inputs that produce the same hash output.
+\textbf{Complexity}: Birthday paradox - approximately $2^{n/2}$ operations for n-bit hash.
+\textbf{Method}:
+\begin{enumerate}
+    \item Generate many random inputs and compute their hashes
+    \item Store hash values in a hash table
+    \item Look for hash collisions
+    \item Verify that colliding inputs are different
+\end{enumerate}
+
+\subsection{Length Extension Attack}
+\textbf{Description}: Exploits the iterative structure of hash functions to extend messages.
+\textbf{Complexity}: Depends on hash function structure.
+\textbf{Method}:
+\begin{enumerate}
+    \item Obtain hash of unknown message
+    \item Use internal state to continue hashing additional data
+    \item Generate valid hash for extended message without knowing original
+\end{enumerate}
+
+\subsection{Meet-in-the-Middle Attack}
+\textbf{Description}: Used against double encryption schemes.
+\textbf{Complexity}: $2^{k+1}$ operations instead of $2^{2k}$.
+\textbf{Method}:
+\begin{enumerate}
+    \item Encrypt plaintext with all possible first keys
+    \item Decrypt ciphertext with all possible second keys
+    \item Look for matches between encryption and decryption results
+\end{enumerate}
+
+\subsection{Related-Key Attack}
+\textbf{Description}: Exploits relationships between different keys.
+\textbf{Complexity}: Varies based on key schedule weaknesses.
+\textbf{Method}:
+\begin{enumerate}
+    \item Choose keys with specific relationships (e.g., XOR differences)
+    \item Analyze how key differences propagate through the cipher
+    \item Use differential analysis on key schedule
+\end{enumerate}
+
+\subsection{Impossible Differential Attack}
+\textbf{Description}: Uses impossible differentials that cannot occur in the cipher.
+\textbf{Complexity}: Often more efficient than standard differential cryptanalysis.
+\textbf{Method}:
+\begin{enumerate}
+    \item Find impossible differential characteristics
+    \item Filter out keys that would make impossible differentials possible
+    \item Reduce key space significantly
+\end{enumerate}
+
+\subsection{Algebraic Attack}
+\textbf{Description}: Formulates the cipher as a system of equations.
+\textbf{Complexity}: Depends on equation system complexity.
+\textbf{Method}:
+\begin{enumerate}
+    \item Express cipher operations as algebraic equations
+    \item Collect many plaintext-ciphertext pairs
+    \item Solve the resulting equation system
+\end{enumerate}
+
+\subsection{Side-Channel Attack}
+\textbf{Description}: Exploits physical implementation characteristics.
+\textbf{Types}: Timing attacks, power analysis, electromagnetic analysis.
+\textbf{Method}:
+\begin{enumerate}
+    \item Measure physical characteristics during encryption/decryption
+    \item Correlate measurements with key-dependent operations
+    \item Use statistical analysis to extract key information
+\end{enumerate}
+
+\section{Block Ciphers}
+
+\subsection{AES (Advanced Encryption Standard)}
+\begin{itemize}
+    \item \textbf{Standard}: FIPS 197 (2001)
+    \item \textbf{Block Size}: 128 bits
+    \item \textbf{Key Sizes}: 128, 192, 256 bits
+    \item \textbf{Rounds}: 10, 12, 14 (depending on key size)
+    \item \textbf{Official Specification}: \url{https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf}
+    \item \textbf{Test Vectors}: \url{https://csrc.nist.gov/Projects/cryptographic-standards-and-guidelines/example-values}
+    \item \textbf{Security Level}: 128, 192, 256 bits respectively
+\end{itemize}
+
+\textbf{Attack Specifications:}
+\begin{itemize}
+    \item \textbf{Biclique Attack}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{126.1}$ for AES-128, $2^{189.7}$ for AES-192, $2^{254.4}$ for AES-256
+        \item \textbf{Method}: Uses biclique structures to reduce key search space
+        \item \textbf{Reference}: \url{https://eprint.iacr.org/2011/449}
+    \end{itemize}
+    \item \textbf{Related-Key Attack}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{99.5}$ for AES-256
+        \item \textbf{Method}: Exploits key schedule weaknesses with related keys
+        \item \textbf{Reference}: \url{https://eprint.iacr.org/2009/317}
+    \end{itemize}
+    \item \textbf{Side-Channel Attacks}: 
+    \begin{itemize}
+        \item \textbf{Types}: Cache timing, power analysis, electromagnetic analysis
+        \item \textbf{Countermeasures}: Constant-time implementation, masking, randomization
+    \end{itemize}
+\end{itemize}
+
+\subsection{DES (Data Encryption Standard)}
+\begin{itemize}
+    \item \textbf{Standard}: FIPS 46-3 (1999)
+    \item \textbf{Block Size}: 64 bits
+    \item \textbf{Key Size}: 56 bits (64 with parity)
+    \item \textbf{Rounds}: 16
+    \item \textbf{Official Specification}: \url{https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.46-3.pdf}
+    \item \textbf{Test Vectors}: \url{https://csrc.nist.gov/Projects/cryptographic-standards-and-guidelines/example-values}
+    \item \textbf{Security Level}: 56 bits (broken)
+\end{itemize}
+
+\textbf{Attack Specifications:}
+\begin{itemize}
+    \item \textbf{Brute Force Attack}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{56}$ operations
+        \item \textbf{Method}: Exhaustive key search using specialized hardware
+        \item \textbf{History}: First broken in 1997 by DESCHALL project
+    \end{itemize}
+    \item \textbf{Differential Cryptanalysis}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{47}$ chosen plaintexts
+        \item \textbf{Method}: Uses differential characteristics through S-boxes
+        \item \textbf{Reference}: \url{https://en.wikipedia.org/wiki/Differential_cryptanalysis}
+    \end{itemize}
+    \item \textbf{Linear Cryptanalysis}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{43}$ known plaintexts
+        \item \textbf{Method}: Linear approximations of S-boxes and round functions
+        \item \textbf{Reference}: \url{https://en.wikipedia.org/wiki/Linear_cryptanalysis}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Triple DES (3DES)}
+\begin{itemize}
+    \item \textbf{Standard}: SP 800-67 (2017)
+    \item \textbf{Block Size}: 64 bits
+    \item \textbf{Key Size}: 112 or 168 bits
+    \item \textbf{Rounds}: 48 (3 × 16)
+    \item \textbf{Official Specification}: \url{https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-67r2.pdf}
+    \item \textbf{Test Vectors}: \url{https://csrc.nist.gov/Projects/cryptographic-standards-and-guidelines/example-values}
+    \item \textbf{Security Level}: 112 bits (112-bit key), 168 bits (168-bit key)
+\end{itemize}
+
+\textbf{Attack Specifications:}
+\begin{itemize}
+    \item \textbf{Meet-in-the-Middle Attack}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{112}$ operations (instead of $2^{168}$)
+        \item \textbf{Method}: Encrypt with all possible first keys, decrypt with all possible third keys
+        \item \textbf{Reference}: \url{https://en.wikipedia.org/wiki/Meet-in-the-middle_attack}
+    \end{itemize}
+    \item \textbf{Sweet32 Attack}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{32}$ operations
+        \item \textbf{Method}: Birthday attack on 64-bit block size
+        \item \textbf{Reference}: \url{https://sweet32.info/}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Serpent}
+\begin{itemize}
+    \item \textbf{Standard}: AES finalist
+    \item \textbf{Block Size}: 128 bits
+    \item \textbf{Key Size}: 128, 192, 256 bits
+    \item \textbf{Rounds}: 32
+    \item \textbf{Official Specification}: \url{https://www.cl.cam.ac.uk/~rja14/serpent.html}
+    \item \textbf{Test Vectors}: \url{https://www.cl.cam.ac.uk/~rja14/serpent.html}
+    \item \textbf{Security Level}: 256 bits
+\end{itemize}
+
+\textbf{Attack Specifications:}
+\begin{itemize}
+    \item \textbf{Linear Cryptanalysis}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{118}$ known plaintexts
+        \item \textbf{Method}: Linear approximations through S-boxes and linear transformation
+        \item \textbf{Reference}: \url{https://www.cl.cam.ac.uk/~rja14/serpent.html}
+    \end{itemize}
+    \item \textbf{Differential Cryptanalysis}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{131}$ chosen plaintexts
+        \item \textbf{Method}: Differential characteristics through S-boxes
+        \item \textbf{Reference}: \url{https://www.cl.cam.ac.uk/~rja14/serpent.html}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Twofish}
+\begin{itemize}
+    \item \textbf{Standard}: AES finalist
+    \item \textbf{Block Size}: 128 bits
+    \item \textbf{Key Size}: 128, 192, 256 bits
+    \item \textbf{Rounds}: 16
+    \item \textbf{Official Specification}: \url{https://www.schneier.com/academic/twofish/}
+    \item \textbf{Test Vectors}: \url{https://www.schneier.com/academic/twofish/}
+    \item \textbf{Security Level}: 256 bits
+\end{itemize}
+
+\textbf{Attack Specifications:}
+\begin{itemize}
+    \item \textbf{Related-Key Attack}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{256}$ operations
+        \item \textbf{Method}: Exploits key schedule with related keys
+        \item \textbf{Reference}: \url{https://www.schneier.com/academic/twofish/}
+    \end{itemize}
+    \item \textbf{Impossible Differentials}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{256}$ operations
+        \item \textbf{Method}: Uses impossible differential characteristics
+        \item \textbf{Reference}: \url{https://www.schneier.com/academic/twofish/}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Blowfish}
+\begin{itemize}
+    \item \textbf{Standard}: Designed by Bruce Schneier
+    \item \textbf{Block Size}: 64 bits
+    \item \textbf{Key Size}: 32-448 bits
+    \item \textbf{Rounds}: 16
+    \item \textbf{Official Specification}: \url{https://www.schneier.com/academic/blowfish/}
+    \item \textbf{Test Vectors}: \url{https://www.schneier.com/academic/blowfish/}
+    \item \textbf{Attacks}: Birthday attack, weak keys
+    \item \textbf{Security Level}: 64 bits
+\end{itemize}
+
+\subsection{CAST-128}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 2144
+    \item \textbf{Block Size}: 64 bits
+    \item \textbf{Key Size}: 40-128 bits
+    \item \textbf{Rounds}: 16
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc2144}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc2144}
+    \item \textbf{Attacks}: Linear cryptanalysis, differential cryptanalysis
+    \item \textbf{Security Level}: 128 bits
+\end{itemize}
+
+\subsection{CAST-256}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 2612
+    \item \textbf{Block Size}: 128 bits
+    \item \textbf{Key Size}: 128, 160, 192, 224, 256 bits
+    \item \textbf{Rounds}: 48
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc2612}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc2612}
+    \item \textbf{Attacks}: Linear cryptanalysis, differential cryptanalysis
+    \item \textbf{Security Level}: 256 bits
+\end{itemize}
+
+\subsection{Camellia}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 3713, ISO/IEC 18033-3
+    \item \textbf{Block Size}: 128 bits
+    \item \textbf{Key Size}: 128, 192, 256 bits
+    \item \textbf{Rounds}: 18, 24 (depending on key size)
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc3713}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc3713}
+    \item \textbf{Attacks}: Impossible differentials, higher-order differentials
+    \item \textbf{Security Level}: 256 bits
+\end{itemize}
+
+\subsection{IDEA (International Data Encryption Algorithm)}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 3058
+    \item \textbf{Block Size}: 64 bits
+    \item \textbf{Key Size}: 128 bits
+    \item \textbf{Rounds}: 8.5
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc3058}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc3058}
+    \item \textbf{Attacks}: Linear cryptanalysis, differential cryptanalysis
+    \item \textbf{Security Level}: 128 bits
+\end{itemize}
+
+\subsection{RC2}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 2268
+    \item \textbf{Block Size}: 64 bits
+    \item \textbf{Key Size}: 1-128 bits
+    \item \textbf{Rounds}: Variable
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc2268}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc2268}
+    \item \textbf{Attacks}: Differential cryptanalysis, linear cryptanalysis
+    \item \textbf{Security Level}: 128 bits
+\end{itemize}
+
+\subsection{RC5}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 2040
+    \item \textbf{Block Size}: 32, 64, 128 bits
+    \item \textbf{Key Size}: 0-2040 bits
+    \item \textbf{Rounds}: 0-255
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc2040}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc2040}
+    \item \textbf{Attacks}: Differential cryptanalysis, linear cryptanalysis
+    \item \textbf{Security Level}: Variable
+\end{itemize}
+
+\subsection{RC6}
+\begin{itemize}
+    \item \textbf{Standard}: AES finalist
+    \item \textbf{Block Size}: 128 bits
+    \item \textbf{Key Size}: 128, 192, 256 bits
+    \item \textbf{Rounds}: 20
+    \item \textbf{Official Specification}: \url{https://www.nist.gov/}
+    \item \textbf{Test Vectors}: \url{https://www.nist.gov/}
+    \item \textbf{Attacks}: Linear cryptanalysis, differential cryptanalysis
+    \item \textbf{Security Level}: 256 bits
+\end{itemize}
+
+\subsection{Skipjack}
+\begin{itemize}
+    \item \textbf{Standard}: FIPS 185 (1994)
+    \item \textbf{Block Size}: 64 bits
+    \item \textbf{Key Size}: 80 bits
+    \item \textbf{Rounds}: 32
+    \item \textbf{Official Specification}: \url{https://csrc.nist.gov/csrc/media/publications/fips/185/archive/1994-07-30/documents/fips185.pdf}
+    \item \textbf{Test Vectors}: \url{https://csrc.nist.gov/csrc/media/publications/fips/185/archive/1994-07-30/documents/fips185.pdf}
+    \item \textbf{Attacks}: Impossible differentials, truncated differentials
+    \item \textbf{Security Level}: 80 bits
+\end{itemize}
+
+\subsection{Misty1}
+\begin{itemize}
+    \item \textbf{Standard}: ISO/IEC 18033-3
+    \item \textbf{Block Size}: 64 bits
+    \item \textbf{Key Size}: 128 bits
+    \item \textbf{Rounds}: 8
+    \item \textbf{Official Specification}: \url{https://www.iso.org/standard/54531.html}
+    \item \textbf{Test Vectors}: \url{https://www.iso.org/standard/54531.html}
+    \item \textbf{Attacks}: Higher-order differentials, impossible differentials
+    \item \textbf{Security Level}: 128 bits
+\end{itemize}
+
+\subsection{Noekeon}
+\begin{itemize}
+    \item \textbf{Standard}: NESSIE submission
+    \item \textbf{Block Size}: 128 bits
+    \item \textbf{Key Size}: 128 bits
+    \item \textbf{Rounds}: 16
+    \item \textbf{Official Specification}: \url{https://gro.noekeon.org/Noekeon-spec.pdf}
+    \item \textbf{Test Vectors}: \url{https://gro.noekeon.org/Noekeon-spec.pdf}
+    \item \textbf{Attacks}: Linear cryptanalysis, differential cryptanalysis
+    \item \textbf{Security Level}: 128 bits
+\end{itemize}
+
+\subsection{XTEA (eXtended TEA)}
+\begin{itemize}
+    \item \textbf{Standard}: Academic paper
+    \item \textbf{Block Size}: 64 bits
+    \item \textbf{Key Size}: 128 bits
+    \item \textbf{Rounds}: 64
+    \item \textbf{Official Specification}: \url{https://en.wikipedia.org/wiki/XTEA}
+    \item \textbf{Test Vectors}: \url{https://en.wikipedia.org/wiki/XTEA}
+    \item \textbf{Attacks}: Related-key attacks, differential cryptanalysis
+    \item \textbf{Security Level}: 128 bits
+\end{itemize}
+
+\section{Stream Ciphers}
+
+\subsection{RC4}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 7465 (deprecated)
+    \item \textbf{Key Size}: 1-256 bytes
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc7465}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc7465}
+    \item \textbf{Security Level}: Broken
+\end{itemize}
+
+\textbf{Attack Specifications:}
+\begin{itemize}
+    \item \textbf{Biased Output Attack}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{16}$ operations
+        \item \textbf{Method}: Exploits statistical biases in early keystream bytes
+        \item \textbf{Reference}: \url{https://en.wikipedia.org/wiki/RC4#Security}
+    \end{itemize}
+    \item \textbf{Related-Key Attack}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{40}$ operations
+        \item \textbf{Method}: Exploits key schedule weaknesses
+        \item \textbf{Reference}: \url{https://eprint.iacr.org/2007/120}
+    \end{itemize}
+    \item \textbf{Distinguishing Attack}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{30}$ operations
+        \item \textbf{Method}: Distinguishes RC4 output from random
+        \item \textbf{Reference}: \url{https://eprint.iacr.org/2001/070}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Salsa20}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 8439
+    \item \textbf{Key Size}: 128 or 256 bits
+    \item \textbf{Nonce Size}: 64 bits
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc8439}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc8439}
+    \item \textbf{Attacks}: Differential cryptanalysis
+    \item \textbf{Security Level}: 256 bits
+\end{itemize}
+
+\subsection{ChaCha20}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 8439
+    \item \textbf{Key Size}: 256 bits
+    \item \textbf{Nonce Size}: 96 bits
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc8439}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc8439}
+    \item \textbf{Attacks}: Differential cryptanalysis
+    \item \textbf{Security Level}: 256 bits
+\end{itemize}
+
+\subsection{Rabbit}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 4503
+    \item \textbf{Key Size}: 128 bits
+    \item \textbf{IV Size}: 64 bits
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc4503}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc4503}
+    \item \textbf{Attacks}: Distinguishing attacks
+    \item \textbf{Security Level}: 128 bits
+\end{itemize}
+
+\subsection{HC-256}
+\begin{itemize}
+    \item \textbf{Standard}: eSTREAM finalist
+    \item \textbf{Key Size}: 256 bits
+    \item \textbf{IV Size}: 256 bits
+    \item \textbf{Official Specification}: \url{https://www.ecrypt.eu.org/stream/hc256.html}
+    \item \textbf{Test Vectors}: \url{https://www.ecrypt.eu.org/stream/hc256.html}
+    \item \textbf{Attacks}: Distinguishing attacks
+    \item \textbf{Security Level}: 256 bits
+\end{itemize}
+
+\subsection{SNOW 3G}
+\begin{itemize}
+    \item \textbf{Standard}: 3GPP TS 35.216
+    \item \textbf{Key Size}: 128 bits
+    \item \textbf{IV Size}: 128 bits
+    \item \textbf{Official Specification}: \url{https://www.3gpp.org/DynaReport/35216.htm}
+    \item \textbf{Test Vectors}: \url{https://www.3gpp.org/DynaReport/35216.htm}
+    \item \textbf{Attacks}: Algebraic attacks
+    \item \textbf{Security Level}: 128 bits
+\end{itemize}
+
+\subsection{SEAL}
+\begin{itemize}
+    \item \textbf{Standard}: Academic paper
+    \item \textbf{Key Size}: 160 bits
+    \item \textbf{Official Specification}: \url{https://en.wikipedia.org/wiki/SEAL_(cipher)}
+    \item \textbf{Test Vectors}: \url{https://en.wikipedia.org/wiki/SEAL_(cipher)}
+    \item \textbf{Attacks}: Related-key attacks
+    \item \textbf{Security Level}: 160 bits
+\end{itemize}
+
+\subsection{Scream}
+\begin{itemize}
+    \item \textbf{Standard}: Academic paper
+    \item \textbf{Key Size}: 128 bits
+    \item \textbf{Official Specification}: \url{https://en.wikipedia.org/wiki/Scream_(cipher)}
+    \item \textbf{Test Vectors}: \url{https://en.wikipedia.org/wiki/Scream_(cipher)}
+    \item \textbf{Attacks}: Differential cryptanalysis
+    \item \textbf{Security Level}: 128 bits
+\end{itemize}
+
+\section{Hash Functions}
+
+\subsection{SHA-1}
+\begin{itemize}
+    \item \textbf{Standard}: FIPS 180-4
+    \item \textbf{Output Size}: 160 bits
+    \item \textbf{Block Size}: 512 bits
+    \item \textbf{Official Specification}: \url{https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf}
+    \item \textbf{Test Vectors}: \url{https://csrc.nist.gov/Projects/cryptographic-standards-and-guidelines/example-values}
+    \item \textbf{Security Level}: 80 bits (broken)
+\end{itemize}
+
+\textbf{Attack Specifications:}
+\begin{itemize}
+    \item \textbf{Collision Attack}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{63.1}$ operations (theoretical), $2^{61.2}$ (practical)
+        \item \textbf{Method}: Differential path construction and message modification
+        \item \textbf{History}: First collision found in 2017 by Google and CWI
+        \item \textbf{Reference}: \url{https://shattered.io/}
+    \end{itemize}
+    \item \textbf{Length Extension Attack}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{160}$ operations
+        \item \textbf{Method}: Exploits Merkle-Damgård construction
+        \item \textbf{Countermeasure}: Use HMAC or similar construction
+    \end{itemize}
+\end{itemize}
+
+\subsection{SHA-2 Family}
+\begin{itemize}
+    \item \textbf{Standard}: FIPS 180-4
+    \item \textbf{Output Sizes}: 224, 256, 384, 512 bits
+    \item \textbf{Block Size}: 512 or 1024 bits
+    \item \textbf{Official Specification}: \url{https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf}
+    \item \textbf{Test Vectors}: \url{https://csrc.nist.gov/Projects/cryptographic-standards-and-guidelines/example-values}
+    \item \textbf{Attacks}: Length extension attacks
+    \item \textbf{Security Level}: 112, 128, 192, 256 bits respectively
+\end{itemize}
+
+\subsection{SHA-3 Family (Keccak)}
+\begin{itemize}
+    \item \textbf{Standard}: FIPS 202
+    \item \textbf{Output Sizes}: 224, 256, 384, 512 bits
+    \item \textbf{Block Size}: Variable
+    \item \textbf{Official Specification}: \url{https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf}
+    \item \textbf{Test Vectors}: \url{https://csrc.nist.gov/Projects/cryptographic-standards-and-guidelines/example-values}
+    \item \textbf{Attacks}: None known
+    \item \textbf{Security Level}: 112, 128, 192, 256 bits respectively
+\end{itemize}
+
+\subsection{MD2}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 1319
+    \item \textbf{Output Size}: 128 bits
+    \item \textbf{Block Size}: 128 bits
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc1319}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc1319}
+    \item \textbf{Attacks}: Collision attacks
+    \item \textbf{Security Level}: Broken
+\end{itemize}
+
+\subsection{MD4}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 1320
+    \item \textbf{Output Size}: 128 bits
+    \item \textbf{Block Size}: 512 bits
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc1320}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc1320}
+    \item \textbf{Attacks}: Collision attacks
+    \item \textbf{Security Level}: Broken
+\end{itemize}
+
+\subsection{MD5}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 1321
+    \item \textbf{Output Size}: 128 bits
+    \item \textbf{Block Size}: 512 bits
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc1321}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc1321}
+    \item \textbf{Security Level}: Broken
+\end{itemize}
+
+\textbf{Attack Specifications:}
+\begin{itemize}
+    \item \textbf{Collision Attack}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{20}$ operations (practical)
+        \item \textbf{Method}: Wang's differential attack with message modification
+        \item \textbf{History}: First collision found in 2004 by Wang et al.
+        \item \textbf{Reference}: \url{https://en.wikipedia.org/wiki/MD5#Security}
+    \end{itemize}
+    \item \textbf{Preimage Attack}: 
+    \begin{itemize}
+        \item \textbf{Complexity}: $2^{123.4}$ operations
+        \item \textbf{Method}: Meet-in-the-middle attack
+        \item \textbf{Reference}: \url{https://eprint.iacr.org/2009/223}
+    \end{itemize}
+\end{itemize}
+
+\subsection{RIPEMD Family}
+\begin{itemize}
+    \item \textbf{Standard}: ISO/IEC 10118-3
+    \item \textbf{Output Sizes}: 128, 160, 256, 320 bits
+    \item \textbf{Block Size}: 512 bits
+    \item \textbf{Official Specification}: \url{https://www.iso.org/standard/39876.html}
+    \item \textbf{Test Vectors}: \url{https://www.iso.org/standard/39876.html}
+    \item \textbf{Attacks}: Collision attacks
+    \item \textbf{Security Level}: 64, 80, 128, 160 bits respectively
+\end{itemize}
+
+\subsection{Whirlpool}
+\begin{itemize}
+    \item \textbf{Standard}: ISO/IEC 10118-3
+    \item \textbf{Output Size}: 512 bits
+    \item \textbf{Block Size}: 512 bits
+    \item \textbf{Official Specification}: \url{https://www.iso.org/standard/39876.html}
+    \item \textbf{Test Vectors}: \url{https://www.iso.org/standard/39876.html}
+    \item \textbf{Attacks}: None known
+    \item \textbf{Security Level}: 256 bits
+\end{itemize}
+
+\subsection{Tiger}
+\begin{itemize}
+    \item \textbf{Standard}: Academic paper
+    \item \textbf{Output Size}: 192 bits
+    \item \textbf{Block Size}: 512 bits
+    \item \textbf{Official Specification}: \url{https://www.cs.technion.ac.il/~biham/Reports/Tiger/}
+    \item \textbf{Test Vectors}: \url{https://www.cs.technion.ac.il/~biham/Reports/Tiger/}
+    \item \textbf{Attacks}: Collision attacks
+    \item \textbf{Security Level}: 192 bits
+\end{itemize}
+
+\subsection{BLAKE}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 7693
+    \item \textbf{Output Sizes}: 256, 512 bits
+    \item \textbf{Block Size}: 1024 bits
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc7693}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc7693}
+    \item \textbf{Attacks}: None known
+    \item \textbf{Security Level}: 256, 512 bits respectively
+\end{itemize}
+
+\section{MAC Algorithms}
+
+\subsection{CBC-MAC}
+\begin{itemize}
+    \item \textbf{Standard}: ISO/IEC 9797-1
+    \item \textbf{Block Size}: Variable
+    \item \textbf{Official Specification}: \url{https://www.iso.org/standard/50375.html}
+    \item \textbf{Test Vectors}: \url{https://www.iso.org/standard/50375.html}
+    \item \textbf{Attacks}: Length extension attacks
+    \item \textbf{Security Level}: Variable
+\end{itemize}
+
+\subsection{CMAC}
+\begin{itemize}
+    \item \textbf{Standard}: NIST SP 800-38B
+    \item \textbf{Block Size}: Variable
+    \item \textbf{Official Specification}: \url{https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38B.pdf}
+    \item \textbf{Test Vectors}: \url{https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38B.pdf}
+    \item \textbf{Attacks}: None known
+    \item \textbf{Security Level}: Variable
+\end{itemize}
+
+\subsection{HMAC}
+\begin{itemize}
+    \item \textbf{Standard}: RFC 2104, FIPS 198-1
+    \item \textbf{Block Size}: Variable
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc2104}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc2104}
+    \item \textbf{Attacks}: Length extension attacks
+    \item \textbf{Security Level}: Variable
+\end{itemize}
+
+\section{Asymmetric Cryptography}
+
+\subsection{RSA}
+\begin{itemize}
+    \item \textbf{Standard}: PKCS\#1, RFC 8017
+    \item \textbf{Key Size}: 1024-4096 bits
+    \item \textbf{Official Specification}: \url{https://tools.ietf.org/html/rfc8017}
+    \item \textbf{Test Vectors}: \url{https://tools.ietf.org/html/rfc8017}
+    \item \textbf{Attacks}: Factorization attacks, side-channel attacks
+    \item \textbf{Security Level}: 80-256 bits (depending on key size)
+\end{itemize}
+
+\subsection{Hellman-Merkle Knapsack}
+\begin{itemize}
+    \item \textbf{Standard}: Academic paper
+    \item \textbf{Key Size}: Variable
+    \item \textbf{Official Specification}: \url{https://en.wikipedia.org/wiki/Merkle-Hellman_knapsack_cryptosystem}
+    \item \textbf{Test Vectors}: \url{https://en.wikipedia.org/wiki/Merkle-Hellman_knapsack_cryptosystem}
+    \item \textbf{Attacks}: Lattice reduction attacks
+    \item \textbf{Security Level}: Broken
+\end{itemize}
+
+\section{Classical Ciphers}
+
+\subsection{Caesar Cipher}
+\begin{itemize}
+    \item \textbf{Type}: Substitution cipher
+    \item \textbf{Key Space}: 25
+    \item \textbf{Official Specification}: Historical
+    \item \textbf{Test Vectors}: Standard
+    \item \textbf{Attacks}: Brute force, frequency analysis
+    \item \textbf{Security Level}: None
+\end{itemize}
+
+\subsection{Vigenère Cipher}
+\begin{itemize}
+    \item \textbf{Type}: Polyalphabetic substitution
+    \item \textbf{Key Space}: Variable
+    \item \textbf{Official Specification}: Historical
+    \item \textbf{Test Vectors}: Standard
+    \item \textbf{Attacks}: Kasiski examination, frequency analysis
+    \item \textbf{Security Level}: None
+\end{itemize}
+
+\subsection{Playfair Cipher}
+\begin{itemize}
+    \item \textbf{Type}: Digraphic substitution
+    \item \textbf{Key Space}: 25!
+    \item \textbf{Official Specification}: Historical
+    \item \textbf{Test Vectors}: Standard
+    \item \textbf{Attacks}: Frequency analysis, pattern analysis
+    \item \textbf{Security Level}: None
+\end{itemize}
+
+\subsection{Hill Cipher}
+\begin{itemize}
+    \item \textbf{Type}: Polygraphic substitution
+    \item \textbf{Key Space}: Variable
+    \item \textbf{Official Specification}: Academic
+    \item \textbf{Test Vectors}: Standard
+    \item \textbf{Attacks}: Known plaintext attacks
+    \item \textbf{Security Level}: None
+\end{itemize}
+
+\subsection{Transposition Ciphers}
+\begin{itemize}
+    \item \textbf{Type}: Permutation cipher
+    \item \textbf{Key Space}: Variable
+    \item \textbf{Official Specification}: Historical
+    \item \textbf{Test Vectors}: Standard
+    \item \textbf{Attacks}: Anagramming, frequency analysis
+    \item \textbf{Security Level}: None
+\end{itemize}
+
+\subsection{ADFGVX Cipher}
+\begin{itemize}
+    \item \textbf{Type}: Fractionated transposition
+    \item \textbf{Key Space}: Variable
+    \item \textbf{Official Specification}: Historical
+    \item \textbf{Test Vectors}: Standard
+    \item \textbf{Attacks}: Frequency analysis, pattern analysis
+    \item \textbf{Security Level}: None
+\end{itemize}
+
+\section{Test Vectors and Validation}
+
+\subsection{Standard Test Vectors}
+All algorithms should be validated against their respective standard test vectors. These can be found in the official specifications and standards documents referenced above.
+
+\subsection{Common Test Vector Sources}
+\begin{itemize}
+    \item NIST Cryptographic Standards: \url{https://csrc.nist.gov/Projects/cryptographic-standards-and-guidelines/example-values}
+    \item RFC Test Vectors: Available in respective RFC documents
+    \item Academic Papers: Available in original research papers
+    \item ISO Standards: Available in respective ISO documents
+\end{itemize}
+
+\section{Security Considerations}
+
+\subsection{Key Management}
+\begin{itemize}
+    \item Use cryptographically secure random number generators
+    \item Implement proper key derivation functions
+    \item Use appropriate key sizes for security requirements
+    \item Implement secure key storage and transmission
+\end{itemize}
+
+\subsection{Implementation Security}
+\begin{itemize}
+    \item Protect against timing attacks
+    \item Implement constant-time operations where required
+    \item Use secure coding practices
+    \item Validate all inputs and outputs
+\end{itemize}
+
+\subsection{Algorithm Selection}
+\begin{itemize}
+    \item Choose algorithms based on security requirements
+    \item Consider performance requirements
+    \item Stay updated with cryptanalysis results
+    \item Use standardized algorithms when possible
+\end{itemize}
+
+\section{References}
+
+\begin{thebibliography}{99}
+\bibitem{nist} National Institute of Standards and Technology (NIST), \textit{Cryptographic Standards and Guidelines}, \url{https://csrc.nist.gov/Projects/cryptographic-standards-and-guidelines}
+
+\bibitem{rfc} Internet Engineering Task Force (IETF), \textit{Request for Comments (RFC)}, \url{https://tools.ietf.org/}
+
+\bibitem{iso} International Organization for Standardization (ISO), \textit{Information Technology Standards}, \url{https://www.iso.org/}
+
+\bibitem{ecrypt} eSTREAM Project, \textit{Stream Cipher Project}, \url{https://www.ecrypt.eu.org/stream/}
+
+\bibitem{aes} AES Competition, \textit{Advanced Encryption Standard}, \url{https://www.nist.gov/}
+
+\bibitem{schneier} Bruce Schneier, \textit{Cryptography Resources}, \url{https://www.schneier.com/}
+\end{thebibliography}
+
+\end{document} 

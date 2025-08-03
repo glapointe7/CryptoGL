@@ -74,13 +74,13 @@
 #include "../UnitTests/WhirlpoolTest.hpp"
 #include "../UnitTests/WolseleyTest.hpp"
 #include "../UnitTests/XTEATest.hpp"
-//#include "../testing/SerpentTest.hpp"
+#include "../UnitTests/SerpentTest.hpp"
 
 #include "../UnitTests/StringMethodsTest.hpp"
 #include "../UnitTests/VectorMethodsTest.hpp"
 
 
-int main(int argc, char **argv)
+int main()
 {   
     UnitTests::TestContainer::runAllTests();
 }

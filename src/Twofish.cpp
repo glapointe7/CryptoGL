@@ -26,26 +26,24 @@ void Twofish::setKey(const BytesVector &key)
 uint32_t Twofish::h(const uint32_t X, const BytesVector &L)
 {
     // Split X into 4 bytes in little endian.
-    const uint8_t k = L.size() / 4;
+    uint8_t k = L.size() / 4;
     BytesVector y = LittleEndian32::toBytesVector(X);
-    switch (k)
+    if (k == 4)
     {
-        case 4:
+        constexpr std::array<uint8_t, 4> k4 = {{1, 0, 0, 1}};
+        for (uint8_t i = 0; i < 4; ++i)
         {
-            constexpr std::array<uint8_t, 4> k4 = {{1, 0, 0, 1}};
-            for (uint8_t i = 0; i < 4; ++i)
-            {
-                y[i] = Q[k4[i]][y[i]] ^ L[12 + i];
-            }
+            y[i] = Q[k4[i]][y[i]] ^ L[12 + i];
         }
+        k = 3;
+    }
 
-        case 3:
+    if (k == 3)
+    {
+        constexpr std::array<uint8_t, 4> k3 = {{1, 1, 0, 0}};
+        for (uint8_t i = 0; i < 4; ++i)
         {
-            constexpr std::array<uint8_t, 4> k3 = {{1, 1, 0, 0}};
-            for (uint8_t i = 0; i < 4; ++i)
-            {
-                y[i] = Q[k3[i]][y[i]] ^ L[8 + i];
-            }
+            y[i] = Q[k3[i]][y[i]] ^ L[8 + i];
         }
     }
 

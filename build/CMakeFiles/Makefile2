@@ -121,7 +121,7 @@ CMakeFiles/CryptoGL.dir/all: src/big_integers/CMakeFiles/big_integers.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/CryptoGL.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles 78
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles 79
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/CryptoGL.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles 0
 .PHONY : CMakeFiles/CryptoGL.dir/rule
@@ -142,12 +142,12 @@ CMakeFiles/CryptoGL.dir/clean:
 src/CMakeFiles/cryptoGL.dir/all:
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/cryptoGL.dir/build.make src/CMakeFiles/cryptoGL.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/cryptoGL.dir/build.make src/CMakeFiles/cryptoGL.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78 "Built target cryptoGL"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles --progress-num=9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79 "Built target cryptoGL"
 .PHONY : src/CMakeFiles/cryptoGL.dir/all
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/cryptoGL.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles 70
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles 71
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/cryptoGL.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/gabriel/Documents/Projects/CryptoGL/build/CMakeFiles 0
 .PHONY : src/CMakeFiles/cryptoGL.dir/rule

@@ -103,6 +103,7 @@ namespace CryptoGL
     template <typename UInteger>
     class LittleEndian : public Endian<LittleEndian<UInteger>, UInteger>
     {
+      using UIntVector = Vector<UInteger>;
     public:   
        /* Convert an integer 'value' to a bytes vector in Little-Endian. */
        static BytesVector toBytesVector(const UInteger &value)
@@ -117,6 +118,24 @@ namespace CryptoGL
 
           return bytes;
        }
+
+      // static UIntVector toIntegers(const UIntVector &words)
+      // {
+      //    UIntVector result;
+      //    result.reserve(words.size());
+
+      //    for (auto w : words)
+      //    {
+      //       UInteger le = 0;
+      //       for (size_t i = 0; i < sizeof(UInteger); ++i)
+      //       {
+      //             le |= ((w >> (i * 8)) & 0xFF) << (i * 8); // little-endian byte by byte
+      //       }
+      //       result.push_back(le);
+      //    }
+
+      //    return result;
+      // }
 
        /* Convert a bytes vector 'bytes' to an integer value in Little-Endian. */
        static UInteger toInteger(const BytesVector &bytes)
