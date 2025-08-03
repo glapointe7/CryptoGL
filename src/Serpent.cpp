@@ -508,6 +508,7 @@ void Serpent::printToConsole(const uint32_t x)
     std::cout << std::setw(8) << std::setfill('0') << std::hex << std::uppercase << x << " ";
 }
 
+// TODO : How this really works from NESSIE to padding the key? Reverse bytes then little-endian?
 UInt32Vector Serpent::padKey()
 {
     const uint8_t key_length = key.size();
@@ -574,6 +575,8 @@ void Serpent::generateSubkeys()
     std::cout << std::endl;
 }
 
+// TO DO : With all 0s 256-bit key and 0s 128-bit plaintext, this still doesn't give the ciphertext from NESSIE.
+// Loading: Reverse + little-endian or simply little-endian from NESSIE?
 void Serpent::processEncodingCurrentBlock()
 {   
     // Implements Serpent block encryption (bitslice, 32 rounds)
