@@ -1,6 +1,4 @@
-
-#ifndef BASE64TEST_HPP
-#define BASE64TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Base64.hpp"
@@ -39,5 +37,3 @@ namespace UnitTests
               "JBTU1BVElPTk9SSUVOVEVFT0JKRVRTVVJMRUJPVVRERVNET0lHVFM=").toString());
     }
 }
-
-#endif

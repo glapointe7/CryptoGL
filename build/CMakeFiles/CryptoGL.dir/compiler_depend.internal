@@ -163,7 +163,6 @@ CMakeFiles/CryptoGL.dir/src/main.cpp.o
  /usr/include/c++/11/bits/stl_bvector.h
  /usr/include/c++/11/bits/vector.tcc
  /home/gabriel/Documents/Projects/CryptoGL/src/Vector.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Types.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /usr/include/c++/11/algorithm
  /usr/include/c++/11/utility
@@ -246,13 +245,10 @@ CMakeFiles/CryptoGL.dir/src/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/MAC.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/AES.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/DES.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Feistel.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Blowfish.hpp
@@ -279,21 +275,16 @@ CMakeFiles/CryptoGL.dir/src/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/Blake.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/HashFunction.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/BlowfishTest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Blowfish.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/CAST128Test.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/FunctionComposition.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/CAST128.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/CAST256Test.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/CAST256.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/CaesarTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/CamelliaTest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Camellia.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/ChaoTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Chao.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/CollonTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Collon.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/DESTest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/DES.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/DelastelleTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Delastelle.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/FleissnerTest.hpp
@@ -331,7 +322,6 @@ CMakeFiles/CryptoGL.dir/src/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/Hill.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/SquareMatrix.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/IDEATest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/IDEA.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/KeccakTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Keccak.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/SpongeFunction.hpp
@@ -346,23 +336,18 @@ CMakeFiles/CryptoGL.dir/src/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/MorseTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Morse.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/Mysty1Test.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Mysty1.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/NihilistesTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Nihilistes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/NoekeonTest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Noekeon.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/PlayfairTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Playfair.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/PolybeTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Polybius.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/RC2Test.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/RC2.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/RC4Test.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/RC4.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/RC5Test.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/RC5.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/RC6Test.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/RC6.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/RabbitTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Rabbit.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/RailfenceTest.hpp
@@ -385,7 +370,6 @@ CMakeFiles/CryptoGL.dir/src/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/PseudoRandomFunction.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/SHA1.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/SHA1Test.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/SHA1.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/SHA224Test.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/SHA2.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/SHA256Test.hpp
@@ -398,7 +382,6 @@ CMakeFiles/CryptoGL.dir/src/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/ScreamTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Scream.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/SkipjackTest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Skipjack.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/Snow3GTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Snow3G.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/TigerTest.hpp
@@ -425,10 +408,8 @@ CMakeFiles/CryptoGL.dir/src/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/TwoSquaresTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/TwoSquares.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/TwofishTest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Twofish.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/UnsortAlphaTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/UnsortAlpha.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/VigenereMultTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/VigenereTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/WhirlpoolTest.hpp
@@ -436,10 +417,8 @@ CMakeFiles/CryptoGL.dir/src/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/WolseleyTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Wolseley.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/XTEATest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/XTEA.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/SerpentTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Serpent.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/StringMethodsTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/VectorMethodsTest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Vector.hpp
 

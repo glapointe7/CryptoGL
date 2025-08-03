@@ -1,11 +1,9 @@
 /*
  * Symmetric cipher abstract class for modern cryptology.
  */
-#ifndef SYMMETRICCIPHER_HPP
-#define SYMMETRICCIPHER_HPP
+#pragma once
 
 #include "Cipher.hpp"
-
 #include "exceptions/BadKeyLength.hpp"
 
 namespace CryptoGL
@@ -31,5 +29,3 @@ namespace CryptoGL
         BytesVector key;
     };
 }
-
-#endif

@@ -2,11 +2,9 @@
  * Need review to improve code for optimization.
  * Need more comments on code.
  */
-#ifndef RAILFENCE_HPP
-#define RAILFENCE_HPP
+#pragma once
 
 #include "StringCipherWithPermutationKey.hpp"
-
 #include <list>
 
 namespace CryptoGL
@@ -54,5 +52,3 @@ namespace CryptoGL
             : RedefenceZigzag(key, KeyType(1, key.size())) { }
     };
 }
-
-#endif

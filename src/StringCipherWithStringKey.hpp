@@ -1,8 +1,7 @@
 /*
  * Manage String cipher keys of String type.
  */
-#ifndef STRINGCIPHERWITHSTRINGKEY_HPP
-#define STRINGCIPHERWITHSTRINGKEY_HPP
+#pragma once
 
 #include "StringCipher.hpp"
 
@@ -29,5 +28,3 @@ namespace CryptoGL
         KeyType key;
     };
 }
-
-#endif

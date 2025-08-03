@@ -1,11 +1,9 @@
 /*
  * Source : http://gro.noekeon.org/Noekeon-spec.pdf
  */
-#ifndef NOEKEON_HPP
-#define NOEKEON_HPP
+#pragma once
 
 #include "BlockCipher.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -53,5 +51,3 @@ namespace CryptoGL
          }};
     };
 }
-
-#endif

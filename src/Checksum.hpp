@@ -1,6 +1,4 @@
-
-#ifndef CHECKSUM_HPP
-#define CHECKSUM_HPP
+#pragma once
 
 #include "Types.hpp"
 
@@ -15,5 +13,3 @@ namespace CryptoGL
         virtual DataType encode(const BytesVector &) = 0;
     };
 }
-
-#endif

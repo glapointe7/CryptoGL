@@ -1,6 +1,4 @@
-
-#ifndef BLOCKCIPHERMODES_HPP
-#define BLOCKCIPHERMODES_HPP
+#pragma once
 
 #include "Types.hpp"
 #include "Endian.hpp"
@@ -171,5 +169,3 @@ namespace CryptoGL
        }
     };
 }
-
-#endif

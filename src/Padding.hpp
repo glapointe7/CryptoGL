@@ -1,6 +1,4 @@
-
-#ifndef PADDING_HPP
-#define PADDING_HPP
+#pragma once
 
 #include "Types.hpp"
 
@@ -22,5 +20,3 @@ namespace CryptoGL
                 const uint8_t first_byte = 0x01, const uint8_t last_byte = 0x80);
     }
 }
-
-#endif

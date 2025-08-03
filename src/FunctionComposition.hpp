@@ -1,6 +1,4 @@
-
-#ifndef FUNCTIONCOMPOSITION_HPP
-#define FUNCTIONCOMPOSITION_HPP
+#pragma once
 
 /*
  * Compose a function F on itself : F^n(x) = (F o F^{n-1})(x). 
@@ -79,5 +77,3 @@ Composer2<F...> composer(F... f)
 {
    return Composer2<F...>(f...);
 }
-
-#endif

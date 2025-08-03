@@ -1,5 +1,4 @@
-#ifndef ADFGVXTEST_HPP
-#define ADFGVXTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Adfgvx.hpp"
@@ -39,5 +38,3 @@ namespace UnitTests
                "AVVFGVDFXVVVDGFXAGFDAXVADXVVXDXVAGFVFXXXDFFFFDFVFVFFXFXAXFDFFFXDFFXDVFDFVFX"));
     }
 }
-
-#endif

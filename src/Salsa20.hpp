@@ -1,8 +1,7 @@
 /*
  * Source : http://cr.yp.to/snuffle/spec.pdf
  */
-#ifndef SALSA20_HPP
-#define SALSA20_HPP
+#pragma once
 
 #include "SynchronousStreamCipher.hpp"
 #include "Endian.hpp"
@@ -42,5 +41,3 @@ namespace CryptoGL
         }};
     };
 }
-
-#endif

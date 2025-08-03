@@ -1,5 +1,4 @@
-#ifndef WOLSELEYTEST_HPP
-#define WOLSELEYTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Wolseley.hpp"
@@ -37,5 +36,3 @@ namespace UnitTests
        compare(clear_text, W->decode("XQFNZUVFVFBQGQVZANYZNOCUUQVXFQBGCRGQDDQZVCUCGVYUZYYCPJYZXNGFYPCNZMYXMCVRZX"));
     }
 }
-
-#endif

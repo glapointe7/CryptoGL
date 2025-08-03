@@ -1,6 +1,4 @@
-
-#ifndef WHIRLPOOLTEST_HPP
-#define WHIRLPOOLTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Whirlpool.hpp"
@@ -40,5 +38,3 @@ namespace UnitTests
        compare(hash, S->encode(clear_text.toBytes()));
     }
 }
-
-#endif

@@ -1,8 +1,7 @@
 /*
  * Source : http://en.wikibooks.org/wiki/Algorithm_Implementation/Miscellaneous/Base64#C.2B.2B
  */
-#ifndef BASE64_HPP
-#define BASE64_HPP
+#pragma once
 
 #include "Cipher.hpp"
 
@@ -21,5 +20,3 @@ namespace CryptoGL
         static uint8_t countPaddingCharacters(const ClassicalType &cipher_data);
     };
 }
-
-#endif

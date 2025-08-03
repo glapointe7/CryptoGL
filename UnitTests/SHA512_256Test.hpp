@@ -1,6 +1,4 @@
-
-#ifndef SHA512_256TEST_HPP
-#define SHA512_256TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/SHA2.hpp"
@@ -38,5 +36,3 @@ namespace UnitTests
        compare(hash, S->encode({}));
     }
 }
-
-#endif

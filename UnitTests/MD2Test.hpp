@@ -1,6 +1,4 @@
-
-#ifndef MD2TEST_HPP
-#define MD2TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/MD2.hpp"
@@ -38,5 +36,3 @@ namespace UnitTests
        compare(hash, S->encode(BytesVector()));
     }
 }
-
-#endif

@@ -1,6 +1,5 @@
 
-#ifndef PSEUDORANDOMFUNCTION_HPP
-#define PSEUDORANDOMFUNCTION_HPP
+#pragma once
 
 #include "Types.hpp"
 
@@ -19,5 +18,3 @@ namespace CryptoGL
         SeedType seed;
     };
 }
-
-#endif

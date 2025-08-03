@@ -1,6 +1,4 @@
-
-#ifndef TOOLS_HPP
-#define TOOLS_HPP
+#pragma once
 
 #include "Types.hpp"
 
@@ -14,5 +12,3 @@ namespace CryptoGL
         String convertFromBaseXToBaseY(const String &number, const uint8_t from_base, const uint8_t to_base);
     }
 }
-
-#endif

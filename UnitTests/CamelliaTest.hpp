@@ -1,8 +1,7 @@
 /*
  * Source : http://tools.ietf.org/html/rfc3713
  */
-#ifndef CAMELLIATEST_HPP
-#define CAMELLIATEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Camellia.hpp"
@@ -79,5 +78,3 @@ namespace UnitTests
                C256->decode(code.hexToBytes()));
     }
 }
-
-#endif

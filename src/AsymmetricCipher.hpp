@@ -1,6 +1,5 @@
 
-#ifndef ASYMMETRICCIPHER_HPP
-#define ASYMMETRICCIPHER_HPP
+#pragma once
 
 #include "Cipher.hpp"
 
@@ -19,5 +18,3 @@ namespace CryptoGL
        virtual void makePublicKey() = 0;
     };
 }
-
-#endif

@@ -1,6 +1,4 @@
-
-#ifndef STRINGCIPHERWITHPERMUTATIONKEY_HPP
-#define STRINGCIPHERWITHPERMUTATIONKEY_HPP
+#pragma once
 
 #include "StringCipher.hpp"
 
@@ -27,5 +25,3 @@ namespace CryptoGL
         using BadPermutationKey = BadKey;
     };
 }
-
-#endif

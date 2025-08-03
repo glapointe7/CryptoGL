@@ -1,6 +1,4 @@
-
-#ifndef AFFINETEST_HPP
-#define	AFFINETEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Affine.hpp"
@@ -38,5 +36,3 @@ namespace UnitTests
         compare(clear_text, A->decode(cipher_text));
     }
 }
-
-#endif

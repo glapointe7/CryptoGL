@@ -1,6 +1,4 @@
-
-#ifndef MERKLEDAMGARDFUNCTION_HPP
-#define MERKLEDAMGARDFUNCTION_HPP
+#pragma once
 
 #include "HashFunction.hpp"
 
@@ -87,5 +85,3 @@ namespace CryptoGL
         }
     };
 }
-
-#endif

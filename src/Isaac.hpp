@@ -1,11 +1,9 @@
 /*
  * Source : http://burtleburtle.net/bob/rand/isaac.html
  */
-#ifndef ISAAC_HPP
-#define ISAAC_HPP
+#pragma once
 
 #include "PseudoRandomFunction.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -44,5 +42,3 @@ namespace CryptoGL
             {11, 8, 10, 8, 2, 16, 4, 9}};
     };
 }
-
-#endif

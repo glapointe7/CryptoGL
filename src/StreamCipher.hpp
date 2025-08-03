@@ -1,8 +1,7 @@
 /*
  * Abstract class for Stream ciphers.
  */
-#ifndef STREAMCIPHER_HPP
-#define STREAMCIPHER_HPP
+#pragma once
 
 #include "SymmetricCipher.hpp"
 
@@ -40,5 +39,3 @@ namespace CryptoGL
         }
     };
 }
-
-#endif

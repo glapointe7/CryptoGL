@@ -1,8 +1,7 @@
 /*
  * Test vectors taken here : http://www.schneier.com/code/vectors.txt
  */
-#ifndef BLOWFISHTEST_HPP
-#define BLOWFISHTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Blowfish.hpp"
@@ -118,5 +117,3 @@ namespace UnitTests
                CTR->decode(clear_text.hexToBytes()));
     }
 }
-
-#endif

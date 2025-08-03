@@ -1,6 +1,4 @@
-
-#ifndef REDEFENCEZIGZAGTEST_HPP
-#define	REDEFENCEZIGZAGTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Railfence.hpp"
@@ -53,5 +51,3 @@ namespace UnitTests
        compare(clear_text, R->decode("NATARAAULLUTCNSARIORLIEOLSTIPQUNIPMAG"));
     }
 }
-
-#endif

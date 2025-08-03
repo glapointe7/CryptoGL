@@ -1,8 +1,7 @@
 /*
  * Source : http://www.ecrypt.eu.org/stream/ciphers/hc256/hc256.pdf
  */
-#ifndef HC256TEST_HPP
-#define HC256TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/HC256.hpp"
@@ -33,5 +32,3 @@ namespace UnitTests
        compare(clear_text, R->encode(BytesVector(64, 0)));
     }
 }
-
-#endif

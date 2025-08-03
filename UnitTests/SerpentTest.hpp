@@ -1,5 +1,4 @@
-#ifndef SERPENTTEST_HPP
-#define SERPENTTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Serpent.hpp"
@@ -121,5 +120,3 @@ namespace UnitTests
         compare("49672BA898D98DF95019180445491089", Set2_256bits->encode(clear_text));
     }
 }
-
-#endif 

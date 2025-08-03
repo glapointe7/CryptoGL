@@ -1,6 +1,4 @@
-
-#ifndef MD4TEST_HPP
-#define MD4TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/MessageDigest.hpp"
@@ -63,5 +61,3 @@ namespace UnitTests
        compare(hash, S->hmacEncode(key, BytesVector()));
     }
 }
-
-#endif

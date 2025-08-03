@@ -1,6 +1,4 @@
-
-#ifndef TWOSQUARESTEST_HPP
-#define	TWOSQUARESTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/TwoSquares.hpp"
@@ -37,5 +35,3 @@ namespace UnitTests
       compare(clear_text, P->decode("OFGANTHOHOOCUBFCOMJFYBJPOBFVGGRPUIUBEJJGGPONIRJSRAUSTRJFOELRLFUORGJYAQGINZ"));
     }
 }
-
-#endif

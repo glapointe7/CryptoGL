@@ -2,8 +2,7 @@
  * Source : http://people.csail.mit.edu/rivest/Rivest-rc5.pdf
  * RC5 is a Feistel network without a F function.
  */
-#ifndef RC5_HPP
-#define RC5_HPP
+#pragma once
 
 #include "Feistel.hpp"
 
@@ -50,5 +49,3 @@ namespace CryptoGL
         void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;
     };
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef SERPENT_HPP
-#define SERPENT_HPP
+#pragma once
 
 #include "BlockCipher.hpp"
 #include <array>
@@ -60,5 +59,3 @@ namespace CryptoGL
         //static const std::array<std::array<uint8_t, 16>, 8> SBoxesInv;
     };
 }
-
-#endif 

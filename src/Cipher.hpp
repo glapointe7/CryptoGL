@@ -1,8 +1,7 @@
 /*
  * Interface for all cipher types : Symmetric and asymmetric ciphers.
  */
-#ifndef CIPHER_H
-#define CIPHER_H
+#pragma once
 
 #include "Types.hpp"
 
@@ -17,5 +16,3 @@ namespace CryptoGL
         virtual ParamType decode(const ReturnType &) = 0;
     };
 }
-
-#endif

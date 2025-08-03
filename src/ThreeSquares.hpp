@@ -1,5 +1,4 @@
-#ifndef THREESQUARES_HPP
-#define THREESQUARES_HPP
+#pragma once
 
 #include "SquareCipher.hpp"
 #include "CipherGrid.hpp"
@@ -23,5 +22,3 @@ namespace CryptoGL
         const CipherGrid grid2, grid3;
     };
 }
-
-#endif

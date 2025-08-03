@@ -1,6 +1,4 @@
-
-#ifndef COLLON_HPP
-#define COLLON_HPP
+#pragma once
 
 #include "SquareCipher.hpp"
 
@@ -27,4 +25,3 @@ namespace CryptoGL
         const uint32_t block_len;
     };
 }
-#endif

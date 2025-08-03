@@ -1,5 +1,4 @@
-#ifndef HILLTEST_HPP
-#define HILLTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Hill.hpp"
@@ -52,5 +51,3 @@ namespace UnitTests
        compare(clear_text, H->decode("DSRMNQXTJEABZRGJJIDXFFQNVNYZDFCGRFXJWYCFBWUBVHMNJXIAPMBXZELSVFHCNMJWXSWOSLJ"));
     }
 }
-
-#endif

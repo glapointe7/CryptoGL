@@ -1,8 +1,7 @@
 /*
  * Source : http://www.ecrypt.eu.org/stream/svn/viewcvs.cgi/ecrypt/trunk/submissions/salsa20/full/verified.test-vectors?rev=210&view=markup
  */
-#ifndef SALSA20TEST_HPP
-#define SALSA20TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Salsa20.hpp"
@@ -44,5 +43,3 @@ namespace UnitTests
        compare(expected, S128->generateKeystream());
     }
 }
-
-#endif

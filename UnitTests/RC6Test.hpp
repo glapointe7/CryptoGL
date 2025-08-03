@@ -1,6 +1,4 @@
-
-#ifndef RC6TEST_HPP
-#define RC6TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/RC6.hpp"
@@ -46,5 +44,3 @@ namespace UnitTests
        compare("02132435465768798A9BACBDCEDFE0F1", C->decode(StringTest("524E192F4715C6231F51F6367EA43F18").hexToBytes()));
     }
 }
-
-#endif

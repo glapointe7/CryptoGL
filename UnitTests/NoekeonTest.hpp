@@ -1,8 +1,7 @@
 /*
  * Source : https://www.cosic.esat.kuleuven.be/nessie/testvectors/bc/noekeon/Noekeon-Direct-128-128.verified.test-vectors
  */
-#ifndef NOEKEONTEST_HPP
-#define NOEKEONTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Noekeon.hpp"
@@ -52,5 +51,3 @@ namespace UnitTests
        compare("4765F3DA10CD3D0473867742B5E5CC3C", C->decode(code.hexToBytes()));
     }
 }
-
-#endif

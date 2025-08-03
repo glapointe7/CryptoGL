@@ -1,6 +1,4 @@
-
-#ifndef ADLER32TEST_HPP
-#define	ADLER32TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 
@@ -35,5 +33,3 @@ namespace UnitTests
         compare(0x29750586u, A->encode(message.toBytes()));
     }
 }
-
-#endif

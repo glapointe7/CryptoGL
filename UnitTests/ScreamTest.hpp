@@ -1,6 +1,4 @@
-
-#ifndef SCREAMTEST_HPP
-#define SCREAMTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Scream.hpp"
@@ -32,5 +30,3 @@ namespace UnitTests
        compare("748C59F20D769EA87A6DC18746E64AC0", input.toHexString());
     }
 }
-
-#endif

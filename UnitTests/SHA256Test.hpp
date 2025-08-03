@@ -1,6 +1,4 @@
-
-#ifndef SHA256TEST_HPP
-#define SHA256TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/SHA2.hpp"
@@ -55,5 +53,3 @@ namespace UnitTests
        compare(hash, S->hmacEncode(BytesVector(), BytesVector()));
     }
 }
-
-#endif

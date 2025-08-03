@@ -1,12 +1,10 @@
 /*
  * Source : http://www.cs.ucdavis.edu/~rogaway/papers/seal.pdf
  */
-#ifndef SEAL_HPP
-#define SEAL_HPP
+#pragma once
 
 #include "SynchronousStreamCipher.hpp"
 #include "PseudoRandomFunction.hpp"
-
 #include "SHA1.hpp"
 
 namespace CryptoGL
@@ -60,5 +58,3 @@ namespace CryptoGL
         uint8_t counter = 0;
     };
 }
-
-#endif

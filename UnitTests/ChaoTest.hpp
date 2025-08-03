@@ -1,6 +1,4 @@
-
-#ifndef CHAOTEST_HPP
-#define	CHAOTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Chao.hpp"
@@ -37,5 +35,3 @@ namespace UnitTests
        compare(clear_text, C->decode("OAHQHCNYNXTSZJRRHJBYHQKSOUJY"));
     }
 }
-
-#endif

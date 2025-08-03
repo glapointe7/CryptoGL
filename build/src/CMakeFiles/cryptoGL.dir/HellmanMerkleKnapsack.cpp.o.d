@@ -195,7 +195,5 @@ src/CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o: \
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp \
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp \
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp \
- /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/../String.hpp \
- /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/../Integer.hpp \
  /home/gabriel/Documents/Projects/CryptoGL/src/MathematicalTools.hpp \
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp

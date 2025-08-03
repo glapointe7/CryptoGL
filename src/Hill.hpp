@@ -1,6 +1,4 @@
-
-#ifndef HILL_HPP
-#define HILL_HPP
+#pragma once
 
 #include "StringCipher.hpp"
 #include "SquareMatrix.hpp"
@@ -28,5 +26,3 @@ namespace CryptoGL
         SquareMatrix key;
     };
 }
-
-#endif

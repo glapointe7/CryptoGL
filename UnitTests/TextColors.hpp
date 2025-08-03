@@ -1,6 +1,4 @@
-
-#ifndef TEXTCOLORS_HPP
-#define	TEXTCOLORS_HPP
+#pragma once
 
 #include <ostream>
 
@@ -33,5 +31,3 @@ std::ostream& operator<<(std::ostream &os, const Color code)
 {
     return os << "\033[" << static_cast<int>(code) << "m";
 }
- 
-#endif

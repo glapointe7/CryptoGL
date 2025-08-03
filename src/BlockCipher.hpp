@@ -1,16 +1,12 @@
 /*
  * GenerateSubkeys and its inverse should be done in the constructor. This would avoid useless IF.
  */
-#ifndef BLOCKCIPHER_HPP
-#define BLOCKCIPHER_HPP
+#pragma once
 
 #include "SymmetricCipher.hpp"
-
 #include "BlockCipherModes.hpp"
-
 #include "Endian.hpp"
 #include "Padding.hpp"
-
 #include <functional>
 
 namespace CryptoGL
@@ -177,5 +173,3 @@ namespace CryptoGL
        }
     };
 }
-
-#endif

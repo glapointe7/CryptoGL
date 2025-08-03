@@ -1,5 +1,4 @@
-#ifndef RAILFENCETEST_HPP
-#define RAILFENCETEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Railfence.hpp"
@@ -53,5 +52,3 @@ namespace UnitTests
        compare(clear_text, R->decode("IQIMESENLTUASAMINTUDSTIIENLRARTERTDULATNAGTOEJLUOSSLPRUOPOINEBEOITAACROOBG"));
     }
 }
-
-#endif

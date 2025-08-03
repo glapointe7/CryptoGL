@@ -196,8 +196,6 @@ src/CMakeFiles/cryptoGL.dir/AES.cpp.o: ../src/AES.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp
@@ -1609,9 +1607,7 @@ src/CMakeFiles/cryptoGL.dir/BlockCipherModes.cpp.o: ../src/BlockCipherModes.cpp 
   ../src/Endian.hpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
-  ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp
+  ../src/exceptions/Exception.hpp
 
 src/CMakeFiles/cryptoGL.dir/Blowfish.cpp.o: ../src/Blowfish.cpp \
   /usr/include/stdc-predef.h \
@@ -1809,8 +1805,6 @@ src/CMakeFiles/cryptoGL.dir/Blowfish.cpp.o: ../src/Blowfish.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp
@@ -2011,8 +2005,6 @@ src/CMakeFiles/cryptoGL.dir/CAST128.cpp.o: ../src/CAST128.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp
@@ -2212,8 +2204,6 @@ src/CMakeFiles/cryptoGL.dir/CAST256.cpp.o: ../src/CAST256.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp
@@ -2414,8 +2404,6 @@ src/CMakeFiles/cryptoGL.dir/Camellia.cpp.o: ../src/Camellia.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp
@@ -2613,9 +2601,7 @@ src/CMakeFiles/cryptoGL.dir/Chao.cpp.o: ../src/Chao.cpp \
   /usr/include/c++/11/limits \
   ../src/exceptions/BadAlphaLength.hpp \
   ../src/exceptions/BadAlpha.hpp \
-  ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp
+  ../src/exceptions/Exception.hpp
 
 src/CMakeFiles/cryptoGL.dir/CipherGrid.cpp.o: ../src/CipherGrid.cpp \
   /usr/include/stdc-predef.h \
@@ -2810,9 +2796,7 @@ src/CMakeFiles/cryptoGL.dir/CipherGrid.cpp.o: ../src/CipherGrid.cpp \
   ../src/exceptions/Exception.hpp \
   ../src/exceptions/BadAlphaLength.hpp \
   ../src/exceptions/BadAlpha.hpp \
-  ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp
+  ../src/exceptions/Exception.hpp
 
 src/CMakeFiles/cryptoGL.dir/Collon.cpp.o: ../src/Collon.cpp \
   /usr/include/stdc-predef.h \
@@ -3205,8 +3189,6 @@ src/CMakeFiles/cryptoGL.dir/DES.cpp.o: ../src/DES.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp \
@@ -3607,9 +3589,7 @@ src/CMakeFiles/cryptoGL.dir/Fleissner.cpp.o: ../src/Fleissner.cpp \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
   ../src/exceptions/BadKeyLength.hpp \
-  ../src/exceptions/BadKey.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp
+  ../src/exceptions/BadKey.hpp
 
 src/CMakeFiles/cryptoGL.dir/FourSquares.cpp.o: ../src/FourSquares.cpp \
   /usr/include/stdc-predef.h \
@@ -4002,8 +3982,6 @@ src/CMakeFiles/cryptoGL.dir/HC256.cpp.o: ../src/HC256.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/Endian.hpp
 
 src/CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o: ../src/HellmanMerkleKnapsack.cpp \
@@ -4236,8 +4214,6 @@ src/CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o: ../src/HellmanMerkleKna
   ../src/exceptions/Exception.hpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/MathematicalTools.hpp \
   ../src/exceptions/Exception.hpp
 
@@ -4638,8 +4614,6 @@ src/CMakeFiles/cryptoGL.dir/IDEA.cpp.o: ../src/IDEA.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp \
@@ -6403,8 +6377,6 @@ src/CMakeFiles/cryptoGL.dir/Mysty1.cpp.o: ../src/Mysty1.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp
@@ -6806,8 +6778,6 @@ src/CMakeFiles/cryptoGL.dir/Noekeon.cpp.o: ../src/Noekeon.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp
@@ -7589,8 +7559,6 @@ src/CMakeFiles/cryptoGL.dir/RC2.cpp.o: ../src/RC2.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp
@@ -7790,8 +7758,6 @@ src/CMakeFiles/cryptoGL.dir/RC4.cpp.o: ../src/RC4.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   /usr/include/c++/11/numeric \
   /usr/include/c++/11/bits/stl_numeric.h \
   /usr/include/c++/11/bit \
@@ -7993,8 +7959,6 @@ src/CMakeFiles/cryptoGL.dir/RC5.cpp.o: ../src/RC5.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp
@@ -8195,8 +8159,6 @@ src/CMakeFiles/cryptoGL.dir/RC6.cpp.o: ../src/RC6.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp
@@ -8397,8 +8359,6 @@ src/CMakeFiles/cryptoGL.dir/Rabbit.cpp.o: ../src/Rabbit.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/Endian.hpp
 
 src/CMakeFiles/cryptoGL.dir/Railfence.cpp.o: ../src/Railfence.cpp \
@@ -8992,8 +8952,6 @@ src/CMakeFiles/cryptoGL.dir/SEAL.cpp.o: ../src/SEAL.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/Endian.hpp \
   ../src/PseudoRandomFunction.hpp \
   ../src/SHA1.hpp \
@@ -9585,8 +9543,6 @@ src/CMakeFiles/cryptoGL.dir/Salsa20.cpp.o: ../src/Salsa20.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/Endian.hpp \
   ../src/FunctionComposition.hpp
 
@@ -9785,8 +9741,6 @@ src/CMakeFiles/cryptoGL.dir/Scream.cpp.o: ../src/Scream.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/MathematicalTools.hpp \
   ../src/exceptions/Exception.hpp \
   ../src/Endian.hpp \
@@ -9987,8 +9941,6 @@ src/CMakeFiles/cryptoGL.dir/Serpent.cpp.o: ../src/Serpent.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp \
@@ -10231,8 +10183,6 @@ src/CMakeFiles/cryptoGL.dir/Skipjack.cpp.o: ../src/Skipjack.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp
@@ -10433,8 +10383,6 @@ src/CMakeFiles/cryptoGL.dir/Snow3G.cpp.o: ../src/Snow3G.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/Endian.hpp
 
 src/CMakeFiles/cryptoGL.dir/SquareMatrix.cpp.o: ../src/SquareMatrix.cpp \
@@ -12400,8 +12348,6 @@ src/CMakeFiles/cryptoGL.dir/TripleDES.cpp.o: ../src/TripleDES.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/DES.hpp \
@@ -12800,8 +12746,6 @@ src/CMakeFiles/cryptoGL.dir/Twofish.cpp.o: ../src/Twofish.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp \
@@ -13779,8 +13723,6 @@ src/CMakeFiles/cryptoGL.dir/XTEA.cpp.o: ../src/XTEA.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp
@@ -13946,7 +13888,6 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o: ../src/main.cpp \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
   ../src/Vector.hpp \
-  ../src/Types.hpp \
   ../src/Integer.hpp \
   /usr/include/c++/11/algorithm \
   /usr/include/c++/11/utility \
@@ -14029,13 +13970,10 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o: ../src/main.cpp \
   ../src/exceptions/BadKeyLength.hpp \
   ../src/exceptions/BadKey.hpp \
   ../src/exceptions/Exception.hpp \
-  ../src/String.hpp \
-  ../src/Integer.hpp \
   ../src/BlockCipherModes.hpp \
   ../src/Endian.hpp \
   ../src/Padding.hpp \
   ../src/MAC.hpp \
-  ../src/AES.hpp \
   ../src/DES.hpp \
   ../src/Feistel.hpp \
   ../src/Blowfish.hpp \
@@ -14062,21 +14000,16 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o: ../src/main.cpp \
   ../src/Blake.hpp \
   ../src/HashFunction.hpp \
   ../UnitTests/BlowfishTest.hpp \
-  ../src/Blowfish.hpp \
   ../UnitTests/CAST128Test.hpp \
   ../src/FunctionComposition.hpp \
-  ../src/CAST128.hpp \
   ../UnitTests/CAST256Test.hpp \
-  ../src/CAST256.hpp \
   ../UnitTests/CaesarTest.hpp \
   ../UnitTests/CamelliaTest.hpp \
-  ../src/Camellia.hpp \
   ../UnitTests/ChaoTest.hpp \
   ../src/Chao.hpp \
   ../UnitTests/CollonTest.hpp \
   ../src/Collon.hpp \
   ../UnitTests/DESTest.hpp \
-  ../src/DES.hpp \
   ../UnitTests/DelastelleTest.hpp \
   ../src/Delastelle.hpp \
   ../UnitTests/FleissnerTest.hpp \
@@ -14114,7 +14047,6 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o: ../src/main.cpp \
   ../src/Hill.hpp \
   ../src/SquareMatrix.hpp \
   ../UnitTests/IDEATest.hpp \
-  ../src/IDEA.hpp \
   ../UnitTests/KeccakTest.hpp \
   ../src/Keccak.hpp \
   ../src/SpongeFunction.hpp \
@@ -14129,23 +14061,18 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o: ../src/main.cpp \
   ../UnitTests/MorseTest.hpp \
   ../src/Morse.hpp \
   ../UnitTests/Mysty1Test.hpp \
-  ../src/Mysty1.hpp \
   ../UnitTests/NihilistesTest.hpp \
   ../src/Nihilistes.hpp \
   ../UnitTests/NoekeonTest.hpp \
-  ../src/Noekeon.hpp \
   ../UnitTests/PlayfairTest.hpp \
   ../src/Playfair.hpp \
   ../UnitTests/PolybeTest.hpp \
   ../src/Polybius.hpp \
   ../UnitTests/RC2Test.hpp \
-  ../src/RC2.hpp \
   ../UnitTests/RC4Test.hpp \
   ../src/RC4.hpp \
   ../UnitTests/RC5Test.hpp \
-  ../src/RC5.hpp \
   ../UnitTests/RC6Test.hpp \
-  ../src/RC6.hpp \
   ../UnitTests/RabbitTest.hpp \
   ../src/Rabbit.hpp \
   ../UnitTests/RailfenceTest.hpp \
@@ -14168,7 +14095,6 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o: ../src/main.cpp \
   ../src/PseudoRandomFunction.hpp \
   ../src/SHA1.hpp \
   ../UnitTests/SHA1Test.hpp \
-  ../src/SHA1.hpp \
   ../UnitTests/SHA224Test.hpp \
   ../src/SHA2.hpp \
   ../UnitTests/SHA256Test.hpp \
@@ -14181,7 +14107,6 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o: ../src/main.cpp \
   ../UnitTests/ScreamTest.hpp \
   ../src/Scream.hpp \
   ../UnitTests/SkipjackTest.hpp \
-  ../src/Skipjack.hpp \
   ../UnitTests/Snow3GTest.hpp \
   ../src/Snow3G.hpp \
   ../UnitTests/TigerTest.hpp \
@@ -14208,10 +14133,8 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o: ../src/main.cpp \
   ../UnitTests/TwoSquaresTest.hpp \
   ../src/TwoSquares.hpp \
   ../UnitTests/TwofishTest.hpp \
-  ../src/Twofish.hpp \
   ../UnitTests/UnsortAlphaTest.hpp \
   ../src/UnsortAlpha.hpp \
-  ../src/String.hpp \
   ../UnitTests/VigenereMultTest.hpp \
   ../UnitTests/VigenereTest.hpp \
   ../UnitTests/WhirlpoolTest.hpp \
@@ -14219,12 +14142,10 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o: ../src/main.cpp \
   ../UnitTests/WolseleyTest.hpp \
   ../src/Wolseley.hpp \
   ../UnitTests/XTEATest.hpp \
-  ../src/XTEA.hpp \
   ../UnitTests/SerpentTest.hpp \
   ../src/Serpent.hpp \
   ../UnitTests/StringMethodsTest.hpp \
-  ../UnitTests/VectorMethodsTest.hpp \
-  ../src/Vector.hpp
+  ../UnitTests/VectorMethodsTest.hpp
 
 
 ../UnitTests/StringMethodsTest.hpp:

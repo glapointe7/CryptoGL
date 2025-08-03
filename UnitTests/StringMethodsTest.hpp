@@ -1,6 +1,4 @@
-
-#ifndef STRINGMETHODSTEST_HPP
-#define	STRINGMETHODSTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/String.hpp"
@@ -35,5 +33,3 @@ namespace UnitTests
         compare("HISISAES!", *str);
     }
 }
-
-#endif	

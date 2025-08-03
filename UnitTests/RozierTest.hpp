@@ -1,5 +1,4 @@
-#ifndef ROZIERTEST_HPP
-#define ROZIERTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Vigenere.hpp"
@@ -53,5 +52,3 @@ namespace UnitTests
       compare(clear_text, R->decode(clear_text));*/
     }
 }
-
-#endif

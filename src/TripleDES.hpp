@@ -1,6 +1,4 @@
-
-#ifndef TRIPLEDES_HPP
-#define TRIPLEDES_HPP
+#pragma once
 
 #include "SymmetricCipher.hpp"
 #include "BlockCipherModes.hpp"
@@ -24,5 +22,3 @@ namespace CryptoGL
         OperationModes mode = OperationModes::ECB;
     };
 }
-
-#endif

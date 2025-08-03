@@ -1,8 +1,7 @@
 /*
  * Source : https://www.cosic.esat.kuleuven.be/nessie/testvectors/bc/idea/Idea-128-64.verified.test-vectors
  */
-#ifndef IDEATEST_HPP
-#define IDEATEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/IDEA.hpp"
@@ -55,5 +54,3 @@ namespace UnitTests
        compare(clear_text, B->decode(message.hexToBytes()));
     }
 }
-
-#endif

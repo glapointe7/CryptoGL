@@ -1,5 +1,4 @@
-#ifndef MORSETEST_HPP
-#define MORSETEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Morse.hpp"
@@ -40,5 +39,3 @@ namespace UnitTests
                ".--. .-. .- - .. --- -. ... "));
     }
 }
-
-#endif

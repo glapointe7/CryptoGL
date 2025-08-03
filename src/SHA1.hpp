@@ -1,11 +1,9 @@
 /*
  * Source : http://csrc.nist.gov
  */
-#ifndef SHA1_HPP
-#define SHA1_HPP
+#pragma once
 
 #include "MerkleDamgardFunction.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -40,5 +38,3 @@ namespace CryptoGL
         }};
     };
 }
-
-#endif

@@ -1,11 +1,9 @@
 /*
  * Source : http://www.schneier.com/paper-twofish-paper.pdf
  */
-#ifndef TWOFISH_HPP
-#define TWOFISH_HPP
+#pragma once
 
 #include "Feistel.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -124,5 +122,3 @@ namespace CryptoGL
         }};
     };
 }
-
-#endif

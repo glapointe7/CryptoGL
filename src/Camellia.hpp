@@ -1,8 +1,7 @@
 /*
  * Source : http://www.cryptrec.go.jp/cryptrec_03_spec_cypherlist_files/PDF/06_01espec.pdf
  */
-#ifndef CAMELLIA_HPP
-#define CAMELLIA_HPP
+#pragma once
 
 #include "Feistel.hpp"
 
@@ -203,5 +202,3 @@ namespace CryptoGL
         }};
     };
 }
-
-#endif

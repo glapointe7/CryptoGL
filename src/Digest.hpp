@@ -1,6 +1,4 @@
-
-#ifndef DIGEST_HPP
-#define DIGEST_HPP
+#pragma once
 
 #include <sstream>
 #include <algorithm>
@@ -47,5 +45,3 @@ namespace Digest
         return V;
     }
 }
-
-#endif

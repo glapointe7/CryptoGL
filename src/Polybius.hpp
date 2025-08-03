@@ -1,6 +1,4 @@
-
-#ifndef POLYBIUS_HPP
-#define POLYBIUS_HPP
+#pragma once
 
 #include "SquareCipher.hpp"
 
@@ -16,5 +14,3 @@ namespace CryptoGL
         ClassicalType decode(const ClassicalType &cipher_text) override;
     };
 }
-
-#endif

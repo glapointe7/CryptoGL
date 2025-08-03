@@ -1,11 +1,9 @@
 /*
  * Source : http://www.ietf.org/rfc/rfc1321.txt
  */
-#ifndef MESSAGEDIGEST_HPP
-#define MESSAGEDIGEST_HPP
+#pragma once
 
 #include "MerkleDamgardFunction.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -105,5 +103,3 @@ namespace CryptoGL
         }
     };
 }
-
-#endif

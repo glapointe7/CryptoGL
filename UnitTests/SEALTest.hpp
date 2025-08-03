@@ -1,8 +1,7 @@
 /*
  * Source : http://www.cs.ucdavis.edu/~rogaway/papers/seal.pdf
  */
-#ifndef SEALTEST_HPP
-#define SEALTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/SEAL.hpp"
@@ -116,5 +115,3 @@ namespace UnitTests
        compare(out, R->generate());
     }
 }
-
-#endif

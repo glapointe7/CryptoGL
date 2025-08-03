@@ -1,8 +1,7 @@
 /*
  * Source : http://people.csail.mit.edu/rivest/pubs/RRSY98.pdf
  */
-#ifndef RC6_HPP
-#define RC6_HPP
+#pragma once
 
 #include "Feistel.hpp"
 
@@ -39,5 +38,3 @@ namespace CryptoGL
         void decodeFeistelRounds(uint64_t &L, uint64_t &R, const uint8_t) const override;
     };
 }
-
-#endif

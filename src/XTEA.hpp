@@ -1,8 +1,7 @@
 /*
  * Source : http://www.cix.co.uk/~klockstone/xtea.pdf
  */
-#ifndef XTEA_HPP
-#define XTEA_HPP
+#pragma once
 
 #include "Feistel.hpp"
 
@@ -36,5 +35,3 @@ namespace CryptoGL
         void decodeFeistelRounds(uint32_t &L, uint32_t &R, const uint8_t) const override;
     };
 }
-
-#endif

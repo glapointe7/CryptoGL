@@ -1,5 +1,4 @@
-#ifndef CAESARTEST_HPP
-#define CAESARTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Vigenere.hpp"
@@ -111,5 +110,3 @@ namespace UnitTests
        compare(clear_text, C->decode("VDOXWQLOLOSDUDLWTXHWXFRQQDLVODSURJUDPPDWLRQRULHQWHHREMHWVXUOHERXWGHVGRLJWV"));
     }*/
 }
-
-#endif

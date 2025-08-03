@@ -1,6 +1,4 @@
-
-#ifndef RABBITTEST_HPP
-#define RABBITTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Rabbit.hpp"
@@ -51,5 +49,3 @@ namespace UnitTests
        compare(BytesVector(48, 0), R->decode(cipher));
     }
 }
-
-#endif

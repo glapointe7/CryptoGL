@@ -2,8 +2,7 @@
  * Source : http://www.ime.usp.br/~rt/cast256/CAST-256.pdf
  * Should be a generalized Feistel Network.
  */
-#ifndef CAST256_HPP
-#define CAST256_HPP
+#pragma once
 
 #include "BlockCipher.hpp"
 
@@ -241,5 +240,3 @@ namespace CryptoGL
         }};
     };
 }
-
-#endif

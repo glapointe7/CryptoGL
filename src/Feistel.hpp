@@ -1,8 +1,7 @@
 /*
  * Feistel network scheme.
  */
-#ifndef FEISTEL_HPP
-#define FEISTEL_HPP
+#pragma once
 
 #include "BlockCipher.hpp"
 
@@ -25,5 +24,3 @@ namespace CryptoGL
         virtual void decodeFeistelRounds(FeistelType &L, FeistelType &R, const uint8_t) const = 0;
     };
 }
-
-#endif

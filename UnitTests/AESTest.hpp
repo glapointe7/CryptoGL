@@ -1,6 +1,4 @@
-
-#ifndef AESTEST_HPP
-#define AESTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/AES.hpp"
@@ -205,5 +203,3 @@ namespace UnitTests
        compare("75F0251D528AC01C4573DFD584D79F29", xcbc.encode({}));
     }
 }
-
-#endif

@@ -1,12 +1,9 @@
 /*
  * Source: http://csrc.nist.gov/publications/fips/fips46-3/fips46-3.pdf
  */
-
-#ifndef DES_HPP
-#define DES_HPP
+#pragma once
 
 #include "Feistel.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -187,5 +184,3 @@ namespace CryptoGL
         }};
     };
 }
-
-#endif

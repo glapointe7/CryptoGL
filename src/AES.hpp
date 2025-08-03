@@ -1,8 +1,7 @@
 /*
  * Source : FIPS197 from NIST and http://en.wikipedia.org/wiki/Rijndael_mix_columns
  */
-#ifndef AES_HPP
-#define AES_HPP
+#pragma once
 
 #include "BlockCipher.hpp"
 
@@ -214,5 +213,3 @@ namespace CryptoGL
         }};
     };
 }
-
-#endif

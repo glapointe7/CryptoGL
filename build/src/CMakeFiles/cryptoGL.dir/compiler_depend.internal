@@ -197,8 +197,6 @@ src/CMakeFiles/cryptoGL.dir/AES.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -1618,8 +1616,6 @@ src/CMakeFiles/cryptoGL.dir/BlockCipherModes.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
 
 src/CMakeFiles/cryptoGL.dir/Blowfish.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/Blowfish.cpp
@@ -1818,8 +1814,6 @@ src/CMakeFiles/cryptoGL.dir/Blowfish.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -2021,8 +2015,6 @@ src/CMakeFiles/cryptoGL.dir/CAST128.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -2223,8 +2215,6 @@ src/CMakeFiles/cryptoGL.dir/CAST256.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -2426,8 +2416,6 @@ src/CMakeFiles/cryptoGL.dir/Camellia.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -2627,8 +2615,6 @@ src/CMakeFiles/cryptoGL.dir/Chao.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadAlphaLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadAlpha.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
 
 src/CMakeFiles/cryptoGL.dir/CipherGrid.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/CipherGrid.cpp
@@ -2825,8 +2811,6 @@ src/CMakeFiles/cryptoGL.dir/CipherGrid.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadAlphaLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadAlpha.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
 
 src/CMakeFiles/cryptoGL.dir/Collon.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/Collon.cpp
@@ -3221,8 +3205,6 @@ src/CMakeFiles/cryptoGL.dir/DES.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -3626,8 +3608,6 @@ src/CMakeFiles/cryptoGL.dir/Fleissner.cpp.o
  /usr/include/c++/11/bits/stl_multiset.h
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
 
 src/CMakeFiles/cryptoGL.dir/FourSquares.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/FourSquares.cpp
@@ -4022,8 +4002,6 @@ src/CMakeFiles/cryptoGL.dir/HC256.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
 
 src/CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o
@@ -4257,8 +4235,6 @@ src/CMakeFiles/cryptoGL.dir/HellmanMerkleKnapsack.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/MathematicalTools.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
 
@@ -4661,8 +4637,6 @@ src/CMakeFiles/cryptoGL.dir/IDEA.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -6435,8 +6409,6 @@ src/CMakeFiles/cryptoGL.dir/Mysty1.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -6840,8 +6812,6 @@ src/CMakeFiles/cryptoGL.dir/Noekeon.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -7627,8 +7597,6 @@ src/CMakeFiles/cryptoGL.dir/RC2.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -7829,8 +7797,6 @@ src/CMakeFiles/cryptoGL.dir/RC4.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /usr/include/c++/11/numeric
  /usr/include/c++/11/bits/stl_numeric.h
  /usr/include/c++/11/bit
@@ -8033,8 +7999,6 @@ src/CMakeFiles/cryptoGL.dir/RC5.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -8236,8 +8200,6 @@ src/CMakeFiles/cryptoGL.dir/RC6.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -8439,8 +8401,6 @@ src/CMakeFiles/cryptoGL.dir/Rabbit.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
 
 src/CMakeFiles/cryptoGL.dir/Railfence.cpp.o
@@ -9037,8 +8997,6 @@ src/CMakeFiles/cryptoGL.dir/SEAL.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/PseudoRandomFunction.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/SHA1.hpp
@@ -9633,8 +9591,6 @@ src/CMakeFiles/cryptoGL.dir/Salsa20.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/FunctionComposition.hpp
 
@@ -9834,8 +9790,6 @@ src/CMakeFiles/cryptoGL.dir/Scream.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/MathematicalTools.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
@@ -10037,8 +9991,6 @@ src/CMakeFiles/cryptoGL.dir/Serpent.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -10282,8 +10234,6 @@ src/CMakeFiles/cryptoGL.dir/Skipjack.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -10485,8 +10435,6 @@ src/CMakeFiles/cryptoGL.dir/Snow3G.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
 
 src/CMakeFiles/cryptoGL.dir/SquareMatrix.cpp.o
@@ -12462,8 +12410,6 @@ src/CMakeFiles/cryptoGL.dir/TripleDES.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/DES.hpp
@@ -12864,8 +12810,6 @@ src/CMakeFiles/cryptoGL.dir/Twofish.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -13848,8 +13792,6 @@ src/CMakeFiles/cryptoGL.dir/XTEA.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
@@ -14016,7 +13958,6 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o
  /usr/include/c++/11/bits/stl_bvector.h
  /usr/include/c++/11/bits/vector.tcc
  /home/gabriel/Documents/Projects/CryptoGL/src/Vector.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Types.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /usr/include/c++/11/algorithm
  /usr/include/c++/11/utility
@@ -14099,13 +14040,10 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKeyLength.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/BadKey.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/exceptions/Exception.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Integer.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/BlockCipherModes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Endian.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Padding.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/MAC.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/AES.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/DES.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Feistel.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Blowfish.hpp
@@ -14132,21 +14070,16 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/Blake.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/HashFunction.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/BlowfishTest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Blowfish.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/CAST128Test.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/FunctionComposition.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/CAST128.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/CAST256Test.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/CAST256.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/CaesarTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/CamelliaTest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Camellia.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/ChaoTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Chao.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/CollonTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Collon.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/DESTest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/DES.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/DelastelleTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Delastelle.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/FleissnerTest.hpp
@@ -14184,7 +14117,6 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/Hill.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/SquareMatrix.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/IDEATest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/IDEA.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/KeccakTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Keccak.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/SpongeFunction.hpp
@@ -14199,23 +14131,18 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/MorseTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Morse.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/Mysty1Test.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Mysty1.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/NihilistesTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Nihilistes.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/NoekeonTest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Noekeon.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/PlayfairTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Playfair.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/PolybeTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Polybius.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/RC2Test.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/RC2.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/RC4Test.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/RC4.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/RC5Test.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/RC5.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/RC6Test.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/RC6.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/RabbitTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Rabbit.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/RailfenceTest.hpp
@@ -14238,7 +14165,6 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/src/PseudoRandomFunction.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/SHA1.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/SHA1Test.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/SHA1.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/SHA224Test.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/SHA2.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/SHA256Test.hpp
@@ -14251,7 +14177,6 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/ScreamTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Scream.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/SkipjackTest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Skipjack.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/Snow3GTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Snow3G.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/TigerTest.hpp
@@ -14278,10 +14203,8 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/TwoSquaresTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/TwoSquares.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/TwofishTest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Twofish.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/UnsortAlphaTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/UnsortAlpha.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/String.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/VigenereMultTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/VigenereTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/WhirlpoolTest.hpp
@@ -14289,10 +14212,8 @@ src/CMakeFiles/cryptoGL.dir/main.cpp.o
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/WolseleyTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Wolseley.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/XTEATest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/XTEA.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/SerpentTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/src/Serpent.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/StringMethodsTest.hpp
  /home/gabriel/Documents/Projects/CryptoGL/UnitTests/VectorMethodsTest.hpp
- /home/gabriel/Documents/Projects/CryptoGL/src/Vector.hpp
 

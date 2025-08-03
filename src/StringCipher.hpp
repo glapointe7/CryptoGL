@@ -1,6 +1,4 @@
-
-#ifndef STRINGCIPHER_HPP
-#define STRINGCIPHER_HPP
+#pragma once
 
 #include "Cipher.hpp"
 
@@ -29,5 +27,3 @@ namespace CryptoGL
         ClassicalType alpha;
     };
 }
-
-#endif

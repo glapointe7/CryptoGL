@@ -1,6 +1,4 @@
-
-#ifndef TEST_HPP
-#define	TEST_HPP
+#pragma once
 
 #include "../src/Types.hpp"
 #include "TextColors.hpp"
@@ -111,5 +109,3 @@ namespace UnitTests
         String name;
     };
 }
-
-#endif

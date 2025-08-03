@@ -1,8 +1,7 @@
 /*
  * Source : http://paper.ijcsns.org/07_book/201105/20110502.pdf
  */
-#ifndef HELLMANMERKLEKNAPSACKTEST_HPP
-#define HELLMANMERKLEKNAPSACKTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/HellmanMerkleKnapsack.hpp"
@@ -36,5 +35,3 @@ namespace UnitTests
        compare("Hello", H->decode(Digest::stringToBigIntVector("6316 10022 10673 10673 15961")).toString());
     }
 }
-
-#endif

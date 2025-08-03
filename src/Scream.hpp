@@ -1,11 +1,9 @@
 /*
  * Source : http://eprint.iacr.org/2002/019.pdf
  */
-#ifndef SCREAM_HPP
-#define SCREAM_HPP
+#pragma once
 
 #include "StreamCipher.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -100,5 +98,3 @@ namespace CryptoGL
         void makeS1() override;
     };
 }
-
-#endif

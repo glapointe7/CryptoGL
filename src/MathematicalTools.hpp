@@ -1,6 +1,4 @@
-
-#ifndef MATHEMATICALTOOLS_HPP
-#define MATHEMATICALTOOLS_HPP
+#pragma once
 
 #include <vector>
 #include <algorithm>
@@ -127,5 +125,3 @@ uint8_t getByteSqrt(const uint8_t sqr);
 uint16_t multiplyShort(const uint16_t a, const uint16_t b);
 
 uint16_t inverseMultiplyShort(const uint16_t value);
-
-#endif

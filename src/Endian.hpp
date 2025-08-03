@@ -1,8 +1,7 @@
 /*
  * Uses Curiously recurring template design pattern to simulate static polymorphism.
  */
-#ifndef ENDIAN_HPP
-#define ENDIAN_HPP
+#pragma once
 
 #include "Types.hpp"
 
@@ -188,5 +187,3 @@ namespace CryptoGL
     using LittleEndian32 = Endian<LittleEndian<uint32_t>, uint32_t>;
     using LittleEndian64 = Endian<LittleEndian<uint64_t>, uint64_t>;
 }
-
-#endif

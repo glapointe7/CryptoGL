@@ -1,11 +1,9 @@
 /*
  * Source : http://csrc.nist.gov
  */
-#ifndef SHA2_HPP
-#define SHA2_HPP
+#pragma once
 
 #include "MerkleDamgardFunction.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -173,5 +171,3 @@ namespace CryptoGL
         SHA512_256() : SHA512_t(32, {0x32, 0x35, 0x36}) { } // code = "256"
     };
 }
-
-#endif

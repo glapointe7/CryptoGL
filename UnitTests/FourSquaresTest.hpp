@@ -1,6 +1,4 @@
-
-#ifndef FOURSQUARESTEST_HPP
-#define	FOURSQUARESTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/FourSquares.hpp"
@@ -37,5 +35,3 @@ namespace UnitTests
       compare(clear_text, P->decode("NIHVSMCKCKNJNLGQNVARXJKMHIFQHUQNIDNLJHANGKLKSBEMTEAMAAARNYPHOEHZSEERAKCCSR"));
     }
 }
-
-#endif

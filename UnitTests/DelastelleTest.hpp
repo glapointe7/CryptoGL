@@ -1,5 +1,4 @@
-#ifndef DELASTELLETEST_HPP
-#define DELASTELLETEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Delastelle.hpp"
@@ -36,5 +35,3 @@ namespace UnitTests
        compare(clear_text, D->decode("OLSNLKALLLOEJJISUTILVQIEZAOABXOPRCPAIQSNMMELRIMELUBAEBCSULOHETOOLCPPBCJSUTQ"));
     }
 }
-
-#endif

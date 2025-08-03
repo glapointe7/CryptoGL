@@ -1,11 +1,9 @@
 /*
  * Source : http://www.larc.usp.br/~pbarreto/WhirlpoolPage.html
  */
-#ifndef WHIRLPOOL_HPP
-#define WHIRLPOOL_HPP
+#pragma once
 
 #include "MerkleDamgardFunction.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -567,5 +565,3 @@ namespace CryptoGL
             }};
     };
 }
-
-#endif

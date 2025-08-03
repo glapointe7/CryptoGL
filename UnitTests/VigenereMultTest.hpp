@@ -1,6 +1,4 @@
-
-#ifndef VIGENEREMULTTEST_HPP
-#define	VIGENEREMULTTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Vigenere.hpp"
@@ -40,5 +38,3 @@ namespace UnitTests
       compare(clear_text, V->decode(cipher_text));
     }
 }
-
-#endif

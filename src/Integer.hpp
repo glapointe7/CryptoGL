@@ -1,5 +1,4 @@
-#ifndef INTEGER_HPP
-#define INTEGER_HPP
+#pragma once
 
 #include "String.hpp"
 #include <algorithm>
@@ -123,5 +122,3 @@ namespace CryptoGL
     using uint32 = Integer<uint32_t>;
     using uint64 = Integer<uint64_t>;
 }
-
-#endif

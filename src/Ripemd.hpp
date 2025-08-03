@@ -1,11 +1,9 @@
 /*
  * Source : http://www.esat.kuleuven.ac.be/~bosselae/ripemd160.html
  */
-#ifndef RIPEMD_HPP
-#define RIPEMD_HPP
+#pragma once
 
 #include "MerkleDamgardFunction.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -133,5 +131,3 @@ namespace CryptoGL
         void compress(UInt32Vector &state) override;
     };
 }
-
-#endif

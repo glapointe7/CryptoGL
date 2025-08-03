@@ -1,11 +1,9 @@
 /*
  * Source : http://keccak.noekeon.org/Keccak-implementation-3.2.pdf
  */
-#ifndef KECCAK_HPP
-#define KECCAK_HPP
+#pragma once
 
 #include "SpongeFunction.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -64,5 +62,3 @@ namespace CryptoGL
         }};
     };
 }
-
-#endif

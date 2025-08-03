@@ -1,11 +1,9 @@
 /*
  * Source : http://paper.ijcsns.org/07_book/201105/20110502.pdf
  */
-#ifndef HELLMANMERKLEKNAPSACK_HPP
-#define	HELLMANMERKLEKNAPSACK_HPP
+#pragma once
 
 #include "AsymmetricCipher.hpp"
-
 #include "exceptions/BadKey.hpp"
 #include "exceptions/BadKeyLength.hpp"
 
@@ -41,5 +39,3 @@ namespace CryptoGL
         BigIntVector public_key;
     };
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef RSA_HPP
-#define RSA_HPP
+#pragma once
 
 #include "AsymmetricCipher.hpp"
 
@@ -17,5 +16,3 @@ namespace CryptoGL
         BigInteger n, e, d;
     };
 }
-
-#endif

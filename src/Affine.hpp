@@ -1,6 +1,5 @@
 
-#ifndef AFFINE_HPP
-#define AFFINE_HPP
+#pragma once
 
 #include "StringCipher.hpp"
 
@@ -29,5 +28,3 @@ namespace CryptoGL
         int32_t b;
     };
 }
-
-#endif

@@ -515,24 +515,24 @@ void Serpent::generateSubkeys()
     // Step 1: Load padded user key into w[-8]..w[-1] (little endian)
     UInt32Vector W = padKey();
     W.reserve(140);
-    std::cout << "PADDED KEY" << std::endl;
+    /*std::cout << "PADDED KEY" << std::endl;
     for (uint8_t i = 0; i < 8; ++i)
     {
         //W.push_back(LittleEndian32::toInteger(key.range(4*i, 4*i + 4)));
         printToConsole(W[i]);
     }
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl << std::endl;*/
     
     // Step 2: Expand key to 132 32-bit words (w[0]..w[131])
     constexpr uint32_t PHI = 0x9E3779B9;
     for (uint8_t i = 8; i < 140; ++i)
     {
         W.push_back(uint32::rotateLeft(W[i-8] ^ W[i-5] ^ W[i-3] ^ W[i-1] ^ PHI ^ (i-8), 11));
-        std::cout << "W[" << std::to_string(i-8) << "] = ";
+        /*std::cout << "W[" << std::to_string(i-8) << "] = ";
         printToConsole(W[i]);      
-        std::cout << std::endl;
+        std::cout << std::endl;*/
     }
-    std::cout << std::endl;
+    //std::cout << std::endl;
 
     // Step 3: Generate 33 128-bit subkeys
     subkeys.reserve(132);
@@ -540,15 +540,15 @@ void Serpent::generateSubkeys()
     { 
         const uint32_t j = 4 * i;
         const UInt32Vector prekeys = S[(rounds + 3-i) % 8]({W[j+8], W[j+9], W[j+10], W[j+11]});
-        std::cout << "subkeys[" << std::to_string(i) << "] = ";
+        //std::cout << "subkeys[" << std::to_string(i) << "] = ";
         for (uint8_t n = 0; n < 4; ++n)
         {
             subkeys[j + n] = prekeys[n]; 
-            printToConsole(prekeys[n]);
+            //printToConsole(prekeys[n]);
         }
-        std::cout << std::endl;
+        //std::cout << std::endl;
     }
-    std::cout << std::endl;
+    //std::cout << std::endl;
 }
 
 // TO DO : With all 0s 256-bit key and 0s 128-bit plaintext, this still doesn't give the ciphertext from NESSIE.
@@ -558,61 +558,60 @@ void Serpent::processEncodingCurrentBlock()
     // Implements Serpent block encryption (bitslice, 32 rounds)
     // current_block: 128-bit input block in big-endian format.
     // subkeys: 33*4 words in little-endian format
-    std::cout << "PLAINTEXT LOADING" << std::endl;
+    /*std::cout << "PLAINTEXT LOADING" << std::endl;
     for (uint8_t i = 0; i < 4; ++i)
     {
         printToConsole(current_block[i]);
     }
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl << std::endl;*/
 
     for (uint8_t round = 0; round < rounds - 1; ++round)
     {
-        std::cout << "ROUND " << std::to_string(round) << std::endl;
-        std::cout << "Key Mixing - Block = ";
+        //std::cout << "ROUND " << std::to_string(round) << std::endl;
+        //std::cout << "Key Mixing - Block = ";
         applyKeyMixing(round);
-        std::cout << std::endl;
+        //std::cout << std::endl;
 
-        std::cout << "S[" << std::to_string(round % 8) << "] - Block = ";
+        //std::cout << "S[" << std::to_string(round % 8) << "] - Block = ";
         current_block = S[round % 8](current_block);
-        for (uint8_t i = 0; i < 4; ++i)
+        /*for (uint8_t i = 0; i < 4; ++i)
         {
             printToConsole(current_block[i]);
         }
         std::cout << std::endl;
 
-        std::cout << "LT - Block = ";
-        //current_block = linearTransform(current_block);
+        std::cout << "LT - Block = ";*/
         linearTransform();
-        for (uint8_t i = 0; i < 4; ++i)
+        /*for (uint8_t i = 0; i < 4; ++i)
         {
             printToConsole(current_block[i]);
         }
-        std::cout << std::endl << std::endl;
+        std::cout << std::endl << std::endl;*/
     }
 
     // Round 31
-    std::cout << "ROUND 31" << std::endl;
-    std::cout << "Key Mixing - Block = ";
+    //std::cout << "ROUND 31" << std::endl;
+    //std::cout << "Key Mixing - Block = ";
     applyKeyMixing(rounds - 1);
-    std::cout << std::endl;
+    //std::cout << std::endl;
 
-    std::cout << "S[7] - Block = ";
+    //std::cout << "S[7] - Block = ";
     current_block = S[7](current_block);
-    for (uint8_t i = 0; i < 4; ++i)
+    /*for (uint8_t i = 0; i < 4; ++i)
     {
         printToConsole(current_block[i]);
     }
     std::cout << std::endl;
 
-    std::cout << "Key Mixing - Block = ";
+    std::cout << "Key Mixing - Block = ";*/
     applyKeyMixing(rounds);
-    std::cout << std::endl << std::endl;
+    /*std::cout << std::endl << std::endl;
  
     for (uint8_t i = 0; i < 4; ++i)
     {
         printToConsole(Integer<uint32_t>::bytesSwap(current_block[i]));
     }
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl << std::endl;*/
 }
 
 void Serpent::applyKeyMixing(const uint8_t round)
@@ -620,7 +619,7 @@ void Serpent::applyKeyMixing(const uint8_t round)
     for (uint8_t i = 0; i < 4; ++i)
     {
         current_block[i] ^= subkeys[4*round + i];
-        printToConsole(current_block[i]);
+        //printToConsole(current_block[i]);
     }
 }
 

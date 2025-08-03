@@ -1,5 +1,4 @@
-#ifndef TRANSPOSITIONROWSTEST_HPP
-#define TRANSPOSITIONROWSTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Transposition.hpp"
@@ -36,5 +35,3 @@ namespace UnitTests
        compare(clear_text, TR->decode("LATILNUSTLRIPAAINUUOECTQRALPIASNTGMARMAONORENIOITEBEEJOTUUEORBLSGDDIEOSTXSXXXXXT"));
     }
 }
-
-#endif

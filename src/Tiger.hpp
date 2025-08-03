@@ -1,11 +1,9 @@
 /*
  * Source : http://www.cs.technion.ac.il/~biham/Reports/Tiger/
  */
-#ifndef TIGER_HPP
-#define TIGER_HPP
+#pragma once
 
 #include "MerkleDamgardFunction.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -579,5 +577,3 @@ namespace CryptoGL
         }};
     };
 }
-
-#endif

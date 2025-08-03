@@ -1,6 +1,4 @@
-
-#ifndef WOLSELEY_HPP
-#define WOLSELEY_HPP
+#pragma once
 
 #include "StringCipherWithStringKey.hpp"
 
@@ -15,5 +13,3 @@ namespace CryptoGL
         ClassicalType decode(const ClassicalType &cipher_text) override;
     };
 }
-
-#endif

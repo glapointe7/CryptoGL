@@ -1,6 +1,4 @@
-
-#ifndef FLEISSNER_HPP
-#define FLEISSNER_HPP
+#pragma once
 
 #include "StringCipher.hpp"
 
@@ -34,5 +32,3 @@ namespace CryptoGL
         Coordinates key;
     };
 }
-
-#endif

@@ -1,11 +1,9 @@
 /*
  * Source : http://tools.ietf.org/html/rfc4503#appendix-A.1
  */
-#ifndef RABBIT_HPP
-#define RABBIT_HPP
+#pragma once
 
 #include "SynchronousStreamCipher.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -47,5 +45,3 @@ namespace CryptoGL
         }};
     };
 }
-
-#endif

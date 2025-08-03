@@ -1,9 +1,6 @@
-
-#ifndef MORSE_HPP
-#define MORSE_HPP
+#pragma once
 
 #include "StringCipher.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -20,5 +17,3 @@ namespace CryptoGL
         static const std::array<ClassicalType, 36> morse;
     };
 }
-
-#endif

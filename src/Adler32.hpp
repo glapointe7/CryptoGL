@@ -1,8 +1,7 @@
 /*
  * Source : tools.ietf.org/html/rfc1950
  */
-#ifndef ADLER32_HPP
-#define ADLER32_HPP
+#pragma once
 
 #include "Checksum.hpp"
 
@@ -21,5 +20,3 @@ namespace CryptoGL
         static constexpr uint16_t mod_prime = 65521;
     };
 }
-
-#endif

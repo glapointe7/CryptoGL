@@ -1,6 +1,4 @@
-
-#ifndef CIPHERGRID_HPP
-#define CIPHERGRID_HPP
+#pragma once
 
 #include "Types.hpp"
 
@@ -62,5 +60,3 @@ namespace CryptoGL
         Grid grid;
     };
 }
-
-#endif

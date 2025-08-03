@@ -1,6 +1,4 @@
-
-#ifndef TRIPLEDESTEST_HPP
-#define TRIPLEDESTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/TripleDES.hpp"
@@ -42,5 +40,3 @@ namespace UnitTests
        compare(clear_text, D->decode(message.hexToBytes()).toString());
     }
 }
-
-#endif

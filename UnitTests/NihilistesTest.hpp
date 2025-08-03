@@ -1,6 +1,4 @@
-
-#ifndef NIHILISTESTEST_HPP
-#define	NIHILISTESTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Nihilistes.hpp"
@@ -37,5 +35,3 @@ namespace UnitTests
       compare(clear_text, P->decode("36435889755789754673876942"));
     }
 }
-
-#endif

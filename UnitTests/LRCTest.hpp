@@ -1,6 +1,4 @@
-
-#ifndef LRCTEST_HPP
-#define LRCTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/LRC.hpp"
@@ -30,5 +28,3 @@ namespace UnitTests
        compare(static_cast<uint8_t>(0x27), S->encode(message));
     }
 }
-
-#endif

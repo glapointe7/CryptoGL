@@ -1,8 +1,7 @@
 /*
  * Source : https://131002.net/blake/blake.pdf
  */
-#ifndef BLAKE_HPP
-#define BLAKE_HPP
+#pragma once
 
 #include "HashFunction.hpp"
 
@@ -213,5 +212,3 @@ namespace CryptoGL
        BytesVector pad(BytesVector message) const override;
     };
 }
-
-#endif

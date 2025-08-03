@@ -1,11 +1,9 @@
 /*
  * Source : http://csrc.nist.gov/groups/ST/toolkit/documents/skipjack/skipjack.pdf
  */
-#ifndef SKIPJACK_HPP
-#define SKIPJACK_HPP
+#pragma once
 
 #include "Feistel.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -63,5 +61,3 @@ namespace CryptoGL
         }};
     };
 }
-
-#endif

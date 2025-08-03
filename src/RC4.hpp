@@ -1,8 +1,6 @@
-#ifndef RC4_HPP
-#define RC4_HPP
+#pragma once
 
 #include "StreamCipher.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -34,5 +32,3 @@ namespace CryptoGL
         uint64_t output_size;
     };
 }
-
-#endif

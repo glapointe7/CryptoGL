@@ -1,6 +1,4 @@
-
-#ifndef TIGERTEST_HPP
-#define TIGERTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Tiger.hpp"
@@ -114,5 +112,3 @@ namespace UnitTests
        compare(hash, T3->hmacEncode(key, {}));
     }
 }
-
-#endif

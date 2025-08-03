@@ -1,6 +1,4 @@
-
-#ifndef IDEA_HPP
-#define IDEA_HPP
+#pragma once
 
 #include "BlockCipher.hpp"
 
@@ -33,5 +31,3 @@ namespace CryptoGL
         UInt16Vector decoded_subkeys;
     };
 }
-
-#endif

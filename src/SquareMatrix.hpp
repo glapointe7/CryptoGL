@@ -1,8 +1,7 @@
 /*
  * Square matrix in M_k(Z_n).
  */
-#ifndef SQUAREMATRIX_HPP
-#define SQUAREMATRIX_HPP
+#pragma once
 
 #include "Types.hpp"
 
@@ -76,5 +75,3 @@ namespace CryptoGL
         Int32Matrix M;
     };
 }
-
-#endif

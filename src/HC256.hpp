@@ -1,8 +1,7 @@
 /*
  * Source : http://www.ecrypt.eu.org/stream/ciphers/hc256/hc256.pdf
  */
-#ifndef HC256_HPP
-#define HC256_HPP
+#pragma once
 
 #include "SynchronousStreamCipher.hpp"
 
@@ -44,5 +43,3 @@ namespace CryptoGL
         UInt32Vector P, Q;
     };
 }
-
-#endif

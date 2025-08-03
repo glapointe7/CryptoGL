@@ -1,6 +1,4 @@
-
-#ifndef SKIPJACKTEST_HPP
-#define SKIPJACKTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Skipjack.hpp"
@@ -55,5 +53,3 @@ namespace UnitTests
        compare(clear_text, B->decode(message.hexToBytes()));
     }
 }
-
-#endif

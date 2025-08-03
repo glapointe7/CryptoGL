@@ -1,6 +1,4 @@
-
-#ifndef CAST256TEST_HPP
-#define CAST256TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/CAST256.hpp"
@@ -62,5 +60,3 @@ namespace UnitTests
        compare("00000000000000000000000000000000", C256->decode(code.hexToBytes()));
     }
 }
-
-#endif

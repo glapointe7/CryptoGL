@@ -1,5 +1,4 @@
-#ifndef DESTEST_HPP
-#define DESTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/DES.hpp"
@@ -37,5 +36,3 @@ namespace UnitTests
        compare(clear_text, D->decode(message.hexToBytes()));
     }
 }
-
-#endif

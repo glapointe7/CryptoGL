@@ -1,5 +1,4 @@
-#ifndef BEAUFORTTEST_HPP
-#define BEAUFORTTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Vigenere.hpp"
@@ -53,5 +52,3 @@ namespace UnitTests
       compare(clear_text, B->decode("NvGPOIDGDGKvMvDOLPzOPxJIIvDNGvKMJBMvHHvODJIJMDzIOzzJwEzONPMGzwJPOyzNyJDBON"));*/
     }
 }
-
-#endif

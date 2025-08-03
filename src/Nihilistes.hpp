@@ -1,6 +1,4 @@
-
-#ifndef NIHILISTES_HPP
-#define NIHILISTES_HPP
+#pragma once
 
 #include "SquareCipher.hpp"
 
@@ -20,5 +18,3 @@ namespace CryptoGL
         KeyType second_key;
     };
 }
-
-#endif

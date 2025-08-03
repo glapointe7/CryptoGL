@@ -1,6 +1,4 @@
-
-#ifndef KECCAKTEST_HPP
-#define KECCAKTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Keccak.hpp"
@@ -107,5 +105,3 @@ namespace UnitTests
        compare(hash, V->encode(cipher));
     }
 }
-
-#endif

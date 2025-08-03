@@ -1,9 +1,6 @@
-
-#ifndef TRANSPOSITION_HPP
-#define TRANSPOSITION_HPP
+#pragma once
 
 #include "StringCipherWithPermutationKey.hpp"
-
 #include <algorithm>
 #include <memory>
 
@@ -148,5 +145,3 @@ namespace CryptoGL
         }
     };
 }
-
-#endif

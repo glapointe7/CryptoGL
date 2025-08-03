@@ -1,5 +1,4 @@
-#ifndef UNSORTALPHATEST_HPP
-#define UNSORTALPHATEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/UnsortAlpha.hpp"
@@ -58,5 +57,3 @@ namespace UnitTests
        compare(clear_text, UA->decode("TFFYUQIUNWINRUNFVOJFRIUNTWTUFDIOVNORWVYIDVTFRIUN"));
     }
 }
-
-#endif

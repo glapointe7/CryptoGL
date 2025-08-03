@@ -1,9 +1,6 @@
-
-#ifndef TESTCONTAINER_HPP
-#define	TESTCONTAINER_HPP
+#pragma once
 
 #include "Test.hpp"
-
 #include <chrono>
 
 namespace UnitTests
@@ -66,5 +63,3 @@ namespace UnitTests
     uint64_t TestContainer::total_passed_tests = 0;
     double TestContainer::total_executed_time = 0.0;
 }
-
-#endif

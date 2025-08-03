@@ -1,9 +1,6 @@
-
-#ifndef UNSORTALPHA_HPP
-#define UNSORTALPHA_HPP
+#pragma once
 
 #include "StringCipherWithStringKey.hpp"
-
 #include <functional>
 
 namespace CryptoGL
@@ -41,5 +38,3 @@ namespace CryptoGL
         ClassicalType process(const ClassicalType &text, const GetCharFunction &getNextChar);
     };
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef SHA1TEST_HPP
-#define SHA1TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/SHA1.hpp"
@@ -42,5 +41,3 @@ namespace UnitTests
                clear_text.toBytes()));
     }
 }
-
-#endif

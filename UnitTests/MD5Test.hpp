@@ -1,8 +1,7 @@
 /*
  * Tests from (http://tools.ietf.org/html/rfc1321)
  */
-#ifndef MD5TEST_HPP
-#define MD5TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/MessageDigest.hpp"
@@ -55,5 +54,3 @@ namespace UnitTests
        compare(hash, S->hmacEncode({}, {}));
     }
 }
-
-#endif

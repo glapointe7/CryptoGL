@@ -1,11 +1,9 @@
 /*
  * Source : http://www.ipa.go.jp/security/rfc/RFC2994EN.html
  */
-#ifndef MYSTY1_HPP
-#define MYSTY1_HPP
+#pragma once
 
 #include "Feistel.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -89,5 +87,3 @@ namespace CryptoGL
         }};
     };
 }
-
-#endif

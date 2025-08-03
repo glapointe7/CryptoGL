@@ -1,6 +1,4 @@
-
-#ifndef LRC_HPP
-#define LRC_HPP
+#pragma once
 
 #include "Checksum.hpp"
 
@@ -14,5 +12,3 @@ namespace CryptoGL
         uint8_t encode(const BytesVector &input) override;
     };
 }
-
-#endif

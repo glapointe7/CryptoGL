@@ -1,10 +1,7 @@
-#ifndef VIGENERE_HPP
-#define VIGENERE_HPP
+#pragma once
 
 #include "StringCipherWithStringKey.hpp"
-
 #include <functional>
-
 #include "MathematicalTools.hpp"
 
 namespace CryptoGL
@@ -212,5 +209,3 @@ namespace CryptoGL
         }
     };
 }
-
-#endif

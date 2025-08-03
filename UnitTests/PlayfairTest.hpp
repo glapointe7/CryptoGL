@@ -1,5 +1,4 @@
-#ifndef PLAYFAIRTEST_HPP
-#define PLAYFAIRTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Playfair.hpp"
@@ -36,5 +35,3 @@ namespace UnitTests
       compare(clear_text, P->decode("EBFZETNKNKOBODNEMYSEYGREEDNIHDQMMAODPUOGENREPMNSTESVAVJPSETXZRSAMVNGSIARTCEI"));
     }
 }
-
-#endif

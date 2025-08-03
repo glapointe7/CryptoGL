@@ -1,6 +1,4 @@
-
-#ifndef VECTORMETHODSTEST_HPP
-#define	VECTORMETHODSTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Vector.hpp"
@@ -36,5 +34,3 @@ namespace UnitTests
         compare({2, 3, 4, 5, 6, 23, 1}, U->rotateLeft(8));
     }
 }
-
-#endif

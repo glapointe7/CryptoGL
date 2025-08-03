@@ -1,9 +1,6 @@
-
-#ifndef SYNCHRONOUSSTREAMCIPHER_HPP
-#define SYNCHRONOUSSTREAMCIPHER_HPP
+#pragma once
 
 #include "StreamCipher.hpp"
-
 #include "Endian.hpp"
 
 namespace CryptoGL
@@ -46,5 +43,3 @@ namespace CryptoGL
         virtual void keySetup() override = 0;
     };
 }
-
-#endif

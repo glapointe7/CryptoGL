@@ -1,6 +1,4 @@
-
-#ifndef CHAO_HPP
-#define CHAO_HPP
+#pragma once
 
 #include "StringCipher.hpp"
 
@@ -23,5 +21,3 @@ namespace CryptoGL
         void rightShiftAlphabet(const uint8_t index);
     };
 }
-
-#endif

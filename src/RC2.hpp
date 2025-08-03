@@ -1,11 +1,9 @@
 /*
  * Source : http://www.ietf.org/rfc/rfc2268.txt
  */
-#ifndef RC2_HPP
-#define RC2_HPP
+#pragma once
 
 #include "BlockCipher.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -61,5 +59,3 @@ namespace CryptoGL
         static constexpr std::array<uint8_t, 4> mixup_rotation = {{1, 2, 3, 5}};
     };
 }
-
-#endif

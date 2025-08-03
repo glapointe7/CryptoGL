@@ -1,6 +1,4 @@
-
-#ifndef DELASTELLE_HPP
-#define DELASTELLE_HPP
+#pragma once
 
 #include "SquareCipher.hpp"
 
@@ -30,5 +28,3 @@ namespace CryptoGL
         uint32_t block_len;
     };
 }
-
-#endif

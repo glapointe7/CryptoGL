@@ -1,9 +1,6 @@
-
-#ifndef FILE_HPP
-#define FILE_HPP
+#pragma once
 
 #include "Types.hpp"
-
 #include <fstream>
 
 namespace CryptoGL
@@ -67,5 +64,3 @@ namespace CryptoGL
         const String filename;
     };
 }
-
-#endif

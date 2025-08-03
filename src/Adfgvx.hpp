@@ -1,6 +1,5 @@
 
-#ifndef ADFGVX_HPP
-#define ADFGVX_HPP
+#pragma once
 
 #include "SquareCipher.hpp"
 #include "CipherGrid.hpp"
@@ -29,5 +28,3 @@ namespace CryptoGL
         static const ClassicalType code;
     };
 }
-
-#endif

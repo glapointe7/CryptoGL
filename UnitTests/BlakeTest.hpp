@@ -1,6 +1,4 @@
-
-#ifndef BLAKETEST_HPP
-#define BLAKETEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Blake.hpp"
@@ -94,5 +92,3 @@ namespace UnitTests
        compare(hash, V->encode(clear_text.hexToBytes()));
     }
 }
-
-#endif

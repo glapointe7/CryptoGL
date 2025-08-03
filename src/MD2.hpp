@@ -1,6 +1,4 @@
-
-#ifndef MD2_HPP
-#define MD2_HPP
+#pragma once
 
 #include "HashFunction.hpp"
 
@@ -41,5 +39,3 @@ namespace CryptoGL
         BytesVector checksum = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     };
 }
-
-#endif

@@ -1,8 +1,7 @@
 /*
  * All string ciphers that uses a square grid.
  */
-#ifndef SQUARECIPHER_HPP
-#define SQUARECIPHER_HPP
+#pragma once
 
 #include "StringCipherWithStringKey.hpp"
 #include "CipherGrid.hpp"
@@ -30,5 +29,3 @@ namespace CryptoGL
        virtual ClassicalType decode(const ClassicalType &) = 0;
     };
 }
-
-#endif

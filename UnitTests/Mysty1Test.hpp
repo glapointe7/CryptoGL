@@ -1,8 +1,7 @@
 /*
  * Source : http://www.ipa.go.jp/security/rfc/RFC2994EN.html
  */
-#ifndef MYSTY1TEST_HPP
-#define MYSTY1TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Mysty1.hpp"
@@ -62,5 +61,3 @@ namespace UnitTests
        compare(clear_text, CBC->decode(expected.hexToBytes()));
     }
 }
-
-#endif

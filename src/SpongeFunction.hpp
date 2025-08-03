@@ -1,8 +1,7 @@
 /*
  * Source : http://sponge.noekeon.org/CSF-0.1.pdf
  */
-#ifndef SPONGEFUNCTION_HPP
-#define SPONGEFUNCTION_HPP
+#pragma once
 
 #include "Types.hpp"
 #include "Padding.hpp"
@@ -72,5 +71,3 @@ namespace CryptoGL
         }
     };
 }
-
-#endif

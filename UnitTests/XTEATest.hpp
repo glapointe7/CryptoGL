@@ -1,6 +1,4 @@
-
-#ifndef XTEATEST_HPP
-#define XTEATEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/XTEA.hpp"
@@ -46,5 +44,3 @@ namespace UnitTests
        compare("0123456789ABCDEF", C->decode(StringTest("27E795E076B2B537").hexToBytes()));
     }
 }
-
-#endif

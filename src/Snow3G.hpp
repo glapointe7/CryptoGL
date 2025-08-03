@@ -3,11 +3,9 @@
  * **** Must use the state machine design pattern.
  * We change of state each time it's clocked.
  */
-#ifndef SNOW3G_HPP
-#define SNOW3G_HPP
+#pragma once
 
 #include "SynchronousStreamCipher.hpp"
-
 #include <array>
 
 namespace CryptoGL
@@ -94,5 +92,3 @@ namespace CryptoGL
         }};
     };
 }
-
-#endif

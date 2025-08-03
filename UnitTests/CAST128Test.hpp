@@ -1,8 +1,7 @@
 /*
  * Source : http://tools.ietf.org/html/rfc2144
  */
-#ifndef CAST128TEST_HPP
-#define CAST128TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include <functional>
@@ -91,5 +90,3 @@ namespace UnitTests
        compare("74790E102AE5AACC", compose<1000>(F)(BytesVector(code.hexToBytes())));
     }
 }
-
-#endif

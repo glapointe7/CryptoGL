@@ -1,8 +1,7 @@
 /*
  * Source : http://www.gsma.com/technicalprojects/wp-content/uploads/2012/04/Doc3-UEA2-UIA2-Spec-Implementors-Test-Data.pdf
  */
-#ifndef SNOW3GTEST_HPP
-#define SNOW3GTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Snow3G.hpp"
@@ -40,5 +39,3 @@ namespace UnitTests
        compare("EFF8A342F751480F", S2->generateKeystream());
     }
 }
-
-#endif

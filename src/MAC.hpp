@@ -1,8 +1,7 @@
 /*
  * Message Authentication Code.
  */
-#ifndef MAC_HPP
-#define MAC_HPP
+#pragma once
 
 #include "Types.hpp"
 #include "exceptions/BadKeyLength.hpp"
@@ -396,4 +395,3 @@ namespace CryptoGL
         BytesVector key2;
     };
 }
-#endif

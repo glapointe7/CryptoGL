@@ -1,6 +1,4 @@
-
-#ifndef TYPES_HPP
-#define TYPES_HPP
+#pragma once
 
 #include "String.hpp"
 #include "Vector.hpp"
@@ -30,5 +28,3 @@ namespace CryptoGL
 
     using IV_Vector = BytesMatrix;
 }
-
-#endif

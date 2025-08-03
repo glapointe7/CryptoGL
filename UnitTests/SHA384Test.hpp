@@ -1,6 +1,4 @@
-
-#ifndef SHA384TEST_HPP
-#define SHA384TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/SHA2.hpp"
@@ -49,5 +47,3 @@ namespace UnitTests
        compare(hash, S->hmacEncode(key, clear_text.toBytes()));
     }
 }
-
-#endif

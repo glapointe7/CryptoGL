@@ -1,6 +1,4 @@
-
-#ifndef PLAYFAIR_HPP
-#define PLAYFAIR_HPP
+#pragma once
 
 #include "SquareCipher.hpp"
 
@@ -16,5 +14,3 @@ namespace CryptoGL
         ClassicalType decode(const ClassicalType &cipher_text) override;
     };
 }
-
-#endif

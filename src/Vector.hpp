@@ -1,8 +1,7 @@
 /*
  * Add responsabilities to the original std vector.
  */
-#ifndef VECTOR_HPP
-#define VECTOR_HPP
+#pragma once
 
 #include "Types.hpp"
 #include "Integer.hpp"
@@ -318,5 +317,3 @@ namespace CryptoGL
         };
     };
 }
-
-#endif

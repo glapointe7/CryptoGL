@@ -1,5 +1,4 @@
-#ifndef COLLONTEST_HPP
-#define COLLONTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Collon.hpp"
@@ -38,5 +37,3 @@ namespace UnitTests
               "MMMGMXZVUZGMMGTVUUVUTMTMMYVZVZTTTTTYVZUVTMGFTVVXXVTTUMFUXUZZTGMUTVXVUUGTTGMZVXZVTGTTYUUX"));
     }
 }
-
-#endif

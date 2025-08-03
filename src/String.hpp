@@ -1,5 +1,4 @@
-#ifndef STRING_HPP
-#define STRING_HPP
+#pragma once
 
 #include <string>
 #include <vector>
@@ -94,5 +93,3 @@ namespace CryptoGL
         void rotateRight(const uint64_t &to_rotate);
     };
 }
-
-#endif

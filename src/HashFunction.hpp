@@ -1,11 +1,9 @@
 /*
  * HMAC source : http://tools.ietf.org/html/rfc2104
  */
-#ifndef HASHFUNCTION_HPP
-#define HASHFUNCTION_HPP
+#pragma once
 
 #include "Types.hpp"
-
 #include "Endian.hpp"
 #include "Padding.hpp"
 
@@ -137,5 +135,3 @@ namespace CryptoGL
         DataTypeVector IV;
     };
 }
-
-#endif

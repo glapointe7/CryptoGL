@@ -1,6 +1,4 @@
-
-#ifndef FLEISSNERTEST_HPP
-#define	FLEISSNERTEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Fleissner.hpp"
@@ -43,5 +41,3 @@ namespace UnitTests
        compare(clear_text, F->decode("TJEEOCCUCRHENUITNAEFNCFXTATAERCAHEEV"));
     }
 }
-
-#endif

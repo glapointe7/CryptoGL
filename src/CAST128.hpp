@@ -1,8 +1,7 @@
 /*
  * Source : http://tools.ietf.org/html/rfc2144
  */
-#ifndef CAST128_HPP
-#define CAST128_HPP
+#pragma once
 
 #include "Feistel.hpp"
 
@@ -419,5 +418,3 @@ namespace CryptoGL
         }};
     };
 }
-
-#endif

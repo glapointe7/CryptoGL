@@ -1,8 +1,7 @@
 /*
  * Source : http://homes.esat.kuleuven.be/~bosselae/ripemd160/pdf/AB-9601/
  */
-#ifndef RIPEMD320TEST_HPP
-#define RIPEMD320TEST_HPP
+#pragma once
 
 #include "Test.hpp"
 #include "../src/Ripemd.hpp"
@@ -40,5 +39,3 @@ namespace UnitTests
        compare(hash, S->encode(BytesVector()));
     }
 }
-
-#endif
