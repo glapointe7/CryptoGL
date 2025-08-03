@@ -28,5 +28,7 @@
 
 # Folders #
 ###########
-Build/
+build/
+build_test/
 cryptogl.git/
+.vscode/
