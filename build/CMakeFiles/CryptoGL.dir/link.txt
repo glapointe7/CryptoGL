@@ -1,1 +1,0 @@
-/usr/bin/g++-11 -g CMakeFiles/CryptoGL.dir/src/main.cpp.o -o CryptoGL  src/libcryptoGL.a src/big_integers/libbig_integers.a 

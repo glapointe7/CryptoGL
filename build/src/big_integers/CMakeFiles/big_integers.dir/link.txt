@@ -1,2 +1,0 @@
-/usr/bin/ar qc libbig_integers.a CMakeFiles/big_integers.dir/BigUnsigned.cc.o CMakeFiles/big_integers.dir/BigInteger.cc.o CMakeFiles/big_integers.dir/BigIntegerAlgorithms.cc.o CMakeFiles/big_integers.dir/BigUnsignedInABase.cc.o CMakeFiles/big_integers.dir/BigIntegerUtils.cc.o
-/usr/bin/ranlib libbig_integers.a
