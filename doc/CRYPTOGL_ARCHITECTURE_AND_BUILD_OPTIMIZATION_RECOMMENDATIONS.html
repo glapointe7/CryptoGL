@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoGL Architecture and Build Optimization Recommendations</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 25px;
+        }
+        .before-after {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .before, .after {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .before {
+            background-color: #ffe6e6;
+            border: 2px solid #e74c3c;
+        }
+        .after {
+            background-color: #e6ffe6;
+            border: 2px solid #27ae60;
+        }
+        .folder-tree {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        .pros, .cons {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .pros {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+        .cons {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+                 .code-block {
+             background-color: #2d3748;
+             color: #e2e8f0;
+             padding: 20px;
+             border-radius: 8px;
+             font-family: 'Courier New', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+             font-size: 14px;
+             overflow-x: auto;
+             margin: 15px 0;
+             white-space: pre-wrap;
+             line-height: 1.4;
+             word-wrap: break-word;
+             word-break: break-all;
+         }
+        .highlight {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .warning {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 CryptoGL Architecture and Build Optimization Recommendations</h1>
+        
+        <div class="info">
+            <strong>Document Purpose:</strong> This document provides comprehensive recommendations for optimizing the CryptoGL cryptography library's folder structure and build system for maximum security, performance, and maintainability.
+        </div>
+
+        <h2>📁 1. Project Folder Structure Recommendations</h2>
+
+        <h3>1.1 Current Structure Analysis</h3>
+        <p>Your current project structure has a good foundation but can be significantly improved for better organization, security, and maintainability.</p>
+
+        <div class="before-after">
+            <div class="before">
+                <h4>🔄 Current Structure (Issues)</h4>
+                <div class="folder-tree">CryptoGL/
+├── build_test/
+├── CMakeLists.txt
+├── doc/
+├── License.txt
+├── README.md
+├── src/
+│   ├── *.cpp (50+ files mixed)
+│   ├── *.hpp (50+ files mixed)
+│   ├── big_integers/
+│   ├── core/
+│   │   ├── exceptions/
+│   │   ├── types/
+│   │   └── Utils/
+│   ├── algorithms/ (empty)
+│   └── CMakeLists.txt
+├── UnitTests/
+└── UML/</div>
+            </div>
+            <div class="after">
+                <h4>✅ Recommended Structure</h4>
+                <div class="folder-tree">CryptoGL/
+├── CMakeLists.txt
+├── README.md
+├── LICENSE
+├── docs/
+│   ├── api/
+│   ├── guides/
+│   └── specifications/
+├── include/
+│   └── cryptogl/
+│       ├── core/
+│       ├── algorithms/
+│       ├── utils/
+│       └── exceptions/
+├── src/
+│   ├── core/
+│   │   ├── types/
+│   │   ├── utils/
+│   │   └── exceptions/
+│   ├── algorithms/
+│   │   ├── symmetric/
+│   │   ├── asymmetric/
+│   │   ├── hash/
+│   │   ├── stream/
+│   │   └── block/
+│   ├── utils/
+│   │   ├── endian/
+│   │   ├── mathematical/
+│   │   └── security/
+│   └── big_integers/
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── performance/
+├── examples/
+├── benchmarks/
+├── scripts/
+├── third_party/
+└── build/</div>
+            </div>
+        </div>
+
+        <div class="pros-cons">
+            <div class="pros">
+                <h4>✅ Pros of Current Structure</h4>
+                <ul>
+                    <li>Simple and straightforward</li>
+                    <li>All source files easily accessible</li>
+                    <li>Basic separation with core/ directory</li>
+                    <li>Unit tests organized separately</li>
+                </ul>
+            </div>
+            <div class="cons">
+                <h4>❌ Cons of Current Structure</h4>
+                <ul>
+                    <li>Header files mixed with implementation</li>
+                    <li>No clear API separation</li>
+                    <li>Algorithms not categorized by type</li>
+                    <li>Missing proper include structure</li>
+                    <li>No examples or benchmarks</li>
+                    <li>Security-sensitive files exposed</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>1.2 Detailed Recommended Structure</h3>
+        
+        <div class="folder-tree">CryptoGL/
+├── CMakeLists.txt                    # Main build configuration
+├── README.md                         # Project overview
+├── LICENSE                           # License file
+├── docs/                             # Documentation
+│   ├── api/                          # API documentation
+│   │   ├── core.md
+│   │   ├── algorithms.md
+│   │   └── utils.md
+│   ├── guides/                       # User guides
+│   │   ├── getting_started.md
+│   │   ├── security_best_practices.md
+│   │   └── performance_tuning.md
+│   └── specifications/               # Technical specifications
+│       ├── algorithms/
+│       └── protocols/
+├── include/                          # Public headers only
+│   └── cryptogl/                     # Namespace-based organization
+│       ├── core/                     # Core types and interfaces
+│       │   ├── types.hpp
+│       │   ├── cipher.hpp
+│       │   ├── hash_function.hpp
+│       │   └── mac.hpp
+│       ├── algorithms/               # Algorithm implementations
+│       │   ├── symmetric/
+│       │   │   ├── aes.hpp
+│       │   │   ├── des.hpp
+│       │   │   └── serpent.hpp
+│       │   ├── asymmetric/
+│       │   │   ├── rsa.hpp
+│       │   │   └── ecc.hpp
+│       │   ├── hash/
+│       │   │   ├── sha.hpp
+│       │   │   └── md5.hpp
+│       │   └── stream/
+│       │       ├── rc4.hpp
+│       │       └── salsa20.hpp
+│       ├── utils/                    # Utility functions
+│       │   ├── endian.hpp
+│       │   ├── mathematical.hpp
+│       │   └── security.hpp
+│       └── exceptions/               # Exception classes
+│           ├── crypto_exception.hpp
+│           └── security_exception.hpp
+├── src/                              # Implementation files
+│   ├── core/                         # Core implementations
+│   │   ├── types/
+│   │   │   ├── integer.cpp
+│   │   │   └── string.cpp
+│   │   ├── utils/
+│   │   │   ├── endian.cpp
+│   │   │   └── mathematical.cpp
+│   │   └── exceptions/
+│   │       └── crypto_exception.cpp
+│   ├── algorithms/                   # Algorithm implementations
+│   │   ├── symmetric/
+│   │   │   ├── aes.cpp
+│   │   │   ├── des.cpp
+│   │   │   └── serpent.cpp
+│   │   ├── asymmetric/
+│   │   │   ├── rsa.cpp
+│   │   │   └── ecc.cpp
+│   │   ├── hash/
+│   │   │   ├── sha.cpp
+│   │   │   └── md5.cpp
+│   │   └── stream/
+│   │       ├── rc4.cpp
+│   │       └── salsa20.cpp
+│   ├── utils/                        # Utility implementations
+│   │   ├── endian/
+│   │   ├── mathematical/
+│   │   └── security/
+│   └── big_integers/                 # Big integer library
+│       ├── big_integer.cpp
+│       └── big_integer_algorithms.cpp
+├── tests/                            # Test suite
+│   ├── unit/                         # Unit tests
+│   │   ├── core/
+│   │   ├── algorithms/
+│   │   └── utils/
+│   ├── integration/                  # Integration tests
+│   │   ├── crypto_systems/
+│   │   └── protocols/
+│   └── performance/                  # Performance tests
+│       ├── benchmarks/
+│       └── stress_tests/
+├── examples/                         # Usage examples
+│   ├── basic_usage/
+│   ├── advanced_features/
+│   └── security_demos/
+├── benchmarks/                       # Performance benchmarks
+│   ├── algorithm_benchmarks/
+│   ├── memory_usage/
+│   └── security_analysis/
+├── scripts/                          # Build and utility scripts
+│   ├── build.sh
+│   ├── test.sh
+│   └── security_audit.sh
+├── third_party/                      # External dependencies
+│   ├── googletest/
+│   └── benchmark/
+└── build/                            # Build artifacts (gitignored)</div>
+
+        <h3>1.3 Key Benefits of Recommended Structure</h3>
+        
+        <table>
+            <tr>
+                <th>Aspect</th>
+                <th>Benefit</th>
+                <th>Security Impact</th>
+            </tr>
+            <tr>
+                <td>Header Separation</td>
+                <td>Clear API boundaries, easier versioning</td>
+                <td>Prevents accidental exposure of internal implementation</td>
+            </tr>
+            <tr>
+                <td>Algorithm Categorization</td>
+                <td>Better organization, easier maintenance</td>
+                <td>Isolates different security domains</td>
+            </tr>
+            <tr>
+                <td>Namespace Organization</td>
+                <td>Prevents naming conflicts</td>
+                <td>Reduces attack surface through better encapsulation</td>
+            </tr>
+            <tr>
+                <td>Test Organization</td>
+                <td>Comprehensive testing strategy</td>
+                <td>Ensures security through thorough testing</td>
+            </tr>
+            <tr>
+                <td>Documentation Structure</td>
+                <td>Better user experience</td>
+                <td>Reduces misuse through clear documentation</td>
+            </tr>
+        </table>
+
+        <h2>🔧 2. CMakeLists.txt Optimization Recommendations</h2>
+
+        <h3>2.1 Current CMakeLists.txt Analysis</h3>
+        
+        <div class="before-after">
+            <div class="before">
+                <h4>🔄 Current Issues</h4>
+                <ul>
+                    <li>Single monolithic CMakeLists.txt</li>
+                    <li>Hardcoded compiler paths</li>
+                    <li>Basic optimization flags</li>
+                    <li>No proper library structure</li>
+                    <li>Missing security hardening</li>
+                    <li>No cross-platform considerations</li>
+                </ul>
+            </div>
+            <div class="after">
+                <h4>✅ Recommended Improvements</h4>
+                <ul>
+                    <li>Modular CMakeLists.txt structure</li>
+                    <li>Cross-platform compiler detection</li>
+                    <li>Advanced security optimizations</li>
+                    <li>Proper library organization</li>
+                    <li>Security hardening flags</li>
+                    <li>Performance profiling support</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>2.2 Recommended CMakeLists.txt Structure</h3>
+
+                 <h4>2.2.1 Root CMakeLists.txt</h4>
+         <div class="code-block"># =============================================================================
+# ROOT CMAKELISTS.TXT - Main Project Configuration
+# =============================================================================
+# This is the entry point for the entire CryptoGL project build system.
+# It sets up the project, includes custom modules, and orchestrates the build.
+
+# Minimum CMake version required (3.20 supports modern C++20 features)
+cmake_minimum_required(VERSION 3.20)
+
+# =============================================================================
+# PROJECT CONFIGURATION
+# =============================================================================
+# Define the project with metadata for packaging and distribution
+project(CryptoGL 
+    VERSION 1.0.0                    # Semantic versioning (major.minor.patch)
+    DESCRIPTION "High-performance cryptography library"
+    HOMEPAGE_URL "https://github.com/your-repo/CryptoGL"
+    LANGUAGES CXX                    # Only C++ language (no C)
+)
+
+# =============================================================================
+# C++ STANDARD CONFIGURATION
+# =============================================================================
+# Enforce C++20 standard for modern features like concepts, ranges, etc.
+set(CMAKE_CXX_STANDARD 20)          # Use C++20 standard
+set(CMAKE_CXX_STANDARD_REQUIRED ON) # Fail if compiler doesn't support C++20
+set(CMAKE_CXX_EXTENSIONS OFF)       # Disable compiler-specific extensions
+
+# =============================================================================
+# SECURITY CONFIGURATION
+# =============================================================================
+# Force use of modern C++ ABI to prevent compatibility issues
+# This ensures consistent behavior across different compiler versions
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=1")
+
+# =============================================================================
+# CUSTOM MODULES SETUP
+# =============================================================================
+# Add the cmake/ directory to CMake's module search path
+# This allows us to use custom .cmake files for specialized configurations
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+# Load our custom configuration modules
+include(CompilerFlags)              # Compiler-specific optimizations
+include(SecurityHardening)          # Security hardening flags
+include(PerformanceOptimization)    # Performance optimizations (SIMD, LTO, etc.)
+include(Testing)                    # Testing framework setup
+
+# =============================================================================
+# OUTPUT DIRECTORY CONFIGURATION
+# =============================================================================
+# Organize build artifacts in a clean directory structure
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)    # Executables
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)    # Shared libraries
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)    # Static libraries
+
+# =============================================================================
+# SUBDIRECTORY INCLUSION
+# =============================================================================
+# Include subdirectories that contain their own CMakeLists.txt files
+# Each subdirectory will be processed in order
+add_subdirectory(src)               # Main source code
+add_subdirectory(tests)             # Test suite
+add_subdirectory(examples)          # Usage examples
+add_subdirectory(benchmarks)        # Performance benchmarks
+
+# =============================================================================
+# INSTALLATION CONFIGURATION
+# =============================================================================
+# Set up proper installation paths for packaging and distribution
+include(GNUInstallDirs)             # Standard installation directories
+include(CMakePackageConfigHelpers)  # Package configuration helpers</div>
+
+                 <h4>2.2.2 cmake/CompilerFlags.cmake</h4>
+         <div class="code-block"># =============================================================================
+# COMPILER FLAGS CONFIGURATION
+# =============================================================================
+# This module provides compiler-specific flags and optimizations for the CryptoGL library.
+# It uses CMake's generator expressions to apply different flags based on the compiler.
+
+# Function to set compiler flags for a specific target
+# Usage: set_compiler_flags(your_target_name)
+function(set_compiler_flags target)
+    # =============================================================================
+    # C++ STANDARD ENFORCEMENT
+    # =============================================================================
+    # Ensure the target uses C++20 standard features
+    target_compile_features(${target} PRIVATE cxx_std_20)
+    
+    # =============================================================================
+    # WARNING FLAGS (Code Quality)
+    # =============================================================================
+    # Enable comprehensive warnings to catch potential issues early
+    target_compile_options(${target} PRIVATE
+        # GCC and Clang: Enable all warnings and treat them as errors
+        $<$<CXX_COMPILER_ID:GNU,Clang>:-Wall -Wextra -Wpedantic -Werror>
+        # MSVC: Enable all warnings and treat them as errors
+        $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+    )
+    
+    # =============================================================================
+    # SECURITY FLAGS (Memory Protection)
+    # =============================================================================
+    # Enable security features to prevent common attack vectors
+    target_compile_options(${target} PRIVATE
+        # GCC and Clang security flags:
+        # -fstack-protector-strong: Stack canary protection
+        # -fPIE: Position Independent Executable (ASLR support)
+        # -fPIC: Position Independent Code (for shared libraries)
+        $<$<CXX_COMPILER_ID:GNU,Clang>:-fstack-protector-strong -fPIE -fPIC>
+        
+        # MSVC security flags:
+        # /GS: Buffer security check
+        # /DYNAMICBASE: Enable ASLR
+        # /NXCOMPAT: Enable DEP (Data Execution Prevention)
+        $<$<CXX_COMPILER_ID:MSVC>:/GS /DYNAMICBASE /NXCOMPAT>
+    )
+    
+    # =============================================================================
+    # PERFORMANCE OPTIMIZATION FLAGS
+    # =============================================================================
+    # Enable aggressive optimizations for maximum performance
+    target_compile_options(${target} PRIVATE
+        # GCC and Clang performance flags:
+        # -O3: Maximum optimization level
+        # -march=native: Optimize for current CPU architecture
+        # -mtune=native: Tune for current CPU microarchitecture
+        $<$<CXX_COMPILER_ID:GNU,Clang>:-O3 -march=native -mtune=native>
+        
+        # MSVC performance flags:
+        # /O2: Maximum optimization
+        # /GL: Whole program optimization
+        # /arch:AVX2: Enable AVX2 instructions
+        $<$<CXX_COMPILER_ID:MSVC>:/O2 /GL /arch:AVX2>
+    )
+    
+    # =============================================================================
+    # CRYPTO-SPECIFIC OPTIMIZATIONS
+    # =============================================================================
+    # Special optimizations beneficial for cryptographic operations
+    target_compile_options(${target} PRIVATE
+        # GCC and Clang crypto optimizations:
+        # -fomit-frame-pointer: Save registers for better performance
+        # -funroll-loops: Unroll loops for better instruction-level parallelism
+        $<$<CXX_COMPILER_ID:GNU,Clang>:-fomit-frame-pointer -funroll-loops>
+        
+        # MSVC crypto optimizations:
+        # /Oy: Omit frame pointer
+        # /Ob2: Any suitable inline function expansion
+        $<$<CXX_COMPILER_ID:MSVC>:/Oy /Ob2>
+    )
+endfunction()</div>
+
+                 <h4>2.2.3 cmake/SecurityHardening.cmake</h4>
+         <div class="code-block"># =============================================================================
+# SECURITY HARDENING CONFIGURATION
+# =============================================================================
+# This module applies security hardening measures to protect against common
+# attack vectors like buffer overflows, memory corruption, and code injection.
+
+# Function to apply security hardening to a specific target
+# Usage: apply_security_hardening(your_target_name)
+function(apply_security_hardening target)
+    # =============================================================================
+    # MEMORY PROTECTION DEFINITIONS
+    # =============================================================================
+    # Enable runtime checks and protections at the source level
+    target_compile_definitions(${target} PRIVATE
+        _FORTIFY_SOURCE=2              # Enable buffer overflow detection
+        _GLIBCXX_ASSERTIONS            # Enable C++ standard library assertions
+    )
+    
+    # =============================================================================
+    # LINKER SECURITY FLAGS
+    # =============================================================================
+    # Apply security flags during the linking phase
+    target_link_options(${target} PRIVATE
+        # GCC and Clang linker security flags:
+        # -Wl,-z,relro: Read-only relocations (prevents GOT overwrites)
+        # -Wl,-z,now: Immediate binding (prevents lazy binding attacks)
+        # -Wl,-z,noexecstack: Non-executable stack (prevents stack-based attacks)
+        $<$<CXX_COMPILER_ID:GNU,Clang>:-Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack>
+        
+        # MSVC linker security flags:
+        # /NXCOMPAT: Non-executable memory compatibility
+        # /DYNAMICBASE: Enable ASLR (Address Space Layout Randomization)
+        # /HIGHENTROPYVA: High entropy address space layout
+        $<$<CXX_COMPILER_ID:MSVC>:/NXCOMPAT /DYNAMICBASE /HIGHENTROPYVA>
+    )
+    
+    # =============================================================================
+    # SECURITY MODE CONFIGURATION
+    # =============================================================================
+    # Disable potentially dangerous features in production builds
+    target_compile_definitions(${target} PRIVATE
+        NDEBUG                         # Disable debug features in release builds
+        CRYPTOGL_SECURE_MODE=1         # Enable secure mode for the library
+    )
+    
+    # =============================================================================
+    # RUNTIME SECURITY CHECKS
+    # =============================================================================
+    # Enable sanitizers for development builds to catch security issues
+    target_compile_options(${target} PRIVATE
+        # GCC and Clang sanitizers:
+        # -fsanitize=address: Address sanitizer (detects memory errors)
+        # -fsanitize=undefined: Undefined behavior sanitizer
+        # -fno-omit-frame-pointer: Keep frame pointers for better debugging
+        $<$<CXX_COMPILER_ID:GNU,Clang>:-fsanitize=address,undefined -fno-omit-frame-pointer>
+    )
+endfunction()
+
+# =============================================================================
+# SECURITY TESTING CONFIGURATION
+# =============================================================================
+# Option to enable security-specific tests (penetration testing, fuzzing, etc.)
+option(ENABLE_SECURITY_TESTS "Enable security-specific tests" ON)
+
+# If security tests are enabled, include the security test directory
+if(ENABLE_SECURITY_TESTS)
+    add_subdirectory(tests/security)
+endif()</div>
+
+                 <h4>2.2.4 cmake/PerformanceOptimization.cmake</h4>
+         <div class="code-block"># =============================================================================
+# PERFORMANCE OPTIMIZATION CONFIGURATION
+# =============================================================================
+# This module applies advanced performance optimizations including SIMD,
+# Link Time Optimization (LTO), and Profile-Guided Optimization (PGO).
+
+# Function to apply performance optimizations to a specific target
+# Usage: apply_performance_optimization(your_target_name)
+function(apply_performance_optimization target)
+    # =============================================================================
+    # SIMD OPTIMIZATIONS
+    # =============================================================================
+    # Enable SIMD (Single Instruction, Multiple Data) instructions for
+    # parallel processing of data, crucial for cryptographic operations
+    include(CheckCXXCompilerFlag)
+    
+    # Check for AVX2 support (256-bit vector instructions)
+    # AVX2 provides the best performance for cryptographic algorithms
+    check_cxx_compiler_flag("-mavx2" COMPILER_SUPPORTS_AVX2)
+    if(COMPILER_SUPPORTS_AVX2)
+        target_compile_options(${target} PRIVATE -mavx2)           # Enable AVX2 instructions
+        target_compile_definitions(${target} PRIVATE HAVE_AVX2=1)  # Define preprocessor macro
+        message(STATUS "AVX2 support enabled for ${target}")
+    else()
+        message(STATUS "AVX2 not supported by compiler for ${target}")
+    endif()
+    
+    # Check for SSE4.2 support (128-bit vector instructions)
+    # SSE4.2 is a fallback for older processors
+    check_cxx_compiler_flag("-msse4.2" COMPILER_SUPPORTS_SSE42)
+    if(COMPILER_SUPPORTS_SSE42)
+        target_compile_options(${target} PRIVATE -msse4.2)           # Enable SSE4.2 instructions
+        target_compile_definitions(${target} PRIVATE HAVE_SSE4_2=1)  # Define preprocessor macro
+        message(STATUS "SSE4.2 support enabled for ${target}")
+    else()
+        message(STATUS "SSE4.2 not supported by compiler for ${target}")
+    endif()
+    
+    # =============================================================================
+    # LINK TIME OPTIMIZATION (LTO)
+    # =============================================================================
+    # LTO allows the compiler to optimize across multiple source files
+    # This can provide significant performance improvements (5-15%)
+    include(CheckIPOSupported)
+    check_ipo_supported(RESULT ipo_supported OUTPUT ipo_output)
+    if(ipo_supported)
+        set_target_properties(${target} PROPERTIES 
+            INTERPROCEDURAL_OPTIMIZATION TRUE  # Enable LTO for this target
+        )
+        message(STATUS "Link Time Optimization enabled for ${target}")
+    else()
+        message(WARNING "LTO not supported for ${target}: ${ipo_output}")
+    endif()
+    
+    # =============================================================================
+    # PROFILE-GUIDED OPTIMIZATION (PGO)
+    # =============================================================================
+    # PGO uses runtime profiling data to optimize the code for actual usage patterns
+    # This can provide 10-20% performance improvement but requires two build phases
+    option(ENABLE_PGO "Enable Profile-Guided Optimization" OFF)
+    if(ENABLE_PGO)
+        # Phase 1: Generate profiling data
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-generate")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-generate")
+        message(STATUS "Profile-Guided Optimization enabled for ${target}")
+        message(STATUS "Note: PGO requires two build phases - first with -fprofile-generate,")
+        message(STATUS "then run your application, then rebuild with -fprofile-use")
+    endif()
+endfunction()</div>
+
+                 <h4>2.2.5 src/CMakeLists.txt</h4>
+         <div class="code-block"># =============================================================================
+# SOURCE DIRECTORY CONFIGURATION
+# =============================================================================
+# This file configures the main CryptoGL library build from source files.
+# It creates the library target and applies all optimizations and security measures.
+
+# =============================================================================
+# SOURCE FILE LIST
+# =============================================================================
+# Explicitly list all source files for better build control and dependency tracking
+# This approach is preferred over GLOB for reproducible builds
+set(CRYPTOGL_SOURCES
+    # Core components
+    core/types/integer.cpp
+    core/types/string.cpp
+    core/utils/endian.cpp
+    core/utils/mathematical.cpp
+    core/exceptions/crypto_exception.cpp
+    
+    # Symmetric encryption algorithms
+    algorithms/symmetric/aes.cpp
+    algorithms/symmetric/des.cpp
+    algorithms/symmetric/serpent.cpp
+    
+    # Asymmetric encryption algorithms
+    algorithms/asymmetric/rsa.cpp
+    
+    # Hash functions
+    algorithms/hash/sha.cpp
+    algorithms/hash/md5.cpp
+    
+    # Stream ciphers
+    algorithms/stream/rc4.cpp
+    algorithms/stream/salsa20.cpp
+    
+    # Utility functions
+    utils/endian/endian_utils.cpp
+    utils/mathematical/math_utils.cpp
+    utils/security/security_utils.cpp
+    
+    # Big integer arithmetic (for RSA and other algorithms)
+    big_integers/big_integer.cpp
+    big_integers/big_integer_algorithms.cpp
+)
+
+# =============================================================================
+# LIBRARY TARGET CREATION
+# =============================================================================
+# Create the main static library target
+# Static libraries are preferred for security (no runtime library injection)
+add_library(cryptogl ${CRYPTOGL_SOURCES})
+
+# =============================================================================
+# INCLUDE DIRECTORY CONFIGURATION
+# =============================================================================
+# Configure include directories for the library
+target_include_directories(cryptogl
+    PUBLIC
+        # Public headers for users of the library
+        # BUILD_INTERFACE: Used during development
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+        # INSTALL_INTERFACE: Used when library is installed
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    PRIVATE
+        # Private headers only used internally
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+# =============================================================================
+# OPTIMIZATION APPLICATION
+# =============================================================================
+# Apply all our custom optimizations and security measures
+set_compiler_flags(cryptogl)                    # Compiler-specific optimizations
+apply_security_hardening(cryptogl)              # Security hardening measures
+apply_performance_optimization(cryptogl)        # Performance optimizations
+
+# =============================================================================
+# LIBRARY PROPERTIES
+# =============================================================================
+# Set metadata and properties for the library
+set_target_properties(cryptogl PROPERTIES
+    VERSION ${PROJECT_VERSION}                  # Full version (e.g., 1.0.0)
+    SOVERSION ${PROJECT_VERSION_MAJOR}          # Shared object version (e.g., 1)
+    PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/../include/cryptogl/*.hpp"  # Headers to install
+)
+
+# =============================================================================
+# COMPONENT SUBDIRECTORIES
+# =============================================================================
+# Include subdirectories for modular component builds
+# Each subdirectory contains its own CMakeLists.txt for component-specific configuration
+add_subdirectory(core)                          # Core types and utilities
+add_subdirectory(algorithms)                    # Cryptographic algorithms
+add_subdirectory(utils)                         # Utility functions
+add_subdirectory(big_integers)                  # Big integer arithmetic</div>
+
+        <h3>2.3 Key Improvements Explained</h3>
+
+        <table>
+            <tr>
+                <th>Improvement</th>
+                <th>Explanation</th>
+                <th>Security Benefit</th>
+                <th>Performance Benefit</th>
+            </tr>
+            <tr>
+                <td>Modular Structure</td>
+                <td>Separate CMakeLists.txt for each component</td>
+                <td>Isolated security domains</td>
+                <td>Faster incremental builds</td>
+            </tr>
+            <tr>
+                <td>Security Hardening</td>
+                <td>Compiler flags for memory protection</td>
+                <td>Prevents buffer overflows, ASLR</td>
+                <td>Minimal performance impact</td>
+            </tr>
+            <tr>
+                <td>SIMD Optimizations</td>
+                <td>Automatic detection and use of CPU features</td>
+                <td>Faster cryptographic operations</td>
+                <td>2-10x performance improvement</td>
+            </tr>
+            <tr>
+                <td>Link Time Optimization</td>
+                <td>Cross-module optimization</td>
+                <td>Better code elimination</td>
+                <td>5-15% performance improvement</td>
+            </tr>
+            <tr>
+                <td>Profile-Guided Optimization</td>
+                <td>Runtime-based optimization</td>
+                <td>Optimized for real usage patterns</td>
+                <td>10-20% performance improvement</td>
+            </tr>
+        </table>
+
+                 <h3>2.4 Build Configuration Options</h3>
+
+         <div class="code-block"># =============================================================================
+# BUILD CONFIGURATION OPTIONS
+# =============================================================================
+# This section defines build-time options that can be controlled by users
+# via command line or CMake GUI. These options allow customization of the build.
+
+# =============================================================================
+# LIBRARY TYPE CONFIGURATION
+# =============================================================================
+# Control whether to build static or shared libraries
+# Static libraries are preferred for security (no runtime injection possible)
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+
+# =============================================================================
+# COMPONENT BUILD OPTIONS
+# =============================================================================
+# Control which components to build
+option(BUILD_TESTS "Build test suite" ON)           # Unit and integration tests
+option(BUILD_EXAMPLES "Build examples" ON)          # Usage examples
+option(BUILD_BENCHMARKS "Build benchmarks" ON)      # Performance benchmarks
+
+# =============================================================================
+# DEVELOPMENT AND ANALYSIS OPTIONS
+# =============================================================================
+# Security and quality assurance options
+option(ENABLE_SECURITY_AUDIT "Enable security audit tools" ON)  # Security scanning
+option(ENABLE_COVERAGE "Enable code coverage" OFF)              # Code coverage analysis
+option(ENABLE_SANITIZERS "Enable sanitizers" ON)                # Runtime error detection
+
+# =============================================================================
+# BUILD TYPE CONFIGURATIONS
+# =============================================================================
+# Different configurations for different build types (Debug, Release, etc.)
+
+# Debug build configuration
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_definitions(cryptogl PRIVATE DEBUG=1)        # Enable debug features
+    target_compile_options(cryptogl PRIVATE -g -O0)             # Debug symbols, no optimization
+    message(STATUS "Debug build configuration applied")
+endif()
+
+# Release build configuration
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    target_compile_definitions(cryptogl PRIVATE NDEBUG=1)       # Disable debug features
+    target_compile_options(cryptogl PRIVATE -O3 -DNDEBUG)       # Maximum optimization
+    message(STATUS "Release build configuration applied")
+endif()
+
+# =============================================================================
+# USAGE EXAMPLES
+# =============================================================================
+# To use these options, run cmake with:
+# cmake -DBUILD_TESTS=ON -DENABLE_SECURITY_AUDIT=ON ..
+# 
+# Or use the CMake GUI to toggle options interactively</div>
+
+        <h2>🔒 3. Security Considerations</h2>
+
+        <div class="warning">
+            <strong>Critical Security Notes:</strong>
+            <ul>
+                <li>Never hardcode cryptographic keys in source code</li>
+                <li>Use secure random number generators for all cryptographic operations</li>
+                <li>Implement proper memory wiping for sensitive data</li>
+                <li>Enable all security hardening flags in production builds</li>
+                <li>Regular security audits of the codebase are essential</li>
+            </ul>
+        </div>
+
+        <h3>3.1 Security Hardening Checklist</h3>
+        <ul>
+            <li>✅ Stack protection enabled</li>
+            <li>✅ Position Independent Executable (PIE)</li>
+            <li>✅ Address Space Layout Randomization (ASLR)</li>
+            <li>✅ Non-executable stack</li>
+            <li>✅ Read-only relocations</li>
+            <li>✅ Immediate binding</li>
+            <li>✅ Undefined behavior sanitizer</li>
+            <li>✅ Address sanitizer</li>
+        </ul>
+
+        <h2>📊 4. Performance Optimization Guide</h2>
+
+        <h3>4.1 Compiler Optimization Levels</h3>
+        <table>
+            <tr>
+                <th>Level</th>
+                <th>Flags</th>
+                <th>Use Case</th>
+                <th>Performance Impact</th>
+            </tr>
+            <tr>
+                <td>Debug</td>
+                <td>-O0 -g</td>
+                <td>Development, debugging</td>
+                <td>Slowest</td>
+            </tr>
+            <tr>
+                <td>Release</td>
+                <td>-O3 -DNDEBUG</td>
+                <td>Production</td>
+                <td>Fastest</td>
+            </tr>
+            <tr>
+                <td>RelWithDebInfo</td>
+                <td>-O2 -g -DNDEBUG</td>
+                <td>Production with debugging</td>
+                <td>Fast</td>
+            </tr>
+        </table>
+
+        <h3>4.2 SIMD Optimization Strategy</h3>
+        <div class="info">
+            <strong>SIMD Optimization Priority:</strong>
+            <ol>
+                <li>AVX2 (256-bit vectors) - Best performance</li>
+                <li>SSE4.2 (128-bit vectors) - Good performance</li>
+                <li>Fallback to scalar operations - Compatible</li>
+            </ol>
+        </div>
+
+        <h2>🚀 5. Implementation Roadmap</h2>
+
+        <h3>5.1 Phase 1: Structure Reorganization (Week 1-2)</h3>
+        <ol>
+            <li>Create new folder structure</li>
+            <li>Move header files to include/cryptogl/</li>
+            <li>Reorganize source files by category</li>
+            <li>Update include paths in all files</li>
+        </ol>
+
+        <h3>5.2 Phase 2: CMake Modernization (Week 3-4)</h3>
+        <ol>
+            <li>Create modular CMakeLists.txt files</li>
+            <li>Implement security hardening</li>
+            <li>Add performance optimizations</li>
+            <li>Set up proper library structure</li>
+        </ol>
+
+        <h3>5.3 Phase 3: Testing and Validation (Week 5-6)</h3>
+        <ol>
+            <li>Update test structure</li>
+            <li>Add security tests</li>
+            <li>Implement performance benchmarks</li>
+            <li>Validate all optimizations</li>
+        </ol>
+
+        <h2>📝 6. Conclusion</h2>
+
+        <p>The recommended structure and build system optimizations will provide:</p>
+        <ul>
+            <li><strong>Enhanced Security:</strong> Proper isolation, hardening, and audit capabilities</li>
+            <li><strong>Improved Performance:</strong> SIMD optimizations, LTO, and profile-guided optimization</li>
+            <li><strong>Better Maintainability:</strong> Clear organization and modular structure</li>
+            <li><strong>Professional Quality:</strong> Industry-standard practices and tools</li>
+        </ul>
+
+        <div class="highlight">
+            <strong>Next Steps:</strong>
+            <ol>
+                <li>Review and approve the recommended structure</li>
+                <li>Create a backup of your current project</li>
+                <li>Implement changes incrementally</li>
+                <li>Test thoroughly at each step</li>
+                <li>Document any deviations from recommendations</li>
+            </ol>
+        </div>
+
+        <hr>
+        <p><em>Document created for CryptoGL project optimization. Last updated: $(date)</em></p>
+    </div>
+</body>
+</html>

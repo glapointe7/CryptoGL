@@ -1,0 +1,18 @@
+#pragma once
+
+#include "../common/StringCipherWithStringKey.hpp"
+
+namespace CryptoGL
+{
+    class MonoalphabeticSubstitution : public StringCipherWithStringKey
+    {
+    public:
+        explicit MonoalphabeticSubstitution(const KeyType &key)
+        {
+            setKey(key);
+        }
+
+        ClassicalType encode(const ClassicalType &clear_text) override;
+        ClassicalType decode(const ClassicalType &cipher_text) override;
+    };
+}

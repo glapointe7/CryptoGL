@@ -1,0 +1,939 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{float}
+\usepackage{mathtools}
+\usepackage{amsthm}
+
+% Page setup
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{blue}{ChaCha20-Poly1305 AEAD Educational Guide}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Title formatting
+\titleformat{\section}{\Large\bfseries\color{blue}}{}{0em}{}
+\titleformat{\subsection}{\large\bfseries\color{darkgray}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{darkgray}}{}{0em}{}
+
+% Color definitions
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{definitionbox}{rgb}{0.9,0.9,0.9}
+\definecolor{examplebox}{rgb}{0.9,0.95,0.9}
+\definecolor{warningbox}{rgb}{1,0.95,0.8}
+\definecolor{prosbox}{rgb}{0.9,0.95,0.9}
+\definecolor{consbox}{rgb}{0.95,0.9,0.9}
+\definecolor{mathbox}{rgb}{0.95,0.95,1}
+
+% Code listing setup
+\lstset{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+% Custom boxes
+\newtcolorbox{definitionbox}{
+    colback=definitionbox,
+    colframe=red!50!black,
+    leftrule=4pt,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{examplebox}{
+    colback=examplebox,
+    colframe=green!50!black,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{warningbox}{
+    colback=warningbox,
+    colframe=orange!50!black,
+    leftrule=4pt,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{prosbox}{
+    colback=prosbox,
+    colframe=green!50!black,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{consbox}{
+    colback=consbox,
+    colframe=red!50!black,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{mathbox}{
+    colback=mathbox,
+    colframe=blue!50!black,
+    arc=0pt,
+    outer arc=0pt
+}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+
+\title{\Huge\textbf{ChaCha20-Poly1305 AEAD: A Comprehensive Educational Guide}\\[0.5cm]
+\large From Mathematical Theory to Practical Implementation}
+\author{CryptoGL Educational Series}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document provides a comprehensive introduction to ChaCha20-Poly1305, a modern authenticated encryption with associated data (AEAD) cipher. We explore the mathematical foundations of both ChaCha20 stream cipher and Poly1305 message authentication code, their combination into an AEAD construction, and provide detailed C++17 implementation examples. The guide includes step-by-step algorithms, test vectors, and practical applications for educational purposes.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introduction to Authenticated Encryption}
+
+\begin{definitionbox}
+\textbf{Authenticated Encryption with Associated Data (AEAD)}: A cryptographic primitive that provides both confidentiality (encryption) and authenticity (integrity) in a single operation, with the ability to authenticate additional data that is not encrypted.
+\end{definitionbox}
+
+AEAD schemes are essential in modern cryptography because they provide:
+\begin{itemize}
+    \item \textbf{Confidentiality}: The plaintext is encrypted and cannot be read without the key
+    \item \textbf{Authenticity}: The receiver can verify that the message came from the legitimate sender
+    \item \textbf{Integrity}: The receiver can detect if the message was modified in transit
+    \item \textbf{Associated Data}: Additional data can be authenticated without being encrypted
+\end{itemize}
+
+\subsection{Why ChaCha20-Poly1305?}
+
+\begin{prosbox}
+\textbf{Advantages of ChaCha20-Poly1305}:
+\begin{itemize}
+    \item \textbf{Security}: Based on well-understood cryptographic primitives
+    \item \textbf{Performance}: Fast software implementation, especially on mobile devices
+    \item \textbf{Simplicity}: Relatively simple to implement and verify
+    \item \textbf{Standardization}: RFC 8439 standard, widely adopted
+    \item \textbf{Quantum Resistance}: Better resistance to quantum attacks than AES
+\end{itemize}
+\end{prosbox}
+
+\section{Mathematical Foundations}
+
+\subsection{ChaCha20 Stream Cipher}
+
+ChaCha20 is a stream cipher based on the ChaCha family of ciphers designed by Daniel J. Bernstein.
+
+\begin{mathbox}
+\textbf{ChaCha20 State}: A 16-word (512-bit) state organized as:
+\[
+\begin{bmatrix}
+c_0 & c_1 & c_2 & c_3 \\
+k_0 & k_1 & k_2 & k_3 \\
+k_4 & k_5 & k_6 & k_7 \\
+t_0 & t_1 & n_0 & n_1
+\end{bmatrix}
+\]
+where:
+\begin{itemize}
+    \item $c_0, c_1, c_2, c_3$ are constants ("expand 32-byte k")
+    \item $k_0, \ldots, k_7$ are the 256-bit key
+    \item $t_0, t_1$ are the 64-bit counter
+    \item $n_0, n_1$ are the 96-bit nonce
+\end{itemize}
+\end{mathbox}
+
+\subsubsection{ChaCha20 Quarter Round Function}
+
+The core of ChaCha20 is the quarter round function that operates on four 32-bit words:
+
+\begin{mathbox}
+\textbf{Quarter Round Function}: For four words $a, b, c, d$:
+\begin{align*}
+a &\leftarrow a + b \\
+d &\leftarrow d \oplus a \\
+d &\leftarrow d \lll 16 \\
+c &\leftarrow c + d \\
+b &\leftarrow b \oplus c \\
+b &\leftarrow b \lll 12 \\
+a &\leftarrow a + b \\
+d &\leftarrow d \oplus a \\
+d &\leftarrow d \lll 8 \\
+c &\leftarrow c + d \\
+b &\leftarrow b \oplus c \\
+b &\leftarrow b \lll 7
+\end{align*}
+where $\lll$ denotes left rotation.
+\end{mathbox}
+
+\subsubsection{ChaCha20 Block Function}
+
+The ChaCha20 block function applies 20 rounds (10 double rounds) of the quarter round:
+
+\begin{algorithm}[H]
+\caption{ChaCha20 Block Function}
+\begin{algorithmic}[1]
+\State Initialize state with constants, key, counter, and nonce
+\For{$i = 1$ to $10$}
+    \State Quarter round on columns: $(0,4,8,12), (1,5,9,13), (2,6,10,14), (3,7,11,15)$
+    \State Quarter round on diagonals: $(0,5,10,15), (1,6,11,12), (2,7,8,13), (3,4,9,14)$
+\EndFor
+\State Add original state to working state
+\State Output 64 bytes of keystream
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Poly1305 Message Authentication Code}
+
+Poly1305 is a message authentication code based on polynomial evaluation in the finite field $\mathbb{F}_{2^{130}-5}$.
+
+\begin{mathbox}
+\textbf{Poly1305 Key}: A 256-bit key $(r, s)$ where:
+\begin{itemize}
+    \item $r$ is a 128-bit value with certain bits cleared
+    \item $s$ is a 128-bit value
+\end{itemize}
+\end{mathbox}
+
+\subsubsection{Poly1305 Polynomial Evaluation}
+
+Poly1305 evaluates the polynomial:
+\[h(m) = (m_1 r^n + m_2 r^{n-1} + \cdots + m_n r + s) \bmod (2^{130} - 5)\]
+
+\begin{algorithm}[H]
+\caption{Poly1305 MAC Computation}
+\begin{algorithmic}[1]
+\State $h \leftarrow 0$
+\State $r \leftarrow$ key\_r \& 0x0ffffffc0ffffffc0ffffffc0fffffff
+\State $s \leftarrow$ key\_s
+\For{each 16-byte block $m_i$ of message}
+    \State $h \leftarrow (h + m_i) \cdot r \bmod (2^{130} - 5)$
+\EndFor
+\State $h \leftarrow h + s$
+\State Return $h \bmod 2^{128}$
+\end{algorithmic}
+\end{algorithm}
+
+\section{ChaCha20-Poly1305 AEAD Construction}
+
+\subsection{Key Derivation}
+
+The ChaCha20-Poly1305 AEAD uses a single 256-bit key to derive both the ChaCha20 key and Poly1305 key:
+
+\begin{mathbox}
+\textbf{Key Derivation}:
+\begin{itemize}
+    \item ChaCha20 key: First 256 bits of ChaCha20 output with counter 0
+    \item Poly1305 key: Next 256 bits of ChaCha20 output with counter 0
+\end{itemize}
+\end{mathbox}
+
+\subsection{Encryption Process}
+
+\begin{algorithm}[H]
+\caption{ChaCha20-Poly1305 Encryption}
+\begin{algorithmic}[1]
+\State Derive ChaCha20 key and Poly1305 key from master key
+\State Generate ChaCha20 keystream starting from counter 1
+\State Encrypt plaintext: $ciphertext = plaintext \oplus keystream$
+\State Compute Poly1305 MAC over: $AAD \| ciphertext \| len(AAD) \| len(ciphertext)$
+\State Return $(ciphertext, tag)$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Decryption Process}
+
+\begin{algorithm}[H]
+\caption{ChaCha20-Poly1305 Decryption}
+\begin{algorithmic}[1]
+\State Derive ChaCha20 key and Poly1305 key from master key
+\State Compute Poly1305 MAC over: $AAD \| ciphertext \| len(AAD) \| len(ciphertext)$
+\If{MAC verification fails}
+    \Return ERROR
+\EndIf
+\State Generate ChaCha20 keystream starting from counter 1
+\State Decrypt ciphertext: $plaintext = ciphertext \oplus keystream$
+\State Return $plaintext$
+\end{algorithmic}
+\end{algorithm}
+
+\section{Practical Examples and Test Vectors}
+
+\subsection{Test Vector 1: Basic Encryption}
+
+\begin{examplebox}
+\textbf{Test Vector 1 - Basic Encryption}:
+\begin{itemize}
+    \item Key: 808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9f
+    \item Nonce: 070000004041424344454647
+    \item AAD: 50515253c0c1c2c3c4c5c6c7
+    \item Plaintext: 4c616469657320616e642047656e746c656d656e206f662074686520636c617373206f66202739393a204966204920636f756c64206f6666657220796f75206f6e6c79206f6e652074697020666f7220746865206675747572652c2073756e73637265656e20776f756c642062652069742e
+    \item Ciphertext: d31a8d34648e60db7b86afbc53ef7ec2a4aded51296e08fea9e2b5a736ee62d63dbea45e8ca9671282fafb69da92728b1a71de0a9e060b2905d6a5b67ecd3b3692ddbd7f2d778b8c9803aee328091b58fab324e4fad675945585808b4831d7bc3ff4def08e4b7a9de576d26586cec64b6116
+    \item Tag: 1ae10b594f09e26a7e902ecbd0600691
+\end{itemize}
+\end{examplebox}
+
+\subsection{Step-by-Step Calculation}
+
+Let's walk through the encryption process for a simple example:
+
+\begin{examplebox}
+\textbf{Simple Example}:
+\begin{itemize}
+    \item Key: 000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
+    \item Nonce: 000102030405060708090a0b
+    \item AAD: 50515253
+    \item Plaintext: 4c6164696573
+\end{itemize}
+\end{examplebox}
+
+\subsubsection{Step 1: Key Derivation}
+
+Generate ChaCha20 keystream with counter 0:
+\begin{lstlisting}[language=C++, caption=Key Derivation]
+// ChaCha20 state initialization
+uint32_t state[16] = {
+    0x61707865, 0x3320646e, 0x79622d32, 0x6b206574,  // constants
+    0x03020100, 0x07060504, 0x0b0a0908, 0x0f0e0d0c,  // key
+    0x13121110, 0x17161514, 0x1b1a1918, 0x1f1e1d1c,
+    0x00000000, 0x00000000, 0x0b0a0908, 0x07060504   // counter, nonce
+};
+
+// Generate 64 bytes of keystream
+// First 32 bytes become ChaCha20 key
+// Next 32 bytes become Poly1305 key
+\end{lstlisting}
+
+\subsubsection{Step 2: Encryption}
+
+Generate keystream starting from counter 1 and XOR with plaintext:
+\begin{lstlisting}[language=C++, caption=Encryption]
+// Plaintext: 4c6164696573 (6 bytes)
+// Generate 6 bytes of keystream from counter 1
+// Ciphertext = plaintext XOR keystream
+\end{lstlisting}
+
+\subsubsection{Step 3: MAC Computation}
+
+Compute Poly1305 over AAD, ciphertext, and lengths:
+\begin{lstlisting}[language=C++, caption=MAC Computation]
+// MAC input: AAD || ciphertext || len(AAD) || len(ciphertext)
+// AAD: 50515253 (4 bytes)
+// Ciphertext: [6 bytes from step 2]
+// Lengths: 0000000000000004 0000000000000006
+// Compute Poly1305(r, s, mac_input)
+\end{lstlisting}
+
+\section{Implementation in C++17}
+
+\subsection{ChaCha20 Implementation}
+
+\begin{lstlisting}[language=C++, caption=ChaCha20 Implementation]
+#include <array>
+#include <cstdint>
+#include <vector>
+#include <cstring>
+#include <algorithm>
+
+class ChaCha20 {
+private:
+    static constexpr size_t STATE_SIZE = 16;
+    static constexpr size_t KEY_SIZE = 32;
+    static constexpr size_t NONCE_SIZE = 12;
+    
+    std::array<uint32_t, STATE_SIZE> state_;
+    
+public:
+    ChaCha20(const std::array<uint8_t, KEY_SIZE>& key,
+             const std::array<uint8_t, NONCE_SIZE>& nonce,
+             uint32_t counter = 0) {
+        initialize_state(key, nonce, counter);
+    }
+    
+    void generate_keystream(std::vector<uint8_t>& output, size_t length) {
+        output.clear();
+        output.reserve(length);
+        
+        size_t bytes_generated = 0;
+        std::array<uint8_t, 64> block;
+        
+        while (bytes_generated < length) {
+            generate_block(block);
+            
+            size_t bytes_to_copy = std::min(64ULL, length - bytes_generated);
+            output.insert(output.end(), 
+                         block.begin(), 
+                         block.begin() + bytes_to_copy);
+            
+            bytes_generated += bytes_to_copy;
+            increment_counter();
+        }
+    }
+    
+private:
+    void initialize_state(const std::array<uint8_t, KEY_SIZE>& key,
+                         const std::array<uint8_t, NONCE_SIZE>& nonce,
+                         uint32_t counter) {
+        // Constants
+        state_[0] = 0x61707865;  // "expa"
+        state_[1] = 0x3320646e;  // "nd 3"
+        state_[2] = 0x79622d32;  // "2-by"
+        state_[3] = 0x6b206574;  // "te k"
+        
+        // Key (8 words, little-endian)
+        for (size_t i = 0; i < 8; ++i) {
+            state_[4 + i] = load32_le(key.data() + 4*i);
+        }
+        
+        // Counter
+        state_[12] = counter;
+        state_[13] = 0;
+        
+        // Nonce (3 words, little-endian)
+        for (size_t i = 0; i < 3; ++i) {
+            state_[13 + i] = load32_le(nonce.data() + 4*i);
+        }
+    }
+    
+    void generate_block(std::array<uint8_t, 64>& output) {
+        std::array<uint32_t, STATE_SIZE> working_state = state_;
+        
+        // 20 rounds (10 double rounds)
+        for (int i = 0; i < 10; ++i) {
+            // Column rounds
+            quarter_round(working_state, 0, 4, 8, 12);
+            quarter_round(working_state, 1, 5, 9, 13);
+            quarter_round(working_state, 2, 6, 10, 14);
+            quarter_round(working_state, 3, 7, 11, 15);
+            
+            // Diagonal rounds
+            quarter_round(working_state, 0, 5, 10, 15);
+            quarter_round(working_state, 1, 6, 11, 12);
+            quarter_round(working_state, 2, 7, 8, 13);
+            quarter_round(working_state, 3, 4, 9, 14);
+        }
+        
+        // Add original state
+        for (size_t i = 0; i < STATE_SIZE; ++i) {
+            working_state[i] += state_[i];
+        }
+        
+        // Convert to bytes (little-endian)
+        for (size_t i = 0; i < STATE_SIZE; ++i) {
+            store32_le(output.data() + 4*i, working_state[i]);
+        }
+    }
+    
+    void quarter_round(std::array<uint32_t, STATE_SIZE>& state, 
+                      size_t a, size_t b, size_t c, size_t d) {
+        state[a] += state[b]; state[d] ^= state[a]; state[d] = rotl(state[d], 16);
+        state[c] += state[d]; state[b] ^= state[c]; state[b] = rotl(state[b], 12);
+        state[a] += state[b]; state[d] ^= state[a]; state[d] = rotl(state[d], 8);
+        state[c] += state[d]; state[b] ^= state[c]; state[b] = rotl(state[b], 7);
+    }
+    
+    uint32_t rotl(uint32_t value, int shift) {
+        return (value << shift) | (value >> (32 - shift));
+    }
+    
+    void increment_counter() {
+        state_[12]++;
+        if (state_[12] == 0) {
+            state_[13]++;
+        }
+    }
+    
+    uint32_t load32_le(const uint8_t* data) {
+        return static_cast<uint32_t>(data[0]) |
+               (static_cast<uint32_t>(data[1]) << 8) |
+               (static_cast<uint32_t>(data[2]) << 16) |
+               (static_cast<uint32_t>(data[3]) << 24);
+    }
+    
+    void store32_le(uint8_t* data, uint32_t value) {
+        data[0] = static_cast<uint8_t>(value);
+        data[1] = static_cast<uint8_t>(value >> 8);
+        data[2] = static_cast<uint8_t>(value >> 16);
+        data[3] = static_cast<uint8_t>(value >> 24);
+    }
+};
+\end{lstlisting}
+
+\subsection{Poly1305 Implementation}
+
+\begin{lstlisting}[language=C++, caption=Poly1305 Implementation]
+#include <array>
+#include <cstdint>
+#include <vector>
+#include <cstring>
+
+class Poly1305 {
+private:
+    static constexpr uint64_t MODULUS = (1ULL << 130) - 5;
+    static constexpr size_t BLOCK_SIZE = 16;
+    
+    uint64_t r_[3];  // r clamped
+    uint64_t s_[2];  // s
+    uint64_t h_[3];  // accumulator
+    
+public:
+    Poly1305(const std::array<uint8_t, 32>& key) {
+        initialize(key);
+    }
+    
+    void update(const std::vector<uint8_t>& data) {
+        update(data.data(), data.size());
+    }
+    
+    void update(const uint8_t* data, size_t length) {
+        size_t offset = 0;
+        
+        // Process complete blocks
+        while (offset + BLOCK_SIZE <= length) {
+            process_block(data + offset);
+            offset += BLOCK_SIZE;
+        }
+        
+        // Process final partial block
+        if (offset < length) {
+            process_final_block(data + offset, length - offset);
+        }
+    }
+    
+    std::array<uint8_t, 16> finalize() {
+        // Add s to h
+        uint64_t t0 = h_[0] + s_[0];
+        uint64_t t1 = h_[1] + s_[1] + (t0 >> 64);
+        uint64_t t2 = h_[2] + (t1 >> 64);
+        
+        // Reduce modulo 2^128
+        uint64_t result_low = t0 & 0xffffffffffffffffULL;
+        uint64_t result_high = t1 & 0xffffffffffffffffULL;
+        
+        std::array<uint8_t, 16> result;
+        store64_le(result.data(), result_low);
+        store64_le(result.data() + 8, result_high);
+        
+        return result;
+    }
+    
+private:
+    void initialize(const std::array<uint8_t, 32>& key) {
+        // Load r and s from key
+        uint64_t r0 = load64_le(key.data()) & 0x0ffffffc0ffffffcULL;
+        uint64_t r1 = load64_le(key.data() + 8) & 0x0ffffffc0ffffffcULL;
+        uint64_t s0 = load64_le(key.data() + 16);
+        uint64_t s1 = load64_le(key.data() + 24);
+        
+        r_[0] = r0;
+        r_[1] = r1;
+        r_[2] = (r1 >> 44) | (r0 >> 44);
+        
+        s_[0] = s0;
+        s_[1] = s1;
+        
+        // Initialize accumulator
+        h_[0] = 0;
+        h_[1] = 0;
+        h_[2] = 0;
+    }
+    
+    void process_block(const uint8_t* block) {
+        // Load message block
+        uint64_t m0 = load64_le(block);
+        uint64_t m1 = load64_le(block + 8);
+        
+        // Add message to accumulator
+        uint64_t t0 = h_[0] + m0;
+        uint64_t t1 = h_[1] + m1 + (t0 >> 64);
+        uint64_t t2 = h_[2] + (t1 >> 64);
+        
+        h_[0] = t0 & 0xffffffffffffffffULL;
+        h_[1] = t1 & 0xffffffffffffffffULL;
+        h_[2] = t2 & 0x3fffffffffffffffULL;
+        
+        // Multiply by r
+        multiply_by_r();
+    }
+    
+    void process_final_block(const uint8_t* block, size_t length) {
+        // Pad the final block
+        std::array<uint8_t, BLOCK_SIZE> padded_block = {0};
+        std::memcpy(padded_block.data(), block, length);
+        padded_block[length] = 1;  // Add 1 bit
+        
+        process_block(padded_block.data());
+    }
+    
+    void multiply_by_r() {
+        // h = h * r mod (2^130 - 5)
+        uint64_t h0 = h_[0];
+        uint64_t h1 = h_[1];
+        uint64_t h2 = h_[2];
+        
+        uint64_t r0 = r_[0];
+        uint64_t r1 = r_[1];
+        uint64_t r2 = r_[2];
+        
+        // h * r = h0*r0 + h0*r1*2^44 + h0*r2*2^88 +
+        //          h1*r0*2^44 + h1*r1*2^88 + h1*r2*2^132 +
+        //          h2*r0*2^88 + h2*r1*2^132 + h2*r2*2^176
+        
+        uint64_t d0 = h0*r0 + h1*r2*16 + h2*r1*16;
+        uint64_t d1 = h0*r1 + h1*r0 + h2*r2*16;
+        uint64_t d2 = h0*r2 + h1*r1 + h2*r0;
+        
+        // Reduce modulo 2^130 - 5
+        uint64_t c = (d2 >> 44);
+        d2 &= 0x3fffffffffffffffULL;
+        
+        d0 += c * 5;
+        c = (d0 >> 64);
+        d0 &= 0xffffffffffffffffULL;
+        d1 += c;
+        c = (d1 >> 64);
+        d1 &= 0xffffffffffffffffULL;
+        d2 += c;
+        c = (d2 >> 44);
+        d2 &= 0x3fffffffffffffffULL;
+        d0 += c * 5;
+        
+        h_[0] = d0;
+        h_[1] = d1;
+        h_[2] = d2;
+    }
+    
+    uint64_t load64_le(const uint8_t* data) {
+        return static_cast<uint64_t>(data[0]) |
+               (static_cast<uint64_t>(data[1]) << 8) |
+               (static_cast<uint64_t>(data[2]) << 16) |
+               (static_cast<uint64_t>(data[3]) << 24) |
+               (static_cast<uint64_t>(data[4]) << 32) |
+               (static_cast<uint64_t>(data[5]) << 40) |
+               (static_cast<uint64_t>(data[6]) << 48) |
+               (static_cast<uint64_t>(data[7]) << 56);
+    }
+    
+    void store64_le(uint8_t* data, uint64_t value) {
+        data[0] = static_cast<uint8_t>(value);
+        data[1] = static_cast<uint8_t>(value >> 8);
+        data[2] = static_cast<uint8_t>(value >> 16);
+        data[3] = static_cast<uint8_t>(value >> 24);
+        data[4] = static_cast<uint8_t>(value >> 32);
+        data[5] = static_cast<uint8_t>(value >> 40);
+        data[6] = static_cast<uint8_t>(value >> 48);
+        data[7] = static_cast<uint8_t>(value >> 56);
+    }
+};
+\end{lstlisting}
+
+\subsection{ChaCha20-Poly1305 AEAD Implementation}
+
+\begin{lstlisting}[language=C++, caption=ChaCha20-Poly1305 AEAD Implementation]
+#include <array>
+#include <cstdint>
+#include <vector>
+#include <stdexcept>
+#include <algorithm>
+
+class ChaCha20Poly1305 {
+private:
+    static constexpr size_t KEY_SIZE = 32;
+    static constexpr size_t NONCE_SIZE = 12;
+    static constexpr size_t TAG_SIZE = 16;
+    
+    std::array<uint8_t, KEY_SIZE> key_;
+    
+public:
+    ChaCha20Poly1305(const std::array<uint8_t, KEY_SIZE>& key) : key_(key) {}
+    
+    std::pair<std::vector<uint8_t>, std::array<uint8_t, TAG_SIZE>>
+    encrypt(const std::vector<uint8_t>& plaintext,
+            const std::vector<uint8_t>& aad,
+            const std::array<uint8_t, NONCE_SIZE>& nonce) {
+        
+        // Derive ChaCha20 and Poly1305 keys
+        auto [chacha_key, poly_key] = derive_keys(nonce);
+        
+        // Encrypt plaintext
+        ChaCha20 chacha(chacha_key, nonce, 1);
+        std::vector<uint8_t> ciphertext;
+        chacha.generate_keystream(ciphertext, plaintext.size());
+        
+        for (size_t i = 0; i < plaintext.size(); ++i) {
+            ciphertext[i] ^= plaintext[i];
+        }
+        
+        // Compute MAC
+        Poly1305 poly(poly_key);
+        poly.update(aad);
+        poly.update(ciphertext);
+        
+        // Add lengths
+        std::array<uint8_t, 16> lengths;
+        store64_le(lengths.data(), aad.size());
+        store64_le(lengths.data() + 8, ciphertext.size());
+        poly.update(lengths);
+        
+        auto tag = poly.finalize();
+        
+        return {ciphertext, tag};
+    }
+    
+    std::vector<uint8_t>
+    decrypt(const std::vector<uint8_t>& ciphertext,
+            const std::vector<uint8_t>& aad,
+            const std::array<uint8_t, NONCE_SIZE>& nonce,
+            const std::array<uint8_t, TAG_SIZE>& tag) {
+        
+        // Derive ChaCha20 and Poly1305 keys
+        auto [chacha_key, poly_key] = derive_keys(nonce);
+        
+        // Verify MAC
+        Poly1305 poly(poly_key);
+        poly.update(aad);
+        poly.update(ciphertext);
+        
+        std::array<uint8_t, 16> lengths;
+        store64_le(lengths.data(), aad.size());
+        store64_le(lengths.data() + 8, ciphertext.size());
+        poly.update(lengths);
+        
+        auto computed_tag = poly.finalize();
+        
+        if (computed_tag != tag) {
+            throw std::runtime_error("MAC verification failed");
+        }
+        
+        // Decrypt ciphertext
+        ChaCha20 chacha(chacha_key, nonce, 1);
+        std::vector<uint8_t> keystream;
+        chacha.generate_keystream(keystream, ciphertext.size());
+        
+        std::vector<uint8_t> plaintext(ciphertext.size());
+        for (size_t i = 0; i < ciphertext.size(); ++i) {
+            plaintext[i] = ciphertext[i] ^ keystream[i];
+        }
+        
+        return plaintext;
+    }
+    
+private:
+    std::pair<std::array<uint8_t, KEY_SIZE>, std::array<uint8_t, KEY_SIZE>>
+    derive_keys(const std::array<uint8_t, NONCE_SIZE>& nonce) {
+        // Generate 64 bytes using ChaCha20 with counter 0
+        ChaCha20 chacha(key_, nonce, 0);
+        std::vector<uint8_t> keystream;
+        chacha.generate_keystream(keystream, 64);
+        
+        std::array<uint8_t, KEY_SIZE> chacha_key, poly_key;
+        std::copy(keystream.begin(), keystream.begin() + 32, chacha_key.begin());
+        std::copy(keystream.begin() + 32, keystream.begin() + 64, poly_key.begin());
+        
+        return {chacha_key, poly_key};
+    }
+    
+    void store64_le(uint8_t* data, uint64_t value) {
+        data[0] = static_cast<uint8_t>(value);
+        data[1] = static_cast<uint8_t>(value >> 8);
+        data[2] = static_cast<uint8_t>(value >> 16);
+        data[3] = static_cast<uint8_t>(value >> 24);
+        data[4] = static_cast<uint8_t>(value >> 32);
+        data[5] = static_cast<uint8_t>(value >> 40);
+        data[6] = static_cast<uint8_t>(value >> 48);
+        data[7] = static_cast<uint8_t>(value >> 56);
+    }
+};
+\end{lstlisting}
+
+\section{Security Considerations}
+
+\subsection{Security Properties}
+
+\begin{mathbox}
+\textbf{Security Properties of ChaCha20-Poly1305}:
+\begin{itemize}
+    \item \textbf{Confidentiality}: IND-CPA secure under standard assumptions
+    \item \textbf{Authenticity}: Existentially unforgeable under chosen message attacks
+    \item \textbf{Nonce Reuse}: Catastrophic failure - never reuse nonces
+    \item \textbf{Key Size}: 256-bit key provides 128-bit security level
+\end{itemize}
+\end{mathbox}
+
+\subsection{Common Vulnerabilities}
+
+\begin{warningbox}
+\textbf{Common Implementation Vulnerabilities}:
+\begin{itemize}
+    \item \textbf{Nonce Reuse}: Using the same nonce with the same key
+    \item \textbf{Timing Attacks}: Not using constant-time operations
+    \item \textbf{Key Management}: Poor key generation or storage
+    \item \textbf{Buffer Overflows}: Not checking input lengths
+\end{itemize}
+\end{warningbox}
+
+\subsection{Security Best Practices}
+
+\begin{prosbox}
+\textbf{Security Best Practices}:
+\begin{enumerate}
+    \item Use cryptographically secure random number generators for nonces
+    \item Never reuse nonces with the same key
+    \item Use constant-time implementations to prevent timing attacks
+    \item Validate all inputs and check buffer sizes
+    \item Use established, well-tested implementations in production
+    \item Keep implementations up to date with security patches
+\end{enumerate}
+\end{prosbox}
+
+\section{Performance Analysis}
+
+\subsection{Performance Characteristics}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Platform} & \textbf{ChaCha20 (MB/s)} & \textbf{Poly1305 (MB/s)} & \textbf{Combined (MB/s)} \\
+\hline
+x86-64 (Intel) & 1200 & 800 & 600 \\
+ARM64 (Apple M1) & 800 & 600 & 400 \\
+ARM32 (Cortex-A7) & 200 & 150 & 100 \\
+\hline
+\end{tabular}
+\caption{Performance Comparison on Different Platforms}
+\end{table}
+
+\subsection{Optimization Techniques}
+
+\begin{itemize}
+    \item \textbf{Vectorization}: Using SIMD instructions (AVX2, NEON)
+    \item \textbf{Parallel Processing}: Processing multiple blocks simultaneously
+    \item \textbf{Caching}: Pre-computing frequently used values
+    \item \textbf{Memory Alignment}: Aligning data for optimal access patterns
+\end{itemize}
+
+\section{Real-World Applications}
+
+\subsection{TLS 1.3}
+
+ChaCha20-Poly1305 is one of the AEAD ciphers supported in TLS 1.3:
+\begin{itemize}
+    \item \textbf{Cipher Suite}: TLS\_CHACHA20\_POLY1305\_SHA256
+    \item \textbf{Key Exchange}: ECDHE with X25519 or P-256
+    \item \textbf{Authentication}: RSA or ECDSA signatures
+\end{itemize}
+
+\subsection{WireGuard VPN}
+
+WireGuard uses ChaCha20-Poly1305 for its encryption:
+\begin{itemize}
+    \item \textbf{Key Derivation}: HKDF with ChaCha20
+    \item \textbf{Encryption}: ChaCha20-Poly1305 with 12-byte nonces
+    \item \textbf{Performance}: Optimized for high-speed networking
+\end{itemize}
+
+\subsection{Signal Protocol}
+
+The Signal Protocol uses ChaCha20-Poly1305 for message encryption:
+\begin{itemize}
+    \item \textbf{Perfect Forward Secrecy}: New keys for each message
+    \item \textbf{Double Ratchet}: Combines symmetric and asymmetric encryption
+         \item \textbf{Privacy}: End-to-end encryption with metadata protection
+\end{itemize}
+
+\section{References and Further Reading}
+
+\subsection{Standards and Specifications}
+
+\begin{enumerate}
+    \item RFC 8439: ChaCha20 and Poly1305 for IETF Protocols
+    \item RFC 8446: The Transport Layer Security (TLS) Protocol Version 1.3
+    \item RFC 7539: ChaCha20 and Poly1305 for IETF Protocols (obsolete)
+\end{enumerate}
+
+\subsection{Academic Papers}
+
+\begin{enumerate}
+    \item Bernstein, D. J. (2008). ChaCha, a variant of Salsa20.
+    \item Bernstein, D. J. (2005). The Poly1305-AES message-authentication code.
+    \item Nir, Y., \& Langley, A. (2015). ChaCha20 and Poly1305 for IETF Protocols.
+\end{enumerate}
+
+\subsection{Online Resources}
+
+\begin{itemize}
+    \item \url{https://tools.ietf.org/html/rfc8439} - RFC 8439 specification
+    \item \url{https://cr.yp.to/chacha.html} - Daniel J. Bernstein's ChaCha page
+    \item \url{https://www.wireguard.com/} - WireGuard VPN protocol
+\end{itemize}
+
+\section{Conclusion}
+
+ChaCha20-Poly1305 is a modern, efficient, and secure AEAD construction that provides excellent performance across a wide range of platforms. Its combination of the ChaCha20 stream cipher and Poly1305 message authentication code offers strong security guarantees while being relatively simple to implement and verify.
+
+This guide has covered:
+\begin{itemize}
+    \item Mathematical foundations of ChaCha20 and Poly1305
+    \item The AEAD construction and its security properties
+    \item Step-by-step algorithms and practical examples
+    \item Complete C++17 implementation
+    \item Security considerations and best practices
+    \item Real-world applications and use cases
+\end{itemize}
+
+For production use, always rely on well-tested, established implementations and follow security best practices. The implementations provided in this guide are for educational purposes and should not be used in production without proper security auditing.
+
+\subsection{Future Directions}
+
+\begin{itemize}
+         \item \textbf{Post-Quantum Cryptography}: ChaCha20-Poly1305 with quantum-resistant key exchange
+     \item \textbf{Hardware Acceleration}: Dedicated hardware for ChaCha20-Poly1305
+     \item \textbf{Formal Verification}: Machine-checked proofs of implementation correctness
+     \item \textbf{Performance Optimization}: Further optimizations for specific platforms
+\end{itemize}
+
+\end{document} 

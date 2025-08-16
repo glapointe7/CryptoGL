@@ -1,16 +1,151 @@
-# Compiled source #
-###################
-*.com
-*.class
-*.dll
-*.exe
-*.o
-*.so
+# ===========================================
+# CMake Build System
+# ===========================================
+build/
+build_test/
+build_debug/
+build_release/
+build_*
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+.cmake/
 
-# Packages #
-############
-# it's better to unpack these files and commit the raw source
-# git has its own built in compression methods
+# ===========================================
+# Compiled Object Files
+# ===========================================
+*.o
+*.obj
+*.elf
+*.bin
+*.exe
+*.out
+*.app
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+*.lo
+*.Plo
+*.Po
+*.pp_al
+*.s
+*.mod
+*.i
+*.ii
+*.h.gch
+*.h.pch
+
+# ===========================================
+# Precompiled Headers
+# ===========================================
+*.gch
+*.pch
+
+# ===========================================
+# Libraries
+# ===========================================
+*.lib
+*.a
+*.la
+*.lo
+*.def
+*.exp
+
+# ===========================================
+# Shared objects (inc. Windows DLLs)
+# ===========================================
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# ===========================================
+# Executables
+# ===========================================
+*.exe
+*.out
+*.app
+*.x*.exe
+*.lnk
+
+# ===========================================
+# Debug files
+# ===========================================
+*.dSYM/
+*.su
+*.idb
+*.pdb
+*.ilk
+*.map
+*.exp
+
+# ===========================================
+# Coverage reports
+# ===========================================
+*.gcov
+*.gcda
+*.gcno
+*.info
+*.lcov
+
+# ===========================================
+# Profiling
+# ===========================================
+*.prof
+*.ps
+*.tsv
+
+# ===========================================
+# IDE and Editor Files
+# ===========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ===========================================
+# OS Generated Files
+# ===========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ===========================================
+# Temporary Files
+# ===========================================
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*.rej
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# ===========================================
+# Package Files
+# ===========================================
 *.7z
 *.dmg
 *.gz
@@ -19,16 +154,23 @@
 *.rar
 *.tar
 *.zip
+*.xz
 
-# Logs and databases #
-######################
-*.log
+# ===========================================
+# Database Files
+# ===========================================
 *.sql
 *.sqlite
+*.sqlite3
+*.db
 
-# Folders #
-###########
-build/
-build_test/
-cryptogl.git/
-.vscode/
+# ===========================================
+# CryptoGL Specific
+# ===========================================
+# Add any project-specific patterns here
+# For example:
+# *.key
+# *.pem
+# *.crt
+# *.p12
+# *.pfx

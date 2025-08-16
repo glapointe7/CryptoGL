@@ -1,0 +1,1357 @@
+\documentclass[11pt,a4paper]{article}
+
+% Essential packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{adjustbox}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+% Page setup
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{CryptoGL Architecture Guide}
+\lhead{Project Improvement Recommendations}
+\rfoot{Page \thepage}
+
+% Title formatting
+\titleformat{\section}{\Large\bfseries\color{blue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{darkgray}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{darkgray}}{\thesubsubsection}{1em}{}
+
+% Colors
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{problemred}{rgb}{0.8,0.2,0.2}
+\definecolor{solutiongreen}{rgb}{0.2,0.6,0.2}
+\definecolor{currentblue}{rgb}{0.2,0.2,0.8}
+
+% Code listing setup
+\lstset{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    frame=single,
+    language=C++,
+    morekeywords={constexpr,noexcept,override,final,using,typename,template}
+}
+
+\begin{document}
+
+\title{\Huge\textbf{CryptoGL Project Architecture\\Improvement Guide}}
+\author{Architecture Optimization Recommendations}
+\date{\today}
+
+\maketitle
+
+\begin{abstract}
+This document provides a comprehensive analysis of the CryptoGL cryptographic library's current architecture and presents a prioritized roadmap for architectural improvements. The recommendations focus on modern C++17 practices, better code organization, improved maintainability, enhanced security, and optimized performance. Each recommendation includes current state analysis, problem identification, solution rationale, and implementation guidance.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Executive Summary}
+
+The CryptoGL project is a comprehensive cryptographic library containing classical ciphers, symmetric/asymmetric ciphers, hash functions, and various cryptographic tools. While functionally complete, the current architecture has several areas for improvement in terms of modern C++ practices, code organization, maintainability, and security.
+
+\subsection{Current Architecture Assessment}
+
+\textbf{Strengths:}
+\begin{itemize}
+    \item Comprehensive coverage of cryptographic algorithms
+    \item Good separation of concerns with header/implementation files
+    \item Proper use of CMake build system
+    \item Extensive unit test coverage
+    \item Modular design with separate components
+\end{itemize}
+
+\textbf{Areas for Improvement:}
+\begin{itemize}
+    \item Flat file structure in \texttt{src/} directory
+    \item Inconsistent naming conventions
+    \item Mixed C++ and C-style code patterns
+    \item Limited use of modern C++17 features
+    \item No clear dependency management
+    \item Missing abstraction layers
+    \item Inconsistent error handling
+\end{itemize}
+
+\section{Priority 1: Foundation and Structure (Easy to Medium)}
+
+\subsection{1.1 Directory Structure Reorganization}
+
+\textbf{Current State:}
+\begin{lstlisting}
+src/
+├── main.cpp
+├── AES.cpp/hpp
+├── DES.cpp/hpp
+├── SHA2.cpp/hpp
+├── Vector.hpp
+├── String.hpp
+├── Types.hpp
+├── big_integers/
+├── exceptions/
+└── [100+ other files]
+\end{lstlisting}
+
+\textcolor{problemred}{\textbf{Problems with Current Structure:}}
+\begin{itemize}
+    \item All files in flat \texttt{src/} directory makes navigation difficult
+    \item No logical grouping of related algorithms
+    \item Difficult to find specific functionality
+    \item Poor scalability for future additions
+    \item No clear separation between core utilities and algorithms
+\end{itemize}
+
+\textcolor{solutiongreen}{\textbf{Why This Fix Works:}}
+\begin{itemize}
+    \item Logical grouping improves code discoverability
+    \item Easier maintenance and refactoring
+    \item Better dependency management
+    \item Clearer project structure for new contributors
+    \item Enables better build system organization
+\end{itemize}
+
+\textbf{Recommended Structure:}
+\begin{lstlisting}
+src/
+├── core/
+│   ├── types/
+│   │   ├── Types.hpp
+│   │   ├── Vector.hpp
+│   │   └── String.hpp
+│   ├── utils/
+│   │   ├── Endian.hpp
+│   │   ├── File.hpp
+│   │   └── MathematicalTools.hpp
+│   └── exceptions/
+├── algorithms/
+│   ├── block_ciphers/
+│   │   ├── aes/
+│   │   ├── des/
+│   │   └── common/
+│   ├── stream_ciphers/
+│   ├── hash_functions/
+│   ├── asymmetric/
+│   └── classical/
+├── modes/
+│   └── BlockCipherModes.hpp
+├── encoding/
+│   └── Base64.hpp
+└── main.cpp
+\end{lstlisting}
+
+\subsection{1.2 Namespace Organization}
+
+\textbf{Current State:}
+\begin{lstlisting}
+// Mixed namespace usage
+class AES { /* ... */ };
+class Vector { /* ... */ };
+namespace CryptoGL { /* ... */ };
+\end{lstlisting}
+
+\textcolor{problemred}{\textbf{Problems with Current Namespace Usage:}}
+\begin{itemize}
+    \item Inconsistent namespace usage across files
+    \item Some classes in global namespace, others in CryptoGL namespace
+    \item No logical grouping within namespaces
+    \item Potential naming conflicts
+\end{itemize}
+
+\textcolor{solutiongreen}{\textbf{Why This Fix Works:}}
+\begin{itemize}
+    \item Prevents naming conflicts
+    \item Provides logical grouping
+    \item Improves code organization
+    \item Makes dependencies explicit
+\end{itemize}
+
+\textbf{Recommended Namespace Structure:}
+\begin{lstlisting}
+namespace CryptoGL {
+    namespace Core {
+        namespace Types { /* Vector, String, etc. */ }
+        namespace Utils { /* Endian, File, etc. */ }
+        namespace Exceptions { /* All exception classes */ }
+    }
+    
+    namespace Algorithms {
+        namespace BlockCiphers { /* AES, DES, etc. */ }
+        namespace StreamCiphers { /* RC4, Salsa20, etc. */ }
+        namespace HashFunctions { /* SHA2, MD5, etc. */ }
+        namespace Asymmetric { /* RSA, etc. */ }
+        namespace Classical { /* Caesar, Vigenere, etc. */ }
+    }
+    
+    namespace Modes { /* CBC, ECB, etc. */ }
+    namespace Encoding { /* Base64, etc. */ }
+}
+\end{lstlisting}
+
+\subsection{1.3 CMake Build System Modernization}
+
+\textbf{Current State:}
+\begin{lstlisting}
+# Current CMakeLists.txt structure
+set(SRC
+   main.cpp
+   AES.cpp
+   DES.cpp
+   # ... 100+ files listed manually
+)
+
+add_library(cryptoGL ${SRC})
+\end{lstlisting}
+
+\textcolor{problemred}{\textbf{Problems with Current Build System:}}
+\begin{itemize}
+    \item Manual file listing in CMakeLists.txt
+    \item No modular component structure
+    \item Difficult to build individual components
+    \item No proper dependency management
+    \item Hard to maintain as project grows
+\end{itemize}
+
+\textcolor{solutiongreen}{\textbf{Why This Fix Works:}}
+\begin{itemize}
+    \item Automatic file discovery reduces maintenance
+    \item Modular structure enables selective building
+    \item Better dependency tracking
+    \item Easier to add new components
+\end{itemize}
+
+\textbf{Recommended CMake Structure:}
+\begin{lstlisting}
+# Root CMakeLists.txt
+cmake_minimum_required(VERSION 3.15)
+project(CryptoGL VERSION 1.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Find all subdirectories automatically
+file(GLOB_RECURSE SUBDIRS "src/*/CMakeLists.txt")
+foreach(SUBDIR ${SUBDIRS})
+    get_filename_component(SUBDIR_PATH ${SUBDIR} DIRECTORY)
+    add_subdirectory(${SUBDIR_PATH})
+endforeach()
+
+# Main executable
+add_executable(${PROJECT_NAME} src/main.cpp)
+target_link_libraries(${PROJECT_NAME} 
+    PRIVATE 
+    CryptoGL::Core
+    CryptoGL::Algorithms
+    CryptoGL::Modes
+)
+\end{lstlisting}
+
+\section{Priority 2: Modern C++17 Integration (Medium)}
+
+\subsection{2.1 Smart Pointer Migration}
+
+\textbf{Current State:}
+\begin{lstlisting}
+// Current raw pointer usage
+class BlockCipher {
+private:
+    uint8_t* current_block;
+    uint8_t* round_keys;
+    
+public:
+    BlockCipher() {
+        current_block = new uint8_t[16];
+        round_keys = new uint8_t[176];
+    }
+    
+    ~BlockCipher() {
+        delete[] current_block;
+        delete[] round_keys;
+    }
+};
+\end{lstlisting}
+
+\textcolor{problemred}{\textbf{Problems with Current Memory Management:}}
+\begin{itemize}
+    \item Manual memory management prone to leaks
+    \item No exception safety
+    \item Potential use-after-free bugs
+    \item Inconsistent ownership semantics
+\end{itemize}
+
+\textcolor{solutiongreen}{\textbf{Why This Fix Works:}}
+\begin{itemize}
+    \item Automatic memory management
+    \item Exception safety guaranteed
+    \item Clear ownership semantics
+    \item RAII compliance
+\end{itemize}
+
+\textbf{Recommended Implementation:}
+\begin{lstlisting}
+#include <memory>
+#include <array>
+
+class BlockCipher {
+private:
+    std::unique_ptr<std::array<uint8_t, 16>> current_block;
+    std::unique_ptr<std::array<uint8_t, 176>> round_keys;
+    
+public:
+    BlockCipher() 
+        : current_block(std::make_unique<std::array<uint8_t, 16>>())
+        , round_keys(std::make_unique<std::array<uint8_t, 176>>()) {
+    }
+    
+    // No destructor needed - RAII handles cleanup
+};
+\end{lstlisting}
+
+\subsection{2.2 Exception Handling Modernization}
+
+\textbf{Current State:}
+\begin{lstlisting}
+// Current exception handling
+class BadKeyLength : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Bad key length";
+    }
+};
+
+// Usage
+if (key.size() != 16) {
+    throw BadKeyLength();
+}
+\end{lstlisting}
+
+\textcolor{problemred}{\textbf{Problems with Current Exception Handling:}}
+\begin{itemize}
+    \item Basic exception classes with minimal information
+    \item No error context or details
+    \item Inconsistent error reporting
+    \item No error categorization
+\end{itemize}
+
+\textcolor{solutiongreen}{\textbf{Why This Fix Works:}}
+\begin{itemize}
+    \item Rich error information for debugging
+    \item Consistent error reporting across library
+    \item Better error categorization
+    \item Improved debugging experience
+\end{itemize}
+
+\textbf{Recommended Exception System:}
+\begin{lstlisting}
+#include <stdexcept>
+#include <string>
+#include <sstream>
+
+namespace CryptoGL::Core::Exceptions {
+
+enum class ErrorCode {
+    INVALID_KEY_LENGTH,
+    INVALID_BLOCK_SIZE,
+    INVALID_ALGORITHM,
+    INVALID_MODE,
+    INTERNAL_ERROR
+};
+
+class CryptoException : public std::runtime_error {
+private:
+    ErrorCode code_;
+    std::string context_;
+    
+public:
+    CryptoException(ErrorCode code, const std::string& message, 
+                   const std::string& context = "")
+        : std::runtime_error(message), code_(code), context_(context) {}
+    
+    ErrorCode code() const noexcept { return code_; }
+    const std::string& context() const noexcept { return context_; }
+    
+    std::string full_message() const {
+        std::ostringstream oss;
+        oss << "CryptoGL Error [" << static_cast<int>(code_) << "]: ";
+        oss << what();
+        if (!context_.empty()) {
+            oss << " Context: " << context_;
+        }
+        return oss.str();
+    }
+};
+
+class InvalidKeyLengthException : public CryptoException {
+public:
+    InvalidKeyLengthException(size_t expected, size_t actual, 
+                            const std::string& algorithm = "")
+        : CryptoException(ErrorCode::INVALID_KEY_LENGTH,
+                         "Invalid key length",
+                         "Expected: " + std::to_string(expected) + 
+                         ", Got: " + std::to_string(actual) + 
+                         (algorithm.empty() ? "" : " Algorithm: " + algorithm)) {}
+};
+
+} // namespace CryptoGL::Core::Exceptions
+\end{lstlisting}
+
+\subsection{2.3 Template Metaprogramming for Algorithm Selection}
+
+\textbf{Current State:}
+\begin{lstlisting}
+// Current algorithm selection
+enum class CipherType {
+    AES,
+    DES,
+    BLOWFISH
+};
+
+class CipherFactory {
+public:
+    static std::unique_ptr<BlockCipher> create(CipherType type) {
+        switch(type) {
+            case CipherType::AES: return std::make_unique<AES>();
+            case CipherType::DES: return std::make_unique<DES>();
+            case CipherType::BLOWFISH: return std::make_unique<Blowfish>();
+            default: throw std::invalid_argument("Unknown cipher type");
+        }
+    }
+};
+\end{lstlisting}
+
+\textcolor{problemred}{\textbf{Problems with Current Approach:}}
+\begin{itemize}
+    \item Runtime overhead for algorithm selection
+    \item No compile-time type safety
+    \item Difficult to extend with new algorithms
+    \item No compile-time optimization opportunities
+\end{itemize}
+
+\textcolor{solutiongreen}{\textbf{Why This Fix Works:}}
+\begin{itemize}
+    \item Compile-time algorithm selection
+    \item Type safety guaranteed at compile time
+    \item Better optimization opportunities
+    \item Easier to extend with new algorithms
+\end{itemize}
+
+\textbf{Recommended Template-Based Approach:}
+\begin{lstlisting}
+#include <type_traits>
+
+namespace CryptoGL::Algorithms {
+
+// Algorithm traits
+template<typename T>
+struct CipherTraits;
+
+template<>
+struct CipherTraits<AES> {
+    static constexpr size_t block_size = 16;
+    static constexpr size_t key_size = 32;
+    static constexpr const char* name = "AES";
+};
+
+template<>
+struct CipherTraits<DES> {
+    static constexpr size_t block_size = 8;
+    static constexpr size_t key_size = 8;
+    static constexpr const char* name = "DES";
+};
+
+// Compile-time algorithm selection
+template<typename CipherType>
+class CipherWrapper {
+    static_assert(std::is_base_of_v<BlockCipher, CipherType>,
+                  "CipherType must inherit from BlockCipher");
+    
+private:
+    CipherType cipher_;
+    
+public:
+    static constexpr size_t block_size = CipherTraits<CipherType>::block_size;
+    static constexpr size_t key_size = CipherTraits<CipherType>::key_size;
+    
+    template<typename... Args>
+    CipherWrapper(Args&&... args) 
+        : cipher_(std::forward<Args>(args)...) {}
+    
+    // Delegate to underlying cipher
+    template<typename... Args>
+    auto encrypt(Args&&... args) -> decltype(cipher_.encrypt(std::forward<Args>(args)...)) {
+        return cipher_.encrypt(std::forward<Args>(args)...);
+    }
+    
+    template<typename... Args>
+    auto decrypt(Args&&... args) -> decltype(cipher_.decrypt(std::forward<Args>(args)...)) {
+        return cipher_.decrypt(std::forward<Args>(args)...);
+    }
+};
+
+// Usage example
+using AESWrapper = CipherWrapper<AES>;
+using DESWrapper = CipherWrapper<DES>;
+
+// Compile-time validation
+static_assert(AESWrapper::block_size == 16, "AES block size must be 16");
+static_assert(DESWrapper::block_size == 8, "DES block size must be 8");
+
+} // namespace CryptoGL::Algorithms
+\end{lstlisting}
+
+\section{Priority 3: Advanced Architecture Patterns (Medium to Hard)}
+
+\subsection{3.1 Policy-Based Design for Algorithm Configuration}
+
+\textbf{Current State:}
+\begin{lstlisting}
+// Current hardcoded algorithm configuration
+class AES {
+private:
+    static constexpr size_t rounds = 10;
+    static constexpr size_t block_size = 16;
+    
+public:
+    void encrypt(const Vector& plaintext, Vector& ciphertext) {
+        // Fixed implementation
+    }
+};
+\end{lstlisting}
+
+\textcolor{problemred}{\textbf{Problems with Current Design:}}
+\begin{itemize}
+    \item Hardcoded algorithm parameters
+    \item No flexibility for different configurations
+    \item Difficult to test different variants
+    \item No compile-time customization
+\end{itemize}
+
+\textcolor{solutiongreen}{\textbf{Why This Fix Works:}}
+\begin{itemize}
+    \item Flexible algorithm configuration
+    \item Compile-time customization
+    \item Better testability
+    \item Reusable components
+\end{itemize}
+
+\textbf{Recommended Policy-Based Design:}
+\begin{lstlisting}
+#include <type_traits>
+
+namespace CryptoGL::Policies {
+
+// Key scheduling policy
+template<typename T>
+struct KeySchedulingPolicy;
+
+template<>
+struct KeySchedulingPolicy<AES> {
+    static constexpr size_t rounds = 10;
+    static constexpr size_t key_size = 32;
+    
+    template<typename KeyType>
+    static auto schedule_key(const KeyType& key) {
+        // AES-specific key scheduling
+        return AES::expandKey(key);
+    }
+};
+
+// Block processing policy
+template<typename T>
+struct BlockProcessingPolicy;
+
+template<>
+struct BlockProcessingPolicy<AES> {
+    static constexpr size_t block_size = 16;
+    
+    template<typename BlockType>
+    static void process_block(BlockType& block) {
+        // AES-specific block processing
+        AES::processBlock(block);
+    }
+};
+
+// Main algorithm template
+template<typename Algorithm, 
+         typename KeyPolicy = KeySchedulingPolicy<Algorithm>,
+         typename BlockPolicy = BlockProcessingPolicy<Algorithm>>
+class ConfigurableCipher {
+private:
+    Algorithm algorithm_;
+    
+public:
+    static constexpr size_t rounds = KeyPolicy::rounds;
+    static constexpr size_t block_size = BlockPolicy::block_size;
+    static constexpr size_t key_size = KeyPolicy::key_size;
+    
+    template<typename KeyType>
+    void set_key(const KeyType& key) {
+        auto scheduled_key = KeyPolicy::schedule_key(key);
+        algorithm_.set_scheduled_key(scheduled_key);
+    }
+    
+    template<typename BlockType>
+    void encrypt_block(BlockType& block) {
+        BlockPolicy::process_block(block);
+    }
+};
+
+// Usage with different configurations
+using StandardAES = ConfigurableCipher<AES>;
+using CustomAES = ConfigurableCipher<AES, CustomKeyPolicy, CustomBlockPolicy>;
+
+} // namespace CryptoGL::Policies
+\end{lstlisting}
+
+\subsection{3.2 Type-Safe Algorithm Interface}
+
+\textbf{Current State:}
+\begin{lstlisting}
+// Current interface design
+class BlockCipher {
+public:
+    virtual void encrypt(const Vector& plaintext, Vector& ciphertext) = 0;
+    virtual void decrypt(const Vector& ciphertext, Vector& plaintext) = 0;
+    virtual void setKey(const Vector& key) = 0;
+};
+
+class AES : public BlockCipher {
+public:
+    void encrypt(const Vector& plaintext, Vector& ciphertext) override;
+    void decrypt(const Vector& ciphertext, Vector& plaintext) override;
+    void setKey(const Vector& key) override;
+};
+\end{lstlisting}
+
+\textcolor{problemred}{\textbf{Problems with Current Interface:}}
+\begin{itemize}
+    \item Runtime polymorphism overhead
+    \item No compile-time type safety
+    \item Difficult to optimize
+    \item No compile-time validation of requirements
+\end{itemize}
+
+\textcolor{solutiongreen}{\textbf{Why This Fix Works:}}
+\begin{itemize}
+    \item Compile-time type safety
+    \item Better optimization opportunities
+    \item Clear interface contracts
+    \item Easier to extend and maintain
+\end{itemize}
+
+\textbf{Recommended Type-Safe Interface:}
+\begin{lstlisting}
+#include <concepts>
+#include <type_traits>
+
+namespace CryptoGL::Concepts {
+
+// Concept for block cipher requirements
+template<typename T>
+concept BlockCipher = requires(T t, const Vector& input, Vector& output, const Vector& key) {
+    { T::block_size } -> std::convertible_to<size_t>;
+    { T::key_size } -> std::convertible_to<size_t>;
+    { t.encrypt(input, output) } -> std::same_as<void>;
+    { t.decrypt(input, output) } -> std::same_as<void>;
+    { t.set_key(key) } -> std::same_as<void>;
+};
+
+// Concept for stream cipher requirements
+template<typename T>
+concept StreamCipher = requires(T t, const Vector& input, Vector& output, const Vector& key) {
+    { T::key_size } -> std::convertible_to<size_t>;
+    { t.process(input, output) } -> std::same_as<void>;
+    { t.set_key(key) } -> std::same_as<void>;
+};
+
+// Concept for hash function requirements
+template<typename T>
+concept HashFunction = requires(T t, const Vector& input, Vector& output) {
+    { T::digest_size } -> std::convertible_to<size_t>;
+    { t.hash(input, output) } -> std::same_as<void>;
+    { t.reset() } -> std::same_as<void>;
+};
+
+} // namespace CryptoGL::Concepts
+
+namespace CryptoGL::Algorithms {
+
+// Type-safe algorithm interface
+template<typename T>
+requires CryptoGL::Concepts::BlockCipher<T>
+class BlockCipherInterface {
+private:
+    T cipher_;
+    
+public:
+    static constexpr size_t block_size = T::block_size;
+    static constexpr size_t key_size = T::key_size;
+    
+    void encrypt(const Vector& plaintext, Vector& ciphertext) {
+        static_assert(plaintext.size() % block_size == 0, 
+                     "Plaintext size must be multiple of block size");
+        cipher_.encrypt(plaintext, ciphertext);
+    }
+    
+    void decrypt(const Vector& ciphertext, Vector& plaintext) {
+        static_assert(ciphertext.size() % block_size == 0, 
+                     "Ciphertext size must be multiple of block size");
+        cipher_.decrypt(ciphertext, plaintext);
+    }
+    
+    void set_key(const Vector& key) {
+        static_assert(key.size() == key_size, 
+                     "Key size must match algorithm requirements");
+        cipher_.set_key(key);
+    }
+};
+
+// Usage with compile-time validation
+using AESInterface = BlockCipherInterface<AES>;
+using DESInterface = BlockCipherInterface<DES>;
+
+// This would cause a compile error if AES doesn't satisfy BlockCipher concept
+static_assert(CryptoGL::Concepts::BlockCipher<AES>, "AES must satisfy BlockCipher concept");
+
+} // namespace CryptoGL::Algorithms
+\end{lstlisting}
+
+\subsection{3.3 Dependency Injection and Configuration}
+
+\textbf{Current State:}
+\begin{lstlisting}
+// Current hardcoded dependencies
+class AES {
+private:
+    Vector current_block;
+    Vector round_keys;
+    std::array<uint8_t, 256> sbox;
+    
+public:
+    AES() {
+        // Hardcoded S-box initialization
+        initialize_sbox();
+    }
+    
+private:
+    void initialize_sbox() {
+        // Hardcoded S-box values
+    }
+};
+\end{lstlisting}
+
+\textcolor{problemred}{\textbf{Problems with Current Design:}}
+\begin{itemize}
+    \item Hardcoded dependencies
+    \item Difficult to test with different configurations
+    \item No flexibility for different implementations
+    \item Tight coupling between components
+\end{itemize}
+
+\textcolor{solutiongreen}{\textbf{Why This Fix Works:}}
+\begin{itemize}
+    \item Flexible dependency injection
+    \item Better testability
+    \item Loose coupling
+    \item Configurable behavior
+\end{itemize}
+
+\textbf{Recommended Dependency Injection Design:}
+\begin{lstlisting}
+#include <memory>
+#include <functional>
+
+namespace CryptoGL::Core {
+
+// Configuration interface
+class AlgorithmConfig {
+public:
+    virtual ~AlgorithmConfig() = default;
+    virtual std::string name() const = 0;
+    virtual size_t version() const = 0;
+};
+
+// S-box provider interface
+class SBoxProvider {
+public:
+    virtual ~SBoxProvider() = default;
+    virtual std::array<uint8_t, 256> get_sbox() const = 0;
+    virtual std::array<uint8_t, 256> get_inverse_sbox() const = 0;
+};
+
+// Key scheduling interface
+class KeyScheduler {
+public:
+    virtual ~KeyScheduler() = default;
+    virtual Vector schedule_key(const Vector& key) const = 0;
+};
+
+// Default implementations
+class DefaultAESConfig : public AlgorithmConfig {
+public:
+    std::string name() const override { return "AES"; }
+    size_t version() const override { return 1; }
+};
+
+class DefaultAESSBox : public SBoxProvider {
+public:
+    std::array<uint8_t, 256> get_sbox() const override {
+        // Return standard AES S-box
+        return AES_SBOX;
+    }
+    
+    std::array<uint8_t, 256> get_inverse_sbox() const override {
+        // Return standard AES inverse S-box
+        return AES_INVERSE_SBOX;
+    }
+};
+
+class DefaultAESKeyScheduler : public KeyScheduler {
+public:
+    Vector schedule_key(const Vector& key) const override {
+        // Standard AES key scheduling
+        return AES::expandKey(key);
+    }
+};
+
+// Configurable AES implementation
+class ConfigurableAES {
+private:
+    std::shared_ptr<AlgorithmConfig> config_;
+    std::shared_ptr<SBoxProvider> sbox_provider_;
+    std::shared_ptr<KeyScheduler> key_scheduler_;
+    
+    Vector current_block;
+    Vector round_keys;
+    std::array<uint8_t, 256> sbox;
+    std::array<uint8_t, 256> inverse_sbox;
+    
+public:
+    ConfigurableAES(std::shared_ptr<AlgorithmConfig> config = nullptr,
+                   std::shared_ptr<SBoxProvider> sbox_provider = nullptr,
+                   std::shared_ptr<KeyScheduler> key_scheduler = nullptr)
+        : config_(config ? config : std::make_shared<DefaultAESConfig>())
+        , sbox_provider_(sbox_provider ? sbox_provider : std::make_shared<DefaultAESSBox>())
+        , key_scheduler_(key_scheduler ? key_scheduler : std::make_shared<DefaultAESKeyScheduler>()) {
+        
+        initialize_sboxes();
+    }
+    
+    void set_key(const Vector& key) {
+        round_keys = key_scheduler_->schedule_key(key);
+    }
+    
+    void encrypt(const Vector& plaintext, Vector& ciphertext) {
+        // Use injected dependencies
+        // Implementation using sbox_ and round_keys_
+    }
+    
+private:
+    void initialize_sboxes() {
+        sbox = sbox_provider_->get_sbox();
+        inverse_sbox = sbox_provider_->get_inverse_sbox();
+    }
+};
+
+// Factory for creating configured algorithms
+class AlgorithmFactory {
+public:
+    template<typename AlgorithmType>
+    static std::unique_ptr<AlgorithmType> create(
+        std::shared_ptr<AlgorithmConfig> config = nullptr,
+        std::shared_ptr<SBoxProvider> sbox_provider = nullptr,
+        std::shared_ptr<KeyScheduler> key_scheduler = nullptr) {
+        
+        return std::make_unique<AlgorithmType>(config, sbox_provider, key_scheduler);
+    }
+};
+
+} // namespace CryptoGL::Core
+
+// Usage examples
+auto standard_aes = AlgorithmFactory::create<ConfigurableAES>();
+auto custom_aes = AlgorithmFactory::create<ConfigurableAES>(
+    std::make_shared<CustomAESConfig>(),
+    std::make_shared<CustomSBoxProvider>(),
+    std::make_shared<CustomKeyScheduler>()
+);
+\end{lstlisting}
+
+\section{Priority 4: Performance and Security Architecture (Hard)}
+
+\subsection{4.1 Memory Safety and Zero-Copy Operations}
+
+\textbf{Current State:}
+\begin{lstlisting}
+// Current memory management
+class Vector {
+private:
+    uint8_t* data_;
+    size_t size_;
+    
+public:
+    Vector(const Vector& other) {
+        size_ = other.size_;
+        data_ = new uint8_t[size_];
+        std::copy(other.data_, other.data_ + size_, data_);
+    }
+    
+    Vector& operator=(const Vector& other) {
+        if (this != &other) {
+            delete[] data_;
+            size_ = other.size_;
+            data_ = new uint8_t[size_];
+            std::copy(other.data_, other.data_ + size_, data_);
+        }
+        return *this;
+    }
+};
+\end{lstlisting}
+
+\textcolor{problemred}{\textbf{Problems with Current Memory Management:}}
+\begin{itemize}
+    \item Unnecessary memory allocations and copies
+    \item Potential memory leaks
+    \item Performance overhead from copying
+    \item No move semantics support
+\end{itemize}
+
+\textcolor{solutiongreen}{\textbf{Why This Fix Works:}}
+\begin{itemize}
+    \item Zero-copy operations where possible
+    \item Efficient move semantics
+    \item RAII-compliant memory management
+    \item Better performance characteristics
+\end{itemize}
+
+\textbf{Recommended Memory-Safe Design:}
+\begin{lstlisting}
+#include <memory>
+#include <span>
+#include <string_view>
+
+namespace CryptoGL::Core {
+
+// Zero-copy view types
+template<typename T>
+using DataView = std::span<const T>;
+
+template<typename T>
+using MutableDataView = std::span<T>;
+
+// Memory-safe vector with zero-copy operations
+template<typename T>
+class SecureVector {
+private:
+    std::unique_ptr<T[]> data_;
+    size_t size_;
+    size_t capacity_;
+    
+public:
+    // Constructors
+    SecureVector() : data_(nullptr), size_(0), capacity_(0) {}
+    
+    explicit SecureVector(size_t size) 
+        : data_(std::make_unique<T[]>(size)), size_(size), capacity_(size) {}
+    
+    // Move constructor
+    SecureVector(SecureVector&& other) noexcept
+        : data_(std::move(other.data_))
+        , size_(other.size_)
+        , capacity_(other.capacity_) {
+        other.size_ = 0;
+        other.capacity_ = 0;
+    }
+    
+    // Move assignment
+    SecureVector& operator=(SecureVector&& other) noexcept {
+        if (this != &other) {
+            data_ = std::move(other.data_);
+            size_ = other.size_;
+            capacity_ = other.capacity_;
+            other.size_ = 0;
+            other.capacity_ = 0;
+        }
+        return *this;
+    }
+    
+    // Zero-copy view operations
+    DataView<T> view() const noexcept {
+        return DataView<T>(data_.get(), size_);
+    }
+    
+    MutableDataView<T> mutable_view() noexcept {
+        return MutableDataView<T>(data_.get(), size_);
+    }
+    
+    // Secure operations
+    void secure_clear() noexcept {
+        if (data_) {
+            std::fill(data_.get(), data_.get() + size_, T{});
+        }
+        size_ = 0;
+    }
+    
+    // RAII cleanup
+    ~SecureVector() {
+        secure_clear();
+    }
+    
+    // Prevent copying for security
+    SecureVector(const SecureVector&) = delete;
+    SecureVector& operator=(const SecureVector&) = delete;
+};
+
+// Zero-copy algorithm interface
+template<typename T>
+concept ZeroCopyAlgorithm = requires(T t, DataView<uint8_t> input, MutableDataView<uint8_t> output) {
+    { t.process(input, output) } -> std::same_as<void>;
+    { t.block_size() } -> std::convertible_to<size_t>;
+};
+
+// Example zero-copy AES implementation
+class ZeroCopyAES {
+private:
+    SecureVector<uint8_t> key_;
+    std::array<uint8_t, 16> block_buffer_;
+    
+public:
+    void set_key(DataView<uint8_t> key) {
+        key_ = SecureVector<uint8_t>(key.size());
+        std::copy(key.begin(), key.end(), key_.mutable_view().begin());
+    }
+    
+    void encrypt_block(DataView<uint8_t> input, MutableDataView<uint8_t> output) {
+        // Process block in-place without copying
+        std::copy(input.begin(), input.end(), block_buffer_.begin());
+        process_block(block_buffer_);
+        std::copy(block_buffer_.begin(), block_buffer_.end(), output.begin());
+    }
+    
+    size_t block_size() const { return 16; }
+    
+private:
+    void process_block(std::array<uint8_t, 16>& block) {
+        // AES block processing
+    }
+};
+
+static_assert(ZeroCopyAlgorithm<ZeroCopyAES>, "ZeroCopyAES must satisfy ZeroCopyAlgorithm concept");
+
+} // namespace CryptoGL::Core
+\end{lstlisting}
+
+\subsection{4.2 Constant-Time Security Architecture}
+
+\textbf{Current State:}
+\begin{lstlisting}
+// Current timing-vulnerable code
+bool String::operator==(const String& other) const {
+    if (size() != other.size()) {
+        return false;  // Early return creates timing side-channel
+    }
+    
+    for (size_t i = 0; i < size(); ++i) {
+        if (data_[i] != other.data_[i]) {
+            return false;  // Early return creates timing side-channel
+        }
+    }
+    return true;
+}
+\end{lstlisting}
+
+\textcolor{problemred}{\textbf{Problems with Current Security:}}
+\begin{itemize}
+    \item Timing side-channels in comparisons
+    \item Early returns reveal information
+    \item Branch-dependent execution paths
+    \item Vulnerable to timing attacks
+\end{itemize}
+
+\textcolor{solutiongreen}{\textbf{Why This Fix Works:}}
+\begin{itemize}
+    \item Constant-time operations
+    \item No timing side-channels
+    \item Secure against timing attacks
+    \item Predictable execution time
+\end{itemize}
+
+\textbf{Recommended Constant-Time Design:}
+\begin{lstlisting}
+#include <array>
+#include <bit>
+#include <cstring>
+
+namespace CryptoGL::Security {
+
+// Constant-time utilities
+class ConstantTime {
+public:
+    // Constant-time comparison
+    template<typename T>
+    static bool equal(const T* a, const T* b, size_t size) noexcept {
+        volatile uint8_t result = 0;
+        
+        for (size_t i = 0; i < size; ++i) {
+            result |= a[i] ^ b[i];
+        }
+        
+        return result == 0;
+    }
+    
+    // Constant-time selection
+    template<typename T>
+    static T select(bool condition, T a, T b) noexcept {
+        // Use bit manipulation for constant-time selection
+        T mask = static_cast<T>(-static_cast<int>(condition));
+        return (a & mask) | (b & ~mask);
+    }
+    
+    // Constant-time memory comparison
+    static bool memcmp_constant_time(const void* a, const void* b, size_t size) noexcept {
+        return equal(static_cast<const uint8_t*>(a), 
+                    static_cast<const uint8_t*>(b), size);
+    }
+    
+    // Constant-time string comparison
+    static bool strcmp_constant_time(const std::string& a, const std::string& b) noexcept {
+        size_t max_size = std::max(a.size(), b.size());
+        
+        // Pad shorter string with zeros for constant-time comparison
+        std::array<uint8_t, 256> padded_a = {};
+        std::array<uint8_t, 256> padded_b = {};
+        
+        std::copy(a.begin(), a.end(), padded_a.begin());
+        std::copy(b.begin(), b.end(), padded_b.begin());
+        
+        return equal(padded_a.data(), padded_b.data(), max_size);
+    }
+};
+
+// Secure string with constant-time operations
+class SecureString {
+private:
+    std::unique_ptr<uint8_t[]> data_;
+    size_t size_;
+    
+public:
+    SecureString() : data_(nullptr), size_(0) {}
+    
+    explicit SecureString(const std::string& str) 
+        : data_(std::make_unique<uint8_t[]>(str.size()))
+        , size_(str.size()) {
+        std::copy(str.begin(), str.end(), data_.get());
+    }
+    
+    // Constant-time comparison
+    bool constant_time_equals(const SecureString& other) const noexcept {
+        if (size_ != other.size_) {
+            // Still compare full buffers to avoid timing side-channel
+            return ConstantTime::equal(data_.get(), other.data_.get(), 
+                                     std::max(size_, other.size_));
+        }
+        return ConstantTime::equal(data_.get(), other.data_.get(), size_);
+    }
+    
+    // Secure cleanup
+    void secure_clear() noexcept {
+        if (data_) {
+            std::fill(data_.get(), data_.get() + size_, 0);
+        }
+    }
+    
+    ~SecureString() {
+        secure_clear();
+    }
+    
+    // Prevent copying for security
+    SecureString(const SecureString&) = delete;
+    SecureString& operator=(const SecureString&) = delete;
+    
+    // Allow moving
+    SecureString(SecureString&&) = default;
+    SecureString& operator=(SecureString&&) = default;
+};
+
+// Constant-time cryptographic operations
+class ConstantTimeCrypto {
+public:
+    // Constant-time modular addition
+    template<typename T>
+    static T modular_add(T a, T b, T modulus) noexcept {
+        T sum = a + b;
+        T overflow = (sum < a) ? 1 : 0;
+        T result = sum - (overflow * modulus);
+        return result;
+    }
+    
+    // Constant-time modular multiplication
+    template<typename T>
+    static T modular_multiply(T a, T b, T modulus) noexcept {
+        T result = 0;
+        T temp = a;
+        
+        for (size_t i = 0; i < sizeof(T) * 8; ++i) {
+            T bit = (b >> i) & 1;
+            result = ConstantTime::select(bit, 
+                                        modular_add(result, temp, modulus), 
+                                        result);
+            temp = modular_add(temp, temp, modulus);
+        }
+        
+        return result;
+    }
+    
+    // Constant-time conditional swap
+    template<typename T>
+    static void conditional_swap(bool condition, T& a, T& b) noexcept {
+        T mask = static_cast<T>(-static_cast<int>(condition));
+        T temp = a ^ b;
+        a ^= temp & mask;
+        b ^= temp & mask;
+    }
+};
+
+} // namespace CryptoGL::Security
+\end{lstlisting}
+
+\section{Implementation Roadmap and Priority Matrix}
+
+\subsection{Architecture Improvement Priority Matrix}
+
+\begin{table}[H]
+\centering
+\adjustbox{width=\textwidth}{
+\begin{tabular}{|p{2cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{Priority Level} & \textbf{Effort Required} & \textbf{Impact} & \textbf{Implementation Time} & \textbf{Recommended Order} \\
+\hline
+Priority 1 & Low-Medium & High & 2-4 weeks & 1st \\
+\hline
+Priority 2 & Medium & High & 4-6 weeks & 2nd \\
+\hline
+Priority 3 & Medium-Hard & Medium-High & 6-8 weeks & 3rd \\
+\hline
+Priority 4 & Hard & High & 8-12 weeks & 4th \\
+\hline
+\end{tabular}
+}
+\caption{Architecture Improvement Priority Matrix}
+\end{table}
+
+\subsection{Detailed Implementation Timeline}
+
+\begin{table}[H]
+\centering
+\adjustbox{width=\textwidth}{
+\begin{tabular}{|p{2.5cm}|p{2cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|}
+\hline
+\textbf{Phase} & \textbf{Week} & \textbf{Primary Tasks} & \textbf{Secondary Tasks} & \textbf{Deliverables} \\
+\hline
+Foundation & 1-2 & Directory restructuring & Namespace organization & New project structure \\
+\hline
+Foundation & 3-4 & CMake modernization & Build system updates & Modernized build system \\
+\hline
+Modern C++ & 5-6 & Smart pointer migration & Exception handling & Memory-safe components \\
+\hline
+Modern C++ & 7-8 & Template metaprogramming & Concept definitions & Type-safe interfaces \\
+\hline
+Advanced Patterns & 9-10 & Policy-based design & Dependency injection & Configurable algorithms \\
+\hline
+Advanced Patterns & 11-12 & Type-safe interfaces & Algorithm factories & Extensible architecture \\
+\hline
+Security & 13-14 & Zero-copy operations & Memory safety & Performance optimizations \\
+\hline
+Security & 15-16 & Constant-time operations & Security hardening & Secure implementations \\
+\hline
+\end{tabular}
+}
+\caption{Detailed Implementation Timeline}
+\end{table}
+
+\subsection{Success Metrics and Validation}
+
+\begin{table}[H]
+\centering
+\adjustbox{width=\textwidth}{
+\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{Metric Category} & \textbf{Current State} & \textbf{Target State} & \textbf{Measurement Method} \\
+\hline
+Code Maintainability & Low (flat structure) & High (modular) & Cyclomatic complexity, file count per directory \\
+\hline
+Build Performance & Medium (manual files) & High (auto-discovery) & Build time, dependency resolution \\
+\hline
+Memory Safety & Medium (raw pointers) & High (smart pointers) & Static analysis, memory leak detection \\
+\hline
+Type Safety & Low (runtime checks) & High (compile-time) & Compile-time error count, concept validation \\
+\hline
+Security & Medium (timing attacks) & High (constant-time) & Timing analysis, security audit \\
+\hline
+Performance & Medium (copies) & High (zero-copy) & Benchmarking, profiling \\
+\hline
+\end{tabular}
+}
+\caption{Success Metrics and Validation Criteria}
+\end{table}
+
+\section{Conclusion}
+
+This architecture improvement guide provides a comprehensive roadmap for modernizing the CryptoGL project. The recommendations are designed to:
+
+\begin{itemize}
+    \item Improve code maintainability and organization
+    \item Enhance security through constant-time operations and memory safety
+    \item Boost performance with zero-copy operations and modern C++17 features
+    \item Increase type safety and compile-time validation
+    \item Enable better testing and extensibility
+\end{itemize}
+
+The phased approach ensures that improvements can be implemented incrementally without disrupting existing functionality. Each phase builds upon the previous one, creating a solid foundation for future development.
+
+\textbf{Key Benefits of Implementation:}
+\begin{itemize}
+    \item \textbf{Maintainability}: Modular structure and clear separation of concerns
+    \item \textbf{Security}: Constant-time operations and memory-safe implementations
+    \item \textbf{Performance}: Zero-copy operations and compile-time optimizations
+    \item \textbf{Extensibility}: Policy-based design and dependency injection
+    \item \textbf{Reliability}: Type-safe interfaces and comprehensive error handling
+\end{itemize}
+
+By following this roadmap, the CryptoGL project will evolve into a modern, secure, and high-performance cryptographic library that leverages the full power of C++17 and follows industry best practices.
+
+\end{document} 

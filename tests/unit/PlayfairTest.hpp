@@ -1,0 +1,37 @@
+#pragma once
+
+#include "Test.hpp"
+#include "../../src/algorithms/classical/playfair/Playfair.hpp"
+
+namespace UnitTests
+{
+    class PlayfairTest : public Test
+    {
+    protected:
+       Playfair *P;
+
+       void setUp() override
+       {
+          P = new Playfair("TESTING");
+       }
+
+       void tearDown() override
+       {
+          delete P;
+       }
+    };
+
+    TEST(PlayfairEncode, PlayfairTest) 
+    {
+      const StringTest clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMMATIONORIENTEEOBJETSURLEBOUTDESDOIGTS";
+
+      compare("EBFZETNKNKOBODNEMYSEYGREEDNIHDQMMAODPUOGENREPMNSTESVAVJPSETXZRSAMVNGSIARTCEI", P->encode(clear_text));
+    }
+
+    TEST(PlayfairDecode, PlayfairTest) 
+    {
+      const StringTest clear_text = "SALUTNILILPARAITQUETUCONNAISLAPROGRAMXMATIONORIENTEXEOBJETSURLEBOUTDESDOIGTS";
+
+      compare(clear_text, P->decode("EBFZETNKNKOBODNEMYSEYGREEDNIHDQMMAODPUOGENREPMNSTESVAVJPSETXZRSAMVNGSIARTCEI"));
+    }
+}

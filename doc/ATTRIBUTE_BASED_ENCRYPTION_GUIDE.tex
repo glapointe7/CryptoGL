@@ -1,0 +1,1637 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{mathtools}
+\usepackage{amsthm}
+
+% Page setup
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{blue}{Attribute-Based Encryption Guide}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Title formatting
+\titleformat{\section}{\Large\bfseries\color{blue}}{}{0em}{}
+\titleformat{\subsection}{\large\bfseries\color{darkgray}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{darkgray}}{}{0em}{}
+
+% Color definitions
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{definitionbox}{rgb}{0.9,0.9,0.9}
+\definecolor{examplebox}{rgb}{0.9,0.95,0.9}
+\definecolor{warningbox}{rgb}{1,0.95,0.8}
+\definecolor{prosbox}{rgb}{0.9,0.95,0.9}
+\definecolor{consbox}{rgb}{0.95,0.9,0.9}
+\definecolor{mathbox}{rgb}{0.95,0.95,1}
+
+% Code listing setup
+\lstset{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+% Custom boxes
+\newtcolorbox{definitionbox}{
+    colback=definitionbox,
+    colframe=red!50!black,
+    leftrule=4pt,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{examplebox}{
+    colback=examplebox,
+    colframe=green!50!black,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{warningbox}{
+    colback=warningbox,
+    colframe=orange!50!black,
+    leftrule=4pt,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{prosbox}{
+    colback=prosbox,
+    colframe=green!50!black,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{consbox}{
+    colback=consbox,
+    colframe=red!50!black,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{mathbox}{
+    colback=mathbox,
+    colframe=blue!50!black,
+    leftrule=4pt,
+    arc=0pt,
+    outer arc=0pt
+}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+
+% Title and author
+\title{\Huge\textbf{Attribute-Based Encryption: A Comprehensive Guide}\\[0.5cm]
+\large From Mathematical Theory to Practical Implementation}
+\author{CryptoGL Educational Series}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This document provides a comprehensive introduction to Attribute-Based Encryption (ABE), a powerful cryptographic primitive that enables fine-grained access control over encrypted data. We begin with the mathematical foundations, including bilinear pairings, access structures, and the underlying complexity assumptions. We then present step-by-step practical examples of Key-Policy ABE (KP-ABE) and Ciphertext-Policy ABE (CP-ABE), followed by implementation strategies and security considerations. This guide is designed for beginners with basic mathematical knowledge who want to understand both the theory and practical applications of attribute-based encryption.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introduction to Attribute-Based Encryption}
+
+Attribute-Based Encryption (ABE) is a type of public-key cryptography that enables fine-grained access control over encrypted data. Unlike traditional public-key encryption where a message is encrypted for a specific recipient, ABE allows encryption with respect to attributes, and decryption is only possible if the user's attributes satisfy a specific access policy.
+
+\begin{definitionbox}
+\textbf{Attribute-Based Encryption (ABE):} A cryptographic system where ciphertexts are associated with attributes or access policies, and private keys are associated with access structures. Decryption is only possible when the attributes associated with the ciphertext satisfy the access structure associated with the private key.
+\end{definitionbox}
+
+\subsection{Key Concepts}
+
+\begin{itemize}
+    \item \textbf{Attributes:} Descriptive labels that characterize users or data (e.g., "role=doctor", "department=cardiology", "level=senior")
+    \item \textbf{Access Policy:} A logical expression that defines which combinations of attributes are required for decryption
+    \item \textbf{Key-Policy ABE (KP-ABE):} Access policies are embedded in private keys, attributes are embedded in ciphertexts
+    \item \textbf{Ciphertext-Policy ABE (CP-ABE):} Access policies are embedded in ciphertexts, attributes are embedded in private keys
+    \item \textbf{Bilinear Pairings:} Mathematical operations that enable the construction of ABE schemes
+\end{itemize}
+
+\subsection{Applications}
+
+\begin{examplebox}
+\textbf{Real-World Applications:}
+\begin{itemize}
+    \item \textbf{Healthcare:} Encrypt patient records with attributes like "role=doctor" and "department=cardiology"
+    \item \textbf{Cloud Storage:} Encrypt files with policies like "role=manager OR (role=employee AND department=IT)"
+    \item \textbf{Social Networks:} Share encrypted posts with policies like "friends OR family"
+    \item \textbf{Government:} Classify documents with security levels and department access
+\end{itemize}
+\end{examplebox}
+
+\section{Mathematical Foundations}
+
+\subsection{Bilinear Pairings}
+
+Bilinear pairings are the fundamental mathematical tool that enables ABE construction.
+
+\begin{definition}
+Let $\mathbb{G}_1$, $\mathbb{G}_2$, and $\mathbb{G}_T$ be cyclic groups of prime order $p$. A \textbf{bilinear pairing} is a map $e: \mathbb{G}_1 \times \mathbb{G}_2 \rightarrow \mathbb{G}_T$ that satisfies:
+\begin{enumerate}
+    \item \textbf{Bilinearity:} For all $a, b \in \mathbb{Z}_p$ and $g_1 \in \mathbb{G}_1$, $g_2 \in \mathbb{G}_2$:
+    \[e(g_1^a, g_2^b) = e(g_1, g_2)^{ab}\]
+    \item \textbf{Non-degeneracy:} $e(g_1, g_2) \neq 1$ for generators $g_1 \in \mathbb{G}_1$, $g_2 \in \mathbb{G}_2$
+    \item \textbf{Computability:} There exists an efficient algorithm to compute $e(g_1, g_2)$
+\end{enumerate}
+\end{definition}
+
+\begin{mathbox}
+\textbf{Properties of Bilinear Pairings:}
+\begin{align*}
+e(g_1^a \cdot g_1^b, g_2) &= e(g_1^{a+b}, g_2) = e(g_1, g_2)^{a+b} \\
+e(g_1, g_2^a \cdot g_2^b) &= e(g_1, g_2^{a+b}) = e(g_1, g_2)^{a+b} \\
+e(g_1^a, g_2^b) &= e(g_1, g_2)^{ab} = e(g_1^b, g_2^a)
+\end{align*}
+\end{mathbox}
+
+\subsection{Access Structures}
+
+\begin{definition}
+An \textbf{access structure} $\mathbb{A}$ is a collection of non-empty subsets of $\{1, 2, \ldots, n\}$ such that:
+\begin{enumerate}
+    \item If $A \in \mathbb{A}$ and $A \subseteq B$, then $B \in \mathbb{A}$ (monotonicity)
+    \item $\mathbb{A}$ is non-empty
+\end{enumerate}
+\end{definition}
+
+\begin{examplebox}
+\textbf{Example Access Structures:}
+\begin{itemize}
+    \item \textbf{Threshold:} $\mathbb{A} = \{S \subseteq \{1,2,3,4\} : |S| \geq 2\}$ (any 2 out of 4)
+    \item \textbf{AND Gate:} $\mathbb{A} = \{\{1,2,3\}\}$ (all three attributes required)
+    \item \textbf{OR Gate:} $\mathbb{A} = \{\{1\}, \{2\}, \{3\}\}$ (any one attribute sufficient)
+\end{itemize}
+\end{examplebox}
+
+\subsection{Linear Secret Sharing Schemes (LSSS)}
+
+\begin{definition}
+A \textbf{Linear Secret Sharing Scheme} over $\mathbb{Z}_p$ consists of:
+\begin{enumerate}
+    \item A matrix $M$ with $n$ rows and $l$ columns
+    \item A function $\rho$ that labels each row with an attribute
+    \item A vector $\vec{v} = (s, r_2, \ldots, r_l)$ where $s$ is the secret
+    \item The shares are $\lambda_i = M_i \cdot \vec{v}$ where $M_i$ is the $i$-th row
+\end{enumerate}
+\end{definition}
+
+\begin{mathbox}
+\textbf{LSSS Construction for AND Gate:}
+For attributes $A$ and $B$ with secret $s$:
+\[M = \begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix}, \quad \vec{v} = \begin{pmatrix} s \\ r \end{pmatrix}\]
+Shares: $\lambda_1 = s$, $\lambda_2 = s + r$
+\end{mathbox}
+
+\subsection{Complexity Assumptions}
+
+\begin{definition}
+\textbf{Decisional Bilinear Diffie-Hellman (DBDH) Assumption:} Given $(g, g^a, g^b, g^c, T)$, it is computationally infeasible to distinguish $T = e(g,g)^{abc}$ from a random element in $\mathbb{G}_T$.
+\end{definition}
+
+\begin{definition}
+\textbf{Decisional Linear (DLIN) Assumption:} Given $(g, g^a, g^b, g^{ac}, g^{bd}, T)$, it is computationally infeasible to distinguish $T = g^{c+d}$ from a random element in $\mathbb{G}_1$.
+\end{definition}
+
+\section{Key-Policy Attribute-Based Encryption (KP-ABE)}
+
+In KP-ABE, access policies are embedded in private keys, and attributes are embedded in ciphertexts.
+
+\subsection{KP-ABE Construction}
+
+\begin{mathbox}
+\textbf{KP-ABE Scheme Components:}
+\begin{enumerate}
+    \item \textbf{Setup:} Generate public parameters and master secret key
+    \item \textbf{KeyGen:} Generate private key for access structure $\mathbb{A}$
+    \item \textbf{Encrypt:} Encrypt message with attribute set $S$
+    \item \textbf{Decrypt:} Decrypt if $S$ satisfies $\mathbb{A}$
+\end{enumerate}
+\end{mathbox}
+
+\subsubsection{Setup Algorithm}
+
+\begin{algorithm}
+\caption{KP-ABE Setup}
+\begin{algorithmic}
+\STATE Choose bilinear groups $\mathbb{G}_1, \mathbb{G}_2, \mathbb{G}_T$ of prime order $p$
+\STATE Choose generators $g_1 \in \mathbb{G}_1$, $g_2 \in \mathbb{G}_2$
+\STATE Choose random $\alpha, \beta \in \mathbb{Z}_p$
+\STATE Compute $h = g_1^\beta$, $f = g_1^{1/\beta}$
+\STATE Public parameters: $PK = (g_1, h, f, e(g_1, g_2)^\alpha)$
+\STATE Master secret key: $MSK = (g_2^\alpha, \beta)$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{lstlisting}[language=C++, caption=KP-ABE Setup Implementation]
+#include <vector>
+#include <random>
+#include <cstdint>
+#include <string>
+
+class KPABESetup {
+private:
+    uint64_t p_;  // Prime order
+    uint64_t g1_; // Generator for G1
+    uint64_t g2_; // Generator for G2
+    uint64_t alpha_, beta_;
+    
+public:
+    struct PublicParams {
+        uint64_t g1, h, f, e_g1_g2_alpha;
+    };
+    
+    struct MasterSecretKey {
+        uint64_t g2_alpha, beta;
+    };
+    
+    KPABESetup(uint64_t prime_order) : p_(prime_order) {
+        // In practice, use cryptographically secure random generators
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<uint64_t> dis(2, p_ - 1);
+        
+        g1_ = dis(gen);
+        g2_ = dis(gen);
+        alpha_ = dis(gen);
+        beta_ = dis(gen);
+    }
+    
+    std::pair<PublicParams, MasterSecretKey> setup() {
+        uint64_t h = mod_pow(g1_, beta_, p_);
+        uint64_t f = mod_inverse(mod_pow(g1_, 1, p_), beta_, p_);
+        uint64_t e_g1_g2_alpha = mod_pow(g1_, alpha_, p_); // Simplified pairing
+        
+        PublicParams pk = {g1_, h, f, e_g1_g2_alpha};
+        MasterSecretKey msk = {mod_pow(g2_, alpha_, p_), beta_};
+        
+        return {pk, msk};
+    }
+    
+private:
+    uint64_t mod_pow(uint64_t base, uint64_t exp, uint64_t mod) {
+        uint64_t result = 1;
+        base %= mod;
+        while (exp > 0) {
+            if (exp & 1) result = (result * base) % mod;
+            base = (base * base) % mod;
+            exp >>= 1;
+        }
+        return result;
+    }
+    
+    uint64_t mod_inverse(uint64_t a, uint64_t m, uint64_t mod) {
+        // Extended Euclidean algorithm for modular inverse
+        int64_t x = 0, y = 0;
+        uint64_t g = extended_gcd(a, m, x, y);
+        if (g != 1) throw std::runtime_error("Modular inverse does not exist");
+        return (x % mod + mod) % mod;
+    }
+    
+    uint64_t extended_gcd(uint64_t a, uint64_t b, int64_t& x, int64_t& y) {
+        if (b == 0) {
+            x = 1;
+            y = 0;
+            return a;
+        }
+        int64_t x1, y1;
+        uint64_t gcd = extended_gcd(b, a % b, x1, y1);
+        x = y1;
+        y = x1 - (a / b) * y1;
+        return gcd;
+    }
+};
+\end{lstlisting}
+
+\subsubsection{KeyGen Algorithm}
+
+\begin{algorithm}
+\caption{KP-ABE KeyGen}
+\begin{algorithmic}
+\STATE \textbf{Input:} Access structure $\mathbb{A} = (M, \rho)$, master secret key $MSK$
+\STATE Choose random vector $\vec{v} = (s, r_2, \ldots, r_l) \in \mathbb{Z}_p^l$
+\STATE For each row $i$ of $M$, compute $\lambda_i = M_i \cdot \vec{v}$
+\STATE Choose random $r_i \in \mathbb{Z}_p$ for each row $i$
+\STATE For each row $i$: $D_i = g_2^{\lambda_i} \cdot f^{r_i}$, $R_i = g_2^{r_i}$
+\STATE Private key: $SK = (D_i, R_i)$ for all rows $i$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{lstlisting}[language=C++, caption=KP-ABE KeyGen Implementation]
+#include <vector>
+#include <random>
+#include <cstdint>
+#include <string>
+
+class KPABEKeyGen {
+private:
+    uint64_t p_;
+    
+public:
+    struct AccessStructure {
+        std::vector<std::vector<uint64_t>> matrix;  // M matrix
+        std::vector<std::string> row_mapping;       // ρ function
+    };
+    
+    struct PrivateKey {
+        std::vector<uint64_t> D_values;  // D_i components
+        std::vector<uint64_t> R_values;  // R_i components
+    };
+    
+    KPABEKeyGen(uint64_t prime_order) : p_(prime_order) {}
+    
+    PrivateKey keygen(const AccessStructure& access_struct, 
+                     const KPABESetup::MasterSecretKey& msk) {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<uint64_t> dis(1, p_ - 1);
+        
+        int rows = access_struct.matrix.size();
+        int cols = access_struct.matrix[0].size();
+        
+        // Generate random vector v = (s, r_2, ..., r_l)
+        std::vector<uint64_t> v(cols);
+        for (int i = 0; i < cols; ++i) {
+            v[i] = dis(gen);
+        }
+        
+        // Compute shares λ_i = M_i · v
+        std::vector<uint64_t> lambda(rows);
+        for (int i = 0; i < rows; ++i) {
+            lambda[i] = 0;
+            for (int j = 0; j < cols; ++j) {
+                lambda[i] = (lambda[i] + access_struct.matrix[i][j] * v[j]) % p_;
+            }
+        }
+        
+        // Generate random values r_i for each row
+        std::vector<uint64_t> r_values(rows);
+        for (int i = 0; i < rows; ++i) {
+            r_values[i] = dis(gen);
+        }
+        
+        // Compute private key components
+        std::vector<uint64_t> D_values(rows);
+        std::vector<uint64_t> R_values(rows);
+        
+        for (int i = 0; i < rows; ++i) {
+            // D_i = g_2^λ_i · f^r_i
+            uint64_t g2_lambda = mod_pow(msk.g2_alpha, lambda[i], p_);
+            uint64_t f_ri = mod_pow(msk.beta, r_values[i], p_); // Simplified f
+            D_values[i] = (g2_lambda * f_ri) % p_;
+            
+            // R_i = g_2^r_i
+            R_values[i] = mod_pow(msk.g2_alpha, r_values[i], p_);
+        }
+        
+        return {D_values, R_values};
+    }
+    
+private:
+    uint64_t mod_pow(uint64_t base, uint64_t exp, uint64_t mod) {
+        uint64_t result = 1;
+        base %= mod;
+        while (exp > 0) {
+            if (exp & 1) result = (result * base) % mod;
+            base = (base * base) % mod;
+            exp >>= 1;
+        }
+        return result;
+    }
+};
+\end{lstlisting}
+
+\subsubsection{Encrypt Algorithm}
+
+\begin{algorithm}
+\caption{KP-ABE Encrypt}
+\begin{algorithmic}
+\STATE \textbf{Input:} Message $M$, attribute set $S$, public parameters $PK$
+\STATE Choose random $s \in \mathbb{Z}_p$
+\STATE Compute $C = M \cdot e(g_1, g_2)^{\alpha s}$
+\STATE Compute $C' = g_1^s$
+\STATE For each attribute $i \in S$: $C_i = h^s$
+\STATE Ciphertext: $CT = (C, C', \{C_i\}_{i \in S})$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{lstlisting}[language=C++, caption=KP-ABE Encrypt Implementation]
+#include <vector>
+#include <random>
+#include <cstdint>
+#include <string>
+#include <unordered_map>
+
+class KPABEEncrypt {
+private:
+    uint64_t p_;
+    
+public:
+    struct Ciphertext {
+        uint64_t C;                                    // Main ciphertext component
+        uint64_t C_prime;                              // C' component
+        std::unordered_map<std::string, uint64_t> C_i; // Attribute components
+    };
+    
+    KPABEEncrypt(uint64_t prime_order) : p_(prime_order) {}
+    
+    Ciphertext encrypt(uint64_t message, 
+                      const std::vector<std::string>& attributes,
+                      const KPABESetup::PublicParams& pk) {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<uint64_t> dis(1, p_ - 1);
+        
+        // Choose random s
+        uint64_t s = dis(gen);
+        
+        // Compute C = M · e(g_1, g_2)^(αs)
+        uint64_t e_g1_g2_alpha_s = mod_pow(pk.e_g1_g2_alpha, s, p_);
+        uint64_t C = (message * e_g1_g2_alpha_s) % p_;
+        
+        // Compute C' = g_1^s
+        uint64_t C_prime = mod_pow(pk.g1, s, p_);
+        
+        // Compute C_i = h^s for each attribute
+        std::unordered_map<std::string, uint64_t> C_i;
+        uint64_t h_s = mod_pow(pk.h, s, p_);
+        
+        for (const auto& attr : attributes) {
+            C_i[attr] = h_s;
+        }
+        
+        return {C, C_prime, C_i};
+    }
+    
+private:
+    uint64_t mod_pow(uint64_t base, uint64_t exp, uint64_t mod) {
+        uint64_t result = 1;
+        base %= mod;
+        while (exp > 0) {
+            if (exp & 1) result = (result * base) % mod;
+            base = (base * base) % mod;
+            exp >>= 1;
+        }
+        return result;
+    }
+};
+\end{lstlisting}
+
+\subsubsection{Decrypt Algorithm}
+
+\begin{algorithm}
+\caption{KP-ABE Decrypt}
+\begin{algorithmic}
+\STATE \textbf{Input:} Ciphertext $CT$, private key $SK$, attribute set $S$
+\STATE Find subset $I \subseteq \{1, \ldots, n\}$ where $\rho(I) \subseteq S$
+\STATE Find constants $\{\omega_i\}_{i \in I}$ such that $\sum_{i \in I} \omega_i M_i = (1, 0, \ldots, 0)$
+\STATE Compute: $A = \prod_{i \in I} e(C', D_i)^{\omega_i}$
+\STATE Compute: $B = \prod_{i \in I} e(C_i, R_i)^{\omega_i}$
+\STATE Recover message: $M = C \cdot \frac{B}{A}$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{lstlisting}[language=C++, caption=KP-ABE Decrypt Implementation]
+#include <vector>
+#include <cstdint>
+#include <string>
+#include <unordered_map>
+#include <algorithm>
+
+class KPABEDecrypt {
+private:
+    uint64_t p_;
+    
+public:
+    KPABEDecrypt(uint64_t prime_order) : p_(prime_order) {}
+    
+    uint64_t decrypt(const KPABEEncrypt::Ciphertext& ct,
+                    const KPABEKeyGen::PrivateKey& sk,
+                    const KPABEKeyGen::AccessStructure& access_struct,
+                    const std::vector<std::string>& user_attributes) {
+        
+        // Find subset I where ρ(I) ⊆ S (user attributes)
+        std::vector<int> I;
+        for (int i = 0; i < access_struct.row_mapping.size(); ++i) {
+            const std::string& attr = access_struct.row_mapping[i];
+            if (std::find(user_attributes.begin(), user_attributes.end(), attr) 
+                != user_attributes.end()) {
+                I.push_back(i);
+            }
+        }
+        
+        if (I.empty()) {
+            throw std::runtime_error("No matching attributes found");
+        }
+        
+        // Find constants ω_i such that Σ ω_i M_i = (1, 0, ..., 0)
+        std::vector<uint64_t> omega = solve_linear_system(access_struct.matrix, I);
+        
+        // Compute A = Π e(C', D_i)^ω_i
+        uint64_t A = 1;
+        for (int idx : I) {
+            uint64_t pairing = simplified_pairing(ct.C_prime, sk.D_values[idx]);
+            uint64_t powered = mod_pow(pairing, omega[idx], p_);
+            A = (A * powered) % p_;
+        }
+        
+        // Compute B = Π e(C_i, R_i)^ω_i
+        uint64_t B = 1;
+        for (int idx : I) {
+            const std::string& attr = access_struct.row_mapping[idx];
+            if (ct.C_i.find(attr) != ct.C_i.end()) {
+                uint64_t pairing = simplified_pairing(ct.C_i.at(attr), sk.R_values[idx]);
+                uint64_t powered = mod_pow(pairing, omega[idx], p_);
+                B = (B * powered) % p_;
+            }
+        }
+        
+        // Recover message: M = C · (B/A)
+        uint64_t A_inv = mod_inverse(A, p_);
+        uint64_t message = (ct.C * B % p_ * A_inv) % p_;
+        
+        return message;
+    }
+    
+private:
+    uint64_t mod_pow(uint64_t base, uint64_t exp, uint64_t mod) {
+        uint64_t result = 1;
+        base %= mod;
+        while (exp > 0) {
+            if (exp & 1) result = (result * base) % mod;
+            base = (base * base) % mod;
+            exp >>= 1;
+        }
+        return result;
+    }
+    
+    uint64_t mod_inverse(uint64_t a, uint64_t mod) {
+        // Extended Euclidean algorithm
+        int64_t x = 0, y = 0;
+        uint64_t g = extended_gcd(a, mod, x, y);
+        if (g != 1) throw std::runtime_error("Modular inverse does not exist");
+        return (x % mod + mod) % mod;
+    }
+    
+    uint64_t extended_gcd(uint64_t a, uint64_t b, int64_t& x, int64_t& y) {
+        if (b == 0) {
+            x = 1;
+            y = 0;
+            return a;
+        }
+        int64_t x1, y1;
+        uint64_t gcd = extended_gcd(b, a % b, x1, y1);
+        x = y1;
+        y = x1 - (a / b) * y1;
+        return gcd;
+    }
+    
+    uint64_t simplified_pairing(uint64_t a, uint64_t b) {
+        // Simplified pairing function for educational purposes
+        // In practice, use proper bilinear pairing implementation
+        return mod_pow(a, b, p_);
+    }
+    
+    std::vector<uint64_t> solve_linear_system(const std::vector<std::vector<uint64_t>>& matrix,
+                                            const std::vector<int>& I) {
+        // Simplified linear system solver
+        // In practice, use proper LSSS reconstruction algorithm
+        std::vector<uint64_t> omega(matrix.size(), 0);
+        for (int idx : I) {
+            omega[idx] = 1; // Simplified: equal weights
+        }
+        return omega;
+    }
+};
+\end{lstlisting}
+
+\subsection{KP-ABE Example}
+
+\begin{examplebox}
+\textbf{Example: Healthcare Access Control}
+
+\textbf{Setup:}
+\begin{itemize}
+    \item Attributes: "role=doctor", "department=cardiology", "level=senior"
+    \item Access Policy: (role=doctor AND department=cardiology) OR level=senior
+\end{itemize}
+
+\textbf{Encryption:}
+\begin{itemize}
+    \item Encrypt patient data with attributes: \{role=doctor, department=cardiology\}
+    \item Ciphertext can be decrypted by users with:
+    \begin{itemize}
+        \item Policy: (role=doctor AND department=cardiology) OR level=senior
+        \item Policy: role=doctor AND department=cardiology
+        \item Policy: level=senior
+    \end{itemize}
+\end{itemize}
+\end{examplebox}
+
+\subsubsection{Step-by-Step Healthcare Example}
+
+\begin{mathbox}
+\textbf{Step 1: System Setup}
+\begin{itemize}
+    \item Choose prime $p = 23$ and generators $g_1 = 2$, $g_2 = 3$
+    \item Master secret: $\alpha = 5$, $\beta = 7$
+    \item Public parameters: $PK = (g_1 = 2, h = 2^7 = 13, f = 2^{1/7} = 10, e(g_1, g_2)^\alpha = 2^{15})$
+    \item Master secret key: $MSK = (g_2^\alpha = 3^5 = 13, \beta = 7)$
+\end{itemize}
+\end{mathbox}
+
+\begin{mathbox}
+\textbf{Step 2: Attribute Encoding}
+\begin{itemize}
+    \item Map attributes to group elements:
+    \begin{align*}
+    H(\text{"role=doctor"}) &= g_1^3 = 2^3 = 8 \\
+    H(\text{"department=cardiology"}) &= g_1^5 = 2^5 = 32 \equiv 9 \pmod{23} \\
+    H(\text{"level=senior"}) &= g_1^7 = 2^7 = 128 \equiv 13 \pmod{23}
+    \end{align*}
+\end{itemize}
+\end{mathbox}
+
+\begin{mathbox}
+\textbf{Step 3: Policy Construction}
+Policy: (role=doctor AND department=cardiology) OR level=senior
+
+Convert to access matrix:
+\[M = \begin{pmatrix} 
+1 & 0 & 0 \\  % role=doctor
+1 & 1 & 0 \\  % department=cardiology  
+0 & 0 & 1     % level=senior
+\end{pmatrix}\]
+
+Row mapping: $\rho(1) = \text{"role=doctor"}$, $\rho(2) = \text{"department=cardiology"}$, $\rho(3) = \text{"level=senior"}$
+\end{mathbox}
+
+\begin{mathbox}
+\textbf{Step 4: Key Generation for Doctor}
+\begin{itemize}
+    \item User attributes: \{role=doctor, department=cardiology\}
+    \item Secret vector: $\vec{v} = (s = 8, r_2 = 3, r_3 = 5)$
+    \item Compute shares: $\lambda_1 = 8$, $\lambda_2 = 11$, $\lambda_3 = 5$
+    \item Choose random values: $r_1 = 2$, $r_2 = 4$, $r_3 = 1$
+    \item Private key components:
+    \begin{align*}
+    D_1 &= g_2^{\lambda_1} \cdot f^{r_1} = 3^8 \cdot 10^2 = 6561 \cdot 100 \equiv 12 \pmod{23} \\
+    D_2 &= g_2^{\lambda_2} \cdot f^{r_2} = 3^{11} \cdot 10^4 = 177147 \cdot 10000 \equiv 15 \pmod{23} \\
+    D_3 &= g_2^{\lambda_3} \cdot f^{r_3} = 3^5 \cdot 10^1 = 243 \cdot 10 \equiv 7 \pmod{23} \\
+    R_1 &= g_2^{r_1} = 3^2 = 9 \\
+    R_2 &= g_2^{r_2} = 3^4 = 81 \equiv 12 \pmod{23} \\
+    R_3 &= g_2^{r_3} = 3^1 = 3
+    \end{align*}
+\end{itemize}
+\end{mathbox}
+
+\begin{mathbox}
+\textbf{Step 5: Encryption of Patient Data}
+\begin{itemize}
+    \item Message: $M = 15$ (patient record)
+    \item Encrypt with attributes: \{role=doctor, department=cardiology\}
+    \item Choose random $s = 6$
+    \item Compute ciphertext:
+    \begin{align*}
+    C &= M \cdot e(g_1, g_2)^{\alpha s} = 15 \cdot 2^{90} \equiv 15 \cdot 16 \equiv 240 \equiv 10 \pmod{23} \\
+    C' &= g_1^s = 2^6 = 64 \equiv 18 \pmod{23} \\
+    C_{\text{role=doctor}} &= h^s = 13^6 = 4826809 \equiv 8 \pmod{23} \\
+    C_{\text{department=cardiology}} &= h^s = 13^6 \equiv 8 \pmod{23}
+    \end{align*}
+    \item Ciphertext: $CT = (C = 10, C' = 18, C_{\text{role=doctor}} = 8, C_{\text{department=cardiology}} = 8)$
+\end{itemize}
+\end{mathbox}
+
+\begin{mathbox}
+\textbf{Step 6: Decryption Process}
+\begin{itemize}
+    \item Find subset $I = \{1, 2\}$ where $\rho(1) = \text{"role=doctor"}$, $\rho(2) = \text{"department=cardiology"}$
+    \item Find constants $\omega_1 = 1$, $\omega_2 = 1$ such that $\omega_1 M_1 + \omega_2 M_2 = (1, 0, 0)$
+    \item Compute:
+    \begin{align*}
+    A &= e(C', D_1)^{\omega_1} \cdot e(C', D_2)^{\omega_2} \\
+    &= e(18, 12)^1 \cdot e(18, 15)^1 \\
+    &= 2^{216} \cdot 2^{270} \equiv 16 \cdot 8 \equiv 128 \equiv 13 \pmod{23} \\
+    B &= e(C_{\text{role=doctor}}, R_1)^{\omega_1} \cdot e(C_{\text{department=cardiology}}, R_2)^{\omega_2} \\
+    &= e(8, 9)^1 \cdot e(8, 12)^1 \\
+    &= 2^{72} \cdot 2^{96} \equiv 4 \cdot 16 \equiv 64 \equiv 18 \pmod{23}
+    \end{align*}
+    \item Recover message: $M = C \cdot \frac{B}{A} = 10 \cdot \frac{18}{13} = 10 \cdot 18 \cdot 13^{-1} = 10 \cdot 18 \cdot 16 = 2880 \equiv 15 \pmod{23}$
+\end{itemize}
+\end{mathbox}
+
+\begin{examplebox}
+\textbf{Access Control Scenarios:}
+\begin{itemize}
+    \item \textbf{Cardiology Doctor:} Has attributes \{role=doctor, department=cardiology\} → Can decrypt (satisfies AND condition)
+    \item \textbf{Senior Nurse:} Has attributes \{role=nurse, level=senior\} → Can decrypt (satisfies OR condition)
+    \item \textbf{Junior Doctor:} Has attributes \{role=doctor, department=neurology\} → Cannot decrypt (doesn't satisfy policy)
+    \item \textbf{Administrator:} Has attributes \{role=admin, level=junior\} → Cannot decrypt (doesn't satisfy policy)
+\end{itemize}
+\end{examplebox}
+
+\begin{lstlisting}[language=C++, caption=Complete KP-ABE Healthcare Example]
+#include <iostream>
+#include <vector>
+#include <string>
+
+// Complete example showing KP-ABE usage for healthcare access control
+int main() {
+    const uint64_t prime_order = 23; // Small prime for educational purposes
+    
+    // Step 1: System Setup
+    KPABESetup setup(prime_order);
+    auto [pk, msk] = setup.setup();
+    
+    std::cout << "=== KP-ABE Healthcare Access Control Example ===" << std::endl;
+    std::cout << "Public Parameters: g1=" << pk.g1 << ", h=" << pk.h 
+              << ", f=" << pk.f << std::endl;
+    
+    // Step 2: Define Access Structure
+    // Policy: (role=doctor AND department=cardiology) OR level=senior
+    KPABEKeyGen::AccessStructure access_struct;
+    access_struct.matrix = {
+        {1, 0, 0},  // role=doctor
+        {1, 1, 0},  // department=cardiology
+        {0, 0, 1}   // level=senior
+    };
+    access_struct.row_mapping = {"role=doctor", "department=cardiology", "level=senior"};
+    
+    // Step 3: Generate Private Key for Cardiology Doctor
+    KPABEKeyGen keygen(prime_order);
+    std::vector<std::string> doctor_attributes = {"role=doctor", "department=cardiology"};
+    auto private_key = keygen.keygen(access_struct, msk);
+    
+    std::cout << "\nPrivate Key Generated for Cardiology Doctor" << std::endl;
+    std::cout << "D values: ";
+    for (auto d : private_key.D_values) std::cout << d << " ";
+    std::cout << "\nR values: ";
+    for (auto r : private_key.R_values) std::cout << r << " ";
+    std::cout << std::endl;
+    
+    // Step 4: Encrypt Patient Data
+    KPABEEncrypt encryptor(prime_order);
+    uint64_t patient_record = 15; // Simplified patient data
+    std::vector<std::string> encrypt_attributes = {"role=doctor", "department=cardiology"};
+    
+    auto ciphertext = encryptor.encrypt(patient_record, encrypt_attributes, pk);
+    
+    std::cout << "\nPatient Data Encrypted" << std::endl;
+    std::cout << "Ciphertext C: " << ciphertext.C << std::endl;
+    std::cout << "Ciphertext C': " << ciphertext.C_prime << std::endl;
+    std::cout << "Attribute components: ";
+    for (const auto& [attr, val] : ciphertext.C_i) {
+        std::cout << attr << "=" << val << " ";
+    }
+    std::cout << std::endl;
+    
+    // Step 5: Decrypt with Doctor's Key
+    KPABEDecrypt decryptor(prime_order);
+    try {
+        uint64_t decrypted_record = decryptor.decrypt(ciphertext, private_key, 
+                                                     access_struct, doctor_attributes);
+        
+        std::cout << "\nDecryption Successful!" << std::endl;
+        std::cout << "Original patient record: " << patient_record << std::endl;
+        std::cout << "Decrypted patient record: " << decrypted_record << std::endl;
+        std::cout << "Access granted: " << (patient_record == decrypted_record ? "✓" : "✗") 
+                  << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << "Decryption failed: " << e.what() << std::endl;
+    }
+    
+    // Step 6: Test Access Control Scenarios
+    std::cout << "\n=== Access Control Testing ===" << std::endl;
+    
+    // Test 1: Senior Nurse (should succeed via OR condition)
+    std::vector<std::string> nurse_attributes = {"role=nurse", "level=senior"};
+    try {
+        uint64_t nurse_result = decryptor.decrypt(ciphertext, private_key, 
+                                                 access_struct, nurse_attributes);
+        std::cout << "Senior Nurse access: " << (nurse_result == patient_record ? "✓" : "✗") 
+                  << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << "Senior Nurse access: ✗ (" << e.what() << ")" << std::endl;
+    }
+    
+    // Test 2: Junior Doctor (should fail)
+    std::vector<std::string> junior_doctor_attrs = {"role=doctor", "department=neurology"};
+    try {
+        uint64_t junior_result = decryptor.decrypt(ciphertext, private_key, 
+                                                  access_struct, junior_doctor_attrs);
+        std::cout << "Junior Doctor access: " << (junior_result == patient_record ? "✓" : "✗") 
+                  << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << "Junior Doctor access: ✗ (Correctly denied)" << std::endl;
+    }
+    
+    return 0;
+}
+\end{lstlisting}
+
+\section{Ciphertext-Policy Attribute-Based Encryption (CP-ABE)}
+
+In CP-ABE, access policies are embedded in ciphertexts, and attributes are embedded in private keys.
+
+\subsection{CP-ABE Construction}
+
+\begin{mathbox}
+\textbf{CP-ABE Scheme Components:}
+\begin{enumerate}
+    \item \textbf{Setup:} Generate public parameters and master secret key
+    \item \textbf{KeyGen:} Generate private key for attribute set $S$
+    \item \textbf{Encrypt:} Encrypt message with access policy $\mathbb{A}$
+    \item \textbf{Decrypt:} Decrypt if $S$ satisfies $\mathbb{A}$
+\end{enumerate}
+\end{mathbox}
+
+\subsubsection{Setup Algorithm}
+
+\begin{algorithm}
+\caption{CP-ABE Setup}
+\begin{algorithmic}
+\STATE Choose bilinear groups $\mathbb{G}_1, \mathbb{G}_2, \mathbb{G}_T$ of prime order $p$
+\STATE Choose generators $g_1 \in \mathbb{G}_1$, $g_2 \in \mathbb{G}_2$
+\STATE Choose random $\alpha, \beta \in \mathbb{Z}_p$
+\STATE Compute $h = g_1^\beta$, $f = g_1^{1/\beta}$
+\STATE Public parameters: $PK = (g_1, h, f, e(g_1, g_2)^\alpha)$
+\STATE Master secret key: $MSK = (g_2^\alpha, \beta)$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{lstlisting}[language=C++, caption=CP-ABE Setup Implementation]
+#include <vector>
+#include <random>
+#include <cstdint>
+#include <string>
+
+class CPABESetup {
+private:
+    uint64_t p_;  // Prime order
+    
+public:
+    struct PublicParams {
+        uint64_t g1, h, f, e_g1_g2_alpha;
+    };
+    
+    struct MasterSecretKey {
+        uint64_t g2_alpha, beta;
+    };
+    
+    CPABESetup(uint64_t prime_order) : p_(prime_order) {
+        // In practice, use cryptographically secure random generators
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<uint64_t> dis(2, p_ - 1);
+        
+        g1_ = dis(gen);
+        g2_ = dis(gen);
+        alpha_ = dis(gen);
+        beta_ = dis(gen);
+    }
+    
+    std::pair<PublicParams, MasterSecretKey> setup() {
+        uint64_t h = mod_pow(g1_, beta_, p_);
+        uint64_t f = mod_inverse(mod_pow(g1_, 1, p_), beta_, p_);
+        uint64_t e_g1_g2_alpha = mod_pow(g1_, alpha_, p_); // Simplified pairing
+        
+        PublicParams pk = {g1_, h, f, e_g1_g2_alpha};
+        MasterSecretKey msk = {mod_pow(g2_, alpha_, p_), beta_};
+        
+        return {pk, msk};
+    }
+    
+private:
+    uint64_t g1_, g2_, alpha_, beta_;
+    
+    uint64_t mod_pow(uint64_t base, uint64_t exp, uint64_t mod) {
+        uint64_t result = 1;
+        base %= mod;
+        while (exp > 0) {
+            if (exp & 1) result = (result * base) % mod;
+            base = (base * base) % mod;
+            exp >>= 1;
+        }
+        return result;
+    }
+    
+    uint64_t mod_inverse(uint64_t a, uint64_t m, uint64_t mod) {
+        int64_t x = 0, y = 0;
+        uint64_t g = extended_gcd(a, m, x, y);
+        if (g != 1) throw std::runtime_error("Modular inverse does not exist");
+        return (x % mod + mod) % mod;
+    }
+    
+    uint64_t extended_gcd(uint64_t a, uint64_t b, int64_t& x, int64_t& y) {
+        if (b == 0) {
+            x = 1;
+            y = 0;
+            return a;
+        }
+        int64_t x1, y1;
+        uint64_t gcd = extended_gcd(b, a % b, x1, y1);
+        x = y1;
+        y = x1 - (a / b) * y1;
+        return gcd;
+    }
+};
+\end{lstlisting}
+
+\subsubsection{KeyGen Algorithm}
+
+\begin{algorithm}
+\caption{CP-ABE KeyGen}
+\begin{algorithmic}
+\STATE \textbf{Input:} Attribute set $S$, master secret key $MSK$
+\STATE Choose random $r \in \mathbb{Z}_p$
+\STATE Compute $D = g_2^{\alpha + r\beta}$
+\STATE For each attribute $i \in S$: $D_i = g_2^r \cdot H(i)^{r_i}$
+\STATE Private key: $SK = (D, \{D_i\}_{i \in S})$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{lstlisting}[language=C++, caption=CP-ABE KeyGen Implementation]
+#include <vector>
+#include <random>
+#include <cstdint>
+#include <string>
+#include <unordered_map>
+
+class CPABEKeyGen {
+private:
+    uint64_t p_;
+    
+public:
+    struct PrivateKey {
+        uint64_t D;                                    // Main key component
+        std::unordered_map<std::string, uint64_t> D_i; // Attribute components
+    };
+    
+    CPABEKeyGen(uint64_t prime_order) : p_(prime_order) {}
+    
+    PrivateKey keygen(const std::vector<std::string>& attributes,
+                     const CPABESetup::MasterSecretKey& msk) {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<uint64_t> dis(1, p_ - 1);
+        
+        // Choose random r
+        uint64_t r = dis(gen);
+        
+        // Compute D = g_2^(α + rβ)
+        uint64_t alpha_plus_r_beta = (msk.g2_alpha + r * msk.beta) % p_;
+        uint64_t D = mod_pow(2, alpha_plus_r_beta, p_); // Simplified g_2
+        
+        // Compute D_i = g_2^r · H(i)^r_i for each attribute
+        std::unordered_map<std::string, uint64_t> D_i;
+        uint64_t g2_r = mod_pow(2, r, p_); // Simplified g_2^r
+        
+        for (const auto& attr : attributes) {
+            uint64_t r_i = dis(gen); // Random value for each attribute
+            uint64_t H_i = hash_attribute(attr);
+            uint64_t H_i_ri = mod_pow(H_i, r_i, p_);
+            D_i[attr] = (g2_r * H_i_ri) % p_;
+        }
+        
+        return {D, D_i};
+    }
+    
+private:
+    uint64_t mod_pow(uint64_t base, uint64_t exp, uint64_t mod) {
+        uint64_t result = 1;
+        base %= mod;
+        while (exp > 0) {
+            if (exp & 1) result = (result * base) % mod;
+            base = (base * base) % mod;
+            exp >>= 1;
+        }
+        return result;
+    }
+    
+    uint64_t hash_attribute(const std::string& attr) {
+        // Simple hash function for educational purposes
+        // In practice, use proper cryptographic hash function
+        uint64_t hash = 0;
+        for (char c : attr) {
+            hash = (hash * 31 + c) % p_;
+        }
+        return hash;
+    }
+};
+\end{lstlisting}
+
+\subsubsection{Encrypt Algorithm}
+
+\begin{algorithm}
+\caption{CP-ABE Encrypt}
+\begin{algorithmic}
+\STATE \textbf{Input:} Message $M$, access policy $\mathbb{A} = (M, \rho)$, public parameters $PK$
+\STATE Choose random vector $\vec{v} = (s, r_2, \ldots, r_l) \in \mathbb{Z}_p^l$
+\STATE For each row $i$ of $M$, compute $\lambda_i = M_i \cdot \vec{v}$
+\STATE Choose random $r_i \in \mathbb{Z}_p$ for each row $i$
+\STATE Compute $C = M \cdot e(g_1, g_2)^{\alpha s}$
+\STATE Compute $C' = g_1^s$
+\STATE For each row $i$: $C_i = g_1^{\lambda_i} \cdot H(\rho(i))^{-r_i}$, $D_i = g_1^{r_i}$
+\STATE Ciphertext: $CT = (C, C', \{C_i, D_i\}_{i})$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{lstlisting}[language=C++, caption=CP-ABE Encrypt Implementation]
+#include <vector>
+#include <random>
+#include <cstdint>
+#include <string>
+#include <unordered_map>
+
+class CPABEEncrypt {
+private:
+    uint64_t p_;
+    
+public:
+    struct Ciphertext {
+        uint64_t C;                                    // Main ciphertext component
+        uint64_t C_prime;                              // C' component
+        std::vector<uint64_t> C_i;                     // Policy components
+        std::vector<uint64_t> D_i;                     // Random components
+        std::vector<std::string> policy_attributes;    // Attribute mapping
+    };
+    
+    CPABEEncrypt(uint64_t prime_order) : p_(prime_order) {}
+    
+    Ciphertext encrypt(uint64_t message,
+                      const std::vector<std::vector<uint64_t>>& policy_matrix,
+                      const std::vector<std::string>& policy_attributes,
+                      const CPABESetup::PublicParams& pk) {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<uint64_t> dis(1, p_ - 1);
+        
+        int rows = policy_matrix.size();
+        int cols = policy_matrix[0].size();
+        
+        // Choose random vector v = (s, r_2, ..., r_l)
+        std::vector<uint64_t> v(cols);
+        for (int i = 0; i < cols; ++i) {
+            v[i] = dis(gen);
+        }
+        
+        // Compute shares λ_i = M_i · v
+        std::vector<uint64_t> lambda(rows);
+        for (int i = 0; i < rows; ++i) {
+            lambda[i] = 0;
+            for (int j = 0; j < cols; ++j) {
+                lambda[i] = (lambda[i] + policy_matrix[i][j] * v[j]) % p_;
+            }
+        }
+        
+        // Choose random r_i for each row
+        std::vector<uint64_t> r_values(rows);
+        for (int i = 0; i < rows; ++i) {
+            r_values[i] = dis(gen);
+        }
+        
+        // Compute C = M · e(g_1, g_2)^(αs)
+        uint64_t s = v[0]; // First component of v
+        uint64_t e_g1_g2_alpha_s = mod_pow(pk.e_g1_g2_alpha, s, p_);
+        uint64_t C = (message * e_g1_g2_alpha_s) % p_;
+        
+        // Compute C' = g_1^s
+        uint64_t C_prime = mod_pow(pk.g1, s, p_);
+        
+        // Compute C_i and D_i for each row
+        std::vector<uint64_t> C_i(rows);
+        std::vector<uint64_t> D_i(rows);
+        
+        for (int i = 0; i < rows; ++i) {
+            // C_i = g_1^λ_i · H(ρ(i))^(-r_i)
+            uint64_t g1_lambda = mod_pow(pk.g1, lambda[i], p_);
+            uint64_t H_rho_i = hash_attribute(policy_attributes[i]);
+            uint64_t H_rho_i_neg_ri = mod_pow(H_rho_i, p_ - 1 - r_values[i], p_);
+            C_i[i] = (g1_lambda * H_rho_i_neg_ri) % p_;
+            
+            // D_i = g_1^r_i
+            D_i[i] = mod_pow(pk.g1, r_values[i], p_);
+        }
+        
+        return {C, C_prime, C_i, D_i, policy_attributes};
+    }
+    
+private:
+    uint64_t mod_pow(uint64_t base, uint64_t exp, uint64_t mod) {
+        uint64_t result = 1;
+        base %= mod;
+        while (exp > 0) {
+            if (exp & 1) result = (result * base) % mod;
+            base = (base * base) % mod;
+            exp >>= 1;
+        }
+        return result;
+    }
+    
+    uint64_t hash_attribute(const std::string& attr) {
+        // Simple hash function for educational purposes
+        uint64_t hash = 0;
+        for (char c : attr) {
+            hash = (hash * 31 + c) % p_;
+        }
+        return hash;
+    }
+};
+\end{lstlisting}
+
+\subsubsection{Decrypt Algorithm}
+
+\begin{algorithm}
+\caption{CP-ABE Decrypt}
+\begin{algorithmic}
+\STATE \textbf{Input:} Ciphertext $CT$, private key $SK$, attribute set $S$
+\STATE Find subset $I \subseteq \{1, \ldots, n\}$ where $\rho(I) \subseteq S$
+\STATE Find constants $\{\omega_i\}_{i \in I}$ such that $\sum_{i \in I} \omega_i M_i = (1, 0, \ldots, 0)$
+\STATE Compute: $A = \prod_{i \in I} e(C_i, D)^{\omega_i}$
+\STATE Compute: $B = \prod_{i \in I} e(D_i, D_{\rho(i)})^{\omega_i}$
+\STATE Recover message: $M = C \cdot \frac{A}{B}$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{lstlisting}[language=C++, caption=CP-ABE Decrypt Implementation]
+#include <vector>
+#include <cstdint>
+#include <string>
+#include <unordered_map>
+#include <algorithm>
+
+class CPABEDecrypt {
+private:
+    uint64_t p_;
+    
+public:
+    CPABEDecrypt(uint64_t prime_order) : p_(prime_order) {}
+    
+    uint64_t decrypt(const CPABEEncrypt::Ciphertext& ct,
+                    const CPABEKeyGen::PrivateKey& sk,
+                    const std::vector<std::string>& user_attributes) {
+        
+        // Find subset I where ρ(I) ⊆ S (user attributes)
+        std::vector<int> I;
+        for (int i = 0; i < ct.policy_attributes.size(); ++i) {
+            const std::string& attr = ct.policy_attributes[i];
+            if (std::find(user_attributes.begin(), user_attributes.end(), attr) 
+                != user_attributes.end()) {
+                I.push_back(i);
+            }
+        }
+        
+        if (I.empty()) {
+            throw std::runtime_error("No matching attributes found");
+        }
+        
+        // Find constants ω_i such that Σ ω_i M_i = (1, 0, ..., 0)
+        // Simplified: use equal weights for educational purposes
+        std::vector<uint64_t> omega(ct.policy_attributes.size(), 0);
+        for (int idx : I) {
+            omega[idx] = 1;
+        }
+        
+        // Compute A = Π e(C_i, D)^ω_i
+        uint64_t A = 1;
+        for (int idx : I) {
+            uint64_t pairing = simplified_pairing(ct.C_i[idx], sk.D);
+            uint64_t powered = mod_pow(pairing, omega[idx], p_);
+            A = (A * powered) % p_;
+        }
+        
+        // Compute B = Π e(D_i, D_ρ(i))^ω_i
+        uint64_t B = 1;
+        for (int idx : I) {
+            const std::string& attr = ct.policy_attributes[idx];
+            if (sk.D_i.find(attr) != sk.D_i.end()) {
+                uint64_t pairing = simplified_pairing(ct.D_i[idx], sk.D_i.at(attr));
+                uint64_t powered = mod_pow(pairing, omega[idx], p_);
+                B = (B * powered) % p_;
+            }
+        }
+        
+        // Recover message: M = C · (A/B)
+        uint64_t B_inv = mod_inverse(B, p_);
+        uint64_t message = (ct.C * A % p_ * B_inv) % p_;
+        
+        return message;
+    }
+    
+private:
+    uint64_t mod_pow(uint64_t base, uint64_t exp, uint64_t mod) {
+        uint64_t result = 1;
+        base %= mod;
+        while (exp > 0) {
+            if (exp & 1) result = (result * base) % mod;
+            base = (base * base) % mod;
+            exp >>= 1;
+        }
+        return result;
+    }
+    
+    uint64_t mod_inverse(uint64_t a, uint64_t mod) {
+        int64_t x = 0, y = 0;
+        uint64_t g = extended_gcd(a, mod, x, y);
+        if (g != 1) throw std::runtime_error("Modular inverse does not exist");
+        return (x % mod + mod) % mod;
+    }
+    
+    uint64_t extended_gcd(uint64_t a, uint64_t b, int64_t& x, int64_t& y) {
+        if (b == 0) {
+            x = 1;
+            y = 0;
+            return a;
+        }
+        int64_t x1, y1;
+        uint64_t gcd = extended_gcd(b, a % b, x1, y1);
+        x = y1;
+        y = x1 - (a / b) * y1;
+        return gcd;
+    }
+    
+    uint64_t simplified_pairing(uint64_t a, uint64_t b) {
+        // Simplified pairing function for educational purposes
+        return mod_pow(a, b, p_);
+    }
+};
+\end{lstlisting}
+
+\subsection{CP-ABE Example}
+
+\begin{examplebox}
+\textbf{Example: Cloud File Sharing}
+
+\textbf{Setup:}
+\begin{itemize}
+    \item User attributes: \{role=manager, department=IT, level=senior\}
+    \item File encryption policy: (role=manager AND department=IT) OR (level=senior AND department=IT)
+\end{itemize}
+
+\textbf{Encryption:}
+\begin{itemize}
+    \item Encrypt file with policy: (role=manager AND department=IT) OR (level=senior AND department=IT)
+    \item User can decrypt because their attributes satisfy the policy
+\end{itemize}
+\end{examplebox}
+
+\begin{lstlisting}[language=C++, caption=Complete CP-ABE Cloud File Sharing Example]
+#include <iostream>
+#include <vector>
+#include <string>
+
+// Complete example showing CP-ABE usage for cloud file sharing
+int main() {
+    const uint64_t prime_order = 17; // Small prime for educational purposes
+    
+    // Step 1: System Setup
+    CPABESetup setup(prime_order);
+    auto [pk, msk] = setup.setup();
+    
+    std::cout << "=== CP-ABE Cloud File Sharing Example ===" << std::endl;
+    std::cout << "Public Parameters: g1=" << pk.g1 << ", h=" << pk.h 
+              << ", f=" << pk.f << std::endl;
+    
+    // Step 2: Generate User Keys
+    CPABEKeyGen keygen(prime_order);
+    
+    // Manager with IT department attributes
+    std::vector<std::string> manager_attrs = {"role=manager", "department=IT", "level=senior"};
+    auto manager_key = keygen.keygen(manager_attrs, msk);
+    
+    // Senior employee with IT department attributes
+    std::vector<std::string> senior_attrs = {"role=employee", "department=IT", "level=senior"};
+    auto senior_key = keygen.keygen(senior_attrs, msk);
+    
+    // Junior employee with IT department attributes
+    std::vector<std::string> junior_attrs = {"role=employee", "department=IT", "level=junior"};
+    auto junior_key = keygen.keygen(junior_attrs, msk);
+    
+    std::cout << "\nUser Keys Generated:" << std::endl;
+    std::cout << "- Manager: D=" << manager_key.D << std::endl;
+    std::cout << "- Senior Employee: D=" << senior_key.D << std::endl;
+    std::cout << "- Junior Employee: D=" << junior_key.D << std::endl;
+    
+    // Step 3: Define Access Policy
+    // Policy: (role=manager AND department=IT) OR (level=senior AND department=IT)
+    std::vector<std::vector<uint64_t>> policy_matrix = {
+        {1, 0, 0, 0},  // role=manager
+        {0, 1, 0, 0},  // department=IT
+        {0, 0, 1, 0},  // level=senior
+        {0, 1, 0, 0}   // department=IT (for second condition)
+    };
+    std::vector<std::string> policy_attrs = {"role=manager", "department=IT", "level=senior", "department=IT"};
+    
+    // Step 4: Encrypt File
+    CPABEEncrypt encryptor(prime_order);
+    uint64_t file_content = 42; // Simplified file data
+    
+    auto ciphertext = encryptor.encrypt(file_content, policy_matrix, policy_attrs, pk);
+    
+    std::cout << "\nFile Encrypted with Policy:" << std::endl;
+    std::cout << "(role=manager AND department=IT) OR (level=senior AND department=IT)" << std::endl;
+    std::cout << "Ciphertext C: " << ciphertext.C << std::endl;
+    std::cout << "Ciphertext C': " << ciphertext.C_prime << std::endl;
+    
+    // Step 5: Test Decryption with Different Users
+    CPABEDecrypt decryptor(prime_order);
+    
+    std::cout << "\n=== Access Control Testing ===" << std::endl;
+    
+    // Test 1: Manager (should succeed via first condition)
+    try {
+        uint64_t manager_result = decryptor.decrypt(ciphertext, manager_key, manager_attrs);
+        std::cout << "Manager access: " << (manager_result == file_content ? "✓" : "✗") 
+                  << " (Result: " << manager_result << ")" << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << "Manager access: ✗ (" << e.what() << ")" << std::endl;
+    }
+    
+    // Test 2: Senior Employee (should succeed via second condition)
+    try {
+        uint64_t senior_result = decryptor.decrypt(ciphertext, senior_key, senior_attrs);
+        std::cout << "Senior Employee access: " << (senior_result == file_content ? "✓" : "✗") 
+                  << " (Result: " << senior_result << ")" << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << "Senior Employee access: ✗ (" << e.what() << ")" << std::endl;
+    }
+    
+    // Test 3: Junior Employee (should fail)
+    try {
+        uint64_t junior_result = decryptor.decrypt(ciphertext, junior_key, junior_attrs);
+        std::cout << "Junior Employee access: " << (junior_result == file_content ? "✓" : "✗") 
+                  << " (Result: " << junior_result << ")" << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << "Junior Employee access: ✗ (Correctly denied)" << std::endl;
+    }
+    
+    // Test 4: Manager from different department (should fail)
+    std::vector<std::string> hr_manager_attrs = {"role=manager", "department=HR", "level=senior"};
+    auto hr_manager_key = keygen.keygen(hr_manager_attrs, msk);
+    try {
+        uint64_t hr_result = decryptor.decrypt(ciphertext, hr_manager_key, hr_manager_attrs);
+        std::cout << "HR Manager access: " << (hr_result == file_content ? "✓" : "✗") 
+                  << " (Result: " << hr_result << ")" << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << "HR Manager access: ✗ (Correctly denied)" << std::endl;
+    }
+    
+    return 0;
+}
+\end{lstlisting}
+
+\section{Practical Implementation Considerations}
+
+\subsection{Attribute Management}
+
+\begin{warningbox}
+\textbf{Important Considerations:}
+\begin{itemize}
+    \item \textbf{Attribute Authority:} Who can issue and revoke attributes?
+    \item \textbf{Attribute Privacy:} How to protect attribute information?
+    \item \textbf{Key Escrow:} The authority can decrypt all messages
+    \item \textbf{Revocation:} How to revoke access when attributes change?
+\end{itemize}
+\end{warningbox}
+
+\subsection{Performance Considerations}
+
+\begin{prosbox}
+\textbf{Advantages:}
+\begin{itemize}
+    \item Fine-grained access control
+    \item Scalable to large attribute sets
+    \item Supports complex access policies
+    \item No need for key distribution
+\end{itemize}
+\end{prosbox}
+
+\begin{consbox}
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item Higher computational overhead than traditional encryption
+    \item Larger ciphertext and key sizes
+    \item Complex key management
+    \item Limited support for dynamic policies
+\end{itemize}
+\end{consbox}
+
+\subsection{Security Considerations}
+
+\begin{mathbox}
+\textbf{Security Properties:}
+\begin{enumerate}
+    \item \textbf{Indistinguishability:} Ciphertexts reveal no information about plaintexts
+    \item \textbf{Collusion Resistance:} Multiple users cannot combine keys to decrypt unauthorized messages
+    \item \textbf{Policy Privacy:} Access policies may be hidden in some schemes
+\end{enumerate}
+\end{mathbox}
+
+\section{Test Vectors and Examples}
+
+\subsection{KP-ABE Test Vector}
+
+\begin{examplebox}
+\textbf{KP-ABE Test Vector:}
+
+\textbf{Parameters:}
+\begin{itemize}
+    \item Prime order: $p = 23$
+    \item Generator $g_1 = 2$ (in $\mathbb{Z}_{23}^*$)
+    \item Generator $g_2 = 3$ (in $\mathbb{Z}_{23}^*$)
+    \item Master secret: $\alpha = 5$, $\beta = 7$
+\end{itemize}
+
+\textbf{Setup:}
+\begin{itemize}
+    \item Public parameters: $PK = (g_1 = 2, h = 2^7 = 13, f = 2^{1/7} = 10, e(g_1, g_2)^\alpha = 2^{15})$
+    \item Master secret key: $MSK = (g_2^\alpha = 3^5 = 13, \beta = 7)$
+\end{itemize}
+
+\textbf{KeyGen (Policy: A AND B):}
+\begin{itemize}
+    \item Access matrix: $M = \begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix}$
+    \item Secret vector: $\vec{v} = (s = 8, r = 3)$
+    \item Shares: $\lambda_1 = 8$, $\lambda_2 = 11$
+    \item Private key components: $D_1 = 3^8 \cdot 10^{r_1}$, $D_2 = 3^{11} \cdot 10^{r_2}$
+\end{itemize}
+
+\textbf{Encrypt (Attributes: \{A, B\}):}
+\begin{itemize}
+    \item Message: $M = 15$
+    \item Random value: $s = 6$
+    \item Ciphertext: $C = 15 \cdot 2^{30}$, $C' = 2^6 = 18$, $C_A = C_B = 13^6 = 8$
+\end{itemize}
+
+\textbf{Decrypt:}
+\begin{itemize}
+    \item Compute: $A = e(18, D_1) \cdot e(18, D_2)$
+    \item Compute: $B = e(8, R_1) \cdot e(8, R_2)$
+    \item Recover: $M = C \cdot \frac{B}{A} = 15$
+\end{itemize}
+\end{examplebox}
+
+\subsection{CP-ABE Test Vector}
+
+\begin{examplebox}
+\textbf{CP-ABE Test Vector:}
+
+\textbf{Parameters:}
+\begin{itemize}
+    \item Prime order: $p = 17$
+    \item Generator $g_1 = 3$ (in $\mathbb{Z}_{17}^*$)
+    \item Generator $g_2 = 5$ (in $\mathbb{Z}_{17}^*$)
+    \item Master secret: $\alpha = 4$, $\beta = 6$
+\end{itemize}
+
+\textbf{Setup:}
+\begin{itemize}
+    \item Public parameters: $PK = (g_1 = 3, h = 3^6 = 15, f = 3^{1/6} = 5, e(g_1, g_2)^\alpha = 3^{20})$
+    \item Master secret key: $MSK = (g_2^\alpha = 5^4 = 13, \beta = 6)$
+\end{itemize}
+
+\textbf{KeyGen (Attributes: \{A, B\}):}
+\begin{itemize}
+    \item Random value: $r = 9$
+    \item Private key: $D = 5^{13 + 9 \cdot 6} = 5^{67} = 12$
+    \item Attribute components: $D_A = 5^9 \cdot H(A)^3$, $D_B = 5^9 \cdot H(B)^7$
+\end{itemize}
+
+\textbf{Encrypt (Policy: A OR B):}
+\begin{itemize}
+    \item Message: $M = 11$
+    \item Access matrix: $M = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$
+    \item Secret vector: $\vec{v} = (s = 7, r = 2)$
+    \item Ciphertext: $C = 11 \cdot 3^{28}$, $C' = 3^7 = 11$
+\end{itemize}
+
+\textbf{Decrypt:}
+\begin{itemize}
+    \item Compute: $A = e(11, 12)$
+    \item Compute: $B = e(5^2, D_A)$
+    \item Recover: $M = C \cdot \frac{A}{B} = 11$
+\end{itemize}
+\end{examplebox}
+
+\section{Implementation Guidelines}
+
+\subsection{Software Libraries}
+
+\begin{examplebox}
+\textbf{Recommended Libraries:}
+\begin{itemize}
+    \item \textbf{Pairing-Based Cryptography (PBC):} C library for bilinear pairings
+    \item \textbf{Charm:} Python framework for ABE implementations
+    \item \textbf{JPBC:} Java library for pairing-based cryptography
+    \item \textbf{OpenABE:} Open-source ABE library
+\end{itemize}
+\end{examplebox}
+
+\subsection{Implementation Checklist}
+
+\begin{enumerate}
+    \item \textbf{Parameter Generation:} Use secure random number generators
+    \item \textbf{Attribute Encoding:} Map attributes to group elements
+    \item \textbf{Policy Representation:} Convert logical expressions to access matrices
+    \item \textbf{Key Management:} Secure storage and distribution of private keys
+    \item \textbf{Performance Optimization:} Use efficient pairing implementations
+    \item \textbf{Security Validation:} Verify against known attacks
+\end{enumerate}
+
+\section{Advanced Topics}
+
+\subsection{Multi-Authority ABE}
+
+\begin{definitionbox}
+\textbf{Multi-Authority ABE:} An extension where multiple authorities can issue attributes, improving scalability and reducing trust requirements.
+\end{definitionbox}
+
+\subsection{Decentralized ABE}
+
+\begin{definitionbox}
+\textbf{Decentralized ABE:} A variant where no central authority is required, and users can generate their own attributes.
+\end{definitionbox}
+
+\subsection{ABE with Outsourcing}
+
+\begin{definitionbox}
+\textbf{ABE with Outsourcing:} Techniques to outsource expensive computations (like pairing operations) to untrusted servers while maintaining security.
+\end{definitionbox}
+
+\section{References and Further Reading}
+
+\subsection{Primary References}
+
+\begin{enumerate}
+    \item Goyal, V., Pandey, O., Sahai, A., \& Waters, B. (2006). Attribute-based encryption for fine-grained access control of encrypted data. \textit{Proceedings of the 13th ACM conference on Computer and communications security}, 89-98.
+    \item Bethencourt, J., Sahai, A., \& Waters, B. (2007). Ciphertext-policy attribute-based encryption. \textit{2007 IEEE symposium on security and privacy}, 321-334.
+    \item Waters, B. (2011). Ciphertext-policy attribute-based encryption: An expressive, efficient, and provably secure realization. \textit{International Workshop on Public Key Cryptography}, 53-70.
+    \item Lewko, A., \& Waters, B. (2011). Decentralizing attribute-based encryption. \textit{Annual International Conference on the Theory and Applications of Cryptographic Techniques}, 568-588.
+\end{enumerate}
+
+\subsection{Additional Resources}
+
+\begin{enumerate}
+    \item Beimel, A. (1996). Secure schemes for secret sharing and key distribution. \textit{PhD thesis, Technion-Israel Institute of Technology}.
+    \item Boneh, D., \& Franklin, M. (2003). Identity-based encryption from the Weil pairing. \textit{SIAM journal on computing}, 32(3), 586-615.
+    \item Sahai, A., \& Waters, B. (2005). Fuzzy identity-based encryption. \textit{Annual International Conference on the Theory and Applications of Cryptographic Techniques}, 457-473.
+\end{enumerate}
+
+\section{Conclusion}
+
+Attribute-Based Encryption represents a significant advancement in cryptographic access control, enabling fine-grained, policy-based encryption that traditional public-key cryptography cannot provide. While ABE introduces computational overhead and complexity, its benefits in terms of flexibility and scalability make it an attractive solution for modern applications requiring sophisticated access control.
+
+The mathematical foundations of ABE, particularly bilinear pairings and linear secret sharing schemes, provide the theoretical basis for secure and efficient implementations. Both KP-ABE and CP-ABE offer different trade-offs between expressiveness and efficiency, allowing practitioners to choose the most appropriate scheme for their specific use case.
+
+As ABE continues to mature, ongoing research focuses on improving performance, supporting more complex policies, and addressing practical deployment challenges such as key management and revocation. The combination of theoretical soundness and practical applicability makes ABE a valuable tool in the modern cryptographic toolkit.
+
+\begin{warningbox}
+\textbf{Important Note:} This document provides educational content and implementation guidelines. For production use, always consult with cryptographic experts and use well-vetted, audited implementations. The test vectors provided are for educational purposes and should not be used in real-world applications without proper security validation.
+\end{warningbox}
+
+\end{document} 

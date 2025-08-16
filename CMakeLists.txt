@@ -1,36 +1,51 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.27)
 
-# Project name and language
+# Project name, version and language
 project(CryptoGL VERSION 1.0 LANGUAGES CXX)
 
-# Optional: specify compiler (only if needed)
-set(CMAKE_CXX_COMPILER "/usr/bin/g++-11")
+# Include custom CMake modules
+include(cmake/CompilerFlags.cmake)
+include(cmake/SecurityHardening.cmake)
+include(cmake/PerformanceOptimization.cmake)
+include(cmake/Testing.cmake)
 
-# Use C++17 standard
-set(CMAKE_CXX_STANDARD 17)
+# Use C++20 standard and compile with std=c++20 instead of std=g++20
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Common compile options
-add_compile_options(-Wall -Wextra -Wpedantic -Werror -pthread)
+# Use absolute paths in target_sources
+cmake_policy(SET CMP0077 NEW)
 
-# Add the source library directory
+# Use absolute paths in file(GLOB)
+cmake_policy(SET CMP0135 NEW)
+
+# We use the GoogleTest framework for unit tests.
+find_package(GTest REQUIRED)
+
+# Add subdirectories in dependency order (this creates the library targets and alias 'cryptoGL::')
 add_subdirectory(src)
+add_subdirectory(tests)
 
-# Include headers for unit tests (if needed)
-include_directories(UnitTests)
+# # Main executable with proper linking
+# add_executable(${PROJECT_NAME} src/main.cpp)
 
-# Define the main executable
-add_executable(${PROJECT_NAME} src/main.cpp)
+# target_link_libraries(${PROJECT_NAME} PRIVATE
+#     cryptoGL::Core
+#     cryptoGL::Algorithms
+#     cryptoGL::BigIntegers
+# )
 
-# Link internal libraries to the main executable
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE
-    cryptoGL
-    big_integers
-)
+# Apply security flags to main executable
+#apply_crypto_security_flags(${PROJECT_NAME})
 
-# Optional: add test library if needed later
-# target_link_libraries(${PROJECT_NAME} CryptoGL_UnitTests)
+# Apply performance flags to main executable
+#apply_performance_flags(${PROJECT_NAME})
+
+# target_include_directories(${PROJECT_NAME} PUBLIC
+#     ${CMAKE_SOURCE_DIR}/src
+# )
+
+# # Tests
 # enable_testing()
-# add_test(NAME CryptoGL_UnitTests COMMAND ${PROJECT_NAME})
+# add_subdirectory(tests)      # Main test suite with 5 subdirectories

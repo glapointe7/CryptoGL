@@ -1,0 +1,594 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+% Page setup
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{blue}{Endianness Educational Guide}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Title formatting
+\titleformat{\section}{\Large\bfseries\color{blue}}{}{0em}{}
+\titleformat{\subsection}{\large\bfseries\color{darkgray}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{darkgray}}{}{0em}{}
+
+% Color definitions
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{definitionbox}{rgb}{0.9,0.9,0.9}
+\definecolor{examplebox}{rgb}{0.9,0.95,0.9}
+\definecolor{warningbox}{rgb}{1,0.95,0.8}
+\definecolor{prosbox}{rgb}{0.9,0.95,0.9}
+\definecolor{consbox}{rgb}{0.95,0.9,0.9}
+
+% Code listing setup
+\lstset{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+% Custom boxes
+\newtcolorbox{definitionbox}{
+    colback=definitionbox,
+    colframe=red!50!black,
+    leftrule=4pt,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{examplebox}{
+    colback=examplebox,
+    colframe=green!50!black,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{warningbox}{
+    colback=warningbox,
+    colframe=orange!50!black,
+    leftrule=4pt,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{prosbox}{
+    colback=prosbox,
+    colframe=green!50!black,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{consbox}{
+    colback=consbox,
+    colframe=red!50!black,
+    arc=0pt,
+    outer arc=0pt
+}
+
+% Custom commands
+\newcommand{\hex}[1]{\texttt{0x#1}}
+\newcommand{\byte}[1]{\texttt{#1}}
+\newcommand{\address}[1]{\texttt{#1}}
+\newcommand{\mathvar}[1]{\textit{#1}}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\Huge\bfseries\color{blue} Understanding Endianness}\\[0.5cm]
+    {\Large A Comprehensive Guide}\\[1cm]
+    
+    \vspace{1cm}
+    
+    {\large Mathematical and Practical Analysis}\\[0.5cm]
+    {\large For Computer Architecture and Cryptography}\\[2cm]
+    
+    \vspace{2cm}
+    
+    {\large \today}
+    
+    \vfill
+    
+    {\small This document provides a comprehensive understanding of endianness for educational purposes.\\
+    For cryptographic implementations, always refer to official specifications and test vectors.}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+Endianness is a fundamental concept in computer architecture and cryptography that determines how multi-byte data is stored and interpreted in memory. This document provides a mathematical and practical understanding of endianness, its implications, and real-world applications.
+
+\begin{definitionbox}
+\textbf{Endianness} refers to the order in which bytes are stored in memory for multi-byte data types (like 32-bit integers, 64-bit floats, etc.). The term originates from Jonathan Swift's "Gulliver's Travels," where the Lilliputians argued over which end of a boiled egg to crack first.
+\end{definitionbox}
+
+\subsection{Mathematical Definition}
+For a multi-byte value stored in memory, endianness determines the mapping between:
+\begin{itemize}
+    \item \textbf{Logical position}: The significance of each byte in the value
+    \item \textbf{Physical position}: The actual memory address where each byte is stored
+\end{itemize}
+
+\section{Types of Endianness}
+
+\subsection{Big-Endian (Most Significant Byte First)}
+
+\begin{definitionbox}
+\textbf{Definition}: The most significant byte (MSB) is stored at the lowest memory address.
+\end{definitionbox}
+
+\subsubsection{Mathematical representation}
+For a 32-bit integer with value \hex{12345678}:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Memory Address} & \address{0x1000} & \address{0x1001} & \address{0x1002} & \address{0x1003} \\
+\hline
+\textbf{Byte Value} & \byte{0x12} & \byte{0x34} & \byte{0x56} & \byte{0x78} \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\textbf{Formula}:\\
+For a value \mathvar{V} with bytes \mathvar{$b_0, b_1, b_2, b_3$} where \mathvar{$b_0$} is the MSB:\\
+\mathvar{V = b_0 \times 2^{24} + b_1 \times 2^{16} + b_2 \times 2^8 + b_3 \times 2^0}
+\end{center}
+
+\subsection{Little-Endian (Least Significant Byte First)}
+
+\begin{definitionbox}
+\textbf{Definition}: The least significant byte (LSB) is stored at the lowest memory address.
+\end{definitionbox}
+
+\subsubsection{Mathematical representation}
+For a 32-bit integer with value \hex{12345678}:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Memory Address} & \address{0x1000} & \address{0x1001} & \address{0x1002} & \address{0x1003} \\
+\hline
+\textbf{Byte Value} & \byte{0x78} & \byte{0x56} & \byte{0x34} & \byte{0x12} \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\textbf{Formula}:\\
+For a value \mathvar{V} with bytes \mathvar{$b_0, b_1, b_2, b_3$} where \mathvar{$b_0$} is the LSB:\\
+\mathvar{V = b_3 \times 2^{24} + b_2 \times 2^{16} + b_1 \times 2^8 + b_0 \times 2^0}
+\end{center}
+
+\section{Step-by-Step Examples}
+
+\subsection{Example 1: 32-bit Integer Conversion}
+
+\textbf{Value}: \hex{DEADBEEF}
+
+\subsubsection{Big-Endian Representation:}
+
+\begin{examplebox}
+\textbf{Memory Layout:}\\
+\begin{tabular}{|c|c|c|c|}
+\hline
+Address: & \address{0x1000} & \address{0x1001} & \address{0x1002} & \address{0x1003} \\
+\hline
+Bytes: & \byte{0xDE} & \byte{0xAD} & \byte{0xBE} & \byte{0xEF} \\
+\hline
+\end{tabular}
+
+\textbf{Calculation:}\\
+$V = 0xDE \times 2^{24} + 0xAD \times 2^{16} + 0xBE \times 2^8 + 0xEF \times 2^0$\\
+$V = 222 \times 16,777,216 + 173 \times 65,536 + 190 \times 256 + 239 \times 1$\\
+$V = 3,723,914,752 + 11,337,728 + 48,640 + 239$\\
+$V = 3,735,301,359 = 0xDEADBEEF$ ✓
+\end{examplebox}
+
+\subsubsection{Little-Endian Representation:}
+
+\begin{examplebox}
+\textbf{Memory Layout:}\\
+\begin{tabular}{|c|c|c|c|}
+\hline
+Address: & \address{0x1000} & \address{0x1001} & \address{0x1002} & \address{0x1003} \\
+\hline
+Bytes: & \byte{0xEF} & \byte{0xBE} & \byte{0xAD} & \byte{0xDE} \\
+\hline
+\end{tabular}
+
+\textbf{Calculation:}\\
+$V = 0xEF \times 2^{24} + 0xBE \times 2^{16} + 0xAD \times 2^8 + 0xDE \times 2^0$\\
+$V = 239 \times 16,777,216 + 190 \times 65,536 + 173 \times 256 + 222 \times 1$\\
+$V = 4,009,754,624 + 12,451,840 + 44,288 + 222$\\
+$V = 4,022,249,974 = 0xEFBEADDE \neq 0xDEADBEEF$
+\end{examplebox}
+
+\subsection{Example 2: 16-bit Integer Conversion}
+
+\textbf{Value}: \hex{1234}
+
+\begin{center}
+\begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
+\begin{prosbox}
+\textbf{Big-Endian:}\\
+Memory: \byte{0x12} \byte{0x34}\\
+Value: $0x12 \times 256 + 0x34 \times 1 = 4,660 = 0x1234$ ✓
+\end{prosbox}
+&
+\begin{consbox}
+\textbf{Little-Endian:}\\
+Memory: \byte{0x34} \byte{0x12}\\
+Value: $0x34 \times 256 + 0x12 \times 1 = 13,330 = 0x3412 \neq 0x1234$
+\end{consbox}
+\end{tabular}
+\end{center}
+
+\section{Why Endianness Matters}
+
+\subsection{Data Portability}
+
+\begin{warningbox}
+\textbf{Problem}: Different architectures use different endianness:
+\begin{itemize}
+    \item \textbf{Big-Endian}: Motorola 68000, IBM PowerPC, most network protocols
+    \item \textbf{Little-Endian}: Intel x86, ARM (configurable), most modern processors
+\end{itemize}
+\end{warningbox}
+
+\textbf{Example}: A file created on a big-endian system may be unreadable on a little-endian system.
+
+\subsection{Network Communication}
+
+\begin{warningbox}
+\textbf{Problem}: Network protocols must standardize byte order for interoperability.\\
+\textbf{Solution}: Network byte order is typically big-endian (also called "network byte order").
+\end{warningbox}
+
+\subsection{Cryptographic Applications}
+
+\begin{warningbox}
+\textbf{Critical Issue}: Cryptographic algorithms are sensitive to byte order. Incorrect endianness can:
+\begin{itemize}
+    \item Generate incorrect keys
+    \item Produce wrong ciphertext
+    \item Break security properties
+\end{itemize}
+\end{warningbox}
+
+\section{Pros and Cons}
+
+\begin{center}
+\begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
+\begin{prosbox}
+\textbf{Big-Endian}
+
+\textbf{Pros:}
+\begin{itemize}
+    \item \textbf{Human-readable}: Memory dumps match written representation
+    \item \textbf{Network standard}: Most network protocols use big-endian
+    \item \textbf{Mathematical consistency}: Left-to-right reading matches significance
+\end{itemize}
+
+\textbf{Cons:}
+\begin{itemize}
+    \item \textbf{Less efficient}: On little-endian hardware, requires byte swapping
+    \item \textbf{Counter-intuitive}: For arithmetic operations on little-endian processors
+\end{itemize}
+\end{prosbox}
+&
+\begin{consbox}
+\textbf{Little-Endian}
+
+\textbf{Pros:}
+\begin{itemize}
+    \item \textbf{Arithmetic efficiency}: Addition/subtraction can start from LSB
+    \item \textbf{Hardware compatibility}: Matches most modern processor architectures
+    \item \textbf{Memory efficiency}: No byte swapping needed on little-endian hardware
+\end{itemize}
+
+\textbf{Cons:}
+\begin{itemize}
+    \item \textbf{Less intuitive}: Memory dumps don't match written representation
+    \item \textbf{Network overhead}: Requires conversion for network communication
+\end{itemize}
+\end{consbox}
+\end{tabular}
+\end{center}
+
+\section{Practical Applications}
+
+\subsection{File Format Design}
+
+\textbf{Example}: PNG image format uses big-endian for all multi-byte values:
+
+\begin{lstlisting}[language=C, caption=PNG chunk length (4 bytes, big-endian)]
+uint32_t length = (bytes[0] << 24) | (bytes[1] << 16) | 
+                  (bytes[2] << 8) | bytes[3];
+\end{lstlisting}
+
+\subsection{Network Programming}
+
+\textbf{Example}: Converting between host and network byte order:
+
+\begin{lstlisting}[language=C, caption=Host and Network Byte Order Functions]
+// Host to network (little-endian to big-endian)
+uint32_t htonl(uint32_t hostlong);
+
+// Network to host (big-endian to little-endian)
+uint32_t ntohl(uint32_t netlong);
+\end{lstlisting}
+
+\subsection{Cryptographic Implementations}
+
+\begin{warningbox}
+\textbf{Critical}: Cryptographic algorithms must specify byte order explicitly.
+\end{warningbox}
+
+\textbf{Example}: SHA-256 specification defines big-endian representation:
+
+\begin{lstlisting}[language=C, caption=Correct SHA-256 implementation (big-endian)]
+uint32_t word = (data[0] << 24) | (data[1] << 16) | 
+                (data[2] << 8) | data[3];
+\end{lstlisting}
+
+\section{Endianness Detection}
+
+\subsection{Runtime Detection}
+
+\begin{lstlisting}[language=C, caption=Runtime Endianness Detection]
+bool isLittleEndian() {
+    uint16_t test = 0x0001;
+    return (*(uint8_t*)&test == 0x01);
+}
+\end{lstlisting}
+
+\subsection{Compile-time Detection}
+
+\begin{lstlisting}[language=C, caption=Compile-time Endianness Detection]
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+    #define IS_LITTLE_ENDIAN 1
+#else
+    #define IS_LITTLE_ENDIAN 0
+#endif
+\end{lstlisting}
+
+\section{Conversion Functions}
+
+\subsection{Manual Conversion}
+
+\begin{lstlisting}[language=C, caption=Manual Endianness Conversion]
+uint32_t swapEndian32(uint32_t value) {
+    return ((value & 0xFF000000) >> 24) |
+           ((value & 0x00FF0000) >> 8) |
+           ((value & 0x0000FF00) << 8) |
+           ((value & 0x000000FF) << 24);
+}
+\end{lstlisting}
+
+\subsection{Using Built-in Functions}
+
+\begin{lstlisting}[language=C, caption=Built-in Endianness Conversion]
+// GCC/Clang built-in
+uint32_t swapped = __builtin_bswap32(value);
+
+// Windows
+uint32_t swapped = _byteswap_ulong(value);
+\end{lstlisting}
+
+\section{Real-World Example: Cryptographic Key Loading}
+
+\subsection{Problem Scenario}
+
+Loading a 256-bit key for Serpent cipher:
+
+\begin{lstlisting}[language=C, caption=Key Loading Example]
+// Key: 2BD6459F82C5B300952C49104881FF48
+// Expected 32-bit words (big-endian):
+// W[0] = 0x2BD6459F
+// W[1] = 0x82C5B300
+// W[2] = 0x0952C491
+// W[3] = 0x04881FF4
+\end{lstlisting}
+
+\subsection{Correct Implementation}
+
+\begin{lstlisting}[language=C, caption=Correct Big-Endian Key Loading]
+UInt32Vector loadKeyBigEndian(const BytesVector& key) {
+    UInt32Vector words;
+    for (int i = 0; i < key.size(); i += 4) {
+        uint32_t word = (key[i] << 24) | (key[i+1] << 16) | 
+                       (key[i+2] << 8) | key[i+3];
+        words.push_back(word);
+    }
+    return words;
+}
+\end{lstlisting}
+
+\subsection{Incorrect Implementation (Little-Endian)}
+
+\begin{lstlisting}[language=C, caption=Incorrect Little-Endian Key Loading]
+UInt32Vector loadKeyLittleEndian(const BytesVector& key) {
+    UInt32Vector words;
+    for (int i = 0; i < key.size(); i += 4) {
+        uint32_t word = key[i] | (key[i+1] << 8) | 
+                       (key[i+2] << 16) | (key[i+3] << 24);
+        words.push_back(word);
+    }
+    return words;
+}
+\end{lstlisting}
+
+\begin{warningbox}
+\textbf{Result}: The little-endian version produces completely different words, leading to incorrect cryptographic operations.
+\end{warningbox}
+
+\section{Best Practices}
+
+\subsection{Always Specify Endianness}
+
+\begin{lstlisting}[language=C, caption=Explicit vs Platform-dependent Endianness]
+// Good: Explicit endianness
+uint32_t readBigEndian32(const uint8_t* data) {
+    return (data[0] << 24) | (data[1] << 16) | 
+           (data[2] << 8) | data[3];
+}
+
+// Bad: Platform-dependent
+uint32_t read32(const uint8_t* data) {
+    return *(uint32_t*)data; // Endianness depends on platform
+}
+\end{lstlisting}
+
+\subsection{Use Standard Functions}
+
+\begin{lstlisting}[language=C, caption=Network Byte Order Functions]
+// Network byte order functions
+uint32_t networkValue = htonl(hostValue);
+uint32_t hostValue = ntohl(networkValue);
+\end{lstlisting}
+
+\subsection{Document Assumptions}
+
+\begin{lstlisting}[language=C, caption=Documenting Endianness Assumptions]
+// Document expected endianness
+/**
+ * Loads a 256-bit key in big-endian format.
+ * Key bytes are interpreted as: [MSB][MSB-1]...[LSB+1][LSB]
+ */
+\end{lstlisting}
+
+\section{Common Architectures and Their Endianness}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Architecture} & \textbf{Endianness} & \textbf{Notes} \\
+\hline
+Intel x86/x64 & Little-Endian & Most common desktop/server processors \\
+\hline
+ARM & Configurable & Usually little-endian by default \\
+\hline
+Motorola 68000 & Big-Endian & Classic Macintosh processors \\
+\hline
+IBM PowerPC & Big-Endian & Older Macintosh and some servers \\
+\hline
+MIPS & Configurable & Can be either endian \\
+\hline
+Network Protocols & Big-Endian & Standard for interoperability \\
+\hline
+\end{tabular}
+\caption{Common Architectures and Their Endianness}
+\end{table}
+
+\section{Mathematical Analysis}
+
+\subsection{Binary Representation}
+
+For a 32-bit integer, the binary representation shows the significance of each bit:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Bit Position} & 31 & 30 & 29 & ... & 2 & 1 & 0 \\
+\hline
+\textbf{Value} & $2^{31}$ & $2^{30}$ & $2^{29}$ & ... & $2^2$ & $2^1$ & $2^0$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Byte-Level Analysis}
+
+In big-endian, the most significant byte contains the highest-order bits:
+
+\begin{center}
+$Value = byte_0 \times 2^{24} + byte_1 \times 2^{16} + byte_2 \times 2^8 + byte_3 \times 2^0$
+\end{center}
+
+In little-endian, the least significant byte is stored first:
+
+\begin{center}
+$Value = byte_3 \times 2^{24} + byte_2 \times 2^{16} + byte_1 \times 2^8 + byte_0 \times 2^0$
+\end{center}
+
+\section{Performance Considerations}
+
+\subsection{Memory Access Patterns}
+
+Little-endian systems can be more efficient for:
+\begin{itemize}
+    \item Arithmetic operations starting from least significant digits
+    \item Variable-length integer operations
+    \item Memory-mapped I/O where byte order matters
+\end{itemize}
+
+Big-endian systems are more efficient for:
+\begin{itemize}
+    \item Network packet processing
+    \item Human-readable debugging
+    \item String comparisons
+\end{itemize}
+
+\section{Conclusion}
+
+Endianness is a critical concept that affects data interpretation, network communication, and cryptographic implementations. Understanding the differences between big-endian and little-endian representations is essential for:
+
+\begin{itemize}
+    \item Writing portable code
+    \item Implementing network protocols
+    \item Developing cryptographic algorithms
+    \item Debugging cross-platform issues
+\end{itemize}
+
+\begin{definitionbox}
+\textbf{Key Takeaway}: The key is to always be explicit about byte order and use appropriate conversion functions when necessary. In cryptographic applications, incorrect endianness can lead to security vulnerabilities, making this understanding particularly important for security-critical code.
+\end{definitionbox}
+
+\vspace{2cm}
+
+\begin{center}
+\textit{This document provides a comprehensive understanding of endianness for educational purposes.\\
+For cryptographic implementations, always refer to official specifications and test vectors.}
+\end{center}
+
+\end{document} 

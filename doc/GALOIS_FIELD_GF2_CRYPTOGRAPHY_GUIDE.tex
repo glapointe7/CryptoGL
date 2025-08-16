@@ -1,0 +1,714 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{mathtools}
+\usepackage{braket}
+
+% Page setup
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{blue}{GF$(2)$ \& Boolean Algebra in Cryptography}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Title formatting
+\titleformat{\section}{\Large\bfseries\color{blue}}{}{0em}{}
+\titleformat{\subsection}{\large\bfseries\color{darkgray}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{darkgray}}{}{0em}{}
+
+% Color definitions
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{definitionbox}{rgb}{0.9,0.9,0.9}
+\definecolor{examplebox}{rgb}{0.9,0.95,0.9}
+\definecolor{warningbox}{rgb}{1,0.95,0.8}
+\definecolor{prosbox}{rgb}{0.9,0.95,0.9}
+\definecolor{consbox}{rgb}{0.95,0.9,0.9}
+\definecolor{theorybox}{rgb}{0.95,0.95,1}
+
+% Code listing setup
+\lstset{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+% Custom boxes
+\newtcolorbox{definitionbox}{
+    colback=definitionbox,
+    colframe=red!50!black,
+    leftrule=4pt,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{examplebox}{
+    colback=examplebox,
+    colframe=green!50!black,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{warningbox}{
+    colback=warningbox,
+    colframe=orange!50!black,
+    leftrule=4pt,
+    arc=0pt,
+    outer arc=0pt
+}
+
+\newtcolorbox{theorybox}{
+    colback=theorybox,
+    colframe=blue!50!black,
+    leftrule=4pt,
+    arc=0pt,
+    outer arc=0pt
+}
+
+% Custom commands
+\newcommand{\gf}[1]{\text{GF}(#1)}
+\newcommand{\xor}{\oplus}
+\newcommand{\andop}{\wedge}
+\newcommand{\orop}{\vee}
+\newcommand{\notop}{\neg}
+\newcommand{\mat}[1]{\mathbf{#1}}
+\newcommand{\vec}[1]{\mathbf{#1}}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\Huge\bfseries\color{blue} Galois Field GF$(2)$ and Boolean Algebra}\\[0.5cm]
+    {\Large A Comprehensive Guide to Cryptography}\\[1cm]
+    
+    \vspace{1cm}
+    
+    {\large Mathematical Foundations and Practical Applications}\\[0.5cm]
+    {\large From Theory to Implementation}\\[2cm]
+    
+    \vspace{2cm}
+    
+    {\large \today}
+    
+    \vfill
+    
+    {\small This document provides a comprehensive understanding of GF$(2)$, Boolean Algebra, and their applications in modern cryptography.\\
+    Suitable for beginners with step-by-step examples and mathematical rigor.}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+Cryptography relies heavily on mathematical structures that provide both security and computational efficiency. Among the most fundamental of these structures are Galois Fields, particularly GF$(2)$, and Boolean Algebra. This document provides a comprehensive introduction to these concepts and their applications in modern cryptography.
+
+\begin{definitionbox}
+\textbf{Galois Field GF$(2)$} is the smallest finite field, containing only two elements: 0 and 1. It forms the foundation for binary arithmetic and is essential in modern cryptography, error correction codes, and digital signal processing.
+\end{definitionbox}
+
+\begin{definitionbox}
+\textbf{Boolean Algebra} is a mathematical structure that deals with binary variables and logical operations. It provides the theoretical foundation for digital logic design and is closely related to GF$(2)$ arithmetic.
+\end{definitionbox}
+
+\section{Mathematical Foundations}
+
+\subsection{What is a Field?}
+
+A field is a mathematical structure that satisfies the following axioms:
+
+\begin{enumerate}
+    \item \textbf{Closure}: Operations on field elements produce field elements
+    \item \textbf{Associativity}: $(a + b) + c = a + (b + c)$ and $(a \cdot b) \cdot c = a \cdot (b \cdot c)$
+    \item \textbf{Commutativity}: $a + b = b + a$ and $a \cdot b = b \cdot a$
+    \item \textbf{Identity Elements}: There exist 0 and 1 such that $a + 0 = a$ and $a \cdot 1 = a$
+    \item \textbf{Inverse Elements}: For every $a$, there exists $-a$ such that $a + (-a) = 0$
+    \item \textbf{Distributivity}: $a \cdot (b + c) = a \cdot b + a \cdot c$
+\end{enumerate}
+
+\subsection{Galois Field GF$(2)$}
+
+GF$(2)$ is the simplest finite field, containing only two elements: $\{0, 1\}$.
+
+\begin{theorybox}
+\textbf{GF$(2)$ Arithmetic Rules:}
+\begin{align*}
+0 + 0 &= 0 \quad \text{(XOR)} \\
+0 + 1 &= 1 \\
+1 + 0 &= 1 \\
+1 + 1 &= 0 \\
+0 \cdot 0 &= 0 \quad \text{(AND)} \\
+0 \cdot 1 &= 0 \\
+1 \cdot 0 &= 0 \\
+1 \cdot 1 &= 1
+\end{align*}
+\end{theorybox}
+
+\subsubsection{Addition in GF$(2)$}
+
+Addition in GF$(2)$ is equivalent to the XOR operation:
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+$a$ & $b$ & $a + b$ (XOR) \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 0 \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection{Multiplication in GF$(2)$}
+
+Multiplication in GF$(2)$ is equivalent to the AND operation:
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+$a$ & $b$ & $a \cdot b$ (AND) \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+1 & 1 & 1 \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Boolean Algebra}
+
+\subsection{Basic Operations}
+
+Boolean Algebra operates on binary variables and uses three fundamental operations:
+
+\begin{enumerate}
+    \item \textbf{AND} ($\wedge$): $a \wedge b = 1$ if and only if both $a = 1$ and $b = 1$
+    \item \textbf{OR} ($\vee$): $a \vee b = 1$ if either $a = 1$ or $b = 1$ (or both)
+    \item \textbf{NOT} ($\neg$): $\neg a = 1$ if $a = 0$, and $\neg a = 0$ if $a = 1$
+\end{enumerate}
+
+\subsection{Truth Tables}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+$a$ & $b$ & $a \wedge b$ & $a \vee b$ & $\neg a$ \\
+\hline
+0 & 0 & 0 & 0 & 1 \\
+0 & 1 & 0 & 1 & 1 \\
+1 & 0 & 0 & 1 & 0 \\
+1 & 1 & 1 & 1 & 0 \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Boolean Identities}
+
+\begin{theorybox}
+\textbf{Key Boolean Identities:}
+\begin{align*}
+a \wedge 0 &= 0 \quad \text{(Annihilation)} \\
+a \wedge 1 &= a \quad \text{(Identity)} \\
+a \vee 0 &= a \quad \text{(Identity)} \\
+a \vee 1 &= 1 \quad \text{(Annihilation)} \\
+a \wedge a &= a \quad \text{(Idempotent)} \\
+a \vee a &= a \quad \text{(Idempotent)} \\
+\neg(\neg a) &= a \quad \text{(Double Negation)} \\
+a \wedge \neg a &= 0 \quad \text{(Contradiction)} \\
+a \vee \neg a &= 1 \quad \text{(Tautology)}
+\end{align*}
+\end{theorybox}
+
+\section{Relationship Between GF$(2)$ and Boolean Algebra}
+
+\subsection{Correspondence}
+
+There is a direct correspondence between GF$(2)$ arithmetic and Boolean operations:
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{GF$(2)$ Operation} & \textbf{Boolean Operation} \\
+\hline
+Addition (+) & XOR ($\oplus$) \\
+Multiplication ($\cdot$) & AND ($\wedge$) \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{XOR Properties}
+
+XOR has several important properties that make it useful in cryptography:
+
+\begin{enumerate}
+    \item \textbf{Commutativity}: $a \oplus b = b \oplus a$
+    \item \textbf{Associativity}: $(a \oplus b) \oplus c = a \oplus (b \oplus c)$
+    \item \textbf{Identity}: $a \oplus 0 = a$
+    \item \textbf{Self-Inverse}: $a \oplus a = 0$
+    \item \textbf{Distributivity over AND}: $a \wedge (b \oplus c) = (a \wedge b) \oplus (a \wedge c)$
+\end{enumerate}
+
+\section{Step-by-Step Examples}
+
+\subsection{Example 1: Basic GF$(2)$ Arithmetic}
+
+Let's perform arithmetic operations in GF$(2)$:
+
+\begin{examplebox}
+\textbf{Problem}: Calculate $(1 + 0) \cdot (1 + 1)$ in GF$(2)$
+
+\textbf{Step-by-step solution:}
+\begin{align*}
+(1 + 0) \cdot (1 + 1) &= 1 \cdot (1 + 1) \quad \text{(since } 1 + 0 = 1\text{)} \\
+&= 1 \cdot 0 \quad \text{(since } 1 + 1 = 0\text{)} \\
+&= 0 \quad \text{(since } 1 \cdot 0 = 0\text{)}
+\end{align*}
+
+\textbf{Verification}: We can verify this using Boolean operations:
+\begin{align*}
+(1 \oplus 0) \wedge (1 \oplus 1) &= 1 \wedge 0 = 0
+\end{align*}
+\end{examplebox}
+
+\subsection{Example 2: Boolean Expression Simplification}
+
+Simplify the Boolean expression: $(a \wedge b) \vee (a \wedge \neg b)$
+
+\begin{examplebox}
+\textbf{Step-by-step simplification:}
+\begin{align*}
+(a \wedge b) \vee (a \wedge \neg b) &= a \wedge (b \vee \neg b) \quad \text{(Distributivity)} \\
+&= a \wedge 1 \quad \text{(Tautology: } b \vee \neg b = 1\text{)} \\
+&= a \quad \text{(Identity)}
+\end{align*}
+
+\textbf{Verification with truth table:}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+$a$ & $b$ & $a \wedge b$ & $a \wedge \neg b$ & $(a \wedge b) \vee (a \wedge \neg b)$ \\
+\hline
+0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 \\
+1 & 0 & 0 & 1 & 1 \\
+1 & 1 & 1 & 0 & 1 \\
+\hline
+\end{tabular}
+\end{center}
+
+The result matches $a$ in all cases, confirming our simplification.
+\end{examplebox}
+
+\subsection{Example 3: XOR Chain Properties}
+
+Demonstrate the properties of XOR chains:
+
+\begin{examplebox}
+\textbf{Problem}: Show that $a \oplus b \oplus b = a$
+
+\textbf{Solution:}
+\begin{align*}
+a \oplus b \oplus b &= a \oplus (b \oplus b) \quad \text{(Associativity)} \\
+&= a \oplus 0 \quad \text{(Self-inverse: } b \oplus b = 0\text{)} \\
+&= a \quad \text{(Identity)}
+\end{align*}
+
+\textbf{Verification with truth table:}
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+$a$ & $b$ & $a \oplus b \oplus b$ & $a$ \\
+\hline
+0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+1 & 0 & 1 & 1 \\
+1 & 1 & 1 & 1 \\
+\hline
+\end{tabular}
+\end{center}
+\end{examplebox}
+
+\section{Applications in Cryptography}
+
+\subsection{One-Time Pad}
+
+The one-time pad is a perfect cipher that uses XOR operations:
+
+\begin{theorybox}
+\textbf{One-Time Pad Encryption:}
+\begin{align*}
+\text{Ciphertext} &= \text{Plaintext} \oplus \text{Key} \\
+\text{Plaintext} &= \text{Ciphertext} \oplus \text{Key}
+\end{align*}
+\end{theorybox}
+
+\begin{examplebox}
+\textbf{Example}: Encrypt the message "HELLO" using one-time pad
+
+\textbf{Step 1}: Convert to binary
+\begin{align*}
+\text{H} &= 01001000 \\
+\text{E} &= 01000101 \\
+\text{L} &= 01001100 \\
+\text{L} &= 01001100 \\
+\text{O} &= 01001111
+\end{align*}
+
+\textbf{Step 2}: Generate random key (same length)
+\begin{align*}
+\text{Key} &= 10110011 \\
+&= 11001010 \\
+&= 00110101 \\
+&= 11100011 \\
+&= 01010100
+\end{align*}
+
+\textbf{Step 3}: XOR plaintext with key
+\begin{align*}
+\text{H} \oplus \text{Key}_1 &= 01001000 \oplus 10110011 = 11111011 \\
+\text{E} \oplus \text{Key}_2 &= 01000101 \oplus 11001010 = 10001111 \\
+\text{L} \oplus \text{Key}_3 &= 01001100 \oplus 00110101 = 01111001 \\
+\text{L} \oplus \text{Key}_4 &= 01001100 \oplus 11100011 = 10101111 \\
+\text{O} \oplus \text{Key}_5 &= 01001111 \oplus 01010100 = 00011011
+\end{align*}
+
+\textbf{Step 4}: Decrypt by XORing ciphertext with same key
+\begin{align*}
+11111011 \oplus 10110011 &= 01001000 = \text{H} \\
+10001111 \oplus 11001010 &= 01000101 = \text{E} \\
+01111001 \oplus 00110101 &= 01001100 = \text{L} \\
+10101111 \oplus 11100011 &= 01001100 = \text{L} \\
+00011011 \oplus 01010100 &= 01001111 = \text{O}
+\end{align*}
+\end{examplebox}
+
+\subsection{Linear Feedback Shift Registers (LFSR)}
+
+LFSRs are used in stream ciphers and pseudo-random number generation:
+
+\begin{theorybox}
+\textbf{LFSR Operation:}
+\begin{align*}
+s_{n+1} &= c_1 s_n \oplus c_2 s_{n-1} \oplus \cdots \oplus c_k s_{n-k+1}
+\end{align*}
+where $c_i$ are the feedback coefficients and $s_i$ are the state bits.
+\end{theorybox}
+
+\begin{examplebox}
+\textbf{Example}: 4-bit LFSR with polynomial $x^4 + x + 1$
+
+\textbf{Initial state}: $[1, 0, 1, 1]$
+
+\textbf{Feedback}: $s_{n+1} = s_n \oplus s_{n-3}$
+
+\textbf{State sequence:}
+\begin{align*}
+\text{State 0}: & [1, 0, 1, 1] \\
+\text{State 1}: & [0, 1, 1, 1] \quad (1 \oplus 1 = 0) \\
+\text{State 2}: & [1, 1, 1, 0] \quad (0 \oplus 1 = 1) \\
+\text{State 3}: & [1, 1, 0, 1] \quad (1 \oplus 0 = 1) \\
+\text{State 4}: & [1, 0, 1, 1] \quad (1 \oplus 1 = 0) \\
+\end{align*}
+
+The sequence repeats every 15 states (period = $2^4 - 1 = 15$).
+\end{examplebox}
+
+\subsection{S-Boxes in Block Ciphers}
+
+S-Boxes use Boolean functions to provide non-linearity:
+
+\begin{examplebox}
+\textbf{Example}: Simple 2x2 S-Box
+
+\textbf{Input}: 2-bit value $[a, b]$
+\textbf{Output}: 2-bit value $[x, y]$ where:
+\begin{align*}
+x &= a \oplus b \\
+y &= a \wedge b
+\end{align*}
+
+\textbf{Truth table:}
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+$a$ & $b$ & $x = a \oplus b$ & $y = a \wedge b$ \\
+\hline
+0 & 0 & 0 & 0 \\
+0 & 1 & 1 & 0 \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 1 \\
+\hline
+\end{tabular}
+\end{center}
+
+This S-Box provides both linear (XOR) and non-linear (AND) operations.
+\end{examplebox}
+
+\section{Advanced Concepts}
+
+\subsection{GF$(2^n)$ Fields}
+
+While GF$(2)$ is the simplest field, cryptography often uses GF$(2^n)$ for larger fields:
+
+\begin{theorybox}
+\textbf{GF$(2^n)$ Construction:}
+\begin{align*}
+\text{GF}(2^n) &= \frac{\text{GF}(2)[x]}{\langle p(x) \rangle}
+\end{align*}
+where $p(x)$ is an irreducible polynomial of degree $n$.
+\end{theorybox}
+
+\begin{examplebox}
+\textbf{Example}: GF$(2^3)$ with irreducible polynomial $p(x) = x^3 + x + 1$
+
+\textbf{Elements}: $\{0, 1, x, x+1, x^2, x^2+1, x^2+x, x^2+x+1\}$
+
+\textbf{Addition}: Component-wise XOR
+\begin{align*}
+(x^2 + x) + (x^2 + 1) &= x + 1
+\end{align*}
+
+\textbf{Multiplication}: Polynomial multiplication modulo $p(x)$
+\begin{align*}
+(x^2 + x) \cdot (x + 1) &= x^3 + x^2 + x^2 + x = x^3 + x \\
+&= x^3 + x \bmod (x^3 + x + 1) = 1
+\end{align*}
+\end{examplebox}
+
+\subsection{Boolean Functions and Cryptography}
+
+Boolean functions are crucial for S-Box design and cryptographic security:
+
+\begin{theorybox}
+\textbf{Important Properties:}
+\begin{enumerate}
+    \item \textbf{Non-linearity}: Distance from linear functions
+    \item \textbf{Balancedness}: Equal number of 0s and 1s in truth table
+    \item \textbf{Correlation immunity}: Resistance to correlation attacks
+    \item \textbf{Algebraic degree}: Highest degree term in algebraic normal form
+\end{enumerate}
+\end{theorybox}
+
+\section{Practical Implementation}
+
+\subsection{C Implementation}
+
+\begin{lstlisting}[language=C, caption=GF$(2)$ Operations in C]
+// GF(2) addition (XOR)
+uint8_t gf2_add(uint8_t a, uint8_t b) {
+    return a ^ b;
+}
+
+// GF(2) multiplication (AND)
+uint8_t gf2_mul(uint8_t a, uint8_t b) {
+    return a & b;
+}
+
+// Boolean operations
+uint8_t bool_and(uint8_t a, uint8_t b) {
+    return a & b;
+}
+
+uint8_t bool_or(uint8_t a, uint8_t b) {
+    return a | b;
+}
+
+uint8_t bool_not(uint8_t a) {
+    return ~a;
+}
+
+uint8_t bool_xor(uint8_t a, uint8_t b) {
+    return a ^ b;
+}
+\end{lstlisting}
+
+\subsection{Python Implementation}
+
+\begin{lstlisting}[language=Python, caption=GF$(2)$ Operations in Python]
+class GF2:
+    def __init__(self, value):
+        self.value = value & 1
+    
+    def __add__(self, other):
+        return GF2(self.value ^ other.value)
+    
+    def __mul__(self, other):
+        return GF2(self.value & other.value)
+    
+    def __str__(self):
+        return str(self.value)
+
+# Boolean operations
+def bool_and(a, b):
+    return a & b
+
+def bool_or(a, b):
+    return a | b
+
+def bool_not(a):
+    return ~a & 1
+
+def bool_xor(a, b):
+    return a ^ b
+
+# Example usage
+a = GF2(1)
+b = GF2(1)
+print(f"{a} + {b} = {a + b}")  # Output: 1 + 1 = 0
+print(f"{a} * {b} = {a * b}")  # Output: 1 * 1 = 1
+\end{lstlisting}
+
+\section{Security Considerations}
+
+\subsection{Linear Cryptanalysis}
+
+Linear cryptanalysis exploits linear relationships in cryptographic functions:
+
+\begin{theorybox}
+\textbf{Linear Approximation:}
+\begin{align*}
+P[a \cdot x \oplus b \cdot y = 0] &= \frac{1}{2} + \epsilon
+\end{align*}
+where $\epsilon$ is the bias and $a, b$ are masks.
+\end{theorybox}
+
+\subsection{Differential Cryptanalysis}
+
+Differential cryptanalysis studies how input differences propagate:
+
+\begin{theorybox}
+\textbf{Differential Probability:}
+\begin{align*}
+P[\Delta y = \beta | \Delta x = \alpha] &= \frac{\#\{x : F(x) \oplus F(x \oplus \alpha) = \beta\}}{2^n}
+\end{align*}
+\end{theorybox}
+
+\subsection{Algebraic Attacks}
+
+Algebraic attacks solve systems of equations over GF$(2)$:
+
+\begin{examplebox}
+\textbf{Example}: Simple algebraic attack on a cipher
+
+Given a cipher with equations:
+\begin{align*}
+x_1 \oplus x_2 \oplus x_3 &= y_1 \\
+x_2 \oplus x_3 \oplus x_4 &= y_2 \\
+x_1 \oplus x_3 \oplus x_4 &= y_3
+\end{align*}
+
+\textbf{Solution using Gaussian elimination:}
+\begin{align*}
+x_1 \oplus x_2 \oplus x_3 &= y_1 \\
+x_2 \oplus x_3 \oplus x_4 &= y_2 \\
+x_1 \oplus x_3 \oplus x_4 &= y_3
+\end{align*}
+
+Adding equations 1 and 3:
+\begin{align*}
+x_2 \oplus x_4 &= y_1 \oplus y_3
+\end{align*}
+
+This reduces the system and can help recover the key.
+\end{examplebox}
+
+\section{Modern Applications}
+
+\subsection{AES S-Box}
+
+The AES S-Box is constructed using GF$(2^8)$ arithmetic:
+
+\begin{theorybox}
+\textbf{AES S-Box Construction:}
+\begin{enumerate}
+    \item Find multiplicative inverse in GF$(2^8)$
+    \item Apply affine transformation
+    \item Result provides high non-linearity and algebraic complexity
+\end{enumerate}
+\end{theorybox}
+
+\subsection{Hash Functions}
+
+Many hash functions use GF$(2)$ operations extensively:
+
+\begin{examplebox}
+\textbf{Example}: SHA-256 uses GF$(2)$ operations
+
+\textbf{Ch function}: $Ch(x,y,z) = (x \wedge y) \oplus (\neg x \wedge z)$
+
+\textbf{Maj function}: $Maj(x,y,z) = (x \wedge y) \oplus (x \wedge z) \oplus (y \wedge z)$
+
+\textbf{Sigma functions}:
+\begin{align*}
+\Sigma_0(x) &= (x \ggg 2) \oplus (x \ggg 13) \oplus (x \ggg 22) \\
+\Sigma_1(x) &= (x \ggg 6) \oplus (x \ggg 11) \oplus (x \ggg 25)
+\end{align*}
+
+All operations are performed in GF$(2)$ arithmetic.
+\end{examplebox}
+
+\section{Conclusion}
+
+Galois Field GF$(2)$ and Boolean Algebra form the mathematical foundation of modern cryptography. Understanding these concepts is essential for:
+
+\begin{itemize}
+    \item Designing secure cryptographic algorithms
+    \item Analyzing cryptographic security
+    \item Implementing efficient cryptographic systems
+    \item Understanding advanced cryptographic techniques
+\end{itemize}
+
+\begin{definitionbox}
+\textbf{Key Takeaways:}
+\begin{enumerate}
+    \item GF$(2)$ arithmetic is equivalent to XOR and AND operations
+    \item Boolean Algebra provides the theoretical framework for digital logic
+    \item These concepts are fundamental to symmetric cryptography
+    \item Understanding enables both design and cryptanalysis
+\end{enumerate}
+\end{definitionbox}
+
+\vspace{2cm}
+
+\begin{center}
+\textit{This document provides a comprehensive introduction to GF$(2)$ and Boolean Algebra in cryptography.\\
+For advanced applications, refer to specialized cryptographic literature and standards.}
+\end{center}
+
+\end{document} 

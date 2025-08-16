@@ -1,0 +1,21 @@
+/*
+ * Source : tools.ietf.org/html/rfc1950
+ */
+#pragma once
+
+#include "../common/Checksum.hpp"
+
+namespace CryptoGL
+{
+    class Adler32 : public Checksum<uint32_t>
+    {
+    public:
+        Adler32() = default;
+
+        uint32_t encode(const BytesVector &input) override;
+
+    private:
+        /* largest prime smaller than 65536. */
+        static constexpr uint16_t mod_prime = 65521;
+    };
+}
