@@ -77,6 +77,7 @@
 
 #include "unit/StringMethodsTest.hpp"
 #include "unit/VectorMethodsTest.hpp"
+#include "unit/ArrayTest.hpp"
 
 
 int main()

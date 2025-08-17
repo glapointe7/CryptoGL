@@ -45,15 +45,14 @@ namespace CryptoGL
         Vector(VectorType&& V) : VectorType(V) { }
         
         /* XOR each element of vector V with the elements of vector W and return the result. */
-        Vector Xor(const Vector &W) const
+        [[nodiscard]] Vector Xor(const Vector &W) const noexcept
         {
             const uint64_t size = this->size();
-            Vector out;
-            out.reserve(size);
+            Vector out(size, 0);
 
             for (uint64_t i = 0; i < size; ++i)
             {
-                out.push_back(this->at(i) ^ W[i]);
+                out[i] = this->at(i) ^ W[i];
             }
 
             return out;
@@ -160,7 +159,7 @@ namespace CryptoGL
         /* Shift a vector of integers 'v' to the left of 'shift' bits. */
         Vector leftShift(uint32_t shift) const
         {
-            const uint8_t size_type = sizeof(Type) * 8;
+            constexpr uint8_t size_type = sizeof(Type) * 8;
             const uint32_t v_size = this->size();
             const uint32_t start = std::min(shift / size_type, v_size);
             Vector result(range(start));
@@ -201,7 +200,7 @@ namespace CryptoGL
         /* Rotate a vector of integers 'V' to the left of 'to_rotate' bits. */
         Vector rotateLeft(const uint32_t to_rotate) const
         {
-            const uint8_t size_type = sizeof(Type) * 8;
+            constexpr uint8_t size_type = sizeof(Type) * 8;
             const uint8_t bytes_to_rotate = to_rotate / size_type;
             const uint8_t bits_to_shift = to_rotate % size_type;
             const uint8_t rest = size_type - bits_to_shift;

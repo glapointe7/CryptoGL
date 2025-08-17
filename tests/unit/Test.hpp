@@ -72,6 +72,21 @@ namespace UnitTests
                 this->input_value = input_value;
             }
         }
+
+        // /* Compare iterators */
+        // void compareIterators(const auto& expected_iterator, const auto& input_iterator)
+        // {
+        //     if(expected_iterator == input_iterator)
+        //     {
+        //         has_passed = true;
+        //     }
+        //     else
+        //     {
+        //         this->expected_value = "Iterator mismatch";
+        //         this->input_value = "Iterator mismatch";
+        //         has_passed = false;
+        //     }
+        // }
         
         /* Compare integers */
         void compare(const uint64_t &expected_value, const uint64_t &input_value)
