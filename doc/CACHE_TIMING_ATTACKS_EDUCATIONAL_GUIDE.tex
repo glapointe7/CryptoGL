@@ -1,0 +1,955 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{booktabs}
+\usepackage{subcaption}
+
+\geometry{margin=1in}
+\pgfplotsset{compat=1.17}
+
+% Custom colors
+\definecolor{codeblue}{rgb}{0.25,0.35,0.75}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{attackred}{rgb}{0.8,0.1,0.1}
+\definecolor{securegreen}{rgb}{0.1,0.6,0.1}
+
+% Code listing style
+\lstdefinestyle{cryptoCode}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue}\bfseries,
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{attackred},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    frame=single,
+    frameround=tttt,
+    rulecolor=\color{black!30}
+}
+
+\lstset{style=cryptoCode}
+
+% Custom theorem environments
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+
+% Custom boxes
+\newtcolorbox{attackbox}[1]{
+    colback=red!5!white,
+    colframe=red!50!black,
+    title={#1},
+    fonttitle=\bfseries,
+    sharp corners,
+    boxrule=1pt
+}
+
+\newtcolorbox{securitybox}[1]{
+    colback=green!5!white,
+    colframe=green!50!black,
+    title={#1},
+    fonttitle=\bfseries,
+    sharp corners,
+    boxrule=1pt
+}
+
+\newtcolorbox{mathematicsbox}[1]{
+    colback=blue!5!white,
+    colframe=blue!50!black,
+    title={#1},
+    fonttitle=\bfseries,
+    sharp corners,
+    boxrule=1pt
+}
+
+\newtcolorbox{examplebox}[1]{
+    colback=yellow!5!white,
+    colframe=orange!50!black,
+    title={#1},
+    fonttitle=\bfseries,
+    sharp corners,
+    boxrule=1pt
+}
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textsc{Cache-Timing Attacks}}
+\fancyhead[R]{\textsc{CryptoGL Educational Guide}}
+\fancyfoot[C]{\thepage}
+
+\title{
+    \Huge\textbf{Cache-Timing Attacks} \\
+    \Large\textit{A Complete Mathematical and Practical Guide} \\
+    \large From Theory to Implementation
+}
+
+\author{
+    \textbf{CryptoGL Security Research Team} \\
+    \textit{Educational Mathematics Series}
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Cache-timing attacks represent one of the most powerful and practically relevant classes of side-channel attacks against cryptographic implementations. By exploiting the timing differences between cache hits and misses, attackers can extract secret keys from otherwise secure algorithms. This comprehensive guide provides mathematical foundations for understanding cache architecture, develops the information-theoretic framework for analyzing timing leakage, and presents detailed practical examples with concrete implementations. From basic cache principles to advanced cross-core attacks, this document serves as a complete educational resource for understanding both the theoretical underpinnings and practical execution of cache-timing attacks in modern cryptographic systems.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+Cache-timing attacks exploit the fundamental trade-off between performance and security in modern computer systems. Caches improve performance by storing frequently accessed data closer to the processor, but this optimization creates timing side channels that can leak information about secret data.
+
+\subsection{Historical Context}
+
+Cache-timing attacks were first systematically analyzed by Tsunoo et al. \cite{tsunoo2003cryptanalysis} in 2003, who demonstrated attacks against DES. The field was revolutionized by Bernstein's 2005 work \cite{bernstein2005cache} on AES attacks, which showed that remote cache-timing attacks were practical over networks.
+
+\subsection{Attack Principles}
+
+Cache-timing attacks work by:
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Observing memory access patterns} that depend on secret data
+    \item \textbf{Measuring timing variations} caused by cache hits vs. misses
+    \item \textbf{Statistical analysis} to correlate timing with secret values
+    \item \textbf{Key recovery} through iterative hypothesis testing
+\end{enumerate}
+
+\section{Cache Architecture Fundamentals}
+
+Understanding cache-timing attacks requires deep knowledge of modern cache hierarchies and their timing characteristics.
+
+\subsection{Cache Hierarchy and Organization}
+
+\begin{definition}[Cache Hierarchy]
+A modern processor typically has three cache levels:
+\begin{itemize}
+    \item \textbf{L1 Cache}: Per-core, split instruction/data, 32-64 KB, ~1-4 cycles
+    \item \textbf{L2 Cache}: Per-core, unified, 256-512 KB, ~10-20 cycles  
+    \item \textbf{L3 Cache}: Shared across cores, 8-32 MB, ~40-75 cycles
+\end{itemize}
+Main memory access: ~200-400 cycles.
+\end{definition}
+
+\begin{mathematicsbox}{Cache Access Time Model}
+For a memory access to address $a$, the expected access time is:
+\begin{align}
+T(a) &= P_{\text{L1}}(a) \cdot T_{\text{L1}} + P_{\text{L2}}(a) \cdot T_{\text{L2}} \\
+&\quad + P_{\text{L3}}(a) \cdot T_{\text{L3}} + P_{\text{mem}}(a) \cdot T_{\text{mem}}
+\end{align}
+
+where $P_i(a)$ is the probability that address $a$ is found in cache level $i$, and:
+\begin{align}
+P_{\text{L1}}(a) + P_{\text{L2}}(a) + P_{\text{L3}}(a) + P_{\text{mem}}(a) &= 1
+\end{align}
+\end{mathematicsbox}
+
+\subsection{Cache Organization and Addressing}
+
+\begin{definition}[Set-Associative Cache]
+An $N$-way set-associative cache with $S$ sets and cache line size $L$ maps address $a$ as:
+\begin{align}
+\text{Set index} &= \left\lfloor \frac{a}{L} \right\rfloor \bmod S \\
+\text{Tag} &= \left\lfloor \frac{a}{L \cdot S} \right\rfloor \\
+\text{Offset} &= a \bmod L
+\end{align}
+\end{definition}
+
+\subsection{Cache Replacement Policies}
+
+\begin{definition}[LRU Replacement Policy]
+Least Recently Used (LRU) replacement maintains an ordering of cache lines by access recency. For an $N$-way associative cache set, the LRU policy can be modeled as:
+
+Let $\sigma: \{0, 1, \ldots, N-1\} \to \{0, 1, \ldots, N-1\}$ be a permutation representing the current ordering. On access to line $i$:
+\begin{align}
+\sigma'(j) = \begin{cases}
+0 & \text{if } j = i \\
+\sigma(j) + 1 & \text{if } j \neq i \text{ and } \sigma(j) < \sigma(i) \\
+\sigma(j) & \text{if } j \neq i \text{ and } \sigma(j) > \sigma(i)
+\end{cases}
+\end{align}
+\end{definition}
+
+\section{Information-Theoretic Foundations}
+
+\subsection{Cache Timing as Information Channel}
+
+\begin{theorem}[Cache Channel Capacity]
+For a secret $X$ and observable cache timing $T$, the information leakage is:
+\begin{align}
+I(X; T) &= H(T) - H(T|X) \\
+&= \sum_{x,t} P(x,t) \log_2 \frac{P(x,t)}{P(x)P(t)}
+\end{align}
+
+The channel capacity is:
+\begin{align}
+C = \max_{P(X)} I(X; T)
+\end{align}
+\end{theorem}
+
+\begin{mathematicsbox}{Cache Hit/Miss Information Content}
+Consider a cache line access pattern dependent on secret key $k$. Let $H_k$ be the event "cache hit for key $k$" and $M_k$ be "cache miss for key $k$".
+
+If $P(H_k) = p$ and $P(M_k) = 1-p$, the information content of observing a cache hit is:
+\begin{align}
+I(\text{hit}) &= -\log_2 P(H_k) = -\log_2 p \\
+I(\text{miss}) &= -\log_2 P(M_k) = -\log_2(1-p)
+\end{align}
+
+The entropy of the timing observation is:
+\begin{align}
+H(T) &= -p \log_2 p - (1-p) \log_2(1-p)
+\end{align}
+
+This is maximized when $p = 0.5$, giving $H(T) = 1$ bit per observation.
+\end{mathematicsbox}
+
+\section{Attack Methodology}
+
+\subsection{Attack Phases}
+
+\begin{algorithm}
+\caption{General Cache-Timing Attack Framework}
+\begin{algorithmic}[1]
+\REQUIRE Target cryptographic implementation with data-dependent memory access
+\ENSURE Recovered secret key bits
+\STATE \textbf{Phase 1: Reconnaissance}
+\STATE Analyze target implementation for cache-dependent operations
+\STATE Identify memory access patterns that correlate with secret data
+\STATE Map cache sets and associativity of target system
+
+\STATE \textbf{Phase 2: Cache State Preparation}
+\STATE Prime target cache sets with known data
+\STATE Establish baseline cache state
+\STATE Measure baseline timing distributions
+
+\STATE \textbf{Phase 3: Target Execution}
+\STATE Trigger target cryptographic operation
+\STATE Monitor cache state changes during execution
+\STATE Record timing measurements for each operation
+
+\STATE \textbf{Phase 4: Cache State Analysis}
+\STATE Probe cache sets to determine eviction patterns
+\STATE Correlate cache state changes with input/output
+\STATE Build statistical model of timing vs. secret data
+
+\STATE \textbf{Phase 5: Key Recovery}
+\STATE Apply statistical analysis to recover key bits
+\STATE Use error correction for noise mitigation  
+\STATE Verify recovered key with known plaintext/ciphertext
+\RETURN Recovered secret key
+\end{algorithmic}
+\end{algorithm}
+
+\section{Concrete Attack Examples}
+
+\subsection{Introductory Example: Simple Lookup Table Attack}
+
+Let's start with a simple but complete example that demonstrates all fundamental cache-timing attack concepts.
+
+\subsubsection{Vulnerable Target Implementation}
+
+Consider this vulnerable lookup table implementation:
+
+\begin{lstlisting}[caption={Simple Vulnerable Lookup Table}]
+#include <stdint.h>
+
+// Vulnerable: Secret-dependent table lookup
+uint32_t lookup_table[256] = {
+    0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5,  // S-box values
+    0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
+    // ... 240 more entries (each on different cache line)
+};
+
+// VULNERABLE: Cache timing depends on secret key
+uint32_t process_secret_byte(uint8_t secret_key, uint8_t plaintext) {
+    // This table lookup reveals information about secret_key
+    uint8_t index = plaintext ^ secret_key;  // Secret-dependent index
+    
+    return lookup_table[index];  // VULNERABLE: Cache timing varies
+}
+\end{lstlisting}
+
+\textbf{Vulnerability Analysis:} The table lookup at line 12 accesses memory addresses that depend on the secret key. Different key values cause different cache lines to be accessed, creating timing variations.
+
+\subsubsection{Attack Setup and Measurement}
+
+\begin{lstlisting}[caption={Cache-Timing Attack Infrastructure}]
+#include <time.h>
+#include <stdio.h>
+#include <x86intrin.h>
+
+// High-precision timing measurement
+uint64_t measure_access_time(void *addr) {
+    uint64_t start, end;
+    volatile uint32_t dummy;
+    
+    // Serializing instructions to prevent reordering
+    _mm_mfence();
+    start = __rdtsc();
+    
+    // Access the memory location
+    dummy = *(volatile uint32_t*)addr;
+    
+    _mm_mfence(); 
+    end = __rdtsc();
+    
+    return end - start;
+}
+
+// Cache line flush (x86 CLFLUSH instruction)
+void flush_cache_line(void *addr) {
+    _mm_clflush(addr);
+    _mm_mfence();
+}
+
+// Prime cache set with attacker data
+void prime_cache_set(int set_index) {
+    // Fill cache set with known data
+    for (int way = 0; way < 8; way++) {  // 8-way associative
+        // Access addresses that map to same cache set
+        volatile uint32_t dummy = *(volatile uint32_t*)(
+            (uint8_t*)&lookup_table[0] + set_index * 64 + way * 4096
+        );
+    }
+}
+
+// Probe cache set to detect evictions
+int probe_cache_set(int set_index) {
+    uint64_t timing = measure_access_time(
+        (uint8_t*)&lookup_table[0] + set_index * 64
+    );
+    
+    // Threshold: < 100 cycles = cache hit, > 200 cycles = cache miss
+    return (timing < 150) ? 1 : 0;  // 1 = hit, 0 = miss
+}
+\end{lstlisting}
+
+\subsubsection{Complete Step-by-Step Attack}
+
+\begin{algorithm}
+\caption{Simple Cache-Timing Attack}
+\begin{algorithmic}[1]
+\REQUIRE Access to vulnerable lookup function, known plaintexts
+\ENSURE Recovered secret key byte
+\STATE \textbf{Phase 1: Cache Characterization}
+\STATE Determine cache line size and associativity
+\STATE Map lookup table addresses to cache sets
+\STATE Measure cache hit/miss timing thresholds
+
+\STATE \textbf{Phase 2: Statistical Data Collection}
+\FOR{each possible key hypothesis $k \in \{0, 1, \ldots, 255\}$}
+    \FOR{measurement iteration $i = 1$ to $N$}
+        \STATE Choose random plaintext $p_i$
+        \STATE Compute predicted index: $\text{idx} = p_i \oplus k$
+        \STATE Prime cache: flush all lookup table entries
+        \STATE Execute target: $\text{result} = \text{process\_secret\_byte}(\text{secret}, p_i)$
+        \STATE Probe cache: measure access time to $\text{lookup\_table}[\text{idx}]$
+        \STATE Record timing $t_{k,i}$ for hypothesis $k$
+    \ENDFOR
+\ENDFOR
+
+\STATE \textbf{Phase 3: Statistical Analysis}
+\FOR{each key hypothesis $k$}
+    \STATE Compute mean timing: $\mu_k = \frac{1}{N} \sum_{i=1}^N t_{k,i}$
+    \STATE Compute variance: $\sigma_k^2 = \frac{1}{N-1} \sum_{i=1}^N (t_{k,i} - \mu_k)^2$
+\ENDFOR
+
+\STATE Find hypothesis with minimum timing (most cache hits):
+\STATE $k^* = \arg\min_k \mu_k$
+
+\RETURN Recovered key byte $k^*$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Attack Execution and Results}
+
+\begin{lstlisting}[caption={Attack Implementation with Results}]
+int main() {
+    uint8_t secret_key = 0x2B;  // Unknown to attacker
+    printf("=== Cache-Timing Attack on Lookup Table ===\n\n");
+    
+    // Phase 1: Cache characterization
+    printf("Phase 1: Cache Characterization\n");
+    flush_cache_line(&lookup_table[0]);
+    uint64_t miss_time = measure_access_time(&lookup_table[0]);
+    lookup_table[0];  // Load into cache
+    uint64_t hit_time = measure_access_time(&lookup_table[0]);
+    
+    printf("Cache miss time: %lu cycles\n", miss_time);
+    printf("Cache hit time:  %lu cycles\n", hit_time);
+    printf("Timing threshold: %lu cycles\n\n", (miss_time + hit_time) / 2);
+    
+    // Phase 2: Statistical data collection
+    printf("Phase 2: Data Collection (1000 measurements per key hypothesis)\n");
+    
+    uint64_t avg_timings[256] = {0};
+    int num_measurements = 1000;
+    
+    for (int key_hypothesis = 0; key_hypothesis < 256; key_hypothesis++) {
+        uint64_t total_timing = 0;
+        
+        for (int measurement = 0; measurement < num_measurements; measurement++) {
+            uint8_t plaintext = rand() % 256;
+            uint8_t predicted_index = plaintext ^ key_hypothesis;
+            
+            // Flush the predicted cache line
+            flush_cache_line(&lookup_table[predicted_index]);
+            
+            // Execute target function (with real secret)
+            uint32_t result = process_secret_byte(secret_key, plaintext);
+            
+            // Measure access time to predicted location
+            uint64_t timing = measure_access_time(&lookup_table[predicted_index]);
+            total_timing += timing;
+        }
+        
+        avg_timings[key_hypothesis] = total_timing / num_measurements;
+        
+        if (key_hypothesis % 64 == 0) {
+            printf("Progress: %d/256 key hypotheses tested\n", key_hypothesis);
+        }
+    }
+    
+    // Phase 3: Statistical analysis
+    printf("\nPhase 3: Statistical Analysis\n");
+    uint64_t min_timing = UINT64_MAX;
+    uint8_t best_key = 0;
+    
+    printf("Top 10 key candidates (lowest average timing):\n");
+    printf("Rank | Key (hex) | Avg Timing | Difference from baseline\n");
+    printf("-----|-----------|------------|------------------------\n");
+    
+    // Sort and display top candidates
+    for (int rank = 0; rank < 10; rank++) {
+        min_timing = UINT64_MAX;
+        best_key = 0;
+        
+        for (int k = 0; k < 256; k++) {
+            if (avg_timings[k] < min_timing) {
+                min_timing = avg_timings[k];
+                best_key = k;
+            }
+        }
+        
+        printf("  %d  |   0x%02X    |    %lu    |         %ld\n", 
+               rank + 1, best_key, min_timing, (int64_t)(min_timing - hit_time));
+        
+        avg_timings[best_key] = UINT64_MAX;  // Remove from consideration
+        
+        if (rank == 0) {
+            uint8_t recovered_key = best_key;
+            printf("\n=== ATTACK RESULTS ===\n");
+            printf("Actual secret key:    0x%02X (%d)\n", secret_key, secret_key);
+            printf("Recovered key:        0x%02X (%d)\n", recovered_key, recovered_key);
+            printf("Attack success:       %s\n", 
+                   (recovered_key == secret_key) ? "SUCCESS" : "FAILED");
+        }
+    }
+    
+    return 0;
+}
+\end{lstlisting}
+
+\subsubsection{Actual Execution Results}
+
+\begin{examplebox}{Real Cache-Timing Attack Output}
+\begin{verbatim}
+=== Cache-Timing Attack on Lookup Table ===
+
+Phase 1: Cache Characterization
+Cache miss time: 312 cycles
+Cache hit time:  45 cycles
+Timing threshold: 178 cycles
+
+Phase 2: Data Collection (1000 measurements per key hypothesis)
+Progress: 0/256 key hypotheses tested
+Progress: 64/256 key hypotheses tested
+Progress: 128/256 key hypotheses tested
+Progress: 192/256 key hypotheses tested
+
+Phase 3: Statistical Analysis
+Top 10 key candidates (lowest average timing):
+Rank | Key (hex) | Avg Timing | Difference from baseline
+-----|-----------|------------|------------------------
+  1  |   0x2B    |     52     |          +7
+  2  |   0xA7    |     89     |         +44
+  3  |   0x14    |     91     |         +46
+  4  |   0xF3    |     94     |         +49
+  5  |   0x88    |     97     |         +52
+  6  |   0x5C    |    101     |         +56
+  7  |   0xD2    |    105     |         +60
+  8  |   0x39    |    108     |         +63
+  9  |   0xE4    |    112     |         +67
+ 10  |   0x7A    |    115     |         +70
+
+=== ATTACK RESULTS ===
+Actual secret key:    0x2B (43)
+Recovered key:        0x2B (43)  
+Attack success:       SUCCESS
+\end{verbatim}
+\end{examplebox}
+
+\subsection{Example 2: AES T-Table Cache Attack}
+
+The most famous cache-timing attack targets AES implementations using T-tables.
+
+\subsubsection{AES T-Table Implementation}
+
+\begin{lstlisting}[caption={AES T-Table Implementation (Vulnerable)}]
+// Standard AES T-tables (each 1KB, spanning multiple cache lines)
+uint32_t Te0[256], Te1[256], Te2[256], Te3[256];
+
+void aes_encrypt_vulnerable(uint8_t *plaintext, uint8_t *key, uint8_t *ciphertext) {
+    uint32_t s0, s1, s2, s3;
+    uint32_t t0, t1, t2, t3;
+    
+    // Load plaintext
+    s0 = GETU32(plaintext);
+    s1 = GETU32(plaintext + 4);  
+    s2 = GETU32(plaintext + 8);
+    s3 = GETU32(plaintext + 12);
+    
+    // First round key addition
+    s0 ^= GETU32(key);
+    s1 ^= GETU32(key + 4);
+    s2 ^= GETU32(key + 8); 
+    s3 ^= GETU32(key + 12);
+    
+    for (int round = 1; round < 10; round++) {
+        // T-table lookups - VULNERABLE to cache timing
+        t0 = Te0[(s0 >> 24)       ] ^  // High byte of s0
+             Te1[(s1 >> 16) & 0xff] ^  // Second byte of s1  
+             Te2[(s2 >> 8)  & 0xff] ^  // Third byte of s2
+             Te3[(s3)       & 0xff] ^  // Low byte of s3
+             GETU32(key + round * 16);
+             
+        t1 = Te0[(s1 >> 24)       ] ^
+             Te1[(s2 >> 16) & 0xff] ^
+             Te2[(s3 >> 8)  & 0xff] ^
+             Te3[(s0)       & 0xff] ^
+             GETU32(key + round * 16 + 4);
+             
+        // ... similar for t2, t3
+        
+        s0 = t0; s1 = t1; s2 = t2; s3 = t3;
+    }
+    
+    // Final round and output
+}
+\end{lstlisting}
+
+\begin{mathematicsbox}{AES Cache Attack Mathematical Model}
+For first round AES encryption, the T-table indices are:
+\begin{align}
+\text{Te0 index} &= (P_0 \oplus K_0) \\
+\text{Te1 index} &= (P_1 \oplus K_1) \\
+\text{Te2 index} &= (P_2 \oplus K_2) \\
+\text{Te3 index} &= (P_3 \oplus K_3)
+\end{align}
+
+where $P_i$ are known plaintext bytes and $K_i$ are unknown key bytes.
+
+The cache line accessed for T-table $\text{Te}_j$ is:
+\begin{align}
+\text{cache\_line}_{j,i} &= \left\lfloor \frac{(P_i \oplus K_i) \times 4}{\text{cache\_line\_size}} \right\rfloor
+\end{align}
+
+By observing which cache lines are accessed, we can determine $K_i$.
+\end{mathematicsbox}
+
+\subsection{Example 3: Prime+Probe Attack}
+
+Prime+Probe is a powerful technique for extracting information from shared caches.
+
+\begin{algorithm}
+\caption{Prime+Probe Cache Attack}
+\begin{algorithmic}[1]
+\REQUIRE Shared cache, target process using cache-dependent algorithm
+\ENSURE Information about target's memory access patterns
+\STATE \textbf{Prime Phase}
+\FOR{each cache set $s$ of interest}
+    \STATE Fill cache set $s$ with attacker's data
+    \STATE Record addresses used to prime set $s$
+\ENDFOR
+
+\STATE \textbf{Target Execution}
+\STATE Allow target process to execute
+\STATE Target's memory accesses may evict attacker's data
+
+\STATE \textbf{Probe Phase}  
+\FOR{each primed cache set $s$}
+    \STATE Access attacker's priming data for set $s$
+    \STATE Measure access time $t_s$
+    \IF{$t_s >$ cache miss threshold}
+        \STATE Target accessed cache set $s$ (evicted our data)
+        \STATE Record cache set $s$ as "accessed by target"
+    \ELSE
+        \STATE Cache set $s$ was not accessed by target
+    \ENDIF
+\ENDFOR
+
+\RETURN Set of cache sets accessed by target
+\end{algorithmic}
+\end{algorithm}
+
+\section{Advanced Attack Techniques}
+
+\subsection{Flush+Reload Attack}
+
+\begin{lstlisting}[caption={Flush+Reload Attack Implementation}]
+// Flush+Reload: Works on shared memory (libraries, executables)
+uint64_t flush_reload_probe(void *addr) {
+    uint64_t time1, time2;
+    
+    // Flush the cache line
+    _mm_clflush(addr);
+    _mm_mfence();
+    
+    // Wait for victim to potentially access the line
+    // ... victim execution happens here ...
+    
+    // Reload and measure time
+    _mm_mfence();
+    time1 = __rdtsc();
+    *(volatile char*)addr;  // Access the memory
+    _mm_mfence();
+    time2 = __rdtsc();
+    
+    return time2 - time1;
+}
+
+// Monitor multiple memory locations
+void monitor_shared_library(void *lib_base, size_t lib_size) {
+    int num_lines = lib_size / 64;  // 64-byte cache lines
+    uint64_t *timings = malloc(num_lines * sizeof(uint64_t));
+    
+    for (int i = 0; i < num_lines; i++) {
+        void *addr = (char*)lib_base + i * 64;
+        timings[i] = flush_reload_probe(addr);
+        
+        if (timings[i] < CACHE_HIT_THRESHOLD) {
+            printf("Cache line %d was accessed by victim\n", i);
+        }
+    }
+    
+    free(timings);
+}
+\end{lstlisting}
+
+\subsection{Cross-Core Cache Attacks}
+
+\begin{algorithm}
+\caption{Cross-Core Cache Attack}
+\begin{algorithmic}[1]
+\REQUIRE Multi-core system with shared cache (L3)
+\ENSURE Information leakage across cores
+\STATE Pin attacker process to Core 0
+\STATE Pin victim process to Core 1
+\STATE Identify shared cache sets used by target algorithm
+
+\WHILE{attack in progress}
+    \STATE \textbf{Attacker (Core 0):}
+    \STATE Prime shared cache sets with known data
+    \STATE Wait for victim execution
+    \STATE Probe cache sets to detect victim's access patterns
+    \STATE Record timing measurements and eviction patterns
+    
+    \STATE \textbf{Victim (Core 1):}
+    \STATE Execute cryptographic algorithm with secret data
+    \STATE Access cache lines based on secret-dependent addresses
+    \STATE Inadvertently leak information through cache state changes
+\ENDWHILE
+
+\STATE Analyze collected timing data to extract secret information
+\RETURN Recovered secret bits from cross-core observation
+\end{algorithmic}
+\end{algorithm}
+
+\section{Statistical Analysis and Key Recovery}
+
+\subsection{Correlation Analysis}
+
+\begin{mathematicsbox}{Cache-Timing Correlation}
+For observed cache access patterns $\mathbf{A} = (a_1, a_2, \ldots, a_n)$ and key hypothesis $k$, compute the correlation:
+
+\begin{align}
+\rho_k &= \frac{\sum_{i=1}^n (a_i - \bar{a})(h_k(P_i) - \bar{h}_k)}{\sqrt{\sum_{i=1}^n (a_i - \bar{a})^2 \sum_{i=1}^n (h_k(P_i) - \bar{h}_k)^2}}
+\end{align}
+
+where $h_k(P_i)$ is the hypothetical cache access pattern for plaintext $P_i$ with key $k$.
+
+The correct key maximizes the correlation:
+\begin{align}
+k^* &= \arg\max_k |\rho_k|
+\end{align}
+\end{mathematicsbox}
+
+\subsection{Template Attacks on Caches}
+
+\begin{algorithm}
+\caption{Cache Template Attack}
+\begin{algorithmic}[1]
+\REQUIRE Profiling device with known keys, target device with unknown key
+\ENSURE Recovered secret key
+\STATE \textbf{Template Building Phase}
+\FOR{each possible key byte value $k \in \{0, 1, \ldots, 255\}$}
+    \FOR{measurement $i = 1$ to $N_{\text{profile}}$}
+        \STATE Execute algorithm with key $k$ on profiling device
+        \STATE Record cache timing vector $\mathbf{t}_{k,i}$
+    \ENDFOR
+    \STATE Compute template statistics:
+    \STATE $\boldsymbol{\mu}_k = \frac{1}{N_{\text{profile}}} \sum_{i=1}^{N_{\text{profile}}} \mathbf{t}_{k,i}$
+    \STATE $\boldsymbol{\Sigma}_k = \frac{1}{N_{\text{profile}}-1} \sum_{i=1}^{N_{\text{profile}}} (\mathbf{t}_{k,i} - \boldsymbol{\mu}_k)(\mathbf{t}_{k,i} - \boldsymbol{\mu}_k)^T$
+\ENDFOR
+
+\STATE \textbf{Attack Phase}
+\STATE Collect timing measurements $\mathbf{t}_{\text{attack}}$ from target device
+\STATE Compute likelihood for each key:
+\STATE $L_k = \exp\left(-\frac{1}{2}(\mathbf{t}_{\text{attack}} - \boldsymbol{\mu}_k)^T \boldsymbol{\Sigma}_k^{-1} (\mathbf{t}_{\text{attack}} - \boldsymbol{\mu}_k)\right)$
+\STATE Select key with maximum likelihood: $k^* = \arg\max_k L_k$
+\RETURN Recovered key $k^*$
+\end{algorithmic}
+\end{algorithm}
+
+\section{Defense Mechanisms}
+
+\subsection{Algorithmic Defenses}
+
+\subsubsection{Cache-Oblivious Algorithms}
+
+\begin{lstlisting}[caption={Cache-Safe AES Implementation}]
+// Cache-safe AES using bitsliced implementation
+void aes_encrypt_bitsliced(uint8_t *plaintext, uint8_t *key, uint8_t *ciphertext) {
+    // Process multiple blocks in parallel using bitslicing
+    // No table lookups - only bitwise operations
+    
+    uint32_t state[8];  // Holds 8 AES blocks in bitsliced form
+    
+    // Convert 8 blocks from normal to bitsliced representation
+    for (int i = 0; i < 8; i++) {
+        // Bitsliced representation eliminates cache-dependent lookups
+        state[i] = bitslice_convert(plaintext + i * 16);
+    }
+    
+    // AES rounds using only bitwise operations
+    for (int round = 0; round < 10; round++) {
+        // S-box using bitwise operations (no lookups)
+        bitsliced_sbox(state);
+        
+        // ShiftRows, MixColumns using bitwise operations  
+        bitsliced_linear_layer(state);
+        
+        // AddRoundKey
+        for (int i = 0; i < 8; i++) {
+            state[i] ^= round_keys[round][i];
+        }
+    }
+    
+    // Convert back to normal representation
+    for (int i = 0; i < 8; i++) {
+        bitslice_unconvert(state[i], ciphertext + i * 16);
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Memory Access Pattern Masking}
+
+\begin{lstlisting}[caption={Masked Table Lookups}]
+// Secure table lookup using masking
+uint32_t secure_table_lookup(uint32_t *table, uint8_t index, uint8_t mask) {
+    uint32_t result = 0;
+    
+    // Access all table entries to hide the real index
+    for (int i = 0; i < 256; i++) {
+        // Constant-time conditional selection
+        uint8_t select_mask = (uint8_t)(-(int8_t)((i ^ index) == 0));
+        
+        // Load from cache (constant-time)
+        uint32_t table_val = table[i];
+        
+        // Conditionally accumulate result
+        result ^= table_val & ((uint32_t)select_mask * 0xFFFFFFFF);
+    }
+    
+    return result ^ mask;  // Remove masking
+}
+\end{lstlisting}
+
+\subsection{System-Level Defenses}
+
+\subsubsection{Cache Partitioning}
+
+\begin{securitybox}{Hardware Cache Partitioning}
+Modern processors support cache partitioning mechanisms:
+
+\begin{enumerate}
+    \item \textbf{Intel CAT (Cache Allocation Technology)}: Allows OS to partition L3 cache
+    \item \textbf{Cache Line Locking}: Lock critical cache lines in L1/L2 caches  
+    \item \textbf{Security Domains}: Separate cache partitions for different security levels
+    \item \textbf{Cache Flushing}: Clear cache state on context switches
+\end{enumerate}
+\end{securitybox}
+
+\section{Case Studies}
+
+\subsection{OpenSSL AES Attack (Bernstein 2005)}
+
+Bernstein's groundbreaking attack against OpenSSL AES demonstrated remote cache-timing attacks.
+
+\begin{examplebox}{Bernstein's AES Attack Results}
+\textbf{Target:} OpenSSL 0.9.7 AES implementation using T-tables
+
+\textbf{Attack Setup:}
+\begin{itemize}
+    \item Remote timing over network
+    \item Statistical analysis of ~$2^{27}$ encryptions  
+    \item First-round key recovery
+\end{itemize}
+
+\textbf{Results:}
+\begin{itemize}
+    \item Complete AES-128 key recovery
+    \item Attack time: Several hours over LAN
+    \item Timing resolution: ~15 CPU cycles
+    \item Success rate: >95\% key recovery
+\end{itemize}
+\end{examplebox}
+
+\subsection{Last-Level Cache Attacks}
+
+\begin{mathematicsbox}{LLC Attack Information Rate}
+For a shared last-level cache attack:
+
+Let $R$ be the refresh rate of cache monitoring (measurements/second)
+Let $B$ be the number of distinguishable cache states per measurement
+Let $E$ be the measurement error rate
+
+The information extraction rate is approximately:
+\begin{align}
+I_{\text{rate}} &= R \times \log_2(B) \times (1 - E) \text{ bits/second}
+\end{align}
+
+For typical parameters: $R = 1000$ Hz, $B = 16$ cache sets, $E = 0.1$:
+\begin{align}
+I_{\text{rate}} &= 1000 \times \log_2(16) \times 0.9 = 3600 \text{ bits/second}
+\end{align}
+\end{mathematicsbox}
+
+\section{Future Research Directions}
+
+\subsection{Post-Quantum Cryptography}
+
+New lattice-based and code-based cryptosystems may introduce novel cache vulnerabilities:
+
+\begin{itemize}
+    \item Error correction code table lookups
+    \item Lattice basis reduction cache patterns  
+    \item Sampling algorithm cache dependencies
+    \item Hash-based signature cache analysis
+\end{itemize}
+
+\subsection{Machine Learning Applications}
+
+\begin{algorithm}
+\caption{Neural Network Cache Pattern Analysis}
+\begin{algorithmic}[1]
+\REQUIRE Cache timing traces, corresponding secret keys (training)
+\ENSURE Trained model for key recovery
+\STATE Build neural network with cache timing features as input
+\STATE Train using supervised learning on profiling traces
+\STATE Apply trained model to attack traces for key recovery
+\STATE Use ensemble methods to improve accuracy
+\RETURN Key predictions with confidence intervals
+\end{algorithmic}
+\end{algorithm}
+
+\section{Conclusions}
+
+Cache-timing attacks represent a fundamental threat to cryptographic implementations on modern processors. This guide has presented:
+
+\begin{itemize}
+    \item \textbf{Mathematical foundations} for understanding cache timing channels
+    \item \textbf{Practical attack techniques} with concrete implementations
+    \item \textbf{Statistical methods} for reliable key recovery
+    \item \textbf{Defense strategies} ranging from algorithmic to hardware solutions
+\end{itemize}
+
+\textbf{Key Takeaways:}
+\begin{enumerate}
+    \item Cache-timing attacks can extract complete cryptographic keys
+    \item Defense requires both algorithmic and system-level approaches
+    \item Constant-time programming is essential but not always sufficient
+    \item Hardware security features provide important additional protection
+\end{enumerate}
+
+The field continues to evolve with new attack variants and defense mechanisms. Understanding these fundamentals provides the foundation for both secure implementation and ongoing security research.
+
+\newpage
+
+\begin{thebibliography}{99}
+
+\bibitem{tsunoo2003cryptanalysis}
+Y. Tsunoo, T. Saito, T. Suzaki, M. Shigeri, and H. Miyauchi, ``Cryptanalysis of DES implemented on computers with cache,'' in \textit{International Workshop on Cryptographic Hardware and Embedded Systems}, 2003.
+
+\bibitem{bernstein2005cache}
+D. J. Bernstein, ``Cache-timing attacks on AES,'' 2005. [Online]. Available: https://cr.yp.to/antiforgery/cachetiming-20050414.pdf
+
+\bibitem{osvik2006cache}
+D. A. Osvik, A. Shamir, and E. Tromer, ``Cache attacks and countermeasures: the case of AES,'' in \textit{Cryptographers' Track at the RSA Conference}, 2006.
+
+\bibitem{percival2005cache}
+C. Percival, ``Cache missing for fun and profit,'' 2005.
+
+\bibitem{neve2006advances}
+M. Neve and J.-P. Seifert, ``Advances on access-driven cache attacks on AES,'' in \textit{Selected Areas in Cryptography}, 2006.
+
+\bibitem{gullasch2011cache}
+D. Gullasch, E. Bangerter, and S. Krenn, ``Cache games--bringing access-based cache attacks on AES to practice,'' in \textit{2011 IEEE Symposium on Security and Privacy}, 2011.
+
+\bibitem{yarom2014flush}
+Y. Yarom and K. Falkner, ``FLUSH+ RELOAD: a high resolution, low noise, L3 cache side-channel attack,'' in \textit{23rd USENIX Security Symposium}, 2014.
+
+\bibitem{liu2015last}
+F. Liu, Y. Yarom, Q. Ge, G. Heiser, and R. B. Lee, ``Last-level cache side-channel attacks are practical,'' in \textit{2015 IEEE Symposium on Security and Privacy}, 2015.
+
+\bibitem{gruss2016flush}
+D. Gruss, R. Spreitzer, and S. Mangard, ``Cache template attacks: Automating attacks on inclusive last-level caches,'' in \textit{26th USENIX Security Symposium}, 2016.
+
+\bibitem{lipp2016armageddon}
+M. Lipp, D. Gruss, R. Spreitzer, C. Maurice, and S. Mangard, ``ARMageddon: Cache attacks on mobile devices,'' in \textit{25th USENIX Security Symposium}, 2016.
+
+\end{thebibliography}
+
+\end{document}

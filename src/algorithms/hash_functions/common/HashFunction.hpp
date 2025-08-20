@@ -42,7 +42,7 @@ namespace CryptoGL
         DataTypeVector current_block;
         
         /* Append length in bits of the initial message to the padded message. */
-        template <class EndianLengthType>
+        template <typename EndianLengthType>
         static BytesVector appendLength(BytesVector bytes, const uint64_t &length)
         {
             bytes.extend(EndianLengthType::toBytesVector(length));

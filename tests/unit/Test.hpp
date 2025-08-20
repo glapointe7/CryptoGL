@@ -31,14 +31,14 @@ namespace UnitTests
     class Test  
     {
     public:
-        virtual ~Test() {}
+        virtual ~Test() = default;
         
         virtual void setUp() = 0;
         virtual void run() = 0;
         virtual void tearDown() = 0;
         
         /* Print the result for one test if passed or failed with the expected result. */
-        void printResult() const
+        virtual void printResult() const
         {
             if(has_passed)
             {
@@ -54,7 +54,7 @@ namespace UnitTests
             }
         }
                 
-        bool hasPassed() const { return has_passed; }
+        virtual bool hasPassed() const { return has_passed; }
                 
     protected:
         void setName(const String &name) { this->name = name; }

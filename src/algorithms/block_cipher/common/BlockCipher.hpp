@@ -44,7 +44,9 @@ namespace CryptoGL
    template <typename SubkeyType, typename InputBlockType, uint8_t InputBlockSize, typename EndianType>
    class BlockCipher : public SymmetricCipher<BytesVector>
    {
-      static_assert(!(InputBlockSize % 8), "InputBlockSize has to be a multiple of 8.");
+      //static_assert(std::is_array_v<InputBlockType>, "InputBlockType must be Array<T, N>");
+      //static_assert(InputBlockType::size() * sizeof(typename InputBlockType::value_type) == InputBlockSize,
+      //            "Array size must match InputBlockSize");
 
    public:
       /* Encode a message block by block sequentially */

@@ -5,115 +5,114 @@
 #include <assert.h>
 #include <limits>
 
+#include <bit>
+#include <concepts>
+#include <type_traits>
+    // Excludes bool (which is technically integral but not useful here)
 namespace CryptoGL
 {
-    template <typename UInteger>
+    template <typename T>
+    concept UnsignedIntegral = std::unsigned_integral<T> && (!std::same_as<T, bool>);
+    template <UnsignedIntegral UInteger>
     class Integer
     {
-        static_assert(std::is_integral<UInteger>::value, "Integer: The type UInteger must be an integral type.");
+        static constexpr uint8_t BITS_COUNT = sizeof(UInteger) * 8;
+        static constexpr uint8_t BYTES_COUNT = sizeof(UInteger);
+        static constexpr UInteger ALL_ONES = ~static_cast<UInteger>(0);
 
     public:
         /* Extract the Least Significant Bits from value. */
-        static constexpr UInteger lsb(const UInteger value, const uint8_t bits_to_extract)
+        [[nodiscard]] static constexpr UInteger lsb(const UInteger value, const uint8_t bits_to_extract) noexcept
         {
-            assert(bits_to_extract <= sizeof(UInteger) * 8 && "Integer (lsb): The argument 'bits_to_extract' has to be between 0 and 63.");
-            return value & (static_cast<UInteger> (1) << bits_to_extract);
+            const UInteger mask = (bits_to_extract == BITS_COUNT) ? 
+                ALL_ONES : 
+                (static_cast<UInteger>(1) << bits_to_extract) - 1;
+            
+            return value & mask;
         }
         
         /* Extract the Most Significant Bits from value. */
-        static constexpr UInteger msb(const UInteger value, const uint8_t bits_to_extract)
+        [[nodiscard]] static constexpr UInteger msb(const UInteger value, const uint8_t bits_to_extract) noexcept
         {
-            assert(bits_to_extract <= sizeof(UInteger) * 8 && "Integer (msb): The argument 'bits_to_extract' has to be between 0 and 63.");
-            return value >> ((sizeof (UInteger) * 8) - bits_to_extract);
+            return value >> (BITS_COUNT - bits_to_extract);
         }
         
         /* Rotate left 'value' of 'shift' bits. 
          */
-        static constexpr UInteger rotateLeft(const UInteger value, const uint8_t shift)
+        [[nodiscard]] static constexpr UInteger rotateLeft(const UInteger value, const uint8_t shift) noexcept
         {
-            constexpr uint8_t uint_size = sizeof(UInteger) * 8;
-            assert(shift <= uint_size && "Integer (rotateLeft): The argument 'shift' has to be between less or equals to uint_size.");
-            return ((value << shift) | (value >> (uint_size - shift)));
+            return std::rotl(value, shift);
         }
         
         /* Rotate left 'value' of 'shift' bits with 'max' in {1,...,64}. */
-        static constexpr UInteger rotateLeft(const UInteger value, const uint8_t shift, const uint8_t max)
+        [[nodiscard]] static constexpr UInteger rotateLeft(const UInteger value, const uint8_t shift, const uint8_t max) noexcept
         {
-            constexpr uint8_t uint_size = sizeof(UInteger) * 8;
-            assert((shift <= uint_size && max <= uint_size) && "Integer (rotateLeft): The argument 'shift' has to be between less or equals to uint_size.");
+            //return std::rotl(value, shift) & ((1ull << max) - 1);
             return ((value << shift) | (value >> (max - shift))) & ((1ull << max) - 1);
         }
         
         /* Rotate right 'value' of 'shift' bits with 'max' in {1,...,64}. 
          * Default value will be adjusted with the type of integer (e.g. uint32 => max = 32).
          */
-        static constexpr UInteger rotateRight(const UInteger value, const uint8_t shift, const uint8_t max = sizeof(UInteger) * 8)
+        [[nodiscard]] static constexpr UInteger rotateRight(const UInteger value, const uint8_t shift, const uint8_t max = BITS_COUNT) noexcept
         {
-            assert(max <= sizeof(UInteger) * 8 && "Integer (rotateRight): The argument 'max' has to be between 1 and 64.");
+            //assert(max <= BITS_COUNT && "Integer (rotateRight): The argument 'max' has to be between 1 and 64.");
             return ((value >> shift) | (value << (max - shift)));
         }
         
         /* Test a bit at a 'pos' in 'value'. */
-        static constexpr bool getBitAtPosition(const UInteger value, const uint8_t pos)
+        [[nodiscard]] static constexpr bool getBitAtPosition(const UInteger value, const uint8_t pos) noexcept
         {
-            assert(pos < 8 * sizeof(UInteger) && "Integer (getBitAtPosition): The argument 'pos' has to be between 0 and 7.");
             return (value & (1ull << pos)) > 0;
         }
         
         /* Set a bit at 'pos' in 'value'. */
-        static constexpr UInteger setBitAtPosition(const UInteger value, const uint8_t pos)
+        [[nodiscard]] static constexpr UInteger setBitAtPosition(const UInteger value, const uint8_t pos) noexcept
         {
-            assert(pos < 8 * sizeof(UInteger) && "Integer (setBitAtPosition): The argument 'pos' has to be between 0 and 7.");
             return value | (1ull << pos);
         }
         
         /* Extract a byte in value at position 'pos'. */
-        static constexpr uint8_t getByteAtPosition(const UInteger value, const uint8_t pos)
+        [[nodiscard]] static constexpr uint8_t getByteAtPosition(const UInteger value, const uint8_t pos) noexcept
         {
-            assert(pos < sizeof(UInteger) && "Integer (getByteAtPosition): The argument 'pos' has to be between 0 and 7.");
             return (value >> (pos * 8)) & 0xFF;
         }
         
         /* Swap every byte in the integer 'value'. */
-        static UInteger bytesSwap(const UInteger value)
+        [[nodiscard]] static constexpr UInteger bytesSwap(UInteger value) noexcept
         {
-            constexpr uint8_t uint_size = sizeof(UInteger);
-            uint32_t retval = value & 0xFF;
-            for(uint8_t i = 1; i < uint_size; ++i)
-            {
-                retval = (retval << 8) | ((value >> (8 * i)) & 0xFF);
-            }
-            
-            return retval;
-        }
-
-        static constexpr UInteger reverse_bits(UInteger n) {
-            static_assert(std::is_unsigned<UInteger>::value, "reverse_bits requires unsigned integer types");
-
-            constexpr int num_bits = std::numeric_limits<UInteger>::digits;
             UInteger result = 0;
-            for (int i = 0; i < num_bits; ++i) {
-                result <<= 1;
-                result |= (n & 1);
-                n >>= 1;
+            for (std::size_t i = 0; i < BYTES_COUNT; ++i) {
+                result <<= 8;
+                result |= (value & 0xFF);
+                value >>= 8;
             }
 
             return result;
         }
         
         /* Convert an integer 'value' to a string. */
-        static String toString(UInteger value)
+        [[nodiscard]] static String toString(UInteger value) noexcept
         {
-            String str;
-            str.reserve(20);
-            do
-            {
-                str.push_back(static_cast<char> ('0' + (value % 10)));
-            }
-            while (value /= 10);
-            std::reverse(str.begin(), str.end());
+            constexpr int MAX_DIGITS = std::numeric_limits<UInteger>::digits10 + 1;
+            std::array<char, MAX_DIGITS> buf{};
+            UInteger tmp = value;
 
-            return str;
+            for (int i = MAX_DIGITS - 1; i >= 0; --i) {
+                buf[i] = static_cast<char>('0' + (tmp % 10));
+                tmp /= 10;
+            }
+
+            // Trouver l'index du premier chiffre non '0' de manière branchless
+            int idx = 0;
+            bool seen_nonzero = false;
+            for (int i = 0; i < MAX_DIGITS - 1; ++i) {
+                bool is_nonzero = (buf[i] != '0');
+                seen_nonzero = seen_nonzero || is_nonzero;
+                if (!seen_nonzero) idx++;
+            }
+
+            return std::string(buf.begin() + idx, buf.end());
         }
     };
 

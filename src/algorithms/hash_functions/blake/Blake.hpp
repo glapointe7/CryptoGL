@@ -46,7 +46,7 @@ namespace CryptoGL
     };
 
 
-    template <class DataType, uint8_t InputBlockSize>
+    template <typename DataType, uint8_t InputBlockSize>
     class Blake : public HashFunction<DataType, Endian<BigEndian<DataType>, DataType>>
     {
     static_assert(!(InputBlockSize % 64), "'InputBlockSize' has to be a multiple of 64.");   

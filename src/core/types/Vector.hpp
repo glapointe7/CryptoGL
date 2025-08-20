@@ -32,7 +32,7 @@ namespace CryptoGL
         /* Create a copy of a std::vector in Vector. */
         explicit Vector(const VectorType &V) : VectorType(V) { }
         
-        template <class InputIterator>
+        template <typename InputIterator>
         Vector(InputIterator first, InputIterator last) : VectorType(first, last) { }
         
         /* Create a Vector filled with 'n' times the value 'value'. */

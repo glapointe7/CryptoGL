@@ -116,7 +116,7 @@ namespace CryptoGL
      * CBC-MAC mode.
      * Source : http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/xcbc-mac/xcbc-mac-spec.pdf
      */
-    template <class BlockCipherType>
+    template <typename BlockCipherType>
     class CBC_MAC : public MAC
     {
         static_assert(!std::is_base_of<BlockCipherBase, BlockCipherType>::value,
@@ -198,7 +198,7 @@ namespace CryptoGL
      * CMAC mode.
      * Source : http://www.nuee.nagoya-u.ac.jp/labs/tiwata/omac/omac.html 
      */
-    template <class BlockCipherType>
+    template <typename BlockCipherType>
     class CMAC : public MAC
     {
         static_assert(!std::is_base_of<BlockCipherBase, BlockCipherType>::value,
@@ -239,7 +239,7 @@ namespace CryptoGL
      * OMAC mode.
      * Source : http://www.nuee.nagoya-u.ac.jp/labs/tiwata/omac/omac.html
      */
-    template <class BlockCipherType>
+    template <typename BlockCipherType>
     class OMAC : public MAC
     {
         static_assert(!std::is_base_of<BlockCipherBase, BlockCipherType>::value,
@@ -282,7 +282,7 @@ namespace CryptoGL
      * PMAC class.
      * Source : http://www.cs.ucdavis.edu/~rogaway/ocb/pmac-bak.htm
      */
-    template <class BlockCipherType>
+    template <typename BlockCipherType>
     class PMAC : public MAC
     {
         static_assert(!std::is_base_of<BlockCipherBase, BlockCipherType>::value,
@@ -337,7 +337,7 @@ namespace CryptoGL
      * TMAC class.
      * Source : http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/tmac/tmac-spec.pdf
      */
-    template <class BlockCipherType>
+    template <typename BlockCipherType>
     class TMAC : public MAC
     {
         static_assert(!std::is_base_of<BlockCipherBase, BlockCipherType>::value,

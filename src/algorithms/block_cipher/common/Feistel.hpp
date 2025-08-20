@@ -7,7 +7,7 @@
 
 namespace CryptoGL
 {
-    template <class FeistelType, class DataType, uint8_t InputBlockSize, class IndianType, class SubkeyType = FeistelType>
+    template <typename FeistelType, typename DataType, uint8_t InputBlockSize, typename IndianType, typename SubkeyType = FeistelType>
     class Feistel : public BlockCipher<SubkeyType, DataType, InputBlockSize, IndianType>
     {
     protected:

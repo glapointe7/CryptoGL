@@ -5,7 +5,7 @@
 
 namespace CryptoGL
 {
-    template <class SeedType, class GenerateType>
+    template <typename SeedType, typename GenerateType>
     class PseudoRandomFunction
     {
     protected:

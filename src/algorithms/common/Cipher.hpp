@@ -7,7 +7,7 @@
 
 namespace CryptoGL
 {
-    template <class OutputType, class InputType = OutputType>
+    template <typename OutputType, typename InputType = OutputType>
     class Cipher
     {
     protected:

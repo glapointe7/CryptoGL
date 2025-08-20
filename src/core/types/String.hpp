@@ -26,7 +26,7 @@ namespace CryptoGL
         /* Move constructor. */
         String(std::string &&str) : std::string(str) { }
         /* Copies the sequence of characters in the range [first,last), in the same order. */
-        template <class InputIterator>
+        template <typename InputIterator>
         String(InputIterator first, InputIterator last) : std::string(first, last) { }
 
         // Useful constants for alpha string.

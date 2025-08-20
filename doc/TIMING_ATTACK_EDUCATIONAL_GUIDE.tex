@@ -1,0 +1,1702 @@
+\documentclass[12pt,a4paper]{article}
+
+% Essential packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+
+% Code listing configuration
+\lstdefinestyle{cryptoCode}{
+    language=C++,
+    basicstyle=\fontsize{8.5}{10}\ttfamily,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green!60!black}\itshape,
+    stringstyle=\color{red},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    numbersep=8pt,
+    tabsize=2,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    breakindent=20pt,
+    prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+    frame=tb,
+    framerule=0.5pt,
+    framexleftmargin=5pt,
+    framexrightmargin=5pt,
+    xleftmargin=10pt,
+    xrightmargin=10pt,
+    aboveskip=12pt,
+    belowskip=12pt,
+    lineskip=1pt,
+    columns=flexible,
+    keepspaces=true,
+    captionpos=b,
+    backgroundcolor=\color{gray!5}
+}
+
+\lstset{style=cryptoCode}
+
+% Page setup
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textsc{Timing Attack Guide}}
+\fancyhead[R]{\textsc{CryptoGL Educational Series}}
+\fancyfoot[C]{\thepage}
+
+% Custom theorem environments
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+
+% Custom colored boxes
+\newtcolorbox{definitionbox}[1]{
+    colback=blue!5!white,
+    colframe=blue!50!black,
+    title=#1,
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{examplebox}[1]{
+    colback=green!5!white,
+    colframe=green!50!black,
+    title=#1,
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{warningbox}[1]{
+    colback=red!5!white,
+    colframe=red!50!black,
+    title=#1,
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{algorithmbox}[1]{
+    colback=orange!5!white,
+    colframe=orange!50!black,
+    title=#1,
+    fonttitle=\bfseries
+}
+
+% Mathematical notation
+\newcommand{\prob}[1]{\mathbb{P}\left[#1\right]}
+\newcommand{\expect}[1]{\mathbb{E}\left[#1\right]}
+\newcommand{\var}[1]{\text{Var}\left[#1\right]}
+\newcommand{\std}[1]{\text{Std}\left[#1\right]}
+\newcommand{\time}[1]{\mathcal{T}\left(#1\right)}
+\newcommand{\timedelta}{\Delta t}
+\newcommand{\timesamples}{\mathbf{T}}
+
+% Title page
+\title{
+    \vspace{-2cm}
+    \begin{center}
+    % \includegraphics[width=0.3\textwidth]{timing_attack_logo.png} % Logo can be added here if available
+    \textsc{\Large CryptoGL Educational Series}
+    \end{center}
+    \vspace{1cm}
+    {\Huge\bfseries Timing Attack Analysis}\\
+    \vspace{0.5cm}
+    {\Large A Comprehensive Guide to Side-Channel Cryptanalysis}\\
+    \vspace{1cm}
+    {\large Educational Document for Cryptography Students}
+}
+
+\author{
+    \textsc{CryptoGL Development Team}\\
+    \textit{Cryptography \& Security Research}
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Introduction to Timing Attacks}
+
+\begin{definitionbox}{What is a Timing Attack?}
+A \textbf{timing attack} is a side-channel attack that exploits variations in execution time of cryptographic algorithms to extract sensitive information, particularly secret keys. These attacks analyze the correlation between execution time and the data being processed to reveal confidential information without directly breaking the cryptographic algorithm itself.
+\end{definitionbox}
+
+Timing attacks represent one of the most practical and dangerous classes of side-channel attacks because:
+
+\begin{enumerate}
+    \item \textbf{Remote Feasibility:} Can often be performed over network connections
+    \item \textbf{Non-Invasive:} Require no physical access to the target device
+    \item \textbf{Algorithm Agnostic:} Can affect any implementation with timing variations
+    \item \textbf{Statistical Power:} Leverage statistical analysis to extract information from noise
+\end{enumerate}
+
+\subsection{Historical Context}
+
+The first published timing attack was demonstrated by Paul Kocher in 1996 \cite{kocher1996timing}, where he showed how to extract RSA private keys by measuring the time required for modular exponentiation operations. This groundbreaking work opened an entirely new field of cryptanalysis that focuses on implementation vulnerabilities rather than mathematical weaknesses.
+
+\begin{examplebox}{Kocher's Original RSA Attack}
+In his seminal paper, Kocher demonstrated that by measuring the time required for RSA decryption operations, an attacker could determine the private key bits one by one. The attack exploited the fact that the square-and-multiply algorithm used different execution paths depending on whether each bit of the private exponent was 0 or 1.
+\end{examplebox}
+
+\subsection{Why Timing Attacks Matter}
+
+\begin{enumerate}
+    \item \textbf{Real-World Impact:} Many cryptographic implementations remain vulnerable
+    \item \textbf{Ubiquitous Threat:} Apply to software, hardware, and embedded systems
+    \item \textbf{Defense Complexity:} Constant-time implementations are challenging to achieve
+    \item \textbf{Evolution:} Attacks become more sophisticated as defenses improve
+\end{enumerate}
+
+\section{Mathematical Foundations}
+
+\subsection{Timing Variation Models}
+
+The fundamental principle behind timing attacks is that execution time depends on the data being processed. We can model this relationship mathematically:
+
+\begin{definitionbox}{Timing Function}
+For a cryptographic operation $f$ with secret input $s$ and public input $p$, the execution time is modeled as:
+\begin{align}
+\time{f(s,p)} = T_{\text{base}} + \Delta T(s,p) + \epsilon
+\end{align}
+where:
+\begin{itemize}
+    \item $T_{\text{base}}$ is the baseline execution time
+    \item $\Delta T(s,p)$ is the data-dependent timing variation
+    \item $\epsilon$ is measurement noise (assumed to be normally distributed)
+\end{itemize}
+\end{definitionbox}
+
+\subsection{Statistical Analysis Framework}
+
+To extract information from timing measurements, we use statistical techniques:
+
+\begin{definitionbox}{Timing Sample Analysis}
+Given a set of timing measurements $\timesamples = \{t_1, t_2, \ldots, t_n\}$ for inputs $\{(s_1,p_1), (s_2,p_2), \ldots, (s_n,p_n)\}$, we analyze:
+
+\begin{align}
+\text{Mean: } \quad &\mu = \frac{1}{n}\sum_{i=1}^{n} t_i\\
+\text{Variance: } \quad &\sigma^2 = \frac{1}{n-1}\sum_{i=1}^{n} (t_i - \mu)^2\\
+\text{Correlation: } \quad &\rho_{XY} = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2 \sum_{i=1}^{n}(y_i - \bar{y})^2}}
+\end{align}
+\end{definitionbox}
+
+\subsection{Signal-to-Noise Ratio}
+
+The success of a timing attack depends on the signal-to-noise ratio (SNR):
+
+\begin{align}
+\text{SNR} = \frac{\text{Signal Power}}{\text{Noise Power}} = \frac{|\Delta T|^2}{\sigma_{\epsilon}^2}
+\end{align}
+
+Higher SNR makes attacks more feasible with fewer measurements.
+
+\section{Types of Timing Attacks}
+
+\subsection{Simple Timing Attacks}
+
+\begin{definitionbox}{Simple Timing Attack}
+A \textbf{simple timing attack} directly exploits observable timing differences in cryptographic operations based on secret data. These attacks analyze timing measurements from individual operations to extract information.
+\end{definitionbox}
+
+\begin{examplebox}{Password Verification Timing}
+Consider a naive password verification function:
+\begin{align}
+\text{verify}(pwd, secret) = \begin{cases}
+\text{true} & \text{if } pwd = secret \\
+\text{false} & \text{otherwise}
+\end{cases}
+\end{align}
+
+If implemented with byte-by-byte comparison that stops at the first mismatch, an attacker can determine password characters one by one by measuring when the comparison takes longer.
+\end{examplebox}
+
+\subsection{Differential Timing Attacks}
+
+\begin{definitionbox}{Differential Timing Attack}
+A \textbf{differential timing attack} compares timing measurements between different inputs to amplify signal differences and reduce noise effects. This approach is more robust against environmental variations.
+\end{definitionbox}
+
+\subsection{Statistical Timing Attacks}
+
+\begin{definitionbox}{Statistical Timing Attack}
+\textbf{Statistical timing attacks} use large numbers of timing measurements and sophisticated statistical analysis to extract information even when timing differences are very small compared to measurement noise.
+\end{definitionbox}
+
+The key insight is that while individual measurements may be noisy, statistical properties emerge over many samples:
+
+\begin{align}
+\text{Standard Error: } \quad SE = \frac{\sigma}{\sqrt{n}}
+\end{align}
+
+As the number of samples $n$ increases, the standard error decreases, making small timing differences detectable.
+
+\section{Attack Methodologies}
+
+\subsection{RSA Timing Attack}
+
+RSA implementations often use the square-and-multiply algorithm for modular exponentiation:
+
+\begin{algorithmbox}{Square-and-Multiply Algorithm}
+\begin{algorithmic}
+\STATE \textbf{Input:} Base $g$, exponent $d = d_{k-1}d_{k-2}\ldots d_1d_0$, modulus $n$
+\STATE \textbf{Output:} $g^d \bmod n$
+\STATE $result \leftarrow 1$
+\FOR{$i = k-1$ \textbf{down to} $0$}
+    \STATE $result \leftarrow result^2 \bmod n$ \quad // Square operation
+    \IF{$d_i = 1$}
+        \STATE $result \leftarrow result \cdot g \bmod n$ \quad // Multiply operation
+    \ENDIF
+\ENDFOR
+\RETURN $result$
+\end{algorithmic}
+\end{algorithmbox}
+
+\begin{examplebox}{RSA Timing Analysis}
+The timing difference occurs because:
+\begin{itemize}
+    \item When $d_i = 0$: Only squaring is performed
+    \item When $d_i = 1$: Both squaring and multiplication are performed
+\end{itemize}
+
+If multiplication takes time $t_m$ and squaring takes time $t_s$, then:
+\begin{align}
+\time{\text{bit } d_i} = \begin{cases}
+t_s & \text{if } d_i = 0 \\
+t_s + t_m & \text{if } d_i = 1
+\end{cases}
+\end{align}
+
+An attacker can distinguish these cases by measuring execution time.
+\end{examplebox}
+
+\subsection{AES Timing Attack}
+
+AES implementations may exhibit timing variations in several operations:
+
+\begin{enumerate}
+    \item \textbf{S-box Lookups:} Cache misses can create timing variations
+    \item \textbf{Key Schedule:} Different keys may cause different cache behaviors
+    \item \textbf{Memory Access Patterns:} Table lookups with data-dependent addresses
+\end{enumerate}
+
+\begin{definitionbox}{Cache-Based Timing Attack on AES}
+In table-based AES implementations, S-box lookups can cause cache misses that depend on the key:
+\begin{align}
+\time{\text{S-box}[i]} = \begin{cases}
+t_{\text{hit}} & \text{if S-box}[i] \text{ is in cache} \\
+t_{\text{miss}} & \text{if S-box}[i] \text{ causes cache miss}
+\end{cases}
+\end{align}
+where $t_{\text{miss}} \gg t_{\text{hit}}$.
+\end{definitionbox}
+
+\subsection{Elliptic Curve Timing Attacks}
+
+Elliptic curve cryptography can be vulnerable to timing attacks in point multiplication algorithms:
+
+\begin{algorithmbox}{Binary Method for Point Multiplication}
+\begin{algorithmic}
+\STATE \textbf{Input:} Point $P$, scalar $k = k_{m-1}k_{m-2}\ldots k_1k_0$
+\STATE \textbf{Output:} $kP$
+\STATE $Q \leftarrow \mathcal{O}$ \quad // Point at infinity
+\FOR{$i = m-1$ \textbf{down to} $0$}
+    \STATE $Q \leftarrow 2Q$ \quad // Point doubling
+    \IF{$k_i = 1$}
+        \STATE $Q \leftarrow Q + P$ \quad // Point addition
+    \ENDIF
+\ENDFOR
+\RETURN $Q$
+\end{algorithmic}
+\end{algorithmbox}
+
+\begin{examplebox}{EC Timing Vulnerability}
+The vulnerability arises because:
+\begin{itemize}
+    \item Point doubling and point addition have different computational costs
+    \item The choice between operations depends on secret key bits
+    \item Timing measurements can reveal the bit pattern of the private key
+\end{itemize}
+\end{examplebox}
+
+\section{Statistical Analysis Techniques}
+
+\subsection{Hypothesis Testing}
+
+To determine if timing differences are statistically significant, we use hypothesis testing:
+
+\begin{definitionbox}{Welch's T-Test for Timing Analysis}
+For two groups of timing measurements $T_0$ and $T_1$, we test:
+\begin{align}
+H_0: \mu_0 = \mu_1 \quad \text{vs} \quad H_1: \mu_0 \neq \mu_1
+\end{align}
+
+The test statistic is:
+\begin{align}
+t = \frac{\bar{T_0} - \bar{T_1}}{\sqrt{\frac{s_0^2}{n_0} + \frac{s_1^2}{n_1}}}
+\end{align}
+
+where $\bar{T_i}$, $s_i^2$, and $n_i$ are the sample mean, variance, and size for group $i$.
+\end{definitionbox}
+
+\subsection{Correlation Analysis}
+
+\begin{definitionbox}{Pearson Correlation for Key Recovery}
+To recover key bits, we compute the correlation between timing measurements and hypothetical intermediate values:
+\begin{align}
+\rho(T, H_k) = \frac{\sum_{i=1}^{n}(t_i - \bar{t})(h_{k,i} - \bar{h_k})}{\sqrt{\sum_{i=1}^{n}(t_i - \bar{t})^2 \sum_{i=1}^{n}(h_{k,i} - \bar{h_k})^2}}
+\end{align}
+
+where $H_k$ represents hypothetical values computed with key guess $k$.
+\end{definitionbox}
+
+\subsection{Template Attacks}
+
+Template attacks use pre-characterized timing profiles:
+
+\begin{algorithmbox}{Template Attack Methodology}
+\begin{algorithmic}
+\STATE \textbf{Phase 1: Profiling}
+\FOR{each possible key value $k$}
+    \STATE Collect timing samples $\{t_{k,i}\}$
+    \STATE Compute mean $\mu_k$ and covariance $\Sigma_k$
+    \STATE Store template $(k, \mu_k, \Sigma_k)$
+\ENDFOR
+\STATE \textbf{Phase 2: Attack}
+\STATE Collect timing samples $\{t_i\}$ from target
+\FOR{each template $(k, \mu_k, \Sigma_k)$}
+    \STATE Compute likelihood $L_k = \mathcal{N}(\{t_i\}; \mu_k, \Sigma_k)$
+\ENDFOR
+\RETURN $k^* = \arg\max_k L_k$
+\end{algorithmic}
+\end{algorithmbox}
+
+\section{Practical Attack Examples}
+
+\subsection{Simple For-Loop Timing Attack}
+
+To understand timing attacks at their most fundamental level, let's examine a simple for-loop example that demonstrates the core principles.
+
+\begin{examplebox}{Vulnerable Array Search Function}
+Consider this simple function that searches for a value in an array:
+
+\begin{lstlisting}[style=cryptoCode, caption={Vulnerable Linear Search Implementation}]
+bool findValue(int* array, int size, int target) {
+    for (int i = 0; i < size; i++) {
+        if (array[i] == target) {
+            return true;  // Early exit - TIMING LEAK!
+        }
+    }
+    return false;
+}
+\end{lstlisting}
+
+\textbf{The Vulnerability:} The loop exits early when the target is found, creating a timing difference based on the position of the target value.
+\end{examplebox}
+
+\subsubsection{Step-by-Step Attack Methodology}
+
+Let's break down exactly how an attacker exploits this timing difference:
+
+\begin{algorithmbox}{For-Loop Timing Attack Steps}
+\begin{algorithmic}
+\STATE \textbf{Step 1: Setup}
+\STATE Attacker controls the \texttt{target} parameter
+\STATE Array contains secret data at unknown positions
+\STATE Goal: Determine which values exist in the array
+\STATE 
+\STATE \textbf{Step 2: Timing Measurement}
+\FOR{each possible target value $v$}
+    \STATE Measure execution time of \texttt{findValue(array, size, v)}
+    \STATE Record timing samples $\{t_1, t_2, \ldots, t_n\}$
+    \STATE Calculate average timing $\bar{t}_v$
+\ENDFOR
+\STATE 
+\STATE \textbf{Step 3: Analysis}
+\STATE Identify values with significantly shorter execution times
+\STATE These correspond to values found early in the array
+\STATE Longer times indicate values not present or found later
+\end{algorithmic}
+\end{algorithmbox}
+
+\begin{examplebox}{Concrete Timing Analysis}
+Assume our array is: \texttt{[42, 17, 99, 23, 56]} and each iteration takes 10 microseconds.
+
+\textbf{Target = 42 (position 0):}
+\begin{align}
+\text{Iterations: } &1 \\
+\text{Time: } &10 \text{ μs}
+\end{align}
+
+\textbf{Target = 99 (position 2):}
+\begin{align}
+\text{Iterations: } &3 \\
+\text{Time: } &30 \text{ μs}
+\end{align}
+
+\textbf{Target = 77 (not found):}
+\begin{align}
+\text{Iterations: } &5 \text{ (complete scan)} \\
+\text{Time: } &50 \text{ μs}
+\end{align}
+
+\textbf{Attack Result:} By measuring timing, the attacker learns:
+\begin{itemize}
+    \item Values with $\approx$10μs timing are at position 0
+    \item Values with $\approx$30μs timing are at position 2  
+    \item Values with $\approx$50μs timing are not in the array
+\end{itemize}
+\end{examplebox}
+
+\subsubsection{Mathematical Model of the Attack}
+
+We can model the timing function mathematically:
+
+\begin{definitionbox}{For-Loop Timing Function}
+For the vulnerable search function, execution time depends on target position:
+\begin{align}
+T(target) = \begin{cases}
+(pos + 1) \times t_{iter} + t_{overhead} & \text{if target found at position } pos \\
+n \times t_{iter} + t_{overhead} & \text{if target not found}
+\end{cases}
+\end{align}
+
+Where:
+\begin{itemize}
+    \item $t_{iter}$ = time per loop iteration
+    \item $t_{overhead}$ = function call overhead  
+    \item $n$ = array size
+    \item $pos$ = position where target is found (0-indexed)
+\end{itemize}
+\end{definitionbox}
+
+\subsubsection{Statistical Analysis of Real Measurements}
+
+In practice, timing measurements contain noise. Here's how to handle it:
+
+\begin{examplebox}{Noisy Timing Analysis}
+Real measurements with noise (σ = 2μs):
+
+\textbf{Target = 42:} Samples: [8.1, 11.3, 9.7, 10.5, 12.1] μs
+\begin{align}
+\text{Mean: } &10.14 \text{ μs} \\
+\text{Std Dev: } &1.52 \text{ μs}
+\end{align}
+
+\textbf{Target = 77:} Samples: [48.3, 51.7, 49.2, 50.8, 47.9] μs  
+\begin{align}
+\text{Mean: } &49.58 \text{ μs} \\
+\text{Std Dev: } &1.69 \text{ μs}
+\end{align}
+
+\textbf{Statistical Test:} Welch's t-test gives t-statistic = 51.2
+\begin{align}
+p\text{-value} < 0.001 \Rightarrow \text{Highly significant difference!}
+\end{align}
+\end{examplebox}
+
+\subsubsection{Information Extraction Techniques}
+
+\begin{algorithmbox}{Binary Search Information Extraction}
+\begin{algorithmic}
+\STATE \textbf{Goal:} Determine exact position of known value
+\STATE \textbf{Method:} Use timing to perform binary search on position
+\STATE 
+\STATE $low \leftarrow 0$, $high \leftarrow n-1$
+\WHILE{$low < high$}
+    \STATE $mid \leftarrow \lfloor(low + high)/2\rfloor$
+    \STATE Create array with target at position $mid$
+    \STATE Measure average timing $t_{mid}$
+    \STATE Calculate expected timing: $t_{expected} = (mid + 1) \times t_{iter}$
+    \IF{$|t_{mid} - t_{expected}| < threshold$}
+        \STATE Target is likely at position $mid$
+        \STATE $low \leftarrow mid$, $high \leftarrow mid$
+    \ELSIF{$t_{mid} > t_{expected}$}
+        \STATE Target is likely after position $mid$  
+        \STATE $low \leftarrow mid + 1$
+    \ELSE
+        \STATE Target is likely before position $mid$
+        \STATE $high \leftarrow mid - 1$
+    \ENDIF
+\ENDWHILE
+\RETURN $low$ as estimated position
+\end{algorithmic}
+\end{algorithmbox}
+
+\subsubsection{Advanced Attack: Array Content Recovery}
+
+\begin{examplebox}{Complete Array Reconstruction}
+An attacker can reconstruct the entire array contents:
+
+\textbf{Phase 1 - Value Discovery:}
+\begin{enumerate}
+    \item Test all possible values (e.g., 0-255 for bytes)
+    \item Identify values that return quickly (exist in array)
+    \item Build set of values present: $V_{present} = \{v_1, v_2, \ldots, v_k\}$
+\end{enumerate}
+
+\textbf{Phase 2 - Position Determination:}
+\begin{enumerate}
+    \item For each $v_i \in V_{present}$, measure average timing $\bar{t}_i$
+    \item Calculate position: $pos_i = \frac{\bar{t}_i - t_{overhead}}{t_{iter}} - 1$
+    \item Round to nearest integer for estimated position
+\end{enumerate}
+
+\textbf{Phase 3 - Array Reconstruction:}
+\begin{enumerate}
+    \item Sort values by estimated position
+    \item Construct array: $array[pos_i] = v_i$
+    \item Verify by testing timing for reconstructed array
+\end{enumerate}
+\end{examplebox}
+
+\subsubsection{Real-World Code Example}
+
+\begin{lstlisting}[style=cryptoCode, caption={Complete Attack Implementation}]
+#include <chrono>
+#include <vector>
+#include <algorithm>
+#include <map>
+
+class ForLoopTimingAttack {
+private:
+    // Simulate the vulnerable function
+    bool vulnerableSearch(const std::vector<int>& array, int target) {
+        for (size_t i = 0; i < array.size(); i++) {
+            if (array[i] == target) {
+                return true;  // Timing leak here!
+            }
+            // Simulate processing time
+            std::this_thread::sleep_for(std::chrono::microseconds(10));
+        }
+        return false;
+    }
+    
+    // Measure execution time
+    double measureTiming(const std::vector<int>& array, int target, 
+                        int samples = 100) {
+        double totalTime = 0.0;
+        
+        for (int i = 0; i < samples; i++) {
+            auto start = std::chrono::high_resolution_clock::now();
+            vulnerableSearch(array, target);
+            auto end = std::chrono::high_resolution_clock::now();
+            
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>
+                           (end - start);
+            totalTime += duration.count();
+        }
+        
+        return totalTime / samples;  // Return average time
+    }
+    
+public:
+    // Attack Phase 1: Discover which values exist
+    std::vector<int> discoverValues(const std::vector<int>& secretArray) {
+        std::vector<int> foundValues;
+        const int maxValue = 100;  // Search range
+        const double timeThreshold = 60.0;  // μs threshold
+        
+        std::cout << "Phase 1: Value Discovery\n";
+        std::cout << "========================\n";
+        
+        for (int candidate = 0; candidate <= maxValue; candidate++) {
+            double avgTime = measureTiming(secretArray, candidate);
+            
+            std::cout << "Testing value " << candidate 
+                      << ": " << std::fixed << std::setprecision(2) 
+                      << avgTime << " μs";
+            
+            if (avgTime < timeThreshold) {  // Found early in array
+                foundValues.push_back(candidate);
+                std::cout << " -> FOUND!";
+            }
+            std::cout << "\n";
+        }
+        
+        return foundValues;
+    }
+    
+    // Attack Phase 2: Determine positions
+    std::map<int, int> determinePositions(const std::vector<int>& secretArray,
+                                         const std::vector<int>& foundValues) {
+        std::map<int, int> valuePositions;
+        const double iterationTime = 10.0;  // μs per iteration
+        const double overhead = 5.0;        // μs function overhead
+        
+        std::cout << "\nPhase 2: Position Determination\n";
+        std::cout << "===============================\n";
+        
+        for (int value : foundValues) {
+            double avgTime = measureTiming(secretArray, value);
+            int estimatedPos = static_cast<int>((avgTime - overhead) / iterationTime) - 1;
+            
+            valuePositions[estimatedPos] = value;
+            
+            std::cout << "Value " << value 
+                      << ": " << avgTime << " μs"
+                      << " -> Position " << estimatedPos << "\n";
+        }
+        
+        return valuePositions;
+    }
+    
+    // Attack Phase 3: Reconstruct array
+    std::vector<int> reconstructArray(const std::map<int, int>& valuePositions,
+                                     size_t arraySize) {
+        std::vector<int> reconstructed(arraySize, -1);  // -1 = unknown
+        
+        std::cout << "\nPhase 3: Array Reconstruction\n";
+        std::cout << "=============================\n";
+        
+        for (const auto& pair : valuePositions) {
+            int position = pair.first;
+            int value = pair.second;
+            
+            if (position >= 0 && position < static_cast<int>(arraySize)) {
+                reconstructed[position] = value;
+            }
+        }
+        
+        std::cout << "Reconstructed array: [";
+        for (size_t i = 0; i < reconstructed.size(); i++) {
+            if (i > 0) std::cout << ", ";
+            if (reconstructed[i] == -1) {
+                std::cout << "?";
+            } else {
+                std::cout << reconstructed[i];
+            }
+        }
+        std::cout << "]\n";
+        
+        return reconstructed;
+    }
+    
+    // Complete attack demonstration
+    void demonstrateAttack() {
+        // Secret array we're trying to recover
+        std::vector<int> secretArray = {42, 17, 99, 23, 56};
+        
+        std::cout << "Target secret array: [";
+        for (size_t i = 0; i < secretArray.size(); i++) {
+            if (i > 0) std::cout << ", ";
+            std::cout << secretArray[i];
+        }
+        std::cout << "]\n\n";
+        
+        // Execute attack phases
+        auto foundValues = discoverValues(secretArray);
+        auto positions = determinePositions(secretArray, foundValues);
+        auto reconstructed = reconstructArray(positions, secretArray.size());
+        
+        // Verify success
+        bool success = std::equal(secretArray.begin(), secretArray.end(),
+                                 reconstructed.begin());
+        
+        std::cout << "\nAttack Result: " 
+                  << (success ? "SUCCESS!" : "PARTIAL SUCCESS") << "\n";
+    }
+};
+\end{lstlisting}
+
+\subsubsection{Defense: Constant-Time Implementation}
+
+\begin{examplebox}{Secure For-Loop Implementation}
+Here's how to fix the vulnerability:
+
+\begin{lstlisting}[style=cryptoCode, caption={Constant-Time Array Search}]
+bool secureSearch(const std::vector<int>& array, int target) {
+    bool found = false;
+    
+    // Always scan entire array - no early exit
+    for (size_t i = 0; i < array.size(); i++) {
+        if (array[i] == target) {
+            found = true;  // Don't return immediately
+        }
+        // Simulate constant processing time
+        std::this_thread::sleep_for(std::chrono::microseconds(10));
+    }
+    
+    return found;
+}
+\end{lstlisting}
+
+\textbf{Key Changes:}
+\begin{itemize}
+    \item \textbf{No early exit:} Always complete the full loop
+    \item \textbf{Constant iterations:} Every call performs exactly $n$ iterations
+    \item \textbf{Uniform timing:} Execution time is independent of target position
+\end{itemize}
+\end{examplebox}
+
+\begin{warningbox}{Performance vs Security Trade-off}
+The constant-time implementation is slower:
+\begin{itemize}
+    \item \textbf{Vulnerable version:} Average $O(n/2)$ for random positions
+    \item \textbf{Secure version:} Always $O(n)$ regardless of position
+\end{itemize}
+
+This trade-off is necessary for security in cryptographic contexts where timing leaks can reveal sensitive information.
+\end{warningbox}
+
+\subsection{Web Application Password Timing}
+
+\begin{examplebox}{String Comparison Attack}
+Consider a web login system that compares passwords character by character:
+
+\begin{align}
+\text{Time to reject} \propto \text{Number of correct prefix characters}
+\end{align}
+
+Attack procedure:
+\begin{enumerate}
+    \item Try all characters for position 1, measure response times
+    \item Character causing longest time is likely correct for position 1
+    \item Fix position 1, repeat for position 2
+    \item Continue until entire password is recovered
+\end{enumerate}
+
+\textbf{Expected complexity:} $O(n \cdot |\Sigma|)$ instead of $O(|\Sigma|^n)$ for brute force, where $n$ is password length and $|\Sigma|$ is alphabet size.
+\end{examplebox}
+
+\subsection{RSA Blinding Attack}
+
+\begin{examplebox}{RSA CRT Implementation Attack}
+RSA implementations using the Chinese Remainder Theorem (CRT) can be vulnerable:
+
+\begin{align}
+\text{RSA-CRT: } \quad c^d \bmod n &= \text{CRT}(c^{d_p} \bmod p, c^{d_q} \bmod q)
+\end{align}
+
+where $d_p = d \bmod (p-1)$ and $d_q = d \bmod (q-1)$.
+
+The timing attack exploits differences in Montgomery reduction operations when intermediate values are larger or smaller than the modulus.
+\end{examplebox}
+
+\subsection{Network-Based Timing Attack}
+
+\begin{examplebox}{Remote SSL/TLS Attack}
+Brumley and Boneh demonstrated a remote timing attack against OpenSSL:
+
+\begin{enumerate}
+    \item Send specially crafted SSL handshake messages
+    \item Measure response times for RSA decryption
+    \item Use statistical analysis to extract private key bits
+    \item Achieve attack over local networks with sufficient measurements
+\end{enumerate}
+
+\textbf{Key insight:} Even with network jitter, statistical analysis can extract timing differences as small as 15 microseconds.
+\end{examplebox}
+
+\section{Advanced Attack Techniques}
+
+\subsection{Multi-dimensional Analysis}
+
+\begin{definitionbox}{Multi-variate Timing Analysis}
+Instead of analyzing single timing measurements, consider vectors of related timing information:
+\begin{align}
+\mathbf{T} = [t_1, t_2, \ldots, t_k]^T
+\end{align}
+
+where each $t_i$ represents timing for different operations or sub-operations.
+
+The attack uses multivariate statistical analysis:
+\begin{align}
+\text{Mahalanobis Distance: } \quad D_M = \sqrt{(\mathbf{T} - \boldsymbol{\mu})^T \boldsymbol{\Sigma}^{-1} (\mathbf{T} - \boldsymbol{\mu})}
+\end{align}
+\end{definitionbox}
+
+\subsection{Machine Learning Approaches}
+
+Modern timing attacks leverage machine learning:
+
+\begin{algorithmbox}{Neural Network Timing Attack}
+\begin{algorithmic}
+\STATE \textbf{Training Phase:}
+\STATE Collect labeled timing samples $\{(\mathbf{t}_i, k_i)\}$
+\STATE Train neural network $f_{\theta}: \mathbf{t} \rightarrow k$
+\STATE Optimize parameters $\theta$ to minimize classification error
+\STATE \textbf{Attack Phase:}
+\STATE Collect timing samples $\mathbf{t}_{\text{target}}$ from target
+\STATE Predict key: $k_{\text{pred}} = f_{\theta}(\mathbf{t}_{\text{target}})$
+\RETURN $k_{\text{pred}}$
+\end{algorithmic}
+\end{algorithmbox}
+
+\subsection{Cross-Platform Attacks}
+
+\begin{definitionbox}{JavaScript Timing Attacks}
+Web-based timing attacks use high-resolution JavaScript timers:
+\begin{align}
+\text{performance.now()} - \text{baseline}
+\end{align}
+
+These attacks can target:
+\begin{itemize}
+    \item Cryptographic libraries compiled to WebAssembly
+    \item Server-side cryptographic operations via AJAX timing
+    \item Local cryptographic computations in web applications
+\end{itemize}
+\end{definitionbox}
+
+\section{Defense Mechanisms}
+
+\subsection{Constant-Time Programming}
+
+\begin{definitionbox}{Constant-Time Property}
+An algorithm is \textbf{constant-time} if its execution time depends only on the input size, not on the input values. Formally:
+\begin{align}
+\forall x, y \in \mathcal{D} : |x| = |y| \Rightarrow \time{f(x)} = \time{f(y)}
+\end{align}
+where $\mathcal{D}$ is the input domain and $|x|$ denotes input size.
+\end{definitionbox}
+
+\subsubsection{Constant-Time Techniques}
+
+\begin{enumerate}
+    \item \textbf{Avoid Conditional Branches:} Use arithmetic operations instead
+    \item \textbf{Constant Memory Access:} Always access same memory locations
+    \item \textbf{Use Constant-Time Primitives:} Leverage hardware or library support
+    \item \textbf{Mask Intermediate Values:} Use blinding to decorrelate timing from secrets
+\end{enumerate}
+
+\begin{examplebox}{Constant-Time Conditional Selection}
+Instead of:
+\begin{align}
+\text{result} = \begin{cases}
+a & \text{if condition} \\
+b & \text{otherwise}
+\end{cases}
+\end{align}
+
+Use constant-time selection:
+\begin{align}
+\text{mask} &= -(condition \text{ as 0 or 1}) \\
+\text{result} &= (\text{mask} \land a) \lor (\neg\text{mask} \land b)
+\end{align}
+\end{examplebox}
+
+\subsection{Blinding Techniques}
+
+\begin{definitionbox}{Cryptographic Blinding}
+\textbf{Blinding} decorrelates timing from secret values by randomizing intermediate computations while preserving final results.
+
+For RSA, multiplicative blinding uses:
+\begin{align}
+c' &= c \cdot r^e \bmod n \quad \text{(blind)} \\
+m' &= (c')^d \bmod n \quad \text{(compute)} \\
+m &= m' \cdot r^{-1} \bmod n \quad \text{(unblind)}
+\end{align}
+where $r$ is a random blinding factor.
+\end{definitionbox}
+
+\subsection{Noise Injection}
+
+\begin{definitionbox}{Artificial Timing Noise}
+Add random delays to mask timing patterns:
+\begin{align}
+\time{\text{total}} = \time{\text{crypto}} + \time{\text{noise}}
+\end{align}
+
+where $\time{\text{noise}}$ is randomly distributed noise that overwhelms the signal.
+\end{definitionbox}
+
+\begin{warningbox}{Noise Injection Limitations}
+Caution: Noise injection can be defeated by:
+\begin{itemize}
+    \item Statistical analysis with more samples
+    \item Higher-order statistical attacks
+    \item Differential analysis that cancels noise
+\end{itemize}
+\end{warningbox}
+
+\subsection{Algorithmic Countermeasures}
+
+\subsubsection{Montgomery Ladder}
+
+\begin{algorithmbox}{Montgomery Ladder for ECC}
+\begin{algorithmic}
+\STATE \textbf{Input:} Point $P$, scalar $k = k_{m-1}k_{m-2}\ldots k_1k_0$
+\STATE \textbf{Output:} $kP$
+\STATE $R_0 \leftarrow \mathcal{O}$, $R_1 \leftarrow P$
+\FOR{$i = m-1$ \textbf{down to} $0$}
+    \IF{$k_i = 0$}
+        \STATE $R_1 \leftarrow R_0 + R_1$, $R_0 \leftarrow 2R_0$
+    \ELSE
+        \STATE $R_0 \leftarrow R_0 + R_1$, $R_1 \leftarrow 2R_1$
+    \ENDIF
+\ENDFOR
+\RETURN $R_0$
+\end{algorithmic}
+\end{algorithmbox}
+
+The Montgomery ladder always performs one addition and one doubling per bit, making it resistant to simple timing attacks.
+
+\subsection{Hardware Countermeasures}
+
+\begin{enumerate}
+    \item \textbf{Dedicated Crypto Processors:} Use hardware with constant-time guarantees
+    \item \textbf{Random Clock Frequencies:} Vary processor speed to mask timing
+    \item \textbf{Pipeline Randomization:} Randomize instruction scheduling
+    \item \textbf{Cache Countermeasures:} Disable caches or use constant-time cache policies
+\end{enumerate}
+
+\section{Implementation Guidelines}
+
+\subsection{Secure Coding Practices}
+
+\begin{algorithmbox}{Constant-Time String Comparison}
+\begin{algorithmic}
+\STATE \textbf{Function:} \textsc{ConstantTimeCompare}(string1, string2)
+\STATE $result \leftarrow 0$
+\STATE $length \leftarrow \max(\text{len}(string1), \text{len}(string2))$
+\FOR{$i = 0$ \textbf{to} $length - 1$}
+    \STATE $c1 \leftarrow$ string1[i] if $i < \text{len}(string1)$ else $0$
+    \STATE $c2 \leftarrow$ string2[i] if $i < \text{len}(string2)$ else $0$
+    \STATE $result \leftarrow result \lor (c1 \oplus c2)$
+\ENDFOR
+\RETURN $result = 0$
+\end{algorithmic}
+\end{algorithmbox}
+
+\subsection{Testing for Timing Leaks}
+
+\begin{algorithmbox}{Statistical Timing Test}
+\begin{algorithmic}
+\STATE \textbf{Input:} Function $f$, test inputs $\{x_0, x_1\}$
+\STATE \textbf{Output:} Statistical test result
+\STATE $samples_0 \leftarrow \{\}$, $samples_1 \leftarrow \{\}$
+\FOR{$i = 1$ \textbf{to} $N$}
+    \STATE $t_0 \leftarrow \text{MeasureTime}(f(x_0))$
+    \STATE $t_1 \leftarrow \text{MeasureTime}(f(x_1))$
+    \STATE $samples_0 \leftarrow samples_0 \cup \{t_0\}$
+    \STATE $samples_1 \leftarrow samples_1 \cup \{t_1\}$
+\ENDFOR
+\STATE $p\text{-value} \leftarrow \text{WelchTTest}(samples_0, samples_1)$
+\RETURN $p\text{-value} < 0.05$ \quad // Reject null hypothesis of equal means
+\end{algorithmic}
+\end{algorithmbox}
+
+\section{Case Studies}
+
+\subsection{OpenSSL CVE-2003-0147}
+
+\begin{examplebox}{OpenSSL RSA Timing Vulnerability}
+In 2003, a timing attack was discovered in OpenSSL's RSA implementation:
+
+\textbf{Vulnerability:} The Montgomery reduction algorithm exhibited timing variations based on intermediate value sizes.
+
+\textbf{Attack:} Remote attackers could extract RSA private keys by:
+\begin{enumerate}
+    \item Sending specially crafted SSL/TLS handshake messages
+    \item Measuring response times for RSA decryption operations
+    \item Using statistical analysis to determine private key bits
+\end{enumerate}
+
+\textbf{Impact:} Complete compromise of RSA private keys over network connections.
+
+\textbf{Fix:} Implementation of RSA blinding to decorrelate timing from secret values.
+\end{examplebox}
+
+\subsection{Lucky Thirteen Attack}
+
+\begin{examplebox}{TLS CBC Padding Oracle}
+The Lucky Thirteen attack exploited timing differences in TLS implementations:
+
+\textbf{Vulnerability:} Different processing times for valid vs. invalid CBC padding.
+
+\textbf{Attack Process:}
+\begin{enumerate}
+    \item Send TLS records with modified padding
+    \item Measure response times for different padding configurations
+    \item Use timing differences to determine correct padding
+    \item Gradually decrypt TLS-protected messages
+\end{enumerate}
+
+\textbf{Statistical Analysis:} Required thousands of measurements to distinguish timing differences of a few microseconds.
+\end{examplebox}
+
+\subsection{FLUSH+RELOAD Cache Attack}
+
+\begin{examplebox}{Last-Level Cache Analysis}
+FLUSH+RELOAD attacks monitor cache usage to infer cryptographic operations:
+
+\textbf{Method:}
+\begin{enumerate}
+    \item Flush specific cache lines using clflush instruction
+    \item Wait for target to perform cryptographic operation
+    \item Reload cache lines and measure access time
+    \item Infer which memory addresses were accessed based on timing
+\end{enumerate}
+
+\textbf{Application to AES:} Recover AES keys by monitoring S-box cache accesses.
+\end{examplebox}
+
+\section{Measurement Techniques}
+
+\subsection{High-Resolution Timing}
+
+\begin{definitionbox}{Timing Sources by Platform}
+\begin{align}
+\text{Linux: } &\quad \text{clock\_gettime(CLOCK\_MONOTONIC)} \\
+\text{Windows: } &\quad \text{QueryPerformanceCounter()} \\
+\text{x86-64: } &\quad \text{rdtsc/rdtscp instructions} \\
+\text{JavaScript: } &\quad \text{performance.now()} \\
+\text{Java: } &\quad \text{System.nanoTime()}
+\end{align}
+\end{definitionbox}
+
+\subsection{Statistical Considerations}
+
+\begin{definitionbox}{Measurement Artifacts}
+When collecting timing data, consider:
+\begin{itemize}
+    \item \textbf{Cache State:} Warm vs. cold cache effects
+    \item \textbf{CPU Frequency Scaling:} Dynamic frequency changes
+    \item \textbf{Process Scheduling:} Context switches and interrupts
+    \item \textbf{Memory Layout:} Address space randomization effects
+    \item \textbf{Thermal Throttling:} Temperature-dependent performance
+\end{itemize}
+\end{definitionbox}
+
+\subsection{Sample Size Determination}
+
+\begin{definitionbox}{Required Sample Size}
+For detecting timing difference $\delta$ with noise standard deviation $\sigma$:
+\begin{align}
+n \geq \frac{2(z_{\alpha/2} + z_{\beta})^2 \sigma^2}{\delta^2}
+\end{align}
+
+where:
+\begin{itemize}
+    \item $z_{\alpha/2}$ is the critical value for significance level $\alpha$
+    \item $z_{\beta}$ is the critical value for power $1-\beta$
+    \item Typical values: $\alpha = 0.05$, $\beta = 0.20$
+\end{itemize}
+\end{definitionbox}
+
+\section{Future Research Directions}
+
+\subsection{Quantum Computing Impact}
+
+\begin{definitionbox}{Post-Quantum Timing Attacks}
+As quantum-resistant algorithms are deployed, new timing attack vectors emerge:
+\begin{itemize}
+    \item \textbf{Lattice-based crypto:} Timing variations in lattice reduction
+    \item \textbf{Code-based crypto:} Syndrome decoding timing patterns
+    \item \textbf{Multivariate crypto:} Polynomial solving timing differences
+    \item \textbf{Hash-based signatures:} Tree traversal timing leaks
+\end{itemize}
+\end{definitionbox}
+
+\subsection{Machine Learning Defense}
+
+\begin{definitionbox}{AI-Powered Countermeasures}
+Emerging defense strategies using machine learning:
+\begin{enumerate}
+    \item \textbf{Adaptive Noise:} ML models that generate optimal timing noise
+    \item \textbf{Anomaly Detection:} Detect timing attack attempts in real-time
+    \item \textbf{Behavioral Analysis:} Identify attack patterns in timing data
+    \item \textbf{Optimal Scheduling:} AI-driven instruction scheduling for constant time
+\end{enumerate}
+\end{definitionbox}
+
+\subsection{IoT and Edge Computing}
+
+\begin{warningbox}{Emerging Attack Surfaces}
+Internet of Things (IoT) and edge computing introduce new challenges:
+\begin{itemize}
+    \item Resource-constrained devices with limited countermeasure options
+    \item Network timing attacks on distributed cryptographic protocols
+    \item Sensor fusion attacks combining multiple side channels
+    \item Supply chain attacks targeting timing characteristics
+\end{itemize}
+\end{warningbox}
+
+\section{Practical Exercises}
+
+\subsection{Beginner Exercises}
+
+\begin{enumerate}
+    \item \textbf{String Comparison Analysis:} Implement and attack a vulnerable password checker
+    \item \textbf{Cache Timing Measurement:} Measure cache hit vs. miss timing differences
+    \item \textbf{Statistical Analysis:} Apply t-tests to distinguish timing populations
+    \item \textbf{Constant-Time Implementation:} Convert vulnerable code to constant-time
+\end{enumerate}
+
+\subsection{Advanced Projects}
+
+\begin{enumerate}
+    \item \textbf{RSA Attack Implementation:} Build complete RSA timing attack
+    \item \textbf{AES Cache Analysis:} Implement FLUSH+RELOAD attack on AES
+    \item \textbf{Network Timing Attack:} Develop remote timing attack over Ethernet
+    \item \textbf{Template Attack:} Create timing templates for key recovery
+\end{enumerate}
+
+\section{Conclusion}
+
+Timing attacks represent a fundamental challenge in cryptographic implementation security. Key takeaways:
+
+\begin{enumerate}
+    \item \textbf{Ubiquitous Threat:} Timing attacks can affect any implementation with data-dependent timing
+    \item \textbf{Statistical Power:} Modern statistical techniques make even small timing differences exploitable
+    \item \textbf{Defense Complexity:} Achieving true constant-time implementation is challenging but essential
+    \item \textbf{Evolving Landscape:} New attack techniques and countermeasures continue to emerge
+\end{enumerate}
+
+\begin{definitionbox}{Best Practices Summary}
+\begin{enumerate}
+    \item Always use constant-time algorithms for cryptographic operations
+    \item Implement proper blinding for operations that cannot be made constant-time
+    \item Regularly test implementations for timing leaks using statistical methods
+    \item Stay informed about new attack techniques and countermeasures
+    \item Consider timing security from the beginning of the design process
+\end{enumerate}
+\end{definitionbox}
+
+The field of timing attack analysis continues to evolve as both attackers and defenders develop new techniques. Understanding these attacks is essential for building secure cryptographic systems in an increasingly connected world.
+
+\section{Implementation Code Examples}
+
+\begin{lstlisting}[style=cryptoCode, caption={Timing Attack Detection Framework}]
+#include <chrono>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <random>
+
+class TimingAnalyzer {
+private:
+    std::vector<double> timingSamples;
+    std::chrono::high_resolution_clock::time_point startTime;
+    
+public:
+    void startMeasurement() {
+        startTime = std::chrono::high_resolution_clock::now();
+    }
+    
+    void endMeasurement() {
+        auto endTime = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>
+                       (endTime - startTime);
+        timingSamples.push_back(duration.count());
+    }
+    
+    // Statistical analysis methods
+    double getMean() const {
+        double sum = 0.0;
+        for (double sample : timingSamples) {
+            sum += sample;
+        }
+        return sum / timingSamples.size();
+    }
+    
+    double getStandardDeviation() const {
+        double mean = getMean();
+        double variance = 0.0;
+        
+        for (double sample : timingSamples) {
+            variance += (sample - mean) * (sample - mean);
+        }
+        variance /= (timingSamples.size() - 1);
+        
+        return std::sqrt(variance);
+    }
+    
+    // Welch's t-test for comparing two timing distributions
+    static double welchTTest(const std::vector<double>& group1,
+                            const std::vector<double>& group2) {
+        double mean1 = 0.0, mean2 = 0.0;
+        double var1 = 0.0, var2 = 0.0;
+        
+        // Calculate means
+        for (double val : group1) mean1 += val;
+        for (double val : group2) mean2 += val;
+        mean1 /= group1.size();
+        mean2 /= group2.size();
+        
+        // Calculate variances
+        for (double val : group1) var1 += (val - mean1) * (val - mean1);
+        for (double val : group2) var2 += (val - mean2) * (val - mean2);
+        var1 /= (group1.size() - 1);
+        var2 /= (group2.size() - 1);
+        
+        // Calculate t-statistic
+        double pooledSE = std::sqrt(var1/group1.size() + var2/group2.size());
+        return (mean1 - mean2) / pooledSE;
+    }
+    
+    void clearSamples() {
+        timingSamples.clear();
+    }
+    
+    size_t getSampleCount() const {
+        return timingSamples.size();
+    }
+};
+\end{lstlisting}
+
+\begin{lstlisting}[style=cryptoCode, caption={Constant-Time Implementation Examples}]
+#include <cstdint>
+#include <cstring>
+
+class ConstantTimeOps {
+public:
+    // Constant-time conditional selection
+    static uint32_t constantTimeSelect(uint32_t condition, 
+                                      uint32_t trueVal, 
+                                      uint32_t falseVal) {
+        // condition must be 0 or 1
+        uint32_t mask = -(condition & 1);  // 0x00000000 or 0xFFFFFFFF
+        return (mask & trueVal) | (~mask & falseVal);
+    }
+    
+    // Constant-time string comparison
+    static bool constantTimeStringCompare(const char* str1, const char* str2, 
+                                         size_t maxLength) {
+        uint8_t result = 0;
+        
+        for (size_t i = 0; i < maxLength; i++) {
+            uint8_t c1 = (i < strlen(str1)) ? str1[i] : 0;
+            uint8_t c2 = (i < strlen(str2)) ? str2[i] : 0;
+            result |= (c1 ^ c2);
+        }
+        
+        return result == 0;
+    }
+    
+    // Constant-time byte array comparison
+    static bool constantTimeMemCompare(const uint8_t* arr1, 
+                                      const uint8_t* arr2, 
+                                      size_t length) {
+        uint8_t result = 0;
+        
+        for (size_t i = 0; i < length; i++) {
+            result |= (arr1[i] ^ arr2[i]);
+        }
+        
+        return result == 0;
+    }
+    
+    // Constant-time conditional swap
+    static void constantTimeSwap(uint32_t& a, uint32_t& b, 
+                                uint32_t condition) {
+        uint32_t mask = -(condition & 1);
+        uint32_t temp = mask & (a ^ b);
+        a ^= temp;
+        b ^= temp;
+    }
+    
+    // Constant-time absolute value
+    static int32_t constantTimeAbs(int32_t x) {
+        int32_t mask = x >> 31;  // Sign extension: 0 or -1
+        return (x + mask) ^ mask;
+    }
+};
+\end{lstlisting}
+
+\begin{lstlisting}[style=cryptoCode, caption={RSA Blinding Implementation}]
+#include <random>
+#include <cassert>
+
+class RSABlinding {
+private:
+    // Simplified modular arithmetic (for educational purposes)
+    static uint64_t modPow(uint64_t base, uint64_t exp, uint64_t mod) {
+        uint64_t result = 1;
+        base %= mod;
+        
+        while (exp > 0) {
+            if (exp & 1) {
+                result = (result * base) % mod;
+            }
+            exp >>= 1;
+            base = (base * base) % mod;
+        }
+        
+        return result;
+    }
+    
+    static uint64_t modInverse(uint64_t a, uint64_t m) {
+        // Extended Euclidean Algorithm (simplified)
+        int64_t m0 = m, x0 = 0, x1 = 1;
+        
+        if (m == 1) return 0;
+        
+        while (a > 1) {
+            int64_t q = a / m;
+            int64_t t = m;
+            m = a % m;
+            a = t;
+            t = x0;
+            x0 = x1 - q * x0;
+            x1 = t;
+        }
+        
+        if (x1 < 0) x1 += m0;
+        return x1;
+    }
+    
+public:
+    struct BlindingParameters {
+        uint64_t blindingFactor;
+        uint64_t unblindingFactor;
+    };
+    
+    // Generate blinding parameters
+    static BlindingParameters generateBlinding(uint64_t n, uint64_t e) {
+        std::random_device rd;
+        std::mt19937_64 gen(rd());
+        std::uniform_int_distribution<uint64_t> dis(2, n-1);
+        
+        uint64_t r;
+        do {
+            r = dis(gen);
+        } while (__gcd(r, n) != 1);  // Ensure r is coprime to n
+        
+        BlindingParameters params;
+        params.blindingFactor = modPow(r, e, n);
+        params.unblindingFactor = modInverse(r, n);
+        
+        return params;
+    }
+    
+    // Blind the ciphertext
+    static uint64_t blindCiphertext(uint64_t ciphertext, 
+                                   const BlindingParameters& params,
+                                   uint64_t n) {
+        return (ciphertext * params.blindingFactor) % n;
+    }
+    
+    // Unblind the result
+    static uint64_t unblindResult(uint64_t blindedResult,
+                                 const BlindingParameters& params,
+                                 uint64_t n) {
+        return (blindedResult * params.unblindingFactor) % n;
+    }
+    
+    // Complete blinded RSA decryption
+    static uint64_t blindedRSADecrypt(uint64_t ciphertext,
+                                     uint64_t d, uint64_t n, uint64_t e) {
+        // Generate fresh blinding parameters
+        BlindingParameters params = generateBlinding(n, e);
+        
+        // Blind the ciphertext
+        uint64_t blindedCiphertext = blindCiphertext(ciphertext, params, n);
+        
+        // Perform RSA decryption on blinded value
+        uint64_t blindedResult = modPow(blindedCiphertext, d, n);
+        
+        // Unblind the result
+        return unblindResult(blindedResult, params, n);
+    }
+};
+\end{lstlisting}
+
+\begin{lstlisting}[style=cryptoCode, caption={Timing Attack Simulation Framework}]
+#include <functional>
+#include <iostream>
+#include <iomanip>
+
+class TimingAttackSimulator {
+private:
+    TimingAnalyzer analyzer;
+    
+    // Simulate vulnerable string comparison
+    bool vulnerableStringCompare(const std::string& input, 
+                                const std::string& secret) {
+        for (size_t i = 0; i < std::min(input.length(), secret.length()); ++i) {
+            if (input[i] != secret[i]) {
+                return false;  // Early exit - timing leak!
+            }
+            // Simulate processing time per character
+            std::this_thread::sleep_for(std::chrono::microseconds(10));
+        }
+        return input == secret;
+    }
+    
+    // Simulate secure string comparison
+    bool secureStringCompare(const std::string& input, 
+                           const std::string& secret) {
+        bool result = (input.length() == secret.length());
+        
+        size_t maxLen = std::max(input.length(), secret.length());
+        
+        for (size_t i = 0; i < maxLen; ++i) {
+            char c1 = (i < input.length()) ? input[i] : 0;
+            char c2 = (i < secret.length()) ? secret[i] : 0;
+            result = result && (c1 == c2);
+            
+            // Constant time processing
+            std::this_thread::sleep_for(std::chrono::microseconds(10));
+        }
+        
+        return result;
+    }
+    
+public:
+    // Demonstrate timing attack on password verification
+    void demonstratePasswordTimingAttack() {
+        const std::string secret = "SECRET123";
+        const int numSamples = 1000;
+        
+        std::cout << "Timing Attack Demonstration\n";
+        std::cout << "===========================\n\n";
+        
+        // Test different prefix lengths
+        std::vector<std::string> testInputs = {
+            "AAAAAAA",    // 0 correct characters
+            "SAAAAAA",    // 1 correct character
+            "SEAAAAA",    // 2 correct characters
+            "SECAAAA",    // 3 correct characters
+            "SECRAA",     // 4 correct characters
+            "SECRET123"   // Full match
+        };
+        
+        std::cout << "Prefix Length vs Average Timing:\n";
+        std::cout << "Prefix\t\tAvg Time (ns)\tStd Dev\n";
+        std::cout << "------\t\t-------------\t-------\n";
+        
+        for (const auto& input : testInputs) {
+            analyzer.clearSamples();
+            
+            // Collect timing samples
+            for (int i = 0; i < numSamples; ++i) {
+                analyzer.startMeasurement();
+                vulnerableStringCompare(input, secret);
+                analyzer.endMeasurement();
+            }
+            
+            double avgTime = analyzer.getMean();
+            double stdDev = analyzer.getStandardDeviation();
+            
+            std::cout << std::left << std::setw(12) << input 
+                      << std::fixed << std::setprecision(2)
+                      << std::setw(15) << avgTime 
+                      << stdDev << "\n";
+        }
+        
+        std::cout << "\nObservation: Timing increases with correct prefix length!\n";
+        std::cout << "This leak allows character-by-character password recovery.\n\n";
+    }
+    
+    // Demonstrate statistical significance testing
+    void demonstrateStatisticalAnalysis() {
+        const int numSamples = 10000;
+        std::vector<double> group1, group2;
+        
+        std::cout << "Statistical Significance Testing\n";
+        std::cout << "===============================\n\n";
+        
+        // Simulate two timing distributions with small difference
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::normal_distribution<double> dist1(1000.0, 50.0);  // Mean: 1000ns
+        std::normal_distribution<double> dist2(1010.0, 50.0);  // Mean: 1010ns
+        
+        for (int i = 0; i < numSamples; ++i) {
+            group1.push_back(dist1(gen));
+            group2.push_back(dist2(gen));
+        }
+        
+        double tStatistic = TimingAnalyzer::welchTTest(group1, group2);
+        
+        std::cout << "Group 1 mean: " << 1000.0 << " ns\n";
+        std::cout << "Group 2 mean: " << 1010.0 << " ns\n";
+        std::cout << "Difference: " << 10.0 << " ns (1% of signal)\n";
+        std::cout << "Sample size: " << numSamples << " per group\n";
+        std::cout << "T-statistic: " << std::fixed << std::setprecision(4) 
+                  << tStatistic << "\n";
+        
+        if (std::abs(tStatistic) > 1.96) {  // Approximate critical value
+            std::cout << "Result: SIGNIFICANT timing difference detected!\n";
+        } else {
+            std::cout << "Result: No significant timing difference.\n";
+        }
+        
+        std::cout << "\nConclusion: Statistical analysis can detect very small\n";
+        std::cout << "timing differences with sufficient sample sizes.\n\n";
+    }
+};
+\end{lstlisting}
+
+\begin{thebibliography}{99}
+
+\bibitem{kocher1996timing}
+Kocher, P. C. (1996).
+\newblock Timing attacks on implementations of Diffie-Hellman, RSA, DSS, and other systems.
+\newblock In \textit{Advances in Cryptology - CRYPTO '96} (pp. 104-113). Springer.
+
+\bibitem{brumley2003remote}
+Brumley, D., \& Boneh, D. (2003).
+\newblock Remote timing attacks are practical.
+\newblock In \textit{Proceedings of the 12th USENIX Security Symposium} (pp. 1-14).
+
+\bibitem{bernstein2005cache}
+Bernstein, D. J. (2005).
+\newblock Cache-timing attacks on AES.
+\newblock \textit{Technical Report}, University of Illinois at Chicago.
+
+\bibitem{aciiccmez2007predicting}
+Acıiçmez, O., Schindler, W., \& Koç, Ç. K. (2007).
+\newblock Cache based remote timing attack on the AES.
+\newblock In \textit{Topics in Cryptology - CT-RSA 2007} (pp. 271-286). Springer.
+
+\bibitem{osvik2006cache}
+Osvik, D. A., Shamir, A., \& Tromer, E. (2006).
+\newblock Cache attacks and countermeasures: the case of AES.
+\newblock In \textit{Topics in Cryptology - CT-RSA 2006} (pp. 1-20). Springer.
+
+\bibitem{yarom2014flush}
+Yarom, Y., \& Falkner, K. (2014).
+\newblock FLUSH+ RELOAD: A high resolution, low noise, L3 cache side-channel attack.
+\newblock In \textit{Proceedings of the 23rd USENIX Security Symposium} (pp. 719-732).
+
+\bibitem{gruss2016flush}
+Gruss, D., Spreitzer, R., \& Mangard, S. (2016).
+\newblock Cache template attacks: Automating attacks on inclusive last-level caches.
+\newblock In \textit{Proceedings of the 24th USENIX Security Symposium} (pp. 897-912).
+
+\bibitem{liu2015last}
+Liu, F., Yarom, Y., Ge, Q., Heiser, G., \& Lee, R. B. (2015).
+\newblock Last-level cache side-channel attacks are practical.
+\newblock In \textit{Proceedings of the 2015 IEEE Symposium on Security and Privacy} (pp. 605-622).
+
+\bibitem{aldaya2019port}
+Aldaya, A. C., Brumley, B. B., ul Hassan, S., García, C. P., \& Tuveri, N. (2019).
+\newblock Port contention for fun and profit.
+\newblock In \textit{Proceedings of the 2019 IEEE Symposium on Security and Privacy} (pp. 870-887).
+
+\bibitem{kocher1999differential}
+Kocher, P., Jaffe, J., \& Jun, B. (1999).
+\newblock Differential power analysis.
+\newblock In \textit{Advances in Cryptology - CRYPTO '99} (pp. 388-397). Springer.
+
+\bibitem{chari1999towards}
+Chari, S., Rao, J. R., \& Rohatgi, P. (1999).
+\newblock Template attacks.
+\newblock In \textit{Cryptographic Hardware and Embedded Systems - CHES 2002} (pp. 13-28). Springer.
+
+\bibitem{schindler2000timing}
+Schindler, W. (2000).
+\newblock A timing attack against RSA with the Chinese remainder theorem.
+\newblock In \textit{Cryptographic Hardware and Embedded Systems - CHES 2000} (pp. 109-124). Springer.
+
+\bibitem{dhem1998practical}
+Dhem, J. F., Koeune, F., Leroux, P. A., Mestré, P., Quisquater, J. J., \& Willems, J. L. (1998).
+\newblock A practical implementation of the timing attack.
+\newblock In \textit{Smart Card Research and Applications} (pp. 167-182). Springer.
+
+\bibitem{boneh1998importance}
+Boneh, D., \& Brumley, D. (2005).
+\newblock Remote timing attacks are practical.
+\newblock \textit{Computer Networks}, 48(5), 701-716.
+
+\bibitem{page2002theoretical}
+Page, D. (2002).
+\newblock Theoretical use of cache memory as a cryptanalytic side-channel.
+\newblock \textit{IACR Cryptology ePrint Archive}, 2002/169.
+
+\bibitem{percival2005cache}
+Percival, C. (2005).
+\newblock Cache missing for fun and profit.
+\newblock In \textit{Proceedings of BSDCan 2005}.
+
+\bibitem{tromer2010efficient}
+Tromer, E., Osvik, D. A., \& Shamir, A. (2010).
+\newblock Efficient cache attacks on AES, and countermeasures.
+\newblock \textit{Journal of Cryptology}, 23(1), 37-71.
+
+\bibitem{neve2006advances}
+Neve, M., \& Seifert, J. P. (2006).
+\newblock Advances on access-driven cache attacks on AES.
+\newblock In \textit{Selected Areas in Cryptography} (pp. 147-162). Springer.
+
+\bibitem{canteaut2006understanding}
+Canteaut, A., Carpov, S., Fontaine, C., Lepoint, T., Naya-Plasencia, M., Paillier, P., \& Sirdey, R. (2016).
+\newblock Stream ciphers: A practical solution for efficient homomorphic-ciphertext compression.
+\newblock In \textit{Fast Software Encryption} (pp. 313-333). Springer.
+
+\bibitem{barthe2014system}
+Barthe, G., Betarte, G., Campo, J. D., Luna, C., \& Pichardie, D. (2014).
+\newblock System-level non-interference for constant-time cryptography.
+\newblock In \textit{Proceedings of the 2014 ACM SIGSAC Conference on Computer and Communications Security} (pp. 1267-1279).
+
+\bibitem{molnar2005scalable}
+Molnar, D., Piotrowski, M., Schultz, D., \& Wagner, D. (2005).
+\newblock The program counter security model: Automatic detection and removal of control-flow side channel attacks.
+\newblock In \textit{Information Security and Cryptology} (pp. 156-168). Springer.
+
+\bibitem{kaufmann2016mitigating}
+Kaufmann, T., Pelletier, H., Vaudenay, S., \& Villegas, K. (2016).
+\newblock When constant-time source yields variable-time binary: Exploiting curve25519-donna built with MSVC 2015.
+\newblock In \textit{Cryptology and Network Security} (pp. 573-582). Springer.
+
+\bibitem{lang2018does}
+Lang, J., Lerman, L., Markowitch, O., \& Vera, L. (2018).
+\newblock Does timing attack on RSA depend on the computation environment?
+\newblock In \textit{Security and Cryptography for Networks} (pp. 581-599). Springer.
+
+\bibitem{zhang2012cross}
+Zhang, Y., Juels, A., Reiter, M. K., \& Ristenpart, T. (2012).
+\newblock Cross-VM side channels and their use to extract private keys.
+\newblock In \textit{Proceedings of the 2012 ACM Conference on Computer and Communications Security} (pp. 305-316).
+
+\bibitem{irazoqui2015wait}
+Irazoqui, G., Eisenbarth, T., \& Sunar, B. (2015).
+\newblock Wait a minute! A fast, Cross-VM attack on AES.
+\newblock In \textit{Research in Attacks, Intrusions, and Defenses} (pp. 299-319). Springer.
+
+\bibitem{lipp2016armageddon}
+Lipp, M., Gruss, D., Spreitzer, R., Maurice, C., \& Mangard, S. (2016).
+\newblock ARMageddon: Cache attacks on mobile devices.
+\newblock In \textit{Proceedings of the 25th USENIX Security Symposium} (pp. 549-564).
+
+\bibitem{horn2018spectre}
+Kocher, P., Horn, J., Fogh, A., Genkin, D., Gruss, D., Haas, W., ... \& Yarom, Y. (2019).
+\newblock Spectre attacks: Exploiting speculative execution.
+\newblock In \textit{Proceedings of the 40th IEEE Symposium on Security and Privacy} (pp. 1-19).
+
+\bibitem{lipp2018meltdown}
+Lipp, M., Schwarz, M., Gruss, D., Prescher, T., Haas, W., Fogh, A., ... \& Mangard, S. (2018).
+\newblock Meltdown: Reading kernel memory from user space.
+\newblock In \textit{Proceedings of the 27th USENIX Security Symposium} (pp. 973-990).
+
+\bibitem{schwarz2017keygeneration}
+Schwarz, M., Weiser, S., Gruss, D., Maurice, C., \& Mangard, S. (2017).
+\newblock Malware guard extension: Using SGX to conceal cache attacks.
+\newblock In \textit{Detection of Intrusions and Malware, and Vulnerability Assessment} (pp. 3-24). Springer.
+
+\bibitem{moghimi2017cachezoom}
+Moghimi, A., Irazoqui, G., \& Eisenbarth, T. (2017).
+\newblock CacheZoom: How SGX amplifies the power of cache attacks.
+\newblock In \textit{Cryptographic Hardware and Embedded Systems - CHES 2017} (pp. 69-90). Springer.
+
+\end{thebibliography}
+
+\end{document}

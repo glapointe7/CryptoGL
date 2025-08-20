@@ -9,11 +9,9 @@
 
 namespace CryptoGL
 {
-
     class AES : public BlockCipher<uint32_t, UInt32Vector, 16, BigEndian32>
     {
     public:
-
         /* Constructor with an IV needed : Only CBC, CFB and OFB modes are accepted. */
         AES(const BytesVector &key, const OperationModes mode, const BytesVector &IV)
             : BlockCipher(mode, 10, IV)

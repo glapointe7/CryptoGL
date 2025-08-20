@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integer.hpp Benchmark Testing Guide - CryptoGL</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .section {
+            background: white;
+            margin: 20px 0;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        .section h3 {
+            color: #764ba2;
+            margin-top: 25px;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        
+        .performance-metrics {
+            background: #d1ecf1;
+            padding: 15px;
+            border-left: 4px solid #17a2b8;
+            margin: 15px 0;
+        }
+        
+        .benchmark-category {
+            background: #d4edda;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            margin: 15px 0;
+        }
+        
+        .framework-addition {
+            background: #f8d7da;
+            padding: 15px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        th {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        .toc {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 Integer.hpp Benchmark Testing Guide</h1>
+        <p>Comprehensive Performance Testing Strategy for CryptoGL Integer Operations</p>
+    </div>
+
+    <div class="toc">
+        <h3>📖 Table of Contents</h3>
+        <ul>
+            <li><a href="#introduction">1. Introduction to Benchmark Testing</a></li>
+            <li><a href="#why-benchmarks">2. Why Benchmark Testing Matters</a></li>
+            <li><a href="#framework-architecture">3. Benchmark Framework Architecture</a></li>
+            <li><a href="#integer-benchmarks">4. Integer.hpp Benchmark Test Coverage</a></li>
+            <li><a href="#framework-additions">5. Required Framework Additions</a></li>
+            <li><a href="#implementation-strategy">6. Implementation Strategy</a></li>
+            <li><a href="#expected-results">7. Expected Results & Performance Metrics</a></li>
+        </ul>
+    </div>
+
+    <div class="section" id="introduction">
+        <h2>🎯 1. Introduction to Benchmark Testing</h2>
+        
+        <p><strong>Benchmark testing</strong> is a performance measurement methodology that evaluates the execution time, memory usage, and computational efficiency of software components under controlled conditions. Unlike unit tests that verify correctness, benchmark tests measure <em>how fast</em> and <em>how efficiently</em> code executes.</p>
+
+        <div class="highlight">
+            <strong>Key Principles:</strong>
+            <ul>
+                <li><strong>Repeatability:</strong> Tests must produce consistent results across multiple runs</li>
+                <li><strong>Isolation:</strong> Each benchmark should test a single operation or algorithm</li>
+                <li><strong>Statistical Significance:</strong> Multiple iterations with statistical analysis</li>
+                <li><strong>Real-world Scenarios:</strong> Test data sizes and patterns relevant to actual usage</li>
+            </ul>
+        </div>
+
+        <h3>🔬 How Benchmark Testing Works</h3>
+        <p>The benchmark process follows this methodology:</p>
+        <ol>
+            <li><strong>Setup Phase:</strong> Initialize test data and system state</li>
+            <li><strong>Warm-up Phase:</strong> Execute operations to stabilize CPU caches and branch predictors</li>
+            <li><strong>Measurement Phase:</strong> Execute operations while measuring time/resources</li>
+            <li><strong>Statistical Analysis:</strong> Calculate mean, median, standard deviation, and percentiles</li>
+            <li><strong>Reporting Phase:</strong> Generate performance reports and comparisons</li>
+        </ol>
+    </div>
+
+    <div class="section" id="why-benchmarks">
+        <h2>🔍 2. Why Benchmark Testing Matters for Cryptographic Libraries</h2>
+        
+        <div class="performance-metrics">
+            <h3>Critical Performance Aspects in Cryptography:</h3>
+            <ul>
+                <li><strong>Throughput:</strong> Operations per second for high-volume scenarios</li>
+                <li><strong>Latency:</strong> Response time for real-time applications</li>
+                <li><strong>Constant-time Operations:</strong> Preventing timing attacks</li>
+                <li><strong>Memory Efficiency:</strong> Cache performance and memory footprint</li>
+                <li><strong>Scalability:</strong> Performance with different data sizes</li>
+            </ul>
+        </div>
+
+        <h3>🎯 Specific Benefits for Integer.hpp</h3>
+        <ul>
+            <li><strong>Bit Manipulation Optimization:</strong> Verify that bit operations are compiler-optimized</li>
+            <li><strong>Cache Performance:</strong> Ensure operations fit within CPU cache lines</li>
+            <li><strong>Branch Prediction:</strong> Measure impact of conditional operations</li>
+            <li><strong>SIMD Utilization:</strong> Detect automatic vectorization opportunities</li>
+            <li><strong>Type Performance Comparison:</strong> Compare uint8/16/32/64 performance characteristics</li>
+        </ul>
+    </div>
+
+    <div class="section" id="framework-architecture">
+        <h2>🏗️ 3. Benchmark Framework Architecture</h2>
+        
+        <p>The benchmark framework extends your existing test infrastructure with performance measurement capabilities:</p>
+
+        <div class="code-block">
+// Benchmark Framework Components:
+// 1. BenchmarkTest base class (extends existing Test class)
+// 2. BenchmarkContainer (manages benchmark execution)
+// 3. PerformanceMetrics (statistical analysis)
+// 4. BenchmarkReporter (results output)
+        </div>
+
+        <h3>🔄 Integration with Existing Framework</h3>
+        <p>The benchmark framework leverages your existing infrastructure:</p>
+        <ul>
+            <li><strong>Reuses TestContainer pattern</strong> for automatic registration</li>
+            <li><strong>Extends existing timing infrastructure</strong> with high-resolution measurements</li>
+            <li><strong>Maintains TEST() macro pattern</strong> for consistency</li>
+            <li><strong>Adds statistical analysis capabilities</strong> to existing timing</li>
+        </ul>
+    </div>
+
+    <div class="section" id="integer-benchmarks">
+        <h2>⚡ 4. Complete Integer.hpp Benchmark Test Coverage</h2>
+        
+        <p>Comprehensive benchmark suite covering all Integer class operations with multiple scenarios:</p>
+
+        <div class="benchmark-category">
+            <h3>📊 Benchmark Categories</h3>
+            <table>
+                <tr>
+                    <th>Category</th>
+                    <th>Operations</th>
+                    <th>Test Scenarios</th>
+                    <th>Key Metrics</th>
+                </tr>
+                <tr>
+                    <td>Bit Extraction</td>
+                    <td>lsb(), msb()</td>
+                    <td>Various bit counts, all integer types</td>
+                    <td>ns/operation, cache misses</td>
+                </tr>
+                <tr>
+                    <td>Bit Rotation</td>
+                    <td>rotateLeft(), rotateRight()</td>
+                    <td>Different shift amounts, with/without max</td>
+                    <td>CPU cycles, instruction count</td>
+                </tr>
+                <tr>
+                    <td>Bit Manipulation</td>
+                    <td>getBitAtPosition(), setBitAtPosition()</td>
+                    <td>Sequential vs random positions</td>
+                    <td>Branch prediction efficiency</td>
+                </tr>
+                <tr>
+                    <td>Byte Operations</td>
+                    <td>getByteAtPosition(), bytesSwap()</td>
+                    <td>Different byte positions, endianness</td>
+                    <td>Memory bandwidth utilization</td>
+                </tr>
+                <tr>
+                    <td>String Conversion</td>
+                    <td>toString()</td>
+                    <td>Various number ranges, different types</td>
+                    <td>Memory allocations, string performance</td>
+                </tr>
+            </table>
+        </div>
+
+        <h3>🏆 Complete Benchmark Test Implementation</h3>
+        
+        <div class="code-block">
+#pragma once
+
+#include "BenchmarkTest.hpp"
+#include "../../src/core/types/Integer.hpp"
+#include &lt;random&gt;
+#include &lt;vector&gt;
+
+namespace BenchmarkTests
+{
+    class IntegerBenchmark : public BenchmarkTest
+    {
+    protected:
+        // Test data for benchmarks
+        std::vector&lt;uint8_t&gt; uint8_data;
+        std::vector&lt;uint16_t&gt; uint16_data;
+        std::vector&lt;uint32_t&gt; uint32_data;
+        std::vector&lt;uint64_t&gt; uint64_data;
+        
+        std::mt19937 rng;
+        
+        void setUp() override
+        {
+            // Initialize random number generator with fixed seed for reproducibility
+            rng.seed(42);
+            
+            // Generate test data sets
+            generateTestData();
+        }
+        
+        void tearDown() override
+        {
+            // Clean up test data
+            uint8_data.clear();
+            uint16_data.clear();
+            uint32_data.clear();
+            uint64_data.clear();
+        }
+        
+    private:
+        void generateTestData()
+        {
+            const size_t data_size = 10000;
+            
+            // Generate diverse test patterns
+            for (size_t i = 0; i &lt; data_size; ++i)
+            {
+                uint8_data.push_back(static_cast&lt;uint8_t&gt;(rng()));
+                uint16_data.push_back(static_cast&lt;uint16_t&gt;(rng()));
+                uint32_data.push_back(static_cast&lt;uint32_t&gt;(rng()));
+                uint64_data.push_back(rng());
+            }
+        }
+    };
+
+    // ========================================
+    // LSB (Least Significant Bits) Benchmarks
+    // ========================================
+    
+    BENCHMARK(IntegerLSBUint8Performance, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(1000000);
+        setWarmupIterations(100000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint8_data) {
+                volatile auto result = uint8::lsb(value, 4);
+                (void)result; // Prevent optimization
+            }
+        };
+        
+        measurePerformance("LSB uint8 extraction (4 bits)", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerLSBUint16Performance, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(1000000);
+        setWarmupIterations(100000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint16_data) {
+                volatile auto result = uint16::lsb(value, 8);
+                (void)result;
+            }
+        };
+        
+        measurePerformance("LSB uint16 extraction (8 bits)", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerLSBVariableBits, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(500000);
+        setWarmupIterations(50000);
+        
+        auto benchmark_func = [&]() {
+            size_t idx = 0;
+            for (const auto& value : uint32_data) {
+                uint8_t bits = 1 + (idx % 31); // 1 to 31 bits
+                volatile auto result = uint32::lsb(value, bits);
+                (void)result;
+                ++idx;
+            }
+        };
+        
+        measurePerformance("LSB uint32 variable bit extraction", benchmark_func);
+    }
+    
+    // ========================================
+    // MSB (Most Significant Bits) Benchmarks
+    // ========================================
+    
+    BENCHMARK(IntegerMSBUint32Performance, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(1000000);
+        setWarmupIterations(100000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint32_data) {
+                volatile auto result = uint32::msb(value, 16);
+                (void)result;
+            }
+        };
+        
+        measurePerformance("MSB uint32 extraction (16 bits)", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerMSBUint64Performance, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(1000000);
+        setWarmupIterations(100000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint64_data) {
+                volatile auto result = uint64::msb(value, 32);
+                (void)result;
+            }
+        };
+        
+        measurePerformance("MSB uint64 extraction (32 bits)", benchmark_func);
+    }
+    
+    // ========================================
+    // Rotation Benchmarks
+    // ========================================
+    
+    BENCHMARK(IntegerRotateLeftFixedShift, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(2000000);
+        setWarmupIterations(200000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint32_data) {
+                volatile auto result = uint32::rotateLeft(value, 8);
+                (void)result;
+            }
+        };
+        
+        measurePerformance("Rotate left uint32 (8 positions)", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerRotateLeftVariableShift, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(1000000);
+        setWarmupIterations(100000);
+        
+        auto benchmark_func = [&]() {
+            size_t idx = 0;
+            for (const auto& value : uint32_data) {
+                uint8_t shift = idx % 32;
+                volatile auto result = uint32::rotateLeft(value, shift);
+                (void)result;
+                ++idx;
+            }
+        };
+        
+        measurePerformance("Rotate left uint32 (variable shift)", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerRotateRightWithMax, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(1000000);
+        setWarmupIterations(100000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint16_data) {
+                volatile auto result = uint16::rotateRight(value, 4, 12);
+                (void)result;
+            }
+        };
+        
+        measurePerformance("Rotate right uint16 with max limit", benchmark_func);
+    }
+    
+    // ========================================
+    // Bit Position Benchmarks
+    // ========================================
+    
+    BENCHMARK(IntegerGetBitSequential, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(500000);
+        setWarmupIterations(50000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint64_data) {
+                for (uint8_t pos = 0; pos &lt; 64; ++pos) {
+                    volatile bool result = uint64::getBitAtPosition(value, pos);
+                    (void)result;
+                }
+            }
+        };
+        
+        measurePerformance("Get bit position sequential (uint64)", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerGetBitRandom, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(1000000);
+        setWarmupIterations(100000);
+        
+        auto benchmark_func = [&]() {
+            size_t idx = 0;
+            for (const auto& value : uint32_data) {
+                uint8_t pos = idx % 32;
+                volatile bool result = uint32::getBitAtPosition(value, pos);
+                (void)result;
+                ++idx;
+            }
+        };
+        
+        measurePerformance("Get bit position random (uint32)", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerSetBitPosition, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(1000000);
+        setWarmupIterations(100000);
+        
+        auto benchmark_func = [&]() {
+            size_t idx = 0;
+            for (const auto& value : uint32_data) {
+                uint8_t pos = idx % 32;
+                volatile auto result = uint32::setBitAtPosition(value, pos);
+                (void)result;
+                ++idx;
+            }
+        };
+        
+        measurePerformance("Set bit position (uint32)", benchmark_func);
+    }
+    
+    // ========================================
+    // Byte Operation Benchmarks
+    // ========================================
+    
+    BENCHMARK(IntegerGetBytePosition, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(2000000);
+        setWarmupIterations(200000);
+        
+        auto benchmark_func = [&]() {
+            size_t idx = 0;
+            for (const auto& value : uint64_data) {
+                uint8_t pos = idx % 8; // 8 bytes in uint64_t
+                volatile auto result = uint64::getByteAtPosition(value, pos);
+                (void)result;
+                ++idx;
+            }
+        };
+        
+        measurePerformance("Get byte position (uint64)", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerBytesSwapUint16, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(2000000);
+        setWarmupIterations(200000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint16_data) {
+                volatile auto result = uint16::bytesSwap(value);
+                (void)result;
+            }
+        };
+        
+        measurePerformance("Byte swap uint16", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerBytesSwapUint32, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(2000000);
+        setWarmupIterations(200000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint32_data) {
+                volatile auto result = uint32::bytesSwap(value);
+                (void)result;
+            }
+        };
+        
+        measurePerformance("Byte swap uint32", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerBytesSwapUint64, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(2000000);
+        setWarmupIterations(200000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint64_data) {
+                volatile auto result = uint64::bytesSwap(value);
+                (void)result;
+            }
+        };
+        
+        measurePerformance("Byte swap uint64", benchmark_func);
+    }
+    
+    // ========================================
+    // String Conversion Benchmarks
+    // ========================================
+    
+    BENCHMARK(IntegerToStringUint8, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(100000);
+        setWarmupIterations(10000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint8_data) {
+                volatile auto result = uint8::toString(value);
+                (void)result;
+            }
+        };
+        
+        measurePerformance("ToString uint8", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerToStringUint32, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(100000);
+        setWarmupIterations(10000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint32_data) {
+                volatile auto result = uint32::toString(value);
+                (void)result;
+            }
+        };
+        
+        measurePerformance("ToString uint32", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerToStringUint64, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(50000);
+        setWarmupIterations(5000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint64_data) {
+                volatile auto result = uint64::toString(value);
+                (void)result;
+            }
+        };
+        
+        measurePerformance("ToString uint64", benchmark_func);
+    }
+    
+    // ========================================
+    // Comparative Type Performance Benchmarks
+    // ========================================
+    
+    BENCHMARK(IntegerTypeComparisonLSB, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(500000);
+        setWarmupIterations(50000);
+        
+        // Compare LSB performance across all types
+        auto benchmark_func = [&]() {
+            const size_t limit = std::min({uint8_data.size(), uint16_data.size(), 
+                                          uint32_data.size(), uint64_data.size()});
+            
+            for (size_t i = 0; i &lt; limit; ++i) {
+                volatile auto r1 = uint8::lsb(uint8_data[i], 4);
+                volatile auto r2 = uint16::lsb(uint16_data[i], 4);
+                volatile auto r3 = uint32::lsb(uint32_data[i], 4);
+                volatile auto r4 = uint64::lsb(uint64_data[i], 4);
+                (void)r1; (void)r2; (void)r3; (void)r4;
+            }
+        };
+        
+        measurePerformance("LSB extraction type comparison", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerTypeComparisonRotation, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(500000);
+        setWarmupIterations(50000);
+        
+        auto benchmark_func = [&]() {
+            const size_t limit = std::min({uint8_data.size(), uint16_data.size(), 
+                                          uint32_data.size(), uint64_data.size()});
+            
+            for (size_t i = 0; i &lt; limit; ++i) {
+                volatile auto r1 = uint8::rotateLeft(uint8_data[i], 2);
+                volatile auto r2 = uint16::rotateLeft(uint16_data[i], 4);
+                volatile auto r3 = uint32::rotateLeft(uint32_data[i], 8);
+                volatile auto r4 = uint64::rotateLeft(uint64_data[i], 16);
+                (void)r1; (void)r2; (void)r3; (void)r4;
+            }
+        };
+        
+        measurePerformance("Rotation type comparison", benchmark_func);
+    }
+    
+    // ========================================
+    // Cryptographic Scenario Benchmarks
+    // ========================================
+    
+    BENCHMARK(IntegerCryptographicWorkflow, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(100000);
+        setWarmupIterations(10000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint32_data) {
+                // Simulate DES-like operations
+                auto left = uint32::msb(value, 16);
+                auto right = uint32::lsb(value, 16);
+                
+                // Simulate round function operations
+                auto rotated = uint32::rotateLeft(left, 4);
+                auto byte0 = uint32::getByteAtPosition(rotated, 0);
+                auto byte1 = uint32::getByteAtPosition(rotated, 1);
+                
+                // Simulate reconstruction
+                auto result = (static_cast&lt;uint32_t&gt;(byte1) &lt;&lt; 8) | byte0;
+                volatile auto final = uint32::setBitAtPosition(result, 15);
+                (void)final;
+            }
+        };
+        
+        measurePerformance("Cryptographic workflow simulation", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerEndianessConversion, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(1000000);
+        setWarmupIterations(100000);
+        
+        auto benchmark_func = [&]() {
+            for (const auto& value : uint32_data) {
+                // Simulate network byte order conversion
+                auto swapped = uint32::bytesSwap(value);
+                auto back = uint32::bytesSwap(swapped);
+                volatile bool correct = (back == value);
+                (void)correct;
+            }
+        };
+        
+        measurePerformance("Endianness conversion round-trip", benchmark_func);
+    }
+    
+    // ========================================
+    // Memory Access Pattern Benchmarks
+    // ========================================
+    
+    BENCHMARK(IntegerSequentialAccess, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(200000);
+        setWarmupIterations(20000);
+        
+        auto benchmark_func = [&]() {
+            // Sequential memory access pattern
+            for (size_t i = 0; i &lt; uint64_data.size(); ++i) {
+                volatile auto result = uint64::rotateLeft(uint64_data[i], 8);
+                (void)result;
+            }
+        };
+        
+        measurePerformance("Sequential memory access pattern", benchmark_func);
+    }
+    
+    BENCHMARK(IntegerRandomAccess, IntegerBenchmark)
+    {
+        using namespace CryptoGL;
+        
+        setIterations(200000);
+        setWarmupIterations(20000);
+        
+        std::vector&lt;size_t&gt; indices;
+        
+        auto setup_func = [&]() {
+            // Generate random access pattern
+            indices.clear();
+            indices.resize(1000);
+            std::uniform_int_distribution&lt;size_t&gt; dist(0, uint64_data.size() - 1);
+            for (auto& idx : indices) {
+                idx = dist(rng);
+            }
+        };
+        
+        auto benchmark_func = [&]() {
+            // Random memory access pattern
+            for (const auto& idx : indices) {
+                volatile auto result = uint64::rotateLeft(uint64_data[idx], 8);
+                (void)result;
+            }
+        };
+        
+        measurePerformanceWithSetup("Random memory access pattern", setup_func, benchmark_func);
+    }
+}
+        </div>
+    </div>
+
+    <div class="section" id="framework-additions">
+        <h2>🔧 5. Required Framework Additions</h2>
+        
+        <p>To implement the comprehensive benchmark suite, several additions to your test framework are needed:</p>
+
+        <div class="framework-addition">
+            <h3>🆕 New Classes Required</h3>
+        </div>
+
+        <h3>BenchmarkTest.hpp</h3>
+        <div class="code-block">
+#pragma once
+
+#include "Test.hpp"
+#include "PerformanceMetrics.hpp"
+#include &lt;chrono&gt;
+#include &lt;functional&gt;
+#include &lt;string&gt;
+
+namespace BenchmarkTests
+{
+    using namespace std::chrono;
+    using HighResClock = high_resolution_clock;
+    
+    /**
+     * @brief Base class for performance benchmark tests
+     * 
+     * Extends the existing Test framework with benchmark-specific functionality
+     * including statistical timing, warm-up phases, and performance reporting.
+     */
+    class BenchmarkTest : public UnitTests::Test
+    {
+    protected:
+        size_t iterations = 1000;           ///< Number of benchmark iterations
+        size_t warmup_iterations = 100;    ///< Number of warm-up iterations
+        PerformanceMetrics metrics;        ///< Statistical performance data
+        
+    public:
+        /**
+         * @brief Set the number of benchmark iterations
+         * @param iter Number of iterations to execute
+         */
+        void setIterations(size_t iter) { iterations = iter; }
+        
+        /**
+         * @brief Set the number of warm-up iterations
+         * @param warmup Number of warm-up iterations
+         */
+        void setWarmupIterations(size_t warmup) { warmup_iterations = warmup; }
+        
+        /**
+         * @brief Measure performance of a benchmark function
+         * @param name Descriptive name for the benchmark
+         * @param func Function to benchmark
+         */
+        template&lt;typename Func&gt;
+        void measurePerformance(const std::string& name, Func&& func)
+        {
+            // Warm-up phase
+            for (size_t i = 0; i &lt; warmup_iterations; ++i) {
+                func();
+            }
+            
+            // Measurement phase
+            std::vector&lt;double&gt; timings;
+            timings.reserve(iterations);
+            
+            for (size_t i = 0; i &lt; iterations; ++i) {
+                auto start = HighResClock::now();
+                func();
+                auto end = HighResClock::now();
+                
+                auto duration_ns = duration_cast&lt;nanoseconds&gt;(end - start).count();
+                timings.push_back(static_cast&lt;double&gt;(duration_ns));
+            }
+            
+            metrics.analyzeTiming(name, timings);
+        }
+        
+        /**
+         * @brief Measure performance with separate setup function
+         * @param name Descriptive name for the benchmark
+         * @param setup_func Setup function called before each iteration
+         * @param benchmark_func Function to benchmark
+         */
+        template&lt;typename SetupFunc, typename BenchmarkFunc&gt;
+        void measurePerformanceWithSetup(const std::string& name, 
+                                        SetupFunc&& setup_func,
+                                        BenchmarkFunc&& benchmark_func)
+        {
+            // Warm-up phase
+            for (size_t i = 0; i &lt; warmup_iterations; ++i) {
+                setup_func();
+                benchmark_func();
+            }
+            
+            // Measurement phase
+            std::vector&lt;double&gt; timings;
+            timings.reserve(iterations);
+            
+            for (size_t i = 0; i &lt; iterations; ++i) {
+                setup_func();
+                
+                auto start = HighResClock::now();
+                benchmark_func();
+                auto end = HighResClock::now();
+                
+                auto duration_ns = duration_cast&lt;nanoseconds&gt;(end - start).count();
+                timings.push_back(static_cast&lt;double&gt;(duration_ns));
+            }
+            
+            metrics.analyzeTiming(name, timings);
+        }
+        
+        /**
+         * @brief Get performance metrics for reporting
+         * @return Const reference to performance metrics
+         */
+        const PerformanceMetrics& getMetrics() const { return metrics; }
+        
+        // Override base Test methods for benchmark behavior
+        void run() override = 0;
+        void printResult() const override
+        {
+            metrics.printReport();
+        }
+        
+        bool hasPassed() const override 
+        { 
+            return true; // Benchmarks don't "pass" or "fail"
+        }
+    };
+    
+    // Macro for benchmark test registration (similar to existing TEST macro)
+    #define BENCHMARK(ClassName, Parent) \
+        class ClassName : public Parent \
+        { \
+        public: \
+            ClassName() { setName(#ClassName); } \
+            void run() override; \
+        }; \
+        class AddBenchmark##ClassName \
+        { \
+        public: \
+            AddBenchmark##ClassName() { BenchmarkContainer::getInstance().append(new ClassName()); } \
+        }; \
+        static AddBenchmark##ClassName AddThisBenchmark##ClassName; \
+        void ClassName::run()
+}
+        </div>
+
+        <h3>PerformanceMetrics.hpp</h3>
+        <div class="code-block">
+#pragma once
+
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;map&gt;
+#include &lt;algorithm&gt;
+#include &lt;numeric&gt;
+#include &lt;cmath&gt;
+#include &lt;iostream&gt;
+#include &lt;iomanip&gt;
+
+namespace BenchmarkTests
+{
+    /**
+     * @brief Statistical analysis and reporting for performance metrics
+     * 
+     * Provides comprehensive statistical analysis of benchmark timing data
+     * including mean, median, standard deviation, percentiles, and outlier detection.
+     */
+    class PerformanceMetrics
+    {
+    private:
+        struct BenchmarkResult
+        {
+            std::string name;
+            double mean_ns;              ///< Mean execution time in nanoseconds
+            double median_ns;            ///< Median execution time in nanoseconds
+            double std_dev_ns;           ///< Standard deviation in nanoseconds
+            double min_ns;               ///< Minimum execution time
+            double max_ns;               ///< Maximum execution time
+            double p95_ns;               ///< 95th percentile
+            double p99_ns;               ///< 99th percentile
+            size_t sample_count;         ///< Number of samples
+            double ops_per_second;       ///< Operations per second
+        };
+        
+        std::vector&lt;BenchmarkResult&gt; results;
+        
+    public:
+        /**
+         * @brief Analyze timing data and compute statistical metrics
+         * @param name Benchmark name
+         * @param timings Vector of timing measurements in nanoseconds
+         */
+        void analyzeTiming(const std::string& name, std::vector&lt;double&gt; timings)
+        {
+            if (timings.empty()) return;
+            
+            // Sort for percentile calculations
+            std::sort(timings.begin(), timings.end());
+            
+            BenchmarkResult result;
+            result.name = name;
+            result.sample_count = timings.size();
+            
+            // Basic statistics
+            result.min_ns = timings.front();
+            result.max_ns = timings.back();
+            result.mean_ns = std::accumulate(timings.begin(), timings.end(), 0.0) / timings.size();
+            
+            // Median
+            size_t mid = timings.size() / 2;
+            if (timings.size() % 2 == 0) {
+                result.median_ns = (timings[mid - 1] + timings[mid]) / 2.0;
+            } else {
+                result.median_ns = timings[mid];
+            }
+            
+            // Standard deviation
+            double variance = 0.0;
+            for (const auto& time : timings) {
+                variance += std::pow(time - result.mean_ns, 2);
+            }
+            result.std_dev_ns = std::sqrt(variance / timings.size());
+            
+            // Percentiles
+            result.p95_ns = timings[static_cast&lt;size_t&gt;(0.95 * timings.size())];
+            result.p99_ns = timings[static_cast&lt;size_t&gt;(0.99 * timings.size())];
+            
+            // Operations per second (based on median)
+            result.ops_per_second = 1e9 / result.median_ns;
+            
+            results.push_back(result);
+        }
+        
+        /**
+         * @brief Print comprehensive performance report
+         */
+        void printReport() const
+        {
+            if (results.empty()) return;
+            
+            std::cout &lt;&lt; "\n" &lt;&lt; std::string(100, '=') &lt;&lt; "\n";
+            std::cout &lt;&lt; "🚀 PERFORMANCE BENCHMARK REPORT\n";
+            std::cout &lt;&lt; std::string(100, '=') &lt;&lt; "\n\n";
+            
+            // Table header
+            std::cout &lt;&lt; std::left &lt;&lt; std::setw(35) &lt;&lt; "Benchmark"
+                      &lt;&lt; std::right &lt;&lt; std::setw(12) &lt;&lt; "Median (ns)"
+                      &lt;&lt; std::setw(12) &lt;&lt; "Mean (ns)"
+                      &lt;&lt; std::setw(12) &lt;&lt; "Std Dev"
+                      &lt;&lt; std::setw(15) &lt;&lt; "Ops/sec"
+                      &lt;&lt; std::setw(12) &lt;&lt; "P95 (ns)"
+                      &lt;&lt; std::setw(12) &lt;&lt; "P99 (ns)" &lt;&lt; "\n";
+            
+            std::cout &lt;&lt; std::string(100, '-') &lt;&lt; "\n";
+            
+            // Results table
+            for (const auto& result : results) {
+                std::cout &lt;&lt; std::left &lt;&lt; std::setw(35) &lt;&lt; truncateString(result.name, 34)
+                          &lt;&lt; std::right &lt;&lt; std::setw(12) &lt;&lt; std::fixed &lt;&lt; std::setprecision(2) &lt;&lt; result.median_ns
+                          &lt;&lt; std::setw(12) &lt;&lt; std::fixed &lt;&lt; std::setprecision(2) &lt;&lt; result.mean_ns
+                          &lt;&lt; std::setw(12) &lt;&lt; std::fixed &lt;&lt; std::setprecision(2) &lt;&lt; result.std_dev_ns
+                          &lt;&lt; std::setw(15) &lt;&lt; std::fixed &lt;&lt; std::setprecision(0) &lt;&lt; result.ops_per_second
+                          &lt;&lt; std::setw(12) &lt;&lt; std::fixed &lt;&lt; std::setprecision(2) &lt;&lt; result.p95_ns
+                          &lt;&lt; std::setw(12) &lt;&lt; std::fixed &lt;&lt; std::setprecision(2) &lt;&lt; result.p99_ns &lt;&lt; "\n";
+            }
+            
+            std::cout &lt;&lt; "\n";
+            printSummaryStatistics();
+        }
+        
+        /**
+         * @brief Get results for external analysis
+         * @return Vector of benchmark results
+         */
+        const std::vector&lt;BenchmarkResult&gt;& getResults() const { return results; }
+        
+    private:
+        std::string truncateString(const std::string& str, size_t max_length) const
+        {
+            if (str.length() &lt;= max_length) return str;
+            return str.substr(0, max_length - 3) + "...";
+        }
+        
+        void printSummaryStatistics() const
+        {
+            if (results.empty()) return;
+            
+            // Find fastest and slowest operations
+            auto fastest = std::min_element(results.begin(), results.end(),
+                [](const auto& a, const auto& b) { return a.median_ns &lt; b.median_ns; });
+            
+            auto slowest = std::max_element(results.begin(), results.end(),
+                [](const auto& a, const auto& b) { return a.median_ns &lt; b.median_ns; });
+            
+            std::cout &lt;&lt; "📊 SUMMARY STATISTICS:\n";
+            std::cout &lt;&lt; "  Fastest operation: " &lt;&lt; fastest-&gt;name 
+                      &lt;&lt; " (" &lt;&lt; std::fixed &lt;&lt; std::setprecision(2) &lt;&lt; fastest-&gt;median_ns &lt;&lt; " ns)\n";
+            std::cout &lt;&lt; "  Slowest operation: " &lt;&lt; slowest-&gt;name 
+                      &lt;&lt; " (" &lt;&lt; std::fixed &lt;&lt; std::setprecision(2) &lt;&lt; slowest-&gt;median_ns &lt;&lt; " ns)\n";
+            std::cout &lt;&lt; "  Performance ratio: " &lt;&lt; std::fixed &lt;&lt; std::setprecision(1) 
+                      &lt;&lt; (slowest-&gt;median_ns / fastest-&gt;median_ns) &lt;&lt; "x\n";
+            std::cout &lt;&lt; "  Total benchmarks: " &lt;&lt; results.size() &lt;&lt; "\n\n";
+        }
+    };
+}
+        </div>
+
+        <h3>BenchmarkContainer.hpp</h3>
+        <div class="code-block">
+#pragma once
+
+#include "BenchmarkTest.hpp"
+#include &lt;vector&gt;
+#include &lt;memory&gt;
+#include &lt;iostream&gt;
+
+namespace BenchmarkTests
+{
+    /**
+     * @brief Container and executor for benchmark tests
+     * 
+     * Manages the collection and execution of benchmark tests,
+     * similar to the existing TestContainer but specialized for performance testing.
+     */
+    class BenchmarkContainer
+    {
+    private:
+        static std::vector&lt;BenchmarkTest*&gt; benchmark_tests;
+        static size_t total_benchmarks;
+        static double total_execution_time;
+        
+        BenchmarkContainer() = default;
+        
+    public:
+        /**
+         * @brief Get singleton instance of benchmark container
+         * @return Reference to the benchmark container instance
+         */
+        static BenchmarkContainer& getInstance()
+        {
+            static BenchmarkContainer instance;
+            return instance;
+        }
+        
+        /**
+         * @brief Register a benchmark test
+         * @param benchmark Pointer to benchmark test instance
+         */
+        void append(BenchmarkTest* benchmark)
+        {
+            benchmark_tests.push_back(benchmark);
+        }
+        
+        /**
+         * @brief Execute all registered benchmark tests
+         */
+        static void runAllBenchmarks()
+        {
+            std::cout &lt;&lt; "\n🏁 Starting CryptoGL Performance Benchmark Suite\n";
+            std::cout &lt;&lt; "Total benchmarks to execute: " &lt;&lt; benchmark_tests.size() &lt;&lt; "\n\n";
+            
+            auto suite_start = std::chrono::high_resolution_clock::now();
+            
+            for (auto* benchmark : benchmark_tests)
+            {
+                std::cout &lt;&lt; "Running: " &lt;&lt; benchmark-&gt;getName() &lt;&lt; "...\n";
+                
+                auto start_time = std::chrono::high_resolution_clock::now();
+                benchmark-&gt;setUp();
+                benchmark-&gt;run();
+                benchmark-&gt;tearDown();
+                auto end_time = std::chrono::high_resolution_clock::now();
+                
+                auto elapsed = std::chrono::duration&lt;double, std::milli&gt;(end_time - start_time).count();
+                total_execution_time += elapsed;
+                ++total_benchmarks;
+                
+                benchmark-&gt;printResult();
+                std::cout &lt;&lt; "Benchmark completed in " &lt;&lt; std::fixed &lt;&lt; std::setprecision(2) 
+                          &lt;&lt; elapsed &lt;&lt; " ms\n\n";
+            }
+            
+            auto suite_end = std::chrono::high_resolution_clock::now();
+            auto total_suite_time = std::chrono::duration&lt;double, std::milli&gt;(suite_end - suite_start).count();
+            
+            printFinalReport(total_suite_time);
+        }
+        
+    private:
+        static void printFinalReport(double suite_time)
+        {
+            std::cout &lt;&lt; "\n" &lt;&lt; std::string(80, '=') &lt;&lt; "\n";
+            std::cout &lt;&lt; "🏆 BENCHMARK SUITE COMPLETED\n";
+            std::cout &lt;&lt; std::string(80, '=') &lt;&lt; "\n";
+            std::cout &lt;&lt; "Total benchmarks executed: " &lt;&lt; total_benchmarks &lt;&lt; "\n";
+            std::cout &lt;&lt; "Total suite execution time: " &lt;&lt; std::fixed &lt;&lt; std::setprecision(2) 
+                      &lt;&lt; suite_time &lt;&lt; " ms\n";
+            std::cout &lt;&lt; "Average benchmark time: " &lt;&lt; std::fixed &lt;&lt; std::setprecision(2) 
+                      &lt;&lt; (total_benchmarks &gt; 0 ? suite_time / total_benchmarks : 0.0) &lt;&lt; " ms\n";
+            std::cout &lt;&lt; std::string(80, '=') &lt;&lt; "\n\n";
+        }
+    };
+    
+    // Static member definitions
+    std::vector&lt;BenchmarkTest*&gt; BenchmarkContainer::benchmark_tests;
+    size_t BenchmarkContainer::total_benchmarks = 0;
+    double BenchmarkContainer::total_execution_time = 0.0;
+}
+        </div>
+    </div>
+
+    <div class="section" id="implementation-strategy">
+        <h2>🛠️ 6. Implementation Strategy</h2>
+        
+        <h3>📁 Directory Structure</h3>
+        <div class="code-block">
+tests/
+├── benchmarking/
+│   ├── CMakeLists.txt
+│   ├── BenchmarkTest.hpp
+│   ├── PerformanceMetrics.hpp
+│   ├── BenchmarkContainer.hpp
+│   ├── IntegerBenchmark.hpp
+│   └── BenchmarkRunner.cpp
+├── unit/
+└── integration/
+        </div>
+
+        <h3>🔧 Integration Steps</h3>
+        <ol>
+            <li><strong>Framework Setup:</strong> Create benchmark base classes and infrastructure</li>
+            <li><strong>CMake Integration:</strong> Add benchmark target to build system</li>
+            <li><strong>Test Implementation:</strong> Implement comprehensive Integer benchmarks</li>
+            <li><strong>CI/CD Integration:</strong> Add benchmark execution to build pipeline</li>
+            <li><strong>Reporting:</strong> Generate performance reports and track regressions</li>
+        </ol>
+
+        <h3>📈 Performance Monitoring</h3>
+        <div class="performance-metrics">
+            <h4>Automated Performance Tracking:</h4>
+            <ul>
+                <li><strong>Baseline Establishment:</strong> Record initial performance metrics</li>
+                <li><strong>Regression Detection:</strong> Alert on performance degradation (&gt;10%)</li>
+                <li><strong>Platform Comparison:</strong> Track performance across different architectures</li>
+                <li><strong>Optimization Validation:</strong> Verify performance improvements</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section" id="expected-results">
+        <h2>📊 7. Expected Results & Performance Metrics</h2>
+        
+        <h3>🎯 Performance Expectations</h3>
+        <table>
+            <tr>
+                <th>Operation Category</th>
+                <th>Expected Performance</th>
+                <th>Critical Metrics</th>
+                <th>Optimization Opportunities</th>
+            </tr>
+            <tr>
+                <td>Bit Extraction (LSB/MSB)</td>
+                <td>1-5 ns per operation</td>
+                <td>CPU cycles, cache hits</td>
+                <td>Compiler intrinsics, constant folding</td>
+            </tr>
+            <tr>
+                <td>Bit Rotation</td>
+                <td>2-8 ns per operation</td>
+                <td>Instruction scheduling</td>
+                <td>Hardware rotation instructions</td>
+            </tr>
+            <tr>
+                <td>Bit Position Operations</td>
+                <td>1-3 ns per operation</td>
+                <td>Branch prediction</td>
+                <td>Branchless implementations</td>
+            </tr>
+            <tr>
+                <td>Byte Operations</td>
+                <td>2-10 ns per operation</td>
+                <td>Memory bandwidth</td>
+                <td>SIMD operations, byte swapping intrinsics</td>
+            </tr>
+            <tr>
+                <td>String Conversion</td>
+                <td>50-500 ns per operation</td>
+                <td>Memory allocations</td>
+                <td>Stack-based string building, lookup tables</td>
+            </tr>
+        </table>
+
+        <h3>🔍 Analysis Insights</h3>
+        <div class="benchmark-category">
+            <h4>Key Performance Indicators:</h4>
+            <ul>
+                <li><strong>Type Efficiency:</strong> uint64 operations may show different cache behavior</li>
+                <li><strong>Compiler Optimization:</strong> Simple operations should optimize to single instructions</li>
+                <li><strong>Memory Patterns:</strong> Sequential access should outperform random access</li>
+                <li><strong>Cryptographic Workflows:</strong> Combined operations show real-world performance</li>
+            </ul>
+        </div>
+
+        <h3>📈 Performance Regression Thresholds</h3>
+        <ul>
+            <li><strong>Green Zone:</strong> Performance within ±5% of baseline</li>
+            <li><strong>Yellow Zone:</strong> Performance degradation of 5-15%</li>
+            <li><strong>Red Zone:</strong> Performance degradation &gt;15% (requires investigation)</li>
+        </ul>
+
+        <div class="highlight">
+            <strong>🎯 Success Criteria:</strong>
+            <ul>
+                <li>All bit operations complete in &lt;10 nanoseconds</li>
+                <li>Memory access patterns show expected cache behavior</li>
+                <li>No unexpected performance anomalies or outliers</li>
+                <li>Consistent performance across different integer types</li>
+                <li>Benchmarks provide actionable optimization insights</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🚀 Conclusion</h2>
+        
+        <p>This comprehensive benchmark testing strategy for <code>Integer.hpp</code> provides:</p>
+        
+        <ul>
+            <li><strong>Complete Coverage:</strong> All Integer class methods with multiple scenarios</li>
+            <li><strong>Statistical Rigor:</strong> Proper timing methodology with warm-up and multiple iterations</li>
+            <li><strong>Framework Integration:</strong> Seamless integration with existing test infrastructure</li>
+            <li><strong>Actionable Insights:</strong> Performance metrics that guide optimization efforts</li>
+            <li><strong>Regression Protection:</strong> Automated detection of performance degradation</li>
+        </ul>
+        
+        <p>The benchmark suite will validate that your cryptographic integer operations meet performance requirements and identify optimization opportunities for enhanced cryptographic throughput.</p>
+        
+        <div class="highlight">
+            <strong>Next Steps:</strong> Implement the framework additions, create the benchmark test files, and integrate into your CI/CD pipeline for continuous performance monitoring.
+        </div>
+    </div>
+
+</body>
+</html>

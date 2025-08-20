@@ -5,7 +5,7 @@
 
 namespace CryptoGL
 {
-    template <class DataType>
+    template <typename DataType>
     class File
     {
     public:

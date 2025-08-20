@@ -78,6 +78,9 @@
 #include "unit/StringMethodsTest.hpp"
 #include "unit/VectorMethodsTest.hpp"
 #include "unit/ArrayTest.hpp"
+#include "unit/IntegerTest.hpp"
+
+//#include "security/IntegerSecurityTest.hpp"
 
 
 int main()
