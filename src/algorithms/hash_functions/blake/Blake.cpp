@@ -36,8 +36,9 @@ BytesVector Blake256::pad(BytesVector message) const
     {
         message.push_back(0x80);
 
-        const uint8_t zeros = (120 - (message.size() & 0x3F)) & 0x3F;
-        message.insert(message.end(), zeros, 0);
+        const uint8_t zeros_to_add = (120 - (message.size() & 0x3F)) & 0x3F;
+        const BytesVector zeros(zeros_to_add, 0);
+        message.extend(zeros);
         message.back() = 0x01;
     }
 
@@ -59,8 +60,9 @@ BytesVector Blake512::pad(BytesVector message) const
     {
         message.push_back(0x80);
 
-        const uint16_t zeros = (240 - (message.size() & 0x7F)) & 0x7F;
-        message.insert(message.end(), zeros, 0);
+        const uint16_t zeros_to_add = (240 - (message.size() & 0x7F)) & 0x7F;
+        const BytesVector zeros(zeros_to_add, 0);
+        message.extend(zeros);
         message.back() = 0x01;
     }
 

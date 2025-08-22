@@ -73,7 +73,8 @@ void Keccak::applyAbsorbingPhase(const BytesVector &padded_message)
     for (uint64_t i = 0; i < pad_len; i += block_size)
     {
         BytesVector block = padded_message.range(i, i + block_size);
-        block.insert(block.end(), capacity_bytes, 0);
+        const BytesVector zeros(capacity_bytes, 0);
+        block.extend(zeros);
 
         const UInt64Vector Pi = LittleEndian64::toIntegersVector(block);
         for (uint8_t x = 0; x < 5; ++x)

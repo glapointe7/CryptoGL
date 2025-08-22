@@ -9,7 +9,7 @@ BytesVector Padding::zeros(BytesVector data, const uint8_t block_size)
     if (remaining != 0)
     {
         data.reserve(data_size + block_size - remaining);
-        data.insert(data.end(), block_size - remaining, 0);
+        data.extend(BytesVector(block_size - remaining, 0));
     }
 
     return data;
@@ -36,7 +36,8 @@ BytesVector Padding::_10Star(BytesVector data, const uint8_t block_size)
     const uint8_t bytes_to_append = block_size - ((data_len + 1) % block_size);
     if (bytes_to_append != block_size)
     {
-        data.insert(data.end(), bytes_to_append, 0);
+        const BytesVector zeros(bytes_to_append, 0);
+        data.extend(zeros);
     }
 
     return data;
@@ -55,7 +56,8 @@ BytesVector Padding::_10Star1(BytesVector data, const uint8_t block_size,
     else
     {
         data.push_back(first_byte);
-        data.insert(data.end(), block_size - ((data_len + 1) % block_size), 0);
+        const BytesVector zeros(block_size - ((data_len + 1) % block_size), 0);
+        data.extend(zeros);
         data.back() = last_byte;
     }
 

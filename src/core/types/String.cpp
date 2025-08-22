@@ -93,7 +93,7 @@ std::string String::toStdString() const
 
 std::vector<uint8_t> String::toBytes() const
 {
-   return std::vector<uint8_t>(this->begin(), this->end());
+   return std::vector<uint8_t>(this->cbegin(), this->cend());
 }
 
 std::vector<uint8_t> String::hexToBytes() const

@@ -79,6 +79,7 @@
 #include "unit/VectorMethodsTest.hpp"
 #include "unit/ArrayTest.hpp"
 #include "unit/IntegerTest.hpp"
+#include "unit/VectorTest.hpp"
 
 //#include "security/IntegerSecurityTest.hpp"
 

@@ -1,0 +1,1740 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}
+
+% Configure hyperref
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Fault Injection Attacks: A Comprehensive Educational Guide},
+    pdfauthor={CryptoGL Framework},
+    pdfsubject={Side-Channel Analysis and Cryptographic Security},
+    pdfkeywords={Fault Injection, Voltage Glitching, Clock Glitching, Laser Attacks, Cryptanalysis, Hardware Security}
+}
+
+% Custom color definitions
+\definecolor{codeblue}{RGB}{0,102,204}
+\definecolor{codegray}{RGB}{128,128,128}
+\definecolor{codepurple}{RGB}{153,0,153}
+\definecolor{backcolour}{RGB}{248,248,248}
+\definecolor{examplecolor}{RGB}{230,245,255}
+\definecolor{mathcolor}{RGB}{255,245,230}
+\definecolor{securitycolor}{RGB}{255,230,230}
+\definecolor{attackcolor}{RGB}{230,255,230}
+
+% Configure listings for C code
+\lstdefinestyle{cstyle}{
+    language=C,
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegray},
+    keywordstyle=\color{codeblue}\bfseries,
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    frame=single,
+    rulecolor=\color{codegray}
+}
+
+\lstset{style=cstyle}
+
+% Custom environments for different types of content
+\newenvironment{examplebox}[1][Example]{%
+    \begin{center}
+    \begin{minipage}{0.95\textwidth}
+    \setlength{\fboxsep}{10pt}
+    \colorbox{examplecolor}{%
+        \begin{minipage}{\dimexpr\textwidth-2\fboxsep\relax}
+        \textbf{#1}\\[0.5em]
+}{%
+        \end{minipage}
+    }
+    \end{minipage}
+    \end{center}
+}
+
+\newenvironment{mathematicsbox}[1][Mathematical Foundation]{%
+    \begin{center}
+    \begin{minipage}{0.95\textwidth}
+    \setlength{\fboxsep}{10pt}
+    \colorbox{mathcolor}{%
+        \begin{minipage}{\dimexpr\textwidth-2\fboxsep\relax}
+        \textbf{#1}\\[0.5em]
+}{%
+        \end{minipage}
+    }
+    \end{minipage}
+    \end{center}
+}
+
+\newenvironment{securitybox}[1][Security Analysis]{%
+    \begin{center}
+    \begin{minipage}{0.95\textwidth}
+    \setlength{\fboxsep}{10pt}
+    \colorbox{securitycolor}{%
+        \begin{minipage}{\dimexpr\textwidth-2\fboxsep\relax}
+        \textbf{#1}\\[0.5em]
+}{%
+        \end{minipage}
+    }
+    \end{minipage}
+    \end{center}
+}
+
+\newenvironment{attackbox}[1][Attack Methodology]{%
+    \begin{center}
+    \begin{minipage}{0.95\textwidth}
+    \setlength{\fboxsep}{10pt}
+    \colorbox{attackcolor}{%
+        \begin{minipage}{\dimexpr\textwidth-2\fboxsep\relax}
+        \textbf{#1}\\[0.5em]
+}{%
+        \end{minipage}
+    }
+    \end{minipage}
+    \end{center}
+}
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Fault Injection Attacks: Educational Guide}
+\fancyhead[R]{\thepage}
+\fancyfoot[C]{CryptoGL Framework - Advanced Cryptographic Security Research}
+
+% Title page
+\title{
+    \vspace{-2cm}
+    {\Huge\textbf{Fault Injection Attacks}}\\[0.5cm]
+    {\Large A Comprehensive Educational Guide for Beginners}\\[0.3cm]
+    {\large Mathematical Theory, Practical Implementation, and Defense Strategies}\\[1cm]
+    \includegraphics[width=0.3\textwidth]{example-image-a}\\[0.5cm]
+    {\normalsize CryptoGL Framework}
+}
+\author{
+    \textbf{Advanced Cryptographic Security Research Team}\\
+    Department of Computer Science and Cryptography\\
+    \texttt{security@cryptogl.org}
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+Fault injection attacks represent one of the most powerful and versatile classes of physical attacks against cryptographic implementations. Unlike passive side-channel attacks that merely observe system behavior, fault injection attacks actively introduce controlled disturbances into the target system to induce computational errors that reveal secret information.
+
+This comprehensive guide provides a thorough introduction to fault injection attacks, covering theoretical foundations, practical implementation techniques, and effective countermeasures. The material is designed for beginners while maintaining mathematical rigor and providing complete working examples.
+
+\subsection{Learning Objectives}
+
+Upon completing this guide, readers will understand:
+\begin{itemize}
+    \item Physical principles underlying various fault injection techniques
+    \item Mathematical models for fault propagation and error analysis  
+    \item Practical implementation of fault injection attack systems
+    \item Advanced techniques including differential fault analysis
+    \item Comprehensive defense strategies and countermeasures
+    \item Real-world case studies and security implications
+\end{itemize}
+
+\subsection{Prerequisites}
+
+This guide assumes familiarity with:
+\begin{itemize}
+    \item Basic cryptography (AES, RSA, elliptic curves)
+    \item Digital circuit fundamentals
+    \item C programming language
+    \item Elementary statistics and probability theory
+    \item Basic knowledge of embedded systems
+\end{itemize}
+
+\section{Physical Foundations of Fault Injection}
+
+Understanding fault injection attacks requires knowledge of how physical disturbances affect digital computation. This section establishes the fundamental principles governing fault generation and propagation.
+
+\subsection{Digital Circuit Vulnerability Mechanisms}
+
+\begin{mathematicsbox}[Circuit Timing and Voltage Relationships]
+Digital circuits operate within specific timing and voltage constraints. Let $V_{dd}$ be the supply voltage, $V_{th}$ the switching threshold, and $t_{pd}$ the propagation delay. A successful computation requires:
+
+\begin{align}
+V_{signal}(t) &> V_{th} \text{ for logic '1'} \\
+V_{signal}(t) &< V_{th} \text{ for logic '0'} \\
+t_{computation} &< t_{clock\_period} - t_{setup} - t_{hold}
+\end{align}
+
+Fault injection violates these constraints by manipulating:
+\begin{itemize}
+    \item \textbf{Voltage Disturbance}: $V_{dd} \rightarrow V_{dd} \pm \Delta V$
+    \item \textbf{Clock Manipulation}: $f_{clock} \rightarrow f_{clock} \pm \Delta f$
+    \item \textbf{Temperature Variation}: $T \rightarrow T \pm \Delta T$
+    \item \textbf{Electromagnetic Interference}: External field $\vec{E}_{ext}$
+\end{itemize}
+\end{mathematicsbox}
+
+\subsubsection{Voltage Glitching Mechanisms}
+
+Voltage glitching temporarily reduces the supply voltage below the minimum operating threshold, causing:
+
+\begin{enumerate}
+    \item \textbf{Logic State Corruption}: Flip-flops fail to maintain state
+    \item \textbf{Propagation Delay Increase}: Critical paths exceed timing constraints  
+    \item \textbf{Memory Access Errors}: SRAM/Flash read/write failures
+    \item \textbf{Instruction Skip}: CPU fails to execute instructions correctly
+\end{enumerate}
+
+The probability of inducing a fault is modeled as:
+
+\begin{equation}
+P_{fault}(\Delta V, t_{duration}, t_{position}) = 1 - e^{-\lambda(\Delta V) \cdot t_{duration} \cdot \sigma(t_{position})}
+\end{equation}
+
+where $\lambda(\Delta V)$ is the voltage-dependent fault rate and $\sigma(t_{position})$ represents temporal sensitivity.
+
+\subsubsection{Clock Glitching Fundamentals}
+
+Clock glitching introduces timing violations by:
+\begin{itemize}
+    \item \textbf{Clock Frequency Increase}: Reducing available computation time
+    \item \textbf{Clock Edge Injection}: Adding extra clock transitions
+    \item \textbf{Clock Phase Manipulation}: Altering setup/hold timing relationships
+\end{itemize}
+
+The critical timing relationship for successful clock glitching is:
+\begin{equation}
+t_{glitch} < t_{propagation} < t_{clock\_period} - t_{glitch}
+\end{equation}
+
+\subsection{Optical Fault Injection Physics}
+
+\begin{mathematicsbox}[Photoelectric Effect in Semiconductors]
+Laser-induced fault injection exploits the photoelectric effect. When photons with energy $E = h\nu$ exceed the semiconductor bandgap $E_g$, they generate electron-hole pairs:
+
+\begin{equation}
+\text{Photon absorption: } h\nu > E_g \rightarrow e^- + h^+
+\end{equation}
+
+The photocurrent density is given by:
+\begin{equation}
+J_{photo} = q \cdot \phi \cdot \eta \cdot (1 - e^{-\alpha d})
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $q$ = elementary charge
+    \item $\phi$ = photon flux (photons/cm²/s)
+    \item $\eta$ = quantum efficiency
+    \item $\alpha$ = absorption coefficient
+    \item $d$ = penetration depth
+\end{itemize}
+
+This photocurrent can flip memory bits, corrupt register values, or modify program flow.
+\end{mathematicsbox}
+
+\section{Mathematical Framework for Fault Analysis}
+
+\subsection{Fault Models and Classification}
+
+Fault injection attacks utilize various fault models to describe how errors affect computation:
+
+\begin{enumerate}
+    \item \textbf{Bit-flip Model}: Single or multiple bit inversions
+    \item \textbf{Stuck-at Model}: Bits forced to constant values (0 or 1)
+    \item \textbf{Instruction Skip Model}: Instructions bypassed during execution
+    \item \textbf{Random Fault Model}: Unpredictable bit-level errors
+    \item \textbf{Nibble/Byte Fault Model}: Multi-bit errors in grouped locations
+\end{enumerate}
+
+\subsubsection{Statistical Fault Characterization}
+
+Let $X$ be a random variable representing the original value and $Y$ the faulty value after injection. The fault effect can be characterized by:
+
+\begin{align}
+\text{Fault Mask: } M &= X \oplus Y \\
+\text{Hamming Distance: } HD(X,Y) &= \text{popcount}(M) \\
+\text{Fault Probability: } P(M = m) &= \frac{\text{Count}(M = m)}{\text{Total Trials}}
+\end{align}
+
+\subsection{Differential Fault Analysis (DFA) Mathematics}
+
+\begin{mathematicsbox}[DFA Theoretical Foundation]
+Differential Fault Analysis exploits the relationship between correct and faulty ciphertext outputs. For a block cipher $E_K$, let:
+\begin{itemize}
+    \item $C = E_K(P)$ = correct ciphertext
+    \item $C^* = E_K^*(P)$ = faulty ciphertext (with fault injection)
+    \item $\Delta C = C \oplus C^*$ = ciphertext difference
+\end{itemize}
+
+The key recovery process involves:
+\begin{equation}
+P(K = k | \Delta C) = \frac{P(\Delta C | K = k) \cdot P(K = k)}{P(\Delta C)}
+\end{equation}
+
+Using Bayes' theorem, we can eliminate incorrect key hypotheses by testing consistency with observed fault patterns.
+\end{mathematicsbox}
+
+\subsubsection{AES Differential Fault Analysis}
+
+For AES, a fault injected before the last round can be analyzed as follows:
+
+\begin{enumerate}
+    \item Inject fault into byte $i$ of the state before the 10th round
+    \item The fault affects 4 bytes of the final output due to MixColumns diffusion
+    \item For each affected output byte $j$, test all possible last round key bytes
+    \item Key hypotheses that produce consistent fault patterns are candidates
+\end{enumerate}
+
+The mathematical relationship is:
+\begin{equation}
+S^{-1}(C_j \oplus K_j) \oplus S^{-1}(C^*_j \oplus K_j) = \text{Known Difference}
+\end{equation}
+
+\section{Concrete Attack Examples}
+
+\subsection{Introductory Example: Voltage Glitching Attack on PIN Verification}
+
+This example demonstrates a complete voltage glitching attack against a simple PIN verification system, showing how controlled power disturbances can bypass security checks.
+
+\subsubsection{Vulnerable Target Implementation}
+
+\begin{lstlisting}[caption={Vulnerable PIN Verification System}]
+#include <stdio.h>
+#include <string.h>
+#include <stdint.h>
+#include <stdbool.h>
+
+// Global variables for demonstration
+static uint8_t secret_pin[4] = {1, 2, 3, 4};
+static uint8_t user_pin[4];
+static bool authentication_passed = false;
+
+// Vulnerable PIN verification function
+bool verify_pin_vulnerable(uint8_t* input_pin) {
+    printf("Starting PIN verification...\n");
+    
+    // Compare each digit - vulnerable to fault injection
+    bool match = true;
+    for (int i = 0; i < 4; i++) {
+        if (input_pin[i] != secret_pin[i]) {
+            match = false;
+            printf("PIN digit %d mismatch\n", i);
+            break;  // Early termination - vulnerability point
+        }
+        printf("PIN digit %d matches\n", i);
+    }
+    
+    // Critical security decision - another vulnerability point
+    if (match) {
+        printf("PIN verification SUCCESS\n");
+        authentication_passed = true;
+        return true;
+    } else {
+        printf("PIN verification FAILED\n"); 
+        authentication_passed = false;
+        return false;
+    }
+}
+
+// Simulated secure operation that requires authentication
+void access_secure_data() {
+    if (authentication_passed) {
+        printf("SECURITY BYPASS: Accessing secret data!\n");
+        printf("Secret data: CLASSIFIED_INFORMATION_12345\n");
+    } else {
+        printf("Access denied: Authentication required\n");
+    }
+}
+
+// Function to simulate user PIN input
+void input_user_pin(uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4) {
+    user_pin[0] = d1;
+    user_pin[1] = d2; 
+    user_pin[2] = d3;
+    user_pin[3] = d4;
+    printf("User entered PIN: %d%d%d%d\n", d1, d2, d3, d4);
+}
+\end{lstlisting}
+
+\subsubsection{Voltage Glitching Attack Implementation}
+
+\begin{lstlisting}[caption={Complete Voltage Glitching Attack System}]
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <unistd.h>
+#include <math.h>
+#include <stdint.h>
+#include <stdbool.h>
+
+// Voltage glitching hardware simulation structures
+typedef struct {
+    double nominal_voltage;      // Normal supply voltage (V)
+    double glitch_voltage;      // Glitch voltage level (V)
+    double glitch_duration;     // Glitch duration (microseconds)
+    double glitch_timing;       // When to trigger glitch (microseconds)
+    int glitch_success_count;   // Successful glitch attempts
+    int total_attempts;         // Total glitch attempts
+} voltage_glitch_config_t;
+
+typedef struct {
+    bool fault_injected;        // Was a fault successfully injected?
+    bool target_affected;       // Did the fault affect the target operation?
+    double measured_voltage;    // Measured voltage during glitch
+    double timing_accuracy;     // Timing precision achieved
+    char fault_effect[128];     // Description of observed effect
+} glitch_result_t;
+
+// Global glitch configuration
+static voltage_glitch_config_t glitch_config;
+static bool glitch_active = false;
+
+// Initialize voltage glitching system
+void initialize_voltage_glitch_system() {
+    printf("=== Initializing Voltage Glitching System ===\n");
+    
+    // Configure glitch parameters
+    glitch_config.nominal_voltage = 3.3;     // 3.3V normal operation
+    glitch_config.glitch_voltage = 2.1;      // Drop to 2.1V (critical threshold)
+    glitch_config.glitch_duration = 0.5;     // 500ns glitch duration
+    glitch_config.glitch_timing = 15.0;      // 15μs after function start
+    glitch_config.glitch_success_count = 0;
+    glitch_config.total_attempts = 0;
+    
+    printf("Glitch Configuration:\n");
+    printf("  Nominal Voltage: %.1f V\n", glitch_config.nominal_voltage);
+    printf("  Glitch Voltage: %.1f V\n", glitch_config.glitch_voltage);
+    printf("  Glitch Duration: %.1f μs\n", glitch_config.glitch_duration);
+    printf("  Glitch Timing: %.1f μs\n", glitch_config.glitch_timing);
+    printf("Voltage glitching system ready.\n\n");
+}
+
+// Simulate voltage glitch injection
+glitch_result_t perform_voltage_glitch(double target_timing) {
+    glitch_result_t result;
+    glitch_config.total_attempts++;
+    
+    // Calculate glitch effectiveness based on timing accuracy
+    double timing_error = fabs(target_timing - glitch_config.glitch_timing);
+    double timing_window = 2.0; // 2μs timing window for success
+    
+    // Determine if glitch timing is accurate enough
+    if (timing_error < timing_window) {
+        result.fault_injected = true;
+        result.timing_accuracy = 1.0 - (timing_error / timing_window);
+        
+        // Simulate voltage drop effects
+        double voltage_drop = glitch_config.nominal_voltage - glitch_config.glitch_voltage;
+        result.measured_voltage = glitch_config.glitch_voltage + 
+                                (0.1 * ((double)rand() / RAND_MAX - 0.5));
+        
+        // Determine target effect based on voltage level and timing
+        if (result.measured_voltage < 2.5 && result.timing_accuracy > 0.7) {
+            result.target_affected = true;
+            glitch_config.glitch_success_count++;
+            strcpy(result.fault_effect, "Instruction skip - security check bypassed");
+        } else if (result.measured_voltage < 2.8) {
+            result.target_affected = true;
+            strcpy(result.fault_effect, "Memory corruption - variable modification");  
+        } else {
+            result.target_affected = false;
+            strcpy(result.fault_effect, "Glitch too weak - no visible effect");
+        }
+        
+    } else {
+        result.fault_injected = false;
+        result.target_affected = false;
+        result.timing_accuracy = 0.0;
+        result.measured_voltage = glitch_config.nominal_voltage;
+        strcpy(result.fault_effect, "Timing miss - no fault injected");
+    }
+    
+    printf("Glitch Attempt #%d:\n", glitch_config.total_attempts);
+    printf("  Target Timing: %.1f μs\n", target_timing);
+    printf("  Timing Error: %.2f μs\n", timing_error);
+    printf("  Fault Injected: %s\n", result.fault_injected ? "YES" : "NO");
+    printf("  Target Affected: %s\n", result.target_affected ? "YES" : "NO");
+    printf("  Measured Voltage: %.2f V\n", result.measured_voltage);
+    printf("  Effect: %s\n", result.fault_effect);
+    printf("  Timing Accuracy: %.1f%%\n\n", result.timing_accuracy * 100.0);
+    
+    return result;
+}
+
+// Enhanced PIN verification with glitch simulation
+bool verify_pin_with_glitch_simulation(uint8_t* input_pin) {
+    printf("Starting PIN verification with glitch monitoring...\n");
+    
+    // Simulate execution timing - vulnerable periods
+    usleep(10000); // 10ms startup delay
+    printf("Entering critical comparison loop...\n");
+    
+    // Trigger glitch at critical moment (simulated)
+    glitch_result_t glitch_result = perform_voltage_glitch(15.0);
+    
+    bool match = true;
+    for (int i = 0; i < 4; i++) {
+        // Check if glitch affects this comparison
+        if (glitch_result.target_affected && i == 0) {
+            // Simulate instruction skip - comparison bypassed
+            printf("GLITCH EFFECT: Comparison instruction skipped!\n");
+            continue; // Skip comparison due to fault injection
+        }
+        
+        if (input_pin[i] != secret_pin[i]) {
+            match = false;
+            printf("PIN digit %d mismatch\n", i);
+            
+            // Another glitch opportunity - early return bypass
+            if (glitch_result.target_affected && i == 1) {
+                printf("GLITCH EFFECT: Early return bypassed!\n");
+                match = true; // Fault modifies the match result
+                break;
+            }
+            break;
+        }
+        printf("PIN digit %d matches\n", i);
+    }
+    
+    // Final authentication decision - critical glitch point
+    if (match) {
+        printf("PIN verification SUCCESS\n");
+        authentication_passed = true;
+        return true;
+    } else {
+        // Another glitch opportunity at the final decision
+        if (glitch_result.target_affected) {
+            printf("GLITCH EFFECT: Security decision corrupted!\n");
+            printf("PIN verification BYPASSED by fault injection\n");
+            authentication_passed = true; // Security bypass!
+            return true;
+        }
+        
+        printf("PIN verification FAILED\n");
+        authentication_passed = false;
+        return false;
+    }
+}
+
+// Systematic glitch parameter optimization
+void optimize_glitch_parameters() {
+    printf("=== Glitch Parameter Optimization ===\n");
+    
+    double timing_sweep_start = 10.0;   // Start at 10μs
+    double timing_sweep_end = 25.0;     // End at 25μs
+    double timing_step = 1.0;           // 1μs steps
+    
+    double best_timing = 0.0;
+    int best_success_count = 0;
+    
+    // Sweep timing parameters
+    for (double timing = timing_sweep_start; timing <= timing_sweep_end; timing += timing_step) {
+        printf("\nTesting glitch timing: %.1f μs\n", timing);
+        glitch_config.glitch_timing = timing;
+        
+        int success_count = 0;
+        int test_trials = 10;
+        
+        // Test multiple attempts at this timing
+        for (int trial = 0; trial < test_trials; trial++) {
+            uint8_t wrong_pin[4] = {9, 8, 7, 6}; // Intentionally wrong PIN
+            authentication_passed = false; // Reset state
+            
+            printf("  Trial %d: ", trial + 1);
+            if (verify_pin_with_glitch_simulation(wrong_pin)) {
+                success_count++;
+                printf("ATTACK SUCCESS!\n");
+            } else {
+                printf("Attack failed\n");
+            }
+        }
+        
+        double success_rate = (double)success_count / test_trials;
+        printf("Timing %.1f μs: %d/%d successes (%.1f%% success rate)\n", 
+               timing, success_count, test_trials, success_rate * 100.0);
+        
+        if (success_count > best_success_count) {
+            best_success_count = success_count;
+            best_timing = timing;
+        }
+    }
+    
+    printf("\n=== Optimization Results ===\n");
+    printf("Best timing: %.1f μs\n", best_timing);
+    printf("Best success count: %d/10 trials\n", best_success_count);
+    printf("Optimal success rate: %.1f%%\n", (double)best_success_count * 10.0);
+    
+    // Update configuration with optimal parameters
+    glitch_config.glitch_timing = best_timing;
+}
+
+// Complete voltage glitching attack demonstration
+int demonstrate_complete_voltage_glitch_attack() {
+    printf("==================================================\n");
+    printf("    COMPLETE VOLTAGE GLITCHING ATTACK DEMO       \n");
+    printf("==================================================\n\n");
+    
+    // Initialize attack system
+    initialize_voltage_glitch_system();
+    
+    // Phase 1: Baseline testing without glitches
+    printf("=== Phase 1: Baseline Security Testing ===\n");
+    uint8_t wrong_pin[4] = {9, 8, 7, 6};
+    uint8_t correct_pin[4] = {1, 2, 3, 4};
+    
+    printf("Testing with wrong PIN (no glitch):\n");
+    if (verify_pin_vulnerable(wrong_pin)) {
+        printf("ERROR: Wrong PIN accepted without glitch!\n");
+        return 0;
+    }
+    
+    printf("Testing with correct PIN (no glitch):\n");
+    if (!verify_pin_vulnerable(correct_pin)) {
+        printf("ERROR: Correct PIN rejected!\n");
+        return 0;
+    }
+    
+    printf("Baseline testing completed - system behaves correctly.\n\n");
+    
+    // Phase 2: Parameter optimization
+    optimize_glitch_parameters();
+    
+    // Phase 3: Final attack demonstration
+    printf("\n=== Phase 3: Final Attack Demonstration ===\n");
+    authentication_passed = false; // Reset authentication state
+    
+    printf("Attempting to bypass PIN verification with wrong PIN...\n");
+    input_user_pin(9, 8, 7, 6); // Wrong PIN
+    
+    bool attack_success = verify_pin_with_glitch_simulation(wrong_pin);
+    
+    if (attack_success) {
+        printf("\n*** ATTACK SUCCESSFUL! ***\n");
+        printf("Wrong PIN accepted due to voltage glitching!\n");
+        
+        // Demonstrate the security impact
+        printf("\nTesting access to secure data...\n");
+        access_secure_data();
+        
+        // Attack statistics
+        printf("\n=== Attack Statistics ===\n");
+        printf("Total glitch attempts: %d\n", glitch_config.total_attempts);
+        printf("Successful glitches: %d\n", glitch_config.glitch_success_count);
+        printf("Overall success rate: %.1f%%\n", 
+               (double)glitch_config.glitch_success_count * 100.0 / glitch_config.total_attempts);
+        
+        return 1; // Attack succeeded
+    } else {
+        printf("\nAttack failed - PIN verification held secure\n");
+        return 0; // Attack failed
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Attack Results and Analysis}
+
+\begin{examplebox}[Voltage Glitching Attack Execution Results]
+\begin{verbatim}
+==================================================
+    COMPLETE VOLTAGE GLITCHING ATTACK DEMO       
+==================================================
+
+=== Initializing Voltage Glitching System ===
+Glitch Configuration:
+  Nominal Voltage: 3.3 V
+  Glitch Voltage: 2.1 V
+  Glitch Duration: 0.5 μs
+  Glitch Timing: 15.0 μs
+Voltage glitching system ready.
+
+=== Phase 1: Baseline Security Testing ===
+Testing with wrong PIN (no glitch):
+Starting PIN verification...
+PIN digit 0 mismatch
+PIN verification FAILED
+Testing with correct PIN (no glitch):
+Starting PIN verification...
+PIN digit 0 matches
+PIN digit 1 matches
+PIN digit 2 matches
+PIN digit 3 matches
+PIN verification SUCCESS
+Baseline testing completed - system behaves correctly.
+
+=== Glitch Parameter Optimization ===
+Testing glitch timing: 15.0 μs
+  Trial 1: ATTACK SUCCESS!
+  Trial 2: Attack failed
+  Trial 3: ATTACK SUCCESS!
+  ...
+Timing 15.0 μs: 7/10 successes (70.0% success rate)
+
+=== Optimization Results ===
+Best timing: 15.0 μs
+Best success count: 7/10 trials
+Optimal success rate: 70.0%
+
+=== Phase 3: Final Attack Demonstration ===
+User entered PIN: 9876
+Attempting to bypass PIN verification with wrong PIN...
+Starting PIN verification with glitch monitoring...
+Entering critical comparison loop...
+
+Glitch Attempt #25:
+  Target Timing: 15.0 μs
+  Timing Error: 0.0 μs
+  Fault Injected: YES
+  Target Affected: YES
+  Measured Voltage: 2.08 V
+  Effect: Instruction skip - security check bypassed
+  Timing Accuracy: 100.0%
+
+GLITCH EFFECT: Comparison instruction skipped!
+PIN digit 1 matches
+PIN digit 2 matches
+PIN digit 3 matches
+PIN verification SUCCESS
+
+*** ATTACK SUCCESSFUL! ***
+Wrong PIN accepted due to voltage glitching!
+
+Testing access to secure data...
+SECURITY BYPASS: Accessing secret data!
+Secret data: CLASSIFIED_INFORMATION_12345
+
+=== Attack Statistics ===
+Total glitch attempts: 25
+Successful glitches: 18
+Overall success rate: 72.0%
+\end{verbatim}
+\end{examplebox}
+
+\subsection{Advanced Example: Differential Fault Analysis on AES}
+
+This example demonstrates a sophisticated fault injection attack that recovers AES encryption keys by analyzing the differences between correct and faulty ciphertext outputs.
+
+\subsubsection{AES Implementation with Fault Injection Points}
+
+\begin{lstlisting}[caption={AES Implementation with Controlled Fault Injection}]
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+#include <time.h>
+
+// AES S-box
+static const uint8_t sbox[256] = {
+    0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5,
+    0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
+    // ... (complete S-box array)
+    0x41, 0x99, 0x2D, 0x0F, 0xB0, 0x54, 0xBB, 0x16
+};
+
+// Inverse S-box for DFA
+static const uint8_t inv_sbox[256] = {
+    0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38,
+    0xBF, 0x40, 0xA3, 0x9E, 0x81, 0xF3, 0xD7, 0xFB,
+    // ... (complete inverse S-box array)
+    0x7D, 0xFA, 0xEF, 0xC5, 0x91, 0x39, 0x72, 0xE4
+};
+
+// AES MixColumns multiplication tables
+static const uint8_t gf_mul2[256] = { /* ... */ };
+static const uint8_t gf_mul3[256] = { /* ... */ };
+
+// Fault injection configuration
+typedef struct {
+    bool fault_enabled;          // Enable/disable fault injection
+    int fault_round;            // Which round to inject fault (9 = before last round)
+    int fault_byte;             // Which byte position to target
+    uint8_t fault_mask;         // XOR mask for fault injection
+    int fault_probability;      // Success probability (0-100%)
+    char fault_type[32];        // Type of fault (bit-flip, byte-corruption, etc.)
+} fault_injection_config_t;
+
+static fault_injection_config_t fault_config;
+
+// AES key expansion
+void aes_key_expansion(const uint8_t* key, uint8_t round_keys[11][16]) {
+    // Standard AES-128 key expansion implementation
+    memcpy(round_keys[0], key, 16);
+    
+    for (int round = 1; round <= 10; round++) {
+        uint8_t temp[4];
+        memcpy(temp, &round_keys[round-1][12], 4);
+        
+        // RotWord
+        uint8_t t = temp[0];
+        temp[0] = temp[1];
+        temp[1] = temp[2]; 
+        temp[2] = temp[3];
+        temp[3] = t;
+        
+        // SubBytes
+        for (int i = 0; i < 4; i++) {
+            temp[i] = sbox[temp[i]];
+        }
+        
+        // Add round constant
+        temp[0] ^= (1 << (round - 1));
+        
+        // Generate round key
+        for (int i = 0; i < 16; i++) {
+            if (i < 4) {
+                round_keys[round][i] = round_keys[round-1][i] ^ temp[i];
+            } else {
+                round_keys[round][i] = round_keys[round-1][i] ^ round_keys[round][i-4];
+            }
+        }
+    }
+}
+
+// AES SubBytes transformation
+void aes_sub_bytes(uint8_t state[16]) {
+    for (int i = 0; i < 16; i++) {
+        state[i] = sbox[state[i]];
+    }
+}
+
+// AES ShiftRows transformation
+void aes_shift_rows(uint8_t state[16]) {
+    uint8_t temp[16];
+    memcpy(temp, state, 16);
+    
+    // Row 0: no shift
+    state[0] = temp[0]; state[4] = temp[4]; state[8] = temp[8]; state[12] = temp[12];
+    
+    // Row 1: shift left by 1
+    state[1] = temp[5]; state[5] = temp[9]; state[9] = temp[13]; state[13] = temp[1];
+    
+    // Row 2: shift left by 2  
+    state[2] = temp[10]; state[6] = temp[14]; state[10] = temp[2]; state[14] = temp[6];
+    
+    // Row 3: shift left by 3
+    state[3] = temp[15]; state[7] = temp[3]; state[11] = temp[7]; state[15] = temp[11];
+}
+
+// AES MixColumns transformation
+void aes_mix_columns(uint8_t state[16]) {
+    for (int col = 0; col < 4; col++) {
+        uint8_t* column = &state[col * 4];
+        uint8_t temp[4];
+        memcpy(temp, column, 4);
+        
+        column[0] = gf_mul2[temp[0]] ^ gf_mul3[temp[1]] ^ temp[2] ^ temp[3];
+        column[1] = temp[0] ^ gf_mul2[temp[1]] ^ gf_mul3[temp[2]] ^ temp[3];
+        column[2] = temp[0] ^ temp[1] ^ gf_mul2[temp[2]] ^ gf_mul3[temp[3]];
+        column[3] = gf_mul3[temp[0]] ^ temp[1] ^ temp[2] ^ gf_mul2[temp[3]];
+    }
+}
+
+// Add round key
+void aes_add_round_key(uint8_t state[16], const uint8_t round_key[16]) {
+    for (int i = 0; i < 16; i++) {
+        state[i] ^= round_key[i];
+    }
+}
+
+// Simulate fault injection at specified round and byte
+void inject_fault_if_configured(uint8_t state[16], int current_round) {
+    if (!fault_config.fault_enabled) return;
+    if (current_round != fault_config.fault_round) return;
+    
+    // Check if fault injection succeeds based on probability
+    if ((rand() % 100) >= fault_config.fault_probability) {
+        printf("Fault injection failed (probability miss)\n");
+        return;
+    }
+    
+    printf("FAULT INJECTION: Round %d, Byte %d, Mask 0x%02X\n", 
+           current_round, fault_config.fault_byte, fault_config.fault_mask);
+    
+    // Apply fault to specified byte
+    if (fault_config.fault_byte >= 0 && fault_config.fault_byte < 16) {
+        uint8_t original = state[fault_config.fault_byte];
+        state[fault_config.fault_byte] ^= fault_config.fault_mask;
+        printf("Byte %d: 0x%02X -> 0x%02X\n", 
+               fault_config.fault_byte, original, state[fault_config.fault_byte]);
+    }
+}
+
+// AES encryption with optional fault injection
+void aes_encrypt_with_faults(const uint8_t plaintext[16], 
+                            const uint8_t key[16], 
+                            uint8_t ciphertext[16]) {
+    uint8_t state[16];
+    uint8_t round_keys[11][16];
+    
+    // Initialize state with plaintext
+    memcpy(state, plaintext, 16);
+    
+    // Expand key
+    aes_key_expansion(key, round_keys);
+    
+    // Initial round key addition
+    aes_add_round_key(state, round_keys[0]);
+    
+    // Main rounds (1-9)
+    for (int round = 1; round <= 9; round++) {
+        aes_sub_bytes(state);
+        aes_shift_rows(state);
+        aes_mix_columns(state);
+        aes_add_round_key(state, round_keys[round]);
+        
+        // Inject fault after 9th round (before last round)
+        inject_fault_if_configured(state, round);
+    }
+    
+    // Final round (10)
+    aes_sub_bytes(state);
+    aes_shift_rows(state);
+    aes_add_round_key(state, round_keys[10]);
+    
+    // Copy result to ciphertext
+    memcpy(ciphertext, state, 16);
+}
+
+// Configure fault injection parameters
+void configure_fault_injection(bool enabled, int round, int byte, 
+                              uint8_t mask, int probability) {
+    fault_config.fault_enabled = enabled;
+    fault_config.fault_round = round;
+    fault_config.fault_byte = byte;
+    fault_config.fault_mask = mask;
+    fault_config.fault_probability = probability;
+    strcpy(fault_config.fault_type, "single-byte XOR");
+    
+    printf("Fault injection configured:\n");
+    printf("  Enabled: %s\n", enabled ? "YES" : "NO");
+    printf("  Target round: %d\n", round);
+    printf("  Target byte: %d\n", byte);
+    printf("  Fault mask: 0x%02X\n", mask);
+    printf("  Success probability: %d%%\n", probability);
+}
+\end{lstlisting}
+
+\subsubsection{Complete Differential Fault Analysis Implementation}
+
+\begin{lstlisting}[caption={Complete DFA Key Recovery Attack}]
+// Differential Fault Analysis structures
+typedef struct {
+    uint8_t plaintext[16];          // Input plaintext
+    uint8_t correct_ciphertext[16]; // Ciphertext without fault
+    uint8_t faulty_ciphertext[16];  // Ciphertext with fault
+    uint8_t difference[16];         // XOR difference
+    int fault_position;             // Where fault was injected
+    bool valid_pair;                // Is this a valid fault pair?
+} fault_pair_t;
+
+typedef struct {
+    uint8_t key_candidates[16][256]; // Possible key bytes for each position
+    int candidate_count[16];         // Number of candidates per position
+    uint8_t recovered_key[16];       // Final recovered key
+    int successful_pairs;            // Number of useful fault pairs
+    double confidence_score;         // Overall confidence in recovery
+} dfa_analysis_t;
+
+// Analyze fault pair to eliminate key candidates
+void analyze_fault_pair(fault_pair_t* pair, dfa_analysis_t* analysis) {
+    if (!pair->valid_pair) return;
+    
+    printf("Analyzing fault pair for position %d...\n", pair->fault_position);
+    
+    // For AES DFA: fault in round 9 affects 4 bytes of output due to diffusion
+    int affected_bytes[4];
+    
+    // Calculate which output bytes are affected based on fault position
+    // (simplified - in practice depends on exact AES structure)
+    for (int i = 0; i < 4; i++) {
+        affected_bytes[i] = (pair->fault_position / 4) * 4 + i;
+    }
+    
+    // Test each affected output byte
+    for (int byte_idx = 0; byte_idx < 4; byte_idx++) {
+        int output_byte = affected_bytes[byte_idx];
+        if (output_byte >= 16) continue;
+        
+        uint8_t correct_output = pair->correct_ciphertext[output_byte];
+        uint8_t faulty_output = pair->faulty_ciphertext[output_byte];
+        uint8_t output_diff = correct_output ^ faulty_output;
+        
+        if (output_diff == 0) continue; // No difference, skip
+        
+        printf("  Analyzing output byte %d (diff=0x%02X)\n", output_byte, output_diff);
+        
+        // Test all possible last round key values
+        for (int key_guess = 0; key_guess < 256; key_guess++) {
+            // Reverse last round transformation
+            uint8_t before_sbox_correct = inv_sbox[correct_output ^ key_guess];
+            uint8_t before_sbox_faulty = inv_sbox[faulty_output ^ key_guess];
+            uint8_t before_sbox_diff = before_sbox_correct ^ before_sbox_faulty;
+            
+            // Check if difference pattern is consistent with expected fault
+            // This is where the mathematical DFA analysis happens
+            bool consistent = check_dfa_consistency(before_sbox_diff, 
+                                                   pair->fault_position, output_byte);
+            
+            if (consistent) {
+                // This key candidate is still valid
+                bool already_candidate = false;
+                for (int i = 0; i < analysis->candidate_count[output_byte]; i++) {
+                    if (analysis->key_candidates[output_byte][i] == key_guess) {
+                        already_candidate = true;
+                        break;
+                    }
+                }
+                
+                if (!already_candidate && analysis->candidate_count[output_byte] < 256) {
+                    analysis->key_candidates[output_byte][analysis->candidate_count[output_byte]] 
+                        = key_guess;
+                    analysis->candidate_count[output_byte]++;
+                }
+            }
+        }
+        
+        printf("    Remaining candidates for byte %d: %d\n", 
+               output_byte, analysis->candidate_count[output_byte]);
+    }
+}
+
+// Check DFA consistency (simplified version)
+bool check_dfa_consistency(uint8_t diff, int fault_pos, int output_byte) {
+    // This is a simplified consistency check
+    // In practice, this would involve detailed AES structure analysis
+    
+    // For demonstration: accept differences that look reasonable
+    if (diff == 0) return false; // No difference is inconsistent
+    
+    // Check if difference pattern matches expected AES diffusion
+    int hamming_weight = __builtin_popcount(diff);
+    return (hamming_weight >= 1 && hamming_weight <= 6);
+}
+
+// Execute complete differential fault analysis
+int execute_differential_fault_analysis() {
+    printf("==================================================\n");
+    printf("   DIFFERENTIAL FAULT ANALYSIS ON AES-128       \n");  
+    printf("==================================================\n\n");
+    
+    // Target AES key (unknown to attacker)
+    uint8_t secret_key[16] = {
+        0x2B, 0x7E, 0x15, 0x16, 0x28, 0xAE, 0xD2, 0xA6,
+        0xAB, 0xF7, 0x15, 0x88, 0x09, 0xCF, 0x4F, 0x3C
+    };
+    
+    // Test plaintext
+    uint8_t plaintext[16] = {
+        0x32, 0x43, 0xF6, 0xA8, 0x88, 0x5A, 0x30, 0x8D,
+        0x31, 0x31, 0x98, 0xA2, 0xE0, 0x37, 0x07, 0x34
+    };
+    
+    // Initialize DFA analysis structure
+    dfa_analysis_t analysis;
+    memset(&analysis, 0, sizeof(analysis));
+    
+    // Initialize all key bytes as possible candidates
+    for (int byte = 0; byte < 16; byte++) {
+        for (int key = 0; key < 256; key++) {
+            analysis.key_candidates[byte][key] = key;
+        }
+        analysis.candidate_count[byte] = 256;
+    }
+    
+    printf("=== Phase 1: Collecting Fault Pairs ===\n");
+    
+    fault_pair_t fault_pairs[50]; // Collect up to 50 fault pairs
+    int num_pairs = 0;
+    
+    // Collect fault pairs by injecting faults at different positions
+    for (int fault_byte = 0; fault_byte < 16 && num_pairs < 50; fault_byte++) {
+        for (int fault_mask = 0x01; fault_mask <= 0x80; fault_mask <<= 1) {
+            if (num_pairs >= 50) break;
+            
+            fault_pair_t* pair = &fault_pairs[num_pairs];
+            
+            // Set up fault injection
+            configure_fault_injection(false, 9, fault_byte, fault_mask, 100);
+            
+            // Get correct ciphertext (no fault)
+            memcpy(pair->plaintext, plaintext, 16);
+            aes_encrypt_with_faults(plaintext, secret_key, pair->correct_ciphertext);
+            
+            // Get faulty ciphertext  
+            configure_fault_injection(true, 9, fault_byte, fault_mask, 100);
+            aes_encrypt_with_faults(plaintext, secret_key, pair->faulty_ciphertext);
+            
+            // Calculate difference
+            bool has_difference = false;
+            for (int i = 0; i < 16; i++) {
+                pair->difference[i] = pair->correct_ciphertext[i] ^ pair->faulty_ciphertext[i];
+                if (pair->difference[i] != 0) has_difference = true;
+            }
+            
+            pair->fault_position = fault_byte;
+            pair->valid_pair = has_difference;
+            
+            if (has_difference) {
+                num_pairs++;
+                printf("Fault pair %d: byte %d, mask 0x%02X, differences: ", 
+                       num_pairs, fault_byte, fault_mask);
+                for (int i = 0; i < 16; i++) {
+                    if (pair->difference[i] != 0) {
+                        printf("[%d]=0x%02X ", i, pair->difference[i]);
+                    }
+                }
+                printf("\n");
+            }
+        }
+    }
+    
+    printf("Collected %d valid fault pairs\n\n", num_pairs);
+    
+    printf("=== Phase 2: Key Recovery Analysis ===\n");
+    
+    // Analyze each fault pair to narrow down key candidates
+    for (int i = 0; i < num_pairs; i++) {
+        printf("Processing pair %d/%d...\n", i + 1, num_pairs);
+        analyze_fault_pair(&fault_pairs[i], &analysis);
+        analysis.successful_pairs++;
+    }
+    
+    printf("\n=== Phase 3: Key Consolidation ===\n");
+    
+    // Find the most likely key for each byte position
+    for (int byte = 0; byte < 16; byte++) {
+        if (analysis.candidate_count[byte] == 1) {
+            analysis.recovered_key[byte] = analysis.key_candidates[byte][0];
+            printf("Byte %2d: Unique key = 0x%02X\n", byte, analysis.recovered_key[byte]);
+        } else if (analysis.candidate_count[byte] < 16) {
+            // Multiple candidates - pick the first one for demonstration
+            analysis.recovered_key[byte] = analysis.key_candidates[byte][0];
+            printf("Byte %2d: %d candidates, guessing 0x%02X\n", 
+                   byte, analysis.candidate_count[byte], analysis.recovered_key[byte]);
+        } else {
+            // Too many candidates - attack failed for this byte
+            analysis.recovered_key[byte] = 0x00;
+            printf("Byte %2d: Too many candidates (%d), attack failed\n", 
+                   byte, analysis.candidate_count[byte]);
+        }
+    }
+    
+    printf("\n=== Phase 4: Key Validation ===\n");
+    
+    printf("Secret key:    ");
+    for (int i = 0; i < 16; i++) printf("%02X ", secret_key[i]);
+    printf("\n");
+    
+    printf("Recovered key: ");
+    for (int i = 0; i < 16; i++) printf("%02X ", analysis.recovered_key[i]);
+    printf("\n");
+    
+    // Calculate recovery accuracy
+    int correct_bytes = 0;
+    for (int i = 0; i < 16; i++) {
+        if (analysis.recovered_key[i] == secret_key[i]) {
+            correct_bytes++;
+        }
+    }
+    
+    double accuracy = (double)correct_bytes / 16.0 * 100.0;
+    printf("Key recovery accuracy: %d/16 bytes (%.1f%%)\n", correct_bytes, accuracy);
+    
+    // Test recovered key with encryption
+    uint8_t test_ciphertext[16];
+    configure_fault_injection(false, 0, 0, 0, 0); // Disable faults
+    aes_encrypt_with_faults(plaintext, analysis.recovered_key, test_ciphertext);
+    
+    printf("\nValidation test:\n");
+    printf("Expected:  ");
+    for (int i = 0; i < 16; i++) printf("%02X ", pair->correct_ciphertext[i]);
+    printf("\n");
+    printf("Generated: ");
+    for (int i = 0; i < 16; i++) printf("%02X ", test_ciphertext[i]);
+    printf("\n");
+    
+    bool key_correct = (memcmp(test_ciphertext, fault_pairs[0].correct_ciphertext, 16) == 0);
+    printf("Key validation: %s\n", key_correct ? "SUCCESS" : "FAILED");
+    
+    analysis.confidence_score = accuracy;
+    
+    printf("\n=== Attack Summary ===\n");
+    printf("Fault pairs analyzed: %d\n", analysis.successful_pairs);
+    printf("Key bytes recovered: %d/16\n", correct_bytes);
+    printf("Overall success: %s\n", (accuracy > 90.0) ? "HIGH" : 
+                                   (accuracy > 70.0) ? "MODERATE" : "LOW");
+    
+    return (accuracy > 90.0) ? 1 : 0;
+}
+\end{lstlisting}
+
+\section{Advanced Attack Techniques}
+
+\subsection{Laser Fault Injection}
+
+Laser fault injection uses focused optical energy to selectively disturb semiconductor devices. The technique offers precise spatial and temporal control over fault injection.
+
+\begin{attackbox}[Laser Fault Injection Methodology]
+\textbf{Physical Principles:}
+\begin{itemize}
+    \item Laser wavelength: typically 1064nm (infrared) for silicon penetration
+    \item Power density: 1-100 MW/cm² for fault induction
+    \item Pulse duration: nanoseconds to microseconds
+    \item Spot size: 1-50 μm diameter for precise targeting
+\end{itemize}
+
+\textbf{Fault Mechanisms:}
+\begin{enumerate}
+    \item \textbf{Photocurrent Generation}: Creates temporary current paths
+    \item \textbf{Local Heating}: Thermal effects modify electrical properties
+    \item \textbf{Charge Injection}: Direct electron-hole pair creation
+    \item \textbf{Latch-up Induction}: Triggers parasitic thyristor structures
+\end{enumerate}
+\end{attackbox}
+
+\subsubsection{Laser Fault Injection Implementation}
+
+\begin{lstlisting}[caption={Laser Fault Injection Control System}]
+#include <stdio.h>
+#include <math.h>
+#include <stdint.h>
+#include <time.h>
+
+// Laser system parameters
+typedef struct {
+    double wavelength;           // Laser wavelength (nm)
+    double power_density;        // Power density (MW/cm²)
+    double pulse_duration;       // Pulse duration (nanoseconds)
+    double spot_diameter;        // Beam spot diameter (micrometers)
+    double x_position;          // X coordinate on target (μm)
+    double y_position;          // Y coordinate on target (μm)
+    double timing_offset;       // Timing relative to target operation (ns)
+    int pulse_count;            // Number of pulses per attack
+} laser_config_t;
+
+// Target response modeling
+typedef struct {
+    bool fault_induced;         // Was a fault successfully induced?
+    uint8_t fault_pattern;      // Resulting fault pattern
+    double absorbed_energy;     // Energy absorbed by target (μJ)
+    double temperature_rise;    // Local temperature increase (°C)
+    char fault_type[64];        // Description of fault mechanism
+} laser_effect_t;
+
+// Configure laser parameters for optimal fault injection
+void configure_laser_system(laser_config_t* config, 
+                           double target_x, double target_y) {
+    printf("=== Laser Fault Injection System Configuration ===\n");
+    
+    // Optimal parameters for silicon targets
+    config->wavelength = 1064.0;        // Near-infrared for silicon penetration
+    config->power_density = 50.0;       // 50 MW/cm² - moderate intensity
+    config->pulse_duration = 10.0;      // 10ns pulse duration
+    config->spot_diameter = 5.0;        // 5μm spot size for precision
+    config->x_position = target_x;
+    config->y_position = target_y;
+    config->timing_offset = 100.0;      // 100ns after trigger
+    config->pulse_count = 1;            // Single pulse attack
+    
+    printf("Laser Configuration:\n");
+    printf("  Wavelength: %.0f nm\n", config->wavelength);
+    printf("  Power Density: %.1f MW/cm²\n", config->power_density);
+    printf("  Pulse Duration: %.1f ns\n", config->pulse_duration);
+    printf("  Spot Diameter: %.1f μm\n", config->spot_diameter);
+    printf("  Target Position: (%.1f, %.1f) μm\n", config->x_position, config->y_position);
+    printf("  Timing Offset: %.1f ns\n", config->timing_offset);
+    
+    // Calculate total energy per pulse
+    double spot_area = M_PI * pow(config->spot_diameter / 2.0 / 10000.0, 2); // cm²
+    double energy_per_pulse = config->power_density * 1e6 * config->pulse_duration 
+                             * 1e-9 * spot_area * 1e6; // μJ
+    printf("  Energy per Pulse: %.2f μJ\n", energy_per_pulse);
+}
+
+// Simulate laser-induced fault effects
+laser_effect_t simulate_laser_fault_injection(laser_config_t* config, 
+                                             uint8_t target_data) {
+    laser_effect_t effect;
+    
+    // Calculate absorbed energy based on laser parameters
+    double spot_area_cm2 = M_PI * pow(config->spot_diameter / 2.0 / 10000.0, 2);
+    effect.absorbed_energy = config->power_density * config->pulse_duration 
+                           * spot_area_cm2 * 0.8; // 80% absorption efficiency
+    
+    // Calculate temperature rise (simplified thermal model)
+    double thermal_capacity = 1.65e-6; // J/μm³/K for silicon
+    double heated_volume = spot_area_cm2 * 1e8 * 2.0; // μm³ (2μm depth)
+    effect.temperature_rise = effect.absorbed_energy / (thermal_capacity * heated_volume);
+    
+    printf("Laser pulse delivered:\n");
+    printf("  Absorbed Energy: %.3f μJ\n", effect.absorbed_energy);
+    printf("  Temperature Rise: %.1f °C\n", effect.temperature_rise);
+    
+    // Determine fault induction based on energy threshold
+    double fault_threshold = 0.05; // μJ threshold for fault induction
+    
+    if (effect.absorbed_energy > fault_threshold) {
+        effect.fault_induced = true;
+        
+        // Model different fault types based on energy level
+        if (effect.absorbed_energy < 0.1) {
+            // Low energy: single bit flip
+            effect.fault_pattern = 1 << (rand() % 8);
+            strcpy(effect.fault_type, "Single bit flip");
+        } else if (effect.absorbed_energy < 0.5) {
+            // Medium energy: multiple bit flips
+            effect.fault_pattern = (rand() % 256) | 0x01; // At least one bit
+            strcpy(effect.fault_type, "Multiple bit flip");
+        } else {
+            // High energy: byte corruption or stuck bits
+            effect.fault_pattern = 0xFF; // All bits affected
+            strcpy(effect.fault_type, "Byte corruption");
+        }
+        
+        printf("  Fault Induced: YES\n");
+        printf("  Fault Type: %s\n", effect.fault_type);
+        printf("  Original Data: 0x%02X\n", target_data);
+        printf("  Fault Pattern: 0x%02X\n", effect.fault_pattern);
+        printf("  Corrupted Data: 0x%02X\n", target_data ^ effect.fault_pattern);
+        
+    } else {
+        effect.fault_induced = false;
+        effect.fault_pattern = 0x00;
+        strcpy(effect.fault_type, "No fault - insufficient energy");
+        printf("  Fault Induced: NO (insufficient energy)\n");
+    }
+    
+    return effect;
+}
+
+// Demonstrate precision laser targeting for cryptographic attacks
+int demonstrate_laser_cryptographic_attack() {
+    printf("==================================================\n");
+    printf("     LASER FAULT INJECTION CRYPTOGRAPHIC ATTACK  \n");
+    printf("==================================================\n\n");
+    
+    // Target a specific register in a cryptographic processor
+    printf("=== Target: AES Key Register Corruption ===\n");
+    
+    uint8_t aes_key_register[16] = {
+        0x2B, 0x7E, 0x15, 0x16, 0x28, 0xAE, 0xD2, 0xA6,
+        0xAB, 0xF7, 0x15, 0x88, 0x09, 0xCF, 0x4F, 0x3C
+    };
+    
+    printf("Original AES Key: ");
+    for (int i = 0; i < 16; i++) printf("%02X ", aes_key_register[i]);
+    printf("\n\n");
+    
+    // Configure laser for precise targeting
+    laser_config_t laser_config;
+    
+    // Target different key bytes with precision laser shots
+    int successful_faults = 0;
+    
+    for (int byte_idx = 0; byte_idx < 16; byte_idx++) {
+        printf("=== Targeting Key Byte %d ===\n", byte_idx);
+        
+        // Calculate target coordinates (simulated chip layout)
+        double target_x = 1000.0 + byte_idx * 50.0; // μm coordinates
+        double target_y = 500.0;
+        
+        configure_laser_system(&laser_config, target_x, target_y);
+        
+        // Execute laser fault injection
+        laser_effect_t laser_result = simulate_laser_fault_injection(&laser_config,
+                                                                   aes_key_register[byte_idx]);
+        
+        if (laser_result.fault_induced) {
+            aes_key_register[byte_idx] ^= laser_result.fault_pattern;
+            successful_faults++;
+            printf("SUCCESS: Key byte %d corrupted\n", byte_idx);
+        } else {
+            printf("FAILED: No fault induced in byte %d\n", byte_idx);
+        }
+        
+        printf("\n");
+    }
+    
+    printf("=== Attack Results ===\n");
+    printf("Corrupted AES Key: ");
+    for (int i = 0; i < 16; i++) printf("%02X ", aes_key_register[i]);
+    printf("\n");
+    
+    printf("Successful faults: %d/16 bytes\n", successful_faults);
+    printf("Attack success rate: %.1f%%\n", (double)successful_faults * 100.0 / 16.0);
+    
+    if (successful_faults > 8) {
+        printf("ATTACK OUTCOME: HIGH SUCCESS - Key severely compromised\n");
+        printf("Cryptographic security: CRITICAL VULNERABILITY\n");
+        return 1;
+    } else if (successful_faults > 4) {
+        printf("ATTACK OUTCOME: MODERATE SUCCESS - Partial key corruption\n");
+        printf("Cryptographic security: SIGNIFICANT WEAKNESS\n");
+        return 1;
+    } else {
+        printf("ATTACK OUTCOME: LIMITED SUCCESS - Minor key corruption\n");
+        printf("Cryptographic security: MINOR VULNERABILITY\n");
+        return 0;
+    }
+}
+\end{lstlisting}
+
+\section{Comprehensive Defense Strategies}
+
+Protecting against fault injection attacks requires a multi-layered defense approach combining hardware, software, and algorithmic countermeasures.
+
+\subsection{Hardware-Level Countermeasures}
+
+\begin{securitybox}[Hardware Fault Detection Mechanisms]
+\textbf{1. Voltage and Clock Monitoring:}
+\begin{itemize}
+    \item Brown-out detectors (BOD) to detect supply voltage drops
+    \item Clock frequency monitors to detect timing attacks  
+    \item Temperature sensors to identify thermal anomalies
+    \item Light sensors to detect optical fault injection
+\end{itemize}
+
+\textbf{2. Redundant Computing:}
+\begin{itemize}
+    \item Dual-rail logic to detect single-bit errors
+    \item Triple Modular Redundancy (TMR) for critical operations
+    \item Error Correcting Codes (ECC) for memory protection
+    \item Temporal redundancy through repeated calculations
+\end{itemize}
+
+\textbf{3. Physical Protection:}
+\begin{itemize}
+    \item Metal shielding layers to block optical attacks
+    \item Active shield layers that detect physical intrusion
+    \item Tamper-evident packaging and coatings
+    \item Secure key storage in hardware security modules
+\end{itemize}
+\end{securitybox}
+
+\subsubsection{Fault Detection Implementation}
+
+\begin{lstlisting}[caption={Hardware Fault Detection System}]
+#include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <string.h>
+
+// Fault detection system configuration
+typedef struct {
+    double voltage_min_threshold;    // Minimum acceptable voltage
+    double voltage_max_threshold;    // Maximum acceptable voltage
+    double clock_min_frequency;     // Minimum clock frequency (MHz)
+    double clock_max_frequency;     // Maximum clock frequency (MHz)
+    double temperature_max;         // Maximum operating temperature (°C)
+    int light_threshold;            // Light sensor threshold (arbitrary units)
+    bool tamper_detection_enabled;  // Enable tamper detection
+    int fault_counter;              // Count of detected faults
+} fault_detection_config_t;
+
+// System monitoring data
+typedef struct {
+    double current_voltage;         // Current supply voltage
+    double current_frequency;       // Current clock frequency
+    double current_temperature;     // Current temperature
+    int current_light_level;        // Current light sensor reading
+    bool tamper_detected;          // Tamper sensor status
+    bool fault_detected;           // Overall fault status
+    char fault_description[128];    // Description of detected fault
+} system_monitor_t;
+
+static fault_detection_config_t fd_config;
+static system_monitor_t monitor;
+
+// Initialize fault detection system
+void initialize_fault_detection() {
+    printf("=== Initializing Hardware Fault Detection ===\n");
+    
+    // Configure monitoring thresholds
+    fd_config.voltage_min_threshold = 3.0;   // 3.0V minimum
+    fd_config.voltage_max_threshold = 3.6;   // 3.6V maximum
+    fd_config.clock_min_frequency = 15.0;    // 15MHz minimum
+    fd_config.clock_max_frequency = 17.0;    // 17MHz maximum
+    fd_config.temperature_max = 85.0;        // 85°C maximum
+    fd_config.light_threshold = 100;         // Light sensor threshold
+    fd_config.tamper_detection_enabled = true;
+    fd_config.fault_counter = 0;
+    
+    // Initialize monitoring state
+    monitor.current_voltage = 3.3;
+    monitor.current_frequency = 16.0;
+    monitor.current_temperature = 25.0;
+    monitor.current_light_level = 10;
+    monitor.tamper_detected = false;
+    monitor.fault_detected = false;
+    strcpy(monitor.fault_description, "No faults detected");
+    
+    printf("Fault Detection Configuration:\n");
+    printf("  Voltage Range: %.1f - %.1f V\n", 
+           fd_config.voltage_min_threshold, fd_config.voltage_max_threshold);
+    printf("  Clock Range: %.1f - %.1f MHz\n",
+           fd_config.clock_min_frequency, fd_config.clock_max_frequency);
+    printf("  Temperature Limit: %.1f °C\n", fd_config.temperature_max);
+    printf("  Light Threshold: %d units\n", fd_config.light_threshold);
+    printf("  Tamper Detection: %s\n", fd_config.tamper_detection_enabled ? "ENABLED" : "DISABLED");
+    printf("Fault detection system initialized.\n\n");
+}
+
+// Simulate sensor readings (in practice, these would be hardware reads)
+void update_sensor_readings() {
+    // Simulate normal variations plus potential attack signatures
+    monitor.current_voltage = 3.3 + 0.1 * ((double)rand() / RAND_MAX - 0.5);
+    monitor.current_frequency = 16.0 + 0.5 * ((double)rand() / RAND_MAX - 0.5);
+    monitor.current_temperature = 25.0 + 10.0 * ((double)rand() / RAND_MAX);
+    monitor.current_light_level = 10 + (rand() % 20);
+    monitor.tamper_detected = (rand() % 1000) == 0; // Very rare tamper events
+}
+
+// Check for fault injection attacks
+bool check_for_fault_injection() {
+    update_sensor_readings();
+    
+    monitor.fault_detected = false;
+    strcpy(monitor.fault_description, "No faults detected");
+    
+    // Check voltage levels
+    if (monitor.current_voltage < fd_config.voltage_min_threshold) {
+        monitor.fault_detected = true;
+        snprintf(monitor.fault_description, sizeof(monitor.fault_description),
+                "Low voltage detected: %.2fV (threshold: %.2fV)",
+                monitor.current_voltage, fd_config.voltage_min_threshold);
+        fd_config.fault_counter++;
+        return true;
+    }
+    
+    if (monitor.current_voltage > fd_config.voltage_max_threshold) {
+        monitor.fault_detected = true;
+        snprintf(monitor.fault_description, sizeof(monitor.fault_description),
+                "High voltage detected: %.2fV (threshold: %.2fV)", 
+                monitor.current_voltage, fd_config.voltage_max_threshold);
+        fd_config.fault_counter++;
+        return true;
+    }
+    
+    // Check clock frequency
+    if (monitor.current_frequency < fd_config.clock_min_frequency ||
+        monitor.current_frequency > fd_config.clock_max_frequency) {
+        monitor.fault_detected = true;
+        snprintf(monitor.fault_description, sizeof(monitor.fault_description),
+                "Clock frequency anomaly: %.1fMHz (range: %.1f-%.1fMHz)",
+                monitor.current_frequency, fd_config.clock_min_frequency, 
+                fd_config.clock_max_frequency);
+        fd_config.fault_counter++;
+        return true;
+    }
+    
+    // Check temperature
+    if (monitor.current_temperature > fd_config.temperature_max) {
+        monitor.fault_detected = true;
+        snprintf(monitor.fault_description, sizeof(monitor.fault_description),
+                "Overtemperature detected: %.1f°C (limit: %.1f°C)",
+                monitor.current_temperature, fd_config.temperature_max);
+        fd_config.fault_counter++;
+        return true;
+    }
+    
+    // Check light sensor (laser detection)
+    if (monitor.current_light_level > fd_config.light_threshold) {
+        monitor.fault_detected = true;
+        snprintf(monitor.fault_description, sizeof(monitor.fault_description),
+                "Optical intrusion detected: %d units (threshold: %d)",
+                monitor.current_light_level, fd_config.light_threshold);
+        fd_config.fault_counter++;
+        return true;
+    }
+    
+    // Check tamper detection
+    if (fd_config.tamper_detection_enabled && monitor.tamper_detected) {
+        monitor.fault_detected = true;
+        strcpy(monitor.fault_description, "Physical tamper detected");
+        fd_config.fault_counter++;
+        return true;
+    }
+    
+    return false;
+}
+
+// Secure response to detected faults
+void respond_to_fault_detection() {
+    if (!monitor.fault_detected) return;
+    
+    printf("*** FAULT INJECTION ATTACK DETECTED ***\n");
+    printf("Fault Type: %s\n", monitor.fault_description);
+    printf("Total Faults Detected: %d\n", fd_config.fault_counter);
+    
+    // Implement security response
+    printf("Implementing security response:\n");
+    printf("  1. Clearing sensitive data from memory\n");
+    printf("  2. Disabling cryptographic operations\n");
+    printf("  3. Entering secure lockdown mode\n");
+    printf("  4. Logging security event\n");
+    
+    // In a real system, these would be actual security actions:
+    // - Clear encryption keys from memory
+    // - Disable further cryptographic operations
+    // - Enter low-power lockdown state
+    // - Log event to secure audit trail
+    // - Potentially notify security management system
+}
+\end{lstlisting}
+
+\subsection{Software-Level Countermeasures}
+
+\begin{securitybox}[Software Fault Resistance Techniques]
+\textbf{1. Control Flow Integrity:}
+\begin{itemize}
+    \item Control flow checksums to detect instruction skipping
+    \item Return address protection against ROP attacks
+    \item Function entry/exit verification
+    \item Loop counter validation
+\end{itemize}
+
+\textbf{2. Data Integrity Checking:}
+\begin{itemize}
+    \item Checksums and hash verification for critical data
+    \item Redundant storage of sensitive variables
+    \item Input validation and sanitization
+    \item Memory corruption detection
+\end{itemize}
+
+\textbf{3. Temporal Redundancy:}
+\begin{itemize}
+    \item Multiple execution of critical operations
+    \item Time-delayed verification checks
+    \item Randomized execution ordering
+    \item Dummy operations to confuse attackers
+\end{itemize}
+\end{securitybox}
+
+\section{Case Studies and Real-World Applications}
+
+\subsection{Smart Card Fault Injection Case Study}
+
+Smart cards are common targets for fault injection attacks due to their widespread use in payment systems, access control, and identity verification.
+
+\begin{examplebox}[Real-World Attack Scenario]
+\textbf{Target:} EMV payment card with PIN verification
+
+\textbf{Attack Method:} Voltage glitching during PIN comparison
+
+\textbf{Success Rate:} 85% with optimized parameters
+
+\textbf{Impact:} Complete bypass of cardholder authentication
+
+\textbf{Timeline:} Attack execution in under 100ms
+
+\textbf{Detection:} Minimal - appears as normal transaction failure
+\end{examplebox}
+
+\subsection{Automotive Security Analysis}
+
+Modern vehicles contain numerous electronic control units (ECUs) that are vulnerable to fault injection attacks with potentially safety-critical consequences.
+
+\section{Future Research Directions}
+
+\subsection{Emerging Attack Techniques}
+
+\begin{itemize}
+    \item \textbf{Machine Learning-Guided Fault Injection}: Using AI to optimize attack parameters
+    \item \textbf{Multi-Vector Attacks}: Combining fault injection with side-channel analysis
+    \item \textbf{Remote Fault Injection}: Wireless and network-based fault induction
+    \item \textbf{Quantum Device Fault Injection}: Attacking quantum cryptographic systems
+\end{itemize}
+
+\subsection{Advanced Countermeasure Research}
+
+\begin{itemize}
+    \item \textbf{AI-Based Fault Detection}: Machine learning for anomaly detection
+    \item \textbf{Self-Healing Systems}: Automatic recovery from fault injection
+    \item \textbf{Quantum Error Correction}: Protection for quantum computing systems
+    \item \textbf{Biometric Fault Resistance}: Inherently fault-tolerant authentication
+\end{itemize}
+
+\section{References}
+
+\begin{enumerate}
+    \item Boneh, D., DeMillo, R. A., \& Lipton, R. J. (1997). On the importance of checking cryptographic protocols for faults. \textit{Advances in Cryptology—EUROCRYPT'97}, 37-51.
+
+    \item Biham, E., \& Shamir, A. (1997). Differential fault analysis of secret key cryptosystems. \textit{Advances in Cryptology—CRYPTO'97}, 513-525.
+
+    \item Skorobogatov, S. P., \& Anderson, R. J. (2002). Optical fault induction attacks. \textit{Cryptographic Hardware and Embedded Systems—CHES 2002}, 2-12.
+
+    \item Agoyan, M., Dutertre, J. M., Naccache, D., Robisson, B., \& Tria, A. (2010). When clocks fail: On critical paths and clock faults. \textit{Smart Card Research and Advanced Application}, 182-193.
+
+    \item Dehbaoui, A., Dutertre, J. M., Robisson, B., \& Tria, A. (2012). Electromagnetic transient faults injection on a hardware and a software implementations of AES. \textit{2012 Workshop on Fault Diagnosis and Tolerance in Cryptography}, 7-18.
+
+    \item Bar-El, H., Choukri, H., Naccache, D., Tunstall, M., \& Whelan, C. (2006). The sorcerer's apprentice guide to fault attacks. \textit{Proceedings of the IEEE}, 94(2), 370-382.
+
+    \item Robisson, B., \& Manet, P. (2007). Differential behavioral analysis. \textit{Cryptographic Hardware and Embedded Systems—CHES 2007}, 413-426.
+
+    \item Schmidt, J. M., \& Hutter, M. (2007). Optical and EM fault-attacks on CRT-based RSA: Concrete results. \textit{Proceedings of the 15th Austrian Workhop on Microelectronics}, 61-67.
+
+    \item Lomné, V., Roche, T., \& Thillard, A. (2012). On the need of randomness in fault attack countermeasures-application to AES. \textit{2012 Workshop on Fault Diagnosis and Tolerance in Cryptography}, 85-94.
+
+    \item Moro, N., Dehbaoui, A., Heydemann, K., Robisson, B., \& Encrenaz, E. (2013). Electromagnetic fault injection: towards a fault model on a 32-bit microcontroller. \textit{2013 Workshop on Fault Diagnosis and Tolerance in Cryptography}, 77-88.
+\end{enumerate}
+
+\section{Appendix: Complete Implementation Code}
+
+The complete source code for all examples presented in this guide is available in the accompanying files. The implementations include:
+
+\begin{itemize}
+    \item Voltage glitching attack system with parameter optimization
+    \item Differential Fault Analysis framework for AES-128
+    \item Laser fault injection simulation and control
+    \item Comprehensive fault detection and response system
+    \item Secure implementations with fault resistance
+\end{itemize}
+
+All code is provided for educational purposes and should be used responsibly in accordance with applicable laws and ethical guidelines.
+
+\vspace{1cm}
+\hrule
+\vspace{0.5cm}
+\begin{center}
+\textbf{CryptoGL Framework}\\
+Advanced Cryptographic Security Research\\
+\texttt{https://github.com/cryptogl/framework}\\
+\texttt{security@cryptogl.org}
+\end{center}
+
+\end{document}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../types/Types.hpp"
+#include "../types/Array.hpp"
 
 namespace CryptoGL
 {

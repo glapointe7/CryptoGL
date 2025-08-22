@@ -57,7 +57,8 @@ namespace CryptoGL
          const BytesVector message_padded = Padding::zeros(message, InputBlockSize);
 
          const uint64_t message_padded_len = message_padded.size();
-         BytesVector output(message_padded_len);
+         BytesVector output;
+         output.reserve(message_padded_len); 
          for (uint64_t n = 0; n < message_padded_len; n += InputBlockSize)
          {
             const BytesVector input_block = message_padded.range(n, n + InputBlockSize);
@@ -97,7 +98,8 @@ namespace CryptoGL
          generateInverseSubkeys();
 
          const uint64_t message_len = message.size();
-         BytesVector output(message_len);
+         BytesVector output;
+         output.reserve(message_len);
          for (uint64_t n = 0; n < message_len; n += InputBlockSize)
          {
             const BytesVector input_block = message.range(n, n + InputBlockSize);

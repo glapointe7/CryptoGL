@@ -169,7 +169,7 @@ namespace CryptoGL
             const uint32_t key_length = my_key.length();
 
             ClassicalType toReturn(cipher_text.trimEnd().length());
-            const Vector<ClassicalType> cipher_numbers = cipher_text.split(' ');
+            const std::vector<ClassicalType> cipher_numbers = cipher_text.split(' ');
 
             uint32_t idx = 0;
             for (const auto &number : cipher_numbers)
