@@ -60,47 +60,47 @@ namespace StringTests {
     TEST(StringDefaultConstructorTest, StringTestBase)
     {
         String s;
-        compare(String("0"), String(uint64::toString(s.size())));
-        compare(String("1"), String(s.empty() ? "1" : "0"));
-        compare(String("4096"), String(uint64::toString(s.capacity())));
+        compare(0, s.size());
+        compare(true, s.empty());
+        compare(4096, s.capacity());
     }
     
     TEST(StringReserveConstructorTest, StringTestBase)
     {
         String s(100);
-        compare(String("0"), String(uint64::toString(s.size())));
-        compare(String("1"), String(s.empty() ? "1" : "0"));
-        compare(String("4096"), String(uint64::toString(s.capacity()))); // Always MAX_SECURE_LENGTH
+        compare(0, s.size());
+        compare(true, s.empty());
+        compare(4096, s.capacity()); // Always MAX_SECURE_LENGTH
     }
     
     TEST(StringCStringConstructorTest, StringTestBase)
     {
         const char* test_cstr = "Hello";
         String s(test_cstr);
-        compare(String("5"), String(uint64::toString(s.size())));
+        compare(5, s.size());
         compare(String("Hello"), s);
-        compare(String("0"), String(s.empty() ? "1" : "0"));
+        compare(false, s.empty());
     }
     
     TEST(StringStdStringConstructorTest, StringTestBase)
     {
         std::string std_str = "Hello World";
         String s(std_str);
-        compare(String("11"), String(uint64::toString(s.size())));
+        compare(11, s.size());
         compare(String("Hello World"), s);
     }
     
     TEST(StringFillConstructorTest, StringTestBase)
     {
         String s(5, 'A');
-        compare(String("5"), String(uint64::toString(s.size())));
+        compare(5, s.size());
         compare(String("AAAAA"), s);
     }
     
     TEST(StringInitializerListConstructorTest, StringTestBase)
     {
         String s{'H', 'e', 'l', 'l', 'o'};
-        compare(String("5"), String(uint64::toString(s.size())));
+        compare(5, s.size());
         compare(String("Hello"), s);
     }
     
@@ -108,7 +108,7 @@ namespace StringTests {
     {
         String original("Original");
         String copy(original);
-        compare(String("8"), String(uint64::toString(copy.size())));
+        compare(8, copy.size());
         compare(String("Original"), copy);
         compare(original, copy);
     }
@@ -117,7 +117,7 @@ namespace StringTests {
     {
         String original("Movable");
         String moved(std::move(original));
-        compare(String("7"), String(uint64::toString(moved.size())));
+        compare(7, moved.size());
         compare(String("Movable"), moved);
         // Original should be in valid but unspecified state
     }
@@ -131,7 +131,7 @@ namespace StringTests {
         String original("Source");
         String target;
         target = original;
-        compare(String("6"), String(uint64::toString(target.size())));
+        compare(6, target.size());
         compare(String("Source"), target);
         compare(original, target);
     }
@@ -141,7 +141,7 @@ namespace StringTests {
         String original("MoveSource");
         String target;
         target = std::move(original);
-        compare(String("10"), String(uint64::toString(target.size())));
+        compare(10, target.size());
         compare(String("MoveSource"), target);
     }
     
@@ -149,7 +149,7 @@ namespace StringTests {
     {
         String s;
         s = "Assigned";
-        compare(String("8"), String(uint64::toString(s.size())));
+        compare(8, s.size());
         compare(String("Assigned"), s);
     }
     
@@ -159,14 +159,14 @@ namespace StringTests {
     
     TEST(StringCapacityTest, StringTestBase)
     {
-        compare(String("4"), String(uint64::toString(test_string.size())));
-        compare(String("4"), String(uint64::toString(test_string.length())));
-        compare(String("4096"), String(uint64::toString(test_string.capacity())));
-        compare(String("4096"), String(uint64::toString(test_string.max_size())));
-        compare(String("0"), String(test_string.empty() ? "1" : "0"));
+        compare(4, test_string.size());
+        compare(4, test_string.length());
+        compare(4096, test_string.capacity());
+        compare(4096, test_string.max_size());
+        compare(false, test_string.empty());
         
-        compare(String("1"), String(empty_string.empty() ? "1" : "0"));
-        compare(String("0"), String(uint64::toString(empty_string.size())));
+        compare(true, empty_string.empty());
+        compare(0, empty_string.size());
     }
     
     // =============================================================================
@@ -191,7 +191,7 @@ namespace StringTests {
             c = s.at(2);
             compare(String("Z"), String(1, c));
         } catch (...) {
-            compare(String("1"), String("0")); // Should not throw for valid indices
+            compare(true, false); // Should not throw for valid indices
         }
     }
     
@@ -200,9 +200,9 @@ namespace StringTests {
         String s("AB");
         try {
             char c = s.at(5); // Out of bounds
-            compare(String("1"), String("0")); // Should not reach here
+            compare(true, false); // Should not reach here
         } catch (const std::out_of_range&) {
-            compare(String("1"), String("1")); // Expected exception
+            compare(true, true); // Expected exception
         }
     }
     
@@ -264,11 +264,11 @@ namespace StringTests {
         String s2("Equal");
         String s3("Different");
         
-        compare(String("1"), String(s1.equals(s2) ? "1" : "0"));
-        compare(String("0"), String(s1.equals(s3) ? "1" : "0"));
+        compare(true, s1.equals(s2));
+        compare(false, s1.equals(s3));
         
-        compare(String("1"), String(s1.equals("Equal") ? "1" : "0"));
-        compare(String("0"), String(s1.equals("Different") ? "1" : "0"));
+        compare(true, s1.equals("Equal"));
+        compare(false, s1.equals("Different"));
     }
     
     TEST(StringComparisonOperatorsTest, StringTestBase)
@@ -277,11 +277,11 @@ namespace StringTests {
         String s2("ABC");
         String s3("DEF");
         
-        compare(String("1"), String((s1 == s2) ? "1" : "0"));
-        compare(String("0"), String((s1 == s3) ? "1" : "0"));
-        compare(String("0"), String((s1 != s2) ? "1" : "0"));
-        compare(String("1"), String((s1 != s3) ? "1" : "0"));
-        compare(String("1"), String((s1 < s3) ? "1" : "0"));
+        compare(true, s1 == s2);
+        compare(false, s1 == s3);
+        compare(false, s1 != s2);
+        compare(true, s1 != s3);
+        compare(true, s1 < s3);
     }
     
     // =============================================================================
@@ -312,16 +312,16 @@ namespace StringTests {
         
         s.pop_back();
         compare(String("AB"), s);
-        compare(String("2"), String(uint64::toString(s.size())));
+        compare(2, s.size());
     }
     
     TEST(StringClearTest, StringTestBase)
     {
         String s("NotEmpty");
-        compare(String("0"), String(s.empty() ? "1" : "0"));
+        compare(false, s.empty());
         s.clear();
-        compare(String("1"), String(s.empty() ? "1" : "0"));
-        compare(String("0"), String(uint64::toString(s.size())));
+        compare(true, s.empty());
+        compare(0, s.size());
     }
     
     // =============================================================================
@@ -377,13 +377,13 @@ namespace StringTests {
     TEST(StringContainsUniqueCharsTest, StringTestBase)
     {
         String s1("abcdef");
-        compare(String("1"), String(s1.containsUniqueChars() ? "1" : "0"));
+        compare(true, s1.containsUniqueChars());
         
         String s2("aabbcc");
-        compare(String("0"), String(s2.containsUniqueChars() ? "1" : "0"));
+        compare(false, s2.containsUniqueChars());
         
         String s3("Hello");
-        compare(String("0"), String(s3.containsUniqueChars() ? "1" : "0")); // 'l' appears twice
+        compare(false, s3.containsUniqueChars()); // 'l' appears twice
     }
     
     // =============================================================================
@@ -402,12 +402,12 @@ namespace StringTests {
     {
         String s("ABC");
         std::vector<uint8_t> bytes = s.toBytes();
-        compare(String("3"), String(uint64::toString(bytes.size())));
+        compare(3, bytes.size());
         
         // Check ASCII values: A=65, B=66, C=67
-        compare(String("65"), String(uint64::toString(bytes[0])));
-        compare(String("66"), String(uint64::toString(bytes[1])));
-        compare(String("67"), String(uint64::toString(bytes[2])));
+        compare(uint8_t(65), bytes[0]);
+        compare(uint8_t(66), bytes[1]);
+        compare(uint8_t(67), bytes[2]);
     }
     
     TEST(StringHexToBytesTest, StringTestBase)
@@ -416,7 +416,7 @@ namespace StringTests {
         std::vector<uint8_t> bytes = s.hexToBytes();
         
         String result;
-        for (uint8_t b : bytes) {
+        for (const uint8_t b : bytes) {
             result.push_back(static_cast<char>(b));
         }
         compare(String("Hello"), result);
@@ -428,7 +428,7 @@ namespace StringTests {
         try {
             auto bytes = s.hexToBytes();
         } catch (const std::invalid_argument&) {
-            compare(String("1"), String("1")); // Expected exception for zero chunk size
+            compare(true, true); 
         }
     }
     
@@ -462,7 +462,7 @@ namespace StringTests {
     {
         String s("A,B,C,D");
         std::vector<String> parts = s.split(',');
-        compare(String("4"), String(uint64::toString(parts.size())));
+        compare(4, parts.size());
         compare(String("A"), parts[0]);
         compare(String("B"), parts[1]);
         compare(String("C"), parts[2]);
@@ -470,7 +470,7 @@ namespace StringTests {
         
         String s2("NoSeparator");
         std::vector<String> parts2 = s2.split(',');
-        compare(String("1"), String(uint64::toString(parts2.size())));
+        compare(1, parts2.size());
         compare(String("NoSeparator"), parts2[0]);
     }
     
@@ -518,20 +518,20 @@ namespace StringTests {
     TEST(StringFindTest, StringTestBase)
     {
         String s("Hello World");
-        compare(String("0"), String(uint64::toString(s.find('H'))));
-        compare(String("6"), String(uint64::toString(s.find('W'))));
-        compare(String("18446744073709551615"), String(uint64::toString(s.find('X')))); // npos
+        compare(0, s.find('H'));
+        compare(6, s.find('W'));
+        compare(-1, s.find('X')); // npos
         
-        compare(String("2"), String(uint64::toString(s.find('l', 0))));
-        compare(String("3"), String(uint64::toString(s.find('l', 3))));
+        compare(2, s.find('l', 0));
+        compare(3, s.find('l', 3));
     }
     
     TEST(StringFindConstantTimeTest, StringTestBase)
     {
         String s("SecretKey");
-        compare(String("0"), String(uint64::toString(s.find('S'))));
-        compare(String("3"), String(uint64::toString(s.find('r'))));
-        compare(String("18446744073709551615"), String(uint64::toString(s.find('Z')))); // npos
+        compare(0, s.find('S'));
+        compare(3, s.find('r'));
+        compare(-1, s.find('Z')); // npos
     }
     
     // =============================================================================
@@ -541,16 +541,16 @@ namespace StringTests {
     TEST(StringStaticConstantsTest, StringTestBase)
     {
         // Test that static constants are properly initialized
-        compare(String("1"), String(String::letters.size() > 0 ? "1" : "0"));
-        compare(String("1"), String(String::uppercase.size() > 0 ? "1" : "0"));
-        compare(String("1"), String(String::lowercase.size() > 0 ? "1" : "0"));
-        compare(String("1"), String(String::digits.size() > 0 ? "1" : "0"));
-        compare(String("1"), String(String::hex_digits.size() > 0 ? "1" : "0"));
-        compare(String("1"), String(String::alpha_numeric.size() > 0 ? "1" : "0"));
-        compare(String("1"), String(String::base64_alphabet.size() > 0 ? "1" : "0"));
-        compare(String("1"), String(String::printable.size() > 0 ? "1" : "0"));
-        compare(String("1"), String(String::punctuation.size() > 0 ? "1" : "0"));
-        compare(String("1"), String(String::white_space.size() > 0 ? "1" : "0"));
+        compare(true, String::letters.size() > 0);
+        compare(true, String::uppercase.size() > 0);
+        compare(true, String::lowercase.size() > 0);
+        compare(true, String::digits.size() > 0);
+        compare(true, String::hex_digits.size() > 0);
+        compare(true, String::alpha_numeric.size() > 0);
+        compare(true, String::base64_alphabet.size() > 0);
+        compare(true, String::printable.size() > 0);
+        compare(true, String::punctuation.size() > 0);
+        compare(true, String::white_space.size() > 0);
     }
     
     // =============================================================================
@@ -562,12 +562,12 @@ namespace StringTests {
         std::string large_data = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         try {
             std::vector<String> chunks = String::chunk(large_data, 10);
-            compare(String("1"), String(chunks.size() > 0 ? "1" : "0"));
-            compare(String("4"), String(uint64::toString(chunks.size()))); // ceil(36/10) = 4
+            compare(true, chunks.size() > 0);
+            compare(4, chunks.size()); // ceil(36/10) = 4
             compare(String("ABCDEFGHIJ"), chunks[0]);
             compare(String("0123456789"), chunks[3]);
         } catch (...) {
-            compare(String("1"), String("0")); // Should not throw for valid chunk size
+            compare(true, false); // Should not throw for valid chunk size
         }
     }
     
@@ -576,16 +576,16 @@ namespace StringTests {
         std::string data = "Test";
         try {
             std::vector<String> chunks = String::chunk(data, 0);
-            compare(String("1"), String("0")); // Should not reach here
+            compare(true, false); // Should not reach here
         } catch (const std::invalid_argument&) {
-            compare(String("1"), String("1")); // Expected exception for zero chunk size
+            compare(true, true); // Expected exception for zero chunk size
         }
         
         try {
             std::vector<String> chunks = String::chunk(data, 8192); // > MAX_SECURE_LENGTH
-            compare(String("1"), String("0")); // Should not reach here
+            compare(true, false); // Should not reach here
         } catch (const std::invalid_argument&) {
-            compare(String("1"), String("1")); // Expected exception for oversized chunk
+            compare(true, true); // Expected exception for oversized chunk
         }
     }
     
@@ -600,7 +600,7 @@ namespace StringTests {
         for (size_t i = 0; i < 100; ++i) { // Fill with reasonable amount
             s.push_back('A');
         }
-        compare(String("100"), String(uint64::toString(s.size())));
+        compare(100, s.size());
     }
     
     TEST(StringSecureComparisonTest, StringTestBase)
@@ -610,8 +610,8 @@ namespace StringTests {
         String secret2("password123");
         String wrong("password124");
         
-        compare(String("1"), String(secret1.equals(secret2) ? "1" : "0"));
-        compare(String("0"), String(secret1.equals(wrong) ? "1" : "0"));
+        compare(true, secret1.equals(secret2));
+        compare(false, secret1.equals(wrong));
     }
     
     TEST(StringMemoryAlignmentTest, StringTestBase)
@@ -620,7 +620,7 @@ namespace StringTests {
         String s1, s2, s3;
         
         // Just verify they can be created without issues
-        compare(String("1"), String("1"));
+        compare(true, true);
     }
     
     TEST(StringNullTerminationTest, StringTestBase)
@@ -631,6 +631,6 @@ namespace StringTests {
         // Verify proper null termination
         String from_cstr(cstr);
         compare(String("Test"), from_cstr);
-        compare(String("4"), String(uint64::toString(from_cstr.size())));
+        compare(4, from_cstr.size());
     }
 }
