@@ -85,7 +85,6 @@ ClassicalType Fleissner::encode(const ClassicalType &clear_text)
 {
     const uint32_t dim = grid_dim * grid_dim;
     ClassicalType full_text(clear_text);
-    full_text.reserve(full_text.length() + dim);
     full_text.append(dim, 'A');
     Grid grid(grid_dim, ClassicalType(grid_dim, '.'));
 
@@ -120,7 +119,6 @@ ClassicalType Fleissner::decode(const ClassicalType &cipher_text)
     const uint32_t max_grid = cipher_len / dim;
 
     Grid grid;
-    grid.reserve(grid_dim);
     ClassicalType decrypted(cipher_len);
     uint32_t k = 0;
     for (uint32_t i = 0; i < max_grid; ++i)

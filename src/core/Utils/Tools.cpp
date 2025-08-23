@@ -30,9 +30,9 @@ String Tools::convertFromBaseXToBaseY(const String &number, const uint8_t from_b
    
    BytesVector pos;
    pos.reserve(number.length());
-   for (const auto c : number)
+   for (const uint8_t c : number)
    {
-      pos.push_back(chars.find(c));
+      pos.push_back((chars.find(c)));
    }
 
    uint32_t length = number.length();

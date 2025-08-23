@@ -75,11 +75,10 @@
 #include "unit/XTEATest.hpp"
 #include "unit/SerpentTest.hpp"
 
-#include "unit/StringMethodsTest.hpp"
-#include "unit/VectorMethodsTest.hpp"
 #include "unit/ArrayTest.hpp"
 #include "unit/IntegerTest.hpp"
 #include "unit/VectorTest.hpp"
+#include "unit/StringTest.hpp"
 
 //#include "security/IntegerSecurityTest.hpp"
 

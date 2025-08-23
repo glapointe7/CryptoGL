@@ -112,7 +112,7 @@ namespace CryptoGL
                 if (!seen_nonzero) idx++;
             }
 
-            return std::string(buf.begin() + idx, buf.end());
+            return String(buf.begin() + idx, buf.end());
         }
     };
 

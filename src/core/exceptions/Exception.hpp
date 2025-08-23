@@ -4,12 +4,12 @@
 #ifndef EXCEPTION_HPP
 #define EXCEPTION_HPP
 
-#include <string>
+#include "../types/String.hpp"
 
 class Exception
 {
 public:
-   using ErrorType = std::string;
+   using ErrorType = CryptoGL::String;
    
    Exception() {}
    explicit Exception(const ErrorType &message) : message(message) {}

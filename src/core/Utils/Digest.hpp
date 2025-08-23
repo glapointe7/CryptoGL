@@ -12,7 +12,7 @@ namespace Digest
 {
     String getStringFromBigInteger(const BigInteger &value)
     {
-        return bigIntegerToString(value);
+        return String(bigIntegerToString(value));
     }
     
     String bigIntVectorToString(const Vector<BigInteger> &V)
@@ -25,19 +25,19 @@ namespace Digest
         }
         str.pop_back();
 
-        return str;
+        return String(str);
     }
     
     Vector<BigInteger> stringToBigIntVector(const String &str)
     {
-        std::istringstream iss(str);
-        Vector<String> tokens;
-        std::copy(std::istream_iterator<String>(iss), std::istream_iterator<String>(),
-                std::back_inserter<Vector < String >> (tokens));
+        std::istringstream iss(str.toStdString());
+        Vector<std::string> tokens;
+        std::copy(std::istream_iterator<std::string>(iss), std::istream_iterator<std::string>(),
+                std::back_inserter<Vector < std::string >> (tokens));
 
         Vector<BigInteger> V;
         V.reserve(tokens.size());
-        for (const auto &str_value : tokens)
+        for (const std::string &str_value : tokens)
         {
             V.push_back(stringToBigInteger(str_value));
         }

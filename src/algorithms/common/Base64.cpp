@@ -7,7 +7,7 @@ ClassicalType Base64::encode(const BytesVector &clear_data)
 {
     const uint32_t clear_len = clear_data.size();
     ClassicalType crypted;
-    crypted.reserve(((clear_len / 3) + (clear_len % 3 > 0)) * 4);
+    //crypted.reserve(((clear_len / 3) + (clear_len % 3 > 0)) * 4);
     
     for (uint32_t i = 0; i < clear_len - 2; i += 3)
     {

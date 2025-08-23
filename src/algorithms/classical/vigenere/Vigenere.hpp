@@ -129,7 +129,6 @@ namespace CryptoGL
         {
             const uint32_t x = (alpha.find(c) + 1) * (alpha.find(key_pos) + 1);
             ClassicalType buffer(uint32::toString(x));
-            buffer.reserve(buffer.length() + 1);
             buffer.push_back(' ');
 
             return buffer;

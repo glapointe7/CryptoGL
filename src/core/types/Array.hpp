@@ -534,7 +534,7 @@ namespace CryptoGL
                 constexpr uint32_t total_hex_digits = Size * hex_digits_per_element;
                 
                 String hex_digest;
-                hex_digest.reserve(total_hex_digits);
+                //hex_digest.reserve(total_hex_digits);
                 
                 // Convert each element to hexadecimal
                 for (uint32_t i = 0; i < Size; ++i) {

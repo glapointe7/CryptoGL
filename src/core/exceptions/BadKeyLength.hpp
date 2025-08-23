@@ -15,7 +15,7 @@ namespace CryptoGL
        BadKeyLength() {}
        explicit BadKeyLength(const ErrorType &message) : BadKey(message) {}
        BadKeyLength(const ErrorType &message, const uint32_t len)
-          : BadKey(message + "Your key length is : " + uint32::toString(len)) { }
+          : BadKey(message + "Your key length is : " + String(std::to_string(len))) { }
     };
 
     using BadIVLength = BadKeyLength;

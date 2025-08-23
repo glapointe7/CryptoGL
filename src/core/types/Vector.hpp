@@ -306,7 +306,7 @@ namespace CryptoGL
             // Pre-calculate buffer size to avoid timing leaks from reallocations
             String result;
             // Conservative estimate for total size
-            result.reserve(length * 10 + length);  // Assume avg 10 chars per element + separators
+            //result.reserve(length * 10 + length);  // Assume avg 10 chars per element + separators
             
             result.append(Integer<Type>::toString(data[0]));
             for (uint64_t i = 1; i < length; ++i) {
@@ -417,7 +417,7 @@ namespace CryptoGL
             const uint8_t data_size = sizeof(Type) * 8;
             const uint64_t vect_size = data.size();
             String hex_digest;
-            hex_digest.reserve(vect_size * data_size / 4);  // Exact size to prevent reallocations
+            //hex_digest.reserve(vect_size * data_size / 4); 
             
             for (uint64_t i = 0; i < vect_size; ++i) {
                 for (int8_t j = data_size - 4; j >= 0; j -= 4) {

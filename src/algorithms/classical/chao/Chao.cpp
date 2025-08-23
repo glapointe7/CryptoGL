@@ -36,8 +36,6 @@ void Chao::rightShiftAlphabet(const uint8_t index)
 ClassicalType Chao::encode(const ClassicalType &clear_text)
 {
     ClassicalType crypted;
-    crypted.reserve(clear_text.length());
-
     for (const auto c : clear_text)
     {
         const uint8_t index = right_alpha.find(c);
@@ -53,8 +51,6 @@ ClassicalType Chao::encode(const ClassicalType &clear_text)
 ClassicalType Chao::decode(const ClassicalType &cipher_text)
 {
     ClassicalType decrypted;
-    decrypted.reserve(cipher_text.length());
-
     for (const auto c : cipher_text)
     {
         const uint8_t index = left_alpha.find(c);
