@@ -19,7 +19,7 @@ void RC2::setKey(const BytesVector &key)
 void RC2::generateSubkeys()
 {
     BytesVector tmp_subkeys(key);
-    tmp_subkeys.reserve(128);
+    tmp_subkeys.resize(128);
     
     const uint8_t key_len = key.size();
     for (uint8_t i = key_len; i < 128; ++i)

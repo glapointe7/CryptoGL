@@ -4,34 +4,47 @@
 #pragma once
 
 #include "../types/Types.hpp"
+#include <optional>
 
 namespace CryptoGL
 {
     class SquareMatrix
     {
     public:
-        SquareMatrix() { }
-        SquareMatrix(const uint32_t dim, const int32_t modulo)
+        SquareMatrix() noexcept = default;
+        SquareMatrix(const uint32_t dim, const int32_t modulo) noexcept
             : dim(dim), n(modulo), M(dim, Int32Vector(dim, 0)) { }
 
-        void setMatrix(const Int32Matrix &);
-        Int32Matrix getMatrix() const
+        SquareMatrix(SquareMatrix&) noexcept = default;
+        SquareMatrix(SquareMatrix&&) noexcept = default;
+
+        SquareMatrix(const Int32Matrix&, const int32_t modulo);
+        SquareMatrix(Int32Matrix&&, const int32_t modulo);
+
+        SquareMatrix& operator=(const SquareMatrix&) = default;
+        SquareMatrix& operator=(SquareMatrix&&) = default;
+
+        void setMatrix(const Int32Matrix &M);
+        void setMatrix(Int32Matrix&& M);
+        
+        [[nodiscard]] Int32Matrix getMatrix() const noexcept
         {
             return M;
         };
 
         /* Get a specific value of the current matrix. */
-        int32_t get(const uint32_t row, const uint32_t col) const;
+        [[nodiscard]] int32_t get(const uint32_t row, const uint32_t col) const;
 
         /* Set value to a specific cell of the matrix.*/
         void set(const uint32_t row, const uint32_t col, const int32_t value);
-        uint32_t getDimension() const
+        
+        [[nodiscard]] uint32_t getDimension() const noexcept
         {
             return dim;
         }
         
         void setDimension(const uint32_t);
-        int32_t getModulo() const
+        [[nodiscard]] int32_t getModulo() const noexcept
         {
             return n;
         };
@@ -39,29 +52,33 @@ namespace CryptoGL
         void setModulo(const int32_t);
 
         /* Multiply a square matrix with a column-vector of the same dimension. */
-        UInt32Vector multiply(const UInt32Vector &V) const;
+        [[nodiscard]] UInt32Vector multiply(const UInt32Vector& V) const noexcept;
 
-        Int32Matrix identity() const;
+        [[nodiscard]] Int32Matrix identity() const noexcept;
 
         /* Return the determinant of the current matrix.*/
-        int32_t det() const;
+        [[nodiscard]] int32_t det() const noexcept;
+        [[nodiscard]] int32_t det_gaussian() const noexcept;
 
         /* Return the inverse of the current matrix using the Gauss-Jordan method.*/
-        SquareMatrix inverse() const;
+        [[nodiscard]] std::optional<SquareMatrix> inverse() const;
 
     private:
         /* Find the first pivot A(n,n) != 0 if it exists. Otherwise, return dim + 1. */
-        uint32_t findNonZero(const Int32Matrix &A, const uint32_t from) const;
+        [[nodiscard]] uint32_t findNonZero(const Int32Matrix &A, const uint32_t from) const;
 
         /* Check if the matrix is square (N x N). */
-        static bool isSquare(const Int32Matrix &mat);
+        [[nodiscard]] static bool isSquare(const Int32Matrix &mat);
 
         /* Calculate the trace of the matrix (vlaue of tr(M)). */
-        int32_t trace() const;
-        int32_t trace(const Int32Matrix &A) const;
+        [[nodiscard]] int32_t trace() const noexcept;
+        [[nodiscard]] int32_t trace(const Int32Matrix &A) const noexcept;
+
+        [[nodiscard]] int32_t diagonal_product() const noexcept;
+        [[nodiscard]] int32_t diagonal_product(const Int32Matrix &A) const noexcept;
 
         /* Set Identity to the matrix (M_3 = [[1,0,0] ; [0,1,0] ; [0,0,1]]). */
-        void setIdentity();
+        void setIdentity() noexcept;
 
 
         void triangularize(Int32Matrix &A, Int32Matrix &I, const uint32_t k, const uint32_t lower_i, const uint32_t upper_i) const;

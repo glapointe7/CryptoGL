@@ -57,72 +57,68 @@ namespace EndianTests {
     
     TEST(LittleEndian8ToIntegerTest, EndianTestBase)
     {
-        uint8_t result = LittleEndian8::toInteger(single_byte);
-        compare(String("66"), String(uint64::toString(result))); // 0x42 = 66
+        const uint8_t result = LittleEndian8::toInteger(single_byte);
+        compare(uint8_t(0x42), result); 
     }
     
     TEST(LittleEndian8ToBytesTest, EndianTestBase)
     {
-        uint8_t value = 0x42;
-        BytesVector result = LittleEndian8::toBytesVector(value);
-        compare(String("1"), String(uint64::toString(result.size())));
-        compare(String("66"), String(uint64::toString(result[0]))); // 0x42 = 66
+        const BytesVector result = LittleEndian8::toBytesVector(0x42);
+        compare(1, result.size());
+        compare(uint8_t(0x42), result[0]); 
     }
     
     TEST(LittleEndian16ToIntegerTest, EndianTestBase)
     {
-        uint16_t result = LittleEndian16::toInteger(two_bytes);
+        const uint16_t result = LittleEndian16::toInteger(two_bytes);
         // Little endian: 0x12, 0x34 -> 0x3412
-        compare(String("13330"), String(uint64::toString(result))); // 0x3412 = 13330
+        compare(uint16_t(0x3412), result); // 0x3412 = 13330
     }
     
     TEST(LittleEndian16ToBytesTest, EndianTestBase)
     {
-        uint16_t value = 0x1234;
-        BytesVector result = LittleEndian16::toBytesVector(value);
-        compare(String("2"), String(uint64::toString(result.size())));
-        compare(String("52"), String(uint64::toString(result[0]))); // 0x34 = 52 (LSB first)
-        compare(String("18"), String(uint64::toString(result[1]))); // 0x12 = 18
+        const BytesVector result = LittleEndian16::toBytesVector(0x1234);
+        compare(2, result.size());
+        compare(uint8_t(0x34), result[0]); // 0x34 = 52 (LSB first)
+        compare(uint8_t(0x12), result[1]); // 0x12 = 18
     }
     
     TEST(LittleEndian32ToIntegerTest, EndianTestBase)
     {
-        uint32_t result = LittleEndian32::toInteger(four_bytes);
+        const uint32_t result = LittleEndian32::toInteger(four_bytes);
         // Little endian: 0x12, 0x34, 0x56, 0x78 -> 0x78563412
-        compare(String("2018915346"), String(uint64::toString(result))); // 0x78563412
+        compare(uint32_t(0x78563412), result); 
     }
     
     TEST(LittleEndian32ToBytesTest, EndianTestBase)
     {
-        uint32_t value = 0x12345678;
-        BytesVector result = LittleEndian32::toBytesVector(value);
-        compare(String("4"), String(uint64::toString(result.size())));
-        compare(String("120"), String(uint64::toString(result[0]))); // 0x78 = 120 (LSB first)
-        compare(String("86"), String(uint64::toString(result[1])));  // 0x56 = 86
-        compare(String("52"), String(uint64::toString(result[2])));  // 0x34 = 52
-        compare(String("18"), String(uint64::toString(result[3])));  // 0x12 = 18
+        const BytesVector result = LittleEndian32::toBytesVector(0x12345678);
+        compare(4, result.size());
+        compare(uint8_t(0x78), result[0]); // 0x78 = 120 (LSB first)
+        compare(uint8_t(0x56), result[1]);  // 0x56 = 86
+        compare(uint8_t(0x34), result[2]);  // 0x34 = 52
+        compare(uint8_t(0x12), result[3]);  // 0x12 = 18
     }
     
     TEST(LittleEndian64ToIntegerTest, EndianTestBase)
     {
-        uint64_t result = LittleEndian64::toInteger(eight_bytes);
+        const uint64_t result = LittleEndian64::toInteger(eight_bytes);
         // Little endian: 0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0 -> 0xF0DEBC9A78563412
-        compare(String("17379091598765846290"), String(uint64::toString(result)));
+        compare(uint64_t(0xF0DEBC9A78563412), result);
     }
     
     TEST(LittleEndian64ToBytesTest, EndianTestBase)
     {
-        uint64_t value = 0x123456789ABCDEF0;
-        BytesVector result = LittleEndian64::toBytesVector(value);
-        compare(String("8"), String(uint64::toString(result.size())));
-        compare(String("240"), String(uint64::toString(result[0]))); // 0xF0 = 240 (LSB first)
-        compare(String("222"), String(uint64::toString(result[1]))); // 0xDE = 222
-        compare(String("188"), String(uint64::toString(result[2]))); // 0xBC = 188
-        compare(String("154"), String(uint64::toString(result[3]))); // 0x9A = 154
-        compare(String("120"), String(uint64::toString(result[4]))); // 0x78 = 120
-        compare(String("86"), String(uint64::toString(result[5])));  // 0x56 = 86
-        compare(String("52"), String(uint64::toString(result[6])));  // 0x34 = 52
-        compare(String("18"), String(uint64::toString(result[7])));  // 0x12 = 18
+        const BytesVector result = LittleEndian64::toBytesVector(0x123456789ABCDEF0);
+        compare(8, result.size());
+        compare(uint8_t(0xF0), result[0]); // 0xF0 = 240 (LSB first)
+        compare(uint8_t(0xDE), result[1]); // 0xDE = 222
+        compare(uint8_t(0xBC), result[2]); // 0xBC = 188
+        compare(uint8_t(0x9A), result[3]); // 0x9A = 154
+        compare(uint8_t(0x78), result[4]); // 0x78 = 120
+        compare(uint8_t(0x56), result[5]);  // 0x56 = 86
+        compare(uint8_t(0x34), result[6]);  // 0x34 = 52
+        compare(uint8_t(0x12), result[7]);  // 0x12 = 18
     }
     
     // =============================================================================
@@ -131,72 +127,68 @@ namespace EndianTests {
     
     TEST(BigEndian8ToIntegerTest, EndianTestBase)
     {
-        uint8_t result = BigEndian8::toInteger(single_byte);
-        compare(String("66"), String(uint64::toString(result))); // 0x42 = 66
+        const uint8_t result = BigEndian8::toInteger(single_byte);
+        compare(uint8_t(0x42), result); // 0x42 = 66
     }
     
     TEST(BigEndian8ToBytesTest, EndianTestBase)
     {
-        uint8_t value = 0x42;
-        BytesVector result = BigEndian8::toBytesVector(value);
-        compare(String("1"), String(uint64::toString(result.size())));
-        compare(String("66"), String(uint64::toString(result[0]))); // 0x42 = 66
+        const BytesVector result = BigEndian8::toBytesVector(0x42);
+        compare(1, result.size());
+        compare(uint8_t(0x42), result[0]); // 0x42 = 66
     }
     
     TEST(BigEndian16ToIntegerTest, EndianTestBase)
     {
-        uint16_t result = BigEndian16::toInteger(two_bytes);
+        const uint16_t result = BigEndian16::toInteger(two_bytes);
         // Big endian: 0x12, 0x34 -> 0x1234
-        compare(String("4660"), String(uint64::toString(result))); // 0x1234 = 4660
+        compare(uint16_t(0x1234), result); // 0x1234 = 4660
     }
     
     TEST(BigEndian16ToBytesTest, EndianTestBase)
     {
-        uint16_t value = 0x1234;
-        BytesVector result = BigEndian16::toBytesVector(value);
-        compare(String("2"), String(uint64::toString(result.size())));
-        compare(String("18"), String(uint64::toString(result[0]))); // 0x12 = 18 (MSB first)
-        compare(String("52"), String(uint64::toString(result[1]))); // 0x34 = 52
+        const BytesVector result = BigEndian16::toBytesVector(0x1234);
+        compare(2, result.size());
+        compare(uint8_t(0x12), result[0]); // 0x12 = 18 (MSB first)
+        compare(uint8_t(0x34), result[1]); // 0x34 = 52
     }
     
     TEST(BigEndian32ToIntegerTest, EndianTestBase)
     {
-        uint32_t result = BigEndian32::toInteger(four_bytes);
+        const uint32_t result = BigEndian32::toInteger(four_bytes);
         // Big endian: 0x12, 0x34, 0x56, 0x78 -> 0x12345678
-        compare(String("305419896"), String(uint64::toString(result))); // 0x12345678
+        compare(uint32_t(0x12345678), result); // 0x12345678
     }
     
     TEST(BigEndian32ToBytesTest, EndianTestBase)
     {
-        uint32_t value = 0x12345678;
-        BytesVector result = BigEndian32::toBytesVector(value);
-        compare(String("4"), String(uint64::toString(result.size())));
-        compare(String("18"), String(uint64::toString(result[0])));  // 0x12 = 18 (MSB first)
-        compare(String("52"), String(uint64::toString(result[1])));  // 0x34 = 52
-        compare(String("86"), String(uint64::toString(result[2])));  // 0x56 = 86
-        compare(String("120"), String(uint64::toString(result[3]))); // 0x78 = 120
+        const BytesVector result = BigEndian32::toBytesVector(0x12345678);
+        compare(4, result.size());
+        compare(uint8_t(0x12), result[0]);  // 0x12 = 18 (MSB first)
+        compare(uint8_t(0x34), result[1]);  // 0x34 = 52
+        compare(uint8_t(0x56), result[2]);  // 0x56 = 86
+        compare(uint8_t(0x78), result[3]); // 0x78 = 120
     }
     
     TEST(BigEndian64ToIntegerTest, EndianTestBase)
     {
-        uint64_t result = BigEndian64::toInteger(eight_bytes);
+        const uint64_t result = BigEndian64::toInteger(eight_bytes);
         // Big endian: 0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0 -> 0x123456789ABCDEF0
-        compare(String("1311768467463790320"), String(uint64::toString(result)));
+        compare(uint64_t(0x123456789ABCDEF0), result);
     }
     
     TEST(BigEndian64ToBytesTest, EndianTestBase)
     {
-        uint64_t value = 0x123456789ABCDEF0;
-        BytesVector result = BigEndian64::toBytesVector(value);
-        compare(String("8"), String(uint64::toString(result.size())));
-        compare(String("18"), String(uint64::toString(result[0])));  // 0x12 = 18 (MSB first)
-        compare(String("52"), String(uint64::toString(result[1])));  // 0x34 = 52
-        compare(String("86"), String(uint64::toString(result[2])));  // 0x56 = 86
-        compare(String("120"), String(uint64::toString(result[3]))); // 0x78 = 120
-        compare(String("154"), String(uint64::toString(result[4]))); // 0x9A = 154
-        compare(String("188"), String(uint64::toString(result[5]))); // 0xBC = 188
-        compare(String("222"), String(uint64::toString(result[6]))); // 0xDE = 222
-        compare(String("240"), String(uint64::toString(result[7]))); // 0xF0 = 240
+        const BytesVector result = BigEndian64::toBytesVector(0x123456789ABCDEF0);
+        compare(8, result.size());
+        compare(uint8_t(0x12), result[0]);  // 0x12 = 18 (MSB first)
+        compare(uint8_t(0x34), result[1]);  // 0x34 = 52
+        compare(uint8_t(0x56), result[2]);  // 0x56 = 86
+        compare(uint8_t(0x78), result[3]); // 0x78 = 120
+        compare(uint8_t(0x9A), result[4]); // 0x9A = 154
+        compare(uint8_t(0xBC), result[5]); // 0xBC = 188
+        compare(uint8_t(0xDE), result[6]); // 0xDE = 222
+        compare(uint8_t(0xF0), result[7]); // 0xF0 = 240
     }
     
     // =============================================================================
@@ -207,29 +199,29 @@ namespace EndianTests {
     {
         // Test range conversion with valid range
         uint32_t result = LittleEndian32::toIntegerRange(eight_bytes, 0, 4);
-        compare(String("2018915346"), String(uint64::toString(result))); // First 4 bytes as little endian
+        compare(uint32_t(2018915346), result); // First 4 bytes as little endian
         
         // Test range conversion from middle
         result = LittleEndian32::toIntegerRange(eight_bytes, 4, 8);
-        compare(String("4026597018"), String(uint64::toString(result))); // Last 4 bytes as little endian
+        compare(uint32_t(4026597018), result); // Last 4 bytes as little endian
     }
     
     TEST(BigEndianRangeConversionTest, EndianTestBase)
     {
         // Test range conversion with valid range
         uint32_t result = BigEndian32::toIntegerRange(eight_bytes, 0, 4);
-        compare(String("305419896"), String(uint64::toString(result))); // First 4 bytes as big endian
+        compare(uint32_t(305419896), result); // First 4 bytes as big endian
         
         // Test range conversion from middle
         result = BigEndian32::toIntegerRange(eight_bytes, 4, 8);
-        compare(String("2596069104"), String(uint64::toString(result))); // Last 4 bytes as big endian
+        compare(uint32_t(2596069104), result); // Last 4 bytes as big endian
     }
     
     TEST(EndianRangeFromIndexTest, EndianTestBase)
     {
         // Test range conversion from index to end
-        uint32_t result = LittleEndian32::toIntegerRange(eight_bytes, 4);
-        compare(String("4026597018"), String(uint64::toString(result))); // From index 4 to end
+        const uint32_t result = LittleEndian32::toIntegerRange(eight_bytes, 4);
+        compare(uint32_t(0xF0DEBC9A), result); // From index 4 to end
     }
     
     // =============================================================================
@@ -239,55 +231,55 @@ namespace EndianTests {
     TEST(LittleEndianBulkToIntegersTest, EndianTestBase)
     {
         // Create test data: 8 bytes -> 2 uint32_t values
-        Vector<uint32_t> result = LittleEndian32::toIntegersVector(eight_bytes);
-        compare(String("2"), String(uint64::toString(result.size())));
-        compare(String("2018915346"), String(uint64::toString(result[0]))); // First 4 bytes
-        compare(String("4026597018"), String(uint64::toString(result[1]))); // Last 4 bytes
+        const Vector<uint32_t> result = LittleEndian32::toIntegersVector(eight_bytes);
+        compare(2, result.size());
+        compare(uint32_t(2018915346), result[0]); // First 4 bytes
+        compare(uint32_t(4026597018), result[1]); // Last 4 bytes
     }
     
     TEST(BigEndianBulkToIntegersTest, EndianTestBase)
     {
         // Create test data: 8 bytes -> 2 uint32_t values
-        Vector<uint32_t> result = BigEndian32::toIntegersVector(eight_bytes);
-        compare(String("2"), String(uint64::toString(result.size())));
-        compare(String("305419896"), String(uint64::toString(result[0]))); // First 4 bytes
-        compare(String("2596069104"), String(uint64::toString(result[1]))); // Last 4 bytes
+        const Vector<uint32_t> result = BigEndian32::toIntegersVector(eight_bytes);
+        compare(2, result.size());
+        compare(uint32_t(305419896), result[0]); // First 4 bytes
+        compare(uint32_t(2596069104), result[1]); // Last 4 bytes
     }
     
     TEST(EndianBulkRangeConversionTest, EndianTestBase)
     {
         // Test partial bulk conversion with specific range
-        Vector<uint16_t> result = LittleEndian16::toIntegersVector(eight_bytes, 2, 4);
-        compare(String("2"), String(uint64::toString(result.size())));
-        compare(String("30806"), String(uint64::toString(result[0]))); // Bytes 2-3 as little endian uint16
-        compare(String("39544"), String(uint64::toString(result[1]))); // Bytes 4-5 as little endian uint16
+        const Vector<uint16_t> result = LittleEndian16::toIntegersVector(eight_bytes, 2, 4);
+        compare(2, result.size());
+        compare(uint16_t(30806), result[0]); // Bytes 2-3 as little endian uint16
+        compare(uint16_t(39544), result[1]); // Bytes 4-5 as little endian uint16
     }
     
     TEST(EndianIntegersToBytesTest, EndianTestBase)
     {
         // Test converting integers back to bytes
-        Vector<uint16_t> integers = {0x1234, 0x5678, 0x9ABC};
+        const Vector<uint16_t> integers = {0x1234, 0x5678, 0x9ABC};
         
-        BytesVector little_result = LittleEndian16::toBytesVector(integers);
-        compare(String("6"), String(uint64::toString(little_result.size()))); // 3 integers * 2 bytes each
-        compare(String("52"), String(uint64::toString(little_result[0])));  // 0x34 (LSB of 0x1234)
-        compare(String("18"), String(uint64::toString(little_result[1])));  // 0x12 (MSB of 0x1234)
+        const BytesVector little_result = LittleEndian16::toBytesVector(integers);
+        compare(6, little_result.size()); // 3 integers * 2 bytes each
+        compare(uint8_t(0x34), little_result[0]);  // 0x34 (LSB of 0x1234)
+        compare(uint8_t(0x12), little_result[1]);  // 0x12 (MSB of 0x1234)
         
-        BytesVector big_result = BigEndian16::toBytesVector(integers);
-        compare(String("6"), String(uint64::toString(big_result.size()))); // 3 integers * 2 bytes each
-        compare(String("18"), String(uint64::toString(big_result[0])));  // 0x12 (MSB of 0x1234)
-        compare(String("52"), String(uint64::toString(big_result[1])));  // 0x34 (LSB of 0x1234)
+        const BytesVector big_result = BigEndian16::toBytesVector(integers);
+        compare(6, big_result.size()); // 3 integers * 2 bytes each
+        compare(uint8_t(0x12), big_result[0]);  // 0x12 (MSB of 0x1234)
+        compare(uint8_t(0x34), big_result[1]);  // 0x34 (LSB of 0x1234)
     }
     
     TEST(EndianLimitedIntegersToBytesTest, EndianTestBase)
     {
         // Test converting limited number of integers
-        Vector<uint32_t> integers = {0x12345678, 0x9ABCDEF0, 0x11223344};
+        const Vector<uint32_t> integers = {0x12345678, 0x9ABCDEF0, 0x11223344};
         
-        BytesVector result = LittleEndian32::toBytesVector(integers, 2); // Only first 2 integers
-        compare(String("8"), String(uint64::toString(result.size()))); // 2 integers * 4 bytes each
-        compare(String("120"), String(uint64::toString(result[0]))); // 0x78 (LSB of first integer)
-        compare(String("240"), String(uint64::toString(result[4]))); // 0xF0 (LSB of second integer)
+        const BytesVector result = LittleEndian32::toBytesVector(integers, 2); // Only first 2 integers
+        compare(8, result.size()); // 2 integers * 4 bytes each
+        compare(uint8_t(0x78), result[0]); // 0x78 (LSB of first integer)
+        compare(uint8_t(0xF0), result[4]); // 0xF0 (LSB of second integer)
     }
     
     // =============================================================================
@@ -298,10 +290,10 @@ namespace EndianTests {
     {
         // Test toInteger with insufficient bytes
         try {
-            uint32_t result = LittleEndian32::toInteger(two_bytes); // Only 2 bytes, need 4
-            compare(String("1"), String("0")); // Should not reach here
+            const uint32_t result = LittleEndian32::toInteger(two_bytes); // Only 2 bytes, need 4
+            compare(true, false); // Should not reach here
         } catch (const std::invalid_argument&) {
-            compare(String("1"), String("1")); // Expected exception
+            compare(true, true); // Expected exception
         }
     }
     
@@ -309,17 +301,17 @@ namespace EndianTests {
     {
         // Test toIntegerRange with invalid range
         try {
-            uint32_t result = LittleEndian32::toIntegerRange(four_bytes, 2, 1); // from > to
-            compare(String("1"), String("0")); // Should not reach here
+            const uint32_t result = LittleEndian32::toIntegerRange(four_bytes, 2, 1); // from > to
+            compare(true, false); // Should not reach here
         } catch (const std::invalid_argument&) {
-            compare(String("1"), String("1")); // Expected exception
+            compare(true, true); // Expected exception
         }
         
         try {
-            uint32_t result = LittleEndian32::toIntegerRange(four_bytes, 0, 10); // to > size
-            compare(String("1"), String("0")); // Should not reach here
+            const uint32_t result = LittleEndian32::toIntegerRange(four_bytes, 0, 10); // to > size
+            compare(true, false); // Should not reach here
         } catch (const std::invalid_argument&) {
-            compare(String("1"), String("1")); // Expected exception
+            compare(true, true); // Expected exception
         }
     }
     
@@ -327,10 +319,10 @@ namespace EndianTests {
     {
         // Test toIntegerRange with range too small for integer type
         try {
-            uint32_t result = LittleEndian32::toIntegerRange(four_bytes, 0, 2); // Only 2 bytes, need 4
-            compare(String("1"), String("0")); // Should not reach here
+            const uint32_t result = LittleEndian32::toIntegerRange(four_bytes, 0, 2); // Only 2 bytes, need 4
+            compare(true, false); // Should not reach here
         } catch (const std::invalid_argument&) {
-            compare(String("1"), String("1")); // Expected exception
+            compare(true, true); // Expected exception
         }
     }
     
@@ -338,10 +330,10 @@ namespace EndianTests {
     {
         // Test toIntegersVector with misaligned vector size
         try {
-            Vector<uint32_t> result = LittleEndian32::toIntegersVector(invalid_size_bytes); // 3 bytes, not multiple of 4
-            compare(String("1"), String("0")); // Should not reach here
+            const Vector<uint32_t> result = LittleEndian32::toIntegersVector(invalid_size_bytes); // 3 bytes, not multiple of 4
+            compare(true, false); // Should not reach here
         } catch (const std::invalid_argument&) {
-            compare(String("1"), String("1")); // Expected exception
+            compare(true, true); // Expected exception
         }
     }
     
@@ -349,17 +341,17 @@ namespace EndianTests {
     {
         // Test toIntegersVector with invalid range parameters
         try {
-            Vector<uint32_t> result = LittleEndian32::toIntegersVector(eight_bytes, 2, 10); // start + length > size
-            compare(String("1"), String("0")); // Should not reach here
+            const Vector<uint32_t> result = LittleEndian32::toIntegersVector(eight_bytes, 2, 10); // start + length > size
+            compare(true, false); // Should not reach here
         } catch (const std::invalid_argument&) {
-            compare(String("1"), String("1")); // Expected exception
+            compare(true, true); // Expected exception
         }
         
         try {
-            Vector<uint32_t> result = LittleEndian32::toIntegersVector(eight_bytes, 0, 3); // length not multiple of type size
-            compare(String("1"), String("0")); // Should not reach here
+            const Vector<uint32_t> result = LittleEndian32::toIntegersVector(eight_bytes, 0, 3); // length not multiple of type size
+            compare(true, false); // Should not reach here
         } catch (const std::invalid_argument&) {
-            compare(String("1"), String("1")); // Expected exception
+            compare(true, true); // Expected exception
         }
     }
     
@@ -370,32 +362,32 @@ namespace EndianTests {
     TEST(EndianEmptyVectorTest, EndianTestBase)
     {
         // Test toIntegersVector with empty vector
-        Vector<uint32_t> result = LittleEndian32::toIntegersVector(empty_bytes);
-        compare(String("0"), String(uint64::toString(result.size()))); // Should return empty vector
+        const Vector<uint32_t> result = LittleEndian32::toIntegersVector(empty_bytes);
+        compare(0, result.size()); // Should return empty vector
     }
     
     TEST(EndianEmptyIntegerVectorTest, EndianTestBase)
     {
         // Test toBytesVector with empty integer vector
-        Vector<uint32_t> empty_integers;
-        BytesVector result = LittleEndian32::toBytesVector(empty_integers);
-        compare(String("0"), String(uint64::toString(result.size()))); // Should return empty vector
+        const Vector<uint32_t> empty_integers;
+        const BytesVector result = LittleEndian32::toBytesVector(empty_integers);
+        compare(0, result.size()); // Should return empty vector
     }
     
     TEST(EndianZeroLengthConversionTest, EndianTestBase)
     {
         // Test toBytesVector with zero length
-        Vector<uint32_t> integers = {0x12345678, 0x9ABCDEF0};
-        BytesVector result = LittleEndian32::toBytesVector(integers, 0);
-        compare(String("0"), String(uint64::toString(result.size()))); // Should return empty vector
+        const Vector<uint32_t> integers = {0x12345678, 0x9ABCDEF0};
+        const BytesVector result = LittleEndian32::toBytesVector(integers, 0);
+        compare(0, result.size()); // Should return empty vector
     }
     
     TEST(EndianOversizedLengthTest, EndianTestBase)
     {
         // Test toBytesVector with length greater than vector size
-        Vector<uint16_t> integers = {0x1234, 0x5678};
-        BytesVector result = LittleEndian16::toBytesVector(integers, 10); // More than vector size
-        compare(String("4"), String(uint64::toString(result.size()))); // Should process only available integers
+        const Vector<uint16_t> integers = {0x1234, 0x5678};
+        const BytesVector result = LittleEndian16::toBytesVector(integers, 10); // More than vector size
+        compare(4, result.size()); // Should process only available integers
     }
     
     // =============================================================================
@@ -405,31 +397,31 @@ namespace EndianTests {
     TEST(LittleEndianRoundtripTest, EndianTestBase)
     {
         // Test that conversion to bytes and back yields original value
-        uint32_t original = 0x12345678;
-        BytesVector bytes = LittleEndian32::toBytesVector(original);
-        uint32_t roundtrip = LittleEndian32::toInteger(bytes);
-        compare(String(uint64::toString(original)), String(uint64::toString(roundtrip)));
+        constexpr uint32_t original = 0x12345678;
+        const BytesVector bytes = LittleEndian32::toBytesVector(original);
+        const uint32_t roundtrip = LittleEndian32::toInteger(bytes);
+        compare(original, roundtrip);
     }
     
     TEST(BigEndianRoundtripTest, EndianTestBase)
     {
         // Test that conversion to bytes and back yields original value
-        uint64_t original = 0x123456789ABCDEF0;
-        BytesVector bytes = BigEndian64::toBytesVector(original);
-        uint64_t roundtrip = BigEndian64::toInteger(bytes);
-        compare(String(uint64::toString(original)), String(uint64::toString(roundtrip)));
+        constexpr uint64_t original = 0x123456789ABCDEF0;
+        const BytesVector bytes = BigEndian64::toBytesVector(original);
+        const uint64_t roundtrip = BigEndian64::toInteger(bytes);
+        compare(original, roundtrip);
     }
     
     TEST(EndianBulkRoundtripTest, EndianTestBase)
     {
         // Test bulk conversion roundtrip
-        Vector<uint16_t> original = {0x1111, 0x2222, 0x3333, 0x4444};
-        BytesVector bytes = LittleEndian16::toBytesVector(original);
-        Vector<uint16_t> roundtrip = LittleEndian16::toIntegersVector(bytes);
+        const Vector<uint16_t> original = {0x1111, 0x2222, 0x3333, 0x4444};
+        const BytesVector bytes = LittleEndian16::toBytesVector(original);
+        const Vector<uint16_t> roundtrip = LittleEndian16::toIntegersVector(bytes);
         
-        compare(String(uint64::toString(original.size())), String(uint64::toString(roundtrip.size())));
+        compare(original.size(), roundtrip.size());
         for (size_t i = 0; i < original.size(); ++i) {
-            compare(String(uint64::toString(original[i])), String(uint64::toString(roundtrip[i])));
+            compare(original[i], roundtrip[i]);
         }
     }
     
@@ -440,36 +432,36 @@ namespace EndianTests {
     TEST(EndianDifferenceVerificationTest, EndianTestBase)
     {
         // Verify that little-endian and big-endian produce different results for multi-byte integers
-        uint32_t value = 0x12345678;
+        constexpr uint32_t value = 0x12345678;
         
-        BytesVector little_bytes = LittleEndian32::toBytesVector(value);
-        BytesVector big_bytes = BigEndian32::toBytesVector(value);
+        const BytesVector little_bytes = LittleEndian32::toBytesVector(value);
+        const BytesVector big_bytes = BigEndian32::toBytesVector(value);
         
         // They should be different for multi-byte values
-        compare(String("0"), String((little_bytes[0] == big_bytes[0]) ? "1" : "0")); // First bytes should differ
-        compare(String("0"), String((little_bytes[3] == big_bytes[3]) ? "1" : "0")); // Last bytes should differ
+        compare(false, little_bytes[0] == big_bytes[0]); // First bytes should differ
+        compare(false, little_bytes[3] == big_bytes[3]); // Last bytes should differ
         
         // But the same data interpreted differently should give different results
-        uint32_t little_result = LittleEndian32::toInteger(little_bytes);
-        uint32_t big_result = BigEndian32::toInteger(little_bytes); // Interpret little-endian bytes as big-endian
+        const uint32_t little_result = LittleEndian32::toInteger(little_bytes);
+        const uint32_t big_result = BigEndian32::toInteger(little_bytes); // Interpret little-endian bytes as big-endian
         
-        compare(String("0"), String((little_result == big_result) ? "1" : "0")); // Results should differ
+        compare(false, little_result == big_result); // Results should differ
     }
     
     TEST(EndianSingleByteConsistencyTest, EndianTestBase)
     {
         // For single bytes, little-endian and big-endian should be identical
-        uint8_t value = 0x42;
+        constexpr uint8_t value = 0x42;
         
-        BytesVector little_bytes = LittleEndian8::toBytesVector(value);
-        BytesVector big_bytes = BigEndian8::toBytesVector(value);
+        const BytesVector little_bytes = LittleEndian8::toBytesVector(value);
+        const BytesVector big_bytes = BigEndian8::toBytesVector(value);
         
-        compare(String("1"), String((little_bytes[0] == big_bytes[0]) ? "1" : "0")); // Should be identical
+        compare(true, little_bytes[0] == big_bytes[0]); // Should be identical
         
-        uint8_t little_result = LittleEndian8::toInteger(little_bytes);
-        uint8_t big_result = BigEndian8::toInteger(big_bytes);
+        const uint8_t little_result = LittleEndian8::toInteger(little_bytes);
+        const uint8_t big_result = BigEndian8::toInteger(big_bytes);
         
-        compare(String("1"), String((little_result == big_result) ? "1" : "0")); // Should be identical
+        compare(true, little_result == big_result); // Should be identical
     }
     
     // =============================================================================
@@ -489,12 +481,12 @@ namespace EndianTests {
         
         // All conversions should complete successfully regardless of input patterns
         for (const auto& test_vec : test_vectors) {
-            uint32_t result = LittleEndian32::toInteger(test_vec);
-            BytesVector back = LittleEndian32::toBytesVector(result);
-            compare(String("4"), String(uint64::toString(back.size()))); // All should produce 4 bytes
+            const uint32_t result = LittleEndian32::toInteger(test_vec);
+            const BytesVector back = LittleEndian32::toBytesVector(result);
+            compare(4, back.size()); // All should produce 4 bytes
         }
         
-        compare(String("1"), String("1")); // Test completed successfully
+        compare(true, true); // Test completed successfully
     }
     
     TEST(EndianLargeDataPerformanceTest, EndianTestBase)
@@ -508,15 +500,15 @@ namespace EndianTests {
         }
         
         // Test bulk conversion performance
-        BytesVector bytes = LittleEndian32::toBytesVector(large_integers);
-        compare(String("400"), String(uint64::toString(bytes.size()))); // 100 integers * 4 bytes
+        const BytesVector bytes = LittleEndian32::toBytesVector(large_integers);
+        compare(400, bytes.size()); // 100 integers * 4 bytes
         
-        Vector<uint32_t> roundtrip = LittleEndian32::toIntegersVector(bytes);
-        compare(String("100"), String(uint64::toString(roundtrip.size())));
+        const Vector<uint32_t> roundtrip = LittleEndian32::toIntegersVector(bytes);
+        compare(100, roundtrip.size());
         
         // Verify data integrity
-        compare(String(uint64::toString(large_integers[0])), String(uint64::toString(roundtrip[0])));
-        compare(String(uint64::toString(large_integers[99])), String(uint64::toString(roundtrip[99])));
+        compare(large_integers[0], roundtrip[0]);
+        compare(large_integers[99], roundtrip[99]);
     }
     
     TEST(EndianMemoryBoundaryTest, EndianTestBase)
@@ -532,14 +524,14 @@ namespace EndianTests {
         
         // Test conversions at various positions
         try {
-            uint32_t result1 = LittleEndian32::toIntegerRange(boundary_test, 0, 4);
-            uint32_t result2 = LittleEndian32::toIntegerRange(boundary_test, 256, 260);
-            uint32_t result3 = LittleEndian32::toIntegerRange(boundary_test, 1020, 1024);
+            const uint32_t result1 = LittleEndian32::toIntegerRange(boundary_test, 0, 4);
+            const uint32_t result2 = LittleEndian32::toIntegerRange(boundary_test, 256, 260);
+            const uint32_t result3 = LittleEndian32::toIntegerRange(boundary_test, 1020, 1024);
             
             // All should complete without error
-            compare(String("1"), String("1"));
+            compare(true, true);
         } catch (...) {
-            compare(String("1"), String("0")); // Should not throw for valid ranges
+            compare(true, false); // Should not throw for valid ranges
         }
     }
     
@@ -552,28 +544,28 @@ namespace EndianTests {
         // Verify that type aliases work correctly
         
         // Test BigEndian8 alias
-        uint8_t value8 = 0x42;
-        BytesVector bytes8 = BigEndian8::toBytesVector(value8);
-        uint8_t result8 = BigEndian8::toInteger(bytes8);
-        compare(String(uint64::toString(value8)), String(uint64::toString(result8)));
+        constexpr uint8_t value8 = 0x42;
+        const BytesVector bytes8 = BigEndian8::toBytesVector(value8);
+        const uint8_t result8 = BigEndian8::toInteger(bytes8);
+        compare(value8, result8);
         
         // Test LittleEndian16 alias
-        uint16_t value16 = 0x1234;
-        BytesVector bytes16 = LittleEndian16::toBytesVector(value16);
-        uint16_t result16 = LittleEndian16::toInteger(bytes16);
-        compare(String(uint64::toString(value16)), String(uint64::toString(result16)));
+        constexpr uint16_t value16 = 0x1234;
+        const BytesVector bytes16 = LittleEndian16::toBytesVector(value16);
+        const uint16_t result16 = LittleEndian16::toInteger(bytes16);
+        compare(value16, result16);
         
         // Test BigEndian32 alias
-        uint32_t value32 = 0x12345678;
-        BytesVector bytes32 = BigEndian32::toBytesVector(value32);
-        uint32_t result32 = BigEndian32::toInteger(bytes32);
-        compare(String(uint64::toString(value32)), String(uint64::toString(result32)));
+        constexpr uint32_t value32 = 0x12345678;
+        const BytesVector bytes32 = BigEndian32::toBytesVector(value32);
+        const uint32_t result32 = BigEndian32::toInteger(bytes32);
+        compare(value32, result32);
         
         // Test LittleEndian64 alias
-        uint64_t value64 = 0x123456789ABCDEF0;
-        BytesVector bytes64 = LittleEndian64::toBytesVector(value64);
-        uint64_t result64 = LittleEndian64::toInteger(bytes64);
-        compare(String(uint64::toString(value64)), String(uint64::toString(result64)));
+        constexpr uint64_t value64 = 0x123456789ABCDEF0;
+        const BytesVector bytes64 = LittleEndian64::toBytesVector(value64);
+        const uint64_t result64 = LittleEndian64::toInteger(bytes64);
+        compare(value64, result64);
     }
     
     // =============================================================================
@@ -585,22 +577,22 @@ namespace EndianTests {
         // Test complex scenario with mixed operations
         
         // 1. Create test data using big-endian
-        Vector<uint32_t> original_data = {0x12345678, 0x9ABCDEF0, 0x11223344, 0x55667788};
-        BytesVector big_endian_bytes = BigEndian32::toBytesVector(original_data);
+        const Vector<uint32_t> original_data = {0x12345678, 0x9ABCDEF0, 0x11223344, 0x55667788};
+        const BytesVector big_endian_bytes = BigEndian32::toBytesVector(original_data);
         
         // 2. Interpret the same bytes as little-endian (should give different results)
-        Vector<uint32_t> little_interpreted = LittleEndian32::toIntegersVector(big_endian_bytes);
+        const Vector<uint32_t> little_interpreted = LittleEndian32::toIntegersVector(big_endian_bytes);
         
         // 3. Convert back to big-endian
-        Vector<uint32_t> roundtrip = BigEndian32::toIntegersVector(big_endian_bytes);
+        const Vector<uint32_t> roundtrip = BigEndian32::toIntegersVector(big_endian_bytes);
         
         // 4. Verify roundtrip integrity
-        compare(String(uint64::toString(original_data.size())), String(uint64::toString(roundtrip.size())));
+        compare(original_data.size(), roundtrip.size());
         for (size_t i = 0; i < original_data.size(); ++i) {
-            compare(String(uint64::toString(original_data[i])), String(uint64::toString(roundtrip[i])));
+            compare(original_data[i], roundtrip[i]);
         }
         
         // 5. Verify that little-endian interpretation is different
-        compare(String("0"), String((original_data[0] == little_interpreted[0]) ? "1" : "0"));
+        compare(false, original_data[0] == little_interpreted[0]);
     }
 }

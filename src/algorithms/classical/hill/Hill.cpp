@@ -64,5 +64,5 @@ ClassicalType Hill::encode(const ClassicalType &clear_text)
 
 ClassicalType Hill::decode(const ClassicalType &cipher_text)
 {
-    return process(cipher_text, key.inverse());
+    return process(cipher_text, key.inverse().value());
 }

@@ -166,6 +166,7 @@ namespace CryptoGL
         // Search operations (with constant-time option)
         [[nodiscard]] size_type find(const uint8_t c, const size_type pos) const noexcept;
         [[nodiscard]] size_type find(const uint8_t c) const noexcept;  // Always scans entire string
+        [[nodiscard]] size_type find(const String& substr, size_type pos = 0) const noexcept;
 
         [[nodiscard]] static std::vector<String> chunk(const std::string_view input, 
             const size_type chunk_size = MAX_SECURE_LENGTH);

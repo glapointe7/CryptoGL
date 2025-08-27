@@ -632,6 +632,26 @@ String::size_type String::find(const uint8_t c, const size_type pos) const noexc
     return npos;
 }
 
+String::size_type String::find(const String& substr, size_type pos) const noexcept
+{
+    if (substr.m_length == 0 || substr.m_length > m_length) {
+        return npos;
+    }
+
+    for (size_type i = pos; i <= m_length - substr.m_length; ++i) {
+        size_type j = 0;
+        for (; j < substr.m_length; ++j) {
+            if (m_data[i + j] != substr.m_data[j]) {
+                break;
+            }
+        }
+        if (j == substr.m_length) {
+            return i; 
+        }
+    }
+    return npos; 
+}
+
 // String manipulation operations
 String& String::append(const String& str) noexcept
 {

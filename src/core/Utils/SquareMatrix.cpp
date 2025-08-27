@@ -7,21 +7,37 @@
 
 using namespace CryptoGL;
 
-void SquareMatrix::setMatrix(const Int32Matrix &M)
-{
-    // Exceptions : Matrix have to be square and not empty.
-    if (M.empty())
-    {
+
+SquareMatrix::SquareMatrix(const Int32Matrix& M, const int32_t modulo) {
+    setMatrix(M);
+    setModulo(modulo);
+}
+
+SquareMatrix::SquareMatrix(Int32Matrix&& M, const int32_t modulo) {
+    setMatrix(M);
+    setModulo(modulo);
+}
+
+void SquareMatrix::setMatrix(const Int32Matrix& M) {
+    if (M.empty()) [[unlikely]] {
         throw EmptyMatrix("The matrix is empty.");
     }
-
-    if (!isSquare(M))
-    {
+    if (!isSquare(M)) [[unlikely]] {
         throw MatrixNotSquare("The matrix has to be square.");
     }
-
-    this->M = M;
+    this->M = M;                                
     setDimension(M.size());
+}
+
+void SquareMatrix::setMatrix(Int32Matrix&& M) {   
+    if (M.empty()) [[unlikely]] {
+        throw EmptyMatrix("The matrix is empty.");
+    }
+    if (!isSquare(M)) [[unlikely]] {
+        throw MatrixNotSquare("The matrix has to be square.");
+    }
+    this->M = std::move(M);           // Move assignment - ZERO COPY!
+    setDimension(this->M.size());
 }
 
 void SquareMatrix::setDimension(const uint32_t dim)
@@ -65,60 +81,63 @@ uint32_t SquareMatrix::findNonZero(const Int32Matrix &A, const uint32_t from) co
     return pos;
 }
 
-UInt32Vector SquareMatrix::multiply(const UInt32Vector &V) const
+UInt32Vector SquareMatrix::multiply(const UInt32Vector &V) const noexcept
 {
-    UInt32Vector soln(dim, 0);
-
-    uint32_t i = 0;
-    for (const auto &row : M)
-    {
-        uint32_t j = 0;
-        for (const auto &number : row)
-        {
-            soln[i] += number * V[j++];
+    UInt32Vector result(dim, 0);
+    
+    // Cache-friendly row-major access with explicit indexing
+    for (uint32_t i = 0; i < dim; ++i) {
+        uint64_t sum = 0;                    // Use wider type to avoid overflow
+        const auto& row = M[i];              // Cache row reference
+        
+        // Inner loop - potential for auto-vectorization
+        for (uint32_t j = 0; j < dim; ++j) {
+            sum += static_cast<uint64_t>(row[j]) * V[j];
         }
-        soln[i++] %= n;
+        result[i] = static_cast<uint32_t>(sum % n);
     }
-
-    return soln;
+    
+    return result;
 }
 
-void SquareMatrix::setIdentity()
+void SquareMatrix::setIdentity() noexcept
 {
-    M = Int32Matrix(dim, Int32Vector(dim, 0));
-    for (uint32_t i = 0; i < dim; ++i)
-    {
+     M.assign(dim, Int32Vector(dim, 0));    
+    
+    // Vectorizable loop for setting diagonal
+    for (uint32_t i = 0; i < dim; ++i) {
         M[i][i] = 1;
     }
 }
 
 // Return the matrix Identity.
-
-Int32Matrix SquareMatrix::identity() const
+Int32Matrix SquareMatrix::identity() const noexcept
 {
-    Int32Matrix Mat = Int32Matrix(dim, Int32Vector(dim, 0));
-    for (uint32_t i = 0; i < dim; ++i)
-    {
-        Mat[i][i] = 1;
+    Int32Matrix mat;
+    mat.reserve(dim);                         // Pre-allocate to avoid reallocations
+    
+    for (uint32_t i = 0; i < dim; ++i) {
+        mat.emplace_back(dim, 0);             // Construct in-place
+        mat[i][i] = 1;                         // Set diagonal element
     }
-
-    return Mat;
+    
+    return mat;
 }
 
-int32_t SquareMatrix::trace() const
+int32_t SquareMatrix::trace() const noexcept
 {
     return trace(M);
 }
 
-int32_t SquareMatrix::trace(const Int32Matrix &A) const
+int32_t SquareMatrix::trace(const Int32Matrix &A) const noexcept
 {
-    int32_t prod = 1;
+    int32_t sum = 0;
     for (uint32_t i = 0; i < dim; ++i)
     {
-        prod *= A[i][i];
+        sum += A[i][i];
     }
 
-    return prod;
+    return sum % n;
 }
 
 bool SquareMatrix::isSquare(const Int32Matrix &mat)
@@ -159,133 +178,148 @@ void SquareMatrix::triangularize(Int32Matrix &A, Int32Matrix &I, const uint32_t 
     }
 }
 
-int32_t SquareMatrix::det() const
+int32_t SquareMatrix::diagonal_product() const noexcept
+{
+    return diagonal_product(M);
+}
+
+int32_t SquareMatrix::diagonal_product(const Int32Matrix &A) const noexcept
+{
+    int32_t result = 0;
+    for (uint32_t i = 0; i < dim; ++i)
+    {
+        result *= A[i][i];
+    }
+
+    return result % n;
+}
+
+int32_t SquareMatrix::det() const noexcept {
+    switch (dim) {
+        case 1:
+            return Maths::Mod(M[0][0], n);
+            
+        case 2:
+            return Maths::Mod(
+                ((M[0][0] * M[1][1]) -
+                (M[0][1] * M[1][0])), n
+            );
+                 
+        case 3: {
+            // Optimized 3x3 determinant using Sarrus rule with overflow protection
+            const int32_t positive = 
+                (M[0][0] * M[1][1] * M[2][2]) +
+                (M[0][1] * M[1][2] * M[2][0]) +
+                (M[0][2] * M[1][0] * M[2][1]);
+                
+            const int32_t negative = 
+                (M[0][2] * M[1][1] * M[2][0]) +
+                (M[0][1] * M[1][0] * M[2][2]) +
+                (M[0][0] * M[1][2] * M[2][1]);
+                
+            return Maths::Mod((positive - negative), n);
+        }
+        
+        default:
+            return det_gaussian();       // Optimized Gaussian elimination
+    }
+}
+
+int32_t SquareMatrix::det_gaussian() const noexcept
 {
     int32_t determinant = 0;
 
-    switch (dim)
+    Int32Matrix A = M;
+    int8_t swapping = 1;
+
+    for (uint32_t k = 0; k < dim - 1; ++k)
     {
-        // 3X3 Matrices should occur more often than 1X1 and 2X2.
-        case 3:
-            determinant = (M[0][0] * ((M[1][1] * M[2][2]) - (M[1][2] * M[2][1]))
-                    - M[0][1] * ((M[1][0] * M[2][2]) - (M[1][2] * M[2][0]))
-                    + M[0][2] * ((M[1][0] * M[2][1]) - (M[1][1] * M[2][0]))) % n;
-            break;
-
-        // 2X2 Matrices should occur more often than 1X1.
-        case 2:
-            determinant = ((M[0][0] * M[1][1]) - (M[0][1] * M[1][0])) % n;
-            break;
-
-        case 1:
-            determinant = M[0][0];
-            break;
-
-        default:
+        // Swap the zero pivot with a non zero one.
+        // If no one is found, then the column k below A(k,k) is zero.
+        // Thus, det(M) = 0.
+        if (A[k][k] == 0 || !Maths::areCoprimes(A[k][k], n))
         {
-            Int32Matrix A = M;
-            int8_t swapping = 1;
-
-            for (uint32_t k = 0; k < dim - 1; ++k)
+            const uint32_t pivot = findNonZero(A, k);
+            if (pivot == dim)
             {
-                // Swap the zero pivot with a non zero one.
-                // If no one is found, then the column k below A(k,k) is zero.
-                // Thus, det(M) = 0.
-                if (A[k][k] == 0 || !Maths::areCoprimes(A[k][k], n))
-                {
-                    const uint32_t pivot = findNonZero(A, k);
-                    if (pivot == dim)
-                    {
-                        return 0;
-                    }
-                    std::swap(A[pivot], A[k]);
-                    swapping *= -1;
-                }
-
-                // Li = Li + q*Ln.
-                const int32_t inv = Maths::getModInverse(A[k][k], n);
-                for (uint32_t i = k + 1; i < dim; ++i)
-                {
-                    const int32_t q = (inv * (n - A[i][k])) % n;
-                    for (uint32_t j = k + 1; j < dim; ++j)
-                    {
-
-                        A[i][j] = (A[i][j] + (q * A[k][j])) % n;
-                    }
-                }
+                return 0;
             }
-            determinant = trace(A) * swapping;
+            std::swap(A[pivot], A[k]);
+            swapping *= -1;
+        }
+
+        // Li = Li + q*Ln.
+        const int32_t inv = Maths::getModInverse(A[k][k], n);
+        for (uint32_t i = k + 1; i < dim; ++i)
+        {
+            const int32_t q = (inv * (n - A[i][k])) % n;
+            for (uint32_t j = k + 1; j < dim; ++j)
+            {
+
+                A[i][j] = (A[i][j] + (q * A[k][j])) % n;
+            }
         }
     }
+    determinant = diagonal_product(A) * swapping;
 
     return determinant;
 }
 
-SquareMatrix SquareMatrix::inverse() const
+std::optional<SquareMatrix> SquareMatrix::inverse() const
 {
-    SquareMatrix result;
-    result.setModulo(n);
-    Int32Matrix A;
-
     // Determinant of A is positive and is in the set {0,...,mod_A-1}
     const int32_t deter = det();
+    if (!Maths::areCoprimes(deter, n)) {
+        return std::nullopt;
+    }
 
     // We make sure that GCD(det(result), mod) = 1 => result is reversible in the Z_mod group.
-    if (Maths::areCoprimes(deter, n))
+    switch (dim)
     {
-        switch (dim)
+        case 1:
         {
-            case 1:
+            Int32Matrix A = {{(Maths::getModInverse(deter, n) + n) % n}};
+            return SquareMatrix(std::move(A), n);
+        }
+
+        case 2:
+        {
+            const int32_t det_inv = Maths::getModInverse(deter, n);
+            // Transform to a positive matrix.
+            Int32Matrix A = {
+                {(((det_inv * M[1][1]) % n) + n) % n, (((det_inv * -M[0][1]) % n) + n) % n},
+                {(((det_inv * -M[1][0]) % n) + n) % n, (((det_inv * M[0][0]) % n) + n) % n}
+            };
+            return SquareMatrix(std::move(A), n);
+        }
+
+        default:
+        {
+            Int32Matrix A = M;
+            Int32Matrix I = identity();
+
+            // Triangular inferior.
+            for (uint32_t k = 0; k < dim - 1; ++k)
             {
-                A = {
-                    {(Maths::getModInverse(deter, n) + n) % n}
-                };
-                result.setMatrix(A);
-                break;
+                triangularize(A, I, k, k + 1, dim);
             }
 
-            case 2:
+            // Triangular superior.
+            for (uint32_t k = dim - 1; k >= 1; --k)
             {
-                const int32_t det_inv = Maths::getModInverse(deter, n);
-                // Transform to a positive matrix.
-                A = {
-                    {(((det_inv * M[1][1]) % n) + n) % n, (((det_inv * -M[0][1]) % n) + n) % n},
-                    {(((det_inv * -M[1][0]) % n) + n) % n, (((det_inv * M[0][0]) % n) + n) % n}
-                };
-                result.setMatrix(A);
-                break;
+                triangularize(A, I, k, 0, k);
             }
 
-            default:
+            // Now we transform A to the identity matrix.
+            for (uint32_t k = 0; k < dim; ++k)
             {
-                A = M;
-                Int32Matrix I = identity();
-
-                // Triangular inferior.
-                for (uint32_t k = 0; k < dim - 1; ++k)
+                const int32_t inv = Maths::getModInverse(A[k][k], n);
+                for (uint32_t i = 0; i < dim; ++i)
                 {
-                    triangularize(A, I, k, k + 1, dim);
+                    I[k][i] = (I[k][i] * inv) % n;
                 }
-
-                // Triangular superior.
-                for (uint32_t k = dim - 1; k >= 1; --k)
-                {
-                    triangularize(A, I, k, 0, k);
-                }
-
-                // Now we transform A to the identity matrix.
-                for (uint32_t k = 0; k < dim; ++k)
-                {
-                    const int32_t inv = Maths::getModInverse(A[k][k], n);
-                    for (uint32_t i = 0; i < dim; ++i)
-                    {
-                        I[k][i] = (I[k][i] * inv) % n;
-                    }
-                } // end FOR k
-                result.setMatrix(I);
-            } // end Default
-        } // end Switch
-    } // end IF
-
-    return result;
+            } // end FOR k
+            return SquareMatrix(std::move(I), n);
+        } // end Default
+    } // end Switch
 }

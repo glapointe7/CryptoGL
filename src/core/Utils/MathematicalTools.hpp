@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <concepts>
 #include "../exceptions/Exception.hpp"
 
 namespace Maths
@@ -109,6 +110,15 @@ namespace Maths
    {
       return (value + modulo) % modulo;
    }
+
+   template<std::integral Type>
+   [[nodiscard]] constexpr Type Mod(Type x, Type y) noexcept {
+    if (y == 0) {
+        return 0;
+    }
+    const Type r = x % y;
+    return (r < 0) ? (r + ((y > 0) ? y : -y)) : r;
+}
 
    /* Check if 'value' is a perfect square. */
    bool isPerfectSquare(const uint32_t value);

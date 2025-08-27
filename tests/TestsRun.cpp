@@ -79,6 +79,9 @@
 #include "unit/IntegerTest.hpp"
 #include "unit/VectorTest.hpp"
 #include "unit/StringTest.hpp"
+#include "unit/EndianTest.hpp"
+#include "unit/FileTest.hpp"
+#include "unit/SquareMatrixTest.hpp"
 
 //#include "security/IntegerSecurityTest.hpp"
 
