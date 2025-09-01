@@ -7,7 +7,7 @@ using namespace CryptoGL;
 
 HellmanMerkleKnapsack::HellmanMerkleKnapsack(const BigIntVector &sequence, const BigInteger &div, const BigInteger &mod)
 {
-    if (!Maths::areCoprimes(div, mod))
+    if (div.gcd(mod) != BigInteger(1))
     {
         throw IntegersNotCoprimes("The modulo 'mod' and dividend 'div' have to be coprimes.");
     }
@@ -23,7 +23,7 @@ HellmanMerkleKnapsack::HellmanMerkleKnapsack(const BigIntVector &sequence, const
     }
 
     const BigInteger sum_sequence = isSuperIncresing(sequence);
-    if (sum_sequence == 0)
+    if (sum_sequence.isZero())
     {
         throw SequenceNotSuperIncreasing("Your sequence's vector has to be a super increasing sequence.");
     }
@@ -92,7 +92,7 @@ BigIntVector HellmanMerkleKnapsack::encode(const BytesVector &message)
         BigInteger sum;
         for (uint8_t i = 0; i < 8; ++i)
         {
-            sum += static_cast<BigInteger> (uint8::getBitAtPosition(byte, 7 - i)) * public_key[i];
+            sum += BigInteger(uint8::getBitAtPosition(byte, 7 - i)) * public_key[i];
         }
         crypted.push_back(sum);
     }
@@ -105,9 +105,9 @@ BytesVector HellmanMerkleKnapsack::decode(const BigIntVector &cipher)
     BytesVector decrypted;
     decrypted.reserve(cipher.size());
 
-    const BigInteger inverse_div = Maths::getModInverse(div, mod);
+    const BigInteger inverse_div = div.modInverse(mod);
 
-    for (const auto &value : cipher)
+    for (const BigInteger &value : cipher)
     {
         decrypted.push_back(makePlainByte((value * inverse_div) % mod));
     }

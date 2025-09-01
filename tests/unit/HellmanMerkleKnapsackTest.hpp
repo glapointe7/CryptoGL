@@ -9,29 +9,39 @@
 
 namespace UnitTests
 {
-    class HellmanMerkleKnapsackTest : public Test
-    {
-    protected:
-       HellmanMerkleKnapsack *H;
+   class HellmanMerkleKnapsackTest : public Test
+   {
+   protected:
+      HellmanMerkleKnapsack *H;
+      const Vector<BigInteger> sequence = {
+         BigInteger(24),
+         BigInteger(50), 
+         BigInteger(91), 
+         BigInteger(228), 
+         BigInteger(434), 
+         BigInteger(924), 
+         BigInteger(1779), 
+         BigInteger(3965)
+      };
 
-       void setUp() override
-       {
-          H = new HellmanMerkleKnapsack({24, 50, 91, 228, 434, 924, 1779, 3965}, 1843, 7908);
-       }
+      void setUp() override
+      {
+         H = new HellmanMerkleKnapsack(sequence, 1843, 7908);
+      }
 
-       void tearDown() override
-       {
-          delete H;
-       }
-    };
+      void tearDown() override
+      {
+         delete H;
+      }
+   };
 
-    TEST(HellmanMerkleKnapsackEncode, HellmanMerkleKnapsackTest)
-    {
-       compare("6316 10022 10673 10673 15961", Digest::bigIntVectorToString(H->encode(StringTest("Hello").toBytes())));
-    }
+   TEST(HellmanMerkleKnapsackEncode, HellmanMerkleKnapsackTest)
+   {
+      compare("6316 10022 10673 10673 15961", BigInteger::toString(H->encode(StringTest("Hello").toBytes())));
+   }
 
-    TEST(HellmanMerkleKnapsackDecode, HellmanMerkleKnapsackTest)
-    {
-       compare("Hello", H->decode(Digest::stringToBigIntVector("6316 10022 10673 10673 15961")).toString());
-    }
+   TEST(HellmanMerkleKnapsackDecode, HellmanMerkleKnapsackTest)
+   {
+      compare("Hello", H->decode(BigInteger::stringToBigIntVector("0x18AC 0x2726 0x29B1 0x29B1 0x3E59")).toString());
+   }
 }

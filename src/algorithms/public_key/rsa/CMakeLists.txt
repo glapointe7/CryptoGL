@@ -10,7 +10,7 @@ target_include_directories(RSA PUBLIC
 
 target_link_libraries(RSA PUBLIC
     cryptoGL::Core
-    cryptoGL::BigIntegers
+    #cryptoGL::BigIntegers
     cryptoGL::PublicKeyCommon
 )
 

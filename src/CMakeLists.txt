@@ -1,7 +1,7 @@
 # Add the source files code (CPP, HPP and the CMakeLists.txt) of 'big_numbers' directory.
 add_subdirectory(core)
 add_subdirectory(algorithms)
-add_subdirectory(big_integers)
+#add_subdirectory(big_integers)
 
 # Create an executable for real usages of the algorithms.
 add_executable(cryptoGL
@@ -12,7 +12,7 @@ add_executable(cryptoGL
 # Therefore, these libraries must be linked with the executable.
 target_link_libraries(cryptoGL PRIVATE
     cryptoGL::Core
-    cryptoGL::BigIntegers
+    #cryptoGL::BigIntegers
     cryptoGL::AlgorithmsCommon
     
     # Block cipher

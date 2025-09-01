@@ -1,5 +1,6 @@
 #include "unit/TestContainer.hpp"
 
+// ALGORITHMS
 #include "unit/Adler32Test.hpp"
 #include "unit/AffineTest.hpp"
 #include "unit/AdfgvxTest.hpp"
@@ -75,6 +76,7 @@
 #include "unit/XTEATest.hpp"
 #include "unit/SerpentTest.hpp"
 
+// TYPES
 #include "unit/ArrayTest.hpp"
 #include "unit/IntegerTest.hpp"
 #include "unit/VectorTest.hpp"
@@ -82,6 +84,9 @@
 #include "unit/EndianTest.hpp"
 #include "unit/FileTest.hpp"
 #include "unit/SquareMatrixTest.hpp"
+#include "unit/BigIntegerTest.hpp"
+#include "unit/ModularArithmeticTest.hpp"
+#include "unit/ChineseRemainderTheoremTest.hpp"
 
 //#include "security/IntegerSecurityTest.hpp"
 

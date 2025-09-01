@@ -14,7 +14,7 @@ target_link_libraries(cryptoGL_tests PRIVATE
     gtest
     gtest_main
     cryptoGL::Core
-    cryptoGL::BigIntegers
+    #cryptoGL::BigIntegers
     cryptoGL::AlgorithmsCommon
     
     # Block cipher

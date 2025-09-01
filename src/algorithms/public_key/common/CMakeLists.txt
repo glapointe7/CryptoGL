@@ -13,7 +13,7 @@ target_include_directories(PublicKeyCommon PUBLIC
 # Link common library to Core dependencies
 target_link_libraries(PublicKeyCommon PUBLIC
     cryptoGL::Core
-    cryptoGL::BigIntegers
+    #cryptoGL::BigIntegers
 )
 
 # Apply security and performance flags to common library

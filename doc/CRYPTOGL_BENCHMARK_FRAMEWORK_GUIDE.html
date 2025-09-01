@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoGL Benchmark Framework - Implementation Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background-color: #1a1a1a;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        h1, h2, h3 {
+            color: #00d4aa;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        h1 {
+            text-align: center;
+            color: #00ff88;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #4fc3f7;
+            font-size: 1.8em;
+            margin-top: 40px;
+        }
+        h3 {
+            color: #ffb74d;
+            font-size: 1.3em;
+            margin-top: 30px;
+        }
+        .code-block {
+            background-color: #000000;
+            border: 1px solid #333;
+            border-left: 4px solid #00d4aa;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+        .keyword { color: #ff6b6b; font-weight: bold; }
+        .type { color: #4ecdc4; font-weight: bold; }
+        .string { color: #95e454; }
+        .comment { color: #6c7086; font-style: italic; }
+        .number { color: #f9ca24; }
+        .preprocessor { color: #a29bfe; }
+        .function { color: #fd79a8; }
+        .variable { color: #fdcb6e; }
+        .namespace { color: #6c5ce7; }
+        .operator { color: #ff7675; }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .feature-box {
+            background-color: #2d2d30;
+            border: 1px solid #404040;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .warning-box {
+            background-color: #3d2914;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .info-box {
+            background-color: #1e3d59;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .security-box {
+            background-color: #2d1b14;
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .function-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #2d2d30;
+        }
+        .function-table th,
+        .function-table td {
+            border: 1px solid #404040;
+            padding: 12px;
+            text-align: left;
+        }
+        .function-table th {
+            background-color: #404040;
+            color: #00d4aa;
+            font-weight: bold;
+        }
+        .function-table tr:nth-child(even) {
+            background-color: #363636;
+        }
+        .output-example {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            color: #c9d1d9;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .highlight {
+            background-color: #3d2914;
+            padding: 2px 4px;
+            border-radius: 3px;
+            color: #f39c12;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CryptoGL Benchmark Framework</h1>
+            <p style="text-align: center; font-size: 1.2em; margin: 0;">
+                <strong>Constant-Time • Secure • Fast • Readable</strong><br>
+                Implementation Guide for C++20 Cryptographic Applications
+            </p>
+        </div>
+
+        <h2>📋 Table of Contents</h2>
+        <ul>
+            <li><a href="#overview" style="color: #4fc3f7;">Framework Overview</a></li>
+            <li><a href="#implementation" style="color: #4fc3f7;">Core Implementation</a></li>
+            <li><a href="#test-hpp-changes" style="color: #4fc3f7;">Recommended Test.hpp Changes</a></li>
+            <li><a href="#functions-summary" style="color: #4fc3f7;">Functions Summary</a></li>
+            <li><a href="#usage-examples" style="color: #4fc3f7;">Usage Examples</a></li>
+            <li><a href="#output-format" style="color: #4fc3f7;">Expected Output Format</a></li>
+        </ul>
+
+        <h2 id="overview">🎯 Framework Overview</h2>
+        
+        <div class="feature-box">
+            <h3>Design Principles</h3>
+            <ul>
+                <li><strong>Constant-Time Focus:</strong> Resistant to timing attacks with statistical analysis</li>
+                <li><strong>Security-First:</strong> Memory-safe, side-channel resistant measurements</li>
+                <li><strong>High Performance:</strong> Minimal overhead, optimized measurement loops</li>
+                <li><strong>Readable Results:</strong> Clear visualization and statistical reporting</li>
+                <li><strong>Easy Integration:</strong> Seamless extension of existing Test.hpp framework</li>
+            </ul>
+        </div>
+
+        <div class="security-box">
+            <h3>⚠️ Security Considerations</h3>
+            <p>This benchmark framework is specifically designed for cryptographic code where timing consistency is critical. It includes features to detect timing variations that could lead to side-channel vulnerabilities.</p>
+        </div>
+
+        <h2 id="implementation">🏗️ Core Implementation</h2>
+
+        <h3>1. Benchmark.hpp - Main Framework Header</h3>
+        <div class="code-block">
+            <pre><code><span class="preprocessor">#pragma once</span>
+
+<span class="preprocessor">#include</span> <span class="string">"../../src/core/types/Types.hpp"</span>
+<span class="preprocessor">#include</span> <span class="string">"../../src/core/types/Vector.hpp"</span>
+<span class="preprocessor">#include</span> <span class="string">"../../src/core/types/String.hpp"</span>
+<span class="preprocessor">#include</span> <span class="string">"Test.hpp"</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;chrono&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;algorithm&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;numeric&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;thread&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;random&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;immintrin.h&gt;</span> <span class="comment">// For memory barriers and CPU-specific instructions</span>
+
+<span class="keyword">using namespace</span> <span class="namespace">CryptoGL</span>;
+
+<span class="keyword">namespace</span> <span class="namespace">UnitTests</span>
+{
+    <span class="comment">/**
+     * @brief High-precision timing measurement for cryptographic operations
+     * 
+     * Provides nanosecond-precision timing with CPU fence instructions
+     * to prevent instruction reordering and ensure accurate measurements.
+     */</span>
+    <span class="keyword">class</span> <span class="type">TimingMeasurement</span>
+    {
+    <span class="keyword">public</span>:
+        <span class="keyword">using</span> <span class="type">TimePoint</span> = <span class="type">std::chrono::high_resolution_clock::time_point</span>;
+        <span class="keyword">using</span> <span class="type">Duration</span> = <span class="type">std::chrono::nanoseconds</span>;
+        
+        <span class="comment">/**
+         * @brief Start high-precision timing measurement
+         * @note Uses CPU serialization instructions to prevent reordering
+         */</span>
+        <span class="keyword">static</span> <span class="type">void</span> <span class="function">startMeasurement</span>() <span class="keyword">noexcept</span>
+        {
+            <span class="preprocessor">#if defined(__x86_64__) || defined(_M_X64)</span>
+            <span class="function">_mm_lfence</span>(); <span class="comment">// Load fence - wait for all previous loads</span>
+            <span class="function">_mm_mfence</span>(); <span class="comment">// Memory fence - full barrier</span>
+            <span class="preprocessor">#endif</span>
+            <span class="keyword">std::atomic_thread_fence</span>(<span class="type">std::memory_order_seq_cst</span>);
+        }
+        
+        <span class="comment">/**
+         * @brief End timing measurement with serialization
+         * @return Duration in nanoseconds
+         */</span>
+        <span class="keyword">static</span> <span class="type">Duration</span> <span class="function">endMeasurement</span>(<span class="type">TimePoint</span> <span class="variable">start</span>) <span class="keyword">noexcept</span>
+        {
+            <span class="preprocessor">#if defined(__x86_64__) || defined(_M_X64)</span>
+            <span class="function">_mm_mfence</span>(); <span class="comment">// Ensure all operations completed</span>
+            <span class="preprocessor">#endif</span>
+            <span class="keyword">std::atomic_thread_fence</span>(<span class="type">std::memory_order_seq_cst</span>);
+            <span class="keyword">return</span> <span class="type">std::chrono::high_resolution_clock</span>::<span class="function">now</span>() <span class="operator">-</span> <span class="variable">start</span>;
+        }
+        
+        <span class="comment">/**
+         * @brief Get current high-resolution timestamp
+         */</span>
+        <span class="keyword">static</span> <span class="type">TimePoint</span> <span class="function">now</span>() <span class="keyword">noexcept</span>
+        {
+            <span class="keyword">return</span> <span class="type">std::chrono::high_resolution_clock</span>::<span class="function">now</span>();
+        }
+    };
+
+    <span class="comment">/**
+     * @brief Statistical analysis for benchmark measurements
+     * 
+     * Provides comprehensive statistical analysis including detection
+     * of timing anomalies that could indicate side-channel vulnerabilities.
+     */</span>
+    <span class="keyword">class</span> <span class="type">BenchmarkStatistics</span>
+    {
+    <span class="keyword">public</span>:
+        <span class="comment">/**
+         * @brief Statistical results for benchmark analysis
+         */</span>
+        <span class="keyword">struct</span> <span class="type">Statistics</span>
+        {
+            <span class="type">double</span> <span class="variable">mean_ns</span>;              <span class="comment">// Mean execution time in nanoseconds</span>
+            <span class="type">double</span> <span class="variable">median_ns</span>;            <span class="comment">// Median execution time</span>
+            <span class="type">double</span> <span class="variable">min_ns</span>;               <span class="comment">// Minimum execution time</span>
+            <span class="type">double</span> <span class="variable">max_ns</span>;               <span class="comment">// Maximum execution time</span>
+            <span class="type">double</span> <span class="variable">stddev_ns</span>;           <span class="comment">// Standard deviation</span>
+            <span class="type">double</span> <span class="variable">cv_percent</span>;          <span class="comment">// Coefficient of variation as percentage</span>
+            <span class="type">double</span> <span class="variable">percentile_95_ns</span>;    <span class="comment">// 95th percentile</span>
+            <span class="type">double</span> <span class="variable">percentile_99_ns</span>;    <span class="comment">// 99th percentile</span>
+            <span class="type">bool</span> <span class="variable">is_constant_time</span>;       <span class="comment">// True if CV &lt; threshold</span>
+            <span class="type">size_t</span> <span class="variable">sample_count</span>;        <span class="comment">// Number of measurements</span>
+        };
+        
+        <span class="comment">/**
+         * @brief Calculate comprehensive statistics from timing measurements
+         * @param measurements Vector of timing measurements in nanoseconds
+         * @param constant_time_threshold CV threshold for constant-time classification (default 5%)
+         * @return Complete statistical analysis
+         */</span>
+        <span class="keyword">static</span> <span class="type">Statistics</span> <span class="function">calculate</span>(<span class="keyword">const</span> <span class="type">Vector</span>&lt;<span class="type">double</span>&gt;<span class="operator">&amp;</span> <span class="variable">measurements</span>,
+                                         <span class="type">double</span> <span class="variable">constant_time_threshold</span> <span class="operator">=</span> <span class="number">5.0</span>)
+        {
+            <span class="keyword">if</span> (<span class="variable">measurements</span>.<span class="function">empty</span>())
+            {
+                <span class="keyword">return</span> <span class="type">Statistics</span>{<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="keyword">false</span>, <span class="number">0</span>};
+            }
+            
+            <span class="comment">// Create sorted copy for percentile calculations</span>
+            <span class="keyword">auto</span> <span class="variable">sorted</span> <span class="operator">=</span> <span class="variable">measurements</span>;
+            <span class="type">std::sort</span>(<span class="variable">sorted</span>.<span class="function">begin</span>(), <span class="variable">sorted</span>.<span class="function">end</span>());
+            
+            <span class="comment">// Basic statistics</span>
+            <span class="type">double</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="type">std::accumulate</span>(<span class="variable">measurements</span>.<span class="function">begin</span>(), <span class="variable">measurements</span>.<span class="function">end</span>(), <span class="number">0.0</span>);
+            <span class="type">double</span> <span class="variable">mean</span> <span class="operator">=</span> <span class="variable">sum</span> <span class="operator">/</span> <span class="variable">measurements</span>.<span class="function">size</span>();
+            
+            <span class="comment">// Variance and standard deviation</span>
+            <span class="type">double</span> <span class="variable">variance</span> <span class="operator">=</span> <span class="number">0.0</span>;
+            <span class="keyword">for</span> (<span class="type">double</span> <span class="variable">value</span> : <span class="variable">measurements</span>)
+            {
+                <span class="type">double</span> <span class="variable">diff</span> <span class="operator">=</span> <span class="variable">value</span> <span class="operator">-</span> <span class="variable">mean</span>;
+                <span class="variable">variance</span> <span class="operator">+=</span> <span class="variable">diff</span> <span class="operator">*</span> <span class="variable">diff</span>;
+            }
+            <span class="variable">variance</span> <span class="operator">/=</span> <span class="variable">measurements</span>.<span class="function">size</span>();
+            <span class="type">double</span> <span class="variable">stddev</span> <span class="operator">=</span> <span class="type">std::sqrt</span>(<span class="variable">variance</span>);
+            
+            <span class="comment">// Coefficient of variation (CV)</span>
+            <span class="type">double</span> <span class="variable">cv</span> <span class="operator">=</span> (<span class="variable">mean</span> <span class="operator">&gt;</span> <span class="number">0</span>) <span class="operator">?</span> (<span class="variable">stddev</span> <span class="operator">/</span> <span class="variable">mean</span> <span class="operator">*</span> <span class="number">100.0</span>) : <span class="number">0.0</span>;
+            
+            <span class="comment">// Percentiles</span>
+            <span class="type">double</span> <span class="variable">median</span> <span class="operator">=</span> <span class="function">getPercentile</span>(<span class="variable">sorted</span>, <span class="number">50.0</span>);
+            <span class="type">double</span> <span class="variable">p95</span> <span class="operator">=</span> <span class="function">getPercentile</span>(<span class="variable">sorted</span>, <span class="number">95.0</span>);
+            <span class="type">double</span> <span class="variable">p99</span> <span class="operator">=</span> <span class="function">getPercentile</span>(<span class="variable">sorted</span>, <span class="number">99.0</span>);
+            
+            <span class="keyword">return</span> <span class="type">Statistics</span>
+            {
+                <span class="variable">mean</span>,
+                <span class="variable">median</span>,
+                <span class="variable">sorted</span>.<span class="function">front</span>(),
+                <span class="variable">sorted</span>.<span class="function">back</span>(),
+                <span class="variable">stddev</span>,
+                <span class="variable">cv</span>,
+                <span class="variable">p95</span>,
+                <span class="variable">p99</span>,
+                <span class="variable">cv</span> <span class="operator">&lt;</span> <span class="variable">constant_time_threshold</span>,
+                <span class="variable">measurements</span>.<span class="function">size</span>()
+            };
+        }
+        
+    <span class="keyword">private</span>:
+        <span class="comment">/**
+         * @brief Calculate percentile from sorted data
+         */</span>
+        <span class="keyword">static</span> <span class="type">double</span> <span class="function">getPercentile</span>(<span class="keyword">const</span> <span class="type">Vector</span>&lt;<span class="type">double</span>&gt;<span class="operator">&amp;</span> <span class="variable">sorted_data</span>, <span class="type">double</span> <span class="variable">percentile</span>)
+        {
+            <span class="keyword">if</span> (<span class="variable">sorted_data</span>.<span class="function">empty</span>()) <span class="keyword">return</span> <span class="number">0.0</span>;
+            
+            <span class="type">double</span> <span class="variable">index</span> <span class="operator">=</span> <span class="variable">percentile</span> <span class="operator">/</span> <span class="number">100.0</span> <span class="operator">*</span> (<span class="variable">sorted_data</span>.<span class="function">size</span>() <span class="operator">-</span> <span class="number">1</span>);
+            <span class="type">size_t</span> <span class="variable">lower_index</span> <span class="operator">=</span> <span class="keyword">static_cast</span>&lt;<span class="type">size_t</span>&gt;(<span class="variable">index</span>);
+            <span class="type">size_t</span> <span class="variable">upper_index</span> <span class="operator">=</span> <span class="type">std::min</span>(<span class="variable">lower_index</span> <span class="operator">+</span> <span class="number">1</span>, <span class="variable">sorted_data</span>.<span class="function">size</span>() <span class="operator">-</span> <span class="number">1</span>);
+            
+            <span class="type">double</span> <span class="variable">weight</span> <span class="operator">=</span> <span class="variable">index</span> <span class="operator">-</span> <span class="variable">lower_index</span>;
+            <span class="keyword">return</span> <span class="variable">sorted_data</span>[<span class="variable">lower_index</span>] <span class="operator">*</span> (<span class="number">1.0</span> <span class="operator">-</span> <span class="variable">weight</span>) <span class="operator">+</span> <span class="variable">sorted_data</span>[<span class="variable">upper_index</span>] <span class="operator">*</span> <span class="variable">weight</span>;
+        }
+    };
+
+    <span class="comment">/**
+     * @brief Advanced benchmark framework derived from Test.hpp
+     * 
+     * Extends the base Test class with comprehensive benchmarking capabilities
+     * specifically designed for cryptographic applications requiring constant-time
+     * execution and side-channel resistance.
+     */</span>
+    <span class="keyword">class</span> <span class="type">Benchmark</span> : <span class="keyword">public</span> <span class="type">Test</span>
+    {
+    <span class="keyword">public</span>:
+        <span class="comment">/**
+         * @brief Configuration for benchmark execution
+         */</span>
+        <span class="keyword">struct</span> <span class="type">Config</span>
+        {
+            <span class="type">size_t</span> <span class="variable">warmup_iterations</span> <span class="operator">=</span> <span class="number">1000</span>;       <span class="comment">// Warm up CPU/cache</span>
+            <span class="type">size_t</span> <span class="variable">benchmark_iterations</span> <span class="operator">=</span> <span class="number">10000</span>;   <span class="comment">// Main benchmark runs</span>
+            <span class="type">double</span> <span class="variable">constant_time_threshold</span> <span class="operator">=</span> <span class="number">5.0</span>;     <span class="comment">// CV% threshold for constant-time</span>
+            <span class="type">bool</span> <span class="variable">enable_memory_tracking</span> <span class="operator">=</span> <span class="keyword">true</span>;       <span class="comment">// Track memory usage</span>
+            <span class="type">bool</span> <span class="variable">enable_statistical_analysis</span> <span class="operator">=</span> <span class="keyword">true</span>; <span class="comment">// Full statistical output</span>
+            <span class="type">bool</span> <span class="variable">randomize_input_data</span> <span class="operator">=</span> <span class="keyword">true</span>;        <span class="comment">// Use random inputs to prevent branch prediction</span>
+        };
+        
+        <span class="comment">/**
+         * @brief Initialize benchmark with configuration
+         */</span>
+        <span class="keyword">explicit</span> <span class="function">Benchmark</span>(<span class="keyword">const</span> <span class="type">Config</span><span class="operator">&amp;</span> <span class="variable">config</span> <span class="operator">=</span> <span class="type">Config</span>{}) : <span class="variable">m_config</span>(<span class="variable">config</span>) {}
+        
+        <span class="comment">/**
+         * @brief Execute benchmark with statistical analysis
+         * @param benchmark_function Lambda or function pointer to benchmark
+         * @return Complete statistical analysis of execution times
+         */</span>
+        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">BenchmarkFunc</span>&gt;
+        <span class="type">BenchmarkStatistics</span>::<span class="type">Statistics</span> <span class="function">execute</span>(<span class="type">BenchmarkFunc</span><span class="operator">&amp;&amp;</span> <span class="variable">benchmark_function</span>)
+        {
+            <span class="comment">// Set CPU affinity and priority for consistent measurements</span>
+            <span class="function">setupCPUAffinity</span>();
+            
+            <span class="comment">// Storage for timing measurements</span>
+            <span class="type">Vector</span>&lt;<span class="type">double</span>&gt; <span class="variable">measurements</span>;
+            <span class="variable">measurements</span>.<span class="function">reserve</span>(<span class="variable">m_config</span>.<span class="variable">benchmark_iterations</span>);
+            
+            <span class="comment">// Warmup phase to stabilize CPU frequency and cache</span>
+            <span class="function">warmupPhase</span>(<span class="variable">benchmark_function</span>);
+            
+            <span class="comment">// Main benchmark loop</span>
+            <span class="keyword">for</span> (<span class="type">size_t</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; <span class="variable">i</span> <span class="operator">&lt;</span> <span class="variable">m_config</span>.<span class="variable">benchmark_iterations</span>; <span class="operator">++</span><span class="variable">i</span>)
+            {
+                <span class="comment">// Optional input randomization to prevent branch prediction optimizations</span>
+                <span class="keyword">if</span> (<span class="variable">m_config</span>.<span class="variable">randomize_input_data</span>)
+                {
+                    <span class="function">randomizeInputData</span>();
+                }
+                
+                <span class="comment">// High-precision timing measurement</span>
+                <span class="type">TimingMeasurement</span>::<span class="function">startMeasurement</span>();
+                <span class="keyword">auto</span> <span class="variable">start</span> <span class="operator">=</span> <span class="type">TimingMeasurement</span>::<span class="function">now</span>();
+                
+                <span class="comment">// Execute the benchmark function</span>
+                <span class="variable">benchmark_function</span>();
+                
+                <span class="comment">// End measurement with memory barriers</span>
+                <span class="keyword">auto</span> <span class="variable">duration</span> <span class="operator">=</span> <span class="type">TimingMeasurement</span>::<span class="function">endMeasurement</span>(<span class="variable">start</span>);
+                
+                <span class="comment">// Store timing in nanoseconds</span>
+                <span class="variable">measurements</span>.<span class="function">push_back</span>(<span class="keyword">static_cast</span>&lt;<span class="type">double</span>&gt;(<span class="variable">duration</span>.<span class="function">count</span>()));
+            }
+            
+            <span class="comment">// Calculate comprehensive statistics</span>
+            <span class="keyword">auto</span> <span class="variable">stats</span> <span class="operator">=</span> <span class="type">BenchmarkStatistics</span>::<span class="function">calculate</span>(<span class="variable">measurements</span>, <span class="variable">m_config</span>.<span class="variable">constant_time_threshold</span>);
+            
+            <span class="comment">// Store for reporting</span>
+            <span class="variable">m_last_statistics</span> <span class="operator">=</span> <span class="variable">stats</span>;
+            
+            <span class="keyword">return</span> <span class="variable">stats</span>;
+        }
+        
+        <span class="comment">/**
+         * @brief Print comprehensive benchmark results
+         */</span>
+        <span class="keyword">void</span> <span class="function">printResult</span>() <span class="keyword">const override</span>
+        {
+            <span class="function">printBenchmarkResults</span>(<span class="variable">m_last_statistics</span>);
+        }
+        
+        <span class="comment">/**
+         * @brief Macro-compatible benchmark execution
+         * @param benchmark_lambda Lambda function to benchmark
+         */</span>
+        <span class="keyword">void</span> <span class="function">runBenchmark</span>(<span class="type">std::function</span>&lt;<span class="type">void</span>()&gt; <span class="variable">benchmark_lambda</span>)
+        {
+            <span class="keyword">auto</span> <span class="variable">stats</span> <span class="operator">=</span> <span class="function">execute</span>(<span class="variable">benchmark_lambda</span>);
+            <span class="variable">has_passed</span> <span class="operator">=</span> <span class="variable">stats</span>.<span class="variable">is_constant_time</span> <span class="operator">||</span> <span class="operator">!</span><span class="variable">m_require_constant_time</span>;
+        }
+        
+        <span class="comment">/**
+         * @brief Set whether constant-time execution is required for test to pass
+         */</span>
+        <span class="keyword">void</span> <span class="function">requireConstantTime</span>(<span class="type">bool</span> <span class="variable">require</span> <span class="operator">=</span> <span class="keyword">true</span>) { <span class="variable">m_require_constant_time</span> <span class="operator">=</span> <span class="variable">require</span>; }
+        
+    <span class="keyword">protected</span>:
+        <span class="comment">/**
+         * @brief Default setUp implementation - can be overridden
+         */</span>
+        <span class="keyword">void</span> <span class="function">setUp</span>() <span class="keyword">override</span> {}
+        
+        <span class="comment">/**
+         * @brief Default run implementation - should be overridden
+         */</span>
+        <span class="keyword">void</span> <span class="function">run</span>() <span class="keyword">override</span> {}
+        
+        <span class="comment">/**
+         * @brief Default tearDown implementation - can be overridden
+         */</span>
+        <span class="keyword">void</span> <span class="function">tearDown</span>() <span class="keyword">override</span> {}
+        
+    <span class="keyword">private</span>:
+        <span class="type">Config</span> <span class="variable">m_config</span>;
+        <span class="type">BenchmarkStatistics</span>::<span class="type">Statistics</span> <span class="variable">m_last_statistics</span>;
+        <span class="type">bool</span> <span class="variable">m_require_constant_time</span> <span class="operator">=</span> <span class="keyword">false</span>;
+        <span class="type">std::random_device</span> <span class="variable">m_random_device</span>;
+        <span class="type">std::mt19937_64</span> <span class="variable">m_rng</span>{<span class="variable">m_random_device</span>()};
+        
+        <span class="comment">// Implementation methods would continue here...</span>
+        <span class="comment">// [Additional private methods for CPU affinity, warmup, etc.]</span>
+    };
+}</code></pre>
+        </div>
+
+        <h3>2. Benchmark.cpp - Implementation Details</h3>
+        <div class="code-block">
+            <pre><code><span class="preprocessor">#include</span> <span class="string">"Benchmark.hpp"</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;iostream&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;iomanip&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;thread&gt;</span>
+
+<span class="preprocessor">#ifdef _WIN32</span>
+    <span class="preprocessor">#include</span> <span class="string">&lt;windows.h&gt;</span>
+    <span class="preprocessor">#include</span> <span class="string">&lt;psapi.h&gt;</span>
+<span class="preprocessor">#else</span>
+    <span class="preprocessor">#include</span> <span class="string">&lt;pthread.h&gt;</span>
+    <span class="preprocessor">#include</span> <span class="string">&lt;sched.h&gt;</span>
+    <span class="preprocessor">#include</span> <span class="string">&lt;sys/resource.h&gt;</span>
+<span class="preprocessor">#endif</span>
+
+<span class="keyword">namespace</span> <span class="namespace">UnitTests</span>
+{
+    <span class="comment">/**
+     * @brief Set CPU affinity to a specific core for consistent measurements
+     * 
+     * Binds the current thread to a single CPU core to reduce timing variance
+     * caused by thread migration between cores with different cache states.
+     */</span>
+    <span class="type">void</span> <span class="type">Benchmark</span>::<span class="function">setupCPUAffinity</span>()
+    {
+<span class="preprocessor">#ifdef _WIN32</span>
+        <span class="comment">// Windows implementation</span>
+        <span class="type">HANDLE</span> <span class="variable">currentThread</span> <span class="operator">=</span> <span class="function">GetCurrentThread</span>();
+        <span class="type">DWORD_PTR</span> <span class="variable">affinityMask</span> <span class="operator">=</span> <span class="number">1</span>; <span class="comment">// Bind to CPU 0</span>
+        <span class="function">SetThreadAffinityMask</span>(<span class="variable">currentThread</span>, <span class="variable">affinityMask</span>);
+        
+        <span class="comment">// Set high priority for timing accuracy</span>
+        <span class="function">SetThreadPriority</span>(<span class="variable">currentThread</span>, <span class="type">THREAD_PRIORITY_TIME_CRITICAL</span>);
+<span class="preprocessor">#else</span>
+        <span class="comment">// Linux implementation</span>
+        <span class="type">cpu_set_t</span> <span class="variable">cpuset</span>;
+        <span class="function">CPU_ZERO</span>(<span class="operator">&amp;</span><span class="variable">cpuset</span>);
+        <span class="function">CPU_SET</span>(<span class="number">0</span>, <span class="operator">&amp;</span><span class="variable">cpuset</span>); <span class="comment">// Bind to CPU 0</span>
+        
+        <span class="type">pthread_t</span> <span class="variable">currentThread</span> <span class="operator">=</span> <span class="function">pthread_self</span>();
+        <span class="function">pthread_setaffinity_np</span>(<span class="variable">currentThread</span>, <span class="keyword">sizeof</span>(<span class="type">cpu_set_t</span>), <span class="operator">&amp;</span><span class="variable">cpuset</span>);
+        
+        <span class="comment">// Set high priority</span>
+        <span class="keyword">struct</span> <span class="type">sched_param</span> <span class="variable">param</span>;
+        <span class="variable">param</span>.<span class="variable">sched_priority</span> <span class="operator">=</span> <span class="function">sched_get_priority_max</span>(<span class="type">SCHED_FIFO</span>);
+        <span class="function">pthread_setschedparam</span>(<span class="variable">currentThread</span>, <span class="type">SCHED_FIFO</span>, <span class="operator">&amp;</span><span class="variable">param</span>);
+<span class="preprocessor">#endif</span>
+    }
+
+    <span class="comment">/**
+     * @brief Warmup phase to stabilize CPU frequency and cache state
+     * @param benchmark_function Function to execute during warmup
+     */</span>
+    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">BenchmarkFunc</span>&gt;
+    <span class="type">void</span> <span class="type">Benchmark</span>::<span class="function">warmupPhase</span>(<span class="type">BenchmarkFunc</span><span class="operator">&amp;&amp;</span> <span class="variable">benchmark_function</span>)
+    {
+        <span class="comment">// Execute warmup iterations to stabilize performance</span>
+        <span class="keyword">for</span> (<span class="type">size_t</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; <span class="variable">i</span> <span class="operator">&lt;</span> <span class="variable">m_config</span>.<span class="variable">warmup_iterations</span>; <span class="operator">++</span><span class="variable">i</span>)
+        {
+            <span class="variable">benchmark_function</span>();
+            
+            <span class="comment">// Prevent compiler from optimizing away the function call</span>
+            <span class="keyword">std::atomic_thread_fence</span>(<span class="type">std::memory_order_seq_cst</span>);
+        }
+        
+        <span class="comment">// Brief pause to let CPU stabilize</span>
+        <span class="type">std::this_thread</span>::<span class="function">sleep_for</span>(<span class="type">std::chrono::milliseconds</span>(<span class="number">10</span>));
+    }
+
+    <span class="comment">/**
+     * @brief Randomize input data to prevent branch prediction optimizations
+     */</span>
+    <span class="type">void</span> <span class="type">Benchmark</span>::<span class="function">randomizeInputData</span>()
+    {
+        <span class="comment">// Generate random memory access pattern</span>
+        <span class="keyword">static</span> <span class="type">thread_local</span> <span class="type">std::uniform_int_distribution</span>&lt;<span class="type">uint64_t</span>&gt; <span class="variable">dist</span>;
+        <span class="keyword">volatile</span> <span class="type">uint64_t</span> <span class="variable">dummy</span> <span class="operator">=</span> <span class="variable">dist</span>(<span class="variable">m_rng</span>);
+        <span class="comment">// This prevents compiler from optimizing based on predictable inputs</span>
+    }
+
+    <span class="comment">/**
+     * @brief Print comprehensive benchmark results with security analysis
+     * @param stats Statistical analysis results
+     */</span>
+    <span class="type">void</span> <span class="type">Benchmark</span>::<span class="function">printBenchmarkResults</span>(<span class="keyword">const</span> <span class="type">BenchmarkStatistics</span>::<span class="type">Statistics</span><span class="operator">&amp;</span> <span class="variable">stats</span>) <span class="keyword">const</span>
+    {
+        <span class="comment">// Color-coded output based on security analysis</span>
+        <span class="keyword">std::string</span> <span class="variable">status_color</span> <span class="operator">=</span> <span class="variable">stats</span>.<span class="variable">is_constant_time</span> 
+            <span class="operator">?</span> <span class="type">Color</span>::<span class="variable">FG_GREEN</span> 
+            : <span class="type">Color</span>::<span class="variable">FG_YELLOW</span>;
+        
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="variable">status_color</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n┌─ BENCHMARK RESULTS ─────────────────────────────────────┐"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"│ Test: "</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_CYAN</span> <span class="operator">&lt;&lt;</span> <span class="function">getName</span>() <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span>;
+        
+        <span class="comment">// Performance metrics</span>
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">std::fixed</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setprecision</span>(<span class="number">2</span>);
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n│ Mean Time:     "</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_WHITE</span> <span class="operator">&lt;&lt;</span> <span class="variable">stats</span>.<span class="variable">mean_ns</span> <span class="operator">&lt;&lt;</span> <span class="string">" ns"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span>;
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n│ Median Time:   "</span> <span class="operator">&lt;&lt;</span> <span class="variable">stats</span>.<span class="variable">median_ns</span> <span class="operator">&lt;&lt;</span> <span class="string">" ns"</span>;
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n│ Min Time:      "</span> <span class="operator">&lt;&lt;</span> <span class="variable">stats</span>.<span class="variable">min_ns</span> <span class="operator">&lt;&lt;</span> <span class="string">" ns"</span>;
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n│ Max Time:      "</span> <span class="operator">&lt;&lt;</span> <span class="variable">stats</span>.<span class="variable">max_ns</span> <span class="operator">&lt;&lt;</span> <span class="string">" ns"</span>;
+        
+        <span class="comment">// Statistical analysis</span>
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n│ Std Deviation: "</span> <span class="operator">&lt;&lt;</span> <span class="variable">stats</span>.<span class="variable">stddev_ns</span> <span class="operator">&lt;&lt;</span> <span class="string">" ns"</span>;
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n│ 95th Percentile: "</span> <span class="operator">&lt;&lt;</span> <span class="variable">stats</span>.<span class="variable">percentile_95_ns</span> <span class="operator">&lt;&lt;</span> <span class="string">" ns"</span>;
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n│ 99th Percentile: "</span> <span class="operator">&lt;&lt;</span> <span class="variable">stats</span>.<span class="variable">percentile_99_ns</span> <span class="operator">&lt;&lt;</span> <span class="string">" ns"</span>;
+        
+        <span class="comment">// Security analysis - most important for crypto</span>
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setprecision</span>(<span class="number">3</span>);
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n│ CV (Variation): "</span> <span class="operator">&lt;&lt;</span> <span class="variable">stats</span>.<span class="variable">cv_percent</span> <span class="operator">&lt;&lt;</span> <span class="string">"%"</span>;
+        
+        <span class="keyword">std::string</span> <span class="variable">security_status</span> <span class="operator">=</span> <span class="variable">stats</span>.<span class="variable">is_constant_time</span> 
+            <span class="operator">?</span> <span class="string">"✓ CONSTANT-TIME"</span> 
+            : <span class="string">"⚠ VARIABLE-TIME"</span>;
+        <span class="keyword">std::string</span> <span class="variable">security_color</span> <span class="operator">=</span> <span class="variable">stats</span>.<span class="variable">is_constant_time</span> 
+            <span class="operator">?</span> <span class="type">Color</span>::<span class="variable">FG_GREEN</span> 
+            : <span class="type">Color</span>::<span class="variable">FG_RED</span>;
+        
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n│ Security:      "</span> <span class="operator">&lt;&lt;</span> <span class="variable">security_color</span> <span class="operator">&lt;&lt;</span> <span class="variable">security_status</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span>;
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n│ Samples:       "</span> <span class="operator">&lt;&lt;</span> <span class="variable">stats</span>.<span class="variable">sample_count</span>;
+        
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="variable">status_color</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n└─────────────────────────────────────────────────────────┘"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+        
+        <span class="comment">// Security recommendations if variable-time detected</span>
+        <span class="keyword">if</span> (<span class="operator">!</span><span class="variable">stats</span>.<span class="variable">is_constant_time</span>)
+        {
+            <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_YELLOW</span> <span class="operator">&lt;&lt;</span> <span class="string">"⚠  WARNING: Variable timing detected (CV > 5%)\n"</span>
+                      <span class="operator">&lt;&lt;</span> <span class="string">"   This may indicate potential timing attack vulnerability.\n"</span>
+                      <span class="operator">&lt;&lt;</span> <span class="string">"   Consider implementing constant-time algorithms.\n"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span>;
+        }
+    }
+}</code></pre>
+        </div>
+
+        <h2 id="test-hpp-changes">🔧 Recommended Test.hpp Changes</h2>
+        
+        <div class="info-box">
+            <h3>Suggested Enhancements to Test.hpp</h3>
+            <p>To better integrate with the benchmark framework, consider these additions to your existing Test.hpp:</p>
+        </div>
+
+        <h3>1. Enhanced Base Test Class</h3>
+        <div class="code-block">
+            <pre><code><span class="comment">// Add these methods to the existing Test class</span>
+
+<span class="keyword">protected</span>:
+    <span class="comment">/**
+     * @brief Get test name for benchmark reporting
+     * @return Name of the current test
+     */</span>
+    <span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="function">getName</span>() <span class="keyword">const</span> { <span class="keyword">return</span> <span class="variable">name</span>; }
+    
+    <span class="comment">/**
+     * @brief Set test passed status (for benchmark integration)
+     */</span>
+    <span class="type">void</span> <span class="function">setPassed</span>(<span class="type">bool</span> <span class="variable">passed</span>) { <span class="variable">has_passed</span> <span class="operator">=</span> <span class="variable">passed</span>; }
+    
+    <span class="comment">/**
+     * @brief Add timing comparison for performance regression testing
+     */</span>
+    <span class="type">void</span> <span class="function">comparePerformance</span>(<span class="type">double</span> <span class="variable">expected_max_ns</span>, <span class="type">double</span> <span class="variable">actual_ns</span>)
+    {
+        <span class="keyword">if</span> (<span class="variable">actual_ns</span> <span class="operator">&lt;=</span> <span class="variable">expected_max_ns</span>) {
+            <span class="variable">has_passed</span> <span class="operator">=</span> <span class="keyword">true</span>;
+        } <span class="keyword">else</span> {
+            <span class="variable">expected_value</span> <span class="operator">=</span> <span class="type">String</span>(<span class="string">"≤ "</span>) <span class="operator">+</span> <span class="type">std::to_string</span>(<span class="variable">expected_max_ns</span>) <span class="operator">+</span> <span class="string">" ns"</span>;
+            <span class="variable">input_value</span> <span class="operator">=</span> <span class="type">String</span>(<span class="type">std::to_string</span>(<span class="variable">actual_ns</span>)) <span class="operator">+</span> <span class="string">" ns"</span>;
+            <span class="variable">has_passed</span> <span class="operator">=</span> <span class="keyword">false</span>;
+        }
+    }
+    
+    <span class="comment">/**
+     * @brief Compare timing variance for constant-time validation
+     */</span>
+    <span class="type">void</span> <span class="function">compareConstantTime</span>(<span class="type">double</span> <span class="variable">cv_threshold</span>, <span class="type">double</span> <span class="variable">actual_cv</span>)
+    {
+        <span class="keyword">if</span> (<span class="variable">actual_cv</span> <span class="operator">&lt;=</span> <span class="variable">cv_threshold</span>) {
+            <span class="variable">has_passed</span> <span class="operator">=</span> <span class="keyword">true</span>;
+        } <span class="keyword">else</span> {
+            <span class="variable">expected_value</span> <span class="operator">=</span> <span class="type">String</span>(<span class="string">"CV ≤ "</span>) <span class="operator">+</span> <span class="type">std::to_string</span>(<span class="variable">cv_threshold</span>) <span class="operator">+</span> <span class="string">"%"</span>;
+            <span class="variable">input_value</span> <span class="operator">=</span> <span class="type">String</span>(<span class="string">"CV = "</span>) <span class="operator">+</span> <span class="type">std::to_string</span>(<span class="variable">actual_cv</span>) <span class="operator">+</span> <span class="string">"%"</span>;
+            <span class="variable">has_passed</span> <span class="operator">=</span> <span class="keyword">false</span>;
+        }
+    }</code></pre>
+        </div>
+
+        <h3>2. Benchmark Macro Definition</h3>
+        <div class="code-block">
+            <pre><code><span class="comment">/**
+ * @brief Macro for easy benchmark test creation
+ * 
+ * Usage: BENCHMARK(MyBenchmarkTest, Benchmark) { ... }
+ * This creates a benchmark test that inherits from the Benchmark class
+ */</span>
+<span class="preprocessor">#define BENCHMARK(ClassName, Parent) \</span>
+    <span class="keyword">class</span> <span class="type">ClassName</span> : <span class="keyword">public</span> <span class="type">Parent</span> <span class="operator">\</span>
+    { <span class="operator">\</span>
+    <span class="keyword">public</span>: <span class="operator">\</span>
+        <span class="function">ClassName</span>() { <span class="function">setName</span>(<span class="preprocessor">#ClassName</span>); } <span class="operator">\</span>
+        <span class="type">void</span> <span class="function">run</span>() <span class="keyword">override</span>; <span class="operator">\</span>
+    }; <span class="operator">\</span>
+    <span class="keyword">class</span> <span class="type">Add##ClassName</span> <span class="operator">\</span>
+    { <span class="operator">\</span>
+    <span class="keyword">public</span>: <span class="operator">\</span>
+        <span class="function">Add##ClassName</span>() { <span class="type">TestContainer</span>::<span class="function">getInstance</span>().<span class="function">append</span>(<span class="keyword">new</span> <span class="type">ClassName</span>()); } <span class="operator">\</span>
+    }; <span class="operator">\</span>
+    <span class="keyword">static</span> <span class="type">Add##ClassName</span> <span class="variable">AddThis##ClassName</span>; <span class="operator">\</span>
+    <span class="type">void</span> <span class="type">ClassName</span>::<span class="function">run</span>()
+
+<span class="comment">/**
+ * @brief Simplified benchmark execution macro
+ * 
+ * Usage within benchmark test:
+ * MEASURE([&](){ myFunction(input); });
+ */</span>
+<span class="preprocessor">#define MEASURE(lambda_function) \</span>
+    <span class="function">runBenchmark</span>(<span class="variable">lambda_function</span>)</code></pre>
+        </div>
+
+        <h2 id="functions-summary">📊 Functions Summary</h2>
+
+        <table class="function-table">
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Function</th>
+                    <th>Purpose</th>
+                    <th>Security Focus</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="type">TimingMeasurement</span></td>
+                    <td><span class="function">startMeasurement()</span></td>
+                    <td>Begin high-precision timing with CPU barriers</td>
+                    <td>Prevents instruction reordering</td>
+                </tr>
+                <tr>
+                    <td><span class="type">TimingMeasurement</span></td>
+                    <td><span class="function">endMeasurement()</span></td>
+                    <td>End timing measurement with serialization</td>
+                    <td>Ensures all operations completed</td>
+                </tr>
+                <tr>
+                    <td><span class="type">BenchmarkStatistics</span></td>
+                    <td><span class="function">calculate()</span></td>
+                    <td>Compute comprehensive statistics</td>
+                    <td>Detects timing variations (CV analysis)</td>
+                </tr>
+                <tr>
+                    <td><span class="type">Benchmark</span></td>
+                    <td><span class="function">execute()</span></td>
+                    <td>Run benchmark with warmup and analysis</td>
+                    <td>Randomized inputs, CPU affinity</td>
+                </tr>
+                <tr>
+                    <td><span class="type">Benchmark</span></td>
+                    <td><span class="function">setupCPUAffinity()</span></td>
+                    <td>Bind thread to specific CPU core</td>
+                    <td>Reduces timing variance</td>
+                </tr>
+                <tr>
+                    <td><span class="type">Benchmark</span></td>
+                    <td><span class="function">warmupPhase()</span></td>
+                    <td>Stabilize CPU frequency and cache</td>
+                    <td>Consistent measurement conditions</td>
+                </tr>
+                <tr>
+                    <td><span class="type">Benchmark</span></td>
+                    <td><span class="function">randomizeInputData()</span></td>
+                    <td>Prevent branch prediction optimizations</td>
+                    <td>Realistic timing measurements</td>
+                </tr>
+                <tr>
+                    <td><span class="type">Benchmark</span></td>
+                    <td><span class="function">requireConstantTime()</span></td>
+                    <td>Set constant-time requirement for pass/fail</td>
+                    <td>Automatic security validation</td>
+                </tr>
+                <tr>
+                    <td><span class="type">Benchmark</span></td>
+                    <td><span class="function">printBenchmarkResults()</span></td>
+                    <td>Display comprehensive results</td>
+                    <td>Security warnings for timing attacks</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 id="usage-examples">💡 Usage Examples</h2>
+
+        <h3>1. Basic Cryptographic Function Benchmark</h3>
+        <div class="code-block">
+            <pre><code><span class="preprocessor">#include</span> <span class="string">"Benchmark.hpp"</span>
+<span class="preprocessor">#include</span> <span class="string">"../../src/algorithms/block_cipher/AES/AES.hpp"</span>
+
+<span class="comment">/**
+ * @brief Benchmark AES-256 encryption for constant-time validation
+ * 
+ * This test verifies that AES encryption runs in constant time
+ * regardless of input data, which is crucial for side-channel resistance.
+ */</span>
+<span class="function">BENCHMARK</span>(<span class="type">AES256EncryptionBenchmark</span>, <span class="type">Benchmark</span>)
+{
+    <span class="comment">// Test setup</span>
+    <span class="type">AES</span> <span class="variable">aes</span>;
+    <span class="type">Vector</span>&lt;<span class="type">uint8_t</span>&gt; <span class="variable">key</span>(<span class="number">32</span>, <span class="number">0x42</span>); <span class="comment">// 256-bit key</span>
+    <span class="type">Vector</span>&lt;<span class="type">uint8_t</span>&gt; <span class="variable">plaintext</span>(<span class="number">16</span>, <span class="number">0x00</span>); <span class="comment">// 128-bit block</span>
+    <span class="type">Vector</span>&lt;<span class="type">uint8_t</span>&gt; <span class="variable">ciphertext</span>(<span class="number">16</span>);
+    
+    <span class="variable">aes</span>.<span class="function">setKey</span>(<span class="variable">key</span>);
+    
+    <span class="comment">// Require constant-time execution (critical for AES)</span>
+    <span class="function">requireConstantTime</span>(<span class="keyword">true</span>);
+    
+    <span class="comment">// Benchmark the encryption operation</span>
+    <span class="function">MEASURE</span>([<span class="operator">&amp;</span>]() {
+        <span class="variable">aes</span>.<span class="function">encryptBlock</span>(<span class="variable">plaintext</span>, <span class="variable">ciphertext</span>);
+    });
+}</code></pre>
+        </div>
+
+        <h3>2. BigInteger Operations Benchmark</h3>
+        <div class="code-block">
+            <pre><code><span class="comment">/**
+ * @brief Benchmark BigInteger modular exponentiation
+ * 
+ * Tests the performance of our Montgomery modular exponentiation
+ * implementation with various key sizes typical in RSA.
+ */</span>
+<span class="function">BENCHMARK</span>(<span class="type">BigIntegerModPowBenchmark</span>, <span class="type">Benchmark</span>)
+{
+    <span class="comment">// RSA-2048 size numbers</span>
+    <span class="type">BigInteger</span> <span class="variable">base</span> <span class="operator">=</span> <span class="type">BigInteger</span>::<span class="function">random</span>(<span class="number">2048</span>);
+    <span class="type">BigInteger</span> <span class="variable">exponent</span> <span class="operator">=</span> <span class="type">BigInteger</span>(<span class="number">65537</span>); <span class="comment">// Common RSA exponent</span>
+    <span class="type">BigInteger</span> <span class="variable">modulus</span> <span class="operator">=</span> <span class="type">BigInteger</span>::<span class="function">generatePrime</span>(<span class="number">2048</span>);
+    
+    <span class="comment">// Custom benchmark configuration for crypto operations</span>
+    <span class="type">Benchmark</span>::<span class="type">Config</span> <span class="variable">crypto_config</span>;
+    <span class="variable">crypto_config</span>.<span class="variable">warmup_iterations</span> <span class="operator">=</span> <span class="number">100</span>;     <span class="comment">// Fewer warmups for slow operations</span>
+    <span class="variable">crypto_config</span>.<span class="variable">benchmark_iterations</span> <span class="operator">=</span> <span class="number">1000</span>;  <span class="comment">// Adequate sample size</span>
+    <span class="variable">crypto_config</span>.<span class="variable">constant_time_threshold</span> <span class="operator">=</span> <span class="number">3.0</span>; <span class="comment">// Stricter for crypto ops</span>
+    
+    <span class="comment">// Apply configuration</span>
+    <span class="function">setConfig</span>(<span class="variable">crypto_config</span>);
+    
+    <span class="comment">// Constant-time is critical for modular exponentiation</span>
+    <span class="function">requireConstantTime</span>(<span class="keyword">true</span>);
+    
+    <span class="function">MEASURE</span>([<span class="operator">&amp;</span>]() {
+        <span class="keyword">volatile</span> <span class="keyword">auto</span> <span class="variable">result</span> <span class="operator">=</span> <span class="variable">base</span>.<span class="function">modPow</span>(<span class="variable">exponent</span>, <span class="variable">modulus</span>);
+        <span class="comment">// Volatile prevents compiler optimization</span>
+    });
+}</code></pre>
+        </div>
+
+        <h3>3. Memory Access Pattern Security Test</h3>
+        <div class="code-block">
+            <pre><code><span class="comment">/**
+ * @brief Test memory access patterns for cache timing resistance
+ * 
+ * Validates that cryptographic operations don't leak information
+ * through cache access patterns that could enable cache timing attacks.
+ */</span>
+<span class="function">BENCHMARK</span>(<span class="type">CacheTimingResistanceBenchmark</span>, <span class="type">Benchmark</span>)
+{
+    <span class="comment">// Large lookup table to test cache behavior</span>
+    <span class="keyword">constexpr</span> <span class="type">size_t</span> <span class="variable">TABLE_SIZE</span> <span class="operator">=</span> <span class="number">4096</span>;
+    <span class="type">Vector</span>&lt;<span class="type">uint8_t</span>&gt; <span class="variable">lookup_table</span>(<span class="variable">TABLE_SIZE</span>);
+    <span class="type">std::iota</span>(<span class="variable">lookup_table</span>.<span class="function">begin</span>(), <span class="variable">lookup_table</span>.<span class="function">end</span>(), <span class="number">0</span>);
+    
+    <span class="comment">// Test various access patterns</span>
+    <span class="type">Vector</span>&lt;<span class="type">uint16_t</span>&gt; <span class="variable">indices</span> <span class="operator">=</span> {
+        <span class="number">0</span>, <span class="number">1</span>, <span class="number">255</span>, <span class="number">256</span>, <span class="number">1023</span>, <span class="number">1024</span>, <span class="number">2047</span>, <span class="number">4095</span>
+    };
+    
+    <span class="type">size_t</span> <span class="variable">index_counter</span> <span class="operator">=</span> <span class="number">0</span>;
+    
+    <span class="comment">// Very strict constant-time requirement for cache resistance</span>
+    <span class="function">requireConstantTime</span>(<span class="keyword">true</span>);
+    
+    <span class="function">MEASURE</span>([<span class="operator">&amp;</span>]() {
+        <span class="comment">// Access different indices each iteration</span>
+        <span class="type">size_t</span> <span class="variable">index</span> <span class="operator">=</span> <span class="variable">indices</span>[<span class="variable">index_counter</span> <span class="operator">%</span> <span class="variable">indices</span>.<span class="function">size</span>()];
+        <span class="keyword">volatile</span> <span class="type">uint8_t</span> <span class="variable">value</span> <span class="operator">=</span> <span class="variable">lookup_table</span>[<span class="variable">index</span>];
+        <span class="operator">++</span><span class="variable">index_counter</span>;
+        
+        <span class="comment">// Prevent compiler from optimizing away the access</span>
+        <span class="function">__asm__</span> <span class="keyword">volatile</span>(<span class="string">""</span> : : <span class="string">"r"</span>(<span class="variable">value</span>) : <span class="string">"memory"</span>);
+    });
+}</code></pre>
+        </div>
+
+        <h3>4. Comparative Performance Benchmark</h3>
+        <div class="code-block">
+            <pre><code><span class="comment">/**
+ * @brief Compare performance between different implementations
+ * 
+ * Demonstrates how to benchmark multiple implementations and compare
+ * their performance characteristics for informed algorithm selection.
+ */</span>
+<span class="function">BENCHMARK</span>(<span class="type">HashFunctionComparisonBenchmark</span>, <span class="type">Benchmark</span>)
+{
+    <span class="comment">// Test data</span>
+    <span class="type">Vector</span>&lt;<span class="type">uint8_t</span>&gt; <span class="variable">test_data</span>(<span class="number">1024</span>); <span class="comment">// 1KB test data</span>
+    <span class="type">std::iota</span>(<span class="variable">test_data</span>.<span class="function">begin</span>(), <span class="variable">test_data</span>.<span class="function">end</span>(), <span class="number">0</span>);
+    
+    <span class="comment">// Test SHA-256</span>
+    <span class="type">SHA256</span> <span class="variable">sha256</span>;
+    <span class="keyword">auto</span> <span class="variable">sha256_stats</span> <span class="operator">=</span> <span class="function">execute</span>([<span class="operator">&amp;</span>]() {
+        <span class="keyword">volatile</span> <span class="keyword">auto</span> <span class="variable">hash</span> <span class="operator">=</span> <span class="variable">sha256</span>.<span class="function">hash</span>(<span class="variable">test_data</span>);
+    });
+    
+    <span class="comment">// Test SHA-3</span>
+    <span class="type">SHA3</span> <span class="variable">sha3</span>;
+    <span class="keyword">auto</span> <span class="variable">sha3_stats</span> <span class="operator">=</span> <span class="function">execute</span>([<span class="operator">&amp;</span>]() {
+        <span class="keyword">volatile</span> <span class="keyword">auto</span> <span class="variable">hash</span> <span class="operator">=</span> <span class="variable">sha3</span>.<span class="function">hash</span>(<span class="variable">test_data</span>);
+    });
+    
+    <span class="comment">// Custom comparison output</span>
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_CYAN</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n=== HASH FUNCTION COMPARISON ===\n"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span>;
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"SHA-256: "</span> <span class="operator">&lt;&lt;</span> <span class="variable">sha256_stats</span>.<span class="variable">mean_ns</span> <span class="operator">&lt;&lt;</span> <span class="string">" ns (CV: "</span> <span class="operator">&lt;&lt;</span> <span class="variable">sha256_stats</span>.<span class="variable">cv_percent</span> <span class="operator">&lt;&lt;</span> <span class="string">"%)\n"</span>;
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"SHA-3:   "</span> <span class="operator">&lt;&lt;</span> <span class="variable">sha3_stats</span>.<span class="variable">mean_ns</span> <span class="operator">&lt;&lt;</span> <span class="string">" ns (CV: "</span> <span class="operator">&lt;&lt;</span> <span class="variable">sha3_stats</span>.<span class="variable">cv_percent</span> <span class="operator">&lt;&lt;</span> <span class="string">"%)\n"</span>;
+    
+    <span class="type">double</span> <span class="variable">speedup</span> <span class="operator">=</span> <span class="variable">sha3_stats</span>.<span class="variable">mean_ns</span> <span class="operator">/</span> <span class="variable">sha256_stats</span>.<span class="variable">mean_ns</span>;
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"Speedup: "</span> <span class="operator">&lt;&lt;</span> <span class="type">std::fixed</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setprecision</span>(<span class="number">2</span>) <span class="operator">&lt;&lt;</span> <span class="variable">speedup</span> <span class="operator">&lt;&lt;</span> <span class="string">"x\n"</span>;
+    
+    <span class="comment">// Test passes if both are reasonably constant-time</span>
+    <span class="function">setPassed</span>(<span class="variable">sha256_stats</span>.<span class="variable">is_constant_time</span> <span class="operator">&amp;&amp;</span> <span class="variable">sha3_stats</span>.<span class="variable">is_constant_time</span>);
+}</code></pre>
+        </div>
+
+        <h2 id="output-format">📋 Expected Output Format</h2>
+
+        <div class="output-example">
+<strong>CryptoGL Benchmark Framework - Test Results</strong>
+
+<span style="color: #00ff88;">┌─ BENCHMARK RESULTS ─────────────────────────────────────┐</span>
+<span style="color: #00ff88;">│</span> Test: <span style="color: #4fc3f7;">AES256EncryptionBenchmark</span>
+<span style="color: #00ff88;">│</span> Mean Time:     <span style="color: #ffffff;">1,247.50 ns</span>
+<span style="color: #00ff88;">│</span> Median Time:   1,245.00 ns
+<span style="color: #00ff88;">│</span> Min Time:      1,201.00 ns
+<span style="color: #00ff88;">│</span> Max Time:      1,389.00 ns
+<span style="color: #00ff88;">│</span> Std Deviation: 31.25 ns
+<span style="color: #00ff88;">│</span> 95th Percentile: 1,298.50 ns
+<span style="color: #00ff88;">│</span> 99th Percentile: 1,356.25 ns
+<span style="color: #00ff88;">│</span> CV (Variation): 2.506%
+<span style="color: #00ff88;">│</span> Security:      <span style="color: #00ff88;">✓ CONSTANT-TIME</span>
+<span style="color: #00ff88;">│</span> Samples:       10000
+<span style="color: #00ff88;">└─────────────────────────────────────────────────────────┘</span>
+
+<span style="color: #4fc3f7;">┌─ BENCHMARK RESULTS ─────────────────────────────────────┐</span>
+<span style="color: #4fc3f7;">│</span> Test: <span style="color: #4fc3f7;">BigIntegerModPowBenchmark</span>
+<span style="color: #4fc3f7;">│</span> Mean Time:     <span style="color: #ffffff;">2,847,562.30 ns</span>
+<span style="color: #4fc3f7;">│</span> Median Time:   2,845,123.50 ns
+<span style="color: #4fc3f7;">│</span> Min Time:      2,789,456.00 ns
+<span style="color: #4fc3f7;">│</span> Max Time:      2,923,789.00 ns
+<span style="color: #4fc3f7;">│</span> Std Deviation: 42,567.89 ns
+<span style="color: #4fc3f7;">│</span> 95th Percentile: 2,895,432.10 ns
+<span style="color: #4fc3f7;">│</span> 99th Percentile: 2,912,345.67 ns
+<span style="color: #4fc3f7;">│</span> CV (Variation): 1.495%
+<span style="color: #4fc3f7;">│</span> Security:      <span style="color: #00ff88;">✓ CONSTANT-TIME</span>
+<span style="color: #4fc3f7;">│</span> Samples:       1000
+<span style="color: #4fc3f7;">└─────────────────────────────────────────────────────────┘</span>
+
+<span style="color: #ffb74d;">┌─ BENCHMARK RESULTS ─────────────────────────────────────┐</span>
+<span style="color: #ffb74d;">│</span> Test: <span style="color: #4fc3f7;">CacheTimingResistanceBenchmark</span>
+<span style="color: #ffb74d;">│</span> Mean Time:     <span style="color: #ffffff;">234.75 ns</span>
+<span style="color: #ffb74d;">│</span> Median Time:   198.50 ns
+<span style="color: #ffb74d;">│</span> Min Time:      156.00 ns
+<span style="color: #ffb74d;">│</span> Max Time:      1,234.50 ns
+<span style="color: #ffb74d;">│</span> Std Deviation: 156.89 ns
+<span style="color: #ffb74d;">│</span> 95th Percentile: 567.25 ns
+<span style="color: #ffb74d;">│</span> 99th Percentile: 891.75 ns
+<span style="color: #ffb74d;">│</span> CV (Variation): 66.831%
+<span style="color: #ffb74d;">│</span> Security:      <span style="color: #ff6b6b;">⚠ VARIABLE-TIME</span>
+<span style="color: #ffb74d;">│</span> Samples:       10000
+<span style="color: #ffb74d;">└─────────────────────────────────────────────────────────┘</span>
+
+<span style="color: #f39c12;">⚠  WARNING: Variable timing detected (CV > 5%)
+   This may indicate potential timing attack vulnerability.
+   Consider implementing constant-time algorithms.</span>
+
+<span style="color: #4fc3f7;">=== HASH FUNCTION COMPARISON ===</span>
+SHA-256: 1,456.78 ns (CV: 2.34%)
+SHA-3:   2,123.45 ns (CV: 1.89%)
+Speedup: 1.46x
+
+<strong>Summary:</strong>
+<span style="color: #00ff88;">✓ PASSED</span>: 2 tests - AES256EncryptionBenchmark, BigIntegerModPowBenchmark
+<span style="color: #f39c12;">⚠ WARNING</span>: 1 test - CacheTimingResistanceBenchmark (timing variance)
+
+<strong>Security Analysis:</strong>
+- Constant-time operations: 2/3 (66.7%)
+- Average CV: 23.6% (target: &lt;5%)
+- Recommendation: Review cache access patterns for timing resistance
+
+<strong>Performance Summary:</strong>
+- Total benchmark time: 45.7 seconds
+- Total measurements: 21,000
+- CPU utilization: 98.5% (single core)
+</div>
+
+        <div class="warning-box">
+            <h3>⚠️ Important Security Notes</h3>
+            <ul>
+                <li><strong>Coefficient of Variation (CV):</strong> Values above 5% indicate potential timing vulnerabilities</li>
+                <li><strong>Constant-Time Validation:</strong> Critical for cryptographic operations to prevent side-channel attacks</li>
+                <li><strong>Statistical Significance:</strong> Minimum 1,000 samples recommended for reliable analysis</li>
+                <li><strong>Environment Consistency:</strong> Run benchmarks on dedicated systems for accurate results</li>
+            </ul>
+        </div>
+
+        <h2>🚀 Integration Benefits</h2>
+
+        <div class="feature-box">
+            <h3>Key Advantages of This Framework</h3>
+            <ul>
+                <li><strong>🔒 Security-First Design:</strong> Automatic detection of timing attack vulnerabilities</li>
+                <li><strong>📊 Comprehensive Statistics:</strong> Beyond simple timing - includes percentiles, variance analysis</li>
+                <li><strong>🎯 Constant-Time Focus:</strong> Specialized for cryptographic applications</li>
+                <li><strong>📈 Performance Insights:</strong> Detailed analysis for optimization guidance</li>
+                <li><strong>🔄 Easy Integration:</strong> Seamlessly extends your existing Test.hpp framework</li>
+                <li><strong>🖥️ Cross-Platform:</strong> Works on Windows, Linux, and other platforms</li>
+                <li><strong>📝 Clear Reporting:</strong> Professional, readable output with security warnings</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <h3>Next Steps</h3>
+            <p>To implement this benchmark framework:</p>
+            <ol>
+                <li>Copy the provided <span class="highlight">Benchmark.hpp</span> and <span class="highlight">Benchmark.cpp</span> files to your test directory</li>
+                <li>Apply the recommended changes to your existing <span class="highlight">Test.hpp</span></li>
+                <li>Create benchmark tests using the <span class="highlight">BENCHMARK</span> macro</li>
+                <li>Run benchmarks as part of your regular testing pipeline</li>
+                <li>Monitor security warnings and timing variance in CI/CD</li>
+            </ol>
+        </div>
+
+        <footer style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid #333; color: #888;">
+            <p>CryptoGL Benchmark Framework Implementation Guide<br>
+            <small>Designed for C++20 Cryptographic Applications • Version 1.0</small></p>
+        </footer>
+    </div>
+</body>
+</html>

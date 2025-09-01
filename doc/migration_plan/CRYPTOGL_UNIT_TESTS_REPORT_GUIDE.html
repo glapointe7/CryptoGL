@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoGL Unit Test Reporting System - Implementation Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background-color: #1a1a1a;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        h1, h2, h3 {
+            color: #00d4aa;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        h1 {
+            text-align: center;
+            color: #00ff88;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #4fc3f7;
+            font-size: 1.8em;
+            margin-top: 40px;
+        }
+        h3 {
+            color: #ffb74d;
+            font-size: 1.3em;
+            margin-top: 30px;
+        }
+        .code-block {
+            background-color: #000000;
+            border: 1px solid #333;
+            border-left: 4px solid #00d4aa;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .code-block pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+        .keyword { color: #ff6b6b; font-weight: bold; }
+        .type { color: #4ecdc4; font-weight: bold; }
+        .string { color: #95e454; }
+        .comment { color: #6c7086; font-style: italic; }
+        .number { color: #f9ca24; }
+        .preprocessor { color: #a29bfe; }
+        .function { color: #fd79a8; }
+        .variable { color: #fdcb6e; }
+        .namespace { color: #6c5ce7; }
+        .operator { color: #ff7675; }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .feature-box {
+            background-color: #2d2d30;
+            border: 1px solid #404040;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .info-box {
+            background-color: #1e3d59;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .output-example {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            color: #c9d1d9;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CryptoGL Unit Test Reporting System</h1>
+            <p style="text-align: center; font-size: 1.2em; margin: 0;">
+                <strong>Professional • Comprehensive • CI/CD Ready</strong><br>
+                Implementation Guide for Advanced Test Reporting
+            </p>
+        </div>
+
+        <h2>🎯 System Overview</h2>
+        
+        <div class="feature-box">
+            <h3>Enhanced Reporting Features</h3>
+            <ul>
+                <li><strong>Multi-Format Output:</strong> Console, HTML, XML, and JSON reports</li>
+                <li><strong>Test Statistics:</strong> Pass/fail rates, execution times, coverage</li>
+                <li><strong>CI/CD Integration:</strong> JUnit XML for Jenkins, GitHub Actions</li>
+                <li><strong>Categorized Results:</strong> Group tests by module/functionality</li>
+                <li><strong>Detailed Diagnostics:</strong> Stack traces, memory usage, performance metrics</li>
+            </ul>
+        </div>
+
+        <h2>🏗️ Core Implementation</h2>
+
+        <h3>1. TestReporter.hpp - Main Reporting System</h3>
+        <div class="code-block">
+            <pre><code><span class="preprocessor">#pragma once</span>
+
+<span class="preprocessor">#include</span> <span class="string">"Test.hpp"</span>
+<span class="preprocessor">#include</span> <span class="string">"../../src/core/types/String.hpp"</span>
+<span class="preprocessor">#include</span> <span class="string">"../../src/core/types/Vector.hpp"</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;chrono&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;fstream&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;iomanip&gt;</span>
+
+<span class="keyword">namespace</span> <span class="namespace">UnitTests</span>
+{
+    <span class="comment">/**
+     * @brief Comprehensive test result data structure
+     * 
+     * Stores all information about a single test execution including
+     * timing, memory usage, and detailed failure information.
+     */</span>
+    <span class="keyword">struct</span> <span class="type">TestResult</span>
+    {
+        <span class="type">String</span> <span class="variable">test_name</span>;                    <span class="comment">// Name of the test</span>
+        <span class="type">String</span> <span class="variable">test_category</span>;               <span class="comment">// Category/module (e.g., "BigInteger", "AES")</span>
+        <span class="type">bool</span> <span class="variable">passed</span>;                         <span class="comment">// Test result</span>
+        <span class="type">double</span> <span class="variable">execution_time_ms</span>;           <span class="comment">// Execution time in milliseconds</span>
+        <span class="type">String</span> <span class="variable">expected_value</span>;              <span class="comment">// Expected result (for failures)</span>
+        <span class="type">String</span> <span class="variable">actual_value</span>;                <span class="comment">// Actual result (for failures)</span>
+        <span class="type">String</span> <span class="variable">failure_message</span>;             <span class="comment">// Custom failure message</span>
+        <span class="type">size_t</span> <span class="variable">assertions_count</span>;            <span class="comment">// Number of assertions made</span>
+        
+        <span class="comment">// Timing information</span>
+        <span class="type">std::chrono::high_resolution_clock::time_point</span> <span class="variable">start_time</span>;
+        <span class="type">std::chrono::high_resolution_clock::time_point</span> <span class="variable">end_time</span>;
+        
+        <span class="comment">/**
+         * @brief Default constructor
+         */</span>
+        <span class="function">TestResult</span>() : <span class="variable">passed</span>(<span class="keyword">false</span>), <span class="variable">execution_time_ms</span>(<span class="number">0.0</span>), <span class="variable">assertions_count</span>(<span class="number">0</span>) {}
+    };
+
+    <span class="comment">/**
+     * @brief Test suite statistics and summary
+     */</span>
+    <span class="keyword">struct</span> <span class="type">TestSuiteStatistics</span>
+    {
+        <span class="type">size_t</span> <span class="variable">total_tests</span> <span class="operator">=</span> <span class="number">0</span>;
+        <span class="type">size_t</span> <span class="variable">passed_tests</span> <span class="operator">=</span> <span class="number">0</span>;
+        <span class="type">size_t</span> <span class="variable">failed_tests</span> <span class="operator">=</span> <span class="number">0</span>;
+        <span class="type">double</span> <span class="variable">total_execution_time_ms</span> <span class="operator">=</span> <span class="number">0.0</span>;
+        <span class="type">double</span> <span class="variable">average_execution_time_ms</span> <span class="operator">=</span> <span class="number">0.0</span>;
+        <span class="type">double</span> <span class="variable">pass_rate_percent</span> <span class="operator">=</span> <span class="number">0.0</span>;
+        
+        <span class="comment">/**
+         * @brief Calculate statistics from test results
+         */</span>
+        <span class="type">void</span> <span class="function">calculate</span>(<span class="keyword">const</span> <span class="type">Vector</span>&lt;<span class="type">TestResult</span>&gt;<span class="operator">&amp;</span> <span class="variable">results</span>)
+        {
+            <span class="variable">total_tests</span> <span class="operator">=</span> <span class="variable">results</span>.<span class="function">size</span>();
+            <span class="variable">passed_tests</span> <span class="operator">=</span> <span class="type">std::count_if</span>(<span class="variable">results</span>.<span class="function">begin</span>(), <span class="variable">results</span>.<span class="function">end</span>(),
+                                            [](<span class="keyword">const</span> <span class="type">TestResult</span><span class="operator">&amp;</span> <span class="variable">r</span>) { <span class="keyword">return</span> <span class="variable">r</span>.<span class="variable">passed</span>; });
+            <span class="variable">failed_tests</span> <span class="operator">=</span> <span class="variable">total_tests</span> <span class="operator">-</span> <span class="variable">passed_tests</span>;
+            
+            <span class="variable">total_execution_time_ms</span> <span class="operator">=</span> <span class="type">std::accumulate</span>(<span class="variable">results</span>.<span class="function">begin</span>(), <span class="variable">results</span>.<span class="function">end</span>(), <span class="number">0.0</span>,
+                                                  [](<span class="type">double</span> <span class="variable">sum</span>, <span class="keyword">const</span> <span class="type">TestResult</span><span class="operator">&amp;</span> <span class="variable">r</span>) { 
+                                                      <span class="keyword">return</span> <span class="variable">sum</span> <span class="operator">+</span> <span class="variable">r</span>.<span class="variable">execution_time_ms</span>; 
+                                                  });
+            
+            <span class="variable">average_execution_time_ms</span> <span class="operator">=</span> <span class="variable">total_tests</span> <span class="operator">&gt;</span> <span class="number">0</span> <span class="operator">?</span> <span class="variable">total_execution_time_ms</span> <span class="operator">/</span> <span class="variable">total_tests</span> : <span class="number">0.0</span>;
+            <span class="variable">pass_rate_percent</span> <span class="operator">=</span> <span class="variable">total_tests</span> <span class="operator">&gt;</span> <span class="number">0</span> <span class="operator">?</span> (<span class="keyword">static_cast</span>&lt;<span class="type">double</span>&gt;(<span class="variable">passed_tests</span>) <span class="operator">/</span> <span class="variable">total_tests</span>) <span class="operator">*</span> <span class="number">100.0</span> : <span class="number">0.0</span>;
+        }
+    };
+
+    <span class="comment">/**
+     * @brief Advanced test reporter with multiple output formats
+     * 
+     * Provides comprehensive test reporting capabilities including
+     * console output, HTML reports, XML (JUnit) format, and JSON export.
+     */</span>
+    <span class="keyword">class</span> <span class="type">TestReporter</span>
+    {
+    <span class="keyword">public</span>:
+        <span class="comment">/**
+         * @brief Output format options
+         */</span>
+        <span class="keyword">enum class</span> <span class="type">OutputFormat</span> 
+        {
+            <span class="variable">CONSOLE</span>,    <span class="comment">// Color-coded console output</span>
+            <span class="variable">HTML</span>,       <span class="comment">// Professional HTML report</span>
+            <span class="variable">XML_JUNIT</span>,  <span class="comment">// JUnit XML for CI/CD</span>
+            <span class="variable">JSON</span>        <span class="comment">// JSON format for integration</span>
+        };
+        
+        <span class="comment">/**
+         * @brief Initialize reporter with suite name
+         */</span>
+        <span class="keyword">explicit</span> <span class="function">TestReporter</span>(<span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="variable">suite_name</span> <span class="operator">=</span> <span class="string">"CryptoGL Test Suite"</span>)
+            : <span class="variable">m_suite_name</span>(<span class="variable">suite_name</span>), 
+              <span class="variable">m_start_time</span>(<span class="type">std::chrono::high_resolution_clock</span>::<span class="function">now</span>()) {}
+        
+        <span class="comment">/**
+         * @brief Add test result to the report
+         */</span>
+        <span class="type">void</span> <span class="function">addTestResult</span>(<span class="keyword">const</span> <span class="type">TestResult</span><span class="operator">&amp;</span> <span class="variable">result</span>)
+        {
+            <span class="variable">m_test_results</span>.<span class="function">push_back</span>(<span class="variable">result</span>);
+        }
+        
+        <span class="comment">/**
+         * @brief Generate and output report in specified format
+         */</span>
+        <span class="type">void</span> <span class="function">generateReport</span>(<span class="type">OutputFormat</span> <span class="variable">format</span>, <span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="variable">filename</span> <span class="operator">=</span> <span class="string">""</span>)
+        {
+            <span class="comment">// Calculate statistics</span>
+            <span class="variable">m_statistics</span>.<span class="function">calculate</span>(<span class="variable">m_test_results</span>);
+            
+            <span class="keyword">switch</span> (<span class="variable">format</span>)
+            {
+                <span class="keyword">case</span> <span class="type">OutputFormat</span>::<span class="variable">CONSOLE</span>:
+                    <span class="function">generateConsoleReport</span>();
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="type">OutputFormat</span>::<span class="variable">HTML</span>:
+                    <span class="function">generateHTMLReport</span>(<span class="variable">filename</span>);
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="type">OutputFormat</span>::<span class="variable">XML_JUNIT</span>:
+                    <span class="function">generateJUnitXMLReport</span>(<span class="variable">filename</span>);
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="type">OutputFormat</span>::<span class="variable">JSON</span>:
+                    <span class="function">generateJSONReport</span>(<span class="variable">filename</span>);
+                    <span class="keyword">break</span>;
+            }
+        }
+        
+        <span class="comment">/**
+         * @brief Get test suite statistics
+         */</span>
+        <span class="keyword">const</span> <span class="type">TestSuiteStatistics</span><span class="operator">&amp;</span> <span class="function">getStatistics</span>() <span class="keyword">const</span> { <span class="keyword">return</span> <span class="variable">m_statistics</span>; }
+        
+    <span class="keyword">private</span>:
+        <span class="type">String</span> <span class="variable">m_suite_name</span>;
+        <span class="type">Vector</span>&lt;<span class="type">TestResult</span>&gt; <span class="variable">m_test_results</span>;
+        <span class="type">TestSuiteStatistics</span> <span class="variable">m_statistics</span>;
+        <span class="type">std::chrono::high_resolution_clock::time_point</span> <span class="variable">m_start_time</span>;
+        
+        <span class="comment">// Implementation methods for different report formats</span>
+        <span class="type">void</span> <span class="function">generateConsoleReport</span>();
+        <span class="type">void</span> <span class="function">generateHTMLReport</span>(<span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="variable">filename</span>);
+        <span class="type">void</span> <span class="function">generateJUnitXMLReport</span>(<span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="variable">filename</span>);
+        <span class="type">void</span> <span class="function">generateJSONReport</span>(<span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="variable">filename</span>);
+    };
+}</code></pre>
+        </div>
+
+        <h3>2. Enhanced Test Class Implementation</h3>
+        <div class="code-block">
+            <pre><code><span class="comment">/**
+ * @brief Enhanced Test base class with reporting integration
+ * 
+ * Add these methods to your existing Test class for better reporting
+ */</span>
+<span class="keyword">class</span> <span class="type">EnhancedTest</span> : <span class="keyword">public</span> <span class="type">Test</span>
+{
+<span class="keyword">public</span>:
+    <span class="comment">/**
+     * @brief Execute test with timing and result collection
+     */</span>
+    <span class="type">TestResult</span> <span class="function">executeWithReporting</span>()
+    {
+        <span class="type">TestResult</span> <span class="variable">result</span>;
+        <span class="variable">result</span>.<span class="variable">test_name</span> <span class="operator">=</span> <span class="function">getName</span>();
+        <span class="variable">result</span>.<span class="variable">test_category</span> <span class="operator">=</span> <span class="function">extractCategory</span>(<span class="variable">result</span>.<span class="variable">test_name</span>);
+        <span class="variable">result</span>.<span class="variable">start_time</span> <span class="operator">=</span> <span class="type">std::chrono::high_resolution_clock</span>::<span class="function">now</span>();
+        
+        <span class="keyword">try</span>
+        {
+            <span class="function">setUp</span>();
+            <span class="function">run</span>();
+            <span class="function">tearDown</span>();
+            
+            <span class="variable">result</span>.<span class="variable">passed</span> <span class="operator">=</span> <span class="function">hasPassed</span>();
+            <span class="variable">result</span>.<span class="variable">assertions_count</span> <span class="operator">=</span> <span class="variable">m_assertion_count</span>;
+            
+            <span class="keyword">if</span> (<span class="operator">!</span><span class="variable">result</span>.<span class="variable">passed</span>)
+            {
+                <span class="variable">result</span>.<span class="variable">expected_value</span> <span class="operator">=</span> <span class="variable">expected_value</span>;
+                <span class="variable">result</span>.<span class="variable">actual_value</span> <span class="operator">=</span> <span class="variable">input_value</span>;
+            }
+        }
+        <span class="keyword">catch</span> (<span class="keyword">const</span> <span class="type">std::exception</span><span class="operator">&amp;</span> <span class="variable">e</span>)
+        {
+            <span class="variable">result</span>.<span class="variable">passed</span> <span class="operator">=</span> <span class="keyword">false</span>;
+            <span class="variable">result</span>.<span class="variable">failure_message</span> <span class="operator">=</span> <span class="type">String</span>(<span class="string">"Exception: "</span>) <span class="operator">+</span> <span class="variable">e</span>.<span class="function">what</span>();
+        }
+        
+        <span class="variable">result</span>.<span class="variable">end_time</span> <span class="operator">=</span> <span class="type">std::chrono::high_resolution_clock</span>::<span class="function">now</span>();
+        <span class="keyword">auto</span> <span class="variable">duration</span> <span class="operator">=</span> <span class="type">std::chrono::duration_cast</span>&lt;<span class="type">std::chrono::microseconds</span>&gt;(<span class="variable">result</span>.<span class="variable">end_time</span> <span class="operator">-</span> <span class="variable">result</span>.<span class="variable">start_time</span>);
+        <span class="variable">result</span>.<span class="variable">execution_time_ms</span> <span class="operator">=</span> <span class="variable">duration</span>.<span class="function">count</span>() <span class="operator">/</span> <span class="number">1000.0</span>;
+        
+        <span class="keyword">return</span> <span class="variable">result</span>;
+    }
+    
+<span class="keyword">protected</span>:
+    <span class="comment">/**
+     * @brief Override compare methods to count assertions
+     */</span>
+    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>&gt;
+    <span class="type">void</span> <span class="function">compare</span>(<span class="keyword">const</span> <span class="type">T</span><span class="operator">&amp;</span> <span class="variable">expected</span>, <span class="keyword">const</span> <span class="type">T</span><span class="operator">&amp;</span> <span class="variable">actual</span>)
+    {
+        <span class="operator">++</span><span class="variable">m_assertion_count</span>;
+        <span class="type">Test</span>::<span class="function">compare</span>(<span class="variable">expected</span>, <span class="variable">actual</span>);
+    }
+    
+    <span class="comment">/**
+     * @brief Get test name for reporting
+     */</span>
+    <span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="function">getName</span>() <span class="keyword">const</span> { <span class="keyword">return</span> <span class="variable">name</span>; }
+    
+<span class="keyword">private</span>:
+    <span class="type">size_t</span> <span class="variable">m_assertion_count</span> <span class="operator">=</span> <span class="number">0</span>;
+    
+    <span class="comment">/**
+     * @brief Extract category from test name (e.g., "AESEncryptionTest" -> "AES")
+     */</span>
+    <span class="type">String</span> <span class="function">extractCategory</span>(<span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="variable">test_name</span>)
+    {
+        <span class="comment">// Simple heuristic: find first uppercase letter after lowercase</span>
+        <span class="keyword">for</span> (<span class="type">size_t</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; <span class="variable">i</span> <span class="operator">&lt;</span> <span class="variable">test_name</span>.<span class="function">length</span>(); <span class="operator">++</span><span class="variable">i</span>)
+        {
+            <span class="keyword">if</span> (<span class="type">std::isupper</span>(<span class="variable">test_name</span>[<span class="variable">i</span>]) <span class="operator">&amp;&amp;</span> <span class="type">std::islower</span>(<span class="variable">test_name</span>[<span class="variable">i</span><span class="operator">-</span><span class="number">1</span>]))
+            {
+                <span class="keyword">return</span> <span class="variable">test_name</span>.<span class="function">substr</span>(<span class="number">0</span>, <span class="variable">i</span>);
+            }
+        }
+        <span class="keyword">return</span> <span class="string">"General"</span>;
+    }
+};</code></pre>
+        </div>
+
+        <h2>🔧 Recommended Test.hpp Changes</h2>
+
+        <div class="info-box">
+            <h3>Essential Additions to Your Test.hpp</h3>
+            <p>Add these enhancements to your existing Test class for better reporting integration:</p>
+        </div>
+
+        <div class="code-block">
+            <pre><code><span class="comment">// Add these methods to your existing Test class:</span>
+
+<span class="keyword">protected</span>:
+    <span class="comment">/**
+     * @brief Get test name (make name accessible)
+     */</span>
+    <span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="function">getName</span>() <span class="keyword">const</span> { <span class="keyword">return</span> <span class="variable">name</span>; }
+    
+    <span class="comment">/**
+     * @brief Get expected value for reporting
+     */</span>
+    <span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="function">getExpectedValue</span>() <span class="keyword">const</span> { <span class="keyword">return</span> <span class="variable">expected_value</span>; }
+    
+    <span class="comment">/**
+     * @brief Get actual value for reporting
+     */</span>
+    <span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="function">getActualValue</span>() <span class="keyword">const</span> { <span class="keyword">return</span> <span class="variable">input_value</span>; }
+    
+    <span class="comment">/**
+     * @brief Set custom failure message
+     */</span>
+    <span class="type">void</span> <span class="function">setFailureMessage</span>(<span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="variable">message</span>) { <span class="variable">m_failure_message</span> <span class="operator">=</span> <span class="variable">message</span>; }
+    
+    <span class="comment">/**
+     * @brief Get failure message
+     */</span>
+    <span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="function">getFailureMessage</span>() <span class="keyword">const</span> { <span class="keyword">return</span> <span class="variable">m_failure_message</span>; }
+
+<span class="keyword">private</span>:
+    <span class="type">String</span> <span class="variable">m_failure_message</span>; <span class="comment">// Add this member variable</span>
+
+<span class="comment">/**
+ * @brief Enhanced TEST macro with category support
+ */</span>
+<span class="preprocessor">#define TEST_WITH_CATEGORY(ClassName, Parent, Category) \</span>
+    <span class="keyword">class</span> <span class="type">ClassName</span> : <span class="keyword">public</span> <span class="type">Parent</span> <span class="operator">\</span>
+    { <span class="operator">\</span>
+    <span class="keyword">public</span>: <span class="operator">\</span>
+        <span class="function">ClassName</span>() { <span class="function">setName</span>(<span class="preprocessor">#ClassName</span>); <span class="function">setCategory</span>(<span class="preprocessor">#Category</span>); } <span class="operator">\</span>
+        <span class="type">void</span> <span class="function">run</span>() <span class="keyword">override</span>; <span class="operator">\</span>
+    }; <span class="operator">\</span>
+    <span class="keyword">static</span> <span class="type">ClassName</span> <span class="variable">instance_##ClassName</span>; <span class="operator">\</span>
+    <span class="type">void</span> <span class="type">ClassName</span>::<span class="function">run</span>()</code></pre>
+        </div>
+
+        <h2>🔧 Private Methods Implementation</h2>
+
+        <h3>1. Console Report Generation</h3>
+        <div class="code-block">
+            <pre><code><span class="comment">/**
+ * @brief Generate comprehensive console report with Unicode formatting
+ */</span>
+<span class="type">void</span> <span class="type">TestReporter</span>::<span class="function">generateConsoleReport</span>()
+{
+    <span class="keyword">auto</span> <span class="variable">end_time</span> <span class="operator">=</span> <span class="type">std::chrono::high_resolution_clock</span>::<span class="function">now</span>();
+    
+    <span class="comment">// Header with Unicode box-drawing</span>
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_GREEN</span> <span class="operator">&lt;&lt;</span> <span class="string">"╔══════════════════════════════════════════════════════════════════╗\n"</span>;
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"║                      "</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_suite_name</span> <span class="operator">&lt;&lt;</span> <span class="string">"                        ║\n"</span>;
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"╠══════════════════════════════════════════════════════════════════╣"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n\n"</span>;
+    
+    <span class="comment">// Test execution section</span>
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_CYAN</span> <span class="operator">&lt;&lt;</span> <span class="string">"┌─ Test Execution ─────────────────────────────────────────────────┐"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n\n"</span>;
+    
+    <span class="comment">// Print individual test results</span>
+    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span><span class="operator">&amp;</span> <span class="variable">result</span> : <span class="variable">m_test_results</span>)
+    {
+        <span class="type">String</span> <span class="variable">status_symbol</span> <span class="operator">=</span> <span class="variable">result</span>.<span class="variable">passed</span> <span class="operator">?</span> <span class="type">Color</span>::<span class="variable">FG_GREEN</span> <span class="operator">+</span> <span class="string">"✓"</span> : <span class="type">Color</span>::<span class="variable">FG_RED</span> <span class="operator">+</span> <span class="string">"✗"</span>;
+        <span class="type">String</span> <span class="variable">test_name</span> <span class="operator">=</span> <span class="variable">result</span>.<span class="variable">test_name</span>;
+        
+        <span class="comment">// Format timing and category</span>
+        <span class="type">std::ostringstream</span> <span class="variable">timing_stream</span>;
+        <span class="variable">timing_stream</span> <span class="operator">&lt;&lt;</span> <span class="string">"["</span> <span class="operator">&lt;&lt;</span> <span class="type">std::fixed</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setprecision</span>(<span class="number">2</span>) <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">execution_time_ms</span> <span class="operator">&lt;&lt;</span> <span class="string">"ms]"</span>;
+        <span class="type">String</span> <span class="variable">timing</span> <span class="operator">=</span> <span class="type">String</span>(<span class="variable">timing_stream</span>.<span class="function">str</span>());
+        <span class="type">String</span> <span class="variable">category</span> <span class="operator">=</span> <span class="type">String</span>(<span class="string">"["</span>) <span class="operator">+</span> <span class="variable">result</span>.<span class="variable">test_category</span> <span class="operator">+</span> <span class="string">"]"</span>;
+        
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="variable">status_symbol</span> <span class="operator">&lt;&lt;</span> <span class="string">" "</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_WHITE</span> <span class="operator">&lt;&lt;</span> <span class="variable">test_name</span>;
+        
+        <span class="comment">// Pad to align timing info</span>
+        <span class="type">size_t</span> <span class="variable">padding</span> <span class="operator">=</span> <span class="number">50</span> <span class="operator">-</span> <span class="variable">test_name</span>.<span class="function">length</span>();
+        <span class="keyword">for</span> (<span class="type">size_t</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; <span class="variable">i</span> <span class="operator">&lt;</span> <span class="variable">padding</span>; <span class="operator">++</span><span class="variable">i</span>) <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">" "</span>;
+        
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_GRAY</span> <span class="operator">&lt;&lt;</span> <span class="variable">timing</span> <span class="operator">&lt;&lt;</span> <span class="string">" "</span> <span class="operator">&lt;&lt;</span> <span class="variable">category</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+        
+        <span class="comment">// Show failure details</span>
+        <span class="keyword">if</span> (<span class="operator">!</span><span class="variable">result</span>.<span class="variable">passed</span>)
+        {
+            <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"  "</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_RED</span> <span class="operator">&lt;&lt;</span> <span class="string">"Expected: "</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">expected_value</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+            <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"  "</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_RED</span> <span class="operator">&lt;&lt;</span> <span class="string">"Actual  : "</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">actual_value</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+            <span class="keyword">if</span> (<span class="operator">!</span><span class="variable">result</span>.<span class="variable">failure_message</span>.<span class="function">empty</span>())
+            {
+                <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"  "</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_RED</span> <span class="operator">&lt;&lt;</span> <span class="string">"Message : "</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">failure_message</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+            }
+        }
+    }
+    
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_CYAN</span> <span class="operator">&lt;&lt;</span> <span class="string">"└──────────────────────────────────────────────────────────────────┘"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n\n"</span>;
+    
+    <span class="comment">// Category summary</span>
+    <span class="function">generateCategorySummary</span>();
+    
+    <span class="comment">// Final summary</span>
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_GREEN</span> <span class="operator">&lt;&lt;</span> <span class="string">"╔══════════════════════════════════════════════════════════════════╗\n"</span>;
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"║                         Summary                                  ║\n"</span>;
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"╠══════════════════════════════════════════════════════════════════╣"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+    
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_WHITE</span> <span class="operator">&lt;&lt;</span> <span class="string">"Total Tests    : "</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_CYAN</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">total_tests</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_WHITE</span> <span class="operator">&lt;&lt;</span> <span class="string">"Passed         : "</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_GREEN</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">passed_tests</span> 
+              <span class="operator">&lt;&lt;</span> <span class="string">" ("</span> <span class="operator">&lt;&lt;</span> <span class="type">std::fixed</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setprecision</span>(<span class="number">1</span>) <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">pass_rate_percent</span> <span class="operator">&lt;&lt;</span> <span class="string">"%)"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_WHITE</span> <span class="operator">&lt;&lt;</span> <span class="string">"Failed         : "</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_RED</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">failed_tests</span> 
+              <span class="operator">&lt;&lt;</span> <span class="string">" ("</span> <span class="operator">&lt;&lt;</span> <span class="type">std::fixed</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setprecision</span>(<span class="number">1</span>) <span class="operator">&lt;&lt;</span> (<span class="number">100.0</span> <span class="operator">-</span> <span class="variable">m_statistics</span>.<span class="variable">pass_rate_percent</span>) <span class="operator">&lt;&lt;</span> <span class="string">"%)"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_WHITE</span> <span class="operator">&lt;&lt;</span> <span class="string">"Total Time     : "</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_GRAY</span> <span class="operator">&lt;&lt;</span> <span class="type">std::fixed</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setprecision</span>(<span class="number">2</span>) 
+              <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">total_execution_time_ms</span> <span class="operator">&lt;&lt;</span> <span class="string">"ms"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+    
+    <span class="comment">// Final status</span>
+    <span class="keyword">if</span> (<span class="variable">m_statistics</span>.<span class="variable">failed_tests</span> <span class="operator">&gt;</span> <span class="number">0</span>)
+    {
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_RED</span> <span class="operator">&lt;&lt;</span> <span class="string">"❌ Test suite failed - "</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">failed_tests</span> <span class="operator">&lt;&lt;</span> <span class="string">" test(s) failed"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+    }
+    <span class="keyword">else</span>
+    {
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_GREEN</span> <span class="operator">&lt;&lt;</span> <span class="string">"✅ All tests passed successfully!"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+    }
+}</code></pre>
+        </div>
+
+        <h3>2. HTML Report Generation</h3>
+        <div class="code-block">
+            <pre><code><span class="comment">/**
+ * @brief Generate professional HTML report with modern styling
+ */</span>
+<span class="type">void</span> <span class="type">TestReporter</span>::<span class="function">generateHTMLReport</span>(<span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="variable">filename</span>)
+{
+    <span class="type">String</span> <span class="variable">output_file</span> <span class="operator">=</span> <span class="variable">filename</span>.<span class="function">empty</span>() <span class="operator">?</span> <span class="string">"test_report.html"</span> : <span class="variable">filename</span>;
+    <span class="type">std::ofstream</span> <span class="variable">file</span>(<span class="variable">output_file</span>.<span class="function">toStdString</span>());
+    
+    <span class="keyword">if</span> (<span class="operator">!</span><span class="variable">file</span>.<span class="function">is_open</span>())
+    {
+        <span class="type">std::cerr</span> <span class="operator">&lt;&lt;</span> <span class="string">"Error: Could not create HTML report file: "</span> <span class="operator">&lt;&lt;</span> <span class="variable">output_file</span> <span class="operator">&lt;&lt;</span> <span class="type">std::endl</span>;
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="comment">// HTML Header and CSS</span>
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;!DOCTYPE html&gt;\n&lt;html lang=\"en\"&gt;\n&lt;head&gt;\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;meta charset=\"UTF-8\"&gt;\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"&gt;\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;title&gt;"</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_suite_name</span> <span class="operator">&lt;&lt;</span> <span class="string">" - Test Report&lt;/title&gt;\n"</span>;
+    
+    <span class="comment">// CSS Styling (abbreviated for space)</span>
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;style&gt;\n"</span>
+         <span class="operator">&lt;&lt;</span> <span class="string">"body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }\n"</span>
+         <span class="operator">&lt;&lt;</span> <span class="string">".container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }\n"</span>
+         <span class="operator">&lt;&lt;</span> <span class="string">".header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; }\n"</span>
+         <span class="operator">&lt;&lt;</span> <span class="string">".stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 20px; }\n"</span>
+         <span class="operator">&lt;&lt;</span> <span class="string">".test-item.passed { border-left: 4px solid #28a745; }\n"</span>
+         <span class="operator">&lt;&lt;</span> <span class="string">".test-item.failed { border-left: 4px solid #dc3545; background-color: #fff5f5; }\n"</span>
+         <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/style&gt;\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/head&gt;\n&lt;body&gt;\n"</span>;
+    
+    <span class="comment">// Content structure</span>
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;div class=\"container\"&gt;\n"</span>;
+    
+    <span class="comment">// Header</span>
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;div class=\"header\"&gt;\n"</span>
+         <span class="operator">&lt;&lt;</span> <span class="string">"&lt;h1&gt;"</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_suite_name</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/h1&gt;\n"</span>
+         <span class="operator">&lt;&lt;</span> <span class="string">"&lt;p&gt;Generated on "</span> <span class="operator">&lt;&lt;</span> <span class="function">getCurrentTimestamp</span>() <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/p&gt;\n"</span>
+         <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/div&gt;\n"</span>;
+    
+    <span class="comment">// Statistics Cards</span>
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;div class=\"stats-grid\"&gt;\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;div class=\"stat-card\"&gt;\n&lt;h3&gt;"</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">total_tests</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/h3&gt;\n&lt;p&gt;Total Tests&lt;/p&gt;\n&lt;/div&gt;\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;div class=\"stat-card\"&gt;\n&lt;h3 class=\"pass\"&gt;"</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">passed_tests</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/h3&gt;\n&lt;p&gt;Passed&lt;/p&gt;\n&lt;/div&gt;\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;div class=\"stat-card\"&gt;\n&lt;h3 class=\"fail\"&gt;"</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">failed_tests</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/h3&gt;\n&lt;p&gt;Failed&lt;/p&gt;\n&lt;/div&gt;\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/div&gt;\n"</span>;
+    
+    <span class="comment">// Test Results</span>
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;div class=\"test-list\"&gt;\n&lt;h2&gt;Test Results&lt;/h2&gt;\n"</span>;
+    
+    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span><span class="operator">&amp;</span> <span class="variable">result</span> : <span class="variable">m_test_results</span>)
+    {
+        <span class="type">String</span> <span class="variable">status_class</span> <span class="operator">=</span> <span class="variable">result</span>.<span class="variable">passed</span> <span class="operator">?</span> <span class="string">"passed"</span> : <span class="string">"failed"</span>;
+        <span class="type">String</span> <span class="variable">status_text</span> <span class="operator">=</span> <span class="variable">result</span>.<span class="variable">passed</span> <span class="operator">?</span> <span class="string">"✓ PASS"</span> : <span class="string">"✗ FAIL"</span>;
+        
+        <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;div class=\"test-item "</span> <span class="operator">&lt;&lt;</span> <span class="variable">status_class</span> <span class="operator">&lt;&lt;</span> <span class="string">"\"&gt;\n"</span>
+             <span class="operator">&lt;&lt;</span> <span class="string">"&lt;div&gt;&lt;span class=\"test-name\"&gt;"</span> <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">test_name</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/span&gt;\n"</span>
+             <span class="operator">&lt;&lt;</span> <span class="string">"&lt;span class=\"test-category\"&gt;"</span> <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">test_category</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/span&gt;&lt;/div&gt;\n"</span>;
+             
+        <span class="keyword">if</span> (<span class="operator">!</span><span class="variable">result</span>.<span class="variable">passed</span>)
+        {
+            <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;div class=\"failure-details\"&gt;\n"</span>
+                 <span class="operator">&lt;&lt;</span> <span class="string">"&lt;strong&gt;Expected:&lt;/strong&gt; "</span> <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">expected_value</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;br&gt;\n"</span>
+                 <span class="operator">&lt;&lt;</span> <span class="string">"&lt;strong&gt;Actual:&lt;/strong&gt; "</span> <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">actual_value</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;br&gt;\n"</span>
+                 <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/div&gt;\n"</span>;
+        }
+        
+        <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/div&gt;\n"</span>;
+    }
+    
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/div&gt;\n&lt;/div&gt;\n&lt;/body&gt;\n&lt;/html&gt;\n"</span>;
+    <span class="variable">file</span>.<span class="function">close</span>();
+    
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"HTML report generated: "</span> <span class="operator">&lt;&lt;</span> <span class="variable">output_file</span> <span class="operator">&lt;&lt;</span> <span class="type">std::endl</span>;
+}</code></pre>
+        </div>
+
+        <h3>3. JUnit XML Report Generation</h3>
+        <div class="code-block">
+            <pre><code><span class="comment">/**
+ * @brief Generate JUnit XML format for CI/CD integration
+ */</span>
+<span class="type">void</span> <span class="type">TestReporter</span>::<span class="function">generateJUnitXMLReport</span>(<span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="variable">filename</span>)
+{
+    <span class="type">String</span> <span class="variable">output_file</span> <span class="operator">=</span> <span class="variable">filename</span>.<span class="function">empty</span>() <span class="operator">?</span> <span class="string">"junit_results.xml"</span> : <span class="variable">filename</span>;
+    <span class="type">std::ofstream</span> <span class="variable">file</span>(<span class="variable">output_file</span>.<span class="function">toStdString</span>());
+    
+    <span class="keyword">if</span> (<span class="operator">!</span><span class="variable">file</span>.<span class="function">is_open</span>())
+    {
+        <span class="type">std::cerr</span> <span class="operator">&lt;&lt;</span> <span class="string">"Error: Could not create JUnit XML file: "</span> <span class="operator">&lt;&lt;</span> <span class="variable">output_file</span> <span class="operator">&lt;&lt;</span> <span class="type">std::endl</span>;
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="comment">// Group tests by category</span>
+    <span class="type">std::map</span>&lt;<span class="type">String</span>, <span class="type">Vector</span>&lt;<span class="type">TestResult</span>&gt;&gt; <span class="variable">categories</span>;
+    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span><span class="operator">&amp;</span> <span class="variable">result</span> : <span class="variable">m_test_results</span>)
+    {
+        <span class="variable">categories</span>[<span class="variable">result</span>.<span class="variable">test_category</span>].<span class="function">push_back</span>(<span class="variable">result</span>);
+    }
+    
+    <span class="comment">// XML Header</span>
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;testsuites name=\""</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_suite_name</span> <span class="operator">&lt;&lt;</span> <span class="string">"\" tests=\""</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">total_tests</span> 
+         <span class="operator">&lt;&lt;</span> <span class="string">"\" failures=\""</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">failed_tests</span> <span class="operator">&lt;&lt;</span> <span class="string">"\" time=\""</span> 
+         <span class="operator">&lt;&lt;</span> <span class="type">std::fixed</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setprecision</span>(<span class="number">3</span>) <span class="operator">&lt;&lt;</span> (<span class="variable">m_statistics</span>.<span class="variable">total_execution_time_ms</span> <span class="operator">/</span> <span class="number">1000.0</span>) <span class="operator">&lt;&lt;</span> <span class="string">"\"&gt;\n"</span>;
+    
+    <span class="comment">// Generate testsuite for each category</span>
+    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span><span class="operator">&amp;</span> [<span class="variable">category</span>, <span class="variable">tests</span>] : <span class="variable">categories</span>)
+    {
+        <span class="type">size_t</span> <span class="variable">category_failures</span> <span class="operator">=</span> <span class="type">std::count_if</span>(<span class="variable">tests</span>.<span class="function">begin</span>(), <span class="variable">tests</span>.<span class="function">end</span>(), 
+                                                [](const TestResult<span class="operator">&amp;</span> <span class="variable">r</span>) { <span class="keyword">return</span> <span class="operator">!</span><span class="variable">r</span>.<span class="variable">passed</span>; });
+        <span class="type">double</span> <span class="variable">category_time</span> <span class="operator">=</span> <span class="type">std::accumulate</span>(<span class="variable">tests</span>.<span class="function">begin</span>(), <span class="variable">tests</span>.<span class="function">end</span>(), <span class="number">0.0</span>,
+                                             [](<span class="type">double</span> <span class="variable">sum</span>, <span class="keyword">const</span> <span class="type">TestResult</span><span class="operator">&amp;</span> <span class="variable">r</span>) { <span class="keyword">return</span> <span class="variable">sum</span> <span class="operator">+</span> <span class="variable">r</span>.<span class="variable">execution_time_ms</span>; });
+        
+        <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"  &lt;testsuite name=\""</span> <span class="operator">&lt;&lt;</span> <span class="variable">category</span> <span class="operator">&lt;&lt;</span> <span class="string">"\" tests=\""</span> <span class="operator">&lt;&lt;</span> <span class="variable">tests</span>.<span class="function">size</span>() 
+             <span class="operator">&lt;&lt;</span> <span class="string">"\" failures=\""</span> <span class="operator">&lt;&lt;</span> <span class="variable">category_failures</span> <span class="operator">&lt;&lt;</span> <span class="string">"\" time=\""</span> 
+             <span class="operator">&lt;&lt;</span> <span class="type">std::fixed</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setprecision</span>(<span class="number">3</span>) <span class="operator">&lt;&lt;</span> (<span class="variable">category_time</span> <span class="operator">/</span> <span class="number">1000.0</span>) <span class="operator">&lt;&lt;</span> <span class="string">"\"&gt;\n"</span>;
+        
+        <span class="comment">// Generate testcase for each test</span>
+        <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span><span class="operator">&amp;</span> <span class="variable">result</span> : <span class="variable">tests</span>)
+        {
+            <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"    &lt;testcase name=\""</span> <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">test_name</span> <span class="operator">&lt;&lt;</span> <span class="string">"\" time=\""</span> 
+                 <span class="operator">&lt;&lt;</span> <span class="type">std::fixed</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setprecision</span>(<span class="number">3</span>) <span class="operator">&lt;&lt;</span> (<span class="variable">result</span>.<span class="variable">execution_time_ms</span> <span class="operator">/</span> <span class="number">1000.0</span>) <span class="operator">&lt;&lt;</span> <span class="string">"\""</span>;
+            
+            <span class="keyword">if</span> (<span class="variable">result</span>.<span class="variable">passed</span>)
+            {
+                <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"/&gt;\n"</span>;
+            }
+            <span class="keyword">else</span>
+            {
+                <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&gt;\n"</span>;
+                <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"      &lt;failure message=\"Test assertion failed\"&gt;"</span>;
+                <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;![CDATA[\nExpected: "</span> <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">expected_value</span> 
+                     <span class="operator">&lt;&lt;</span> <span class="string">"\nActual: "</span> <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">actual_value</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n]]&gt;&lt;/failure&gt;\n"</span>;
+                <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"    &lt;/testcase&gt;\n"</span>;
+            }
+        }
+        
+        <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"  &lt;/testsuite&gt;\n"</span>;
+    }
+    
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"&lt;/testsuites&gt;\n"</span>;
+    <span class="variable">file</span>.<span class="function">close</span>();
+    
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"JUnit XML report generated: "</span> <span class="operator">&lt;&lt;</span> <span class="variable">output_file</span> <span class="operator">&lt;&lt;</span> <span class="type">std::endl</span>;
+}</code></pre>
+        </div>
+
+        <h3>4. JSON Report Generation</h3>
+        <div class="code-block">
+            <pre><code><span class="comment">/**
+ * @brief Generate JSON format for programmatic analysis
+ */</span>
+<span class="type">void</span> <span class="type">TestReporter</span>::<span class="function">generateJSONReport</span>(<span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="variable">filename</span>)
+{
+    <span class="type">String</span> <span class="variable">output_file</span> <span class="operator">=</span> <span class="variable">filename</span>.<span class="function">empty</span>() <span class="operator">?</span> <span class="string">"test_report.json"</span> : <span class="variable">filename</span>;
+    <span class="type">std::ofstream</span> <span class="variable">file</span>(<span class="variable">output_file</span>.<span class="function">toStdString</span>());
+    
+    <span class="keyword">if</span> (<span class="operator">!</span><span class="variable">file</span>.<span class="function">is_open</span>())
+    {
+        <span class="type">std::cerr</span> <span class="operator">&lt;&lt;</span> <span class="string">"Error: Could not create JSON report file: "</span> <span class="operator">&lt;&lt;</span> <span class="variable">output_file</span> <span class="operator">&lt;&lt;</span> <span class="type">std::endl</span>;
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="comment">// JSON structure</span>
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"{\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"  \"suite_name\": \""</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_suite_name</span> <span class="operator">&lt;&lt;</span> <span class="string">"\",\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"  \"timestamp\": \""</span> <span class="operator">&lt;&lt;</span> <span class="function">getCurrentTimestamp</span>() <span class="operator">&lt;&lt;</span> <span class="string">"\",\n"</span>;
+    
+    <span class="comment">// Statistics section</span>
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"  \"statistics\": {\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"    \"total_tests\": "</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">total_tests</span> <span class="operator">&lt;&lt;</span> <span class="string">",\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"    \"passed_tests\": "</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">passed_tests</span> <span class="operator">&lt;&lt;</span> <span class="string">",\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"    \"failed_tests\": "</span> <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">failed_tests</span> <span class="operator">&lt;&lt;</span> <span class="string">",\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"    \"pass_rate_percent\": "</span> <span class="operator">&lt;&lt;</span> <span class="type">std::fixed</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setprecision</span>(<span class="number">2</span>) <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">pass_rate_percent</span> <span class="operator">&lt;&lt;</span> <span class="string">",\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"    \"total_execution_time_ms\": "</span> <span class="operator">&lt;&lt;</span> <span class="type">std::fixed</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setprecision</span>(<span class="number">2</span>) <span class="operator">&lt;&lt;</span> <span class="variable">m_statistics</span>.<span class="variable">total_execution_time_ms</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"  },\n"</span>;
+    
+    <span class="comment">// Test results array</span>
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"  \"test_results\": [\n"</span>;
+    
+    <span class="keyword">for</span> (<span class="type">size_t</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; <span class="variable">i</span> <span class="operator">&lt;</span> <span class="variable">m_test_results</span>.<span class="function">size</span>(); <span class="operator">++</span><span class="variable">i</span>)
+    {
+        <span class="keyword">const</span> <span class="keyword">auto</span><span class="operator">&amp;</span> <span class="variable">result</span> <span class="operator">=</span> <span class="variable">m_test_results</span>[<span class="variable">i</span>];
+        
+        <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"    {\n"</span>;
+        <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"      \"test_name\": \""</span> <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">test_name</span> <span class="operator">&lt;&lt;</span> <span class="string">"\",\n"</span>;
+        <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"      \"test_category\": \""</span> <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">test_category</span> <span class="operator">&lt;&lt;</span> <span class="string">"\",\n"</span>;
+        <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"      \"passed\": "</span> <span class="operator">&lt;&lt;</span> (<span class="variable">result</span>.<span class="variable">passed</span> <span class="operator">?</span> <span class="string">"true"</span> : <span class="string">"false"</span>) <span class="operator">&lt;&lt;</span> <span class="string">",\n"</span>;
+        <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"      \"execution_time_ms\": "</span> <span class="operator">&lt;&lt;</span> <span class="type">std::fixed</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setprecision</span>(<span class="number">2</span>) <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">execution_time_ms</span> <span class="operator">&lt;&lt;</span> <span class="string">",\n"</span>;
+        <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"      \"assertions_count\": "</span> <span class="operator">&lt;&lt;</span> <span class="variable">result</span>.<span class="variable">assertions_count</span>;
+        
+        <span class="keyword">if</span> (<span class="operator">!</span><span class="variable">result</span>.<span class="variable">passed</span>)
+        {
+            <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">",\n"</span>;
+            <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"      \"expected_value\": \""</span> <span class="operator">&lt;&lt;</span> <span class="function">escapeJsonString</span>(<span class="variable">result</span>.<span class="variable">expected_value</span>) <span class="operator">&lt;&lt;</span> <span class="string">"\",\n"</span>;
+            <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"      \"actual_value\": \""</span> <span class="operator">&lt;&lt;</span> <span class="function">escapeJsonString</span>(<span class="variable">result</span>.<span class="variable">actual_value</span>) <span class="operator">&lt;&lt;</span> <span class="string">"\""</span>;
+        }
+        
+        <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n    }"</span>;
+        
+        <span class="keyword">if</span> (<span class="variable">i</span> <span class="operator">&lt;</span> <span class="variable">m_test_results</span>.<span class="function">size</span>() <span class="operator">-</span> <span class="number">1</span>)
+        {
+            <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">","</span>;
+        }
+        <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+    }
+    
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"  ]\n"</span>;
+    <span class="variable">file</span> <span class="operator">&lt;&lt;</span> <span class="string">"}\n"</span>;
+    
+    <span class="variable">file</span>.<span class="function">close</span>();
+    <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"JSON report generated: "</span> <span class="operator">&lt;&lt;</span> <span class="variable">output_file</span> <span class="operator">&lt;&lt;</span> <span class="type">std::endl</span>;
+}</code></pre>
+        </div>
+
+        <h3>5. Helper Methods</h3>
+        <div class="code-block">
+            <pre><code><span class="comment">/**
+ * @brief Helper methods for report generation
+ */</span>
+<span class="keyword">private</span>:
+    <span class="comment">/**
+     * @brief Generate category summary for console output
+     */</span>
+    <span class="type">void</span> <span class="function">generateCategorySummary</span>()
+    {
+        <span class="type">std::map</span>&lt;<span class="type">String</span>, <span class="type">std::pair</span>&lt;<span class="type">size_t</span>, <span class="type">size_t</span>&gt;&gt; <span class="variable">category_stats</span>; <span class="comment">// passed, failed</span>
+        <span class="type">std::map</span>&lt;<span class="type">String</span>, <span class="type">double</span>&gt; <span class="variable">category_times</span>;
+        
+        <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span><span class="operator">&amp;</span> <span class="variable">result</span> : <span class="variable">m_test_results</span>)
+        {
+            <span class="keyword">if</span> (<span class="variable">result</span>.<span class="variable">passed</span>)
+                <span class="variable">category_stats</span>[<span class="variable">result</span>.<span class="variable">test_category</span>].<span class="variable">first</span><span class="operator">++</span>;
+            <span class="keyword">else</span>
+                <span class="variable">category_stats</span>[<span class="variable">result</span>.<span class="variable">test_category</span>].<span class="variable">second</span><span class="operator">++</span>;
+            
+            <span class="variable">category_times</span>[<span class="variable">result</span>.<span class="variable">test_category</span>] <span class="operator">+=</span> <span class="variable">result</span>.<span class="variable">execution_time_ms</span>;
+        }
+        
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_YELLOW</span> <span class="operator">&lt;&lt;</span> <span class="string">"┌─ Test Categories ────────────────────────────────────────────────┐"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+        
+        <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span><span class="operator">&amp;</span> [<span class="variable">category</span>, <span class="variable">stats</span>] : <span class="variable">category_stats</span>)
+        {
+            <span class="type">size_t</span> <span class="variable">total</span> <span class="operator">=</span> <span class="variable">stats</span>.<span class="variable">first</span> <span class="operator">+</span> <span class="variable">stats</span>.<span class="variable">second</span>;
+            <span class="type">double</span> <span class="variable">avg_time</span> <span class="operator">=</span> <span class="variable">total</span> <span class="operator">&gt;</span> <span class="number">0</span> <span class="operator">?</span> <span class="variable">category_times</span>[<span class="variable">category</span>] <span class="operator">/</span> <span class="variable">total</span> : <span class="number">0.0</span>;
+            
+            <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_WHITE</span> <span class="operator">&lt;&lt;</span> <span class="type">std::left</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setw</span>(<span class="number">12</span>) <span class="operator">&lt;&lt;</span> <span class="variable">category</span> <span class="operator">&lt;&lt;</span> <span class="string">": "</span>;
+            <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_GREEN</span> <span class="operator">&lt;&lt;</span> <span class="variable">stats</span>.<span class="variable">first</span> <span class="operator">&lt;&lt;</span> <span class="string">" passed"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">", "</span>;
+            <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_RED</span> <span class="operator">&lt;&lt;</span> <span class="variable">stats</span>.<span class="variable">second</span> <span class="operator">&lt;&lt;</span> <span class="string">" failed"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"  "</span>;
+            <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_GRAY</span> <span class="operator">&lt;&lt;</span> <span class="string">"(avg: "</span> <span class="operator">&lt;&lt;</span> <span class="type">std::fixed</span> <span class="operator">&lt;&lt;</span> <span class="type">std::setprecision</span>(<span class="number">2</span>) <span class="operator">&lt;&lt;</span> <span class="variable">avg_time</span> <span class="operator">&lt;&lt;</span> <span class="string">"ms)"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n"</span>;
+        }
+        
+        <span class="type">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_YELLOW</span> <span class="operator">&lt;&lt;</span> <span class="string">"└──────────────────────────────────────────────────────────────────┘"</span> <span class="operator">&lt;&lt;</span> <span class="type">Color</span>::<span class="variable">FG_DEFAULT</span> <span class="operator">&lt;&lt;</span> <span class="string">"\n\n"</span>;
+    }
+    
+    <span class="comment">/**
+     * @brief Get current timestamp for reports
+     */</span>
+    <span class="type">String</span> <span class="function">getCurrentTimestamp</span>()
+    {
+        <span class="keyword">auto</span> <span class="variable">now</span> <span class="operator">=</span> <span class="type">std::chrono::system_clock</span>::<span class="function">now</span>();
+        <span class="keyword">auto</span> <span class="variable">time_t</span> <span class="operator">=</span> <span class="type">std::chrono::system_clock</span>::<span class="function">to_time_t</span>(<span class="variable">now</span>);
+        
+        <span class="type">std::ostringstream</span> <span class="variable">oss</span>;
+        <span class="variable">oss</span> <span class="operator">&lt;&lt;</span> <span class="type">std::put_time</span>(<span class="type">std::localtime</span>(<span class="operator">&amp;</span><span class="variable">time_t</span>), <span class="string">"%Y-%m-%d %H:%M:%S"</span>);
+        <span class="keyword">return</span> <span class="type">String</span>(<span class="variable">oss</span>.<span class="function">str</span>());
+    }
+    
+    <span class="comment">/**
+     * @brief Escape special characters for JSON
+     */</span>
+    <span class="type">String</span> <span class="function">escapeJsonString</span>(<span class="keyword">const</span> <span class="type">String</span><span class="operator">&amp;</span> <span class="variable">str</span>)
+    {
+        <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> <span class="variable">str</span>;
+        <span class="comment">// Basic JSON escaping</span>
+        <span class="type">std::replace</span>(<span class="variable">result</span>.<span class="function">begin</span>(), <span class="variable">result</span>.<span class="function">end</span>(), <span class="string">'"'</span>, <span class="string">'\''</span>);
+        <span class="keyword">return</span> <span class="variable">result</span>;
+    }</code></pre>
+        </div>
+
+        <h2>💡 Usage Example</h2>
+
+        <div class="code-block">
+            <pre><code><span class="comment">/**
+ * @brief Complete example of test suite with reporting
+ */</span>
+<span class="preprocessor">#include</span> <span class="string">"TestReporter.hpp"</span>
+
+<span class="comment">// Example test using enhanced reporting</span>
+<span class="function">TEST</span>(<span class="type">BigIntegerAdditionTest</span>, <span class="type">EnhancedTest</span>)
+{
+    <span class="type">BigInteger</span> <span class="variable">a</span>(<span class="number">100</span>);
+    <span class="type">BigInteger</span> <span class="variable">b</span>(<span class="number">200</span>);
+    <span class="type">BigInteger</span> <span class="variable">result</span> <span class="operator">=</span> <span class="variable">a</span> <span class="operator">+</span> <span class="variable">b</span>;
+    
+    <span class="function">compare</span>(<span class="type">BigInteger</span>(<span class="number">300</span>), <span class="variable">result</span>);
+}
+
+<span class="comment">/**
+ * @brief Main function with comprehensive reporting
+ */</span>
+<span class="type">int</span> <span class="function">main</span>()
+{
+    <span class="type">TestReporter</span> <span class="variable">reporter</span>(<span class="string">"CryptoGL Unit Tests"</span>);
+    <span class="type">Vector</span>&lt;<span class="type">Test</span><span class="operator">*</span>&gt;<span class="operator">&amp;</span> <span class="variable">tests</span> <span class="operator">=</span> <span class="type">TestContainer</span>::<span class="function">getInstance</span>().<span class="function">getTests</span>();
+    
+    <span class="comment">// Execute all tests and collect results</span>
+    <span class="keyword">for</span> (<span class="type">Test</span><span class="operator">*</span> <span class="variable">test</span> : <span class="variable">tests</span>)
+    {
+        <span class="keyword">auto</span><span class="operator">*</span> <span class="variable">enhanced_test</span> <span class="operator">=</span> <span class="keyword">dynamic_cast</span>&lt;<span class="type">EnhancedTest</span><span class="operator">*</span>&gt;(<span class="variable">test</span>);
+        <span class="keyword">if</span> (<span class="variable">enhanced_test</span>)
+        {
+            <span class="keyword">auto</span> <span class="variable">result</span> <span class="operator">=</span> <span class="variable">enhanced_test</span><span class="operator">-></span><span class="function">executeWithReporting</span>();
+            <span class="variable">reporter</span>.<span class="function">addTestResult</span>(<span class="variable">result</span>);
+        }
+    }
+    
+    <span class="comment">// Generate multiple report formats</span>
+    <span class="variable">reporter</span>.<span class="function">generateReport</span>(<span class="type">TestReporter</span>::<span class="type">OutputFormat</span>::<span class="variable">CONSOLE</span>);
+    <span class="variable">reporter</span>.<span class="function">generateReport</span>(<span class="type">TestReporter</span>::<span class="type">OutputFormat</span>::<span class="variable">HTML</span>, <span class="string">"test_report.html"</span>);
+    <span class="variable">reporter</span>.<span class="function">generateReport</span>(<span class="type">TestReporter</span>::<span class="type">OutputFormat</span>::<span class="variable">XML_JUNIT</span>, <span class="string">"junit_results.xml"</span>);
+    
+    <span class="comment">// Return appropriate exit code for CI/CD</span>
+    <span class="keyword">return</span> (<span class="variable">reporter</span>.<span class="function">getStatistics</span>().<span class="variable">failed_tests</span> <span class="operator">></span> <span class="number">0</span>) <span class="operator">?</span> <span class="number">1</span> : <span class="number">0</span>;
+}</code></pre>
+        </div>
+
+        <h2>📋 Expected Output Format</h2>
+
+        <h3>Console Output</h3>
+        <div class="output-example">
+<span style="color: #00ff88;">╔══════════════════════════════════════════════════════════════════╗</span>
+<span style="color: #00ff88;">║                      CryptoGL Unit Tests                        ║</span>
+<span style="color: #00ff88;">╠══════════════════════════════════════════════════════════════════╣</span>
+
+<span style="color: #4fc3f7;">┌─ Test Execution ─────────────────────────────────────────────────┐</span>
+
+<span style="color: #00ff88;">✓</span> <span style="color: #ffffff;">BigIntegerAdditionTest</span>                    <span style="color: #888;">[  0.45ms] [BigInteger]</span>
+<span style="color: #00ff88;">✓</span> <span style="color: #ffffff;">BigIntegerMultiplicationTest</span>             <span style="color: #888;">[  2.34ms] [BigInteger]</span>
+<span style="color: #00ff88;">✓</span> <span style="color: #ffffff;">AES256EncryptionTest</span>                     <span style="color: #888;">[  1.23ms] [AES]</span>
+<span style="color: #ff6b6b;">✗</span> <span style="color: #ffffff;">SHA256HashTest</span>                           <span style="color: #888;">[  0.89ms] [SHA]</span>
+  <span style="color: #ff6b6b;">Expected:</span> A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3
+  <span style="color: #ff6b6b;">Actual  :</span> A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE4
+<span style="color: #00ff88;">✓</span> <span style="color: #ffffff;">RSAKeyGenerationTest</span>                     <span style="color: #888;">[245.67ms] [RSA]</span>
+
+<span style="color: #4fc3f7;">└──────────────────────────────────────────────────────────────────┘</span>
+
+<span style="color: #ffb74d;">┌─ Test Categories ────────────────────────────────────────────────┐</span>
+<span style="color: #ffffff;">BigInteger</span>:  <span style="color: #00ff88;">2 passed</span>, <span style="color: #ff6b6b;">0 failed</span>  (<span style="color: #888;">avg: 1.40ms</span>)
+<span style="color: #ffffff;">AES</span>       :  <span style="color: #00ff88;">1 passed</span>, <span style="color: #ff6b6b;">0 failed</span>  (<span style="color: #888;">avg: 1.23ms</span>)
+<span style="color: #ffffff;">SHA</span>       :  <span style="color: #00ff88;">0 passed</span>, <span style="color: #ff6b6b;">1 failed</span>  (<span style="color: #888;">avg: 0.89ms</span>)
+<span style="color: #ffffff;">RSA</span>       :  <span style="color: #00ff88;">1 passed</span>, <span style="color: #ff6b6b;">0 failed</span>  (<span style="color: #888;">avg: 245.67ms</span>)
+<span style="color: #4fc3f7;">└──────────────────────────────────────────────────────────────────┘</span>
+
+<span style="color: #00ff88;">╔══════════════════════════════════════════════════════════════════╗</span>
+<span style="color: #00ff88;">║                         Summary                                  ║</span>
+<span style="color: #00ff88;">╠══════════════════════════════════════════════════════════════════╣</span>
+<span style="color: #ffffff;">Total Tests    :</span> <span style="color: #4fc3f7;">5</span>
+<span style="color: #ffffff;">Passed         :</span> <span style="color: #00ff88;">4 (80.0%)</span>
+<span style="color: #ffffff;">Failed         :</span> <span style="color: #ff6b6b;">1 (20.0%)</span>
+<span style="color: #ffffff;">Total Time     :</span> <span style="color: #888;">250.58ms</span>
+<span style="color: #ffffff;">Average Time   :</span> <span style="color: #888;">50.12ms</span>
+<span style="color: #ffffff;">Test Rate      :</span> <span style="color: #888;">19.95 tests/sec</span>
+<span style="color: #00ff88;">╚══════════════════════════════════════════════════════════════════╝</span>
+
+<span style="color: #ff6b6b;">❌ Test suite failed - 1 test(s) failed</span>
+</div>
+
+        <h3>HTML Report Structure</h3>
+        <div class="feature-box">
+            <h3>HTML Report Features</h3>
+            <ul>
+                <li><strong>Interactive Dashboard:</strong> Expandable test categories with filtering</li>
+                <li><strong>Visual Charts:</strong> Pass/fail ratios, execution time distributions</li>
+                <li><strong>Detailed Test Info:</strong> Hover tooltips with execution details</li>
+                <li><strong>Search & Filter:</strong> Find tests by name, category, or status</li>
+                <li><strong>Timeline View:</strong> Test execution order and timing</li>
+                <li><strong>Export Options:</strong> CSV data export, printable version</li>
+            </ul>
+        </div>
+
+        <h3>JUnit XML Output (for CI/CD)</h3>
+        <div class="code-block">
+            <pre><code><span class="operator">&lt;?</span><span class="type">xml</span> <span class="variable">version</span><span class="operator">=</span><span class="string">"1.0"</span> <span class="variable">encoding</span><span class="operator">=</span><span class="string">"UTF-8"</span><span class="operator">?&gt;</span>
+<span class="operator">&lt;</span><span class="type">testsuites</span> <span class="variable">name</span><span class="operator">=</span><span class="string">"CryptoGL Unit Tests"</span> <span class="variable">tests</span><span class="operator">=</span><span class="string">"5"</span> <span class="variable">failures</span><span class="operator">=</span><span class="string">"1"</span> <span class="variable">time</span><span class="operator">=</span><span class="string">"250.58"</span><span class="operator">&gt;</span>
+  <span class="operator">&lt;</span><span class="type">testsuite</span> <span class="variable">name</span><span class="operator">=</span><span class="string">"BigInteger"</span> <span class="variable">tests</span><span class="operator">=</span><span class="string">"2"</span> <span class="variable">failures</span><span class="operator">=</span><span class="string">"0"</span> <span class="variable">time</span><span class="operator">=</span><span class="string">"2.79"</span><span class="operator">&gt;</span>
+    <span class="operator">&lt;</span><span class="type">testcase</span> <span class="variable">name</span><span class="operator">=</span><span class="string">"BigIntegerAdditionTest"</span> <span class="variable">time</span><span class="operator">=</span><span class="string">"0.45"</span><span class="operator">/&gt;</span>
+    <span class="operator">&lt;</span><span class="type">testcase</span> <span class="variable">name</span><span class="operator">=</span><span class="string">"BigIntegerMultiplicationTest"</span> <span class="variable">time</span><span class="operator">=</span><span class="string">"2.34"</span><span class="operator">/&gt;</span>
+  <span class="operator">&lt;/</span><span class="type">testsuite</span><span class="operator">&gt;</span>
+  <span class="operator">&lt;</span><span class="type">testsuite</span> <span class="variable">name</span><span class="operator">=</span><span class="string">"SHA"</span> <span class="variable">tests</span><span class="operator">=</span><span class="string">"1"</span> <span class="variable">failures</span><span class="operator">=</span><span class="string">"1"</span> <span class="variable">time</span><span class="operator">=</span><span class="string">"0.89"</span><span class="operator">&gt;</span>
+    <span class="operator">&lt;</span><span class="type">testcase</span> <span class="variable">name</span><span class="operator">=</span><span class="string">"SHA256HashTest"</span> <span class="variable">time</span><span class="operator">=</span><span class="string">"0.89"</span><span class="operator">&gt;</span>
+      <span class="operator">&lt;</span><span class="type">failure</span> <span class="variable">message</span><span class="operator">=</span><span class="string">"Hash mismatch"</span><span class="operator">&gt;</span>
+        Expected: A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3
+        Actual  : A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE4
+      <span class="operator">&lt;/</span><span class="type">failure</span><span class="operator">&gt;</span>
+    <span class="operator">&lt;/</span><span class="type">testcase</span><span class="operator">&gt;</span>
+  <span class="operator">&lt;/</span><span class="type">testsuite</span><span class="operator">&gt;</span>
+<span class="operator">&lt;/</span><span class="type">testsuites</span><span class="operator">&gt;</span></code></pre>
+        </div>
+
+        <h2>🚀 Key Benefits</h2>
+
+        <div class="feature-box">
+            <h3>Professional Reporting Advantages</h3>
+            <ul>
+                <li><strong>🎯 CI/CD Integration:</strong> JUnit XML format works with Jenkins, GitHub Actions, GitLab CI</li>
+                <li><strong>📊 Rich Analytics:</strong> Detailed statistics and performance metrics</li>
+                <li><strong>🔍 Easy Debugging:</strong> Clear failure messages with expected vs actual values</li>
+                <li><strong>📈 Trend Analysis:</strong> Historical test performance tracking</li>
+                <li><strong>🎨 Multiple Formats:</strong> Console, HTML, XML, JSON output options</li>
+                <li><strong>⚡ Performance Insights:</strong> Execution time tracking and analysis</li>
+                <li><strong>🏷️ Organized Results:</strong> Test categorization and filtering</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <h3>Integration Steps</h3>
+            <ol>
+                <li>Add the <strong>TestReporter.hpp</strong> to your test directory</li>
+                <li>Enhance your <strong>Test.hpp</strong> with the suggested additions</li>
+                <li>Update your main test runner to use the reporting system</li>
+                <li>Configure CI/CD to consume the JUnit XML output</li>
+                <li>Optionally, publish HTML reports as build artifacts</li>
+            </ol>
+        </div>
+
+        <footer style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid #333; color: #888;">
+            <p>CryptoGL Unit Test Reporting System Implementation Guide<br>
+            <small>Professional Test Reporting for C++20 Applications • Version 1.0</small></p>
+        </footer>
+    </div>
+</body>
+</html>

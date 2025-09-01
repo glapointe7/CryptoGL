@@ -1,8 +1,10 @@
 #pragma once
 
 #include "../../src/core/types/Types.hpp"
+#include "../../src/core/types/BigInteger.hpp"
 #include "TextColors.hpp"
 #include "TestContainer.hpp"
+#include "TestReporter.hpp"
 
 #include <iostream>
 
@@ -24,6 +26,19 @@ namespace UnitTests
         Add##ClassName() { TestContainer::getInstance().append(new ClassName()); } \
     }; \
     static Add##ClassName AddThis##ClassName; \
+     void ClassName::run()
+
+/**
+ * @brief Enhanced TEST macro with category support
+ */
+#define TEST_WITH_CATEGORY(ClassName, Parent, Category) \
+    class ClassName : public Parent \
+    { \
+    public: \
+        ClassName() { setName(#ClassName); setCategory(#Category); } \
+        void run() override; \
+    }; \
+    static ClassName instance_##ClassName; \
     void ClassName::run()
 
     
@@ -36,32 +51,79 @@ namespace UnitTests
         virtual void setUp() = 0;
         virtual void run() = 0;
         virtual void tearDown() = 0;
-        
-        /* Print the result for one test if passed or failed with the expected result. */
-        virtual void printResult() const
+
+        /**
+         * @brief Execute test with timing and result collection
+         */
+        TestResult executeWithReporting()
         {
-            if(has_passed)
+            TestResult result;
+            result.test_name = getName();
+            result.test_category = extractCategory(result.test_name);
+            result.start_time = std::chrono::high_resolution_clock::now();
+            
+            try
             {
-                std::cout << Color::FG_GREEN << "\n[PASSED] ";
-                std::cout << Color::FG_DEFAULT << name;
+                setUp();
+                run();
+                tearDown();
+                
+                result.passed = hasPassed();
+                result.assertions_count = assertion_count;
+                
+                if (!result.passed)
+                {
+                    result.expected_value = expected_value;
+                    result.actual_value = input_value;
+                }
             }
-            else
+            catch (const std::exception& e)
             {
-                std::cout << Color::FG_RED << "\n[FAILED] ";
-                std::cout << Color::FG_DEFAULT << name << " \n   Input value: ";
-                std::cout << Color::FG_RED << input_value;
-                std::cout << Color::FG_DEFAULT << "\nExpected value: " << expected_value;
+                result.passed = false;
+                result.failure_message = String("Exception: ") + e.what();
             }
+            
+            result.end_time = std::chrono::high_resolution_clock::now();
+            const auto duration = std::chrono::duration_cast<std::chrono::microseconds>(result.end_time - result.start_time);
+            result.execution_time_ms = duration.count() / 1000.0;
+            
+            return result;
         }
                 
         virtual bool hasPassed() const { return has_passed; }
                 
     protected:
+        /**
+         * @brief Get test name (make name accessible)
+         */
+        const String& getName() const { return name; }
+        
+        /**
+         * @brief Get expected value for reporting
+         */
+        const String& getExpectedValue() const { return expected_value; }
+        
+        /**
+         * @brief Get actual value for reporting
+         */
+        const String& getActualValue() const { return input_value; }
+        
+        /**
+         * @brief Set custom failure message
+         */
+        void setFailureMessage(const String& message) { failure_message = message; }
+        
+        /**
+         * @brief Get failure message
+         */
+        const String& getFailureMessage() const { return failure_message; }
+
         void setName(const String &name) { this->name = name; }
         
         /* Compare Strings */
         void compare(const String &expected_value, const String &input_value)
         {
+            ++assertion_count;
             if(expected_value == input_value)
             {
                 has_passed = true;
@@ -79,6 +141,7 @@ namespace UnitTests
             static_assert(std::is_arithmetic_v<T> || std::is_enum_v<T>,
                         "Generic compare only for arithmetic/enum types");
             
+            ++assertion_count;
             if (expected_value == input_value) {
                 has_passed = true;
             } else {
@@ -90,6 +153,7 @@ namespace UnitTests
 
         void compare(bool expected_value, bool input_value)
         {
+            ++assertion_count;
             if (expected_value == input_value) {
                 has_passed = true;
             } else {
@@ -102,6 +166,7 @@ namespace UnitTests
         void compare(const Vector<T>& expected_value, const Vector<T>& input_value)
         {
             // Fast path: check sizes first
+            ++assertion_count;
             if (expected_value.size() != input_value.size()) {
                 has_passed = false;
                 this->expected_value = String("size=") + uint64::toString(expected_value.size());
@@ -121,6 +186,7 @@ namespace UnitTests
 
         void compare(size_t expected_value, size_t input_value)
         {
+            ++assertion_count;
             if (expected_value == input_value) {
                 has_passed = true;
             } else {
@@ -132,6 +198,7 @@ namespace UnitTests
         // Support for move semantics to avoid copies
         void compare(String&& expected_value, String&& input_value)
         {
+            ++assertion_count;
             if (expected_value == input_value) {
                 has_passed = true;
             } else {
@@ -143,6 +210,7 @@ namespace UnitTests
         // For cryptographic timing tests - allows small variance
         void compare(double expected_value, double input_value, const double epsilon = 1e-9)
         {
+            ++assertion_count;
             if (std::abs(expected_value - input_value) <= epsilon) {
                 has_passed = true;
             } else {
@@ -155,7 +223,21 @@ namespace UnitTests
         template<typename T>
         void compare(const String &expected_value, const Vector<T> &input_value)
         {
+            ++assertion_count;
             compare(expected_value, input_value.toHexString());
+        }
+
+        // For BigInteger comparisons
+        void compare(const BigInteger& expected, const BigInteger& actual) {
+            ++assertion_count;
+            if (expected == actual) {
+                has_passed = true;
+            } else {
+                // Convert to strings ONLY on failure for debugging
+                this->expected_value = expected.toHexString();
+                this->input_value = actual.toHexString();
+                has_passed = false;
+            }
         }
                
     private:
@@ -163,5 +245,23 @@ namespace UnitTests
         String input_value;
         bool has_passed = false;
         String name;
+        String failure_message;
+        size_t assertion_count = 0;
+
+        /**
+         * @brief Extract category from test name (e.g., "AESEncryptionTest" -> "AES")
+         */
+        String extractCategory(const String& test_name)
+        {
+            // Simple heuristic: find first uppercase letter after lowercase
+            for (size_t i = 1; i < test_name.length(); ++i)
+            {
+                if (std::isupper(test_name[i]) && std::islower(test_name[i-1]))
+                {
+                    return test_name.substr(0, i);
+                }
+            }
+            return "General";
+        }
     };
 }
